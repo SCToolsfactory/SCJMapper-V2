@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SharpDX;
+using SharpDX.DirectInput;
+using System;
 using System.Text;
 using System.Windows.Forms;
-using SharpDX;
-using SharpDX.DirectInput;
 
 namespace SCJMapper_V2
 {
