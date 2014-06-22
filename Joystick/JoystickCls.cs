@@ -219,8 +219,10 @@ namespace SCJMapper_V2
       if ( pov[3] >= 0 ) if ( pov[3] != ppov[3] ) m_lastItem = "hat4_" + HatDir( pov[0] );
 
       bool[] buttons = m_state.Buttons;
+      bool[] prevButtons = m_prevState.Buttons;
       for ( int bi=0; bi < buttons.Length; bi++ ) {
-        if ( buttons[bi] ) m_lastItem = "button" + ( bi + 1 ).ToString( );
+        if ( buttons[bi] && buttons[bi] != prevButtons[bi]) 
+            m_lastItem = "button" + ( bi + 1 ).ToString( );
       }
       return m_lastItem;
     }
