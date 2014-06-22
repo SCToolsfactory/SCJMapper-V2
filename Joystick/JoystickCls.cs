@@ -1,6 +1,8 @@
 ﻿using SharpDX;
 using SharpDX.DirectInput;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -211,13 +213,24 @@ namespace SCJMapper_V2
         /// <returns>The last action as CryEngine compatible string</returns>
         public String GetLastChange()
         {
-            if (m_state.X != m_prevState.X) m_lastItem = "x";
-            if (m_state.Y != m_prevState.Y) m_lastItem = "y";
-            if (m_state.Z != m_prevState.Z) m_lastItem = "throttlez"; // this is not z because it usually maps the throttle 
+            // TODO: Expand this out into a joystick class (see commit for details)
+            Dictionary<string, string> axies = new Dictionary<string, string>()
+		    {
+			    {"X","x"},
+			    {"Y","y"},
+			    {"Z","throttlez"}, // this is not z because it usually maps the throttle 
+			    {"RotationX","rotx"},
+			    {"RotationY","roty"},
+			    {"RotationZ","rotz"}
+		    };
 
-            if (m_state.RotationX != m_prevState.RotationX) m_lastItem = "rotx";
-            if (m_state.RotationY != m_prevState.RotationY) m_lastItem = "roty";
-            if (m_state.RotationZ != m_prevState.RotationZ) m_lastItem = "rotz";
+            foreach (KeyValuePair<string, string> entry in axies)
+            {
+                PropertyInfo axisProperty = typeof(JoystickState).GetProperty(entry.Key);
+
+                if (DidAxisChange((int)axisProperty.GetValue(this.m_state, null), (int)axisProperty.GetValue(this.m_prevState, null)))
+                    this.m_lastItem = entry.Value;
+            }
 
             int[] slider = m_state.Sliders;
             int[] pslider = m_prevState.Sliders;
@@ -239,6 +252,24 @@ namespace SCJMapper_V2
                     m_lastItem = "button" + (bi + 1).ToString();
             }
             return m_lastItem;
+        }
+
+
+        ///<summary>
+        /// Figure out if an axis changed enough to consider it as a changed state
+        /// </summary>
+        private bool DidAxisChange(int current, int prev)
+        {
+            // determine if the axis drifts more than x% to account for bounce
+            // old-new/old
+            if (current == prev)
+                return false;
+            if (prev == 0)
+                prev = 1;
+            int changepct = Math.Abs(prev) - Math.Abs(current) / Math.Abs(prev);
+            // if the axis has changed more than 70% relative to it's last value
+            return changepct > 70 ? true : false;
+
         }
 
         /// <summary>
