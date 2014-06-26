@@ -238,3 +238,5 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 *.suo
+SCJMapper-V2.suo
+*.suo
