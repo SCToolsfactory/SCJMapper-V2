@@ -46,6 +46,9 @@ namespace SCJMapper_V2
 
       // some applic initialization 
       rtb.SelectionTabs = new int[] { 10, 20, 30, 40, 50, 60 }; // short tabs
+      rtb.DragEnter +=new DragEventHandler(rtb_DragEnter);
+      rtb.DragDrop +=new DragEventHandler(rtb_DragDrop);
+      rtb.AllowDrop = true; // add Drop to rtb
       String version = Application.ProductVersion;  // get the version information
       lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // get the first two elements
     }
@@ -356,7 +359,39 @@ namespace SCJMapper_V2
       m_AT.FindCtrl( lblLastJ.Text ); // find the action for a Control (joystick input)
     }
 
-    
+    // rtb drop xml file
+    private void rtb_DragEnter( object sender, DragEventArgs e )
+    {
+      bool dropEnabled = true;
+      if ( e.Data.GetDataPresent( DataFormats.FileDrop, true ) ) {
+        string[] filenames = 
+                       e.Data.GetData( DataFormats.FileDrop, true ) as string[];
+
+        foreach ( string filename in filenames ) {
+          if ( System.IO.Path.GetExtension( filename ).ToUpperInvariant( ) != ".XML" ) {
+            dropEnabled = false;
+            break;
+          }
+        }
+      }
+      else {
+        dropEnabled = false;
+      }
+
+      if ( dropEnabled ) {
+        e.Effect = DragDropEffects.Copy;
+      }
+      else {
+        e.Effect = DragDropEffects.None;
+      }
+    }
+
+    private void rtb_DragDrop( object sender, DragEventArgs e )
+    {
+      // Loads the file into the control. 
+      string[] droppedFilenames = e.Data.GetData( DataFormats.FileDrop, true ) as string[];
+      if ( droppedFilenames.Length>0 ) rtb.LoadFile( droppedFilenames[0], System.Windows.Forms.RichTextBoxStreamType.PlainText );
+    }    
     #endregion
 
 

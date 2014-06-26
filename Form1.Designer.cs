@@ -37,6 +37,14 @@
       this.btReset = new System.Windows.Forms.Button();
       this.label3 = new System.Windows.Forms.Label();
       this.rtb = new System.Windows.Forms.RichTextBox();
+      this.cmCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.tsiCopy = new System.Windows.Forms.ToolStripMenuItem();
+      this.tsiPaste = new System.Windows.Forms.ToolStripMenuItem();
+      this.tsiPReplace = new System.Windows.Forms.ToolStripMenuItem();
+      this.tsiSelAll = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+      this.tsiOpen = new System.Windows.Forms.ToolStripMenuItem();
+      this.tsiSaveAs = new System.Windows.Forms.ToolStripMenuItem();
       this.btGrab = new System.Windows.Forms.Button();
       this.btDump = new System.Windows.Forms.Button();
       this.panel3 = new System.Windows.Forms.Panel();
@@ -56,8 +64,10 @@
       this.lblAction = new System.Windows.Forms.Label();
       this.btAssign = new System.Windows.Forms.Button();
       this.treeView1 = new System.Windows.Forms.TreeView();
+      this.IL = new System.Windows.Forms.ImageList(this.components);
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.label8 = new System.Windows.Forms.Label();
       this.lblTitle = new System.Windows.Forms.Label();
@@ -65,23 +75,13 @@
       this.buttonExit = new System.Windows.Forms.Button();
       this.OFD = new System.Windows.Forms.OpenFileDialog();
       this.timer1 = new System.Windows.Forms.Timer(this.components);
-      this.cmCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
-      this.tsiCopy = new System.Windows.Forms.ToolStripMenuItem();
-      this.tsiPaste = new System.Windows.Forms.ToolStripMenuItem();
-      this.tsiPReplace = new System.Windows.Forms.ToolStripMenuItem();
-      this.tsiSelAll = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-      this.tsiOpen = new System.Windows.Forms.ToolStripMenuItem();
-      this.tsiSaveAs = new System.Windows.Forms.ToolStripMenuItem();
       this.SFD = new System.Windows.Forms.SaveFileDialog();
-      this.IL = new System.Windows.Forms.ImageList(this.components);
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
+      this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
       this.panel2.SuspendLayout();
       this.tc1.SuspendLayout();
       this.tabJS1.SuspendLayout();
       this.panel1.SuspendLayout();
-      this.cmCopyPaste.SuspendLayout();
       this.SuspendLayout();
       // 
       // btDumpList
@@ -125,6 +125,66 @@
       this.rtb.TabIndex = 21;
       this.rtb.Text = "";
       this.rtb.WordWrap = false;
+      // 
+      // cmCopyPaste
+      // 
+      this.cmCopyPaste.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsiCopy,
+            this.tsiPaste,
+            this.tsiPReplace,
+            this.tsiSelAll,
+            this.toolStripSeparator1,
+            this.tsiOpen,
+            this.tsiSaveAs});
+      this.cmCopyPaste.Name = "cmCopyPaste";
+      this.cmCopyPaste.Size = new System.Drawing.Size(170, 142);
+      // 
+      // tsiCopy
+      // 
+      this.tsiCopy.Name = "tsiCopy";
+      this.tsiCopy.Size = new System.Drawing.Size(169, 22);
+      this.tsiCopy.Text = "Copy";
+      this.tsiCopy.Click += new System.EventHandler(this.tsiCopy_Click);
+      // 
+      // tsiPaste
+      // 
+      this.tsiPaste.Name = "tsiPaste";
+      this.tsiPaste.Size = new System.Drawing.Size(169, 22);
+      this.tsiPaste.Text = "Paste";
+      this.tsiPaste.Click += new System.EventHandler(this.tsiPaste_Click);
+      // 
+      // tsiPReplace
+      // 
+      this.tsiPReplace.Name = "tsiPReplace";
+      this.tsiPReplace.Size = new System.Drawing.Size(169, 22);
+      this.tsiPReplace.Text = "Paste (Replace all)";
+      this.tsiPReplace.Click += new System.EventHandler(this.tsiPReplace_Click);
+      // 
+      // tsiSelAll
+      // 
+      this.tsiSelAll.Name = "tsiSelAll";
+      this.tsiSelAll.Size = new System.Drawing.Size(169, 22);
+      this.tsiSelAll.Text = "Select All";
+      this.tsiSelAll.Click += new System.EventHandler(this.tsiSelAll_Click);
+      // 
+      // toolStripSeparator1
+      // 
+      this.toolStripSeparator1.Name = "toolStripSeparator1";
+      this.toolStripSeparator1.Size = new System.Drawing.Size(166, 6);
+      // 
+      // tsiOpen
+      // 
+      this.tsiOpen.Name = "tsiOpen";
+      this.tsiOpen.Size = new System.Drawing.Size(169, 22);
+      this.tsiOpen.Text = "Open...";
+      this.tsiOpen.Click += new System.EventHandler(this.tsiOpen_Click);
+      // 
+      // tsiSaveAs
+      // 
+      this.tsiSaveAs.Name = "tsiSaveAs";
+      this.tsiSaveAs.Size = new System.Drawing.Size(169, 22);
+      this.tsiSaveAs.Text = "Save as...";
+      this.tsiSaveAs.Click += new System.EventHandler(this.tsiSaveAs_Click);
       // 
       // btGrab
       // 
@@ -337,6 +397,18 @@
       this.treeView1.TabIndex = 16;
       this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
       // 
+      // IL
+      // 
+      this.IL.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("IL.ImageStream")));
+      this.IL.TransparentColor = System.Drawing.Color.Transparent;
+      this.IL.Images.SetKeyName(0, "Map");
+      this.IL.Images.SetKeyName(1, "Selected");
+      this.IL.Images.SetKeyName(2, "J");
+      this.IL.Images.SetKeyName(3, "K");
+      this.IL.Images.SetKeyName(4, "X");
+      this.IL.Images.SetKeyName(5, "P");
+      this.IL.Images.SetKeyName(6, "Z");
+      // 
       // tc1
       // 
       this.tc1.Controls.Add(this.tabJS1);
@@ -361,6 +433,13 @@
       this.tabJS1.Size = new System.Drawing.Size(281, 245);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Location = new System.Drawing.Point(0, 6);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(278, 234);
+      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -421,90 +500,11 @@
       // 
       this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
       // 
-      // cmCopyPaste
-      // 
-      this.cmCopyPaste.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsiCopy,
-            this.tsiPaste,
-            this.tsiPReplace,
-            this.tsiSelAll,
-            this.toolStripSeparator1,
-            this.tsiOpen,
-            this.tsiSaveAs});
-      this.cmCopyPaste.Name = "cmCopyPaste";
-      this.cmCopyPaste.Size = new System.Drawing.Size(170, 142);
-      // 
-      // tsiCopy
-      // 
-      this.tsiCopy.Name = "tsiCopy";
-      this.tsiCopy.Size = new System.Drawing.Size(169, 22);
-      this.tsiCopy.Text = "Copy";
-      this.tsiCopy.Click += new System.EventHandler(this.tsiCopy_Click);
-      // 
-      // tsiPaste
-      // 
-      this.tsiPaste.Name = "tsiPaste";
-      this.tsiPaste.Size = new System.Drawing.Size(169, 22);
-      this.tsiPaste.Text = "Paste";
-      this.tsiPaste.Click += new System.EventHandler(this.tsiPaste_Click);
-      // 
-      // tsiPReplace
-      // 
-      this.tsiPReplace.Name = "tsiPReplace";
-      this.tsiPReplace.Size = new System.Drawing.Size(169, 22);
-      this.tsiPReplace.Text = "Paste (Replace all)";
-      this.tsiPReplace.Click += new System.EventHandler(this.tsiPReplace_Click);
-      // 
-      // tsiSelAll
-      // 
-      this.tsiSelAll.Name = "tsiSelAll";
-      this.tsiSelAll.Size = new System.Drawing.Size(169, 22);
-      this.tsiSelAll.Text = "Select All";
-      this.tsiSelAll.Click += new System.EventHandler(this.tsiSelAll_Click);
-      // 
-      // toolStripSeparator1
-      // 
-      this.toolStripSeparator1.Name = "toolStripSeparator1";
-      this.toolStripSeparator1.Size = new System.Drawing.Size(166, 6);
-      // 
-      // tsiOpen
-      // 
-      this.tsiOpen.Name = "tsiOpen";
-      this.tsiOpen.Size = new System.Drawing.Size(169, 22);
-      this.tsiOpen.Text = "Open...";
-      this.tsiOpen.Click += new System.EventHandler(this.tsiOpen_Click);
-      // 
-      // tsiSaveAs
-      // 
-      this.tsiSaveAs.Name = "tsiSaveAs";
-      this.tsiSaveAs.Size = new System.Drawing.Size(169, 22);
-      this.tsiSaveAs.Text = "Save as...";
-      this.tsiSaveAs.Click += new System.EventHandler(this.tsiSaveAs_Click);
-      // 
       // SFD
       // 
       this.SFD.DefaultExt = "xml";
       this.SFD.Filter = "Mapping files|*.xml|Text files|*.txt|All files|*.*";
       this.SFD.SupportMultiDottedExtensions = true;
-      // 
-      // IL
-      // 
-      this.IL.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("IL.ImageStream")));
-      this.IL.TransparentColor = System.Drawing.Color.Transparent;
-      this.IL.Images.SetKeyName(0, "Map");
-      this.IL.Images.SetKeyName(1, "Selected");
-      this.IL.Images.SetKeyName(2, "J");
-      this.IL.Images.SetKeyName(3, "K");
-      this.IL.Images.SetKeyName(4, "X");
-      this.IL.Images.SetKeyName(5, "P");
-      this.IL.Images.SetKeyName(6, "Z");
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Location = new System.Drawing.Point(0, 6);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(278, 234);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm
       // 
@@ -523,9 +523,11 @@
       this.Controls.Add(this.tc1);
       this.Controls.Add(this.panel1);
       this.Controls.Add(this.buttonExit);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "MainForm";
       this.Text = "SC Joystick Mapper";
       this.Load += new System.EventHandler(this.MainForm_Load);
+      this.cmCopyPaste.ResumeLayout(false);
       this.panel3.ResumeLayout(false);
       this.panel2.ResumeLayout(false);
       this.panel2.PerformLayout();
@@ -533,7 +535,6 @@
       this.tabJS1.ResumeLayout(false);
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
-      this.cmCopyPaste.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
