@@ -67,7 +67,6 @@
       this.IL = new System.Windows.Forms.ImageList(this.components);
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.label8 = new System.Windows.Forms.Label();
       this.lblTitle = new System.Windows.Forms.Label();
@@ -76,17 +75,26 @@
       this.OFD = new System.Windows.Forms.OpenFileDialog();
       this.timer1 = new System.Windows.Forms.Timer(this.components);
       this.SFD = new System.Windows.Forms.SaveFileDialog();
+      this.tlpanel = new System.Windows.Forms.TableLayoutPanel();
+      this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
       this.panel2.SuspendLayout();
       this.tc1.SuspendLayout();
       this.tabJS1.SuspendLayout();
       this.panel1.SuspendLayout();
+      this.tlpanel.SuspendLayout();
+      this.flowLayoutPanel1.SuspendLayout();
+      this.tableLayoutPanel1.SuspendLayout();
+      this.tableLayoutPanel2.SuspendLayout();
       this.SuspendLayout();
       // 
       // btDumpList
       // 
-      this.btDumpList.Location = new System.Drawing.Point(398, 636);
+      this.btDumpList.Location = new System.Drawing.Point(3, 52);
       this.btDumpList.Name = "btDumpList";
       this.btDumpList.Size = new System.Drawing.Size(94, 26);
       this.btDumpList.TabIndex = 24;
@@ -96,7 +104,8 @@
       // 
       // btReset
       // 
-      this.btReset.Location = new System.Drawing.Point(397, 679);
+      this.btReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.btReset.Location = new System.Drawing.Point(3, 72);
       this.btReset.Name = "btReset";
       this.btReset.Size = new System.Drawing.Size(94, 24);
       this.btReset.TabIndex = 23;
@@ -105,12 +114,13 @@
       // 
       // label3
       // 
-      this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(797, 685);
+      this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.label3.Location = new System.Drawing.Point(606, 828);
       this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(214, 13);
+      this.label3.Size = new System.Drawing.Size(372, 25);
       this.label3.TabIndex = 22;
       this.label3.Text = "Right click above to open the context menu";
+      this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // rtb
       // 
@@ -118,10 +128,12 @@
       this.rtb.BackColor = System.Drawing.Color.Ivory;
       this.rtb.ContextMenuStrip = this.cmCopyPaste;
       this.rtb.DetectUrls = false;
+      this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
       this.rtb.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rtb.Location = new System.Drawing.Point(682, 74);
+      this.rtb.Location = new System.Drawing.Point(606, 81);
       this.rtb.Name = "rtb";
-      this.rtb.Size = new System.Drawing.Size(439, 608);
+      this.tlpanel.SetRowSpan(this.rtb, 3);
+      this.rtb.Size = new System.Drawing.Size(372, 744);
       this.rtb.TabIndex = 21;
       this.rtb.Text = "";
       this.rtb.WordWrap = false;
@@ -188,7 +200,8 @@
       // 
       // btGrab
       // 
-      this.btGrab.Location = new System.Drawing.Point(579, 604);
+      this.btGrab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btGrab.Location = new System.Drawing.Point(197, 3);
       this.btGrab.Name = "btGrab";
       this.btGrab.Size = new System.Drawing.Size(94, 26);
       this.btGrab.TabIndex = 19;
@@ -198,7 +211,7 @@
       // 
       // btDump
       // 
-      this.btDump.Location = new System.Drawing.Point(398, 604);
+      this.btDump.Location = new System.Drawing.Point(3, 3);
       this.btDump.Name = "btDump";
       this.btDump.Size = new System.Drawing.Size(94, 26);
       this.btDump.TabIndex = 20;
@@ -216,7 +229,7 @@
       this.panel3.Controls.Add(this.cbJs3);
       this.panel3.Controls.Add(this.cbJs2);
       this.panel3.Controls.Add(this.cbJs1);
-      this.panel3.Location = new System.Drawing.Point(387, 355);
+      this.panel3.Location = new System.Drawing.Point(3, 284);
       this.panel3.Name = "panel3";
       this.panel3.Size = new System.Drawing.Size(289, 134);
       this.panel3.TabIndex = 18;
@@ -312,7 +325,7 @@
       this.panel2.Controls.Add(this.lblLastJ);
       this.panel2.Controls.Add(this.lblAction);
       this.panel2.Controls.Add(this.btAssign);
-      this.panel2.Location = new System.Drawing.Point(387, 495);
+      this.panel2.Location = new System.Drawing.Point(3, 424);
       this.panel2.Name = "panel2";
       this.panel2.Size = new System.Drawing.Size(289, 103);
       this.panel2.TabIndex = 17;
@@ -387,13 +400,15 @@
       // 
       // treeView1
       // 
+      this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.treeView1.HotTracking = true;
       this.treeView1.ImageKey = "Map";
       this.treeView1.ImageList = this.IL;
-      this.treeView1.Location = new System.Drawing.Point(12, 74);
+      this.treeView1.Location = new System.Drawing.Point(6, 81);
       this.treeView1.Name = "treeView1";
+      this.tlpanel.SetRowSpan(this.treeView1, 3);
       this.treeView1.SelectedImageKey = "Selected";
-      this.treeView1.Size = new System.Drawing.Size(369, 629);
+      this.treeView1.Size = new System.Drawing.Size(294, 744);
       this.treeView1.TabIndex = 16;
       this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
       // 
@@ -416,7 +431,7 @@
       this.tc1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.tc1.HotTrack = true;
       this.tc1.ItemSize = new System.Drawing.Size(62, 22);
-      this.tc1.Location = new System.Drawing.Point(387, 74);
+      this.tc1.Location = new System.Drawing.Point(3, 3);
       this.tc1.Multiline = true;
       this.tc1.Name = "tc1";
       this.tc1.SelectedIndex = 0;
@@ -434,21 +449,16 @@
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
       // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Location = new System.Drawing.Point(0, 6);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(278, 234);
-      this.UC_JoyPanel.TabIndex = 0;
-      // 
       // panel1
       // 
+      this.tlpanel.SetColumnSpan(this.panel1, 3);
       this.panel1.Controls.Add(this.label8);
       this.panel1.Controls.Add(this.lblTitle);
       this.panel1.Controls.Add(this.label4);
-      this.panel1.Location = new System.Drawing.Point(2, 2);
+      this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+      this.panel1.Location = new System.Drawing.Point(6, 6);
       this.panel1.Name = "panel1";
-      this.panel1.Size = new System.Drawing.Size(1109, 66);
+      this.panel1.Size = new System.Drawing.Size(972, 66);
       this.panel1.TabIndex = 14;
       // 
       // label8
@@ -481,7 +491,8 @@
       // 
       // buttonExit
       // 
-      this.buttonExit.Location = new System.Drawing.Point(577, 679);
+      this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+      this.buttonExit.Location = new System.Drawing.Point(197, 72);
       this.buttonExit.Name = "buttonExit";
       this.buttonExit.Size = new System.Drawing.Size(94, 24);
       this.buttonExit.TabIndex = 13;
@@ -506,24 +517,95 @@
       this.SFD.Filter = "Mapping files|*.xml|Text files|*.txt|All files|*.*";
       this.SFD.SupportMultiDottedExtensions = true;
       // 
+      // tlpanel
+      // 
+      this.tlpanel.ColumnCount = 3;
+      this.tlpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
+      this.tlpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
+      this.tlpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tlpanel.Controls.Add(this.rtb, 2, 1);
+      this.tlpanel.Controls.Add(this.panel1, 0, 0);
+      this.tlpanel.Controls.Add(this.label3, 2, 4);
+      this.tlpanel.Controls.Add(this.treeView1, 0, 1);
+      this.tlpanel.Controls.Add(this.flowLayoutPanel1, 1, 1);
+      this.tlpanel.Controls.Add(this.tableLayoutPanel1, 1, 2);
+      this.tlpanel.Controls.Add(this.tableLayoutPanel2, 1, 3);
+      this.tlpanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tlpanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+      this.tlpanel.Location = new System.Drawing.Point(0, 0);
+      this.tlpanel.Name = "tlpanel";
+      this.tlpanel.Padding = new System.Windows.Forms.Padding(3);
+      this.tlpanel.RowCount = 5;
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 540F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+      this.tlpanel.Size = new System.Drawing.Size(984, 856);
+      this.tlpanel.TabIndex = 25;
+      // 
+      // flowLayoutPanel1
+      // 
+      this.flowLayoutPanel1.Controls.Add(this.tc1);
+      this.flowLayoutPanel1.Controls.Add(this.panel3);
+      this.flowLayoutPanel1.Controls.Add(this.panel2);
+      this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+      this.flowLayoutPanel1.Location = new System.Drawing.Point(306, 81);
+      this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+      this.flowLayoutPanel1.Size = new System.Drawing.Size(294, 534);
+      this.flowLayoutPanel1.TabIndex = 22;
+      // 
+      // tableLayoutPanel1
+      // 
+      this.tableLayoutPanel1.ColumnCount = 2;
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.Controls.Add(this.btDump, 0, 0);
+      this.tableLayoutPanel1.Controls.Add(this.btGrab, 1, 0);
+      this.tableLayoutPanel1.Controls.Add(this.btDumpList, 0, 1);
+      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+      this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(306, 621);
+      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+      this.tableLayoutPanel1.RowCount = 2;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 99);
+      this.tableLayoutPanel1.TabIndex = 23;
+      // 
+      // tableLayoutPanel2
+      // 
+      this.tableLayoutPanel2.ColumnCount = 2;
+      this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel2.Controls.Add(this.btReset, 0, 1);
+      this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 1);
+      this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 726);
+      this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+      this.tableLayoutPanel2.RowCount = 2;
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 99);
+      this.tableLayoutPanel2.TabIndex = 24;
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Location = new System.Drawing.Point(0, 6);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(278, 234);
+      this.UC_JoyPanel.TabIndex = 0;
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1132, 715);
-      this.Controls.Add(this.btDumpList);
-      this.Controls.Add(this.btReset);
-      this.Controls.Add(this.label3);
-      this.Controls.Add(this.rtb);
-      this.Controls.Add(this.btGrab);
-      this.Controls.Add(this.btDump);
-      this.Controls.Add(this.panel3);
-      this.Controls.Add(this.panel2);
-      this.Controls.Add(this.treeView1);
-      this.Controls.Add(this.tc1);
-      this.Controls.Add(this.panel1);
-      this.Controls.Add(this.buttonExit);
+      this.ClientSize = new System.Drawing.Size(984, 856);
+      this.Controls.Add(this.tlpanel);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+      this.MinimumSize = new System.Drawing.Size(1000, 894);
       this.Name = "MainForm";
       this.Text = "SC Joystick Mapper";
       this.Load += new System.EventHandler(this.MainForm_Load);
@@ -535,8 +617,11 @@
       this.tabJS1.ResumeLayout(false);
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
+      this.tlpanel.ResumeLayout(false);
+      this.flowLayoutPanel1.ResumeLayout(false);
+      this.tableLayoutPanel1.ResumeLayout(false);
+      this.tableLayoutPanel2.ResumeLayout(false);
       this.ResumeLayout(false);
-      this.PerformLayout();
 
     }
 
@@ -585,6 +670,10 @@
     private System.Windows.Forms.SaveFileDialog SFD;
     private System.Windows.Forms.ImageList IL;
     private UC_JoyPanel UC_JoyPanel;
+    private System.Windows.Forms.TableLayoutPanel tlpanel;
+    private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
   }
 }
 
