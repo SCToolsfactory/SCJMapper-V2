@@ -15,7 +15,7 @@ namespace SCJMapper_V2
 
 
     // Load MappingVars.csv into the ActionList and create the Control TreeView
-    public void LoadTree( )
+    public void LoadTree( String defaultProfile )
     {
       TreeNode tn = null;
       TreeNode[] cnl = { };
@@ -33,14 +33,24 @@ namespace SCJMapper_V2
       DProfileReader dpReader = new DProfileReader( ); // we may read a profile
       TextReader txReader = null;
 
-      // 1st choice is a user given MappingVars.csv file in the appdir
+      // 1st choice is a user given MappingVars.csv file in the appdir - this is only compatibilty and testing
       if ( File.Exists( "MappingVars.csv" ) ) {
         txReader = new StreamReader( "MappingVars.csv" );
       }
-      // second choice a defaultProfile.xml in the app dir
+      // second choice a defaultProfile.xml in given path
+      else if ( File.Exists( defaultProfile ) ) {
+        using ( StreamReader sr = new StreamReader( defaultProfile ) ) {
+          String buff = sr.ReadToEnd( );
+          dpReader.fromXML( buff );
+        }
+        if ( dpReader.ValidContent ) {
+          txReader = new StringReader( dpReader.CSVMap );
+        }
+      }
+      // third choice a defaultProfile.xml in the app dir distributed with the application ??? to be deleted ???
       else {
-        if ( File.Exists( "defaultProfile.xml" ) ) {
-          using ( StreamReader sr = new StreamReader( "defaultProfile.xml" ) ) {
+        if ( File.Exists( SCPath.DefaultProfileName ) ) {
+          using ( StreamReader sr = new StreamReader( SCPath.DefaultProfileName ) ) {
             String buff = sr.ReadToEnd( );
             dpReader.fromXML( buff );
           }
@@ -78,7 +88,7 @@ namespace SCJMapper_V2
               }
             }//for
             tn = new TreeNode( acm.name, cnl ); tn.Name = acm.name;  // name it to find it..
-            tn.ImageIndex = 0; tn.NodeFont = new Font( Ctrl.Font, FontStyle.Bold ); 
+            tn.ImageIndex = 0; tn.NodeFont = new Font( Ctrl.Font, FontStyle.Bold );
             Ctrl.BackColor = Ctrl.BackColor; // fix for defect TreeView (cut off bold text)
             Ctrl.Nodes.Add( tn ); // add to control
             if ( topNode == null ) topNode = tn; // once to keep the start of list
@@ -203,7 +213,7 @@ namespace SCJMapper_V2
       if ( !String.IsNullOrEmpty( ActionMaps.js6 ) ) repList += String.Format( "** js6 = {0}\n", ActionMaps.js6 );
       if ( !String.IsNullOrEmpty( ActionMaps.js7 ) ) repList += String.Format( "** js7 = {0}\n", ActionMaps.js7 );
       if ( !String.IsNullOrEmpty( ActionMaps.js8 ) ) repList += String.Format( "** js8 = {0}\n", ActionMaps.js8 );
-      repList += String.Format( "\n");
+      repList += String.Format( "\n" );
       foreach ( ActionMapCls acm in ActionMaps ) {
         String rep = String.Format( "*** {0}\n", acm.name );
         repList += rep;

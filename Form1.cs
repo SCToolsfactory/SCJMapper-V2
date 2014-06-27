@@ -148,10 +148,17 @@ namespace SCJMapper_V2
     /// </summary>
     private void InitActionTree( )
     {
+      // default profile handling
+      // TODO ?? change the data path away from the app directory as this is not Win policy if installed in "Program Files"
+      String dataPath = "";
+      SCDefaultProfile SD = new SCDefaultProfile( );
+      SD.GetDefaultProfile( dataPath );
+      String defProf = SD.DefaultProfileName; // either "" or a valid full filename
+
       // build TreeView and the ActionMaps
       m_AT = new ActionTree( );
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
-      m_AT.LoadTree( );       // Init
+      m_AT.LoadTree( defProf );       // Init with default profile filepath
 
       // default JS to Joystick mapping - can be changed and reloaded from XML
       if ( tc1.TabCount > 0 ) { cbJs1.SelectedIndex = 0; m_AT.ActionMaps.js1 = cbJs1.Text; }
