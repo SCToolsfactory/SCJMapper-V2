@@ -15,7 +15,7 @@ namespace SCJMapper_V2
 
 
     // Load MappingVars.csv into the ActionList and create the Control TreeView
-    public void LoadTree( String defaultProfile )
+    public void LoadTree( )
     {
       TreeNode tn = null;
       TreeNode[] cnl = { };
@@ -33,36 +33,9 @@ namespace SCJMapper_V2
       DProfileReader dpReader = new DProfileReader( ); // we may read a profile
       TextReader txReader = null;
 
-      // 1st choice is a user given MappingVars.csv file in the appdir - this is only compatibilty and testing
-      if ( File.Exists( "MappingVars.csv" ) ) {
-        txReader = new StreamReader( "MappingVars.csv" );
-      }
-      // second choice a defaultProfile.xml in given path
-      else if ( File.Exists( defaultProfile ) ) {
-        using ( StreamReader sr = new StreamReader( defaultProfile ) ) {
-          String buff = sr.ReadToEnd( );
-          dpReader.fromXML( buff );
-        }
-        if ( dpReader.ValidContent ) {
-          txReader = new StringReader( dpReader.CSVMap );
-        }
-      }
-      // third choice a defaultProfile.xml in the app dir distributed with the application ??? to be deleted ???
-      else {
-        if ( File.Exists( SCPath.DefaultProfileName ) ) {
-          using ( StreamReader sr = new StreamReader( SCPath.DefaultProfileName ) ) {
-            String buff = sr.ReadToEnd( );
-            dpReader.fromXML( buff );
-          }
-          if ( dpReader.ValidContent ) {
-            txReader = new StringReader( dpReader.CSVMap );
-          }
-        }
-      }
-      // last resort is the built in list
-      if ( txReader == null ) {
-        var defFile = SCJMapper_V2.Properties.Resources.MappingVars;
-        txReader = new StringReader( defFile );
+      dpReader.fromXML( SCDefaultProfile.DefaultProfile( ) );
+      if ( dpReader.ValidContent ) {
+        txReader = new StringReader( dpReader.CSVMap );
       }
 
       using ( TextReader sr = txReader ) {

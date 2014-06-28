@@ -14,63 +14,54 @@ namespace SCJMapper_V2
   /// </summary>
   class SCDefaultProfile
   {
-    private Boolean m_valid = false;
-    public Boolean IsValid { get { return m_valid; } }
 
-    private String m_fileName = "";
-    public String DefaultProfileName { get { return m_fileName; } }
-
-    /// <summary>
-    /// Extracts the file to destPath
-    /// the subpath will be retained
-    /// </summary>
-    /// <param name="destPath">Destination path to extract to</param>
-    private void ExtractDefaultProfile( String destPath )
+    static public String DefaultProfile( )
     {
-      String scp = SCPath.SCClientDataPath;
-      if ( String.IsNullOrEmpty( scp ) ) return; // sorry did not work
+      String retVal = "";
 
-      using ( ZipFile zip = ZipFile.Read( SCPath.SCGameData_pak ) ) {
-        zip.CaseSensitiveRetrieval = false;
-
-        ICollection<ZipEntry> gdpak = zip.SelectEntries( "name = " + SCPath.DefaultProfileName, SCPath.DefaultProfilePath_rel );
-        if ( gdpak != null ) {
-          gdpak.FirstOrDefault( ).Extract( destPath, ExtractExistingFileAction.OverwriteSilently );
-          m_fileName = Path.Combine( destPath, SCPath.DefaultProfilePath_rel );
-          m_fileName = Path.Combine( m_fileName, SCPath.DefaultProfileName );
-          m_valid = true;
+      // first try to get the SC defaultProfile from the GameData.pak
+      retVal = ExtractDefaultProfile( );
+      if ( String.IsNullOrEmpty( retVal ) ) {
+        // second choice a defaultProfile.xml in the app dir distributed with the application ??? to be deleted ???
+        if ( File.Exists( SCPath.DefaultProfileName ) ) {
+          using ( StreamReader sr = new StreamReader( SCPath.DefaultProfileName ) ) {
+            retVal = sr.ReadToEnd( );
+          }
+        }
+        // last resort is the built in one
+        else {
+          retVal = SCJMapper_V2.Properties.Resources.defaultProfile;
         }
       }
+      return retVal;
     }
 
-
     /// <summary>
-    /// Deletes the extracted version of the defaultProfile
+    /// Extracts the file to the internal string
     /// </summary>
-    /// <param name="destPath">Destination path to delete from</param>
-    public void ClearDefaultProfile( String destPath )
+    static private String ExtractDefaultProfile( )
     {
-      try {
-        String p = Path.Combine( destPath, SCPath.DefaultProfilePath_rel );
-        File.Delete( Path.Combine( p, SCPath.DefaultProfileName ) );
-        m_fileName = "";
-        m_valid = false;
+      String retVal = "";
+      if ( File.Exists( SCPath.SCGameData_pak ) ) {
+        using ( ZipFile zip = ZipFile.Read( SCPath.SCGameData_pak ) ) {
+          zip.CaseSensitiveRetrieval = false;
+          ICollection<ZipEntry> gdpak = zip.SelectEntries( "name = " + SCPath.DefaultProfileName, SCPath.DefaultProfilePath_rel );
+          if ( gdpak != null ) {
+            try {
+              MemoryStream mst = new MemoryStream( );
+              gdpak.FirstOrDefault( ).Extract( mst );
+              UTF8Encoding unc = new UTF8Encoding( );
+              retVal = unc.GetString( mst.ToArray( ) );
+            }
+            catch {
+              retVal = ""; // clear any remanents
+            }
+          }
+        }
       }
-      catch { }
+      return retVal;
     }
 
-    /// <summary>
-    /// Retrieves the newest defaultProfile from GameData.pak
-    /// It deletes the last retrieved one first
-    /// </summary>
-    /// <param name="destPath">Destination path to extract to</param>
-    /// <returns>True if successfull; if false there is no old file left in the path</returns>
-    public Boolean GetDefaultProfile( String destPath )
-    {
-      ClearDefaultProfile( destPath );
-      ExtractDefaultProfile( destPath );
-      return m_valid;
-    }
 
   }
 }
