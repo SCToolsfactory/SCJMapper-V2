@@ -79,19 +79,21 @@
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+      this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
       this.tsDDbtProfiles = new System.Windows.Forms.ToolStripDropDownButton();
-      this.tsDDbtMappings = new System.Windows.Forms.ToolStripDropDownButton();
       this.tsBtReset = new System.Windows.Forms.ToolStripDropDownButton();
       this.resetDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.resetEmptyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+      this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+      this.tsDDbtMappings = new System.Windows.Forms.ToolStripDropDownButton();
       this.tsBtLoad = new System.Windows.Forms.ToolStripDropDownButton();
+      this.defaultsLoadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.resetLoadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.resetLoadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.defaultsLoadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-      this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-      this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+      this.txFilter = new System.Windows.Forms.TextBox();
+      this.btClearFilter = new System.Windows.Forms.Button();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
@@ -496,7 +498,7 @@
       // buttonExit
       // 
       this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.buttonExit.Location = new System.Drawing.Point(171, 75);
+      this.buttonExit.Location = new System.Drawing.Point(171, 21);
       this.buttonExit.Name = "buttonExit";
       this.buttonExit.Size = new System.Drawing.Size(120, 24);
       this.buttonExit.TabIndex = 13;
@@ -542,8 +544,8 @@
       this.tlpanel.RowCount = 5;
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 540F));
-      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 75F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
       this.tlpanel.Size = new System.Drawing.Size(984, 862);
       this.tlpanel.TabIndex = 25;
@@ -568,15 +570,19 @@
       this.tableLayoutPanel1.Controls.Add(this.btDump, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.btGrab, 1, 0);
       this.tableLayoutPanel1.Controls.Add(this.btDumpList, 0, 1);
-      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+      this.tableLayoutPanel1.Controls.Add(this.txFilter, 0, 3);
+      this.tableLayoutPanel1.Controls.Add(this.btClearFilter, 0, 4);
+      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel1.Location = new System.Drawing.Point(306, 621);
       this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-      this.tableLayoutPanel1.RowCount = 3;
+      this.tableLayoutPanel1.RowCount = 5;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 99);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 156);
       this.tableLayoutPanel1.TabIndex = 23;
       // 
       // tableLayoutPanel2
@@ -584,16 +590,16 @@
       this.tableLayoutPanel2.ColumnCount = 2;
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 2);
+      this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 1);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 729);
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 783);
       this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-      this.tableLayoutPanel2.RowCount = 3;
+      this.tableLayoutPanel2.RowCount = 2;
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 102);
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 48);
       this.tableLayoutPanel2.TabIndex = 24;
       // 
       // statusStrip1
@@ -614,6 +620,13 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
+      // toolStripStatusLabel2
+      // 
+      this.toolStripStatusLabel2.BackColor = System.Drawing.Color.DarkKhaki;
+      this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+      this.toolStripStatusLabel2.Size = new System.Drawing.Size(49, 17);
+      this.toolStripStatusLabel2.Text = "Profiles:";
+      // 
       // tsDDbtProfiles
       // 
       this.tsDDbtProfiles.AutoSize = false;
@@ -624,19 +637,6 @@
       this.tsDDbtProfiles.Size = new System.Drawing.Size(250, 20);
       this.tsDDbtProfiles.Text = "Available Profiles";
       this.tsDDbtProfiles.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsDDbtProfiles_DropDownItemClicked);
-      // 
-      // tsDDbtMappings
-      // 
-      this.tsDDbtMappings.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-      this.tsDDbtMappings.AutoSize = false;
-      this.tsDDbtMappings.BackColor = System.Drawing.Color.DarkSeaGreen;
-      this.tsDDbtMappings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-      this.tsDDbtMappings.Image = ((System.Drawing.Image)(resources.GetObject("tsDDbtMappings.Image")));
-      this.tsDDbtMappings.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.tsDDbtMappings.Name = "tsDDbtMappings";
-      this.tsDDbtMappings.Size = new System.Drawing.Size(250, 20);
-      this.tsDDbtMappings.Text = "Available Mappings";
-      this.tsDDbtMappings.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsDDbtMappings_DropDownItemClicked);
       // 
       // tsBtReset
       // 
@@ -668,6 +668,35 @@
       this.resetEmptyToolStripMenuItem.Text = "Reset empty !";
       this.resetEmptyToolStripMenuItem.Click += new System.EventHandler(this.resetEmptyToolStripMenuItem_Click);
       // 
+      // toolStripStatusLabel3
+      // 
+      this.toolStripStatusLabel3.AutoSize = false;
+      this.toolStripStatusLabel3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+      this.toolStripStatusLabel3.Size = new System.Drawing.Size(100, 17);
+      this.toolStripStatusLabel3.Text = "                            ";
+      // 
+      // toolStripStatusLabel1
+      // 
+      this.toolStripStatusLabel1.BackColor = System.Drawing.Color.DarkSeaGreen;
+      this.toolStripStatusLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+      this.toolStripStatusLabel1.Size = new System.Drawing.Size(63, 17);
+      this.toolStripStatusLabel1.Text = "Mappings:";
+      // 
+      // tsDDbtMappings
+      // 
+      this.tsDDbtMappings.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+      this.tsDDbtMappings.AutoSize = false;
+      this.tsDDbtMappings.BackColor = System.Drawing.Color.DarkSeaGreen;
+      this.tsDDbtMappings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.tsDDbtMappings.Image = ((System.Drawing.Image)(resources.GetObject("tsDDbtMappings.Image")));
+      this.tsDDbtMappings.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsDDbtMappings.Name = "tsDDbtMappings";
+      this.tsDDbtMappings.Size = new System.Drawing.Size(250, 20);
+      this.tsDDbtMappings.Text = "Available Mappings";
+      this.tsDDbtMappings.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsDDbtMappings_DropDownItemClicked);
+      // 
       // tsBtLoad
       // 
       this.tsBtLoad.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -683,6 +712,22 @@
       this.tsBtLoad.Name = "tsBtLoad";
       this.tsBtLoad.Size = new System.Drawing.Size(80, 20);
       this.tsBtLoad.Text = "Load...";
+      // 
+      // defaultsLoadAndGrabToolStripMenuItem
+      // 
+      this.defaultsLoadAndGrabToolStripMenuItem.BackColor = System.Drawing.Color.DarkSeaGreen;
+      this.defaultsLoadAndGrabToolStripMenuItem.Name = "defaultsLoadAndGrabToolStripMenuItem";
+      this.defaultsLoadAndGrabToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+      this.defaultsLoadAndGrabToolStripMenuItem.Text = "Defaults, Load and Grab !";
+      this.defaultsLoadAndGrabToolStripMenuItem.Click += new System.EventHandler(this.defaultsLoadAndGrabToolStripMenuItem_Click);
+      // 
+      // resetLoadAndGrabToolStripMenuItem
+      // 
+      this.resetLoadAndGrabToolStripMenuItem.BackColor = System.Drawing.Color.DarkSeaGreen;
+      this.resetLoadAndGrabToolStripMenuItem.Name = "resetLoadAndGrabToolStripMenuItem";
+      this.resetLoadAndGrabToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+      this.resetLoadAndGrabToolStripMenuItem.Text = "Reset, Load and Grab !";
+      this.resetLoadAndGrabToolStripMenuItem.Click += new System.EventHandler(this.resetLoadAndGrabToolStripMenuItem_Click);
       // 
       // loadAndGrabToolStripMenuItem
       // 
@@ -700,44 +745,24 @@
       this.loadToolStripMenuItem.Text = "Load !";
       this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
       // 
-      // resetLoadAndGrabToolStripMenuItem
+      // txFilter
       // 
-      this.resetLoadAndGrabToolStripMenuItem.BackColor = System.Drawing.Color.DarkSeaGreen;
-      this.resetLoadAndGrabToolStripMenuItem.Name = "resetLoadAndGrabToolStripMenuItem";
-      this.resetLoadAndGrabToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-      this.resetLoadAndGrabToolStripMenuItem.Text = "Reset, Load and Grab !";
-      this.resetLoadAndGrabToolStripMenuItem.Click += new System.EventHandler(this.resetLoadAndGrabToolStripMenuItem_Click);
+      this.txFilter.Location = new System.Drawing.Point(3, 93);
+      this.txFilter.Name = "txFilter";
+      this.txFilter.Size = new System.Drawing.Size(120, 20);
+      this.txFilter.TabIndex = 25;
+      this.txFilter.WordWrap = false;
+      this.txFilter.TextChanged += new System.EventHandler(this.txFilter_TextChanged);
       // 
-      // defaultsLoadAndGrabToolStripMenuItem
+      // btClearFilter
       // 
-      this.defaultsLoadAndGrabToolStripMenuItem.BackColor = System.Drawing.Color.DarkSeaGreen;
-      this.defaultsLoadAndGrabToolStripMenuItem.Name = "defaultsLoadAndGrabToolStripMenuItem";
-      this.defaultsLoadAndGrabToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-      this.defaultsLoadAndGrabToolStripMenuItem.Text = "Defaults, Load and Grab !";
-      this.defaultsLoadAndGrabToolStripMenuItem.Click += new System.EventHandler(this.defaultsLoadAndGrabToolStripMenuItem_Click);
-      // 
-      // toolStripStatusLabel1
-      // 
-      this.toolStripStatusLabel1.BackColor = System.Drawing.Color.DarkSeaGreen;
-      this.toolStripStatusLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-      this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-      this.toolStripStatusLabel1.Size = new System.Drawing.Size(63, 17);
-      this.toolStripStatusLabel1.Text = "Mappings:";
-      // 
-      // toolStripStatusLabel2
-      // 
-      this.toolStripStatusLabel2.BackColor = System.Drawing.Color.DarkKhaki;
-      this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-      this.toolStripStatusLabel2.Size = new System.Drawing.Size(49, 17);
-      this.toolStripStatusLabel2.Text = "Profiles:";
-      // 
-      // toolStripStatusLabel3
-      // 
-      this.toolStripStatusLabel3.AutoSize = false;
-      this.toolStripStatusLabel3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-      this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-      this.toolStripStatusLabel3.Size = new System.Drawing.Size(100, 17);
-      this.toolStripStatusLabel3.Text = "                            ";
+      this.btClearFilter.Location = new System.Drawing.Point(3, 123);
+      this.btClearFilter.Name = "btClearFilter";
+      this.btClearFilter.Size = new System.Drawing.Size(120, 24);
+      this.btClearFilter.TabIndex = 26;
+      this.btClearFilter.Text = "Clear Filter";
+      this.btClearFilter.UseVisualStyleBackColor = true;
+      this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
       // 
       // UC_JoyPanel
       // 
@@ -770,6 +795,7 @@
       this.tlpanel.ResumeLayout(false);
       this.flowLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel1.ResumeLayout(false);
+      this.tableLayoutPanel1.PerformLayout();
       this.tableLayoutPanel2.ResumeLayout(false);
       this.statusStrip1.ResumeLayout(false);
       this.statusStrip1.PerformLayout();
@@ -840,6 +866,8 @@
     private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+    private System.Windows.Forms.Button btClearFilter;
+    private System.Windows.Forms.TextBox txFilter;
   }
 }
 

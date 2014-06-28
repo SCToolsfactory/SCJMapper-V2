@@ -10,12 +10,74 @@ namespace SCJMapper_V2
 {
   class ActionTree
   {
+
+    private String m_Filter = "";
+
     public ActionMapsCls ActionMaps { get; set; }
     public TreeView Ctrl { get; set; }
     public Boolean Dirty { get; set; }
 
 
-    // Load MappingVars.csv into the ActionList and create the Control TreeView
+    private void ApplyFilter( )
+    {
+      TreeNode topNode = null;
+      Ctrl.BeginUpdate( );
+      foreach ( TreeNode tn in Ctrl.Nodes ) {
+        if ( topNode == null ) topNode = tn;
+        // have to search nodes of nodes
+        Boolean allHidden = true;
+        foreach ( TreeNode stn in tn.Nodes ) {
+          if ( ( stn.Tag != null ) && ( ( Boolean )stn.Tag == true ) ) {
+            // hide it - thoug you cannot hide TreeViewNodes at all...
+            stn.ForeColor = stn.BackColor;
+          }
+          else {
+            stn.ForeColor = Ctrl.ForeColor;
+            allHidden = false;
+          }
+        }
+        // make it tidier..
+        if ( allHidden ) tn.Collapse( );
+        else tn.Expand( );
+      }
+      if ( topNode != null ) Ctrl.TopNode = topNode;
+
+      Ctrl.EndUpdate( );
+    }
+
+    /// <summary>
+    /// Filters the tree 
+    /// </summary>
+    private void FilterTree( )
+    {
+      Boolean hidden = ! String.IsNullOrEmpty( m_Filter ); // hide only if there is a find string
+      foreach ( TreeNode tn in Ctrl.Nodes ) {
+        // have to search nodes of nodes
+        foreach ( TreeNode stn in tn.Nodes ) {
+          if ( !stn.Text.Contains( m_Filter ) ) stn.Tag = hidden;
+          else stn.Tag = null;
+        }
+      }
+      ApplyFilter( );
+    }
+
+
+    /// <summary>
+    /// Filters entries with given criteria but not action maps
+    /// </summary>
+    /// <param name="filter">The text snip to filter</param>
+    public void FilterTree( String filter )
+    {
+      m_Filter = filter;
+      FilterTree( );
+    }
+
+
+    /// <summary>
+    /// Load MappingVars.csv into the ActionList and create the Control TreeView 
+    /// </summary>
+    /// <param name="defaultProfileName">The name of the profile to load (w/o extension)</param>
+    /// <param name="applyDefaults">True if default mappings should be carried on</param>
     public void LoadTree( String defaultProfileName, Boolean applyDefaults )
     {
       TreeNode tn = null;
@@ -57,6 +119,7 @@ namespace SCJMapper_V2
                 String devID = elem[ei].Substring( 0, 1 );
                 String device = ActionCls.DeviceFromID( devID );
                 cn.ImageKey = devID;
+                cn.BackColor = Color.White; // some stuff does not work properly...
 
                 Array.Resize( ref cnl, cnl.Length + 1 ); cnl[cnl.Length - 1] = cn;
                 ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.defBinding = defBinding;
@@ -77,7 +140,7 @@ namespace SCJMapper_V2
             }//for
             tn = new TreeNode( acm.name, cnl ); tn.Name = acm.name;  // name it to find it..
             tn.ImageIndex = 0; tn.NodeFont = new Font( Ctrl.Font, FontStyle.Bold );
-            Ctrl.BackColor = Ctrl.BackColor; // fix for defect TreeView (cut off bold text)
+            Ctrl.BackColor = Color.White; // fix for defect TreeView (cut off bold text)
             Ctrl.Nodes.Add( tn ); // add to control
             if ( topNode == null ) topNode = tn; // once to keep the start of list
             ActionMaps.Add( acm ); // add to our map
@@ -100,6 +163,7 @@ namespace SCJMapper_V2
       Dirty = false;
       Ctrl.EndUpdate( );
 
+      FilterTree( );
     }
 
 
@@ -171,8 +235,14 @@ namespace SCJMapper_V2
         }
       }
       Ctrl.EndUpdate( );
+
+      FilterTree( );
     }
 
+    /// <summary>
+    /// Find a control that contains the string and make it visible
+    /// </summary>
+    /// <param name="ctrl">The string to find</param>
     public void FindCtrl( String ctrl )
     {
       Boolean found = false;
@@ -191,6 +261,10 @@ namespace SCJMapper_V2
     }
 
 
+    /// <summary>
+    /// Reports a summary list of the mapped items
+    /// </summary>
+    /// <returns></returns>
     public String ReportActions( )
     {
       String repList = "";
@@ -209,7 +283,7 @@ namespace SCJMapper_V2
         repList += rep;
         foreach ( ActionCls ac in acm ) {
           if ( !String.IsNullOrEmpty( ac.input ) ) {
-            rep = String.Format( " {0} - {1} - {2}\n", ac.name.PadRight( 35 ), ac.device.PadRight( 10 ), ac.input );
+            rep = String.Format( " {0} - {1} - ({2})\n", ac.name.PadRight( 35 ), ac.input.PadRight( 20 ), ac.device);
             repList += rep;
           }
         }

@@ -293,6 +293,8 @@ namespace SCJMapper_V2
 
     #region Event Handling
 
+    // Form Events
+
     private void MainForm_FormClosing( object sender, FormClosingEventArgs e )
     {
       m_AppSettings.FormSize = this.Size;
@@ -307,6 +309,9 @@ namespace SCJMapper_V2
       lblLastJ.Text = JSStr( ) + m_JS[tc1.SelectedIndex].GetLastChange( ); // show last handled JS control
     }
 
+
+    // TreeView Events
+
     private void treeView1_AfterSelect( object sender, TreeViewEventArgs e )
     {
       if ( e.Node.Level == 1 ) {
@@ -320,11 +325,21 @@ namespace SCJMapper_V2
       }
     }
 
+    // Assign Panel Items
+
+    private void btFind_Click( object sender, EventArgs e )
+    {
+      m_AT.FindCtrl( lblLastJ.Text ); // find the action for a Control (joystick input)
+    }
+
     private void btAssign_Click( object sender, EventArgs e )
     {
       m_AT.UpdateSelectedItem( lblLastJ.Text );
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
+
+
+    // General Area Items
 
     private void btClear_Click( object sender, EventArgs e )
     {
@@ -347,6 +362,19 @@ namespace SCJMapper_V2
     {
       Grab( );
     }
+
+    private void btClearFilter_Click( object sender, EventArgs e )
+    {
+      txFilter.Text = "";
+    }
+
+    private void txFilter_TextChanged( object sender, EventArgs e )
+    {
+      m_AT.FilterTree( txFilter.Text );
+    }
+
+
+    // Toolstrip Items
 
     private void tsBtReset_ButtonClick( object sender, EventArgs e )
     {
@@ -413,7 +441,7 @@ namespace SCJMapper_V2
     }
 
 
-
+    // Context Menu Items
     
     private void tsiCopy_Click( object sender, EventArgs e )
     {
@@ -462,10 +490,7 @@ namespace SCJMapper_V2
 
     }
 
-    private void btFind_Click( object sender, EventArgs e )
-    {
-      m_AT.FindCtrl( lblLastJ.Text ); // find the action for a Control (joystick input)
-    }
+
 
     // rtb drop xml file
     private void rtb_DragEnter( object sender, DragEventArgs e )
@@ -500,7 +525,10 @@ namespace SCJMapper_V2
       string[] droppedFilenames = e.Data.GetData( DataFormats.FileDrop, true ) as string[];
       if ( droppedFilenames.Length > 0 ) rtb.LoadFile( droppedFilenames[0], System.Windows.Forms.RichTextBoxStreamType.PlainText );
     }
+
+    
     #endregion
+
 
 
 
