@@ -141,13 +141,13 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
-    /// Returns the name of the DefaultProfile.xml
+    /// Returns the name part of the DefaultProfile w/o extension...
     /// </summary>
     static public String DefaultProfileName
     {
       get
       {
-        return @"defaultProfile.xml";
+        return @"defaultProfile";
       }
     }
 

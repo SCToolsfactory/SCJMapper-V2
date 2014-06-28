@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-//using SharpDX;
 using SharpDX.DirectInput;
 using System.IO;
 
@@ -16,6 +15,7 @@ namespace SCJMapper_V2
 {
   public partial class MainForm : Form
   {
+    AppSettings m_AppSettings = new AppSettings( );
 
     ///<remarks>
     /// Holds the DXInput Joystick List
@@ -44,13 +44,6 @@ namespace SCJMapper_V2
 
       InitializeComponent( );
 
-      // some applic initialization 
-      rtb.SelectionTabs = new int[] { 10, 20, 30, 40, 50, 60 }; // short tabs
-      rtb.DragEnter +=new DragEventHandler(rtb_DragEnter);
-      rtb.DragDrop +=new DragEventHandler(rtb_DragDrop);
-      rtb.AllowDrop = true; // add Drop to rtb
-      String version = Application.ProductVersion;  // get the version information
-      lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // get the first two elements
     }
 
 
@@ -61,9 +54,36 @@ namespace SCJMapper_V2
     /// <param name="e"></param>
     private void MainForm_Load( object sender, System.EventArgs e )
     {
+      // some applic initialization 
+      // Assign Size property, since databinding to Size doesn't work well.
+
+      this.Size = m_AppSettings.FormSize;
+      this.Location = m_AppSettings.FormLocation;
+
+      // XML RTB
+      rtb.SelectionTabs = new int[] { 10, 20, 30, 40, 50, 60 }; // short tabs
+      rtb.DragEnter += new DragEventHandler( rtb_DragEnter );
+      rtb.DragDrop += new DragEventHandler( rtb_DragDrop );
+      rtb.AllowDrop = true; // add Drop to rtb
+      String version = Application.ProductVersion;  // get the version information
+      lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // get the first two elements
+
+      // load profiles
+      foreach ( String s in SCDefaultProfile.DefaultProfileNames ) {
+        tsDDbtProfiles.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ) );
+      }
+      tsDDbtProfiles.Text = m_AppSettings.DefProfileName;
+
+      // load ResetMode
+      tsDDbtResetMode.DropDownItems.Add( m_AppSettings.ResetModeEmpty );
+      tsDDbtResetMode.DropDownItems.Add( m_AppSettings.ResetModeDefault );
+      tsDDbtResetMode.Text = m_AppSettings.ResetMode;
+
+      // Init X things
       if ( !InitDirectInput( ) )
         Close( );
 
+      // poll the XInput
       timer1.Start( ); // this one polls the joysticks to show the props
     }
 
@@ -151,7 +171,7 @@ namespace SCJMapper_V2
       // build TreeView and the ActionMaps
       m_AT = new ActionTree( );
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
-      m_AT.LoadTree( addDefaultBinding );       // Init with default profile filepath
+      m_AT.LoadTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
 
       // default JS to Joystick mapping - can be changed and reloaded from XML
       if ( tc1.TabCount > 0 ) { cbJs1.SelectedIndex = 0; m_AT.ActionMaps.js1 = cbJs1.Text; }
@@ -186,7 +206,7 @@ namespace SCJMapper_V2
         }
         else {
           // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
-          tc1.TabPages.Add("Joystick " + (tabs+1).ToString());
+          tc1.TabPages.Add( "Joystick " + ( tabs + 1 ).ToString( ) );
           UC_JoyPanel uUC_JoyPanelNew = new UC_JoyPanel( );
           tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
           uUC_JoyPanelNew.Size = UC_JoyPanel.Size;
@@ -215,7 +235,8 @@ namespace SCJMapper_V2
         return false;
       }
 
-      InitActionTree( false );
+      // load the profile items from the XML
+      InitActionTree( ( m_AppSettings.ResetMode == m_AppSettings.ResetModeDefault ) );
 
       return true;
     }
@@ -226,14 +247,21 @@ namespace SCJMapper_V2
     /// <returns></returns>
     private String JSStr( )
     {
-      if ( (String)tc1.SelectedTab.Tag == ( string )cbJs1.SelectedItem ) return JoystickCls.JSTag( 1 );
+      if ( ( String )tc1.SelectedTab.Tag == ( string )cbJs1.SelectedItem ) return JoystickCls.JSTag( 1 );
       if ( ( String )tc1.SelectedTab.Tag == ( string )cbJs2.SelectedItem ) return JoystickCls.JSTag( 2 );
       if ( ( String )tc1.SelectedTab.Tag == ( string )cbJs3.SelectedItem ) return JoystickCls.JSTag( 3 );
-      return JoystickCls.JSTag( tc1.SelectedIndex+1 ); // return the Joystick number
+      return JoystickCls.JSTag( tc1.SelectedIndex + 1 ); // return the Joystick number
     }
 
 
     #region Event Handling
+
+    private void MainForm_FormClosing( object sender, FormClosingEventArgs e )
+    {
+      m_AppSettings.FormSize = this.Size;
+      m_AppSettings.FormLocation = this.Location;
+      m_AppSettings.Save( );
+    }
 
 
     private void timer1_Tick( object sender, System.EventArgs e )
@@ -302,15 +330,27 @@ namespace SCJMapper_V2
       btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
     }
 
-    private void btReset_Click( object sender, EventArgs e )
+    private void tsBtReset_ButtonClick( object sender, EventArgs e )
     {
-      InitActionTree( false ); // start over
+      // start over and if chosen, load defaults from SC game
+      InitActionTree( ( m_AppSettings.ResetMode == m_AppSettings.ResetModeDefault ) );
     }
 
-    private void btResetDefaults_Click( object sender, EventArgs e )
+    private void tsDDbtProfiles_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
     {
-      InitActionTree( true ); // start over and load defaults from SC game
+      tsDDbtProfiles.Text = e.ClickedItem.Text;
+      m_AppSettings.DefProfileName = e.ClickedItem.Text;
+      m_AppSettings.Save( );
+     // InitActionTree( ( Settings.Default.ResetMode == Settings.Default.ResetModeDefault ) ); // start over
     }
+
+    private void tsDDbtResetMode_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
+    {
+      tsDDbtResetMode.Text = e.ClickedItem.Text;
+      m_AppSettings.ResetMode = e.ClickedItem.Text;
+      m_AppSettings.Save( );
+    }
+
 
     private void tsiCopy_Click( object sender, EventArgs e )
     {
@@ -395,10 +435,9 @@ namespace SCJMapper_V2
     {
       // Loads the file into the control. 
       string[] droppedFilenames = e.Data.GetData( DataFormats.FileDrop, true ) as string[];
-      if ( droppedFilenames.Length>0 ) rtb.LoadFile( droppedFilenames[0], System.Windows.Forms.RichTextBoxStreamType.PlainText );
-    }    
+      if ( droppedFilenames.Length > 0 ) rtb.LoadFile( droppedFilenames[0], System.Windows.Forms.RichTextBoxStreamType.PlainText );
+    }
     #endregion
-
 
 
 

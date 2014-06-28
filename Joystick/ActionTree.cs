@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
+using SCJMapper_V2.Properties;
 
 namespace SCJMapper_V2
 {
@@ -15,7 +16,7 @@ namespace SCJMapper_V2
 
 
     // Load MappingVars.csv into the ActionList and create the Control TreeView
-    public void LoadTree( Boolean addDefaultBinding )
+    public void LoadTree( String defaultProfileName, Boolean applyDefaults )
     {
       TreeNode tn = null;
       TreeNode[] cnl = { };
@@ -33,7 +34,7 @@ namespace SCJMapper_V2
       DProfileReader dpReader = new DProfileReader( ); // we may read a profile
       TextReader txReader = null;
 
-      dpReader.fromXML( SCDefaultProfile.DefaultProfile( ) );
+      dpReader.fromXML( SCDefaultProfile.DefaultProfile( defaultProfileName + ".xml" ) );
       if ( dpReader.ValidContent ) {
         txReader = new StringReader( dpReader.CSVMap );
       }
@@ -61,7 +62,7 @@ namespace SCJMapper_V2
                 ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.defBinding = defBinding;
                 acm.Add( ac ); // add to our map
 
-                if ( addDefaultBinding ) {
+                if ( applyDefaults ) {
                   // right now this application only works with joysticks
                   if ( JoystickCls.IsJoystick( ac.device ) ) {
                     int jNum = JoystickCls.JSNum( ac.defBinding );

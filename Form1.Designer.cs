@@ -34,7 +34,6 @@
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
       this.btDumpList = new System.Windows.Forms.Button();
-      this.btReset = new System.Windows.Forms.Button();
       this.label3 = new System.Windows.Forms.Label();
       this.rtb = new System.Windows.Forms.RichTextBox();
       this.cmCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -79,7 +78,10 @@
       this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-      this.btResetDefaults = new System.Windows.Forms.Button();
+      this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+      this.tsDDbtProfiles = new System.Windows.Forms.ToolStripDropDownButton();
+      this.tsDDbtResetMode = new System.Windows.Forms.ToolStripDropDownButton();
+      this.tsBtReset = new System.Windows.Forms.ToolStripSplitButton();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
@@ -91,6 +93,7 @@
       this.flowLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel2.SuspendLayout();
+      this.statusStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
       // btDumpList
@@ -103,19 +106,10 @@
       this.btDumpList.UseVisualStyleBackColor = true;
       this.btDumpList.Click += new System.EventHandler(this.btDumpList_Click);
       // 
-      // btReset
-      // 
-      this.btReset.Location = new System.Drawing.Point(3, 72);
-      this.btReset.Name = "btReset";
-      this.btReset.Size = new System.Drawing.Size(120, 24);
-      this.btReset.TabIndex = 23;
-      this.btReset.Text = "Reset";
-      this.btReset.Click += new System.EventHandler(this.btReset_Click);
-      // 
       // label3
       // 
       this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.label3.Location = new System.Drawing.Point(606, 828);
+      this.label3.Location = new System.Drawing.Point(606, 834);
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(372, 25);
       this.label3.TabIndex = 22;
@@ -133,7 +127,7 @@
       this.rtb.Location = new System.Drawing.Point(606, 81);
       this.rtb.Name = "rtb";
       this.tlpanel.SetRowSpan(this.rtb, 3);
-      this.rtb.Size = new System.Drawing.Size(372, 744);
+      this.rtb.Size = new System.Drawing.Size(372, 750);
       this.rtb.TabIndex = 21;
       this.rtb.Text = "";
       this.rtb.WordWrap = false;
@@ -408,7 +402,7 @@
       this.treeView1.Name = "treeView1";
       this.tlpanel.SetRowSpan(this.treeView1, 3);
       this.treeView1.SelectedImageKey = "Selected";
-      this.treeView1.Size = new System.Drawing.Size(294, 744);
+      this.treeView1.Size = new System.Drawing.Size(294, 750);
       this.treeView1.TabIndex = 16;
       this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
       // 
@@ -492,7 +486,7 @@
       // buttonExit
       // 
       this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.buttonExit.Location = new System.Drawing.Point(171, 72);
+      this.buttonExit.Location = new System.Drawing.Point(171, 75);
       this.buttonExit.Name = "buttonExit";
       this.buttonExit.Size = new System.Drawing.Size(120, 24);
       this.buttonExit.TabIndex = 13;
@@ -541,7 +535,7 @@
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-      this.tlpanel.Size = new System.Drawing.Size(984, 856);
+      this.tlpanel.Size = new System.Drawing.Size(984, 862);
       this.tlpanel.TabIndex = 25;
       // 
       // flowLayoutPanel1
@@ -580,28 +574,61 @@
       this.tableLayoutPanel2.ColumnCount = 2;
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel2.Controls.Add(this.btReset, 0, 2);
       this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 2);
-      this.tableLayoutPanel2.Controls.Add(this.btResetDefaults, 0, 1);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 726);
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 729);
       this.tableLayoutPanel2.Name = "tableLayoutPanel2";
       this.tableLayoutPanel2.RowCount = 3;
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 99);
+      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 102);
       this.tableLayoutPanel2.TabIndex = 24;
       // 
-      // btResetDefaults
+      // statusStrip1
       // 
-      this.btResetDefaults.Location = new System.Drawing.Point(3, 42);
-      this.btResetDefaults.Name = "btResetDefaults";
-      this.btResetDefaults.Size = new System.Drawing.Size(120, 24);
-      this.btResetDefaults.TabIndex = 24;
-      this.btResetDefaults.Text = "Reset to defaults";
-      this.btResetDefaults.Click += new System.EventHandler(this.btResetDefaults_Click);
+      this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsDDbtProfiles,
+            this.tsDDbtResetMode,
+            this.tsBtReset});
+      this.statusStrip1.Location = new System.Drawing.Point(0, 840);
+      this.statusStrip1.Name = "statusStrip1";
+      this.statusStrip1.Size = new System.Drawing.Size(984, 22);
+      this.statusStrip1.TabIndex = 26;
+      this.statusStrip1.Text = "statusStrip1";
+      // 
+      // tsDDbtProfiles
+      // 
+      this.tsDDbtProfiles.AutoSize = false;
+      this.tsDDbtProfiles.Image = ((System.Drawing.Image)(resources.GetObject("tsDDbtProfiles.Image")));
+      this.tsDDbtProfiles.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsDDbtProfiles.Name = "tsDDbtProfiles";
+      this.tsDDbtProfiles.Size = new System.Drawing.Size(250, 20);
+      this.tsDDbtProfiles.Text = "Available Profiles";
+      this.tsDDbtProfiles.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsDDbtProfiles_DropDownItemClicked);
+      // 
+      // tsDDbtResetMode
+      // 
+      this.tsDDbtResetMode.AutoSize = false;
+      this.tsDDbtResetMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.tsDDbtResetMode.Image = ((System.Drawing.Image)(resources.GetObject("tsDDbtResetMode.Image")));
+      this.tsDDbtResetMode.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsDDbtResetMode.Name = "tsDDbtResetMode";
+      this.tsDDbtResetMode.Size = new System.Drawing.Size(150, 20);
+      this.tsDDbtResetMode.Text = "Reset Mode";
+      this.tsDDbtResetMode.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsDDbtResetMode_DropDownItemClicked);
+      // 
+      // tsBtReset
+      // 
+      this.tsBtReset.AutoSize = false;
+      this.tsBtReset.Image = ((System.Drawing.Image)(resources.GetObject("tsBtReset.Image")));
+      this.tsBtReset.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsBtReset.Name = "tsBtReset";
+      this.tsBtReset.Size = new System.Drawing.Size(100, 20);
+      this.tsBtReset.Text = "Reset";
+      this.tsBtReset.ToolTipText = "Reset with chosen options";
+      this.tsBtReset.ButtonClick += new System.EventHandler(this.tsBtReset_ButtonClick);
       // 
       // UC_JoyPanel
       // 
@@ -614,12 +641,14 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(984, 856);
+      this.ClientSize = new System.Drawing.Size(984, 862);
+      this.Controls.Add(this.statusStrip1);
       this.Controls.Add(this.tlpanel);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-      this.MinimumSize = new System.Drawing.Size(1000, 894);
+      this.MinimumSize = new System.Drawing.Size(1000, 900);
       this.Name = "MainForm";
       this.Text = "SC Joystick Mapper";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
       this.Load += new System.EventHandler(this.MainForm_Load);
       this.cmCopyPaste.ResumeLayout(false);
       this.panel3.ResumeLayout(false);
@@ -633,14 +662,16 @@
       this.flowLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel2.ResumeLayout(false);
+      this.statusStrip1.ResumeLayout(false);
+      this.statusStrip1.PerformLayout();
       this.ResumeLayout(false);
+      this.PerformLayout();
 
     }
 
     #endregion
 
     private System.Windows.Forms.Button btDumpList;
-    private System.Windows.Forms.Button btReset;
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.RichTextBox rtb;
     private System.Windows.Forms.Button btGrab;
@@ -686,7 +717,10 @@
     private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-    private System.Windows.Forms.Button btResetDefaults;
+    private System.Windows.Forms.StatusStrip statusStrip1;
+    private System.Windows.Forms.ToolStripDropDownButton tsDDbtProfiles;
+    private System.Windows.Forms.ToolStripDropDownButton tsDDbtResetMode;
+    private System.Windows.Forms.ToolStripSplitButton tsBtReset;
   }
 }
 
