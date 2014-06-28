@@ -79,6 +79,7 @@
       this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+      this.btResetDefaults = new System.Windows.Forms.Button();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
@@ -94,9 +95,9 @@
       // 
       // btDumpList
       // 
-      this.btDumpList.Location = new System.Drawing.Point(3, 52);
+      this.btDumpList.Location = new System.Drawing.Point(3, 33);
       this.btDumpList.Name = "btDumpList";
-      this.btDumpList.Size = new System.Drawing.Size(94, 26);
+      this.btDumpList.Size = new System.Drawing.Size(120, 24);
       this.btDumpList.TabIndex = 24;
       this.btDumpList.Text = "Dump List-->";
       this.btDumpList.UseVisualStyleBackColor = true;
@@ -104,10 +105,9 @@
       // 
       // btReset
       // 
-      this.btReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.btReset.Location = new System.Drawing.Point(3, 72);
       this.btReset.Name = "btReset";
-      this.btReset.Size = new System.Drawing.Size(94, 24);
+      this.btReset.Size = new System.Drawing.Size(120, 24);
       this.btReset.TabIndex = 23;
       this.btReset.Text = "Reset";
       this.btReset.Click += new System.EventHandler(this.btReset_Click);
@@ -201,9 +201,9 @@
       // btGrab
       // 
       this.btGrab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btGrab.Location = new System.Drawing.Point(197, 3);
+      this.btGrab.Location = new System.Drawing.Point(171, 3);
       this.btGrab.Name = "btGrab";
-      this.btGrab.Size = new System.Drawing.Size(94, 26);
+      this.btGrab.Size = new System.Drawing.Size(120, 24);
       this.btGrab.TabIndex = 19;
       this.btGrab.Text = "<-- Grab XML";
       this.btGrab.UseVisualStyleBackColor = true;
@@ -213,7 +213,7 @@
       // 
       this.btDump.Location = new System.Drawing.Point(3, 3);
       this.btDump.Name = "btDump";
-      this.btDump.Size = new System.Drawing.Size(94, 26);
+      this.btDump.Size = new System.Drawing.Size(120, 24);
       this.btDump.TabIndex = 20;
       this.btDump.Text = "Dump XML-->";
       this.btDump.UseVisualStyleBackColor = true;
@@ -491,10 +491,10 @@
       // 
       // buttonExit
       // 
-      this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.buttonExit.Location = new System.Drawing.Point(197, 72);
+      this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.buttonExit.Location = new System.Drawing.Point(171, 72);
       this.buttonExit.Name = "buttonExit";
-      this.buttonExit.Size = new System.Drawing.Size(94, 24);
+      this.buttonExit.Size = new System.Drawing.Size(120, 24);
       this.buttonExit.TabIndex = 13;
       this.buttonExit.Text = "Exit";
       this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
@@ -568,9 +568,10 @@
       this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel1.Location = new System.Drawing.Point(306, 621);
       this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-      this.tableLayoutPanel1.RowCount = 2;
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.RowCount = 3;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 99);
       this.tableLayoutPanel1.TabIndex = 23;
       // 
@@ -579,17 +580,28 @@
       this.tableLayoutPanel2.ColumnCount = 2;
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel2.Controls.Add(this.btReset, 0, 1);
-      this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 1);
+      this.tableLayoutPanel2.Controls.Add(this.btReset, 0, 2);
+      this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 2);
+      this.tableLayoutPanel2.Controls.Add(this.btResetDefaults, 0, 1);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 726);
       this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-      this.tableLayoutPanel2.RowCount = 2;
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel2.RowCount = 3;
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 99);
       this.tableLayoutPanel2.TabIndex = 24;
+      // 
+      // btResetDefaults
+      // 
+      this.btResetDefaults.Location = new System.Drawing.Point(3, 42);
+      this.btResetDefaults.Name = "btResetDefaults";
+      this.btResetDefaults.Size = new System.Drawing.Size(120, 24);
+      this.btResetDefaults.TabIndex = 24;
+      this.btResetDefaults.Text = "Reset to defaults";
+      this.btResetDefaults.Click += new System.EventHandler(this.btResetDefaults_Click);
       // 
       // UC_JoyPanel
       // 
@@ -674,6 +686,7 @@
     private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+    private System.Windows.Forms.Button btResetDefaults;
   }
 }
 

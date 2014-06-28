@@ -26,7 +26,7 @@ namespace SCJMapper_V2
     {
       switch ( device.ToLower( ) ) {
         case "keyboard": return "K";
-        case "joystick": return "J";
+        case JoystickCls.DeviceName: return "J";
         case "xboxpad": return "X";
         case "ps3pad": return "P";
         default: return "Z";
@@ -42,7 +42,7 @@ namespace SCJMapper_V2
     {
       switch ( devID ) {
         case "K": return "keyboard";
-        case "J": return "joystick";
+        case "J": return JoystickCls.DeviceName;
         case "X": return "xboxpad";
         case "P": return "ps3pad";
         default: return "unknown";
@@ -56,6 +56,7 @@ namespace SCJMapper_V2
     public String name { get; set; }
     public String device { get; set; }
     public String input { get; set; }
+    public String defBinding { get; set; }  // the default binding
 
     /// <summary>
     /// ctor
@@ -69,7 +70,7 @@ namespace SCJMapper_V2
     /// Merge action is simply copying the new input control
     /// </summary>
     /// <param name="newAc"></param>
-    public void Merge(ActionCls newAc)
+    public void Merge( ActionCls newAc )
     {
       input = newAc.input;
     }
@@ -81,7 +82,7 @@ namespace SCJMapper_V2
     public String toXML( )
     {
       String r = "";
-      if (! String.IsNullOrEmpty(input) ) r = String.Format( "\t<action name=\"{0}\">\n\t\t\t<rebind device=\"{1}\" input=\"{2}\" />\n\t\t</action>\n", name, device, input );
+      if ( !String.IsNullOrEmpty( input ) ) r = String.Format( "\t<action name=\"{0}\">\n\t\t\t<rebind device=\"{1}\" input=\"{2}\" />\n\t\t</action>\n", name, device, input );
       return r;
     }
 
@@ -96,7 +97,7 @@ namespace SCJMapper_V2
       settings.ConformanceLevel = ConformanceLevel.Fragment;
       settings.IgnoreWhitespace = true;
       settings.IgnoreComments = true;
-      XmlReader reader = XmlReader.Create(new StringReader( xml ), settings);
+      XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
 
       reader.Read( );
 

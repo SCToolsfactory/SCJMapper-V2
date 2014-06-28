@@ -15,7 +15,7 @@ namespace SCJMapper_V2
 
 
     // Load MappingVars.csv into the ActionList and create the Control TreeView
-    public void LoadTree( )
+    public void LoadTree( Boolean addDefaultBinding )
     {
       TreeNode tn = null;
       TreeNode[] cnl = { };
@@ -38,6 +38,7 @@ namespace SCJMapper_V2
         txReader = new StringReader( dpReader.CSVMap );
       }
 
+      Ctrl.BeginUpdate( );
       using ( TextReader sr = txReader ) {
         String buf = sr.ReadLine( );
         while ( !String.IsNullOrEmpty( buf ) ) {
@@ -47,17 +48,30 @@ namespace SCJMapper_V2
             Array.Resize( ref cnl, 0 );
             acm = new ActionMapCls( ); acm.name = elem[0]; // get actionmap name
             // process items
-            for ( int ei=1; ei < elem.Length; ei++ ) {
+            for ( int ei=1; ei < elem.Length; ei += 2 ) { // step 2  - action;defaultBinding come in pairs
               if ( !String.IsNullOrEmpty( elem[ei] ) ) {
                 String action = elem[ei].Substring( 1 );
+                String defBinding = elem[ei + 1].Substring( 0 );
                 cn = new TreeNode( action ); cn.Name = elem[ei];  // name with the key it to find it..
                 String devID = elem[ei].Substring( 0, 1 );
                 String device = ActionCls.DeviceFromID( devID );
                 cn.ImageKey = devID;
 
                 Array.Resize( ref cnl, cnl.Length + 1 ); cnl[cnl.Length - 1] = cn;
-                ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device;
+                ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.defBinding = defBinding;
                 acm.Add( ac ); // add to our map
+
+                if ( addDefaultBinding ) {
+                  // right now this application only works with joysticks
+                  if ( JoystickCls.IsJoystick( ac.device ) ) {
+                    int jNum = JoystickCls.JSNum( ac.defBinding );
+                    if ( JoystickCls.IsJSValid( jNum ) ) {
+                      ac.input = ac.defBinding;
+                      cn.Text += " - " + ac.defBinding;
+                      cn.BackColor = MyColors.JColor[jNum - 1]; // color list is 0 based
+                    }
+                  }
+                }
               }
             }//for
             tn = new TreeNode( acm.name, cnl ); tn.Name = acm.name;  // name it to find it..
@@ -83,6 +97,8 @@ namespace SCJMapper_V2
       Ctrl.ExpandAll( );
       if ( topNode != null ) Ctrl.TopNode = topNode;
       Dirty = false;
+      Ctrl.EndUpdate( );
+
     }
 
 

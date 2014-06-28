@@ -146,12 +146,12 @@ namespace SCJMapper_V2
     /// <summary>
     /// Resets the Action Tree
     /// </summary>
-    private void InitActionTree( )
+    private void InitActionTree( Boolean addDefaultBinding )
     {
       // build TreeView and the ActionMaps
       m_AT = new ActionTree( );
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
-      m_AT.LoadTree( );       // Init with default profile filepath
+      m_AT.LoadTree( addDefaultBinding );       // Init with default profile filepath
 
       // default JS to Joystick mapping - can be changed and reloaded from XML
       if ( tc1.TabCount > 0 ) { cbJs1.SelectedIndex = 0; m_AT.ActionMaps.js1 = cbJs1.Text; }
@@ -215,7 +215,7 @@ namespace SCJMapper_V2
         return false;
       }
 
-      InitActionTree( );
+      InitActionTree( false );
 
       return true;
     }
@@ -302,6 +302,16 @@ namespace SCJMapper_V2
       btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
     }
 
+    private void btReset_Click( object sender, EventArgs e )
+    {
+      InitActionTree( false ); // start over
+    }
+
+    private void btResetDefaults_Click( object sender, EventArgs e )
+    {
+      InitActionTree( true ); // start over and load defaults from SC game
+    }
+
     private void tsiCopy_Click( object sender, EventArgs e )
     {
       rtb.Focus( );
@@ -327,11 +337,6 @@ namespace SCJMapper_V2
       rtb.SelectAll( );
       rtb.Paste( DataFormats.GetFormat( DataFormats.UnicodeText ) );
       btGrab.BackColor = MyColors.DirtyColor;
-    }
-
-    private void btReset_Click( object sender, EventArgs e )
-    {
-      InitActionTree( ); // start over
     }
 
     private void tsiOpen_Click( object sender, EventArgs e )
@@ -393,6 +398,7 @@ namespace SCJMapper_V2
       if ( droppedFilenames.Length>0 ) rtb.LoadFile( droppedFilenames[0], System.Windows.Forms.RichTextBoxStreamType.PlainText );
     }    
     #endregion
+
 
 
 

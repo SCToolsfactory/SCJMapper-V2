@@ -52,7 +52,7 @@ namespace SCJMapper_V2
 
     /// <summary>
     /// Returns the collected actionmaps as CSV (same format as MappingVars)
-    /// i.e. one line per actionmap where the first element is the actionmap and following are actions lead by the input Key in uppercase (JKXP)
+    /// i.e. one line per actionmap where the first element is the actionmap and following are actions;defaultBinding lead by the input Key in uppercase (JKXP)
     /// </summary>
     public String CSVMap
     {
@@ -62,7 +62,7 @@ namespace SCJMapper_V2
         foreach ( ActionMap am in m_aMap.Values ) {
           buf += am.name + ";";
           foreach ( Action a in am ) {
-            buf += a.keyName + ";";
+            buf += a.keyName + ";" + a.defBinding + ";"; // add default binding to the CSV
           }
           buf += String.Format( "\n" );
         }
