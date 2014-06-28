@@ -245,14 +245,14 @@ namespace SCJMapper_V2
       foreach ( KeyValuePair<string, string> entry in axies ) {
         PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( entry.Key );
 
-        if ( DidAxisChange( ( int )axisProperty.GetValue( this.m_state, null ), ( int )axisProperty.GetValue( this.m_prevState, null ) ) )
+        if ( DidAxisChange2( ( int )axisProperty.GetValue( this.m_state, null ), ( int )axisProperty.GetValue( this.m_prevState, null ) ) )
           this.m_lastItem = entry.Value;
       }
 
       int[] slider = m_state.Sliders;
       int[] pslider = m_prevState.Sliders;
-      if ( slider[0] != pslider[0] ) m_lastItem = "slider1";
-      if ( slider[1] != pslider[1] ) m_lastItem = "slider2";
+      if ( DidAxisChange2( slider[0], pslider[0]) ) m_lastItem = "slider1";
+      if ( DidAxisChange2(slider[1], pslider[1] ) ) m_lastItem = "slider2";
 
       int[] pov = m_state.PointOfViewControllers;
       int[] ppov = m_prevState.PointOfViewControllers;
@@ -270,6 +270,25 @@ namespace SCJMapper_V2
       return m_lastItem;
     }
 
+
+    ///<summary>
+    /// Figure out if an axis changed enough to consider it as a changed state
+    /// The change is polled every 100ms (timer1) so the user has to change so much within that time
+    /// Then an axis usually swings back when left alone - that is the real recording of a change.
+    /// We know that the range is -1000 .. 1000 so we can judge absolute
+    /// % relative is prone to small changes around 0 - which is likely the case with axes
+    /// </summary>
+    private bool DidAxisChange2( int current, int prev )
+    {
+      // determine if the axis drifts more than x units to account for bounce
+      // old-new/old
+      if ( current == prev )
+        return false;
+      int change = Math.Abs( prev - current );
+      // if the axis has changed more than x units to it's last value
+      return change > 100 ? true : false;
+
+    }
 
     ///<summary>
     /// Figure out if an axis changed enough to consider it as a changed state
