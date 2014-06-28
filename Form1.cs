@@ -74,10 +74,11 @@ namespace SCJMapper_V2
       }
       tsDDbtProfiles.Text = m_AppSettings.DefProfileName;
 
-      // load ResetMode
-      tsDDbtResetMode.DropDownItems.Add( m_AppSettings.ResetModeEmpty );
-      tsDDbtResetMode.DropDownItems.Add( m_AppSettings.ResetModeDefault );
-      tsDDbtResetMode.Text = m_AppSettings.ResetMode;
+      // load mappings
+      foreach ( String s in SCMappings.MappingNames ) {
+        tsDDbtMappings.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ) );
+      }
+      tsDDbtMappings.Text = m_AppSettings.DefMappingName;
 
       // Init X things
       if ( !InitDirectInput( ) )
@@ -236,7 +237,7 @@ namespace SCJMapper_V2
       }
 
       // load the profile items from the XML
-      InitActionTree( ( m_AppSettings.ResetMode == m_AppSettings.ResetModeDefault ) );
+      InitActionTree( true );
 
       return true;
     }
@@ -252,6 +253,42 @@ namespace SCJMapper_V2
       if ( ( String )tc1.SelectedTab.Tag == ( string )cbJs3.SelectedItem ) return JoystickCls.JSTag( 3 );
       return JoystickCls.JSTag( tc1.SelectedIndex + 1 ); // return the Joystick number
     }
+
+    /// <summary>
+    ///  Grab the rtb data and load them into config
+    /// </summary>
+    private void Grab ()
+    {
+      m_AT.ActionMaps.fromXML( rtb.Text );
+      m_AT.ReloadCtrl( );
+      // JS mapping for the first 3 items can be changed and reloaded from XML
+      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js1 ) ) {
+        int i = cbJs1.FindString( m_AT.ActionMaps.js1 );
+        if ( i >= 0 ) cbJs1.SelectedIndex = i;
+      }
+      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js2 ) ) {
+        int i = cbJs2.FindString( m_AT.ActionMaps.js2 );
+        if ( i >= 0 ) cbJs2.SelectedIndex = i;
+      }
+      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js3 ) ) {
+        int i = cbJs3.FindString( m_AT.ActionMaps.js3 );
+        if ( i >= 0 ) cbJs3.SelectedIndex = i;
+      }
+      btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
+      btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
+    }
+
+    /// <summary>
+    /// Dump Config into rtb
+    /// </summary>
+    private void Dump( )
+    {
+      rtb.Text = String.Format( "<!-- {0} - SC Joystick Mapping -->\n{1}", DateTime.Now, m_AT.ActionMaps.toXML( ) );
+
+      btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
+      btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
+    }
+
 
 
     #region Event Handling
@@ -298,10 +335,7 @@ namespace SCJMapper_V2
 
     private void btDump_Click( object sender, EventArgs e )
     {
-      rtb.Text = String.Format( "<!-- {0} - SC Joystick Mapping -->\n{1}", DateTime.Now, m_AT.ActionMaps.toXML( ) );
-
-      btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
-      btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
+      Dump( );
     }
 
     private void btDumpList_Click( object sender, EventArgs e )
@@ -311,29 +345,11 @@ namespace SCJMapper_V2
 
     private void btGrab_Click( object sender, EventArgs e )
     {
-      m_AT.ActionMaps.fromXML( rtb.Text );
-      m_AT.ReloadCtrl( );
-      // JS mapping for the first 3 items can be changed and reloaded from XML
-      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js1 ) ) {
-        int i = cbJs1.FindString( m_AT.ActionMaps.js1 );
-        if ( i >= 0 ) cbJs1.SelectedIndex = i;
-      }
-      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js2 ) ) {
-        int i = cbJs2.FindString( m_AT.ActionMaps.js2 );
-        if ( i >= 0 ) cbJs2.SelectedIndex = i;
-      }
-      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js3 ) ) {
-        int i = cbJs3.FindString( m_AT.ActionMaps.js3 );
-        if ( i >= 0 ) cbJs3.SelectedIndex = i;
-      }
-      btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
-      btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
+      Grab( );
     }
 
     private void tsBtReset_ButtonClick( object sender, EventArgs e )
     {
-      // start over and if chosen, load defaults from SC game
-      InitActionTree( ( m_AppSettings.ResetMode == m_AppSettings.ResetModeDefault ) );
     }
 
     private void tsDDbtProfiles_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
@@ -344,14 +360,61 @@ namespace SCJMapper_V2
      // InitActionTree( ( Settings.Default.ResetMode == Settings.Default.ResetModeDefault ) ); // start over
     }
 
-    private void tsDDbtResetMode_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
+    private void resetEmptyToolStripMenuItem_Click( object sender, EventArgs e )
     {
-      tsDDbtResetMode.Text = e.ClickedItem.Text;
-      m_AppSettings.ResetMode = e.ClickedItem.Text;
+      // start over 
+      InitActionTree( false );
+      rtb.Text = "";
+    }
+
+    private void resetDefaultsToolStripMenuItem_Click( object sender, EventArgs e )
+    {
+      // start over and if chosen, load defaults from SC game
+      InitActionTree( true );
+      rtb.Text = "";
+    }
+
+    private void tsDDbtMappings_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
+    {
+      tsDDbtMappings.Text = e.ClickedItem.Text;
+      m_AppSettings.DefMappingName = e.ClickedItem.Text;
       m_AppSettings.Save( );
     }
 
 
+    private void loadToolStripMenuItem_Click( object sender, EventArgs e )
+    {
+      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      btGrab.BackColor = MyColors.DirtyColor;
+    }
+
+    private void loadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
+    {
+      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      Grab( );
+      btDump.BackColor = MyColors.DirtyColor;
+    }
+
+    private void resetLoadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
+    {
+      // start over 
+      InitActionTree( false );
+      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      Grab( );
+    }
+
+    private void defaultsLoadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
+    {
+      // start over 
+      InitActionTree( true );
+      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      Grab( );
+      btDump.BackColor = MyColors.DirtyColor;
+    }
+
+
+
+    
     private void tsiCopy_Click( object sender, EventArgs e )
     {
       rtb.Focus( );
@@ -438,6 +501,8 @@ namespace SCJMapper_V2
       if ( droppedFilenames.Length > 0 ) rtb.LoadFile( droppedFilenames[0], System.Windows.Forms.RichTextBoxStreamType.PlainText );
     }
     #endregion
+
+
 
 
 

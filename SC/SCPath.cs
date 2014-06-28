@@ -114,6 +114,23 @@ namespace SCJMapper_V2
 
 
     /// <summary>
+    /// Returns the SC ClientData path  e.g.  "E:\G\StarCitizen\CitizenClient\Data\Controls\Mappings"
+    /// </summary>
+    static public String SCClientMappingPath
+    {
+      get
+      {
+        String scp = SCClientDataPath;
+        if ( String.IsNullOrEmpty( scp ) ) return "";
+        //
+        scp = Path.Combine( scp, "Controls" );
+        scp = Path.Combine( scp, "Mappings" );
+        return scp;
+      }
+    }
+
+
+    /// <summary>
     /// Returns the SC GameData.pak file path  e.g.  "E:\G\StarCitizen\CitizenClient\Data\GameData.pak"
     /// </summary>
     static public String SCGameData_pak

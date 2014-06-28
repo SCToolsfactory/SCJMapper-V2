@@ -36,30 +36,12 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "Reset empty" )] // defaults to one of the ResetMode Settings below
-    public String ResetMode
+    [DefaultSettingValueAttribute( "layout_joystick_spacesim" )] // from Game Bundle
+    public String DefMappingName
     {
-      get { return ( String )this["ResetMode"]; }
-      set { this["ResetMode"] = value; }
+      get { return ( String )this["DefMappingName"]; }
+      set { this["DefMappingName"] = value; }
     }
-
-    // Application Settings
-    [ApplicationScopedSetting( )]
-    [DefaultSettingValueAttribute( "Reset empty" )]
-    public String ResetModeEmpty
-    {
-      get { return ( String )this["ResetModeEmpty"]; }
-      set { ; } // cannot be changed
-    }
-
-    [ApplicationScopedSetting( )]
-    [DefaultSettingValueAttribute( "Reset defaults" )]
-    public String ResetModeDefault
-    {
-      get { return ( String )this["ResetModeDefault"]; }
-      set { ; } // cannot be changed
-    }
-
 
 
 
