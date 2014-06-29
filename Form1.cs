@@ -514,21 +514,16 @@ namespace SCJMapper_V2
     private void tsiOpen_Click( object sender, EventArgs e )
     {
       if ( OFD.ShowDialog( this ) == System.Windows.Forms.DialogResult.OK ) {
-        using ( StreamReader istr = new StreamReader( OFD.OpenFile( ) ) ) {
-          rtb.Text = istr.ReadToEnd( ); // load the complete XML from the file into the textbox
-          btGrab.BackColor = MyColors.DirtyColor;
-        }
+        rtb.LoadFile( OFD.FileName, RichTextBoxStreamType.PlainText );
+        btGrab.BackColor = MyColors.DirtyColor;
       }
     }
 
     private void tsiSaveAs_Click( object sender, EventArgs e )
     {
       if ( SFD.ShowDialog( this ) == System.Windows.Forms.DialogResult.OK ) {
-        using ( StreamWriter istr = new StreamWriter( SFD.OpenFile( ) ) ) {
-          istr.Write( rtb.Text ); // just dump the whole XML text
-        }
+        rtb.SaveFile( SFD.FileName, RichTextBoxStreamType.PlainText );
       }
-
     }
 
 
@@ -592,6 +587,8 @@ namespace SCJMapper_V2
         }
         if ( !cancel ) {
           rtb.SaveFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
+          rtb.SaveFile( TheUser.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText ); // backup copy 
+
           // get the new one into the list
           SCMappings.UpdateMappingNames( );
           LoadMappingDD( );
@@ -625,13 +622,7 @@ namespace SCJMapper_V2
 
     #endregion
 
-
-
-
-
-
-
-
+    
 
   }
 }

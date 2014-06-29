@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "SC Joystick Mapper" )]
+[assembly: AssemblyTitle( "SC Joystick Mapper V2" )]
 [assembly: AssemblyDescription( "SC Joystick mapping tool" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "Cassini (SC handle)" )]
-[assembly: AssemblyProduct( "SCJMapper-V2" )]
+[assembly: AssemblyProduct( "SCJMapper" )]
 [assembly: AssemblyCopyright( "Copyright (c) 2014 M.Burri" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]

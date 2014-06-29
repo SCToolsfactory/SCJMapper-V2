@@ -103,6 +103,7 @@
     <Compile Include="SC\SCDefaultProfile.cs" />
     <Compile Include="SC\SCMappings.cs" />
     <Compile Include="SC\SCPath.cs" />
+    <Compile Include="TheUser.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
