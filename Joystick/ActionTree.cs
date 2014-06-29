@@ -8,62 +8,108 @@ using SCJMapper_V2.Properties;
 
 namespace SCJMapper_V2
 {
+  /// <summary>
+  /// Maintains the action tree and its GUI representation, the TreeView
+  ///  - the TreeView is managed primary in memory (Master Tree) and copied to the GUI tree via the Filter functions
+  /// </summary>
   class ActionTree
   {
 
-    private String m_Filter = "";
+    public ActionMapsCls ActionMaps { get; set; }   // the Action Maps and Actions
 
-    public ActionMapsCls ActionMaps { get; set; }
-    public TreeView Ctrl { get; set; }
-    public Boolean Dirty { get; set; }
+    private TreeView m_MasterTree = new TreeView( ); // the master TreeView (mem only)
+    private TreeView m_ctrl = null; // the TreeView in the GUI - injected from GUI via Ctrl property
+    public TreeView Ctrl
+    {
+      get { return m_ctrl;}
+      set { 
+        m_ctrl = value; 
+        // copy props needed
+        m_MasterTree.Font = m_ctrl.Font;
+        m_MasterTree.ImageList = m_ctrl.ImageList; 
+      }
+    }  
+    public Boolean Dirty { get; set; }  // maintains the change status (gets reset by reloading the complete tree)
+
+    private String m_Filter = ""; // the tree content filter
 
 
+    /// <summary>
+    /// Instantiates a copy of the node - copies only the needed properties
+    /// </summary>
+    /// <param name="srcNode">A source node</param>
+    /// <returns>A new TreeNode</returns>
+    private TreeNode TNCopy( TreeNode srcNode )
+    {
+      if ( srcNode == null ) return null;
+
+      TreeNode nn = new TreeNode( );
+      nn.Name = srcNode.Name;
+      nn.Text = srcNode.Text;
+      nn.BackColor = srcNode.BackColor;
+      nn.ForeColor = srcNode.ForeColor;
+      nn.NodeFont = srcNode.NodeFont;
+      nn.ImageKey = srcNode.ImageKey;
+      return nn;
+    }
+
+
+    /// <summary>
+    /// Apply the filter to the GUI TreeView
+    /// </summary>
     private void ApplyFilter( )
     {
-      TreeNode topNode = null;
+      TreeNode topNode = null; // allow to backup the view - will carry the first node items
+
       Ctrl.BeginUpdate( );
-      foreach ( TreeNode tn in Ctrl.Nodes ) {
-        if ( topNode == null ) topNode = tn;
+      Ctrl.Nodes.Clear( ); // start over
+
+      // traverse the master tree and build the GUI tree from it
+      foreach ( TreeNode tn in m_MasterTree.Nodes ) {
+        TreeNode tnMap = TNCopy( tn ); Ctrl.Nodes.Add( tnMap ); // copy level 0 nodes
+        if ( topNode == null ) topNode = tnMap;
+
         // have to search nodes of nodes
         Boolean allHidden = true;
         foreach ( TreeNode stn in tn.Nodes ) {
-          if ( ( stn.Tag != null ) && ( ( Boolean )stn.Tag == true ) ) {
-            // hide it - thoug you cannot hide TreeViewNodes at all...
-            stn.ForeColor = stn.BackColor;
+          if ( ( stn.Tag != null ) && ( ( Boolean )stn.Tag == true ) ) {            
+            ;  // don't create it i.e hide it - though you cannot hide TreeViewNodes at all...
           }
           else {
-            stn.ForeColor = Ctrl.ForeColor;
+            TreeNode tnAction = TNCopy( stn ); tnMap.Nodes.Add( tnAction ); // copy level 1 nodes
             allHidden = false;
           }
         }
         // make it tidier..
-        if ( allHidden ) tn.Collapse( );
-        else tn.Expand( );
+        if ( allHidden ) tnMap.Collapse( );
+        else tnMap.Expand( );
       }
-      if ( topNode != null ) Ctrl.TopNode = topNode;
+      if ( topNode != null ) Ctrl.TopNode = topNode; // set view to topnode
 
-      Ctrl.EndUpdate( );
+      Ctrl.EndUpdate( ); // enable GUI update
     }
 
+
     /// <summary>
-    /// Filters the tree 
+    /// Filters the master tree  - only Actions (level 1) and not actionmaps (level 0)
+    ///   - Tag gets Bool hidden=true if not to be shown
     /// </summary>
     private void FilterTree( )
     {
-      Boolean hidden = ! String.IsNullOrEmpty( m_Filter ); // hide only if there is a find string
-      foreach ( TreeNode tn in Ctrl.Nodes ) {
+      Boolean hidden = !String.IsNullOrEmpty( m_Filter ); // hide only if there is a find string
+      foreach ( TreeNode tn in m_MasterTree.Nodes ) {
         // have to search nodes of nodes
         foreach ( TreeNode stn in tn.Nodes ) {
           if ( !stn.Text.Contains( m_Filter ) ) stn.Tag = hidden;
           else stn.Tag = null;
         }
       }
-      ApplyFilter( );
+      ApplyFilter( ); // to the GUI tree
     }
 
 
     /// <summary>
-    /// Filters entries with given criteria but not action maps
+    /// Filters entries with given criteria
     /// </summary>
     /// <param name="filter">The text snip to filter</param>
     public void FilterTree( String filter )
@@ -74,7 +120,7 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Load MappingVars.csv into the ActionList and create the Control TreeView 
+    /// Load MappingVars.csv into the ActionList and create the Master TreeView 
     /// </summary>
     /// <param name="defaultProfileName">The name of the profile to load (w/o extension)</param>
     /// <param name="applyDefaults">True if default mappings should be carried on</param>
@@ -89,7 +135,7 @@ namespace SCJMapper_V2
       ActionMapCls acm = null;
 
       ActionMaps = new ActionMapsCls( );
-      Ctrl.Nodes.Clear( );
+      m_MasterTree.Nodes.Clear( );
 
 
       // read the action items into the TreeView
@@ -101,7 +147,6 @@ namespace SCJMapper_V2
         txReader = new StringReader( dpReader.CSVMap );
       }
 
-      Ctrl.BeginUpdate( );
       using ( TextReader sr = txReader ) {
         String buf = sr.ReadLine( );
         while ( !String.IsNullOrEmpty( buf ) ) {
@@ -139,9 +184,9 @@ namespace SCJMapper_V2
               }
             }//for
             tn = new TreeNode( acm.name, cnl ); tn.Name = acm.name;  // name it to find it..
-            tn.ImageIndex = 0; tn.NodeFont = new Font( Ctrl.Font, FontStyle.Bold );
-            Ctrl.BackColor = Color.White; // fix for defect TreeView (cut off bold text)
-            Ctrl.Nodes.Add( tn ); // add to control
+            tn.ImageIndex = 0; tn.NodeFont = new Font( m_MasterTree.Font, FontStyle.Bold );
+            m_MasterTree.BackColor = Color.White; // fix for defect TreeView (cut off bold text)
+            m_MasterTree.Nodes.Add( tn ); // add to control
             if ( topNode == null ) topNode = tn; // once to keep the start of list
             ActionMaps.Add( acm ); // add to our map
           }// if valid line
@@ -150,42 +195,53 @@ namespace SCJMapper_V2
       }
       // fix for defect TreeView (cut off bold text at last element -despite the BackColor fix) add another and delete it 
       tn = new TreeNode( "DUMMY" ); tn.Name = "DUMMY";
-      tn.ImageIndex = 0; tn.NodeFont = new Font( Ctrl.Font, FontStyle.Bold );
-      Ctrl.BackColor = Ctrl.BackColor; // fix for defect TreeView (cut off bold text)
-      Ctrl.Nodes.Add( tn ); // add to control
-      Ctrl.Nodes.RemoveByKey( "DUMMY" );
+      tn.ImageIndex = 0; tn.NodeFont = new Font( m_MasterTree.Font, FontStyle.Bold );
+      m_MasterTree.BackColor = m_MasterTree.BackColor; // fix for defect TreeView (cut off bold text)
+      m_MasterTree.Nodes.Add( tn ); // add to control
+      m_MasterTree.Nodes.RemoveByKey( "DUMMY" );
       // fix for defect TreeView (cut off bold text)
 
       txReader = null;
-
-      Ctrl.ExpandAll( );
-      if ( topNode != null ) Ctrl.TopNode = topNode;
       Dirty = false;
-      Ctrl.EndUpdate( );
 
+      // finally apply the filter and make it visible
       FilterTree( );
     }
 
 
+
     // input is like  js1_button3
+    /// <summary>
+    /// Apply an update the the treenode
+    /// First apply to the GUI tree where the selection happend then copy it over to master tree
+    /// </summary>
+    /// <param name="input">The new Text property</param>
     public void UpdateSelectedItem( String input )
     {
       if ( Ctrl.SelectedNode == null ) return;
+
+      // applies only to ActionNodes
       if ( Ctrl.SelectedNode.Level == 1 ) {
         String[] elements = Ctrl.SelectedNode.Text.Split( );
         if ( String.IsNullOrEmpty( input ) ) {
-          Ctrl.SelectedNode.Text = elements[0];
-          Ctrl.SelectedNode.BackColor = Color.White;
+          Ctrl.SelectedNode.Text = elements[0]; 
+          Ctrl.SelectedNode.BackColor = Color.White;  
         }
         else {
           Ctrl.SelectedNode.Text = elements[0] + " - " + input;
           int jNum = JoystickCls.JSNum( input );
           Ctrl.SelectedNode.BackColor = MyColors.JColor[jNum - 1]; // color list is 0 based
         }
+        // copy to master node
+        TreeNode[] masterNode = m_MasterTree.Nodes.Find( Ctrl.SelectedNode.Name, true ); // find the same node in master
+        if ( masterNode.Length == 0 ) throw new IndexOutOfRangeException( "ActionTree ERROR - cannot find synched node in master" ); // OUT OF SYNC
+        masterNode[0].Text = Ctrl.SelectedNode.Text;
+        masterNode[0].BackColor = Ctrl.SelectedNode.BackColor;
+
+        // Apply the input to the ActionTree
         ActionMapCls ACM = ActionMaps.Find( delegate( ActionMapCls acm ) {
           return acm.name == Ctrl.SelectedNode.Parent.Name;
         } );
-
         if ( ACM != null ) {
           ActionCls AC = ACM.Find( delegate( ActionCls ac ) {
             return ac.key == Ctrl.SelectedNode.Name;
@@ -195,6 +251,7 @@ namespace SCJMapper_V2
             Dirty = true;
           }
         }
+
       }
     }
 
@@ -205,10 +262,9 @@ namespace SCJMapper_V2
     /// </summary>
     public void ReloadCtrl( )
     {
-      Ctrl.BeginUpdate( );
       foreach ( ActionMapCls acm in ActionMaps ) {
         try {
-          TreeNode amTn = Ctrl.Nodes[acm.name]; // get the map node
+          TreeNode amTn = m_MasterTree.Nodes[acm.name]; // get the map node
           // find the item to reload into the treeview
           foreach ( ActionCls ac in acm ) {
             try {
@@ -234,15 +290,17 @@ namespace SCJMapper_V2
           ; // map key not found ??
         }
       }
-      Ctrl.EndUpdate( );
 
+      // finally apply the filter and make it visible
       FilterTree( );
     }
 
+
     /// <summary>
-    /// Find a control that contains the string and make it visible
+    /// Find a control that contains the string and mark it
+    ///   this method is applied to the GUI TreeView only
     /// </summary>
-    /// <param name="ctrl">The string to find</param>
+    /// <param name="m_MasterTree">The string to find</param>
     public void FindCtrl( String ctrl )
     {
       Boolean found = false;
@@ -268,7 +326,7 @@ namespace SCJMapper_V2
     public String ReportActions( )
     {
       String repList = "";
-
+      // JS assignments
       if ( !String.IsNullOrEmpty( ActionMaps.js1 ) ) repList += String.Format( "** js1 = {0}\n", ActionMaps.js1 );
       if ( !String.IsNullOrEmpty( ActionMaps.js2 ) ) repList += String.Format( "** js2 = {0}\n", ActionMaps.js2 );
       if ( !String.IsNullOrEmpty( ActionMaps.js3 ) ) repList += String.Format( "** js3 = {0}\n", ActionMaps.js3 );
@@ -277,13 +335,14 @@ namespace SCJMapper_V2
       if ( !String.IsNullOrEmpty( ActionMaps.js6 ) ) repList += String.Format( "** js6 = {0}\n", ActionMaps.js6 );
       if ( !String.IsNullOrEmpty( ActionMaps.js7 ) ) repList += String.Format( "** js7 = {0}\n", ActionMaps.js7 );
       if ( !String.IsNullOrEmpty( ActionMaps.js8 ) ) repList += String.Format( "** js8 = {0}\n", ActionMaps.js8 );
+      // now the mapped actions
       repList += String.Format( "\n" );
       foreach ( ActionMapCls acm in ActionMaps ) {
         String rep = String.Format( "*** {0}\n", acm.name );
         repList += rep;
         foreach ( ActionCls ac in acm ) {
           if ( !String.IsNullOrEmpty( ac.input ) ) {
-            rep = String.Format( " {0} - {1} - ({2})\n", ac.name.PadRight( 35 ), ac.input.PadRight( 20 ), ac.device);
+            rep = String.Format( " {0} - {1} - ({2})\n", ac.name.PadRight( 35 ), ac.input.PadRight( 20 ), ac.device );
             repList += rep;
           }
         }
