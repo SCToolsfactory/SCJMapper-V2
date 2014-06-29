@@ -80,6 +80,11 @@
       this.txFilter = new System.Windows.Forms.TextBox();
       this.btClearFilter = new System.Windows.Forms.Button();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+      this.btSaveMyMapping = new System.Windows.Forms.Button();
+      this.btLoadMyMapping = new System.Windows.Forms.Button();
+      this.txMappingName = new System.Windows.Forms.TextBox();
+      this.label1 = new System.Windows.Forms.Label();
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
       this.tsDDbtProfiles = new System.Windows.Forms.ToolStripDropDownButton();
@@ -94,12 +99,9 @@
       this.resetLoadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-      this.txMappingName = new System.Windows.Forms.TextBox();
-      this.btLoadMyMapping = new System.Windows.Forms.Button();
-      this.btSaveMyMapping = new System.Windows.Forms.Button();
-      this.label1 = new System.Windows.Forms.Label();
+      this.linkLblReleases = new System.Windows.Forms.LinkLabel();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
+      this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
       this.panel2.SuspendLayout();
@@ -110,8 +112,8 @@
       this.flowLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel2.SuspendLayout();
-      this.statusStrip1.SuspendLayout();
       this.tableLayoutPanel3.SuspendLayout();
+      this.statusStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
       // btDumpList
@@ -127,9 +129,9 @@
       // label3
       // 
       this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.label3.Location = new System.Drawing.Point(606, 833);
+      this.label3.Location = new System.Drawing.Point(606, 823);
       this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(372, 26);
+      this.label3.Size = new System.Drawing.Size(372, 36);
       this.label3.TabIndex = 22;
       this.label3.Text = "Right click above to open the context menu";
       this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -145,7 +147,7 @@
       this.rtb.Location = new System.Drawing.Point(606, 81);
       this.rtb.Name = "rtb";
       this.tlpanel.SetRowSpan(this.rtb, 2);
-      this.rtb.Size = new System.Drawing.Size(372, 674);
+      this.rtb.Size = new System.Drawing.Size(372, 667);
       this.rtb.TabIndex = 21;
       this.rtb.Text = "";
       this.rtb.WordWrap = false;
@@ -420,7 +422,7 @@
       this.treeView1.Name = "treeView1";
       this.tlpanel.SetRowSpan(this.treeView1, 3);
       this.treeView1.SelectedImageKey = "Selected";
-      this.treeView1.Size = new System.Drawing.Size(294, 749);
+      this.treeView1.Size = new System.Drawing.Size(294, 739);
       this.treeView1.TabIndex = 16;
       this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
       // 
@@ -464,6 +466,7 @@
       // panel1
       // 
       this.tlpanel.SetColumnSpan(this.panel1, 3);
+      this.panel1.Controls.Add(this.linkLblReleases);
       this.panel1.Controls.Add(this.label8);
       this.panel1.Controls.Add(this.lblTitle);
       this.panel1.Controls.Add(this.label4);
@@ -504,7 +507,7 @@
       // buttonExit
       // 
       this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.buttonExit.Location = new System.Drawing.Point(171, 42);
+      this.buttonExit.Location = new System.Drawing.Point(171, 39);
       this.buttonExit.Name = "buttonExit";
       this.buttonExit.Size = new System.Drawing.Size(120, 24);
       this.buttonExit.TabIndex = 13;
@@ -553,7 +556,7 @@
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 540F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
-      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
       this.tlpanel.Size = new System.Drawing.Size(984, 862);
       this.tlpanel.TabIndex = 25;
       // 
@@ -589,7 +592,7 @@
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 134);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 127);
       this.tableLayoutPanel1.TabIndex = 23;
       // 
       // txFilter
@@ -620,14 +623,77 @@
       this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 1);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 761);
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 754);
       this.tableLayoutPanel2.Name = "tableLayoutPanel2";
       this.tableLayoutPanel2.RowCount = 2;
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 69);
+      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 66);
       this.tableLayoutPanel2.TabIndex = 24;
+      // 
+      // tableLayoutPanel3
+      // 
+      this.tableLayoutPanel3.ColumnCount = 2;
+      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 240F));
+      this.tableLayoutPanel3.Controls.Add(this.btSaveMyMapping, 1, 1);
+      this.tableLayoutPanel3.Controls.Add(this.btLoadMyMapping, 0, 1);
+      this.tableLayoutPanel3.Controls.Add(this.txMappingName, 1, 0);
+      this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
+      this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel3.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+      this.tableLayoutPanel3.Location = new System.Drawing.Point(606, 754);
+      this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+      this.tableLayoutPanel3.RowCount = 2;
+      this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.tableLayoutPanel3.Size = new System.Drawing.Size(372, 66);
+      this.tableLayoutPanel3.TabIndex = 25;
+      // 
+      // btSaveMyMapping
+      // 
+      this.btSaveMyMapping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btSaveMyMapping.Image = ((System.Drawing.Image)(resources.GetObject("btSaveMyMapping.Image")));
+      this.btSaveMyMapping.Location = new System.Drawing.Point(191, 39);
+      this.btSaveMyMapping.Name = "btSaveMyMapping";
+      this.btSaveMyMapping.Size = new System.Drawing.Size(178, 24);
+      this.btSaveMyMapping.TabIndex = 15;
+      this.btSaveMyMapping.Text = "Dump and Save my Mapping";
+      this.btSaveMyMapping.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.btSaveMyMapping.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+      this.btSaveMyMapping.Click += new System.EventHandler(this.btSaveMyMapping_Click);
+      // 
+      // btLoadMyMapping
+      // 
+      this.btLoadMyMapping.Location = new System.Drawing.Point(3, 39);
+      this.btLoadMyMapping.Name = "btLoadMyMapping";
+      this.btLoadMyMapping.Size = new System.Drawing.Size(120, 24);
+      this.btLoadMyMapping.TabIndex = 14;
+      this.btLoadMyMapping.Text = "Load my Mapping";
+      this.btLoadMyMapping.Visible = false;
+      this.btLoadMyMapping.Click += new System.EventHandler(this.btLoadMyMapping_Click);
+      // 
+      // txMappingName
+      // 
+      this.txMappingName.Anchor = System.Windows.Forms.AnchorStyles.Right;
+      this.txMappingName.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
+      this.txMappingName.Location = new System.Drawing.Point(135, 8);
+      this.txMappingName.Name = "txMappingName";
+      this.txMappingName.Size = new System.Drawing.Size(234, 20);
+      this.txMappingName.TabIndex = 0;
+      this.txMappingName.WordWrap = false;
+      this.txMappingName.TextChanged += new System.EventHandler(this.txMappingName_TextChanged);
+      // 
+      // label1
+      // 
+      this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(49, 11);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(80, 13);
+      this.label1.TabIndex = 16;
+      this.label1.Text = "Mapping name:";
       // 
       // statusStrip1
       // 
@@ -639,19 +705,20 @@
             this.toolStripStatusLabel1,
             this.tsDDbtMappings,
             this.tsBtLoad});
-      this.statusStrip1.Location = new System.Drawing.Point(0, 840);
+      this.statusStrip1.Location = new System.Drawing.Point(0, 832);
       this.statusStrip1.Name = "statusStrip1";
       this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
       this.statusStrip1.ShowItemToolTips = true;
-      this.statusStrip1.Size = new System.Drawing.Size(984, 22);
+      this.statusStrip1.Size = new System.Drawing.Size(984, 30);
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
       // toolStripStatusLabel2
       // 
       this.toolStripStatusLabel2.BackColor = System.Drawing.Color.DarkKhaki;
+      this.toolStripStatusLabel2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-      this.toolStripStatusLabel2.Size = new System.Drawing.Size(49, 17);
+      this.toolStripStatusLabel2.Size = new System.Drawing.Size(52, 25);
       this.toolStripStatusLabel2.Text = "Profiles:";
       // 
       // tsDDbtProfiles
@@ -661,7 +728,7 @@
       this.tsDDbtProfiles.Image = ((System.Drawing.Image)(resources.GetObject("tsDDbtProfiles.Image")));
       this.tsDDbtProfiles.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.tsDDbtProfiles.Name = "tsDDbtProfiles";
-      this.tsDDbtProfiles.Size = new System.Drawing.Size(250, 20);
+      this.tsDDbtProfiles.Size = new System.Drawing.Size(250, 28);
       this.tsDDbtProfiles.Text = "Available Profiles";
       this.tsDDbtProfiles.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsDDbtProfiles_DropDownItemClicked);
       // 
@@ -675,7 +742,7 @@
       this.tsBtReset.Image = ((System.Drawing.Image)(resources.GetObject("tsBtReset.Image")));
       this.tsBtReset.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.tsBtReset.Name = "tsBtReset";
-      this.tsBtReset.Size = new System.Drawing.Size(100, 20);
+      this.tsBtReset.Size = new System.Drawing.Size(100, 28);
       this.tsBtReset.Text = "Reset...";
       this.tsBtReset.ToolTipText = "Reset with chosen options";
       // 
@@ -700,15 +767,16 @@
       this.toolStripStatusLabel3.AutoSize = false;
       this.toolStripStatusLabel3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
       this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-      this.toolStripStatusLabel3.Size = new System.Drawing.Size(100, 17);
+      this.toolStripStatusLabel3.Size = new System.Drawing.Size(100, 25);
       this.toolStripStatusLabel3.Text = "                            ";
       // 
       // toolStripStatusLabel1
       // 
       this.toolStripStatusLabel1.BackColor = System.Drawing.Color.DarkSeaGreen;
       this.toolStripStatusLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.toolStripStatusLabel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-      this.toolStripStatusLabel1.Size = new System.Drawing.Size(63, 17);
+      this.toolStripStatusLabel1.Size = new System.Drawing.Size(63, 25);
       this.toolStripStatusLabel1.Text = "Mappings:";
       // 
       // tsDDbtMappings
@@ -720,7 +788,7 @@
       this.tsDDbtMappings.Image = ((System.Drawing.Image)(resources.GetObject("tsDDbtMappings.Image")));
       this.tsDDbtMappings.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.tsDDbtMappings.Name = "tsDDbtMappings";
-      this.tsDDbtMappings.Size = new System.Drawing.Size(250, 20);
+      this.tsDDbtMappings.Size = new System.Drawing.Size(250, 28);
       this.tsDDbtMappings.Text = "Available Mappings";
       this.tsDDbtMappings.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsDDbtMappings_DropDownItemClicked);
       // 
@@ -737,7 +805,7 @@
       this.tsBtLoad.Image = ((System.Drawing.Image)(resources.GetObject("tsBtLoad.Image")));
       this.tsBtLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.tsBtLoad.Name = "tsBtLoad";
-      this.tsBtLoad.Size = new System.Drawing.Size(80, 20);
+      this.tsBtLoad.Size = new System.Drawing.Size(80, 28);
       this.tsBtLoad.Text = "Load...";
       // 
       // defaultsLoadAndGrabToolStripMenuItem
@@ -772,65 +840,16 @@
       this.loadToolStripMenuItem.Text = "Load !";
       this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
       // 
-      // tableLayoutPanel3
+      // linkLblReleases
       // 
-      this.tableLayoutPanel3.ColumnCount = 2;
-      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 240F));
-      this.tableLayoutPanel3.Controls.Add(this.btSaveMyMapping, 1, 1);
-      this.tableLayoutPanel3.Controls.Add(this.btLoadMyMapping, 0, 1);
-      this.tableLayoutPanel3.Controls.Add(this.txMappingName, 1, 0);
-      this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
-      this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.tableLayoutPanel3.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel3.Location = new System.Drawing.Point(606, 761);
-      this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-      this.tableLayoutPanel3.RowCount = 2;
-      this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-      this.tableLayoutPanel3.Size = new System.Drawing.Size(372, 69);
-      this.tableLayoutPanel3.TabIndex = 25;
-      // 
-      // txMappingName
-      // 
-      this.txMappingName.Anchor = System.Windows.Forms.AnchorStyles.Right;
-      this.txMappingName.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
-      this.txMappingName.Location = new System.Drawing.Point(135, 9);
-      this.txMappingName.Name = "txMappingName";
-      this.txMappingName.Size = new System.Drawing.Size(234, 20);
-      this.txMappingName.TabIndex = 0;
-      this.txMappingName.WordWrap = false;
-      this.txMappingName.TextChanged += new System.EventHandler(this.txMappingName_TextChanged);
-      // 
-      // btLoadMyMapping
-      // 
-      this.btLoadMyMapping.Location = new System.Drawing.Point(3, 42);
-      this.btLoadMyMapping.Name = "btLoadMyMapping";
-      this.btLoadMyMapping.Size = new System.Drawing.Size(120, 24);
-      this.btLoadMyMapping.TabIndex = 14;
-      this.btLoadMyMapping.Text = "Load my Mapping";
-      this.btLoadMyMapping.Visible = false;
-      this.btLoadMyMapping.Click += new System.EventHandler(this.btLoadMyMapping_Click);
-      // 
-      // btSaveMyMapping
-      // 
-      this.btSaveMyMapping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btSaveMyMapping.Location = new System.Drawing.Point(191, 42);
-      this.btSaveMyMapping.Name = "btSaveMyMapping";
-      this.btSaveMyMapping.Size = new System.Drawing.Size(178, 24);
-      this.btSaveMyMapping.TabIndex = 15;
-      this.btSaveMyMapping.Text = "Dump and Save my Mapping";
-      this.btSaveMyMapping.Click += new System.EventHandler(this.btSaveMyMapping_Click);
-      // 
-      // label1
-      // 
-      this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(49, 13);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(80, 13);
-      this.label1.TabIndex = 16;
-      this.label1.Text = "Mapping name:";
+      this.linkLblReleases.AutoSize = true;
+      this.linkLblReleases.Location = new System.Drawing.Point(732, 17);
+      this.linkLblReleases.Name = "linkLblReleases";
+      this.linkLblReleases.Size = new System.Drawing.Size(233, 13);
+      this.linkLblReleases.TabIndex = 3;
+      this.linkLblReleases.TabStop = true;
+      this.linkLblReleases.Text = "For information and updates visit us @ Github ...";
+      this.linkLblReleases.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLblReleases_LinkClicked);
       // 
       // UC_JoyPanel
       // 
@@ -865,10 +884,10 @@
       this.tableLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel1.PerformLayout();
       this.tableLayoutPanel2.ResumeLayout(false);
-      this.statusStrip1.ResumeLayout(false);
-      this.statusStrip1.PerformLayout();
       this.tableLayoutPanel3.ResumeLayout(false);
       this.tableLayoutPanel3.PerformLayout();
+      this.statusStrip1.ResumeLayout(false);
+      this.statusStrip1.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -943,6 +962,8 @@
     private System.Windows.Forms.Button btLoadMyMapping;
     private System.Windows.Forms.TextBox txMappingName;
     private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.LinkLabel linkLblReleases;
+    private System.Windows.Forms.ToolTip toolTip1;
   }
 }
 

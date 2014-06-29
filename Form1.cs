@@ -15,7 +15,9 @@ namespace SCJMapper_V2
 {
   public partial class MainForm : Form
   {
-    AppSettings m_AppSettings = new AppSettings( );
+    private const String c_GithubLink = "https://github.com/bm98/SCJMapper-V2/releases";
+
+    private AppSettings m_AppSettings = new AppSettings( );
 
     ///<remarks>
     /// Holds the DXInput Joystick List
@@ -74,6 +76,10 @@ namespace SCJMapper_V2
       rtb.AllowDrop = true; // add Drop to rtb
       String version = Application.ProductVersion;  // get the version information
       lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // get the first two elements
+
+      // tooltips where needed
+      toolTip1.SetToolTip( this.linkLblReleases, c_GithubLink ); // allow to see where the link may head
+
 
       // load profiles
       foreach ( String s in SCDefaultProfile.DefaultProfileNames ) {
@@ -606,6 +612,14 @@ namespace SCJMapper_V2
       else {
         txMappingName.BackColor = MyColors.InvalidColor;
       }
+    }
+
+    // Hyperlink
+
+    private void linkLblReleases_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+    {
+      this.linkLblReleases.LinkVisited = true;
+      System.Diagnostics.Process.Start( c_GithubLink );
     }
 
 
