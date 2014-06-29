@@ -12,6 +12,68 @@ namespace SCJMapper_V2
   /// </summary>
   class SCMappings
   {
+    private const String c_UserMapStartsWith = "layout_my_";  // we only allow those mapping names
+
+    static private List<String> m_scMappings = new List<string>( );
+
+
+    /// <summary>
+    /// Returns true if a mapping file exists
+    /// </summary>
+    /// <param name="mapName">The mapping name</param>
+    /// <returns>True if the file exists</returns>
+    static public Boolean MappingFileExists( String mapName )
+    {
+      Boolean retVal = false;
+      if ( Directory.Exists( SCPath.SCClientMappingPath ) ) {
+        retVal = File.Exists( Path.Combine( SCPath.SCClientMappingPath, mapName + ".xml" ) );
+      }
+      return retVal;
+    }
+
+    /// <summary>
+    /// Returns the mapping file name + path into our user MAPPING dir (TODO possibly to change??)
+    /// </summary>
+    /// <param name="mapName">The mapping name</param>
+    /// <returns>A fully qualified filename</returns>
+    static public String MappingFileName( String mapName )
+    {
+      return Path.Combine( SCPath.SCClientMappingPath, mapName + ".xml" );
+    }
+
+
+    /// <summary>
+    /// Returns true if a mapping name is considered a user mapping
+    /// </summary>
+    /// <param name="mapName">The mapping name</param>
+    /// <returns>True if it is a user mapping name</returns>
+    static public Boolean IsUserMapping( String mapName )
+    {
+      return mapName.StartsWith( c_UserMapStartsWith );
+    }
+
+    /// <summary>
+    /// Check if we may use that name - we allow only names like "layout_my_XYZ" 
+    /// </summary>
+    /// <param name="mapName">A map name</param>
+    /// <returns>True if valid</returns>
+    static public Boolean IsValidMappingName( String mapName )
+    {
+      Boolean retVal = true; // for now
+      retVal &= mapName.StartsWith( c_UserMapStartsWith );
+      retVal &= ( mapName.IndexOfAny( new char[] { ' ', '\t', '\n', '\r', '\0' } ) < 0 ); // make sure we don't have spaces etc.
+      return retVal;
+    }
+
+
+    static public void UpdateMappingNames( )
+    {
+      if ( Directory.Exists( SCPath.SCClientMappingPath ) ) {
+        m_scMappings.Clear( );
+        m_scMappings = ( List<String> )Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
+      }
+    }
+
 
     /// <summary>
     /// Returns a list of files found 
@@ -21,11 +83,13 @@ namespace SCJMapper_V2
     {
       get
       {
-        List<String> retVal = new List<String>( );
-        if ( Directory.Exists( SCPath.SCClientMappingPath ) ) {
-          retVal = ( List<String> )Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList();
+        if ( m_scMappings.Count == 0 ) {
+          if ( Directory.Exists( SCPath.SCClientMappingPath ) ) {
+            m_scMappings.Clear( );
+            m_scMappings = ( List<String> )Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
+          }
         }
-        return retVal;
+        return m_scMappings;
       }
     }
 

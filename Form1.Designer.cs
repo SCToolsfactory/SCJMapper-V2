@@ -77,6 +77,8 @@
       this.tlpanel = new System.Windows.Forms.TableLayoutPanel();
       this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.txFilter = new System.Windows.Forms.TextBox();
+      this.btClearFilter = new System.Windows.Forms.Button();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -92,8 +94,11 @@
       this.resetLoadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.txFilter = new System.Windows.Forms.TextBox();
-      this.btClearFilter = new System.Windows.Forms.Button();
+      this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+      this.txMappingName = new System.Windows.Forms.TextBox();
+      this.btLoadMyMapping = new System.Windows.Forms.Button();
+      this.btSaveMyMapping = new System.Windows.Forms.Button();
+      this.label1 = new System.Windows.Forms.Label();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
@@ -106,6 +111,7 @@
       this.tableLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel2.SuspendLayout();
       this.statusStrip1.SuspendLayout();
+      this.tableLayoutPanel3.SuspendLayout();
       this.SuspendLayout();
       // 
       // btDumpList
@@ -121,9 +127,9 @@
       // label3
       // 
       this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.label3.Location = new System.Drawing.Point(606, 834);
+      this.label3.Location = new System.Drawing.Point(606, 833);
       this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(372, 25);
+      this.label3.Size = new System.Drawing.Size(372, 26);
       this.label3.TabIndex = 22;
       this.label3.Text = "Right click above to open the context menu";
       this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -138,8 +144,8 @@
       this.rtb.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.rtb.Location = new System.Drawing.Point(606, 81);
       this.rtb.Name = "rtb";
-      this.tlpanel.SetRowSpan(this.rtb, 3);
-      this.rtb.Size = new System.Drawing.Size(372, 750);
+      this.tlpanel.SetRowSpan(this.rtb, 2);
+      this.rtb.Size = new System.Drawing.Size(372, 674);
       this.rtb.TabIndex = 21;
       this.rtb.Text = "";
       this.rtb.WordWrap = false;
@@ -414,7 +420,7 @@
       this.treeView1.Name = "treeView1";
       this.tlpanel.SetRowSpan(this.treeView1, 3);
       this.treeView1.SelectedImageKey = "Selected";
-      this.treeView1.Size = new System.Drawing.Size(294, 750);
+      this.treeView1.Size = new System.Drawing.Size(294, 749);
       this.treeView1.TabIndex = 16;
       this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
       // 
@@ -498,7 +504,7 @@
       // buttonExit
       // 
       this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.buttonExit.Location = new System.Drawing.Point(171, 21);
+      this.buttonExit.Location = new System.Drawing.Point(171, 42);
       this.buttonExit.Name = "buttonExit";
       this.buttonExit.Size = new System.Drawing.Size(120, 24);
       this.buttonExit.TabIndex = 13;
@@ -536,6 +542,7 @@
       this.tlpanel.Controls.Add(this.flowLayoutPanel1, 1, 1);
       this.tlpanel.Controls.Add(this.tableLayoutPanel1, 1, 2);
       this.tlpanel.Controls.Add(this.tableLayoutPanel2, 1, 3);
+      this.tlpanel.Controls.Add(this.tableLayoutPanel3, 2, 3);
       this.tlpanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tlpanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tlpanel.Location = new System.Drawing.Point(0, 0);
@@ -544,8 +551,8 @@
       this.tlpanel.RowCount = 5;
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 540F));
-      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 75F));
-      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
       this.tlpanel.Size = new System.Drawing.Size(984, 862);
       this.tlpanel.TabIndex = 25;
@@ -570,8 +577,8 @@
       this.tableLayoutPanel1.Controls.Add(this.btDump, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.btGrab, 1, 0);
       this.tableLayoutPanel1.Controls.Add(this.btDumpList, 0, 1);
-      this.tableLayoutPanel1.Controls.Add(this.txFilter, 0, 3);
-      this.tableLayoutPanel1.Controls.Add(this.btClearFilter, 0, 4);
+      this.tableLayoutPanel1.Controls.Add(this.txFilter, 0, 2);
+      this.tableLayoutPanel1.Controls.Add(this.btClearFilter, 0, 3);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel1.Location = new System.Drawing.Point(306, 621);
@@ -582,8 +589,28 @@
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 156);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 134);
       this.tableLayoutPanel1.TabIndex = 23;
+      // 
+      // txFilter
+      // 
+      this.txFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.txFilter.Location = new System.Drawing.Point(3, 67);
+      this.txFilter.Name = "txFilter";
+      this.txFilter.Size = new System.Drawing.Size(120, 20);
+      this.txFilter.TabIndex = 25;
+      this.txFilter.WordWrap = false;
+      this.txFilter.TextChanged += new System.EventHandler(this.txFilter_TextChanged);
+      // 
+      // btClearFilter
+      // 
+      this.btClearFilter.Location = new System.Drawing.Point(3, 93);
+      this.btClearFilter.Name = "btClearFilter";
+      this.btClearFilter.Size = new System.Drawing.Size(120, 24);
+      this.btClearFilter.TabIndex = 26;
+      this.btClearFilter.Text = "Clear Filter";
+      this.btClearFilter.UseVisualStyleBackColor = true;
+      this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
       // 
       // tableLayoutPanel2
       // 
@@ -593,13 +620,13 @@
       this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 1);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 783);
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 761);
       this.tableLayoutPanel2.Name = "tableLayoutPanel2";
       this.tableLayoutPanel2.RowCount = 2;
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 48);
+      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 69);
       this.tableLayoutPanel2.TabIndex = 24;
       // 
       // statusStrip1
@@ -745,24 +772,65 @@
       this.loadToolStripMenuItem.Text = "Load !";
       this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
       // 
-      // txFilter
+      // tableLayoutPanel3
       // 
-      this.txFilter.Location = new System.Drawing.Point(3, 93);
-      this.txFilter.Name = "txFilter";
-      this.txFilter.Size = new System.Drawing.Size(120, 20);
-      this.txFilter.TabIndex = 25;
-      this.txFilter.WordWrap = false;
-      this.txFilter.TextChanged += new System.EventHandler(this.txFilter_TextChanged);
+      this.tableLayoutPanel3.ColumnCount = 2;
+      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 240F));
+      this.tableLayoutPanel3.Controls.Add(this.btSaveMyMapping, 1, 1);
+      this.tableLayoutPanel3.Controls.Add(this.btLoadMyMapping, 0, 1);
+      this.tableLayoutPanel3.Controls.Add(this.txMappingName, 1, 0);
+      this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
+      this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel3.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+      this.tableLayoutPanel3.Location = new System.Drawing.Point(606, 761);
+      this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+      this.tableLayoutPanel3.RowCount = 2;
+      this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.tableLayoutPanel3.Size = new System.Drawing.Size(372, 69);
+      this.tableLayoutPanel3.TabIndex = 25;
       // 
-      // btClearFilter
+      // txMappingName
       // 
-      this.btClearFilter.Location = new System.Drawing.Point(3, 123);
-      this.btClearFilter.Name = "btClearFilter";
-      this.btClearFilter.Size = new System.Drawing.Size(120, 24);
-      this.btClearFilter.TabIndex = 26;
-      this.btClearFilter.Text = "Clear Filter";
-      this.btClearFilter.UseVisualStyleBackColor = true;
-      this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
+      this.txMappingName.Anchor = System.Windows.Forms.AnchorStyles.Right;
+      this.txMappingName.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
+      this.txMappingName.Location = new System.Drawing.Point(135, 9);
+      this.txMappingName.Name = "txMappingName";
+      this.txMappingName.Size = new System.Drawing.Size(234, 20);
+      this.txMappingName.TabIndex = 0;
+      this.txMappingName.WordWrap = false;
+      this.txMappingName.TextChanged += new System.EventHandler(this.txMappingName_TextChanged);
+      // 
+      // btLoadMyMapping
+      // 
+      this.btLoadMyMapping.Location = new System.Drawing.Point(3, 42);
+      this.btLoadMyMapping.Name = "btLoadMyMapping";
+      this.btLoadMyMapping.Size = new System.Drawing.Size(120, 24);
+      this.btLoadMyMapping.TabIndex = 14;
+      this.btLoadMyMapping.Text = "Load my Mapping";
+      this.btLoadMyMapping.Visible = false;
+      this.btLoadMyMapping.Click += new System.EventHandler(this.btLoadMyMapping_Click);
+      // 
+      // btSaveMyMapping
+      // 
+      this.btSaveMyMapping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btSaveMyMapping.Location = new System.Drawing.Point(191, 42);
+      this.btSaveMyMapping.Name = "btSaveMyMapping";
+      this.btSaveMyMapping.Size = new System.Drawing.Size(178, 24);
+      this.btSaveMyMapping.TabIndex = 15;
+      this.btSaveMyMapping.Text = "Dump and Save my Mapping";
+      this.btSaveMyMapping.Click += new System.EventHandler(this.btSaveMyMapping_Click);
+      // 
+      // label1
+      // 
+      this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(49, 13);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(80, 13);
+      this.label1.TabIndex = 16;
+      this.label1.Text = "Mapping name:";
       // 
       // UC_JoyPanel
       // 
@@ -799,6 +867,8 @@
       this.tableLayoutPanel2.ResumeLayout(false);
       this.statusStrip1.ResumeLayout(false);
       this.statusStrip1.PerformLayout();
+      this.tableLayoutPanel3.ResumeLayout(false);
+      this.tableLayoutPanel3.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -868,6 +938,11 @@
     private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
     private System.Windows.Forms.Button btClearFilter;
     private System.Windows.Forms.TextBox txFilter;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+    private System.Windows.Forms.Button btSaveMyMapping;
+    private System.Windows.Forms.Button btLoadMyMapping;
+    private System.Windows.Forms.TextBox txMappingName;
+    private System.Windows.Forms.Label label1;
   }
 }
 

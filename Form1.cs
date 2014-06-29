@@ -46,6 +46,13 @@ namespace SCJMapper_V2
 
     }
 
+    private void LoadMappingDD( )
+    {
+      tsDDbtMappings.DropDownItems.Clear( );
+      foreach ( String s in SCMappings.MappingNames ) {
+        tsDDbtMappings.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ) );
+      }
+    }
 
     /// <summary>
     ///  Handle the load event
@@ -75,14 +82,26 @@ namespace SCJMapper_V2
       tsDDbtProfiles.Text = m_AppSettings.DefProfileName;
 
       // load mappings
-      foreach ( String s in SCMappings.MappingNames ) {
-        tsDDbtMappings.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ) );
-      }
+      LoadMappingDD( );
       tsDDbtMappings.Text = m_AppSettings.DefMappingName;
+
+      // load other defaults
+      txMappingName.Text = m_AppSettings.MyMappingName;
 
       // Init X things
       if ( !InitDirectInput( ) )
         Close( );
+
+      if ( SCMappings.MappingFileExists( txMappingName.Text ) ) {
+        rtb.LoadFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
+        InitActionTree( false );
+        Grab( );
+        m_AppSettings.MyMappingName = txMappingName.Text; // last used - persist
+        txMappingName.BackColor = MyColors.SuccessColor;
+      }
+      else {
+        txMappingName.BackColor = MyColors.ErrorColor;
+      }
 
       // poll the XInput
       timer1.Start( ); // this one polls the joysticks to show the props
@@ -257,7 +276,7 @@ namespace SCJMapper_V2
     /// <summary>
     ///  Grab the rtb data and load them into config
     /// </summary>
-    private void Grab ()
+    private void Grab( )
     {
       m_AT.ActionMaps.fromXML( rtb.Text );
       m_AT.ReloadCtrl( );
@@ -385,7 +404,7 @@ namespace SCJMapper_V2
       tsDDbtProfiles.Text = e.ClickedItem.Text;
       m_AppSettings.DefProfileName = e.ClickedItem.Text;
       m_AppSettings.Save( );
-     // InitActionTree( ( Settings.Default.ResetMode == Settings.Default.ResetModeDefault ) ); // start over
+      // InitActionTree( ( Settings.Default.ResetMode == Settings.Default.ResetModeDefault ) ); // start over
     }
 
     private void resetEmptyToolStripMenuItem_Click( object sender, EventArgs e )
@@ -413,14 +432,22 @@ namespace SCJMapper_V2
     private void loadToolStripMenuItem_Click( object sender, EventArgs e )
     {
       rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
+        txMappingName.Text = m_AppSettings.DefMappingName;
+      }
       btGrab.BackColor = MyColors.DirtyColor;
+      txMappingName.BackColor = MyColors.ValidColor;
     }
 
     private void loadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
     {
       rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
       Grab( );
+      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
+        txMappingName.Text = m_AppSettings.DefMappingName;
+      }
       btDump.BackColor = MyColors.DirtyColor;
+      txMappingName.BackColor = MyColors.ValidColor;
     }
 
     private void resetLoadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
@@ -428,7 +455,11 @@ namespace SCJMapper_V2
       // start over 
       InitActionTree( false );
       rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
+        txMappingName.Text = m_AppSettings.DefMappingName;
+      }
       Grab( );
+      txMappingName.BackColor = MyColors.ValidColor;
     }
 
     private void defaultsLoadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
@@ -437,12 +468,16 @@ namespace SCJMapper_V2
       InitActionTree( true );
       rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
       Grab( );
+      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
+        txMappingName.Text = m_AppSettings.DefMappingName;
+      }
       btDump.BackColor = MyColors.DirtyColor;
+      txMappingName.BackColor = MyColors.ValidColor;
     }
 
 
     // Context Menu Items
-    
+
     private void tsiCopy_Click( object sender, EventArgs e )
     {
       rtb.Focus( );
@@ -523,11 +558,59 @@ namespace SCJMapper_V2
     {
       // Loads the file into the control. 
       string[] droppedFilenames = e.Data.GetData( DataFormats.FileDrop, true ) as string[];
-      if ( droppedFilenames.Length > 0 ) rtb.LoadFile( droppedFilenames[0], System.Windows.Forms.RichTextBoxStreamType.PlainText );
+      if ( droppedFilenames.Length > 0 ) rtb.LoadFile( droppedFilenames[0], RichTextBoxStreamType.PlainText );
     }
 
-    
+    // XML load and save
+    private void btLoadMyMapping_Click( object sender, EventArgs e )
+    {
+      if ( SCMappings.MappingFileExists( txMappingName.Text ) ) {
+        rtb.LoadFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
+        InitActionTree( false );
+        Grab( );
+        m_AppSettings.MyMappingName = txMappingName.Text; // last used - persist
+        txMappingName.BackColor = MyColors.SuccessColor;
+      }
+      else {
+        txMappingName.BackColor = MyColors.ErrorColor;
+      }
+    }
+
+    private void btSaveMyMapping_Click( object sender, EventArgs e )
+    {
+      Boolean cancel = false;
+      if ( SCMappings.IsValidMappingName( txMappingName.Text ) ) {
+        Dump( );
+        if ( SCMappings.MappingFileExists( txMappingName.Text ) ) {
+          cancel = ( MessageBox.Show( "File exists, shall we overwrite ?", "Save XML", MessageBoxButtons.YesNo ) == System.Windows.Forms.DialogResult.No);
+        }
+        if ( !cancel ) {
+          rtb.SaveFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
+          // get the new one into the list
+          SCMappings.UpdateMappingNames( );
+          LoadMappingDD( );
+          m_AppSettings.MyMappingName = txMappingName.Text; // last used - persist
+          txMappingName.BackColor = MyColors.SuccessColor;
+        }
+      }
+      else {
+        txMappingName.BackColor = MyColors.ErrorColor;
+      }
+    }
+
+    private void txMappingName_TextChanged( object sender, EventArgs e )
+    {
+      if ( SCMappings.IsValidMappingName( txMappingName.Text ) ) {
+        txMappingName.BackColor = MyColors.ValidColor;
+      }
+      else {
+        txMappingName.BackColor = MyColors.InvalidColor;
+      }
+    }
+
+
     #endregion
+
 
 
 

@@ -43,6 +43,14 @@ namespace SCJMapper_V2
       set { this["DefMappingName"] = value; }
     }
 
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "layout_my_joystick" )] // just a default
+    public String MyMappingName
+    {
+      get { return ( String )this["MyMappingName"]; }
+      set { this["MyMappingName"] = value; }
+    }
+
 
 
   }
