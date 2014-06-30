@@ -66,7 +66,9 @@
       this.IL = new System.Windows.Forms.ImageList(this.components);
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
+      this.linkLblReleases = new System.Windows.Forms.LinkLabel();
       this.label8 = new System.Windows.Forms.Label();
       this.lblTitle = new System.Windows.Forms.Label();
       this.label4 = new System.Windows.Forms.Label();
@@ -99,8 +101,6 @@
       this.resetLoadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.linkLblReleases = new System.Windows.Forms.LinkLabel();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
@@ -463,6 +463,13 @@
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
       // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Location = new System.Drawing.Point(0, 6);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(278, 234);
+      this.UC_JoyPanel.TabIndex = 0;
+      // 
       // panel1
       // 
       this.tlpanel.SetColumnSpan(this.panel1, 3);
@@ -475,6 +482,17 @@
       this.panel1.Name = "panel1";
       this.panel1.Size = new System.Drawing.Size(972, 66);
       this.panel1.TabIndex = 14;
+      // 
+      // linkLblReleases
+      // 
+      this.linkLblReleases.AutoSize = true;
+      this.linkLblReleases.Location = new System.Drawing.Point(732, 17);
+      this.linkLblReleases.Name = "linkLblReleases";
+      this.linkLblReleases.Size = new System.Drawing.Size(233, 13);
+      this.linkLblReleases.TabIndex = 3;
+      this.linkLblReleases.TabStop = true;
+      this.linkLblReleases.Text = "For information and updates visit us @ Github ...";
+      this.linkLblReleases.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLblReleases_LinkClicked);
       // 
       // label8
       // 
@@ -839,24 +857,6 @@
       this.loadToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
       this.loadToolStripMenuItem.Text = "Load !";
       this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
-      // 
-      // linkLblReleases
-      // 
-      this.linkLblReleases.AutoSize = true;
-      this.linkLblReleases.Location = new System.Drawing.Point(732, 17);
-      this.linkLblReleases.Name = "linkLblReleases";
-      this.linkLblReleases.Size = new System.Drawing.Size(233, 13);
-      this.linkLblReleases.TabIndex = 3;
-      this.linkLblReleases.TabStop = true;
-      this.linkLblReleases.Text = "For information and updates visit us @ Github ...";
-      this.linkLblReleases.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLblReleases_LinkClicked);
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Location = new System.Drawing.Point(0, 6);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(278, 234);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm
       // 
