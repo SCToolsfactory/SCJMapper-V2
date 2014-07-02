@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace SCJMapper_V2
 {
@@ -69,6 +70,45 @@ namespace SCJMapper_V2
       return ( jsNum > JSnum_UNKNOWN );
     }
 
+    const string js_pattern = @"^js\d_[xyz]$";
+    static Regex rgx_js = new Regex( js_pattern, RegexOptions.IgnoreCase );
+    const string jsr_pattern = @"^js\d_rot[xyz]$";
+    static Regex rgx_jsr = new Regex( jsr_pattern, RegexOptions.IgnoreCase );
+    /// <summary>
+    /// Makes a throttle from the given ctrl
+    /// accepts js#_(rot)[xyz] and returns js#_throttle[xyz]
+    /// </summary>
+    /// <param name="control"></param>
+    /// <param name="makeIt"></param>
+    /// <returns></returns>
+    static public String MakeThrottle( String control, Boolean makeIt )
+    {
+      if ( makeIt == false ) return control;
+      if ( control.Length < 5 ) return control;
+
+      String retVal = control;
+      if ( rgx_js.IsMatch( control ) ) {
+        retVal = retVal.Insert( 4, "throttle" );
+      }
+      else if ( rgx_jsr.IsMatch( control ) ) {
+        retVal = retVal.Remove( 4, 3 );  // remove rot
+        retVal = retVal.Insert( 4, "throttle" );
+      } 
+      
+      return retVal;
+    }
+
+    /// <summary>
+    /// returns true if the ctrl can be a throttle - for now this is js#_[xyz]
+    /// </summary>
+    /// <param name="control"></param>
+    /// <returns></returns>
+    static public Boolean CanThrottle( String control )
+    {
+      return rgx_js.IsMatch( control ) || rgx_jsr.IsMatch( control );
+    }
+
+
     #endregion
 
     private Joystick m_device;
@@ -80,6 +120,7 @@ namespace SCJMapper_V2
     private int m_numPOVs = 0;      // static counter for UpdateControls
     private int m_sliderCount = 0;  // static counter for UpdateControls
     private String m_lastItem = "";
+    private int m_senseLimit = 150; // axis jitter avoidance...
 
     private UC_JoyPanel m_jPanel = null; // the GUI panel
 
@@ -119,6 +160,8 @@ namespace SCJMapper_V2
       m_device = device;
       m_hwnd = hwnd;
       m_jPanel = panel;
+
+      m_senseLimit = AppConfiguration.AppConfig.jsSenseLimit; // can be changed in the app.config file if it is still too little
 
       // Set BufferSize in order to use buffered data.
       m_device.Properties.BufferSize = 128;
@@ -236,7 +279,7 @@ namespace SCJMapper_V2
 		    {
 			    {"X","x"},
 			    {"Y","y"},
-			    {"Z","throttlez"}, // this is not z because it usually maps the throttle 
+			    {"Z","z"}, 
 			    {"RotationX","rotx"},
 			    {"RotationY","roty"},
 			    {"RotationZ","rotz"}
@@ -286,7 +329,7 @@ namespace SCJMapper_V2
         return false;
       int change = Math.Abs( prev - current );
       // if the axis has changed more than x units to it's last value
-      return change > 100 ? true : false;
+      return change > m_senseLimit ? true : false;
 
     }
 

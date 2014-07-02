@@ -93,6 +93,7 @@ namespace SCJMapper_V2
 
       // load other defaults
       txMappingName.Text = m_AppSettings.MyMappingName;
+      SetRebindField( txMappingName.Text );
 
       // Init X things
       if ( !InitDirectInput( ) )
@@ -267,6 +268,8 @@ namespace SCJMapper_V2
       return true;
     }
 
+
+
     /// <summary>
     /// Create the jsN  Joystick string from mapping (or from the JS index above item 3)
     /// </summary>
@@ -278,6 +281,8 @@ namespace SCJMapper_V2
       if ( ( String )tc1.SelectedTab.Tag == ( string )cbJs3.SelectedItem ) return JoystickCls.JSTag( 3 );
       return JoystickCls.JSTag( tc1.SelectedIndex + 1 ); // return the Joystick number
     }
+
+
 
     /// <summary>
     ///  Grab the rtb data and load them into config
@@ -303,6 +308,7 @@ namespace SCJMapper_V2
       btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
     }
 
+
     /// <summary>
     /// Dump Config into rtb
     /// </summary>
@@ -314,6 +320,11 @@ namespace SCJMapper_V2
       btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
     }
 
+
+    private void SetRebindField( String map )
+    {
+      txRebind.Text = "pp_rebindkeys " + map;
+    }
 
 
     #region Event Handling
@@ -331,7 +342,15 @@ namespace SCJMapper_V2
     private void timer1_Tick( object sender, System.EventArgs e )
     {
       foreach ( JoystickCls jsc in m_JS ) { jsc.GetData( ); }  // poll the devices
-      lblLastJ.Text = JSStr( ) + m_JS[tc1.SelectedIndex].GetLastChange( ); // show last handled JS control
+      String ctrl =  JSStr( ) + m_JS[tc1.SelectedIndex].GetLastChange( ); // show last handled JS control
+      lblLastJ.Text = ctrl;
+      if ( JoystickCls.CanThrottle( ctrl ) ) {
+        cbxThrottle.Enabled = true;
+      }
+      else {
+        cbxThrottle.Checked = false;
+        cbxThrottle.Enabled = false;
+      }
     }
 
 
@@ -354,12 +373,12 @@ namespace SCJMapper_V2
 
     private void btFind_Click( object sender, EventArgs e )
     {
-      m_AT.FindCtrl( lblLastJ.Text ); // find the action for a Control (joystick input)
+      m_AT.FindCtrl( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ) ); // find the action for a Control (joystick input)
     }
 
     private void btAssign_Click( object sender, EventArgs e )
     {
-      m_AT.UpdateSelectedItem( lblLastJ.Text );
+      m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked) );
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
 
@@ -440,6 +459,7 @@ namespace SCJMapper_V2
       rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
       if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
         txMappingName.Text = m_AppSettings.DefMappingName;
+        SetRebindField( txMappingName.Text );
       }
       btGrab.BackColor = MyColors.DirtyColor;
       txMappingName.BackColor = MyColors.ValidColor;
@@ -451,6 +471,7 @@ namespace SCJMapper_V2
       Grab( );
       if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
         txMappingName.Text = m_AppSettings.DefMappingName;
+        SetRebindField( txMappingName.Text );
       }
       btDump.BackColor = MyColors.DirtyColor;
       txMappingName.BackColor = MyColors.ValidColor;
@@ -463,6 +484,7 @@ namespace SCJMapper_V2
       rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
       if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
         txMappingName.Text = m_AppSettings.DefMappingName;
+        SetRebindField( txMappingName.Text );
       }
       Grab( );
       txMappingName.BackColor = MyColors.ValidColor;
@@ -476,6 +498,7 @@ namespace SCJMapper_V2
       Grab( );
       if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
         txMappingName.Text = m_AppSettings.DefMappingName;
+        SetRebindField( txMappingName.Text );
       }
       btDump.BackColor = MyColors.DirtyColor;
       txMappingName.BackColor = MyColors.ValidColor;
@@ -588,6 +611,7 @@ namespace SCJMapper_V2
         if ( !cancel ) {
           rtb.SaveFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
           rtb.SaveFile( TheUser.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText ); // backup copy 
+          SetRebindField( txMappingName.Text );
 
           // get the new one into the list
           SCMappings.UpdateMappingNames( );
@@ -621,6 +645,7 @@ namespace SCJMapper_V2
 
 
     #endregion
+
 
     
 

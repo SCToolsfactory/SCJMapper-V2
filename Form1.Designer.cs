@@ -66,7 +66,6 @@
       this.IL = new System.Windows.Forms.ImageList(this.components);
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.linkLblReleases = new System.Windows.Forms.LinkLabel();
       this.label8 = new System.Windows.Forms.Label();
@@ -102,6 +101,9 @@
       this.loadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+      this.cbxThrottle = new System.Windows.Forms.CheckBox();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
+      this.txRebind = new System.Windows.Forms.TextBox();
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
       this.panel2.SuspendLayout();
@@ -332,6 +334,7 @@
       // panel2
       // 
       this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.panel2.Controls.Add(this.cbxThrottle);
       this.panel2.Controls.Add(this.btFind);
       this.panel2.Controls.Add(this.label7);
       this.panel2.Controls.Add(this.label6);
@@ -463,16 +466,10 @@
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
       // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Location = new System.Drawing.Point(0, 6);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(278, 234);
-      this.UC_JoyPanel.TabIndex = 0;
-      // 
       // panel1
       // 
       this.tlpanel.SetColumnSpan(this.panel1, 3);
+      this.panel1.Controls.Add(this.txRebind);
       this.panel1.Controls.Add(this.linkLblReleases);
       this.panel1.Controls.Add(this.label8);
       this.panel1.Controls.Add(this.lblTitle);
@@ -858,6 +855,31 @@
       this.loadToolStripMenuItem.Text = "Load !";
       this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
       // 
+      // cbxThrottle
+      // 
+      this.cbxThrottle.AutoSize = true;
+      this.cbxThrottle.Location = new System.Drawing.Point(110, 72);
+      this.cbxThrottle.Name = "cbxThrottle";
+      this.cbxThrottle.Size = new System.Drawing.Size(62, 17);
+      this.cbxThrottle.TabIndex = 13;
+      this.cbxThrottle.Text = "Throttle";
+      this.cbxThrottle.UseVisualStyleBackColor = true;
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Location = new System.Drawing.Point(0, 6);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(278, 234);
+      this.UC_JoyPanel.TabIndex = 0;
+      // 
+      // txRebind
+      // 
+      this.txRebind.Location = new System.Drawing.Point(603, 39);
+      this.txRebind.Name = "txRebind";
+      this.txRebind.Size = new System.Drawing.Size(361, 20);
+      this.txRebind.TabIndex = 4;
+      this.txRebind.Text = "pp_rebindkeys";
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -964,6 +986,8 @@
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.LinkLabel linkLblReleases;
     private System.Windows.Forms.ToolTip toolTip1;
+    private System.Windows.Forms.CheckBox cbxThrottle;
+    private System.Windows.Forms.TextBox txRebind;
   }
 }
 
