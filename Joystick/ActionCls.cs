@@ -15,6 +15,8 @@ namespace SCJMapper_V2
   /// </summary>
   class ActionCls
   {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+
     // Static items to have this mapping in only one place
 
     /// <summary>

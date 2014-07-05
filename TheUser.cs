@@ -12,6 +12,7 @@ namespace SCJMapper_V2
   /// </summary>
   class TheUser
   {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType ); 
 
     /// <summary>
     /// Returns the name of the Personal Program folder in My Documents
@@ -22,6 +23,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "UserDir - Entry" );
         String docPath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.Personal ), Application.ProductName);
         if ( !Directory.Exists( docPath ) ) Directory.CreateDirectory( docPath );
         return docPath;
@@ -36,6 +38,8 @@ namespace SCJMapper_V2
     /// <returns>A fully qualified filename</returns>
     static public String MappingFileName( String mapName )
     {
+      log.Debug( "MappingFileName - Entry" );
+
       return Path.Combine( UserDir, mapName + ".xml" );
     }
 

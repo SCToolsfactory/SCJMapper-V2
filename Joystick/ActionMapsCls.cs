@@ -20,6 +20,9 @@ namespace SCJMapper_V2
   /// </summary>
   class ActionMapsCls : List<ActionMapCls>
   {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+
+    
     public String version { get; set; }
     // own additions for JS mapping - should not harm..
     public String js1 { get; set; }
@@ -47,6 +50,8 @@ namespace SCJMapper_V2
     /// <param name="newAcm"></param>
     private void Merge( ActionMapCls newAcm )
     {
+      log.Debug( "Merge - Entry" );
+
       // do we find an actionmap like the new one in our list ?
       ActionMapCls ACM = this.Find( delegate( ActionMapCls acm ) {
         return acm.name == newAcm.name;
@@ -66,7 +71,9 @@ namespace SCJMapper_V2
     /// <returns>the action as XML fragment</returns>
     public String toXML( )
     {
-      String r = String.Format( "<ActionMaps version=\"{0}\" ", version);
+      log.Debug( "toXML - Entry" );
+
+      String r = String.Format( "<ActionMaps version=\"{0}\" ", version );
       if ( !String.IsNullOrEmpty( js1 ) ) r += String.Format( "js1=\"{0}\" ", js1 );
       if ( !String.IsNullOrEmpty( js2 ) ) r += String.Format( "js2=\"{0}\" ", js2 );
       if ( !String.IsNullOrEmpty( js3 ) ) r += String.Format( "js3=\"{0}\" ", js3 );
@@ -92,6 +99,8 @@ namespace SCJMapper_V2
     /// <returns>True if an action was decoded</returns>
     public Boolean fromXML( String xml )
     {
+      log.Debug( "fromXML - Entry" );
+
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;
       settings.IgnoreWhitespace = true;

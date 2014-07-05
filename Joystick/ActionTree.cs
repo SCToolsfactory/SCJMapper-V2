@@ -14,6 +14,7 @@ namespace SCJMapper_V2
   /// </summary>
   class ActionTree
   {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     public ActionMapsCls ActionMaps { get; set; }   // the Action Maps and Actions
 
@@ -59,6 +60,8 @@ namespace SCJMapper_V2
     /// </summary>
     private void ApplyFilter( )
     {
+      log.Debug( "ApplyFilter - Entry" );
+
       TreeNode topNode = null; // allow to backup the view - will carry the first node items
 
       Ctrl.BeginUpdate( );
@@ -126,6 +129,8 @@ namespace SCJMapper_V2
     /// <param name="applyDefaults">True if default mappings should be carried on</param>
     public void LoadTree( String defaultProfileName, Boolean applyDefaults )
     {
+      log.Debug( "LoadTree - Entry" );
+
       TreeNode tn = null;
       TreeNode[] cnl = { };
       TreeNode cn = null;
@@ -218,6 +223,8 @@ namespace SCJMapper_V2
     /// <param name="input">The new Text property</param>
     public void UpdateSelectedItem( String input )
     {
+      log.Debug( "UpdateSelectedItem - Entry" );
+
       if ( Ctrl.SelectedNode == null ) return;
 
       // applies only to ActionNodes
@@ -262,6 +269,8 @@ namespace SCJMapper_V2
     /// </summary>
     public void ReloadCtrl( )
     {
+      log.Debug( "ReloadCtrl - Entry" );
+
       foreach ( ActionMapCls acm in ActionMaps ) {
         try {
           TreeNode amTn = m_MasterTree.Nodes[acm.name]; // get the map node
@@ -303,6 +312,8 @@ namespace SCJMapper_V2
     /// <param name="m_MasterTree">The string to find</param>
     public void FindCtrl( String ctrl )
     {
+      log.Debug( "FindCtrl - Entry" );
+
       Boolean found = false;
       foreach ( TreeNode tn in Ctrl.Nodes ) {
         // have to search nodes of nodes
@@ -325,6 +336,8 @@ namespace SCJMapper_V2
     /// <returns></returns>
     public String ReportActions( )
     {
+      log.Debug( "FindCtrl - ReportActions" );
+
       String repList = "";
       // JS assignments
       if ( !String.IsNullOrEmpty( ActionMaps.js1 ) ) repList += String.Format( "** js1 = {0}\n", ActionMaps.js1 );

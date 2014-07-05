@@ -12,6 +12,9 @@ namespace SCJMapper_V2
   /// </summary>
   class SCMappings
   {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+
+
     private const String c_UserMapStartsWith = "layout_my_";  // we only allow those mapping names
 
     static private List<String> m_scMappings = new List<string>( );
@@ -83,11 +86,15 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "MappingNames - Entry" );
         if ( m_scMappings.Count == 0 ) {
           if ( Directory.Exists( SCPath.SCClientMappingPath ) ) {
             m_scMappings.Clear( );
             m_scMappings = ( List<String> )Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
           }
+        }
+        else {
+          log.Warn( "MappingNames - cannot find SC Mapping directory" );
         }
         return m_scMappings;
       }

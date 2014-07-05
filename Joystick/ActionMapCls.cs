@@ -20,6 +20,7 @@ namespace SCJMapper_V2
   /// </summary>
   class ActionMapCls : List<ActionCls>
   {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     public String name { get; set; }
 

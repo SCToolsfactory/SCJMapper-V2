@@ -15,7 +15,9 @@ namespace SCJMapper_V2
 {
   public partial class MainForm : Form
   {
-    private const String c_GithubLink = "https://github.com/bm98/SCJMapper-V2/releases";
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+
+    private const String c_GithubLink = @"https://github.com/SCToolsfactory/SCJMapper-V2/releases";
 
     private AppSettings m_AppSettings = new AppSettings( );
 
@@ -63,42 +65,53 @@ namespace SCJMapper_V2
     /// <param name="e"></param>
     private void MainForm_Load( object sender, System.EventArgs e )
     {
+      log.Debug( "MainForm_Load - Entry" );
+
       // some applic initialization 
       // Assign Size property, since databinding to Size doesn't work well.
 
       this.Size = m_AppSettings.FormSize;
       this.Location = m_AppSettings.FormLocation;
 
-      // XML RTB
-      rtb.SelectionTabs = new int[] { 10, 20, 30, 40, 50, 60 }; // short tabs
-      rtb.DragEnter += new DragEventHandler( rtb_DragEnter );
-      rtb.DragDrop += new DragEventHandler( rtb_DragDrop );
-      rtb.AllowDrop = true; // add Drop to rtb
       String version = Application.ProductVersion;  // get the version information
       lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // get the first two elements
 
       // tooltips where needed
       toolTip1.SetToolTip( this.linkLblReleases, c_GithubLink ); // allow to see where the link may head
 
+      // XML RTB
+      log.Debug( "Loading RTB" );
+      rtb.SelectionTabs = new int[] { 10, 20, 30, 40, 50, 60 }; // short tabs
+      rtb.DragEnter += new DragEventHandler( rtb_DragEnter );
+      rtb.DragDrop += new DragEventHandler( rtb_DragDrop );
+      rtb.AllowDrop = true; // add Drop to rtb
 
       // load profiles
+      log.Debug( "Loading Profiles" );
       foreach ( String s in SCDefaultProfile.DefaultProfileNames ) {
         tsDDbtProfiles.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ) );
       }
       tsDDbtProfiles.Text = m_AppSettings.DefProfileName;
 
       // load mappings
+      log.Debug( "Loading Mappings" );
       LoadMappingDD( );
       tsDDbtMappings.Text = m_AppSettings.DefMappingName;
 
       // load other defaults
+      log.Debug( "Loading Other" );
       txMappingName.Text = m_AppSettings.MyMappingName;
       SetRebindField( txMappingName.Text );
 
       // Init X things
-      if ( !InitDirectInput( ) )
+      log.Debug( "Loading DirectX" );
+      if ( !InitDirectInput( ) ) {
+        log.Fatal( "Initializing DirectXInput failed" );
+        MessageBox.Show( "Initializing DirectXInput failed - program exits now", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information );
         Close( );
+      }
 
+      log.Debug( "Loading last used mapping" );
       if ( SCMappings.MappingFileExists( txMappingName.Text ) ) {
         rtb.LoadFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
         InitActionTree( false );
@@ -107,10 +120,12 @@ namespace SCJMapper_V2
         txMappingName.BackColor = MyColors.SuccessColor;
       }
       else {
+        log.WarnFormat( "Last used mapping not available ({0})", txMappingName.Text );
         txMappingName.BackColor = MyColors.ErrorColor;
       }
 
       // poll the XInput
+      log.Debug( "Start XInput polling" );
       timer1.Start( ); // this one polls the joysticks to show the props
     }
 
@@ -120,6 +135,7 @@ namespace SCJMapper_V2
     /// </summary>
     private void buttonExit_Click( object sender, System.EventArgs e )
     {
+      log.Debug( "Shutting down now..." );
       Close( );
     }
 
@@ -182,8 +198,8 @@ namespace SCJMapper_V2
         }
       }
       catch ( Exception Ex ) {
+        log.Error( "Ex DrawItem", Ex );
         MessageBox.Show( Ex.Message.ToString( ), "Error Occured", MessageBoxButtons.OK, MessageBoxIcon.Information );
-
       }
 
     }
@@ -195,6 +211,8 @@ namespace SCJMapper_V2
     /// </summary>
     private void InitActionTree( Boolean addDefaultBinding )
     {
+      log.Debug( "InitActionTree - Entry" );
+
       // build TreeView and the ActionMaps
       m_AT = new ActionTree( );
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
@@ -206,64 +224,85 @@ namespace SCJMapper_V2
       if ( tc1.TabCount > 2 ) { cbJs3.SelectedIndex = 2; m_AT.ActionMaps.js3 = cbJs3.Text; }
     }
 
+
     /// <summary>
     /// Aquire the DInput joystick devices
     /// </summary>
     /// <returns></returns>
     public bool InitDirectInput( )
     {
+      log.Debug( "Entry" );
+
       // Enumerate joysticks in the system.
       int tabs = 0;
       cbJs1.Items.Clear( ); cbJs2.Items.Clear( ); cbJs3.Items.Clear( ); // JS dropdowns init
 
-      // Initialize DirectInput
-      var directInput = new DirectInput( );
+      try {
+        // Initialize DirectInput
+        log.Debug( "Instantiate DirectInput" );
+        var directInput = new DirectInput( );
 
-      // scan the Input for attached devices
-      foreach ( DeviceInstance instance in directInput.GetDevices( DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly ) ) {
+        // scan the Input for attached devices
+        log.Debug( "Scan GameControl devices" );
+        foreach ( DeviceInstance instance in directInput.GetDevices( DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly ) ) {
 
-        // Create the device interface
-        Joystick jsDevice = new Joystick( directInput, instance.InstanceGuid );
-        JoystickCls js = null;
+          // Create the device interface
+          log.Debug( "Create the device interface" );
+          Joystick jsDevice = new Joystick( directInput, instance.InstanceGuid );
+          JoystickCls js = null;
+          log.DebugFormat( "Create the device interface for: {0}", jsDevice.Information.ProductName );
 
-        // we have the first tab made as reference so TabPage[0] already exists
+          // we have the first tab made as reference so TabPage[0] already exists
+          if ( tabs == 0 ) {
+            // first panel - The Tab content exists already 
+            log.Debug( "Add first Joystick panel" );
+            js = new JoystickCls( jsDevice, this, UC_JoyPanel ); // does all device related activities for that particular item
+          }
+          else {
+            log.Debug( "Add next Joystick panel" );
+            // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
+            tc1.TabPages.Add( "Joystick " + ( tabs + 1 ).ToString( ) );
+            UC_JoyPanel uUC_JoyPanelNew = new UC_JoyPanel( );
+            tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
+            uUC_JoyPanelNew.Size = UC_JoyPanel.Size;
+            uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
+            log.Debug( "Create Joystick instance" );
+            js = new JoystickCls( jsDevice, this, uUC_JoyPanelNew ); // does all device related activities for that particular item
+          }
+          m_JS.Add( js ); // add to joystick list
+
+          tc1.TabPages[tabs].Tag = js.DevName;  // used to find the tab via JS mapping
+          tc1.TabPages[tabs].BackColor = MyColors.JColor[tabs]; // each tab has its own color
+          cbJs1.Items.Add( js.DevName ); cbJs2.Items.Add( js.DevName ); cbJs3.Items.Add( js.DevName ); // populate DropDowns with the JS name
+
+          // next tab
+          tabs++;
+          if ( tabs == 8 ) break; // cannot load more JSticks than predefined Tabs
+        }
+        log.DebugFormat( "Added {0} GameControl devices", tabs );
+
+        /*
+        // TEST CREATE ALL 8 TABS
+        for ( int i=(tabs+1); i < 9; i++ ) {
+          tc1.TabPages.Add( "Joystick " + i.ToString( ) );
+        }
+        */
+
         if ( tabs == 0 ) {
-          // first panel - The Tab content exists already 
-          js = new JoystickCls( jsDevice, this, UC_JoyPanel ); // does all device related activities for that particular item
+          log.Warn( "Unable to find and/or create any joystick devices." );
+          MessageBox.Show( "Unable to create a joystick device. Program will exit.", "No joystick found",  MessageBoxButtons.OK, MessageBoxIcon.Information );
+          return false;
         }
-        else {
-          // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
-          tc1.TabPages.Add( "Joystick " + ( tabs + 1 ).ToString( ) );
-          UC_JoyPanel uUC_JoyPanelNew = new UC_JoyPanel( );
-          tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
-          uUC_JoyPanelNew.Size = UC_JoyPanel.Size;
-          uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
-          js = new JoystickCls( jsDevice, this, uUC_JoyPanelNew ); // does all device related activities for that particular item
-        }
-        m_JS.Add( js ); // add to joystick list
 
-        tc1.TabPages[tabs].Tag = js.DevName;  // used to find the tab via JS mapping
-        tc1.TabPages[tabs].BackColor = MyColors.JColor[tabs]; // each tab has its own color
-        cbJs1.Items.Add( js.DevName ); cbJs2.Items.Add( js.DevName ); cbJs3.Items.Add( js.DevName ); // populate DropDowns with the JS name
+        // load the profile items from the XML
+        log.Debug( "Init ActionTree" );
+        InitActionTree( true );
 
-        // next tab
-        tabs++;
-        if ( tabs == 8 ) break; // cannot load more JSticks than predefined Tabs
       }
-      /*
-      // TEST CREATE ALL 8 TABS
-      for ( int i=(tabs+1); i < 9; i++ ) {
-        tc1.TabPages.Add( "Joystick " + i.ToString( ) );
-      }
-      */
-
-      if ( tabs == 0 ) {
-        MessageBox.Show( "Unable to create a joystick device. Program will exit.", "No joystick found" );
+      catch ( Exception ex ) {
+        log.Debug( "InitDirectInput failed unexpetedly", ex );
         return false;
       }
-
-      // load the profile items from the XML
-      InitActionTree( true );
 
       return true;
     }
@@ -289,6 +328,8 @@ namespace SCJMapper_V2
     /// </summary>
     private void Grab( )
     {
+      log.Debug( "Grab - Entry" );
+
       m_AT.ActionMaps.fromXML( rtb.Text );
       m_AT.ReloadCtrl( );
       // JS mapping for the first 3 items can be changed and reloaded from XML
@@ -314,6 +355,8 @@ namespace SCJMapper_V2
     /// </summary>
     private void Dump( )
     {
+      log.Debug( "Dump - Entry" );
+
       rtb.Text = String.Format( "<!-- {0} - SC Joystick Mapping -->\n{1}", DateTime.Now, m_AT.ActionMaps.toXML( ) );
 
       btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
@@ -333,6 +376,8 @@ namespace SCJMapper_V2
 
     private void MainForm_FormClosing( object sender, FormClosingEventArgs e )
     {
+      log.Debug( "MainForm_FormClosing - Entry" );
+
       m_AppSettings.FormSize = this.Size;
       m_AppSettings.FormLocation = this.Location;
       m_AppSettings.Save( );

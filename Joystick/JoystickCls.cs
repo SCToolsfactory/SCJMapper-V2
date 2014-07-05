@@ -16,6 +16,7 @@ namespace SCJMapper_V2
   /// </summary>
   class JoystickCls
   {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     #region Static Items
 
@@ -157,6 +158,8 @@ namespace SCJMapper_V2
     /// <param name="panel">The respective JS panel to show the properties</param>
     public JoystickCls( Joystick device, Control hwnd, UC_JoyPanel panel )
     {
+      log.DebugFormat( "ctor - Entry with {0}", device.Information.ProductName );
+
       m_device = device;
       m_hwnd = hwnd;
       m_jPanel = panel;
@@ -171,20 +174,26 @@ namespace SCJMapper_V2
       m_jPanel.nButtons = ButtonCount.ToString( );
       m_jPanel.nPOVs = POVCount.ToString( );
 
-      // Set the data format to the c_dfDIJoystick pre-defined format.
-      //m_device.SetDataFormat( DeviceDataFormat.Joystick );
-      // Set the cooperative level for the device.
-      m_device.SetCooperativeLevel( m_hwnd, CooperativeLevel.Exclusive | CooperativeLevel.Foreground );
-      // Enumerate all the objects on the device.
-      foreach ( DeviceObjectInstance d in m_device.GetObjects( ) ) {
-        // For axes that are returned, set the DIPROP_RANGE property for the
-        // enumerated axis in order to scale min/max values.
-        if ( ( 0 != ( d.ObjectId.Flags & DeviceObjectTypeFlags.Axis ) ) ) {
-          // Set the range for the axis.
-          m_device.Properties.Range = new InputRange( -1000, +1000 );
+      log.Debug( "Get JS Objects" );
+      try {
+        // Set the data format to the c_dfDIJoystick pre-defined format.
+        //m_device.SetDataFormat( DeviceDataFormat.Joystick );
+        // Set the cooperative level for the device.
+        m_device.SetCooperativeLevel( m_hwnd, CooperativeLevel.Exclusive | CooperativeLevel.Foreground );
+        // Enumerate all the objects on the device.
+        foreach ( DeviceObjectInstance d in m_device.GetObjects( ) ) {
+          // For axes that are returned, set the DIPROP_RANGE property for the
+          // enumerated axis in order to scale min/max values.
+          if ( ( 0 != ( d.ObjectId.Flags & DeviceObjectTypeFlags.Axis ) ) ) {
+            // Set the range for the axis.
+            m_device.Properties.Range = new InputRange( -1000, +1000 );
+          }
+          // Update the controls to reflect what objects the device supports.
+          UpdateControls( d );
         }
-        // Update the controls to reflect what objects the device supports.
-        UpdateControls( d );
+      }
+      catch ( Exception ex ) {
+        log.Error( "Get JS Objects failed", ex );
       }
 
     }
@@ -194,8 +203,11 @@ namespace SCJMapper_V2
     /// </summary>
     public void FinishDX( )
     {
-      if ( null != m_device )
+      if ( null != m_device ) {
+        log.DebugFormat( "Release DirectInput device: {0}", m_device.Information.ProductName );
         m_device.Unacquire( );
+        m_device = null;
+      }
     }
 
 
@@ -414,10 +426,13 @@ namespace SCJMapper_V2
             m_device.Acquire( );
           }
           catch ( SharpDXException ) {
-            // Failed to acquire the device.
-            // This could be because the app doesn't have focus.
-            return;
+            // Failed to acquire the device. This could be because the app doesn't have focus.
+            return;  // EXIT unaquired
           }
+        }
+        else {
+          log.Error( "Unexpected Poll Exception", e );
+          return;  // EXIT see ex code
         }
       }
 

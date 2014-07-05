@@ -11,6 +11,8 @@ namespace SCJMapper_V2
   /// </summary>
   class DProfileReader
   {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+
     public Boolean ValidContent { get; set; }
 
     private Stack<String> m_nodeNameStack = null; // element name stack - keeping track where we are
@@ -29,7 +31,7 @@ namespace SCJMapper_V2
       public String name { get; set; }    // the action name
       public String input { get; set; }  // the input method K,J,X,P
       private String m_defBinding = "";
-      public String defBinding { get { return m_defBinding;} set { m_defBinding = value.Trim();} }  // need to clean this one, found spaces...
+      public String defBinding { get { return m_defBinding; } set { m_defBinding = value.Trim( ); } }  // need to clean this one, found spaces...
       public String keyName
       { get { return input + name; } } // prep for TreView usage - create a key from input+name
     }
@@ -59,6 +61,8 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "CSVMap - Entry" );
+
         String buf = "";
         foreach ( ActionMap am in m_aMap.Values ) {
           buf += am.name + ";";
@@ -266,6 +270,8 @@ namespace SCJMapper_V2
     /// <returns></returns>
     private Boolean ReadXML( XmlReader xr )
     {
+      log.Debug( "ReadXML - Entry" );
+
       Boolean retVal = true;
 
       try {
@@ -295,8 +301,9 @@ namespace SCJMapper_V2
           return false;
 
       }
-      catch {
+      catch ( Exception ex ) {
         // get any exceptions from reading
+        log.Error( "ReadXML - unexpected", ex );
         return false;
       }
     }
@@ -308,6 +315,8 @@ namespace SCJMapper_V2
     /// <returns>True if an action was decoded</returns>
     public Boolean fromXML( String xml )
     {
+      log.Debug( "fromXML - Entry" );
+
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;
       settings.IgnoreWhitespace = true;

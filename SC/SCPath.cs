@@ -12,6 +12,7 @@ namespace SCJMapper_V2
   /// </summary>
   class SCPath
   {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     /// <summary>
     /// Try to locate the launcher under "App Paths"
@@ -22,8 +23,10 @@ namespace SCJMapper_V2
       {
         String scpath = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\StarCitizen Launcher.exe", "", null );
         if ( scpath != null ) {
+          log.Info( "SCLauncherPath1 - Found HKLM - AppPath - Launcher.exe" );
           return scpath;
         }
+        log.Warn( "SCLauncherPath1 - did not found HKLM - AppPath - Launcher.exe" );
         return "";
       }
     }
@@ -37,8 +40,10 @@ namespace SCJMapper_V2
       {
         String scpath = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\StarCitizen", "DisplayIcon", null );
         if ( scpath != null ) {
+          log.Info( "SCLauncherPath2 - Found HKLM - Uninstall - StarCitizen" );
           return scpath;
         }
+        log.Warn( "SCLauncherPath2 - did not found HKLM - Uninstall - StarCitizen" );
         return "";
       }
     }
@@ -51,6 +56,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "SCBasePath - Entry" );
         String scp = SCLauncherPath1;
         if ( String.IsNullOrEmpty( scp ) ) {
           scp = SCLauncherPath2;
@@ -74,6 +80,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "SCInstallPath - Entry" );
         return SCBasePath;
       }
     }
@@ -86,6 +93,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "SCClientDataPath - Entry" );
         String scp = SCBasePath;
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
@@ -103,6 +111,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "SCClientUSERPath - Entry" );
         String scp = SCBasePath;
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
@@ -120,6 +129,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "SCClientMappingPath - Entry" );
         String scp = SCClientDataPath;
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
@@ -137,6 +147,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "SCGameData_pak - Entry" );
         String scp = SCClientDataPath;
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
@@ -153,6 +164,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "DefaultProfilePath_rel - Entry" );
         return @"Libs\Config";
       }
     }
@@ -164,6 +176,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "DefaultProfileName - Entry" );
         return @"defaultProfile";
       }
     }
