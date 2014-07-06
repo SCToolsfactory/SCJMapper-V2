@@ -63,6 +63,14 @@ namespace SCJMapper_V2
       set { this["MyMappingName"] = value; }
     }
 
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "False" )] // false
+    public Boolean BlendUnmapped
+    {
+      get { return ( Boolean )this["BlendUnmapped"]; }
+      set { this["BlendUnmapped"] = value; }
+    }
+
 
     // Seetings Window
 

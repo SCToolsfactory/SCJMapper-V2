@@ -102,6 +102,7 @@ namespace SCJMapper_V2
       log.Debug( "Loading Other" );
       txMappingName.Text = m_AppSettings.MyMappingName;
       SetRebindField( txMappingName.Text );
+      cbxBlendUnmapped.Checked = m_AppSettings.BlendUnmapped;
 
       // Init X things
       log.Debug( "Loading DirectX" );
@@ -214,7 +215,7 @@ namespace SCJMapper_V2
       log.Debug( "InitActionTree - Entry" );
 
       // build TreeView and the ActionMaps
-      m_AT = new ActionTree( );
+      m_AT = new ActionTree( cbxBlendUnmapped.Checked );
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
       m_AT.LoadTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
 
@@ -472,8 +473,7 @@ namespace SCJMapper_V2
     private void tsDDbtProfiles_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
     {
       tsDDbtProfiles.Text = e.ClickedItem.Text;
-      m_AppSettings.DefProfileName = e.ClickedItem.Text;
-      m_AppSettings.Save( );
+      m_AppSettings.DefProfileName = e.ClickedItem.Text; m_AppSettings.Save( );
       // InitActionTree( ( Settings.Default.ResetMode == Settings.Default.ResetModeDefault ) ); // start over
     }
 
@@ -494,8 +494,7 @@ namespace SCJMapper_V2
     private void tsDDbtMappings_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
     {
       tsDDbtMappings.Text = e.ClickedItem.Text;
-      m_AppSettings.DefMappingName = e.ClickedItem.Text;
-      m_AppSettings.Save( );
+      m_AppSettings.DefMappingName = e.ClickedItem.Text; m_AppSettings.Save( );
     }
 
 
@@ -698,6 +697,18 @@ namespace SCJMapper_V2
       m_AppSettings.ShowSettings( );
       foreach ( JoystickCls j in m_JS ) j.ApplySettings(); // update Seetings
       timer1.Enabled = true;
+    }
+
+    // Blend Unmapped
+
+    private void cbxBlendUnmapped_CheckedChanged( object sender, EventArgs e )
+    {
+      if ( m_AT != null ) {
+        m_AT.BlendUnmapped = cbxBlendUnmapped.Checked;
+        m_AT.ReloadCtrl( );
+      }
+      m_AppSettings.BlendUnmapped = cbxBlendUnmapped.Checked;
+
     }
 
 

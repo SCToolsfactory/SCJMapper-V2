@@ -65,7 +65,7 @@ namespace SCJMapper_V2
     /// </summary>
     public ActionCls( )
     {
-      device = "joystick";  // what else ??
+      device = JoystickCls.DeviceName;
     }
 
     /// <summary>

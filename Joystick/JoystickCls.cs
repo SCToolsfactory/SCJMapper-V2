@@ -22,6 +22,10 @@ namespace SCJMapper_V2
     #region Static Items
 
     public const String DeviceName = "joystick";  // the device name used throughout this app
+
+    public const String JsUnknown = "jsx_";
+    public const String BlendedJsInput = JsUnknown + "reserved";  // the device name used throughout this app
+
     static private int JSnum_UNKNOWN = 0;
 
     /// <summary>
@@ -36,19 +40,20 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Returns properly formatted jsn_ string
+    /// Returns properly formatted jsn_ string (jsx_ if the input is UNKNOWN)
     /// </summary>
     /// <param name="jsNum">The JS number</param>
     /// <returns>The formatted JS name for the CryEngine XML</returns>
     static public String JSTag( int jsNum )
     {
+      if ( jsNum == JSnum_UNKNOWN ) return JsUnknown;
       if ( IsJSValid( jsNum ) ) return "js" + jsNum.ToString( ) + "_";
       else return "";
     }
 
 
     /// <summary>
-    /// Extract the JS number from a JS string
+    /// Extract the JS number from a JS string (jsx_ returns 0 - UNKNOWN)
     /// </summary>
     /// <param name="jsTag">The JS string</param>
     /// <returns>The JS number</returns>
@@ -56,7 +61,9 @@ namespace SCJMapper_V2
     {
       int retNum = JSnum_UNKNOWN;
       if ( !String.IsNullOrEmpty( jsTag ) ) {
-        int.TryParse( jsTag.Substring( 2, 1 ), out retNum );
+        if ( !int.TryParse( jsTag.Substring( 2, 1 ), out retNum ) ) {
+          retNum = JSnum_UNKNOWN;
+        }
       }
       return retNum;
     }

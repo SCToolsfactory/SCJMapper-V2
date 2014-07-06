@@ -22,17 +22,36 @@ namespace SCJMapper_V2
     private TreeView m_ctrl = null; // the TreeView in the GUI - injected from GUI via Ctrl property
     public TreeView Ctrl
     {
-      get { return m_ctrl;}
-      set { 
-        m_ctrl = value; 
+      get { return m_ctrl; }
+      set
+      {
+        m_ctrl = value;
         // copy props needed
         m_MasterTree.Font = m_ctrl.Font;
-        m_MasterTree.ImageList = m_ctrl.ImageList; 
+        m_MasterTree.ImageList = m_ctrl.ImageList;
       }
-    }  
-    public Boolean Dirty { get; set; }  // maintains the change status (gets reset by reloading the complete tree)
+    }
 
-    private String m_Filter = ""; // the tree content filter
+    /// <summary>
+    /// maintains the change status (gets reset by reloading the complete tree)
+    /// </summary>
+    public Boolean Dirty { get; set; }
+
+    /// <summary>
+    /// Blend (insert jsx_reserved") into undmapped items
+    /// </summary>
+    public Boolean BlendUnmapped { get; set; }
+
+    private String  m_Filter = ""; // the tree content filter
+
+
+    /// <summary>
+    /// ctor
+    /// </summary>
+    public ActionTree( Boolean blendUnmapped )
+    {
+      BlendUnmapped = blendUnmapped;
+    }
 
 
     /// <summary>
@@ -75,7 +94,7 @@ namespace SCJMapper_V2
         // have to search nodes of nodes
         Boolean allHidden = true;
         foreach ( TreeNode stn in tn.Nodes ) {
-          if ( ( stn.Tag != null ) && ( ( Boolean )stn.Tag == true ) ) {            
+          if ( ( stn.Tag != null ) && ( ( Boolean )stn.Tag == true ) ) {
             ;  // don't create it i.e hide it - though you cannot hide TreeViewNodes at all...
           }
           else {
@@ -165,7 +184,7 @@ namespace SCJMapper_V2
               if ( !String.IsNullOrEmpty( elem[ei] ) ) {
                 String action = elem[ei].Substring( 1 );
                 String defBinding = elem[ei + 1].Substring( 0 );
-                cn = new TreeNode( action ); cn.Name = elem[ei];  // name with the key it to find it..
+                cn = new TreeNode( action ); cn.Name = elem[ei]; cn.BackColor = Color.White; // name with the key it to find it..                
                 String devID = elem[ei].Substring( 0, 1 );
                 String device = ActionCls.DeviceFromID( devID );
                 cn.ImageKey = devID;
@@ -174,6 +193,7 @@ namespace SCJMapper_V2
                 Array.Resize( ref cnl, cnl.Length + 1 ); cnl[cnl.Length - 1] = cn;
                 ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.defBinding = defBinding;
                 acm.Add( ac ); // add to our map
+
 
                 if ( applyDefaults ) {
                   // right now this application only works with joysticks
@@ -184,10 +204,24 @@ namespace SCJMapper_V2
                       cn.Text += " - " + ac.defBinding;
                       cn.BackColor = MyColors.JColor[jNum - 1]; // color list is 0 based
                     }
+                    else {
+                      if ( BlendUnmapped ) {
+                        ac.input = JoystickCls.BlendedJsInput;
+                        cn.Text += " - " + JoystickCls.BlendedJsInput;
+                      }
+                    }
+                  }
+                }
+                else {
+                  // init empty
+                  if ( JoystickCls.IsJoystick( ac.device ) && BlendUnmapped ) {
+                    ac.input = JoystickCls.BlendedJsInput;
+                    cn.Text += " - " + JoystickCls.BlendedJsInput;
                   }
                 }
               }
             }//for
+
             tn = new TreeNode( acm.name, cnl ); tn.Name = acm.name;  // name it to find it..
             tn.ImageIndex = 0; tn.NodeFont = new Font( m_MasterTree.Font, FontStyle.Bold );
             m_MasterTree.BackColor = Color.White; // fix for defect TreeView (cut off bold text)
@@ -227,37 +261,51 @@ namespace SCJMapper_V2
 
       if ( Ctrl.SelectedNode == null ) return;
 
+      // Apply the input to the ActionTree
+      ActionCls ac = null;
+      ActionMapCls ACM = ActionMaps.Find( delegate( ActionMapCls acm ) { return acm.name == Ctrl.SelectedNode.Parent.Name; } );
+      if ( ACM != null ) {
+        ac = ACM.Find( delegate( ActionCls _AC ) { return _AC.key == Ctrl.SelectedNode.Name; } );
+        if ( ac != null ) {
+          if ( String.IsNullOrEmpty( input ) ) {
+            // unmapped
+            if ( JoystickCls.IsJoystick( ac.device ) && BlendUnmapped ) ac.input = JoystickCls.BlendedJsInput;
+            else ac.input = "";
+          }
+          else {
+            // mapped
+            ac.input = input;
+          }
+          Dirty = true;
+        }
+        else {
+          log.Error( "UpdateSelectedItem - Action Not found in tree" );
+          return;  // ERROR - Action Not found in tree
+        }
+      }
+
       // applies only to ActionNodes
       if ( Ctrl.SelectedNode.Level == 1 ) {
         String[] elements = Ctrl.SelectedNode.Text.Split( );
         if ( String.IsNullOrEmpty( input ) ) {
-          Ctrl.SelectedNode.Text = elements[0]; 
-          Ctrl.SelectedNode.BackColor = Color.White;  
+          // unmapped
+          if ( JoystickCls.IsJoystick( ac.device ) && BlendUnmapped ) Ctrl.SelectedNode.Text = elements[0] + " - " + JoystickCls.BlendedJsInput;
+          else Ctrl.SelectedNode.Text = elements[0];
+          Ctrl.SelectedNode.BackColor = Color.White;
         }
         else {
+          // mapped
           Ctrl.SelectedNode.Text = elements[0] + " - " + input;
           int jNum = JoystickCls.JSNum( input );
           Ctrl.SelectedNode.BackColor = MyColors.JColor[jNum - 1]; // color list is 0 based
         }
+
         // copy to master node
         TreeNode[] masterNode = m_MasterTree.Nodes.Find( Ctrl.SelectedNode.Name, true ); // find the same node in master
         if ( masterNode.Length == 0 ) throw new IndexOutOfRangeException( "ActionTree ERROR - cannot find synched node in master" ); // OUT OF SYNC
         masterNode[0].Text = Ctrl.SelectedNode.Text;
         masterNode[0].BackColor = Ctrl.SelectedNode.BackColor;
 
-        // Apply the input to the ActionTree
-        ActionMapCls ACM = ActionMaps.Find( delegate( ActionMapCls acm ) {
-          return acm.name == Ctrl.SelectedNode.Parent.Name;
-        } );
-        if ( ACM != null ) {
-          ActionCls AC = ACM.Find( delegate( ActionCls ac ) {
-            return ac.key == Ctrl.SelectedNode.Name;
-          } );
-          if ( AC != null ) {
-            AC.input = input;
-            Dirty = true;
-          }
-        }
 
       }
     }
@@ -279,12 +327,14 @@ namespace SCJMapper_V2
             try {
               TreeNode tnl = amTn.Nodes[ac.key];
               String[] elements = tnl.Text.Split( );
-              if ( String.IsNullOrEmpty( ac.input ) ) {
+              if ( String.IsNullOrEmpty( ac.input ) || ( ac.input == JoystickCls.BlendedJsInput ) ) {
                 // grabed input is not mapped
-                tnl.Text = elements[0];
-                tnl.BackColor = Color.Transparent;
+                if ( JoystickCls.IsJoystick( ac.device ) && BlendUnmapped ) tnl.Text = elements[0] + " - " + JoystickCls.BlendedJsInput;
+                else tnl.Text = elements[0];
+                tnl.BackColor = Color.White;
               }
               else {
+                // mapped
                 int jNum = JoystickCls.JSNum( ac.input );
                 tnl.Text = elements[0] + " - " + ac.input;
                 tnl.BackColor = MyColors.JColor[jNum - 1]; // color list is 0 based
@@ -354,7 +404,7 @@ namespace SCJMapper_V2
         String rep = String.Format( "*** {0}\n", acm.name );
         repList += rep;
         foreach ( ActionCls ac in acm ) {
-          if ( !String.IsNullOrEmpty( ac.input ) ) {
+          if ( !String.IsNullOrEmpty( ac.input ) && !( ac.input == JoystickCls.BlendedJsInput ) ) {
             rep = String.Format( " {0} - {1} - ({2})\n", ac.name.PadRight( 35 ), ac.input.PadRight( 20 ), ac.device );
             repList += rep;
           }

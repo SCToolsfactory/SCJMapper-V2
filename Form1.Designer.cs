@@ -83,6 +83,7 @@
       this.txFilter = new System.Windows.Forms.TextBox();
       this.btClearFilter = new System.Windows.Forms.Button();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+      this.btSettings = new System.Windows.Forms.Button();
       this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
       this.btSaveMyMapping = new System.Windows.Forms.Button();
       this.btLoadMyMapping = new System.Windows.Forms.Button();
@@ -103,7 +104,7 @@
       this.loadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-      this.btSettings = new System.Windows.Forms.Button();
+      this.cbxBlendUnmapped = new System.Windows.Forms.CheckBox();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
@@ -656,6 +657,7 @@
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 1);
       this.tableLayoutPanel2.Controls.Add(this.btSettings, 0, 1);
+      this.tableLayoutPanel2.Controls.Add(this.cbxBlendUnmapped, 0, 0);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 754);
@@ -666,6 +668,15 @@
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
       this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 66);
       this.tableLayoutPanel2.TabIndex = 24;
+      // 
+      // btSettings
+      // 
+      this.btSettings.Location = new System.Drawing.Point(3, 39);
+      this.btSettings.Name = "btSettings";
+      this.btSettings.Size = new System.Drawing.Size(120, 24);
+      this.btSettings.TabIndex = 14;
+      this.btSettings.Text = "Settings";
+      this.btSettings.Click += new System.EventHandler(this.btSettings_Click);
       // 
       // tableLayoutPanel3
       // 
@@ -875,14 +886,17 @@
       this.loadToolStripMenuItem.Text = "Load !";
       this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
       // 
-      // btSettings
+      // cbxBlendUnmapped
       // 
-      this.btSettings.Location = new System.Drawing.Point(3, 39);
-      this.btSettings.Name = "btSettings";
-      this.btSettings.Size = new System.Drawing.Size(120, 24);
-      this.btSettings.TabIndex = 14;
-      this.btSettings.Text = "Settings";
-      this.btSettings.Click += new System.EventHandler(this.btSettings_Click);
+      this.cbxBlendUnmapped.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.cbxBlendUnmapped.AutoSize = true;
+      this.cbxBlendUnmapped.Location = new System.Drawing.Point(3, 16);
+      this.cbxBlendUnmapped.Name = "cbxBlendUnmapped";
+      this.cbxBlendUnmapped.Size = new System.Drawing.Size(106, 17);
+      this.cbxBlendUnmapped.TabIndex = 15;
+      this.cbxBlendUnmapped.Text = "Blend unmapped";
+      this.cbxBlendUnmapped.UseVisualStyleBackColor = true;
+      this.cbxBlendUnmapped.CheckedChanged += new System.EventHandler(this.cbxBlendUnmapped_CheckedChanged);
       // 
       // UC_JoyPanel
       // 
@@ -917,6 +931,7 @@
       this.tableLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel1.PerformLayout();
       this.tableLayoutPanel2.ResumeLayout(false);
+      this.tableLayoutPanel2.PerformLayout();
       this.tableLayoutPanel3.ResumeLayout(false);
       this.tableLayoutPanel3.PerformLayout();
       this.statusStrip1.ResumeLayout(false);
@@ -1000,6 +1015,7 @@
     private System.Windows.Forms.CheckBox cbxThrottle;
     private System.Windows.Forms.TextBox txRebind;
     private System.Windows.Forms.Button btSettings;
+    private System.Windows.Forms.CheckBox cbxBlendUnmapped;
   }
 }
 
