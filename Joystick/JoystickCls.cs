@@ -17,6 +17,7 @@ namespace SCJMapper_V2
   class JoystickCls
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+    private static readonly AppSettings  appSettings = new AppSettings( );
 
     #region Static Items
 
@@ -91,11 +92,12 @@ namespace SCJMapper_V2
       if ( rgx_js.IsMatch( control ) ) {
         retVal = retVal.Insert( 4, "throttle" );
       }
+      /* THIS IS WRONG.... don't know if rot can get a throttle...
       else if ( rgx_jsr.IsMatch( control ) ) {
         retVal = retVal.Remove( 4, 3 );  // remove rot
         retVal = retVal.Insert( 4, "throttle" );
       } 
-      
+      */
       return retVal;
     }
 
@@ -122,8 +124,11 @@ namespace SCJMapper_V2
     private int m_sliderCount = 0;  // static counter for UpdateControls
     private String m_lastItem = "";
     private int m_senseLimit = 150; // axis jitter avoidance...
+    private int m_joystickNumber = 0;
+    private bool[] m_ignoreButtons;
 
     private UC_JoyPanel m_jPanel = null; // the GUI panel
+
 
     /// <summary>
     /// Returns a CryEngine compatible hat direction
@@ -156,12 +161,13 @@ namespace SCJMapper_V2
     /// <param name="device">A DXInput device</param>
     /// <param name="hwnd">The WinHandle of the main window</param>
     /// <param name="panel">The respective JS panel to show the properties</param>
-    public JoystickCls( Joystick device, Control hwnd, UC_JoyPanel panel )
+    public JoystickCls( Joystick device, Control hwnd, int joystickNum, UC_JoyPanel panel )
     {
       log.DebugFormat( "ctor - Entry with {0}", device.Information.ProductName );
 
       m_device = device;
       m_hwnd = hwnd;
+      m_joystickNumber = joystickNum;
       m_jPanel = panel;
 
       m_senseLimit = AppConfiguration.AppConfig.jsSenseLimit; // can be changed in the app.config file if it is still too little
@@ -173,6 +179,9 @@ namespace SCJMapper_V2
       m_jPanel.nAxis = AxisCount.ToString( );
       m_jPanel.nButtons = ButtonCount.ToString( );
       m_jPanel.nPOVs = POVCount.ToString( );
+
+      m_ignoreButtons = new bool[m_state.Buttons.Length]; 
+      ResetIgnoreButtons( );
 
       log.Debug( "Get JS Objects" );
       try {
@@ -196,7 +205,10 @@ namespace SCJMapper_V2
         log.Error( "Get JS Objects failed", ex );
       }
 
+      ApplySettings( ); // get whatever is needed here from Settings
     }
+
+
 
     /// <summary>
     /// Shutdown device access
@@ -209,6 +221,49 @@ namespace SCJMapper_V2
         m_device = null;
       }
     }
+
+
+    private void ResetIgnoreButtons( )
+    {
+      for ( int i=0; i < m_ignoreButtons.Length; i++ ) m_ignoreButtons[i] = false;
+    }
+
+    /// <summary>
+    /// Tells the Joystick to re-read settings
+    /// </summary>
+    public void ApplySettings( )
+    {
+      appSettings.Reload( );
+
+      ResetIgnoreButtons( );
+      // read ignore buttons
+      String igs = "";
+      switch ( m_joystickNumber ) {
+        case 1: igs = appSettings.IgnoreJS1; break;
+        case 2: igs = appSettings.IgnoreJS2; break;
+        case 3: igs = appSettings.IgnoreJS3; break;
+        case 4: igs = appSettings.IgnoreJS4; break;
+        case 5: igs = appSettings.IgnoreJS5; break;
+        case 6: igs = appSettings.IgnoreJS6; break;
+        case 7: igs = appSettings.IgnoreJS7; break;
+        case 8: igs = appSettings.IgnoreJS8; break;
+        default: break;
+      }
+      if ( String.IsNullOrWhiteSpace( igs ) ) return; // no setting - all allowed
+
+      // read the ignore numbers
+      String[] nums = igs.Split( ' ' );
+      foreach ( String s in nums ) {
+        int btNum = 0; // gets 1..n
+        if ( int.TryParse( s, out btNum ) ) {
+          if ( ( btNum > 0 ) && ( btNum <= m_ignoreButtons.Length ) ) {
+            m_ignoreButtons[--btNum] = true; // zero indexed
+          }
+        }
+      }
+
+    }
+
 
 
     /// <summary>
@@ -306,8 +361,8 @@ namespace SCJMapper_V2
 
       int[] slider = m_state.Sliders;
       int[] pslider = m_prevState.Sliders;
-      if ( DidAxisChange2( slider[0], pslider[0]) ) m_lastItem = "slider1";
-      if ( DidAxisChange2(slider[1], pslider[1] ) ) m_lastItem = "slider2";
+      if ( DidAxisChange2( slider[0], pslider[0] ) ) m_lastItem = "slider1";
+      if ( DidAxisChange2( slider[1], pslider[1] ) ) m_lastItem = "slider2";
 
       int[] pov = m_state.PointOfViewControllers;
       int[] ppov = m_prevState.PointOfViewControllers;
@@ -319,8 +374,10 @@ namespace SCJMapper_V2
       bool[] buttons = m_state.Buttons;
       bool[] prevButtons = m_prevState.Buttons;
       for ( int bi = 0; bi < buttons.Length; bi++ ) {
-        if ( buttons[bi] && buttons[bi] != prevButtons[bi] )
-          m_lastItem = "button" + ( bi + 1 ).ToString( );
+        if ( m_ignoreButtons[bi] == false ) {
+          if ( buttons[bi] && buttons[bi] != prevButtons[bi] )
+            m_lastItem = "button" + ( bi + 1 ).ToString( );
+        }
       }
       return m_lastItem;
     }

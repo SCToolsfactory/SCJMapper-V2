@@ -13,6 +13,7 @@ namespace SCJMapper_V2
   class SCPath
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+    private static readonly AppSettings  appSettings = new AppSettings( );
 
     /// <summary>
     /// Try to locate the launcher under "App Paths"
@@ -21,6 +22,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "SCLauncherPath1 - Entry" );
         String scpath = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\StarCitizen Launcher.exe", "", null );
         if ( scpath != null ) {
           log.Info( "SCLauncherPath1 - Found HKLM - AppPath - Launcher.exe" );
@@ -38,6 +40,7 @@ namespace SCJMapper_V2
     {
       get
       {
+        log.Debug( "SCLauncherPath2 - Entry" );
         String scpath = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\StarCitizen", "DisplayIcon", null );
         if ( scpath != null ) {
           log.Info( "SCLauncherPath2 - Found HKLM - Uninstall - StarCitizen" );
@@ -57,11 +60,21 @@ namespace SCJMapper_V2
       get
       {
         log.Debug( "SCBasePath - Entry" );
-        String scp = SCLauncherPath1;
-        if ( String.IsNullOrEmpty( scp ) ) {
-          scp = SCLauncherPath2;
+
+        String scp = "";
+        if ( appSettings.UserSCPathUsed ) {
+          // User has priority
+          scp = appSettings.UserSCPath;
+          if ( !Directory.Exists( scp ) ) return ""; // sorry path does not exist
+        }
+        else {
+          // start the registry search
+          scp = SCLauncherPath1;
           if ( String.IsNullOrEmpty( scp ) ) {
-            return "";  // sorry did not found a thing..
+            scp = SCLauncherPath2;
+            if ( String.IsNullOrEmpty( scp ) ) {
+              return "";  // sorry did not found a thing..
+            }
           }
         }
         // found the launcher

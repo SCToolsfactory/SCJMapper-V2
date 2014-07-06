@@ -111,6 +111,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSettings.Designer.cs">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Joystick\ActionCls.cs" />
     <Compile Include="Joystick\ActionMapCls.cs" />
     <Compile Include="Joystick\ActionMapsCls.cs" />
@@ -132,6 +138,9 @@
     <Compile Include="TheUser.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSettings.resx">
+      <DependentUpon>FormSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Joystick\UC_JoyPanel.resx">
       <DependentUpon>UC_JoyPanel.cs</DependentUpon>

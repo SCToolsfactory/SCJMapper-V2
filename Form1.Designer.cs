@@ -55,6 +55,7 @@
       this.cbJs2 = new System.Windows.Forms.ComboBox();
       this.cbJs1 = new System.Windows.Forms.ComboBox();
       this.panel2 = new System.Windows.Forms.Panel();
+      this.cbxThrottle = new System.Windows.Forms.CheckBox();
       this.btFind = new System.Windows.Forms.Button();
       this.label7 = new System.Windows.Forms.Label();
       this.label6 = new System.Windows.Forms.Label();
@@ -67,6 +68,7 @@
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
       this.panel1 = new System.Windows.Forms.Panel();
+      this.txRebind = new System.Windows.Forms.TextBox();
       this.linkLblReleases = new System.Windows.Forms.LinkLabel();
       this.label8 = new System.Windows.Forms.Label();
       this.lblTitle = new System.Windows.Forms.Label();
@@ -101,9 +103,8 @@
       this.loadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-      this.cbxThrottle = new System.Windows.Forms.CheckBox();
+      this.btSettings = new System.Windows.Forms.Button();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
-      this.txRebind = new System.Windows.Forms.TextBox();
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
       this.panel2.SuspendLayout();
@@ -347,6 +348,16 @@
       this.panel2.Size = new System.Drawing.Size(289, 103);
       this.panel2.TabIndex = 17;
       // 
+      // cbxThrottle
+      // 
+      this.cbxThrottle.AutoSize = true;
+      this.cbxThrottle.Location = new System.Drawing.Point(110, 72);
+      this.cbxThrottle.Name = "cbxThrottle";
+      this.cbxThrottle.Size = new System.Drawing.Size(62, 17);
+      this.cbxThrottle.TabIndex = 13;
+      this.cbxThrottle.Text = "Throttle";
+      this.cbxThrottle.UseVisualStyleBackColor = true;
+      // 
       // btFind
       // 
       this.btFind.Location = new System.Drawing.Point(190, 37);
@@ -480,10 +491,18 @@
       this.panel1.Size = new System.Drawing.Size(972, 66);
       this.panel1.TabIndex = 14;
       // 
+      // txRebind
+      // 
+      this.txRebind.Location = new System.Drawing.Point(603, 39);
+      this.txRebind.Name = "txRebind";
+      this.txRebind.Size = new System.Drawing.Size(361, 20);
+      this.txRebind.TabIndex = 4;
+      this.txRebind.Text = "pp_rebindkeys";
+      // 
       // linkLblReleases
       // 
       this.linkLblReleases.AutoSize = true;
-      this.linkLblReleases.Location = new System.Drawing.Point(732, 17);
+      this.linkLblReleases.Location = new System.Drawing.Point(731, 17);
       this.linkLblReleases.Name = "linkLblReleases";
       this.linkLblReleases.Size = new System.Drawing.Size(233, 13);
       this.linkLblReleases.TabIndex = 3;
@@ -636,6 +655,7 @@
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 1);
+      this.tableLayoutPanel2.Controls.Add(this.btSettings, 0, 1);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 754);
@@ -855,15 +875,14 @@
       this.loadToolStripMenuItem.Text = "Load !";
       this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
       // 
-      // cbxThrottle
+      // btSettings
       // 
-      this.cbxThrottle.AutoSize = true;
-      this.cbxThrottle.Location = new System.Drawing.Point(110, 72);
-      this.cbxThrottle.Name = "cbxThrottle";
-      this.cbxThrottle.Size = new System.Drawing.Size(62, 17);
-      this.cbxThrottle.TabIndex = 13;
-      this.cbxThrottle.Text = "Throttle";
-      this.cbxThrottle.UseVisualStyleBackColor = true;
+      this.btSettings.Location = new System.Drawing.Point(3, 39);
+      this.btSettings.Name = "btSettings";
+      this.btSettings.Size = new System.Drawing.Size(120, 24);
+      this.btSettings.TabIndex = 14;
+      this.btSettings.Text = "Settings";
+      this.btSettings.Click += new System.EventHandler(this.btSettings_Click);
       // 
       // UC_JoyPanel
       // 
@@ -871,14 +890,6 @@
       this.UC_JoyPanel.Name = "UC_JoyPanel";
       this.UC_JoyPanel.Size = new System.Drawing.Size(278, 234);
       this.UC_JoyPanel.TabIndex = 0;
-      // 
-      // txRebind
-      // 
-      this.txRebind.Location = new System.Drawing.Point(603, 39);
-      this.txRebind.Name = "txRebind";
-      this.txRebind.Size = new System.Drawing.Size(361, 20);
-      this.txRebind.TabIndex = 4;
-      this.txRebind.Text = "pp_rebindkeys";
       // 
       // MainForm
       // 
@@ -988,6 +999,7 @@
     private System.Windows.Forms.ToolTip toolTip1;
     private System.Windows.Forms.CheckBox cbxThrottle;
     private System.Windows.Forms.TextBox txRebind;
+    private System.Windows.Forms.Button btSettings;
   }
 }
 

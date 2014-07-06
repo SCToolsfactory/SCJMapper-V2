@@ -256,7 +256,7 @@ namespace SCJMapper_V2
           if ( tabs == 0 ) {
             // first panel - The Tab content exists already 
             log.Debug( "Add first Joystick panel" );
-            js = new JoystickCls( jsDevice, this, UC_JoyPanel ); // does all device related activities for that particular item
+            js = new JoystickCls( jsDevice, this, tabs + 1, UC_JoyPanel ); // does all device related activities for that particular item
           }
           else {
             log.Debug( "Add next Joystick panel" );
@@ -267,7 +267,7 @@ namespace SCJMapper_V2
             uUC_JoyPanelNew.Size = UC_JoyPanel.Size;
             uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
             log.Debug( "Create Joystick instance" );
-            js = new JoystickCls( jsDevice, this, uUC_JoyPanelNew ); // does all device related activities for that particular item
+            js = new JoystickCls( jsDevice, this, tabs + 1, uUC_JoyPanelNew ); // does all device related activities for that particular item
           }
           m_JS.Add( js ); // add to joystick list
 
@@ -300,7 +300,7 @@ namespace SCJMapper_V2
 
       }
       catch ( Exception ex ) {
-        log.Debug( "InitDirectInput failed unexpetedly", ex );
+        log.Debug( "InitDirectInput failed unexpectedly", ex );
         return false;
       }
 
@@ -686,6 +686,18 @@ namespace SCJMapper_V2
     {
       this.linkLblReleases.LinkVisited = true;
       System.Diagnostics.Process.Start( c_GithubLink );
+    }
+
+
+    // Settings
+
+    private void btSettings_Click( object sender, EventArgs e )
+    {
+      // have to stop polling while the Settings window is open
+      timer1.Enabled = false;
+      m_AppSettings.ShowSettings( );
+      foreach ( JoystickCls j in m_JS ) j.ApplySettings(); // update Seetings
+      timer1.Enabled = true;
     }
 
 
