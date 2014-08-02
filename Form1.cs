@@ -217,6 +217,7 @@ namespace SCJMapper_V2
       // build TreeView and the ActionMaps
       m_AT = new ActionTree( cbxBlendUnmapped.Checked );
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
+      m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
       m_AT.LoadTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
 
       // default JS to Joystick mapping - can be changed and reloaded from XML
@@ -696,6 +697,9 @@ namespace SCJMapper_V2
       timer1.Enabled = false;
       m_AppSettings.ShowSettings( );
       foreach ( JoystickCls j in m_JS ) j.ApplySettings(); // update Seetings
+      m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
+      InitActionTree( true );
+
       timer1.Enabled = true;
     }
 

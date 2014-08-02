@@ -84,6 +84,7 @@
       this.btClearFilter = new System.Windows.Forms.Button();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.btSettings = new System.Windows.Forms.Button();
+      this.cbxBlendUnmapped = new System.Windows.Forms.CheckBox();
       this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
       this.btSaveMyMapping = new System.Windows.Forms.Button();
       this.btLoadMyMapping = new System.Windows.Forms.Button();
@@ -104,7 +105,6 @@
       this.loadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-      this.cbxBlendUnmapped = new System.Windows.Forms.CheckBox();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel3.SuspendLayout();
@@ -247,15 +247,15 @@
       this.panel3.Controls.Add(this.cbJs3);
       this.panel3.Controls.Add(this.cbJs2);
       this.panel3.Controls.Add(this.cbJs1);
-      this.panel3.Location = new System.Drawing.Point(3, 284);
+      this.panel3.Location = new System.Drawing.Point(3, 294);
       this.panel3.Name = "panel3";
-      this.panel3.Size = new System.Drawing.Size(289, 134);
+      this.panel3.Size = new System.Drawing.Size(289, 118);
       this.panel3.TabIndex = 18;
       // 
       // label56
       // 
       this.label56.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label56.Location = new System.Drawing.Point(7, 101);
+      this.label56.Location = new System.Drawing.Point(7, 89);
       this.label56.Name = "label56";
       this.label56.Size = new System.Drawing.Size(39, 20);
       this.label56.TabIndex = 2;
@@ -264,7 +264,7 @@
       // label55
       // 
       this.label55.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label55.Location = new System.Drawing.Point(7, 74);
+      this.label55.Location = new System.Drawing.Point(7, 62);
       this.label55.Name = "label55";
       this.label55.Size = new System.Drawing.Size(39, 20);
       this.label55.TabIndex = 2;
@@ -282,7 +282,7 @@
       // label54
       // 
       this.label54.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label54.Location = new System.Drawing.Point(7, 47);
+      this.label54.Location = new System.Drawing.Point(7, 35);
       this.label54.Name = "label54";
       this.label54.Size = new System.Drawing.Size(39, 20);
       this.label54.TabIndex = 2;
@@ -297,7 +297,7 @@
             "Joystick 1",
             "Joystick 2",
             "Joystick 3"});
-      this.cbJs3.Location = new System.Drawing.Point(52, 98);
+      this.cbJs3.Location = new System.Drawing.Point(52, 86);
       this.cbJs3.MaxDropDownItems = 4;
       this.cbJs3.Name = "cbJs3";
       this.cbJs3.Size = new System.Drawing.Size(233, 25);
@@ -312,7 +312,7 @@
             "Joystick 1",
             "Joystick 2",
             "Joystick 3"});
-      this.cbJs2.Location = new System.Drawing.Point(52, 71);
+      this.cbJs2.Location = new System.Drawing.Point(52, 59);
       this.cbJs2.MaxDropDownItems = 4;
       this.cbJs2.Name = "cbJs2";
       this.cbJs2.Size = new System.Drawing.Size(233, 25);
@@ -327,7 +327,7 @@
             "Joystick 1",
             "Joystick 2",
             "Joystick 3"});
-      this.cbJs1.Location = new System.Drawing.Point(52, 44);
+      this.cbJs1.Location = new System.Drawing.Point(52, 32);
       this.cbJs1.MaxDropDownItems = 4;
       this.cbJs1.Name = "cbJs1";
       this.cbJs1.Size = new System.Drawing.Size(233, 25);
@@ -344,7 +344,7 @@
       this.panel2.Controls.Add(this.lblLastJ);
       this.panel2.Controls.Add(this.lblAction);
       this.panel2.Controls.Add(this.btAssign);
-      this.panel2.Location = new System.Drawing.Point(3, 424);
+      this.panel2.Location = new System.Drawing.Point(3, 418);
       this.panel2.Name = "panel2";
       this.panel2.Size = new System.Drawing.Size(289, 103);
       this.panel2.TabIndex = 17;
@@ -459,22 +459,22 @@
       this.tc1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
       this.tc1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.tc1.HotTrack = true;
-      this.tc1.ItemSize = new System.Drawing.Size(62, 22);
+      this.tc1.ItemSize = new System.Drawing.Size(62, 20);
       this.tc1.Location = new System.Drawing.Point(3, 3);
       this.tc1.Multiline = true;
       this.tc1.Name = "tc1";
       this.tc1.SelectedIndex = 0;
-      this.tc1.Size = new System.Drawing.Size(289, 275);
+      this.tc1.Size = new System.Drawing.Size(289, 285);
       this.tc1.TabIndex = 15;
       this.tc1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tc1_DrawItem);
       // 
       // tabJS1
       // 
       this.tabJS1.Controls.Add(this.UC_JoyPanel);
-      this.tabJS1.Location = new System.Drawing.Point(4, 26);
+      this.tabJS1.Location = new System.Drawing.Point(4, 24);
       this.tabJS1.Name = "tabJS1";
       this.tabJS1.Padding = new System.Windows.Forms.Padding(3);
-      this.tabJS1.Size = new System.Drawing.Size(281, 245);
+      this.tabJS1.Size = new System.Drawing.Size(281, 257);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
       // 
@@ -677,6 +677,18 @@
       this.btSettings.TabIndex = 14;
       this.btSettings.Text = "Settings";
       this.btSettings.Click += new System.EventHandler(this.btSettings_Click);
+      // 
+      // cbxBlendUnmapped
+      // 
+      this.cbxBlendUnmapped.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.cbxBlendUnmapped.AutoSize = true;
+      this.cbxBlendUnmapped.Location = new System.Drawing.Point(3, 16);
+      this.cbxBlendUnmapped.Name = "cbxBlendUnmapped";
+      this.cbxBlendUnmapped.Size = new System.Drawing.Size(106, 17);
+      this.cbxBlendUnmapped.TabIndex = 15;
+      this.cbxBlendUnmapped.Text = "Blend unmapped";
+      this.cbxBlendUnmapped.UseVisualStyleBackColor = true;
+      this.cbxBlendUnmapped.CheckedChanged += new System.EventHandler(this.cbxBlendUnmapped_CheckedChanged);
       // 
       // tableLayoutPanel3
       // 
@@ -886,23 +898,12 @@
       this.loadToolStripMenuItem.Text = "Load !";
       this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
       // 
-      // cbxBlendUnmapped
-      // 
-      this.cbxBlendUnmapped.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.cbxBlendUnmapped.AutoSize = true;
-      this.cbxBlendUnmapped.Location = new System.Drawing.Point(3, 16);
-      this.cbxBlendUnmapped.Name = "cbxBlendUnmapped";
-      this.cbxBlendUnmapped.Size = new System.Drawing.Size(106, 17);
-      this.cbxBlendUnmapped.TabIndex = 15;
-      this.cbxBlendUnmapped.Text = "Blend unmapped";
-      this.cbxBlendUnmapped.UseVisualStyleBackColor = true;
-      this.cbxBlendUnmapped.CheckedChanged += new System.EventHandler(this.cbxBlendUnmapped_CheckedChanged);
-      // 
       // UC_JoyPanel
       // 
-      this.UC_JoyPanel.Location = new System.Drawing.Point(0, 6);
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
       this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(278, 234);
+      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 251);
       this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm

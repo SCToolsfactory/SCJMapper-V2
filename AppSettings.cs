@@ -11,6 +11,22 @@ namespace SCJMapper_V2
   {
     FormSettings FS = null;
 
+    public AppSettings( )
+    {
+      if ( this.FirstRun ) {
+        // migrate the settings to the new version if the app runs the rist time
+        try {
+          this.Upgrade( );
+        }
+        catch { }
+        this.FirstRun = false;
+        this.Save( );
+      }
+    }
+
+    /// <summary>
+    /// Show the Settings Dialog
+    /// </summary>
     public void ShowSettings( )
     {
       if ( FS == null ) FS = new FormSettings( this );
@@ -19,6 +35,15 @@ namespace SCJMapper_V2
 
 
     #region Setting Properties
+
+    // manages Upgrade
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "True" )] 
+    public Boolean FirstRun
+    {
+      get { return ( Boolean )this["FirstRun"]; }
+      set { this["FirstRun"] = value; }
+    }
 
 
     // Control bound settings
@@ -152,6 +177,14 @@ namespace SCJMapper_V2
     {
       get { return ( Boolean )this["UserSCPathUsed"]; }
       set { this["UserSCPathUsed"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( ",multiplayer,player,singleplayer," )] // empty  Note: comma separated list, must have a comma at the begining and the end (to find 'player' on its own...)
+    public String IgnoreActionmaps
+    {
+      get { return ( String )this["IgnoreActionmaps"]; }
+      set { this["IgnoreActionmaps"] = value; }
     }
 
 

@@ -42,6 +42,11 @@ namespace SCJMapper_V2
     /// </summary>
     public Boolean BlendUnmapped { get; set; }
 
+    /// <summary>
+    /// a comma separated list of actionmaps to ignore
+    /// </summary>
+    public String IgnoreMaps { get; set; }
+
     private String  m_Filter = ""; // the tree content filter
 
 
@@ -51,6 +56,7 @@ namespace SCJMapper_V2
     public ActionTree( Boolean blendUnmapped )
     {
       BlendUnmapped = blendUnmapped;
+      IgnoreMaps = ""; // nothing to ignore
     }
 
 
@@ -176,58 +182,61 @@ namespace SCJMapper_V2
         while ( !String.IsNullOrEmpty( buf ) ) {
           String[] elem = buf.Split( new char[] { ';', ',', ' ' } );
           if ( elem.Length > 1 ) {
-            // must have 2 elements min
-            Array.Resize( ref cnl, 0 );
-            acm = new ActionMapCls( ); acm.name = elem[0]; // get actionmap name
-            // process items
-            for ( int ei=1; ei < elem.Length; ei += 2 ) { // step 2  - action;defaultBinding come in pairs
-              if ( !String.IsNullOrEmpty( elem[ei] ) ) {
-                String action = elem[ei].Substring( 1 );
-                String defBinding = elem[ei + 1].Substring( 0 );
-                cn = new TreeNode( action ); cn.Name = elem[ei]; cn.BackColor = Color.White; // name with the key it to find it..                
-                String devID = elem[ei].Substring( 0, 1 );
-                String device = ActionCls.DeviceFromID( devID );
-                cn.ImageKey = devID;
-                cn.BackColor = Color.White; // some stuff does not work properly...
+            if ( !IgnoreMaps.Contains( "," + elem[0] + "," ) ) {
+              // must have 2 elements min
+              Array.Resize( ref cnl, 0 );
+              acm = new ActionMapCls( ); acm.name = elem[0]; // get actionmap name
+              // process items
+              for ( int ei=1; ei < elem.Length; ei += 2 ) { // step 2  - action;defaultBinding come in pairs
+                if ( !String.IsNullOrEmpty( elem[ei] ) ) {
+                  String action = elem[ei].Substring( 1 );
+                  String defBinding = elem[ei + 1].Substring( 0 );
+                  cn = new TreeNode( action ); cn.Name = elem[ei]; cn.BackColor = Color.White; // name with the key it to find it..                
+                  String devID = elem[ei].Substring( 0, 1 );
+                  String device = ActionCls.DeviceFromID( devID );
+                  cn.ImageKey = devID;
+                  cn.BackColor = Color.White; // some stuff does not work properly...
 
-                Array.Resize( ref cnl, cnl.Length + 1 ); cnl[cnl.Length - 1] = cn;
-                ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.defBinding = defBinding;
-                acm.Add( ac ); // add to our map
+                  Array.Resize( ref cnl, cnl.Length + 1 ); cnl[cnl.Length - 1] = cn;
+                  ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.defBinding = defBinding;
+                  acm.Add( ac ); // add to our map
 
 
-                if ( applyDefaults ) {
-                  // right now this application only works with joysticks
-                  if ( JoystickCls.IsJoystick( ac.device ) ) {
-                    int jNum = JoystickCls.JSNum( ac.defBinding );
-                    if ( JoystickCls.IsJSValid( jNum ) ) {
-                      ac.input = ac.defBinding;
-                      cn.Text += " - " + ac.defBinding;
-                      cn.BackColor = MyColors.JColor[jNum - 1]; // color list is 0 based
-                    }
-                    else {
-                      if ( BlendUnmapped ) {
-                        ac.input = JoystickCls.BlendedJsInput;
-                        cn.Text += " - " + JoystickCls.BlendedJsInput;
+                  if ( applyDefaults ) {
+                    // right now this application only works with joysticks
+                    if ( JoystickCls.IsJoystick( ac.device ) ) {
+                      int jNum = JoystickCls.JSNum( ac.defBinding );
+                      if ( JoystickCls.IsJSValid( jNum ) ) {
+                        ac.input = ac.defBinding;
+                        cn.Text += " - " + ac.defBinding;
+                        cn.BackColor = MyColors.JColor[jNum - 1]; // color list is 0 based
+                      }
+                      else {
+                        if ( BlendUnmapped ) {
+                          ac.input = JoystickCls.BlendedJsInput;
+                          cn.Text += " - " + JoystickCls.BlendedJsInput;
+                        }
                       }
                     }
                   }
-                }
-                else {
-                  // init empty
-                  if ( JoystickCls.IsJoystick( ac.device ) && BlendUnmapped ) {
-                    ac.input = JoystickCls.BlendedJsInput;
-                    cn.Text += " - " + JoystickCls.BlendedJsInput;
+                  else {
+                    // init empty
+                    if ( JoystickCls.IsJoystick( ac.device ) && BlendUnmapped ) {
+                      ac.input = JoystickCls.BlendedJsInput;
+                      cn.Text += " - " + JoystickCls.BlendedJsInput;
+                    }
                   }
                 }
-              }
-            }//for
+              }//for
 
-            tn = new TreeNode( acm.name, cnl ); tn.Name = acm.name;  // name it to find it..
-            tn.ImageIndex = 0; tn.NodeFont = new Font( m_MasterTree.Font, FontStyle.Bold );
-            m_MasterTree.BackColor = Color.White; // fix for defect TreeView (cut off bold text)
-            m_MasterTree.Nodes.Add( tn ); // add to control
-            if ( topNode == null ) topNode = tn; // once to keep the start of list
-            ActionMaps.Add( acm ); // add to our map
+              tn = new TreeNode( acm.name, cnl ); tn.Name = acm.name;  // name it to find it..
+              tn.ImageIndex = 0; tn.NodeFont = new Font( m_MasterTree.Font, FontStyle.Bold );
+              m_MasterTree.BackColor = Color.White; // fix for defect TreeView (cut off bold text)
+              m_MasterTree.Nodes.Add( tn ); // add to control
+              if ( topNode == null ) topNode = tn; // once to keep the start of list
+              ActionMaps.Add( acm ); // add to our map
+            }//not ignored
+
           }// if valid line
           buf = sr.ReadLine( );
         }//while
@@ -320,6 +329,7 @@ namespace SCJMapper_V2
       log.Debug( "ReloadCtrl - Entry" );
 
       foreach ( ActionMapCls acm in ActionMaps ) {
+        if ( IgnoreMaps.Contains(  "," + acm.name + "," ) ) break; // next
         try {
           TreeNode amTn = m_MasterTree.Nodes[acm.name]; // get the map node
           // find the item to reload into the treeview

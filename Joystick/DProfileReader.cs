@@ -42,10 +42,6 @@ namespace SCJMapper_V2
     Dictionary<String, ActionMap> m_aMap = null; // key would be the actionmap name
     ActionMap m_currentMap = null;
 
-    // actionmap names to gather (do we need them to be cofigurable ??)
-    private String[] c_exMaps = { "spaceship_general", "spaceship_view", "spaceship_movement", "spaceship_targeting", "spaceship_weapons", "spaceship_missiles", 
-                                "spaceship_defensive", "spaceship_auto_weapons", "spaceship_radar" , "spaceship_hud" , "IFCS_controls" , "" , "" , "" };
-
 
     public DProfileReader( )
     {
@@ -230,7 +226,7 @@ namespace SCJMapper_V2
             if ( m_nodeNameStack.Peek( ).ToLower( ) == "actionmap" ) {
               // check for a valid one
               String mapName = attr["name"];
-              String item = Array.Find( c_exMaps, delegate( String sstr ) {
+              String item = Array.Find( ActionMapsCls.ActionMaps, delegate( String sstr ) {
                 return sstr == mapName;
               } );
               if ( !String.IsNullOrEmpty( item ) ) {

@@ -22,6 +22,11 @@ namespace SCJMapper_V2
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
+    // actionmap names to gather (do we need them to be cofigurable ??)
+    public static String[] ActionMaps = { "multiplayer", "singleplayer", "player", "spaceship_general", "spaceship_view", "spaceship_movement", "spaceship_targeting", "spaceship_weapons", "spaceship_missiles", 
+                                "spaceship_defensive", "spaceship_auto_weapons", "spaceship_radar" , "spaceship_hud" , "IFCS_controls" };
+
+
     
     public String version { get; set; }
     // own additions for JS mapping - should not harm..

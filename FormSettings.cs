@@ -26,6 +26,10 @@ namespace SCJMapper_V2
 
     private void FormSettings_Load( object sender, EventArgs e )
     {
+      chkLbActionMaps.Items.Clear( );
+      for ( int i = 0; i < ActionMapsCls.ActionMaps.Length; i++ ) {
+        chkLbActionMaps.Items.Add( ActionMapsCls.ActionMaps[i] );
+      }
       LoadSettings( );
     }
 
@@ -45,6 +49,13 @@ namespace SCJMapper_V2
       txJS6.Text = m_owner.IgnoreJS6;
       txJS7.Text = m_owner.IgnoreJS7;
       txJS8.Text = m_owner.IgnoreJS8;
+
+      // Ignore actionmaps
+      for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
+        if ( m_owner.IgnoreActionmaps.Contains( "," + chkLbActionMaps.Items[i].ToString( ) + "," ) ) {
+          chkLbActionMaps.SetItemChecked(i, true);
+        }
+      }
     }
 
 
@@ -64,6 +75,15 @@ namespace SCJMapper_V2
       m_owner.IgnoreJS7 = txJS7.Text;
       m_owner.IgnoreJS8 = txJS8.Text;
 
+      // Ignore actionmaps
+      String ignore = ",";
+      for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
+        if ( chkLbActionMaps.GetItemChecked(i) ) {
+          ignore += chkLbActionMaps.Items[i].ToString( ) + ",";
+        }
+      }
+      m_owner.IgnoreActionmaps = ignore;
+      
       m_owner.Save( );
     }
 
