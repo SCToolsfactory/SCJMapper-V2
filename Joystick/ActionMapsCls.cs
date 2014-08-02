@@ -78,7 +78,7 @@ namespace SCJMapper_V2
     {
       log.Debug( "toXML - Entry" );
 
-      String r = String.Format( "<ActionMaps version=\"{0}\" ", version );
+      String r = String.Format( "<ActionMaps version=\"{0}\" \n", version );
       if ( !String.IsNullOrEmpty( js1 ) ) r += String.Format( "js1=\"{0}\" ", js1 );
       if ( !String.IsNullOrEmpty( js2 ) ) r += String.Format( "js2=\"{0}\" ", js2 );
       if ( !String.IsNullOrEmpty( js3 ) ) r += String.Format( "js3=\"{0}\" ", js3 );

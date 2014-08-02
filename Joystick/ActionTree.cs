@@ -148,7 +148,7 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Load MappingVars.csv into the ActionList and create the Master TreeView 
+    /// Load Mappings into the ActionList and create the Master TreeView 
     /// </summary>
     /// <param name="defaultProfileName">The name of the profile to load (w/o extension)</param>
     /// <param name="applyDefaults">True if default mappings should be carried on</param>
@@ -329,7 +329,7 @@ namespace SCJMapper_V2
       log.Debug( "ReloadCtrl - Entry" );
 
       foreach ( ActionMapCls acm in ActionMaps ) {
-        if ( IgnoreMaps.Contains(  "," + acm.name + "," ) ) break; // next
+        if ( IgnoreMaps.Contains( "," + acm.name + "," ) ) break; // next
         try {
           TreeNode amTn = m_MasterTree.Nodes[acm.name]; // get the map node
           // find the item to reload into the treeview

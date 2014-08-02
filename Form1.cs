@@ -224,6 +224,11 @@ namespace SCJMapper_V2
       if ( tc1.TabCount > 0 ) { cbJs1.SelectedIndex = 0; m_AT.ActionMaps.js1 = cbJs1.Text; }
       if ( tc1.TabCount > 1 ) { cbJs2.SelectedIndex = 1; m_AT.ActionMaps.js2 = cbJs2.Text; }
       if ( tc1.TabCount > 2 ) { cbJs3.SelectedIndex = 2; m_AT.ActionMaps.js3 = cbJs3.Text; }
+      if ( tc1.TabCount > 3 ) { m_AT.ActionMaps.js4 = ( String )tc1.TabPages[3].Tag; }
+      if ( tc1.TabCount > 4 ) { m_AT.ActionMaps.js5 = ( String )tc1.TabPages[4].Tag; }
+      if ( tc1.TabCount > 5 ) { m_AT.ActionMaps.js6 = ( String )tc1.TabPages[5].Tag; }
+      if ( tc1.TabCount > 6 ) { m_AT.ActionMaps.js7 = ( String )tc1.TabPages[6].Tag; }
+      if ( tc1.TabCount > 7 ) { m_AT.ActionMaps.js8 = ( String )tc1.TabPages[7].Tag; }
     }
 
 
@@ -339,14 +344,29 @@ namespace SCJMapper_V2
         int i = cbJs1.FindString( m_AT.ActionMaps.js1 );
         if ( i >= 0 ) cbJs1.SelectedIndex = i;
       }
+      else {
+        if ( tc1.TabCount > 0 ) { cbJs1.SelectedIndex = 0; m_AT.ActionMaps.js1 = cbJs1.Text; }
+      }
       if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js2 ) ) {
         int i = cbJs2.FindString( m_AT.ActionMaps.js2 );
         if ( i >= 0 ) cbJs2.SelectedIndex = i;
+      }
+      else {
+        if ( tc1.TabCount > 1 ) { cbJs2.SelectedIndex = 1; m_AT.ActionMaps.js2 = cbJs2.Text; }
       }
       if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js3 ) ) {
         int i = cbJs3.FindString( m_AT.ActionMaps.js3 );
         if ( i >= 0 ) cbJs3.SelectedIndex = i;
       }
+      else {
+        if ( tc1.TabCount > 2 ) { cbJs3.SelectedIndex = 2; m_AT.ActionMaps.js3 = cbJs3.Text; }
+      }
+      if ( tc1.TabCount > 3 ) { m_AT.ActionMaps.js4 = ( String )tc1.TabPages[3].Tag; }
+      if ( tc1.TabCount > 4 ) { m_AT.ActionMaps.js5 = ( String )tc1.TabPages[4].Tag; }
+      if ( tc1.TabCount > 5 ) { m_AT.ActionMaps.js6 = ( String )tc1.TabPages[5].Tag; }
+      if ( tc1.TabCount > 6 ) { m_AT.ActionMaps.js7 = ( String )tc1.TabPages[6].Tag; }
+      if ( tc1.TabCount > 7 ) { m_AT.ActionMaps.js8 = ( String )tc1.TabPages[7].Tag; }
+
       btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
       btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
     }
@@ -695,10 +715,11 @@ namespace SCJMapper_V2
     {
       // have to stop polling while the Settings window is open
       timer1.Enabled = false;
-      m_AppSettings.ShowSettings( );
-      foreach ( JoystickCls j in m_JS ) j.ApplySettings(); // update Seetings
-      m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
-      InitActionTree( true );
+      if ( m_AppSettings.ShowSettings( ) != System.Windows.Forms.DialogResult.Cancel ) {
+        foreach ( JoystickCls j in m_JS ) j.ApplySettings( ); // update Seetings
+        m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
+        InitActionTree( false );
+      }
 
       timer1.Enabled = true;
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace SCJMapper_V2
 {
@@ -27,10 +28,11 @@ namespace SCJMapper_V2
     /// <summary>
     /// Show the Settings Dialog
     /// </summary>
-    public void ShowSettings( )
+    public DialogResult ShowSettings( )
     {
       if ( FS == null ) FS = new FormSettings( this );
       FS.ShowDialog( );
+      return ( FS.Canceled ) ? DialogResult.Cancel : DialogResult.OK;
     }
 
 

@@ -53,6 +53,8 @@
       this.groupBox2 = new System.Windows.Forms.GroupBox();
       this.groupBox3 = new System.Windows.Forms.GroupBox();
       this.chkLbActionMaps = new System.Windows.Forms.CheckedListBox();
+      this.btCancel = new System.Windows.Forms.Button();
+      this.label1 = new System.Windows.Forms.Label();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -60,11 +62,11 @@
       // 
       // btDone
       // 
-      this.btDone.Location = new System.Drawing.Point(760, 340);
+      this.btDone.Location = new System.Drawing.Point(657, 340);
       this.btDone.Name = "btDone";
       this.btDone.Size = new System.Drawing.Size(93, 31);
       this.btDone.TabIndex = 1;
-      this.btDone.Text = "Done";
+      this.btDone.Text = "Accept";
       this.btDone.UseVisualStyleBackColor = true;
       this.btDone.Click += new System.EventHandler(this.btDone_Click);
       // 
@@ -304,11 +306,35 @@
       this.chkLbActionMaps.Size = new System.Drawing.Size(268, 301);
       this.chkLbActionMaps.TabIndex = 0;
       // 
+      // btCancel
+      // 
+      this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+      this.btCancel.Location = new System.Drawing.Point(756, 340);
+      this.btCancel.Name = "btCancel";
+      this.btCancel.Size = new System.Drawing.Size(93, 31);
+      this.btCancel.TabIndex = 25;
+      this.btCancel.Text = "Cancel";
+      this.btCancel.UseVisualStyleBackColor = true;
+      this.btCancel.Click += new System.EventHandler(this.btCancel_Click);
+      // 
+      // label1
+      // 
+      this.label1.ForeColor = System.Drawing.Color.Red;
+      this.label1.Location = new System.Drawing.Point(227, 344);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(414, 28);
+      this.label1.TabIndex = 26;
+      this.label1.Text = "Note: Accepting changes will clear the action tree to apply the new settings; Can" +
+    "cel now if you want to save your work first.";
+      // 
       // FormSettings
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.CancelButton = this.btCancel;
       this.ClientSize = new System.Drawing.Size(861, 381);
+      this.Controls.Add(this.label1);
+      this.Controls.Add(this.btCancel);
       this.Controls.Add(this.groupBox3);
       this.Controls.Add(this.groupBox2);
       this.Controls.Add(this.groupBox1);
@@ -357,5 +383,7 @@
     private System.Windows.Forms.GroupBox groupBox2;
     private System.Windows.Forms.GroupBox groupBox3;
     private System.Windows.Forms.CheckedListBox chkLbActionMaps;
+    private System.Windows.Forms.Button btCancel;
+    private System.Windows.Forms.Label label1;
   }
 }

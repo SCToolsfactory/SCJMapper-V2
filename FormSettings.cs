@@ -13,6 +13,9 @@ namespace SCJMapper_V2
   {
     private readonly AppSettings m_owner = null; // owner class - access to settings
 
+
+    public Boolean Canceled { get; set; }
+
     /// <summary>
     /// ctor - gets the owning class instance
     /// </summary>
@@ -91,9 +94,16 @@ namespace SCJMapper_V2
     private void btDone_Click( object sender, EventArgs e )
     {
       SaveSettings( );
+      Canceled = false;
       this.Hide( );
     }
 
+    private void btCancel_Click( object sender, EventArgs e )
+    {
+      LoadSettings( );
+      Canceled = true;
+      this.Hide( );
+    }
 
     // allow only numbers, blanks and del
     private bool nonNumberEntered = false;
@@ -140,6 +150,7 @@ namespace SCJMapper_V2
         txSCPath.Text = fbDlg.SelectedPath;
       }
     }
+
 
 
 
