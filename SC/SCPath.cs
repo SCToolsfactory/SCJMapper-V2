@@ -18,17 +18,23 @@ namespace SCJMapper_V2
     /// <summary>
     /// Try to locate the launcher under "App Paths"
     /// </summary>
-    static private String SCLauncherPath1
+    static private String SCLauncherFile1
     {
       get
       {
-        log.Debug( "SCLauncherPath1 - Entry" );
-        String scpath = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\StarCitizen Launcher.exe", "", null );
-        if ( scpath != null ) {
-          log.Info( "SCLauncherPath1 - Found HKLM - AppPath - Launcher.exe" );
-          return scpath;
+        log.Debug( "SCLauncherFile1 - Entry" );
+        String scLauncher = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\StarCitizen Launcher.exe", "", null );
+        if ( scLauncher != null ) {
+          log.Info( "SCLauncherFile1 - Found HKLM - AppPath - Launcher.exe" );
+          if ( File.Exists( scLauncher ) ) {
+            return scLauncher;
+          }
+          else {
+            log.WarnFormat( "SCLauncherFile1 - file does not exist: {0}", scLauncher );
+            return "";
+          }
         }
-        log.Warn( "SCLauncherPath1 - did not found HKLM - AppPath - Launcher.exe" );
+        log.Warn( "SCLauncherFile1 - did not found HKLM - AppPath - Launcher.exe" );
         return "";
       }
     }
@@ -36,17 +42,48 @@ namespace SCJMapper_V2
     /// <summary>
     /// Try to locate the launcher under "Uninstall"
     /// </summary>
-    static private String SCLauncherPath2
+    static private String SCLauncherFile2
     {
       get
       {
-        log.Debug( "SCLauncherPath2 - Entry" );
-        String scpath = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\StarCitizen", "DisplayIcon", null );
-        if ( scpath != null ) {
-          log.Info( "SCLauncherPath2 - Found HKLM - Uninstall - StarCitizen" );
-          return scpath;
+        log.Debug( "SCLauncherFile2 - Entry" );
+        String scLauncher = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\StarCitizen", "DisplayIcon", null );
+        if ( scLauncher != null ) {
+          log.Info( "SCLauncherFile2 - Found HKLM - Uninstall - StarCitizen" );
+          if ( File.Exists( scLauncher ) ) {
+            return scLauncher;
+          }
+          else {
+            log.WarnFormat( "SCLauncherFile2 - file does not exist: {0}", scLauncher );
+            return "";
+          }
         }
-        log.Warn( "SCLauncherPath2 - did not found HKLM - Uninstall - StarCitizen" );
+        log.Warn( "SCLauncherFile2 - did not found HKLM - Uninstall - StarCitizen" );
+        return "";
+      }
+    }
+
+
+    /// <summary>
+    /// Try to locate the launcher under "Uninstall"
+    /// </summary>
+    static private String SCLauncherFile3
+    {
+      get
+      {
+        log.Debug( "SCLauncherFile3 - Entry" );
+        String scLauncher = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Cloud Imperium Games\StarCitizen Launcher.exe", "", null );
+        if ( scLauncher != null ) {
+          log.Info( "SCLauncherFile3 - Found HKLM - CIG - Launcher.exe" );
+          if ( File.Exists( scLauncher ) ) {
+            return scLauncher;
+          }
+          else {
+            log.WarnFormat( "SCLauncherFile3 - file does not exist: {0}", scLauncher );
+            return "";
+          }
+        }
+        log.Warn( "SCLauncherFile3 - did not found HKLM - CIG - Launcher.exe" );
         return "";
       }
     }
@@ -60,26 +97,34 @@ namespace SCJMapper_V2
       get
       {
         log.Debug( "SCBasePath - Entry" );
-
+        appSettings.Reload( ); // local instance - reload as it might be changed outside
         String scp = "";
         if ( appSettings.UserSCPathUsed ) {
           // User has priority
           scp = appSettings.UserSCPath;
-          if ( !Directory.Exists( scp ) ) return ""; // sorry path does not exist
+          if ( !Directory.Exists( scp ) ) {
+            log.WarnFormat( "SCBasePath - user defined folder does not exist: {0}", scp );
+            return ""; // sorry path does not exist
+          }
         }
         else {
           // start the registry search
-          scp = SCLauncherPath1;
+          scp = SCLauncherFile1;
           if ( String.IsNullOrEmpty( scp ) ) {
-            scp = SCLauncherPath2;
+            scp = SCLauncherFile2;
             if ( String.IsNullOrEmpty( scp ) ) {
-              return "";  // sorry did not found a thing..
+              scp = SCLauncherFile3;
+              if ( String.IsNullOrEmpty( scp ) ) {
+                log.Warn( "SCBasePath - cannot find any valid SC path" );
+                return "";  // sorry did not found a thing..
+              }
             }
           }
+          // found the launcher.exe file - path adjust
+          scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen\Launcher"
+          scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen"
         }
-        // found the launcher
-        scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen\Launcher"
-        scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen"
+
         return scp;
       }
     }
@@ -87,7 +132,7 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Returns the SC installation path
+    /// Returns the SC installation path or ""
     /// </summary>
     static public String SCInstallPath
     {
@@ -108,11 +153,14 @@ namespace SCJMapper_V2
       {
         log.Debug( "SCClientDataPath - Entry" );
         String scp = SCBasePath;
-        if ( String.IsNullOrEmpty( scp ) ) return "";
+        if ( String.IsNullOrEmpty( scp ) ) return ""; // no valid one can be found
         //
         scp = Path.Combine( scp, "CitizenClient" );
         scp = Path.Combine( scp, "Data" );
-        return scp;
+        if ( Directory.Exists( scp ) ) return scp;
+
+        log.WarnFormat( "SCClientDataPath - CitizenClient.Data subfolder does not exist: {0}", scp );
+        return "";
       }
     }
 
@@ -130,7 +178,10 @@ namespace SCJMapper_V2
         //
         scp = Path.Combine( scp, "CitizenClient" );
         scp = Path.Combine( scp, "USER" );
-        return scp;
+        if ( Directory.Exists( scp ) ) return scp;
+
+        log.WarnFormat( "SCClientUSERPath - CitizenClient.USER subfolder does not exist: {0}", scp );
+        return "";
       }
     }
 
@@ -148,7 +199,10 @@ namespace SCJMapper_V2
         //
         scp = Path.Combine( scp, "Controls" );
         scp = Path.Combine( scp, "Mappings" );
-        return scp;
+        if ( Directory.Exists( scp ) ) return scp;
+
+        log.WarnFormat( "SCClientMappingPath - CitizenClient.Data.Controls.Mappings subfolder does not exist: {0}", scp );
+        return "";
       }
     }
 
@@ -165,7 +219,10 @@ namespace SCJMapper_V2
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
         scp = Path.Combine( scp, "GameData.pak" );
-        return scp;
+        if ( File.Exists( scp ) ) return scp;
+
+        log.WarnFormat( "SCGameData_pak - CitizenClient.Data.GameData.pak file does not exist: {0}", scp );
+        return "";
       }
     }
 

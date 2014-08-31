@@ -40,8 +40,8 @@ namespace SCJMapper_V2
     private void LoadSettings( )
     {
       // SC path
-      m_owner.UserSCPath = txSCPath.Text;
-      m_owner.UserSCPathUsed = cbxUsePath.Checked;
+      txSCPath.Text = m_owner.UserSCPath;
+      cbxUsePath.Checked = m_owner.UserSCPathUsed;
 
       //Ignore Buttons
       txJS1.Text = m_owner.IgnoreJS1;
@@ -65,8 +65,8 @@ namespace SCJMapper_V2
     private void SaveSettings( )
     {
       // SC path
-      txSCPath.Text = m_owner.UserSCPath;
-      cbxUsePath.Checked = m_owner.UserSCPathUsed;
+      m_owner.UserSCPath = txSCPath.Text;
+      m_owner.UserSCPathUsed = cbxUsePath.Checked;
 
       //Ignore Buttons
       m_owner.IgnoreJS1 = txJS1.Text;

@@ -16,6 +16,8 @@ namespace SCJMapper_V2
       InitializeComponent( );
     }
 
+    private int m_jsAssignment = 0; // na
+
 
     #region Strings
 
@@ -25,7 +27,7 @@ namespace SCJMapper_V2
     /// <param name="s">String to return if length less than 12</param>
     /// <param name="d">String to return if s length more than 12</param>
     /// <returns>A string</returns>
-    private String Chk( String s, String d  )
+    private String Chk( String s, String d )
     {
       if ( s.Length > 12 ) return d; else return s;
     }
@@ -174,7 +176,7 @@ namespace SCJMapper_V2
 
     public String nPOVs
     {
-      set { lblnPOVs .Text = value; }
+      set { lblnPOVs.Text = value; }
     }
 
 
@@ -251,5 +253,36 @@ namespace SCJMapper_V2
     #endregion
 
 
+    #region jsAsignment
+
+    /// <summary>
+    /// jsN assignment
+    /// Note: this is supposed to be either 1..4 for assigned ones or 0 for unassigned ones
+    /// </summary>
+    public int JsAssignment
+    {
+      get { return m_jsAssignment; }
+      set
+      {
+        m_jsAssignment = value;
+        switch ( m_jsAssignment ) {
+          case 1: rbJs1.Checked = true; break;
+          case 2: rbJs2.Checked = true; break;
+          case 3: rbJs3.Checked = true; break;
+          case 4: rbJs4.Checked = true; break;
+          default:
+            rbJsNA.Checked = true;
+            m_jsAssignment = value;
+            break;
+        }
+      }
+    }
+
+    public String JsName
+    {
+      get { return JoystickCls.JSTag(m_jsAssignment); }
+    }
+
+    #endregion
   }
 }

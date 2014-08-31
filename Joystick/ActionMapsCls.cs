@@ -34,10 +34,11 @@ namespace SCJMapper_V2
     public String js2 { get; set; }
     public String js3 { get; set; }
     public String js4 { get; set; }
-    public String js5 { get; set; }
-    public String js6 { get; set; }
-    public String js7 { get; set; }
-    public String js8 { get; set; }
+
+    public String js1GUID { get; set; }
+    public String js2GUID { get; set; }
+    public String js3GUID { get; set; }
+    public String js4GUID { get; set; }
 
     /// <summary>
     /// ctor
@@ -45,7 +46,30 @@ namespace SCJMapper_V2
     public ActionMapsCls( )
     {
       version = "0";
-      js1 = ""; js2 = ""; js3 = ""; js4 = ""; js5 = ""; js6 = ""; js7 = ""; js8 = "";
+      js1 = ""; js2 = ""; js3 = ""; js4 = "";
+      js1GUID = ""; js2GUID = ""; js3GUID = ""; js4GUID = "";
+    }
+
+
+    /// <summary>
+    /// Copy return all ActionMaps while reassigning the JsN Tag
+    /// </summary>
+    /// <param name="newJsList">The JsN reassign list</param>
+    /// <returns>The ActionMaps copy with reassigned input</returns>
+    public ActionMapsCls ReassignJsN( Dictionary<int, int> newJsList )
+    {
+      ActionMapsCls newMaps = new ActionMapsCls( );
+      // full copy from 'this' 
+      newMaps.js1 = this.js1; newMaps.js1GUID = this.js1GUID;
+      newMaps.js2 = this.js2; newMaps.js2GUID = this.js2GUID;
+      newMaps.js3 = this.js3; newMaps.js3GUID = this.js3GUID;
+      newMaps.js4 = this.js4; newMaps.js4GUID = this.js4GUID;
+
+      foreach ( ActionMapCls am in this ) {
+        newMaps.Add( am.ReassignJsN( newJsList ) );
+      }
+
+      return newMaps;
     }
 
     /// <summary>
@@ -79,14 +103,14 @@ namespace SCJMapper_V2
       log.Debug( "toXML - Entry" );
 
       String r = String.Format( "<ActionMaps version=\"{0}\" \n", version );
-      if ( !String.IsNullOrEmpty( js1 ) ) r += String.Format( "js1=\"{0}\" ", js1 );
-      if ( !String.IsNullOrEmpty( js2 ) ) r += String.Format( "js2=\"{0}\" ", js2 );
-      if ( !String.IsNullOrEmpty( js3 ) ) r += String.Format( "js3=\"{0}\" ", js3 );
-      if ( !String.IsNullOrEmpty( js4 ) ) r += String.Format( "js4=\"{0}\" ", js4 );
-      if ( !String.IsNullOrEmpty( js5 ) ) r += String.Format( "js5=\"{0}\" ", js5 );
-      if ( !String.IsNullOrEmpty( js6 ) ) r += String.Format( "js6=\"{0}\" ", js6 );
-      if ( !String.IsNullOrEmpty( js7 ) ) r += String.Format( "js7=\"{0}\" ", js7 );
-      if ( !String.IsNullOrEmpty( js8 ) ) r += String.Format( "js8=\"{0}\" ", js8 );
+      if ( !String.IsNullOrEmpty( js1 ) ) r += String.Format( "\tjs1=\"{0}\" ", js1 );
+      if ( !String.IsNullOrEmpty( js1GUID ) ) r += String.Format( "js1G=\"{0}\" ", js1GUID ); r += String.Format( "\n" );
+      if ( !String.IsNullOrEmpty( js2 ) ) r += String.Format( "\tjs2=\"{0}\" ", js2 );
+      if ( !String.IsNullOrEmpty( js2GUID ) ) r += String.Format( "js2G=\"{0}\" ", js2GUID ); r += String.Format( "\n" );
+      if ( !String.IsNullOrEmpty( js3 ) ) r += String.Format( "\tjs3=\"{0}\" ", js3 );
+      if ( !String.IsNullOrEmpty( js3GUID ) ) r += String.Format( "js3G=\"{0}\" ", js3GUID ); r += String.Format( "\n" );
+      if ( !String.IsNullOrEmpty( js4 ) ) r += String.Format( "\tjs4=\"{0}\" ", js4 );
+      if ( !String.IsNullOrEmpty( js4GUID ) ) r += String.Format( "js4G=\"{0}\" ", js4GUID ); r += String.Format( "\n" );
       r += String.Format( ">\n");
       foreach ( ActionMapCls amc in this ) {
         r += String.Format( "{0}\n", amc.toXML( ) );
@@ -123,10 +147,10 @@ namespace SCJMapper_V2
           js2 = reader["js2"];
           js3 = reader["js3"];
           js4 = reader["js4"];
-          js5 = reader["js5"];
-          js6 = reader["js6"];
-          js7 = reader["js7"];
-          js8 = reader["js8"];
+          js1GUID = reader["js1G"];
+          js2GUID = reader["js2G"];
+          js3GUID = reader["js3G"];
+          js4GUID = reader["js4G"];
         }
         else {
           return false;

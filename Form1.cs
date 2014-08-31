@@ -24,7 +24,8 @@ namespace SCJMapper_V2
     ///<remarks>
     /// Holds the DXInput Joystick List
     ///</remarks>
-    private List<JoystickCls> m_JS = new List<JoystickCls>( );
+    private JoystickList m_JS = new JoystickList( );
+
     ///<remarks>
     /// Holds the ActionTree that manages the TreeView and the action lists
     ///</remarks>
@@ -50,13 +51,35 @@ namespace SCJMapper_V2
 
     }
 
+    private void LoadProfileDD( )
+    {
+      tsDDbtProfiles.DropDownItems.Clear( );
+      foreach ( String s in SCDefaultProfile.DefaultProfileNames ) {
+        tsDDbtProfiles.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ) );
+      }
+    }
+
     private void LoadMappingDD( )
     {
+      SCMappings.UpdateMappingNames( );
       tsDDbtMappings.DropDownItems.Clear( );
       foreach ( String s in SCMappings.MappingNames ) {
         tsDDbtMappings.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ) );
       }
     }
+
+    /// <summary>
+    /// Indicates if the SC directory is a valid one
+    /// </summary>
+    private void SCFileIndication( )
+    {
+      if ( String.IsNullOrEmpty( SCPath.SCGameData_pak ) ) tsDDbtProfiles.BackColor = MyColors.InvalidColor;
+      else tsDDbtProfiles.BackColor = MyColors.ProfileColor;
+
+      if ( String.IsNullOrEmpty( SCPath.SCClientMappingPath ) ) tsDDbtMappings.BackColor = MyColors.InvalidColor;
+      else tsDDbtMappings.BackColor = MyColors.MappingColor;
+    }
+
 
     /// <summary>
     ///  Handle the load event
@@ -88,15 +111,15 @@ namespace SCJMapper_V2
 
       // load profiles
       log.Debug( "Loading Profiles" );
-      foreach ( String s in SCDefaultProfile.DefaultProfileNames ) {
-        tsDDbtProfiles.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ) );
-      }
+      LoadProfileDD( );
       tsDDbtProfiles.Text = m_AppSettings.DefProfileName;
 
       // load mappings
       log.Debug( "Loading Mappings" );
       LoadMappingDD( );
       tsDDbtMappings.Text = m_AppSettings.DefMappingName;
+
+      SCFileIndication( );
 
       // load other defaults
       log.Debug( "Loading Other" );
@@ -221,14 +244,14 @@ namespace SCJMapper_V2
       m_AT.LoadTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
 
       // default JS to Joystick mapping - can be changed and reloaded from XML
-      if ( tc1.TabCount > 0 ) { cbJs1.SelectedIndex = 0; m_AT.ActionMaps.js1 = cbJs1.Text; }
-      if ( tc1.TabCount > 1 ) { cbJs2.SelectedIndex = 1; m_AT.ActionMaps.js2 = cbJs2.Text; }
-      if ( tc1.TabCount > 2 ) { cbJs3.SelectedIndex = 2; m_AT.ActionMaps.js3 = cbJs3.Text; }
-      if ( tc1.TabCount > 3 ) { m_AT.ActionMaps.js4 = ( String )tc1.TabPages[3].Tag; }
-      if ( tc1.TabCount > 4 ) { m_AT.ActionMaps.js5 = ( String )tc1.TabPages[4].Tag; }
-      if ( tc1.TabCount > 5 ) { m_AT.ActionMaps.js6 = ( String )tc1.TabPages[5].Tag; }
-      if ( tc1.TabCount > 6 ) { m_AT.ActionMaps.js7 = ( String )tc1.TabPages[6].Tag; }
-      if ( tc1.TabCount > 7 ) { m_AT.ActionMaps.js8 = ( String )tc1.TabPages[7].Tag; }
+      if ( m_JS.Count > 0 ) { m_JS[0].JSAssignment = 1; m_AT.ActionMaps.js1 = m_JS[0].DevName; m_AT.ActionMaps.js1GUID = m_JS[0].DevInstanceGUID; }
+      if ( m_JS.Count > 1 ) { m_JS[1].JSAssignment = 2; m_AT.ActionMaps.js2 = m_JS[1].DevName; m_AT.ActionMaps.js2GUID = m_JS[1].DevInstanceGUID; }
+      if ( m_JS.Count > 2 ) { m_JS[2].JSAssignment = 0; } // unmapped ones go with default 0
+      if ( m_JS.Count > 3 ) { m_JS[3].JSAssignment = 0; }
+      if ( m_JS.Count > 4 ) { m_JS[4].JSAssignment = 0; }
+      if ( m_JS.Count > 5 ) { m_JS[5].JSAssignment = 0; }
+      if ( m_JS.Count > 6 ) { m_JS[6].JSAssignment = 0; }
+      if ( m_JS.Count > 7 ) { m_JS[7].JSAssignment = 0; }
     }
 
 
@@ -242,7 +265,6 @@ namespace SCJMapper_V2
 
       // Enumerate joysticks in the system.
       int tabs = 0;
-      cbJs1.Items.Clear( ); cbJs2.Items.Clear( ); cbJs3.Items.Clear( ); // JS dropdowns init
 
       try {
         // Initialize DirectInput
@@ -255,7 +277,7 @@ namespace SCJMapper_V2
 
           // Create the device interface
           log.Debug( "Create the device interface" );
-          Joystick jsDevice = new Joystick( directInput, instance.InstanceGuid );
+          SharpDX.DirectInput.Joystick jsDevice = new Joystick( directInput, instance.InstanceGuid );
           JoystickCls js = null;
           log.DebugFormat( "Create the device interface for: {0}", jsDevice.Information.ProductName );
 
@@ -263,7 +285,7 @@ namespace SCJMapper_V2
           if ( tabs == 0 ) {
             // first panel - The Tab content exists already 
             log.Debug( "Add first Joystick panel" );
-            js = new JoystickCls( jsDevice, this, tabs + 1, UC_JoyPanel ); // does all device related activities for that particular item
+            js = new JoystickCls( jsDevice, this, tabs + 1, UC_JoyPanel, tc1.TabPages[0] ); // does all device related activities for that particular item
           }
           else {
             log.Debug( "Add next Joystick panel" );
@@ -274,13 +296,12 @@ namespace SCJMapper_V2
             uUC_JoyPanelNew.Size = UC_JoyPanel.Size;
             uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
             log.Debug( "Create Joystick instance" );
-            js = new JoystickCls( jsDevice, this, tabs + 1, uUC_JoyPanelNew ); // does all device related activities for that particular item
+            js = new JoystickCls( jsDevice, this, tabs + 1, uUC_JoyPanelNew, tc1.TabPages[tabs] ); // does all device related activities for that particular item
           }
           m_JS.Add( js ); // add to joystick list
 
           tc1.TabPages[tabs].Tag = js.DevName;  // used to find the tab via JS mapping
           tc1.TabPages[tabs].BackColor = MyColors.JColor[tabs]; // each tab has its own color
-          cbJs1.Items.Add( js.DevName ); cbJs2.Items.Add( js.DevName ); cbJs3.Items.Add( js.DevName ); // populate DropDowns with the JS name
 
           // next tab
           tabs++;
@@ -297,7 +318,7 @@ namespace SCJMapper_V2
 
         if ( tabs == 0 ) {
           log.Warn( "Unable to find and/or create any joystick devices." );
-          MessageBox.Show( "Unable to create a joystick device. Program will exit.", "No joystick found",  MessageBoxButtons.OK, MessageBoxIcon.Information );
+          MessageBox.Show( "Unable to create a joystick device. Program will exit.", "No joystick found", MessageBoxButtons.OK, MessageBoxIcon.Information );
           return false;
         }
 
@@ -317,17 +338,14 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Create the jsN  Joystick string from mapping (or from the JS index above item 3)
+    /// Get the current JsTag for the active device tab
     /// </summary>
     /// <returns></returns>
     private String JSStr( )
     {
-      if ( ( String )tc1.SelectedTab.Tag == ( string )cbJs1.SelectedItem ) return JoystickCls.JSTag( 1 );
-      if ( ( String )tc1.SelectedTab.Tag == ( string )cbJs2.SelectedItem ) return JoystickCls.JSTag( 2 );
-      if ( ( String )tc1.SelectedTab.Tag == ( string )cbJs3.SelectedItem ) return JoystickCls.JSTag( 3 );
-      return JoystickCls.JSTag( tc1.SelectedIndex + 1 ); // return the Joystick number
+      UC_JoyPanel jp = ( UC_JoyPanel )( tc1.SelectedTab.Controls["UC_JoyPanel"] );
+      return jp.JsName;
     }
-
 
 
     /// <summary>
@@ -337,35 +355,67 @@ namespace SCJMapper_V2
     {
       log.Debug( "Grab - Entry" );
 
+      m_JS.ResetJsNAssignment( );
       m_AT.ActionMaps.fromXML( rtb.Text );
-      m_AT.ReloadCtrl( );
-      // JS mapping for the first 3 items can be changed and reloaded from XML
-      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js1 ) ) {
-        int i = cbJs1.FindString( m_AT.ActionMaps.js1 );
-        if ( i >= 0 ) cbJs1.SelectedIndex = i;
+      // JS mapping for js1 .. js4 can be changed and reloaded from XML
+      // note - unmapped ones remain what they were
+      // This is includes similar procedures as reassigning of the jsN items
+      JoystickCls j = null;
+      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js1GUID ) ) {
+        j = m_JS.Find_jsInstance( m_AT.ActionMaps.js1GUID );
       }
-      else {
-        if ( tc1.TabCount > 0 ) { cbJs1.SelectedIndex = 0; m_AT.ActionMaps.js1 = cbJs1.Text; }
+      else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js1 ) ) {
+        j = m_JS.Find_jsDev( m_AT.ActionMaps.js1 );
       }
-      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js2 ) ) {
-        int i = cbJs2.FindString( m_AT.ActionMaps.js2 );
-        if ( i >= 0 ) cbJs2.SelectedIndex = i;
+      if ( j != null ) {
+        m_AT.ActionMaps.js1GUID = j.DevInstanceGUID; // subst for missing one (version up etc.)
+        j.JSAssignment = 1;
       }
-      else {
-        if ( tc1.TabCount > 1 ) { cbJs2.SelectedIndex = 1; m_AT.ActionMaps.js2 = cbJs2.Text; }
+
+      j = null; ;
+      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js2GUID ) ) {
+        j = m_JS.Find_jsInstance( m_AT.ActionMaps.js2GUID );
       }
-      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js3 ) ) {
-        int i = cbJs3.FindString( m_AT.ActionMaps.js3 );
-        if ( i >= 0 ) cbJs3.SelectedIndex = i;
+      else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js2 ) ) {
+        j = m_JS.Find_jsDev( m_AT.ActionMaps.js2 );
       }
-      else {
-        if ( tc1.TabCount > 2 ) { cbJs3.SelectedIndex = 2; m_AT.ActionMaps.js3 = cbJs3.Text; }
+      if ( j != null ) {
+        m_AT.ActionMaps.js2GUID = j.DevInstanceGUID; // subst for missing one (version up etc.)
+        j.JSAssignment = 2;
       }
-      if ( tc1.TabCount > 3 ) { m_AT.ActionMaps.js4 = ( String )tc1.TabPages[3].Tag; }
-      if ( tc1.TabCount > 4 ) { m_AT.ActionMaps.js5 = ( String )tc1.TabPages[4].Tag; }
-      if ( tc1.TabCount > 5 ) { m_AT.ActionMaps.js6 = ( String )tc1.TabPages[5].Tag; }
-      if ( tc1.TabCount > 6 ) { m_AT.ActionMaps.js7 = ( String )tc1.TabPages[6].Tag; }
-      if ( tc1.TabCount > 7 ) { m_AT.ActionMaps.js8 = ( String )tc1.TabPages[7].Tag; }
+
+      j = null; ;
+      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js3GUID ) ) {
+        j = m_JS.Find_jsInstance( m_AT.ActionMaps.js3GUID );
+      }
+      else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js3 ) ) {
+        j = m_JS.Find_jsDev( m_AT.ActionMaps.js3 );
+      }
+      if ( j != null ) {
+        m_AT.ActionMaps.js3GUID = j.DevInstanceGUID; // subst for missing one (version up etc.)
+        j.JSAssignment = 3;
+      }
+
+      j = null; ;
+      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js4GUID ) ) {
+        j = m_JS.Find_jsInstance( m_AT.ActionMaps.js4GUID );
+      }
+      else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js4 ) ) {
+        j = m_JS.Find_jsDev( m_AT.ActionMaps.js4 );
+      }
+      if ( j != null ) {
+        m_AT.ActionMaps.js4GUID = j.DevInstanceGUID; // subst for missing one (version up etc.)
+        j.JSAssignment = 4;
+      }
+
+      // maintain the new JsN assignment and update the colorlist
+      List<int> newL = new List<int>( );
+      foreach ( JoystickCls jj in m_JS ) {
+        newL.Add(jj.JSAssignment);
+      }
+      JoystickCls.ReassignJsColor( newL );
+
+      m_AT.ReloadCtrl( ); // finally reload things into the tree
 
       btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
       btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
@@ -445,7 +495,7 @@ namespace SCJMapper_V2
 
     private void btAssign_Click( object sender, EventArgs e )
     {
-      m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked) );
+      m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ) );
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
 
@@ -671,15 +721,15 @@ namespace SCJMapper_V2
       if ( SCMappings.IsValidMappingName( txMappingName.Text ) ) {
         Dump( );
         if ( SCMappings.MappingFileExists( txMappingName.Text ) ) {
-          cancel = ( MessageBox.Show( "File exists, shall we overwrite ?", "Save XML", MessageBoxButtons.YesNo ) == System.Windows.Forms.DialogResult.No);
+          cancel = ( MessageBox.Show( "File exists, shall we overwrite ?", "Save XML", MessageBoxButtons.YesNo ) == System.Windows.Forms.DialogResult.No );
         }
         if ( !cancel ) {
           rtb.SaveFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
-          rtb.SaveFile( TheUser.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText ); // backup copy 
+          TheUser.BackupMappingFile( txMappingName.Text ); // backup copy of the old one
+          rtb.SaveFile( TheUser.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText ); // also save the new one in the user space
           SetRebindField( txMappingName.Text );
 
           // get the new one into the list
-          SCMappings.UpdateMappingNames( );
           LoadMappingDD( );
           m_AppSettings.MyMappingName = txMappingName.Text; // last used - persist
           txMappingName.BackColor = MyColors.SuccessColor;
@@ -716,13 +766,68 @@ namespace SCJMapper_V2
       // have to stop polling while the Settings window is open
       timer1.Enabled = false;
       if ( m_AppSettings.ShowSettings( ) != System.Windows.Forms.DialogResult.Cancel ) {
+        m_AppSettings.Reload( ); // must reload in case of any changes in the form
+        // then reload the profile and mappings
+        LoadProfileDD( );
+        LoadMappingDD( );
+        // indicates (in)valid folders
+        SCFileIndication( );
+        // now update the contents according to new settings
         foreach ( JoystickCls j in m_JS ) j.ApplySettings( ); // update Seetings
         m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
+        // and start over with an empty tree
         InitActionTree( false );
       }
 
       timer1.Enabled = true;
     }
+
+    private void btJsReassign_Click( object sender, EventArgs e )
+    {
+      // have to stop polling while the Reassign window is open
+      timer1.Enabled = false;
+      if ( m_JS.ShowReassign( ) != System.Windows.Forms.DialogResult.Cancel ) {
+        // copy the action tree while reassigning the jsN mappings from OLD to NEW
+        ActionTree newTree = m_AT.ReassignJsN( m_JS.JsReassingList );
+        // we have still the old assignment in the ActionMap - change it here (map does not know about the devices)
+        JoystickCls j = null;
+        j = m_JS.Find_jsN( 1 );
+        if ( j != null ) {
+          newTree.ActionMaps.js1 = j.DevName; newTree.ActionMaps.js1GUID = j.DevInstanceGUID;
+        }
+        else {
+          newTree.ActionMaps.js1 = ""; newTree.ActionMaps.js1GUID = "";
+        }
+        j = m_JS.Find_jsN( 2 );
+        if ( j != null ) {
+          newTree.ActionMaps.js2 = j.DevName; newTree.ActionMaps.js2GUID = j.DevInstanceGUID;
+        }
+        else {
+          newTree.ActionMaps.js2 = ""; newTree.ActionMaps.js2GUID = "";
+        }
+        j = m_JS.Find_jsN( 3 );
+        if ( j != null ) {
+          newTree.ActionMaps.js3 = j.DevName; newTree.ActionMaps.js3GUID = j.DevInstanceGUID;
+        }
+        else {
+          newTree.ActionMaps.js3 = ""; newTree.ActionMaps.js3GUID = "";
+        }
+        j = m_JS.Find_jsN( 4 );
+        if ( j != null ) {
+          newTree.ActionMaps.js4 = j.DevName; newTree.ActionMaps.js4GUID = j.DevInstanceGUID;
+        }
+        else {
+          newTree.ActionMaps.js4 = ""; newTree.ActionMaps.js4GUID = "";
+        }
+
+        m_AT = newTree; // make it the valid one
+        m_AT.ReloadCtrl( );
+        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+
+      timer1.Enabled = true;
+    }
+
 
     // Blend Unmapped
 
@@ -740,7 +845,8 @@ namespace SCJMapper_V2
     #endregion
 
 
-    
+
+
 
   }
 }

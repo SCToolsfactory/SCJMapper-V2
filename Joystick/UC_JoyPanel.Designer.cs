@@ -61,8 +61,15 @@
       this.label5 = new System.Windows.Forms.Label();
       this.label3 = new System.Windows.Forms.Label();
       this.label2 = new System.Windows.Forms.Label();
+      this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.rbJsNA = new System.Windows.Forms.RadioButton();
+      this.rbJs4 = new System.Windows.Forms.RadioButton();
+      this.rbJs3 = new System.Windows.Forms.RadioButton();
+      this.rbJs2 = new System.Windows.Forms.RadioButton();
+      this.rbJs1 = new System.Windows.Forms.RadioButton();
       this.gBox.SuspendLayout();
       this.gBoxCap.SuspendLayout();
+      this.groupBox1.SuspendLayout();
       this.SuspendLayout();
       // 
       // gBox
@@ -425,18 +432,92 @@
       this.label2.TabIndex = 13;
       this.label2.Text = "# Axis:";
       // 
+      // groupBox1
+      // 
+      this.groupBox1.Controls.Add(this.rbJsNA);
+      this.groupBox1.Controls.Add(this.rbJs4);
+      this.groupBox1.Controls.Add(this.rbJs3);
+      this.groupBox1.Controls.Add(this.rbJs2);
+      this.groupBox1.Controls.Add(this.rbJs1);
+      this.groupBox1.Location = new System.Drawing.Point(3, 236);
+      this.groupBox1.Name = "groupBox1";
+      this.groupBox1.Size = new System.Drawing.Size(232, 46);
+      this.groupBox1.TabIndex = 5;
+      this.groupBox1.TabStop = false;
+      this.groupBox1.Text = "jsN - Assignment";
+      // 
+      // rbJsNA
+      // 
+      this.rbJsNA.AutoSize = true;
+      this.rbJsNA.Checked = true;
+      this.rbJsNA.Enabled = false;
+      this.rbJsNA.Location = new System.Drawing.Point(182, 19);
+      this.rbJsNA.Name = "rbJsNA";
+      this.rbJsNA.Size = new System.Drawing.Size(37, 17);
+      this.rbJsNA.TabIndex = 4;
+      this.rbJsNA.TabStop = true;
+      this.rbJsNA.Text = "jsx";
+      this.rbJsNA.UseVisualStyleBackColor = true;
+      // 
+      // rbJs4
+      // 
+      this.rbJs4.AutoSize = true;
+      this.rbJs4.Enabled = false;
+      this.rbJs4.Location = new System.Drawing.Point(138, 19);
+      this.rbJs4.Name = "rbJs4";
+      this.rbJs4.Size = new System.Drawing.Size(38, 17);
+      this.rbJs4.TabIndex = 3;
+      this.rbJs4.Text = "js4";
+      this.rbJs4.UseVisualStyleBackColor = true;
+      // 
+      // rbJs3
+      // 
+      this.rbJs3.AutoSize = true;
+      this.rbJs3.Enabled = false;
+      this.rbJs3.Location = new System.Drawing.Point(94, 19);
+      this.rbJs3.Name = "rbJs3";
+      this.rbJs3.Size = new System.Drawing.Size(38, 17);
+      this.rbJs3.TabIndex = 2;
+      this.rbJs3.Text = "js3";
+      this.rbJs3.UseVisualStyleBackColor = true;
+      // 
+      // rbJs2
+      // 
+      this.rbJs2.AutoSize = true;
+      this.rbJs2.Enabled = false;
+      this.rbJs2.Location = new System.Drawing.Point(50, 19);
+      this.rbJs2.Name = "rbJs2";
+      this.rbJs2.Size = new System.Drawing.Size(38, 17);
+      this.rbJs2.TabIndex = 1;
+      this.rbJs2.Text = "js2";
+      this.rbJs2.UseVisualStyleBackColor = true;
+      // 
+      // rbJs1
+      // 
+      this.rbJs1.AutoSize = true;
+      this.rbJs1.Enabled = false;
+      this.rbJs1.Location = new System.Drawing.Point(6, 19);
+      this.rbJs1.Name = "rbJs1";
+      this.rbJs1.Size = new System.Drawing.Size(38, 17);
+      this.rbJs1.TabIndex = 0;
+      this.rbJs1.Text = "js1";
+      this.rbJs1.UseVisualStyleBackColor = true;
+      // 
       // UC_JoyPanel
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.Controls.Add(this.groupBox1);
       this.Controls.Add(this.gBoxCap);
       this.Controls.Add(this.gBox);
       this.Name = "UC_JoyPanel";
-      this.Size = new System.Drawing.Size(239, 234);
+      this.Size = new System.Drawing.Size(239, 295);
       this.gBox.ResumeLayout(false);
       this.gBox.PerformLayout();
       this.gBoxCap.ResumeLayout(false);
       this.gBoxCap.PerformLayout();
+      this.groupBox1.ResumeLayout(false);
+      this.groupBox1.PerformLayout();
       this.ResumeLayout(false);
 
     }
@@ -477,5 +558,11 @@
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.GroupBox groupBox1;
+    private System.Windows.Forms.RadioButton rbJsNA;
+    private System.Windows.Forms.RadioButton rbJs4;
+    private System.Windows.Forms.RadioButton rbJs3;
+    private System.Windows.Forms.RadioButton rbJs2;
+    private System.Windows.Forms.RadioButton rbJs1;
   }
 }

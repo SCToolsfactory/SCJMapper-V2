@@ -11,6 +11,8 @@ namespace SCJMapper_V2
   class MyColors
   {
     static public Color[] JColor = { Color.LightGreen, Color.LightBlue, Color.Khaki, Color.LightSalmon, Color.Beige, Color.Yellow, Color.Plum, Color.Lavender };
+    static public Color UnassignedColor = Color.WhiteSmoke;
+
     static public Color DirtyColor = Color.Tomato;
 
     static public Color SuccessColor = Color.GreenYellow;
@@ -18,5 +20,7 @@ namespace SCJMapper_V2
     static public Color InvalidColor = Color.Tomato;
     static public Color ErrorColor = Color.Gold;
 
+    static public Color ProfileColor = Color.DarkKhaki;
+    static public Color MappingColor = Color.DarkSeaGreen;
   }
 }

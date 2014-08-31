@@ -61,6 +61,26 @@ namespace SCJMapper_V2
 
 
     /// <summary>
+    /// Copy return the complete ActionTree while reassigning JsN
+    /// </summary>
+    /// <param name="newJsList">The JsN reassign list</param>
+    /// <returns>The ActionTree Copy with reassigned input</returns>
+    public ActionTree ReassignJsN( Dictionary<int, int> newJsList )
+    {
+      ActionTree nTree = new ActionTree( BlendUnmapped );
+      // full copy from 'this'
+      nTree.m_MasterTree = this.m_MasterTree;
+      nTree.m_ctrl = this.m_ctrl;
+      nTree.IgnoreMaps = this.IgnoreMaps;
+      nTree.m_Filter = this.m_Filter;
+
+      nTree.ActionMaps = this.ActionMaps.ReassignJsN( newJsList );
+
+      nTree.Dirty = true;
+      return nTree;
+    }
+
+    /// <summary>
     /// Instantiates a copy of the node - copies only the needed properties
     /// </summary>
     /// <param name="srcNode">A source node</param>
@@ -209,7 +229,7 @@ namespace SCJMapper_V2
                       if ( JoystickCls.IsJSValid( jNum ) ) {
                         ac.input = ac.defBinding;
                         cn.Text += " - " + ac.defBinding;
-                        cn.BackColor = MyColors.JColor[jNum - 1]; // color list is 0 based
+                        cn.BackColor = JoystickCls.JColor[jNum - 1]; // color list is 0 based
                       }
                       else {
                         if ( BlendUnmapped ) {
@@ -306,7 +326,7 @@ namespace SCJMapper_V2
           // mapped
           Ctrl.SelectedNode.Text = elements[0] + " - " + input;
           int jNum = JoystickCls.JSNum( input );
-          Ctrl.SelectedNode.BackColor = MyColors.JColor[jNum - 1]; // color list is 0 based
+          Ctrl.SelectedNode.BackColor = JoystickCls.JColor[jNum - 1]; // color list is 0 based
         }
 
         // copy to master node
@@ -339,15 +359,21 @@ namespace SCJMapper_V2
               String[] elements = tnl.Text.Split( );
               if ( String.IsNullOrEmpty( ac.input ) || ( ac.input == JoystickCls.BlendedJsInput ) ) {
                 // grabed input is not mapped
-                if ( JoystickCls.IsJoystick( ac.device ) && BlendUnmapped ) tnl.Text = elements[0] + " - " + JoystickCls.BlendedJsInput;
-                else tnl.Text = elements[0];
+                if ( JoystickCls.IsJoystick( ac.device ) && BlendUnmapped ) {
+                  ac.input = JoystickCls.BlendedJsInput;
+                  tnl.Text = elements[0] + " - " + JoystickCls.BlendedJsInput;
+                }
+                else {
+                  ac.input = "";
+                  tnl.Text = elements[0];
+                }
                 tnl.BackColor = Color.White;
               }
               else {
                 // mapped
                 int jNum = JoystickCls.JSNum( ac.input );
                 tnl.Text = elements[0] + " - " + ac.input;
-                tnl.BackColor = MyColors.JColor[jNum - 1]; // color list is 0 based
+                tnl.BackColor = JoystickCls.JColor[jNum - 1]; // color list is 0 based
               }
             }
             catch {
@@ -404,10 +430,6 @@ namespace SCJMapper_V2
       if ( !String.IsNullOrEmpty( ActionMaps.js2 ) ) repList += String.Format( "** js2 = {0}\n", ActionMaps.js2 );
       if ( !String.IsNullOrEmpty( ActionMaps.js3 ) ) repList += String.Format( "** js3 = {0}\n", ActionMaps.js3 );
       if ( !String.IsNullOrEmpty( ActionMaps.js4 ) ) repList += String.Format( "** js4 = {0}\n", ActionMaps.js4 );
-      if ( !String.IsNullOrEmpty( ActionMaps.js5 ) ) repList += String.Format( "** js5 = {0}\n", ActionMaps.js5 );
-      if ( !String.IsNullOrEmpty( ActionMaps.js6 ) ) repList += String.Format( "** js6 = {0}\n", ActionMaps.js6 );
-      if ( !String.IsNullOrEmpty( ActionMaps.js7 ) ) repList += String.Format( "** js7 = {0}\n", ActionMaps.js7 );
-      if ( !String.IsNullOrEmpty( ActionMaps.js8 ) ) repList += String.Format( "** js8 = {0}\n", ActionMaps.js8 );
       // now the mapped actions
       repList += String.Format( "\n" );
       foreach ( ActionMapCls acm in ActionMaps ) {

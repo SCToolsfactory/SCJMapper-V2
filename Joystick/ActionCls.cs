@@ -68,6 +68,32 @@ namespace SCJMapper_V2
       device = JoystickCls.DeviceName;
     }
 
+
+    /// <summary>
+    /// Copy return the action while reassigning the JsN Tag
+    /// </summary>
+    /// <param name="newJsList">The JsN reassign list</param>
+    /// <returns>The action copy with reassigned input</returns>
+    public ActionCls ReassignJsN( Dictionary<int,int> newJsList )
+    {
+      ActionCls newAc = new ActionCls( );
+      // full copy from 'this'
+      newAc.key = this.key;
+      newAc.name = this.name;
+      newAc.device = this.device;
+      newAc.defBinding = this.defBinding;
+      newAc.input = this.input;
+      // reassign the jsX part
+      int oldJsN = JoystickCls.JSNum(this.input);
+      if ( JoystickCls.IsJSValid( oldJsN ) ) {
+        if ( newJsList.ContainsKey(oldJsN) ) newAc.input = JoystickCls.ReassignJSTag( this.input, newJsList[oldJsN] );
+      }
+
+      return newAc;
+    }
+
+
+
     /// <summary>
     /// Merge action is simply copying the new input control
     /// </summary>
@@ -117,6 +143,7 @@ namespace SCJMapper_V2
         if ( reader.HasAttributes ) {
           device = reader["device"];
           input = reader["input"];
+          if ( input == JoystickCls.BlendedJsInput ) input = ""; // don't carry jsx reserved into the action
           key = DevID( device ) + name; // unique id of the action
           // Move the reader back to the element node.
           reader.ReadStartElement( "rebind" );

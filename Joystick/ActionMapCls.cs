@@ -25,6 +25,25 @@ namespace SCJMapper_V2
     public String name { get; set; }
 
     /// <summary>
+    /// Copy return the complete ActionMap while reassigning the JsN Tag
+    /// </summary>
+    /// <param name="newJsList">The JsN reassign list</param>
+    /// <returns>The ActionMap copy with reassigned input</returns>
+    public ActionMapCls ReassignJsN( Dictionary<int, int> newJsList )
+    {
+      ActionMapCls newMap = new ActionMapCls( );
+      // full copy from 'this'
+      newMap.name = this.name;
+
+      foreach ( ActionCls ac in this ) {
+        newMap.Add( ac.ReassignJsN( newJsList ) );
+      }
+
+      return newMap;
+    }
+
+
+    /// <summary>
     /// Merge the given Map with this Map
     /// new ones are ignored - we don't learn from XML input for the time beeing
     /// </summary>

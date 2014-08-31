@@ -44,6 +44,17 @@ namespace SCJMapper_V2
     }
 
 
+    /// <summary>
+    /// Create a backupfile from the given file
+    /// </summary>
+    /// <param name="mapName">The mapping name</param>
+    static public void BackupMappingFile( String mapName )
+    {
+      log.Debug( "BackupMappingFile - Entry" );
+
+      String mf = MappingFileName( mapName );
+      if ( File.Exists( mf ) ) File.Copy( mf, mf + ".backup", true );
+    }
 
   }
 }

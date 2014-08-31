@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
 using System.Text.RegularExpressions;
 
 namespace SCJMapper_V2
@@ -27,6 +28,20 @@ namespace SCJMapper_V2
     public const String BlendedJsInput = JsUnknown + "reserved";  // the device name used throughout this app
 
     static private int JSnum_UNKNOWN = 0;
+    static private int JSnum_MAX = 4;   // can only assign 4 jsN devices in SC
+
+    static public System.Drawing.Color[] JColor = (System.Drawing.Color[])MyColors.JColor.Clone(); // default
+
+    static public void ReassignJsColor( List<int> newJsList )
+    {
+      int idx = 0;
+      foreach ( int i in newJsList ) {
+        if ( i > 0 ) {
+          JColor[i - 1] = MyColors.JColor[idx++];
+        }
+      }
+    }
+
 
     /// <summary>
     /// Returns true if the devicename is a joystick
@@ -46,9 +61,8 @@ namespace SCJMapper_V2
     /// <returns>The formatted JS name for the CryEngine XML</returns>
     static public String JSTag( int jsNum )
     {
-      if ( jsNum == JSnum_UNKNOWN ) return JsUnknown;
       if ( IsJSValid( jsNum ) ) return "js" + jsNum.ToString( ) + "_";
-      else return "";
+      return JsUnknown;
     }
 
 
@@ -76,11 +90,42 @@ namespace SCJMapper_V2
     /// <returns>True if it is a valid one</returns>
     static public Boolean IsJSValid( int jsNum )
     {
-      return ( jsNum > JSnum_UNKNOWN );
+      return ( jsNum > JSnum_UNKNOWN ) && ( jsNum <= JSnum_MAX );
     }
 
-    const string js_pattern = @"^js\d_[xyz]$";
+    const string js_pattern = @"^js\d_*";
     static Regex rgx_js = new Regex( js_pattern, RegexOptions.IgnoreCase );
+    /// <summary>
+    /// Returns true if the input starts with a valid jsN_ formatting
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    static public Bool IsJsN( String input )
+    {
+      return rgx_js.IsMatch( input );
+    }
+
+
+    /// <summary>
+    /// Returns an adjusted jsN_ tag with the new number
+    /// </summary>
+    /// <param name="input">An input directive</param>
+    /// <param name="newJsN">the new JsN number</param>
+    /// <returns>The modified js directive or the directive if no mod can be done</returns>
+    static public String ReassignJSTag( String input, int newJsN )
+    {
+      if ( IsJsN( input ) ) {
+        return input.Replace( input.Substring( 0, 4 ), JSTag( newJsN ) );
+      }
+      else {
+        return input;
+      }
+    }
+
+
+
+    const string jsl_pattern = @"^js\d_[xyz]$";
+    static Regex rgx_jsl = new Regex( jsl_pattern, RegexOptions.IgnoreCase );
     const string jsr_pattern = @"^js\d_rot[xyz]$";
     static Regex rgx_jsr = new Regex( jsr_pattern, RegexOptions.IgnoreCase );
     /// <summary>
@@ -96,7 +141,7 @@ namespace SCJMapper_V2
       if ( control.Length < 5 ) return control;
 
       String retVal = control;
-      if ( rgx_js.IsMatch( control ) ) {
+      if ( rgx_jsl.IsMatch( control ) ) {
         retVal = retVal.Insert( 4, "throttle" );
       }
       /* THIS IS WRONG.... don't know if rot can get a throttle...
@@ -115,7 +160,7 @@ namespace SCJMapper_V2
     /// <returns></returns>
     static public Boolean CanThrottle( String control )
     {
-      return rgx_js.IsMatch( control ) || rgx_jsr.IsMatch( control );
+      return rgx_jsl.IsMatch( control ) || rgx_jsr.IsMatch( control );
     }
 
 
@@ -131,11 +176,11 @@ namespace SCJMapper_V2
     private int m_sliderCount = 0;  // static counter for UpdateControls
     private String m_lastItem = "";
     private int m_senseLimit = 150; // axis jitter avoidance...
-    private int m_joystickNumber = 0;
+    private int m_joystickNumber = 0; // seq number of the enumerated joystick
     private bool[] m_ignoreButtons;
 
     private UC_JoyPanel m_jPanel = null; // the GUI panel
-
+    private TabPage     m_jTab = null;
 
     /// <summary>
     /// Returns a CryEngine compatible hat direction
@@ -154,9 +199,27 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// The povides the JS ProductName property
+    /// The JS ProductName property
     /// </summary>
     public String DevName { get { return m_device.Properties.ProductName; } }
+    /// <summary>
+    /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
+    /// </summary>
+    public String DevInstanceGUID { get { return m_device.Information.InstanceGuid.ToString( ); } }
+    /// <summary>
+    /// The sequence number of the enumerated devices
+    /// </summary>
+    public int DevNumber { get { return m_joystickNumber; } }
+    /// <summary>
+    /// The assigned jsN number for this device
+    /// </summary>
+    public int JSAssignment
+    {
+      get { return m_jPanel.JsAssignment; }
+      set { m_jPanel.JsAssignment = value; }
+    }
+
+    // device props
     public int AxisCount { get { return m_device.Capabilities.AxeCount; } }
     public int ButtonCount { get { return m_device.Capabilities.ButtonCount; } }
     public int POVCount { get { return m_device.Capabilities.PovCount; } }
@@ -168,7 +231,7 @@ namespace SCJMapper_V2
     /// <param name="device">A DXInput device</param>
     /// <param name="hwnd">The WinHandle of the main window</param>
     /// <param name="panel">The respective JS panel to show the properties</param>
-    public JoystickCls( Joystick device, Control hwnd, int joystickNum, UC_JoyPanel panel )
+    public JoystickCls( Joystick device, Control hwnd, int joystickNum, UC_JoyPanel panel, TabPage tab )
     {
       log.DebugFormat( "ctor - Entry with {0}", device.Information.ProductName );
 
@@ -176,6 +239,7 @@ namespace SCJMapper_V2
       m_hwnd = hwnd;
       m_joystickNumber = joystickNum;
       m_jPanel = panel;
+      m_jTab = tab;
 
       m_senseLimit = AppConfiguration.AppConfig.jsSenseLimit; // can be changed in the app.config file if it is still too little
 
@@ -186,8 +250,9 @@ namespace SCJMapper_V2
       m_jPanel.nAxis = AxisCount.ToString( );
       m_jPanel.nButtons = ButtonCount.ToString( );
       m_jPanel.nPOVs = POVCount.ToString( );
+      m_jPanel.JsAssignment = 0; // default is no assignment
 
-      m_ignoreButtons = new bool[m_state.Buttons.Length]; 
+      m_ignoreButtons = new bool[m_state.Buttons.Length];
       ResetIgnoreButtons( );
 
       log.Debug( "Get JS Objects" );

@@ -46,14 +46,6 @@
       this.tsiSaveAs = new System.Windows.Forms.ToolStripMenuItem();
       this.btGrab = new System.Windows.Forms.Button();
       this.btDump = new System.Windows.Forms.Button();
-      this.panel3 = new System.Windows.Forms.Panel();
-      this.label56 = new System.Windows.Forms.Label();
-      this.label55 = new System.Windows.Forms.Label();
-      this.label57 = new System.Windows.Forms.Label();
-      this.label54 = new System.Windows.Forms.Label();
-      this.cbJs3 = new System.Windows.Forms.ComboBox();
-      this.cbJs2 = new System.Windows.Forms.ComboBox();
-      this.cbJs1 = new System.Windows.Forms.ComboBox();
       this.panel2 = new System.Windows.Forms.Panel();
       this.cbxThrottle = new System.Windows.Forms.CheckBox();
       this.btFind = new System.Windows.Forms.Button();
@@ -80,11 +72,12 @@
       this.tlpanel = new System.Windows.Forms.TableLayoutPanel();
       this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.cbxBlendUnmapped = new System.Windows.Forms.CheckBox();
       this.txFilter = new System.Windows.Forms.TextBox();
       this.btClearFilter = new System.Windows.Forms.Button();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.btSettings = new System.Windows.Forms.Button();
-      this.cbxBlendUnmapped = new System.Windows.Forms.CheckBox();
+      this.btJsReassign = new System.Windows.Forms.Button();
       this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
       this.btSaveMyMapping = new System.Windows.Forms.Button();
       this.btLoadMyMapping = new System.Windows.Forms.Button();
@@ -107,7 +100,6 @@
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
-      this.panel3.SuspendLayout();
       this.panel2.SuspendLayout();
       this.tc1.SuspendLayout();
       this.tabJS1.SuspendLayout();
@@ -143,7 +135,6 @@
       // rtb
       // 
       this.rtb.AcceptsTab = true;
-      this.rtb.BackColor = System.Drawing.Color.Ivory;
       this.rtb.ContextMenuStrip = this.cmCopyPaste;
       this.rtb.DetectUrls = false;
       this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -151,7 +142,7 @@
       this.rtb.Location = new System.Drawing.Point(606, 81);
       this.rtb.Name = "rtb";
       this.tlpanel.SetRowSpan(this.rtb, 2);
-      this.rtb.Size = new System.Drawing.Size(372, 667);
+      this.rtb.Size = new System.Drawing.Size(372, 653);
       this.rtb.TabIndex = 21;
       this.rtb.Text = "";
       this.rtb.WordWrap = false;
@@ -237,102 +228,6 @@
       this.btDump.UseVisualStyleBackColor = true;
       this.btDump.Click += new System.EventHandler(this.btDump_Click);
       // 
-      // panel3
-      // 
-      this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.panel3.Controls.Add(this.label56);
-      this.panel3.Controls.Add(this.label55);
-      this.panel3.Controls.Add(this.label57);
-      this.panel3.Controls.Add(this.label54);
-      this.panel3.Controls.Add(this.cbJs3);
-      this.panel3.Controls.Add(this.cbJs2);
-      this.panel3.Controls.Add(this.cbJs1);
-      this.panel3.Location = new System.Drawing.Point(3, 294);
-      this.panel3.Name = "panel3";
-      this.panel3.Size = new System.Drawing.Size(289, 118);
-      this.panel3.TabIndex = 18;
-      // 
-      // label56
-      // 
-      this.label56.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label56.Location = new System.Drawing.Point(7, 89);
-      this.label56.Name = "label56";
-      this.label56.Size = new System.Drawing.Size(39, 20);
-      this.label56.TabIndex = 2;
-      this.label56.Text = "js3";
-      // 
-      // label55
-      // 
-      this.label55.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label55.Location = new System.Drawing.Point(7, 62);
-      this.label55.Name = "label55";
-      this.label55.Size = new System.Drawing.Size(39, 20);
-      this.label55.TabIndex = 2;
-      this.label55.Text = "js2";
-      // 
-      // label57
-      // 
-      this.label57.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label57.Location = new System.Drawing.Point(7, 9);
-      this.label57.Name = "label57";
-      this.label57.Size = new System.Drawing.Size(267, 20);
-      this.label57.TabIndex = 2;
-      this.label57.Text = "SC-Device to Joystick Mapping";
-      // 
-      // label54
-      // 
-      this.label54.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label54.Location = new System.Drawing.Point(7, 35);
-      this.label54.Name = "label54";
-      this.label54.Size = new System.Drawing.Size(39, 20);
-      this.label54.TabIndex = 2;
-      this.label54.Text = "js1";
-      // 
-      // cbJs3
-      // 
-      this.cbJs3.DisplayMember = "js1";
-      this.cbJs3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.cbJs3.FormattingEnabled = true;
-      this.cbJs3.Items.AddRange(new object[] {
-            "Joystick 1",
-            "Joystick 2",
-            "Joystick 3"});
-      this.cbJs3.Location = new System.Drawing.Point(52, 86);
-      this.cbJs3.MaxDropDownItems = 4;
-      this.cbJs3.Name = "cbJs3";
-      this.cbJs3.Size = new System.Drawing.Size(233, 25);
-      this.cbJs3.TabIndex = 0;
-      // 
-      // cbJs2
-      // 
-      this.cbJs2.DisplayMember = "js1";
-      this.cbJs2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.cbJs2.FormattingEnabled = true;
-      this.cbJs2.Items.AddRange(new object[] {
-            "Joystick 1",
-            "Joystick 2",
-            "Joystick 3"});
-      this.cbJs2.Location = new System.Drawing.Point(52, 59);
-      this.cbJs2.MaxDropDownItems = 4;
-      this.cbJs2.Name = "cbJs2";
-      this.cbJs2.Size = new System.Drawing.Size(233, 25);
-      this.cbJs2.TabIndex = 0;
-      // 
-      // cbJs1
-      // 
-      this.cbJs1.DisplayMember = "js1";
-      this.cbJs1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.cbJs1.FormattingEnabled = true;
-      this.cbJs1.Items.AddRange(new object[] {
-            "Joystick 1",
-            "Joystick 2",
-            "Joystick 3"});
-      this.cbJs1.Location = new System.Drawing.Point(52, 32);
-      this.cbJs1.MaxDropDownItems = 4;
-      this.cbJs1.Name = "cbJs1";
-      this.cbJs1.Size = new System.Drawing.Size(233, 25);
-      this.cbJs1.TabIndex = 0;
-      // 
       // panel2
       // 
       this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -344,7 +239,7 @@
       this.panel2.Controls.Add(this.lblLastJ);
       this.panel2.Controls.Add(this.lblAction);
       this.panel2.Controls.Add(this.btAssign);
-      this.panel2.Location = new System.Drawing.Point(3, 418);
+      this.panel2.Location = new System.Drawing.Point(3, 358);
       this.panel2.Name = "panel2";
       this.panel2.Size = new System.Drawing.Size(289, 103);
       this.panel2.TabIndex = 17;
@@ -354,7 +249,7 @@
       this.cbxThrottle.AutoSize = true;
       this.cbxThrottle.Location = new System.Drawing.Point(110, 72);
       this.cbxThrottle.Name = "cbxThrottle";
-      this.cbxThrottle.Size = new System.Drawing.Size(62, 17);
+      this.cbxThrottle.Size = new System.Drawing.Size(66, 17);
       this.cbxThrottle.TabIndex = 13;
       this.cbxThrottle.Text = "Throttle";
       this.cbxThrottle.UseVisualStyleBackColor = true;
@@ -374,7 +269,7 @@
       this.label7.AutoSize = true;
       this.label7.Location = new System.Drawing.Point(7, 37);
       this.label7.Name = "label7";
-      this.label7.Size = new System.Drawing.Size(25, 13);
+      this.label7.Size = new System.Drawing.Size(28, 13);
       this.label7.TabIndex = 3;
       this.label7.Text = "Ctrl.";
       // 
@@ -383,7 +278,7 @@
       this.label6.AutoSize = true;
       this.label6.Location = new System.Drawing.Point(7, 17);
       this.label6.Name = "label6";
-      this.label6.Size = new System.Drawing.Size(31, 13);
+      this.label6.Size = new System.Drawing.Size(33, 13);
       this.label6.TabIndex = 3;
       this.label6.Text = "Cmd.";
       // 
@@ -464,7 +359,7 @@
       this.tc1.Multiline = true;
       this.tc1.Name = "tc1";
       this.tc1.SelectedIndex = 0;
-      this.tc1.Size = new System.Drawing.Size(289, 285);
+      this.tc1.Size = new System.Drawing.Size(289, 349);
       this.tc1.TabIndex = 15;
       this.tc1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tc1_DrawItem);
       // 
@@ -474,7 +369,7 @@
       this.tabJS1.Location = new System.Drawing.Point(4, 24);
       this.tabJS1.Name = "tabJS1";
       this.tabJS1.Padding = new System.Windows.Forms.Padding(3);
-      this.tabJS1.Size = new System.Drawing.Size(281, 257);
+      this.tabJS1.Size = new System.Drawing.Size(281, 321);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
       // 
@@ -496,16 +391,16 @@
       // 
       this.txRebind.Location = new System.Drawing.Point(603, 39);
       this.txRebind.Name = "txRebind";
-      this.txRebind.Size = new System.Drawing.Size(361, 20);
+      this.txRebind.Size = new System.Drawing.Size(361, 22);
       this.txRebind.TabIndex = 4;
       this.txRebind.Text = "pp_rebindkeys";
       // 
       // linkLblReleases
       // 
       this.linkLblReleases.AutoSize = true;
-      this.linkLblReleases.Location = new System.Drawing.Point(731, 17);
+      this.linkLblReleases.Location = new System.Drawing.Point(672, 17);
       this.linkLblReleases.Name = "linkLblReleases";
-      this.linkLblReleases.Size = new System.Drawing.Size(233, 13);
+      this.linkLblReleases.Size = new System.Drawing.Size(259, 13);
       this.linkLblReleases.TabIndex = 3;
       this.linkLblReleases.TabStop = true;
       this.linkLblReleases.Text = "For information and updates visit us @ Github ...";
@@ -516,7 +411,7 @@
       this.label8.AutoSize = true;
       this.label8.Location = new System.Drawing.Point(353, 42);
       this.label8.Name = "label8";
-      this.label8.Size = new System.Drawing.Size(54, 13);
+      this.label8.Size = new System.Drawing.Size(58, 13);
       this.label8.TabIndex = 2;
       this.label8.Text = "by Cassini";
       // 
@@ -542,7 +437,7 @@
       // buttonExit
       // 
       this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.buttonExit.Location = new System.Drawing.Point(171, 39);
+      this.buttonExit.Location = new System.Drawing.Point(171, 53);
       this.buttonExit.Name = "buttonExit";
       this.buttonExit.Size = new System.Drawing.Size(120, 24);
       this.buttonExit.TabIndex = 13;
@@ -588,7 +483,7 @@
       this.tlpanel.Padding = new System.Windows.Forms.Padding(3);
       this.tlpanel.RowCount = 5;
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
-      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 540F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 500F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -598,13 +493,12 @@
       // flowLayoutPanel1
       // 
       this.flowLayoutPanel1.Controls.Add(this.tc1);
-      this.flowLayoutPanel1.Controls.Add(this.panel3);
       this.flowLayoutPanel1.Controls.Add(this.panel2);
       this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
       this.flowLayoutPanel1.Location = new System.Drawing.Point(306, 81);
       this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-      this.flowLayoutPanel1.Size = new System.Drawing.Size(294, 534);
+      this.flowLayoutPanel1.Size = new System.Drawing.Size(294, 494);
       this.flowLayoutPanel1.TabIndex = 22;
       // 
       // tableLayoutPanel1
@@ -615,11 +509,12 @@
       this.tableLayoutPanel1.Controls.Add(this.btDump, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.btGrab, 1, 0);
       this.tableLayoutPanel1.Controls.Add(this.btDumpList, 0, 1);
+      this.tableLayoutPanel1.Controls.Add(this.cbxBlendUnmapped, 0, 4);
       this.tableLayoutPanel1.Controls.Add(this.txFilter, 0, 2);
       this.tableLayoutPanel1.Controls.Add(this.btClearFilter, 0, 3);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel1.Location = new System.Drawing.Point(306, 621);
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(306, 581);
       this.tableLayoutPanel1.Name = "tableLayoutPanel1";
       this.tableLayoutPanel1.RowCount = 5;
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -627,15 +522,26 @@
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 127);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 153);
       this.tableLayoutPanel1.TabIndex = 23;
+      // 
+      // cbxBlendUnmapped
+      // 
+      this.cbxBlendUnmapped.AutoSize = true;
+      this.cbxBlendUnmapped.Location = new System.Drawing.Point(3, 123);
+      this.cbxBlendUnmapped.Name = "cbxBlendUnmapped";
+      this.cbxBlendUnmapped.Size = new System.Drawing.Size(115, 17);
+      this.cbxBlendUnmapped.TabIndex = 15;
+      this.cbxBlendUnmapped.Text = "Blend unmapped";
+      this.cbxBlendUnmapped.UseVisualStyleBackColor = true;
+      this.cbxBlendUnmapped.CheckedChanged += new System.EventHandler(this.cbxBlendUnmapped_CheckedChanged);
       // 
       // txFilter
       // 
       this.txFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.txFilter.Location = new System.Drawing.Point(3, 67);
+      this.txFilter.Location = new System.Drawing.Point(3, 65);
       this.txFilter.Name = "txFilter";
-      this.txFilter.Size = new System.Drawing.Size(120, 20);
+      this.txFilter.Size = new System.Drawing.Size(120, 22);
       this.txFilter.TabIndex = 25;
       this.txFilter.WordWrap = false;
       this.txFilter.TextChanged += new System.EventHandler(this.txFilter_TextChanged);
@@ -657,38 +563,36 @@
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 1);
       this.tableLayoutPanel2.Controls.Add(this.btSettings, 0, 1);
-      this.tableLayoutPanel2.Controls.Add(this.cbxBlendUnmapped, 0, 0);
+      this.tableLayoutPanel2.Controls.Add(this.btJsReassign, 0, 0);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 754);
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(306, 740);
       this.tableLayoutPanel2.Name = "tableLayoutPanel2";
       this.tableLayoutPanel2.RowCount = 2;
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 66);
+      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 80);
       this.tableLayoutPanel2.TabIndex = 24;
       // 
       // btSettings
       // 
-      this.btSettings.Location = new System.Drawing.Point(3, 39);
+      this.btSettings.Location = new System.Drawing.Point(3, 53);
       this.btSettings.Name = "btSettings";
       this.btSettings.Size = new System.Drawing.Size(120, 24);
       this.btSettings.TabIndex = 14;
-      this.btSettings.Text = "Settings";
+      this.btSettings.Text = "Settings...";
       this.btSettings.Click += new System.EventHandler(this.btSettings_Click);
       // 
-      // cbxBlendUnmapped
+      // btJsReassign
       // 
-      this.cbxBlendUnmapped.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.cbxBlendUnmapped.AutoSize = true;
-      this.cbxBlendUnmapped.Location = new System.Drawing.Point(3, 16);
-      this.cbxBlendUnmapped.Name = "cbxBlendUnmapped";
-      this.cbxBlendUnmapped.Size = new System.Drawing.Size(106, 17);
-      this.cbxBlendUnmapped.TabIndex = 15;
-      this.cbxBlendUnmapped.Text = "Blend unmapped";
-      this.cbxBlendUnmapped.UseVisualStyleBackColor = true;
-      this.cbxBlendUnmapped.CheckedChanged += new System.EventHandler(this.cbxBlendUnmapped_CheckedChanged);
+      this.btJsReassign.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.btJsReassign.Location = new System.Drawing.Point(3, 23);
+      this.btJsReassign.Name = "btJsReassign";
+      this.btJsReassign.Size = new System.Drawing.Size(120, 24);
+      this.btJsReassign.TabIndex = 16;
+      this.btJsReassign.Text = "Js Reassign...";
+      this.btJsReassign.Click += new System.EventHandler(this.btJsReassign_Click);
       // 
       // tableLayoutPanel3
       // 
@@ -701,21 +605,21 @@
       this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
       this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel3.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel3.Location = new System.Drawing.Point(606, 754);
+      this.tableLayoutPanel3.Location = new System.Drawing.Point(606, 740);
       this.tableLayoutPanel3.Name = "tableLayoutPanel3";
       this.tableLayoutPanel3.RowCount = 2;
       this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-      this.tableLayoutPanel3.Size = new System.Drawing.Size(372, 66);
+      this.tableLayoutPanel3.Size = new System.Drawing.Size(372, 80);
       this.tableLayoutPanel3.TabIndex = 25;
       // 
       // btSaveMyMapping
       // 
       this.btSaveMyMapping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.btSaveMyMapping.Image = ((System.Drawing.Image)(resources.GetObject("btSaveMyMapping.Image")));
-      this.btSaveMyMapping.Location = new System.Drawing.Point(191, 39);
+      this.btSaveMyMapping.Location = new System.Drawing.Point(164, 53);
       this.btSaveMyMapping.Name = "btSaveMyMapping";
-      this.btSaveMyMapping.Size = new System.Drawing.Size(178, 24);
+      this.btSaveMyMapping.Size = new System.Drawing.Size(205, 24);
       this.btSaveMyMapping.TabIndex = 15;
       this.btSaveMyMapping.Text = "Dump and Save my Mapping";
       this.btSaveMyMapping.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -724,7 +628,7 @@
       // 
       // btLoadMyMapping
       // 
-      this.btLoadMyMapping.Location = new System.Drawing.Point(3, 39);
+      this.btLoadMyMapping.Location = new System.Drawing.Point(3, 53);
       this.btLoadMyMapping.Name = "btLoadMyMapping";
       this.btLoadMyMapping.Size = new System.Drawing.Size(120, 24);
       this.btLoadMyMapping.TabIndex = 14;
@@ -736,9 +640,9 @@
       // 
       this.txMappingName.Anchor = System.Windows.Forms.AnchorStyles.Right;
       this.txMappingName.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
-      this.txMappingName.Location = new System.Drawing.Point(135, 8);
+      this.txMappingName.Location = new System.Drawing.Point(135, 14);
       this.txMappingName.Name = "txMappingName";
-      this.txMappingName.Size = new System.Drawing.Size(234, 20);
+      this.txMappingName.Size = new System.Drawing.Size(234, 22);
       this.txMappingName.TabIndex = 0;
       this.txMappingName.WordWrap = false;
       this.txMappingName.TextChanged += new System.EventHandler(this.txMappingName_TextChanged);
@@ -747,9 +651,9 @@
       // 
       this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(49, 11);
+      this.label1.Location = new System.Drawing.Point(41, 18);
       this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(80, 13);
+      this.label1.Size = new System.Drawing.Size(88, 13);
       this.label1.TabIndex = 16;
       this.label1.Text = "Mapping name:";
       // 
@@ -901,9 +805,10 @@
       // UC_JoyPanel
       // 
       this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
       this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
       this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 251);
+      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
       this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm
@@ -913,6 +818,7 @@
       this.ClientSize = new System.Drawing.Size(984, 862);
       this.Controls.Add(this.statusStrip1);
       this.Controls.Add(this.tlpanel);
+      this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MinimumSize = new System.Drawing.Size(1000, 900);
       this.Name = "MainForm";
@@ -920,7 +826,6 @@
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
       this.Load += new System.EventHandler(this.MainForm_Load);
       this.cmCopyPaste.ResumeLayout(false);
-      this.panel3.ResumeLayout(false);
       this.panel2.ResumeLayout(false);
       this.panel2.PerformLayout();
       this.tc1.ResumeLayout(false);
@@ -932,7 +837,6 @@
       this.tableLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel1.PerformLayout();
       this.tableLayoutPanel2.ResumeLayout(false);
-      this.tableLayoutPanel2.PerformLayout();
       this.tableLayoutPanel3.ResumeLayout(false);
       this.tableLayoutPanel3.PerformLayout();
       this.statusStrip1.ResumeLayout(false);
@@ -949,14 +853,6 @@
     private System.Windows.Forms.RichTextBox rtb;
     private System.Windows.Forms.Button btGrab;
     private System.Windows.Forms.Button btDump;
-    private System.Windows.Forms.Panel panel3;
-    private System.Windows.Forms.Label label56;
-    private System.Windows.Forms.Label label55;
-    private System.Windows.Forms.Label label57;
-    private System.Windows.Forms.Label label54;
-    private System.Windows.Forms.ComboBox cbJs3;
-    private System.Windows.Forms.ComboBox cbJs2;
-    private System.Windows.Forms.ComboBox cbJs1;
     private System.Windows.Forms.Panel panel2;
     private System.Windows.Forms.Button btFind;
     private System.Windows.Forms.Label label7;
@@ -1017,6 +913,7 @@
     private System.Windows.Forms.TextBox txRebind;
     private System.Windows.Forms.Button btSettings;
     private System.Windows.Forms.CheckBox cbxBlendUnmapped;
+    private System.Windows.Forms.Button btJsReassign;
   }
 }
 
