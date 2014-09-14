@@ -121,7 +121,11 @@
             "js1",
             "js2",
             "js3",
-            "js4"});
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8"});
       this.cbxStick8.Location = new System.Drawing.Point(562, 217);
       this.cbxStick8.Name = "cbxStick8";
       this.cbxStick8.Size = new System.Drawing.Size(84, 21);
@@ -135,7 +139,11 @@
             "js1",
             "js2",
             "js3",
-            "js4"});
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8"});
       this.cbxStick7.Location = new System.Drawing.Point(562, 189);
       this.cbxStick7.Name = "cbxStick7";
       this.cbxStick7.Size = new System.Drawing.Size(84, 21);
@@ -149,7 +157,11 @@
             "js1",
             "js2",
             "js3",
-            "js4"});
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8"});
       this.cbxStick6.Location = new System.Drawing.Point(562, 161);
       this.cbxStick6.Name = "cbxStick6";
       this.cbxStick6.Size = new System.Drawing.Size(84, 21);
@@ -163,7 +175,11 @@
             "js1",
             "js2",
             "js3",
-            "js4"});
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8"});
       this.cbxStick5.Location = new System.Drawing.Point(562, 133);
       this.cbxStick5.Name = "cbxStick5";
       this.cbxStick5.Size = new System.Drawing.Size(84, 21);
@@ -177,7 +193,11 @@
             "js1",
             "js2",
             "js3",
-            "js4"});
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8"});
       this.cbxStick4.Location = new System.Drawing.Point(562, 105);
       this.cbxStick4.Name = "cbxStick4";
       this.cbxStick4.Size = new System.Drawing.Size(84, 21);
@@ -191,7 +211,11 @@
             "js1",
             "js2",
             "js3",
-            "js4"});
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8"});
       this.cbxStick3.Location = new System.Drawing.Point(562, 77);
       this.cbxStick3.Name = "cbxStick3";
       this.cbxStick3.Size = new System.Drawing.Size(84, 21);
@@ -205,7 +229,11 @@
             "js1",
             "js2",
             "js3",
-            "js4"});
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8"});
       this.cbxStick2.Location = new System.Drawing.Point(562, 49);
       this.cbxStick2.Name = "cbxStick2";
       this.cbxStick2.Size = new System.Drawing.Size(84, 21);
@@ -219,7 +247,11 @@
             "js1",
             "js2",
             "js3",
-            "js4"});
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8"});
       this.cbxStick1.Location = new System.Drawing.Point(562, 21);
       this.cbxStick1.Name = "cbxStick1";
       this.cbxStick1.Size = new System.Drawing.Size(84, 21);

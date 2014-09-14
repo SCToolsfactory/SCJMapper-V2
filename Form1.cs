@@ -24,7 +24,7 @@ namespace SCJMapper_V2
     ///<remarks>
     /// Holds the DXInput Joystick List
     ///</remarks>
-    private JoystickList m_JS = new JoystickList( );
+    private JoystickList m_Joystick = new JoystickList( );
 
     ///<remarks>
     /// Holds the ActionTree that manages the TreeView and the action lists
@@ -98,6 +98,7 @@ namespace SCJMapper_V2
 
       String version = Application.ProductVersion;  // get the version information
       lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // get the first two elements
+      log.InfoFormat( "Application Version: {0}", version.ToString( ) );
 
       // tooltips where needed
       toolTip1.SetToolTip( this.linkLblReleases, c_GithubLink ); // allow to see where the link may head
@@ -244,14 +245,14 @@ namespace SCJMapper_V2
       m_AT.LoadTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
 
       // default JS to Joystick mapping - can be changed and reloaded from XML
-      if ( m_JS.Count > 0 ) { m_JS[0].JSAssignment = 1; m_AT.ActionMaps.js1 = m_JS[0].DevName; m_AT.ActionMaps.js1GUID = m_JS[0].DevInstanceGUID; }
-      if ( m_JS.Count > 1 ) { m_JS[1].JSAssignment = 2; m_AT.ActionMaps.js2 = m_JS[1].DevName; m_AT.ActionMaps.js2GUID = m_JS[1].DevInstanceGUID; }
-      if ( m_JS.Count > 2 ) { m_JS[2].JSAssignment = 0; } // unmapped ones go with default 0
-      if ( m_JS.Count > 3 ) { m_JS[3].JSAssignment = 0; }
-      if ( m_JS.Count > 4 ) { m_JS[4].JSAssignment = 0; }
-      if ( m_JS.Count > 5 ) { m_JS[5].JSAssignment = 0; }
-      if ( m_JS.Count > 6 ) { m_JS[6].JSAssignment = 0; }
-      if ( m_JS.Count > 7 ) { m_JS[7].JSAssignment = 0; }
+      if ( m_Joystick.Count > 0 ) { m_Joystick[0].JSAssignment = 1; m_AT.ActionMaps.jsN[0] = m_Joystick[0].DevName; m_AT.ActionMaps.jsNGUID[0] = m_Joystick[0].DevInstanceGUID; }
+      if ( m_Joystick.Count > 1 ) { m_Joystick[1].JSAssignment = 2; m_AT.ActionMaps.jsN[1] = m_Joystick[1].DevName; m_AT.ActionMaps.jsNGUID[1] = m_Joystick[1].DevInstanceGUID; }
+      if ( m_Joystick.Count > 2 ) { m_Joystick[2].JSAssignment = 0; } // unmapped ones go with default 0
+      if ( m_Joystick.Count > 3 ) { m_Joystick[3].JSAssignment = 0; }
+      if ( m_Joystick.Count > 4 ) { m_Joystick[4].JSAssignment = 0; }
+      if ( m_Joystick.Count > 5 ) { m_Joystick[5].JSAssignment = 0; }
+      if ( m_Joystick.Count > 6 ) { m_Joystick[6].JSAssignment = 0; }
+      if ( m_Joystick.Count > 7 ) { m_Joystick[7].JSAssignment = 0; }
     }
 
 
@@ -298,7 +299,7 @@ namespace SCJMapper_V2
             log.Debug( "Create Joystick instance" );
             js = new JoystickCls( jsDevice, this, tabs + 1, uUC_JoyPanelNew, tc1.TabPages[tabs] ); // does all device related activities for that particular item
           }
-          m_JS.Add( js ); // add to joystick list
+          m_Joystick.Add( js ); // add to joystick list
 
           tc1.TabPages[tabs].Tag = js.DevName;  // used to find the tab via JS mapping
           tc1.TabPages[tabs].BackColor = MyColors.JColor[tabs]; // each tab has its own color
@@ -355,62 +356,32 @@ namespace SCJMapper_V2
     {
       log.Debug( "Grab - Entry" );
 
-      m_JS.ResetJsNAssignment( );
+      m_Joystick.ResetJsNAssignment( );
       m_AT.ActionMaps.fromXML( rtb.Text );
-      // JS mapping for js1 .. js4 can be changed and reloaded from XML
+      // JS mapping for js1 .. js8 can be changed and reloaded from XML
       // note - unmapped ones remain what they were
       // This is includes similar procedures as reassigning of the jsN items
       JoystickCls j = null;
-      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js1GUID ) ) {
-        j = m_JS.Find_jsInstance( m_AT.ActionMaps.js1GUID );
-      }
-      else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js1 ) ) {
-        j = m_JS.Find_jsDev( m_AT.ActionMaps.js1 );
-      }
-      if ( j != null ) {
-        m_AT.ActionMaps.js1GUID = j.DevInstanceGUID; // subst for missing one (version up etc.)
-        j.JSAssignment = 1;
+
+      // for all supported jsN
+      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+        j = null;
+        if ( !String.IsNullOrEmpty( m_AT.ActionMaps.jsNGUID[i] ) ) {
+          j = m_Joystick.Find_jsInstance( m_AT.ActionMaps.jsNGUID[i] );
+        }
+        else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.jsN[i] ) ) {
+          j = m_Joystick.Find_jsDev( m_AT.ActionMaps.jsN[i] );
+        }
+        if ( j != null ) {
+          m_AT.ActionMaps.jsNGUID[i] = j.DevInstanceGUID; // subst for missing one (version up etc.)
+          j.JSAssignment = i+1;
+        }
       }
 
-      j = null; ;
-      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js2GUID ) ) {
-        j = m_JS.Find_jsInstance( m_AT.ActionMaps.js2GUID );
-      }
-      else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js2 ) ) {
-        j = m_JS.Find_jsDev( m_AT.ActionMaps.js2 );
-      }
-      if ( j != null ) {
-        m_AT.ActionMaps.js2GUID = j.DevInstanceGUID; // subst for missing one (version up etc.)
-        j.JSAssignment = 2;
-      }
-
-      j = null; ;
-      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js3GUID ) ) {
-        j = m_JS.Find_jsInstance( m_AT.ActionMaps.js3GUID );
-      }
-      else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js3 ) ) {
-        j = m_JS.Find_jsDev( m_AT.ActionMaps.js3 );
-      }
-      if ( j != null ) {
-        m_AT.ActionMaps.js3GUID = j.DevInstanceGUID; // subst for missing one (version up etc.)
-        j.JSAssignment = 3;
-      }
-
-      j = null; ;
-      if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js4GUID ) ) {
-        j = m_JS.Find_jsInstance( m_AT.ActionMaps.js4GUID );
-      }
-      else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.js4 ) ) {
-        j = m_JS.Find_jsDev( m_AT.ActionMaps.js4 );
-      }
-      if ( j != null ) {
-        m_AT.ActionMaps.js4GUID = j.DevInstanceGUID; // subst for missing one (version up etc.)
-        j.JSAssignment = 4;
-      }
 
       // maintain the new JsN assignment and update the colorlist
       List<int> newL = new List<int>( );
-      foreach ( JoystickCls jj in m_JS ) {
+      foreach ( JoystickCls jj in m_Joystick ) {
         newL.Add(jj.JSAssignment);
       }
       JoystickCls.ReassignJsColor( newL );
@@ -458,8 +429,8 @@ namespace SCJMapper_V2
 
     private void timer1_Tick( object sender, System.EventArgs e )
     {
-      foreach ( JoystickCls jsc in m_JS ) { jsc.GetData( ); }  // poll the devices
-      String ctrl =  JSStr( ) + m_JS[tc1.SelectedIndex].GetLastChange( ); // show last handled JS control
+      foreach ( JoystickCls jsc in m_Joystick ) { jsc.GetData( ); }  // poll the devices
+      String ctrl =  JSStr( ) + m_Joystick[tc1.SelectedIndex].GetLastChange( ); // show last handled JS control
       lblLastJ.Text = ctrl;
       if ( JoystickCls.CanThrottle( ctrl ) ) {
         cbxThrottle.Enabled = true;
@@ -773,7 +744,7 @@ namespace SCJMapper_V2
         // indicates (in)valid folders
         SCFileIndication( );
         // now update the contents according to new settings
-        foreach ( JoystickCls j in m_JS ) j.ApplySettings( ); // update Seetings
+        foreach ( JoystickCls j in m_Joystick ) j.ApplySettings( ); // update Seetings
         m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
         // and start over with an empty tree
         InitActionTree( false );
@@ -786,38 +757,21 @@ namespace SCJMapper_V2
     {
       // have to stop polling while the Reassign window is open
       timer1.Enabled = false;
-      if ( m_JS.ShowReassign( ) != System.Windows.Forms.DialogResult.Cancel ) {
+      if ( m_Joystick.ShowReassign( ) != System.Windows.Forms.DialogResult.Cancel ) {
         // copy the action tree while reassigning the jsN mappings from OLD to NEW
-        ActionTree newTree = m_AT.ReassignJsN( m_JS.JsReassingList );
+        ActionTree newTree = m_AT.ReassignJsN( m_Joystick.JsReassingList );
+        
         // we have still the old assignment in the ActionMap - change it here (map does not know about the devices)
         JoystickCls j = null;
-        j = m_JS.Find_jsN( 1 );
-        if ( j != null ) {
-          newTree.ActionMaps.js1 = j.DevName; newTree.ActionMaps.js1GUID = j.DevInstanceGUID;
-        }
-        else {
-          newTree.ActionMaps.js1 = ""; newTree.ActionMaps.js1GUID = "";
-        }
-        j = m_JS.Find_jsN( 2 );
-        if ( j != null ) {
-          newTree.ActionMaps.js2 = j.DevName; newTree.ActionMaps.js2GUID = j.DevInstanceGUID;
-        }
-        else {
-          newTree.ActionMaps.js2 = ""; newTree.ActionMaps.js2GUID = "";
-        }
-        j = m_JS.Find_jsN( 3 );
-        if ( j != null ) {
-          newTree.ActionMaps.js3 = j.DevName; newTree.ActionMaps.js3GUID = j.DevInstanceGUID;
-        }
-        else {
-          newTree.ActionMaps.js3 = ""; newTree.ActionMaps.js3GUID = "";
-        }
-        j = m_JS.Find_jsN( 4 );
-        if ( j != null ) {
-          newTree.ActionMaps.js4 = j.DevName; newTree.ActionMaps.js4GUID = j.DevInstanceGUID;
-        }
-        else {
-          newTree.ActionMaps.js4 = ""; newTree.ActionMaps.js4GUID = "";
+        // for all supported jsN devices
+        for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+          j = m_Joystick.Find_jsN( i+1 );
+          if ( j != null ) {
+            newTree.ActionMaps.jsN[i] = j.DevName; newTree.ActionMaps.jsNGUID[i] = j.DevInstanceGUID;
+          }
+          else {
+            newTree.ActionMaps.jsN[i] = ""; newTree.ActionMaps.jsNGUID[i] = "";
+          }
         }
 
         m_AT = newTree; // make it the valid one

@@ -23,22 +23,33 @@ namespace SCJMapper_V2
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     // actionmap names to gather (do we need them to be cofigurable ??)
-    public static String[] ActionMaps = { "multiplayer", "singleplayer", "player", "spaceship_general", "spaceship_view", "spaceship_movement", "spaceship_targeting", "spaceship_weapons", "spaceship_missiles", 
-                                "spaceship_defensive", "spaceship_auto_weapons", "spaceship_radar" , "spaceship_hud" , "IFCS_controls" };
+    public static String[] ActionMaps = { "multiplayer", "singleplayer", "player", "flycam", "spaceship_general", "spaceship_view", "spaceship_movement", "spaceship_targeting", "spaceship_turret", 
+                                          "spaceship_weapons", "spaceship_missiles", "spaceship_defensive", "spaceship_auto_weapons", "spaceship_radar" , "spaceship_hud" , "IFCS_controls" };
 
 
     
     public String version { get; set; }
-    // own additions for JS mapping - should not harm..
-    public String js1 { get; set; }
-    public String js2 { get; set; }
-    public String js3 { get; set; }
-    public String js4 { get; set; }
 
-    public String js1GUID { get; set; }
-    public String js2GUID { get; set; }
-    public String js3GUID { get; set; }
-    public String js4GUID { get; set; }
+    // own additions for JS mapping - should not harm..
+    private String[] m_js;
+    private String[] m_GUIDs;
+
+    /// <summary>
+    /// get/set jsN assignment (use 0-based index i.e. js1 -> [0])
+    /// </summary>
+    public String[] jsN
+    {
+      get { return m_js; }
+    }
+
+    /// <summary>
+    /// get/set jsN GUID assignment (use 0-based index i.e. js1GUID -> [0])
+    /// </summary>
+    public String[] jsNGUID
+    {
+      get { return m_GUIDs; }
+    }
+
 
     /// <summary>
     /// ctor
@@ -46,8 +57,13 @@ namespace SCJMapper_V2
     public ActionMapsCls( )
     {
       version = "0";
-      js1 = ""; js2 = ""; js3 = ""; js4 = "";
-      js1GUID = ""; js2GUID = ""; js3GUID = ""; js4GUID = "";
+
+      // create the Joystick assignments
+      Array.Resize( ref m_js, JoystickCls.JSnum_MAX + 1 );
+      Array.Resize( ref m_GUIDs, JoystickCls.JSnum_MAX + 1 );
+      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+        m_js[i] = ""; m_GUIDs[i] = "";
+      }
     }
 
 
@@ -60,10 +76,9 @@ namespace SCJMapper_V2
     {
       ActionMapsCls newMaps = new ActionMapsCls( );
       // full copy from 'this' 
-      newMaps.js1 = this.js1; newMaps.js1GUID = this.js1GUID;
-      newMaps.js2 = this.js2; newMaps.js2GUID = this.js2GUID;
-      newMaps.js3 = this.js3; newMaps.js3GUID = this.js3GUID;
-      newMaps.js4 = this.js4; newMaps.js4GUID = this.js4GUID;
+      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+        newMaps.jsN[i] = this.jsN[i]; newMaps.jsNGUID[i] = this.jsNGUID[i]; 
+      }
 
       foreach ( ActionMapCls am in this ) {
         newMaps.Add( am.ReassignJsN( newJsList ) );
@@ -103,15 +118,12 @@ namespace SCJMapper_V2
       log.Debug( "toXML - Entry" );
 
       String r = String.Format( "<ActionMaps version=\"{0}\" \n", version );
-      if ( !String.IsNullOrEmpty( js1 ) ) r += String.Format( "\tjs1=\"{0}\" ", js1 );
-      if ( !String.IsNullOrEmpty( js1GUID ) ) r += String.Format( "js1G=\"{0}\" ", js1GUID ); r += String.Format( "\n" );
-      if ( !String.IsNullOrEmpty( js2 ) ) r += String.Format( "\tjs2=\"{0}\" ", js2 );
-      if ( !String.IsNullOrEmpty( js2GUID ) ) r += String.Format( "js2G=\"{0}\" ", js2GUID ); r += String.Format( "\n" );
-      if ( !String.IsNullOrEmpty( js3 ) ) r += String.Format( "\tjs3=\"{0}\" ", js3 );
-      if ( !String.IsNullOrEmpty( js3GUID ) ) r += String.Format( "js3G=\"{0}\" ", js3GUID ); r += String.Format( "\n" );
-      if ( !String.IsNullOrEmpty( js4 ) ) r += String.Format( "\tjs4=\"{0}\" ", js4 );
-      if ( !String.IsNullOrEmpty( js4GUID ) ) r += String.Format( "js4G=\"{0}\" ", js4GUID ); r += String.Format( "\n" );
-      r += String.Format( ">\n");
+      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+        if ( !String.IsNullOrEmpty( jsN[i] ) ) r += String.Format( "\tjs{0}=\"{1}\" ", i+1, jsN[i] );
+        if ( !String.IsNullOrEmpty( jsNGUID[i] ) ) r += String.Format( "js{0}G=\"{1}\" \n", i + 1, jsNGUID[i] );
+      }
+
+      r += String.Format( ">\n" );
       foreach ( ActionMapCls amc in this ) {
         r += String.Format( "{0}\n", amc.toXML( ) );
       }
@@ -143,14 +155,10 @@ namespace SCJMapper_V2
         if ( reader.HasAttributes ) {
           version = reader["version"];
           // get the joystick mapping if there is one
-          js1 = reader["js1"];
-          js2 = reader["js2"];
-          js3 = reader["js3"];
-          js4 = reader["js4"];
-          js1GUID = reader["js1G"];
-          js2GUID = reader["js2G"];
-          js3GUID = reader["js3G"];
-          js4GUID = reader["js4G"];
+          for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+            jsN[i] = reader[String.Format( "js{0}", i + 1 )];
+            jsNGUID[i] = reader[String.Format( "js{0}G", i + 1 )];
+          }
         }
         else {
           return false;

@@ -52,7 +52,7 @@ namespace SCJMapper_V2
       m_owner.JsReassingList.Clear( );
       m_owner.NewJsList.Clear( );
       foreach ( JoystickCls j in m_owner ) {
-        m_cb[textIdx].SelectedIndex = ( j.JSAssignment <= 4 ) ? j.JSAssignment : 0;
+        m_cb[textIdx].SelectedIndex = ( j.JSAssignment <= 8 ) ? j.JSAssignment : 0;
         m_owner.NewJsList.Add( m_cb[textIdx].SelectedIndex );  // old for now - new depends on Leave Button
         textIdx++;
       }
@@ -77,12 +77,12 @@ namespace SCJMapper_V2
 
     private Boolean IsOK( )
     {
-      int[] jsx = {0,0,0,0,0};
+      int[] jsx = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
       foreach ( ComboBox cb in m_cb ) {
         if ( cb.SelectedIndex>0) jsx[cb.SelectedIndex]++;
       }
 
-      return ( ( jsx[1] < 2 ) && ( jsx[2] < 2 ) && ( jsx[3] < 2 ) && ( jsx[4] < 2 ) ); // each Js can be set only once
+      return ( ( jsx[1] < 2 ) && ( jsx[2] < 2 ) && ( jsx[3] < 2 ) && ( jsx[4] < 2 ) && ( jsx[5] < 2 ) && ( jsx[6] < 2 ) && ( jsx[7] < 2 ) && ( jsx[8] < 2 ) ); // each Js can be set only once
     }
 
 

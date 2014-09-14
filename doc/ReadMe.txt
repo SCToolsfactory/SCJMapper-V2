@@ -1,5 +1,5 @@
-SC Joystick Mapper V 2.3
-(c) Cassini, StandardToaster - 31-August-2014
+SC Joystick Mapper V 2.4
+(c) Cassini, StandardToaster - 14-September-2014
 
 Contains 9 files:
 
@@ -11,7 +11,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.3.pdf    Quick Guide
+SCJMapper_QGuide V2.4.pdf    Quick Guide
 ReadMe.txt                   This file
 
 Read the Guide first RTFM ;-)
@@ -24,6 +24,10 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.4
+- improvement - add new actionmaps for AC 0.9 (flycam, spaceship_turret)
+- improvement - supports now assignment of js1 .. js8 - SC may not support all though...
+- Update of the Guide for V2.4
 V 2.3
 - new feature - allow reassignment of the jsN group
 - improvement - uniquely identified devices with the same name (use GUID)
@@ -31,17 +35,19 @@ V 2.3
 - improvement - detection of the SC install path extended to one more Registry entry
 - fix - blend unmapped works properly now
 - fix - manual entry of SC directory works now
+- Update of the Guide for V2.3
 V 2.2
 - new feature - option to ignore actionmaps in Settings
 - improvement - add actionmaps for multiplayer, singleplayer, player
 - improvement - GUI layout of Joystick tabs for more than 4 devices
+- Update of the Guide for V2.2
 V 2.1
 - program is maintained at "https://github.com/SCToolsfactory/SCJMapper-V2/releases"
 - new feature - option to blend unmapped actions
 - improvement - ignore buttons in Settings
 - improvement - override the built in detection of the SC folder in Settings
 - added - trace log for resolving crash and other issues
-- Update of the Guide for V2.0
+- Update of the Guide for V2.1
 V 2.0
 - program is maintained at "https://github.com/bm98/SCJMapper-V2/releases"
 - new feature - get defaultProfile.xml from game assets

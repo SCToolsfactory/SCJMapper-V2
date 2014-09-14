@@ -426,10 +426,9 @@ namespace SCJMapper_V2
 
       String repList = "";
       // JS assignments
-      if ( !String.IsNullOrEmpty( ActionMaps.js1 ) ) repList += String.Format( "** js1 = {0}\n", ActionMaps.js1 );
-      if ( !String.IsNullOrEmpty( ActionMaps.js2 ) ) repList += String.Format( "** js2 = {0}\n", ActionMaps.js2 );
-      if ( !String.IsNullOrEmpty( ActionMaps.js3 ) ) repList += String.Format( "** js3 = {0}\n", ActionMaps.js3 );
-      if ( !String.IsNullOrEmpty( ActionMaps.js4 ) ) repList += String.Format( "** js4 = {0}\n", ActionMaps.js4 );
+      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+        if ( !String.IsNullOrEmpty( ActionMaps.jsN[i] ) ) repList += String.Format( "** js{0} = {1}\n", i+1, ActionMaps.jsN[i] );
+      }
       // now the mapped actions
       repList += String.Format( "\n" );
       foreach ( ActionMapCls acm in ActionMaps ) {

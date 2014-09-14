@@ -265,15 +265,11 @@ namespace SCJMapper_V2
       set
       {
         m_jsAssignment = value;
-        switch ( m_jsAssignment ) {
-          case 1: rbJs1.Checked = true; break;
-          case 2: rbJs2.Checked = true; break;
-          case 3: rbJs3.Checked = true; break;
-          case 4: rbJs4.Checked = true; break;
-          default:
-            rbJsNA.Checked = true;
-            m_jsAssignment = value;
-            break;
+        if ( ( m_jsAssignment >= 1 ) && ( m_jsAssignment <= 8 ) ) {
+          lblJsAssignment.Text = String.Format( "js{0}", m_jsAssignment );
+        }
+        else {
+          lblJsAssignment.Text = "not assigned";
         }
       }
     }

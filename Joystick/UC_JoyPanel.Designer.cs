@@ -62,11 +62,8 @@
       this.label3 = new System.Windows.Forms.Label();
       this.label2 = new System.Windows.Forms.Label();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.rbJsNA = new System.Windows.Forms.RadioButton();
-      this.rbJs4 = new System.Windows.Forms.RadioButton();
-      this.rbJs3 = new System.Windows.Forms.RadioButton();
-      this.rbJs2 = new System.Windows.Forms.RadioButton();
-      this.rbJs1 = new System.Windows.Forms.RadioButton();
+      this.label1 = new System.Windows.Forms.Label();
+      this.lblJsAssignment = new System.Windows.Forms.Label();
       this.gBox.SuspendLayout();
       this.gBoxCap.SuspendLayout();
       this.groupBox1.SuspendLayout();
@@ -434,11 +431,8 @@
       // 
       // groupBox1
       // 
-      this.groupBox1.Controls.Add(this.rbJsNA);
-      this.groupBox1.Controls.Add(this.rbJs4);
-      this.groupBox1.Controls.Add(this.rbJs3);
-      this.groupBox1.Controls.Add(this.rbJs2);
-      this.groupBox1.Controls.Add(this.rbJs1);
+      this.groupBox1.Controls.Add(this.lblJsAssignment);
+      this.groupBox1.Controls.Add(this.label1);
       this.groupBox1.Location = new System.Drawing.Point(3, 236);
       this.groupBox1.Name = "groupBox1";
       this.groupBox1.Size = new System.Drawing.Size(232, 46);
@@ -446,62 +440,24 @@
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "jsN - Assignment";
       // 
-      // rbJsNA
+      // label1
       // 
-      this.rbJsNA.AutoSize = true;
-      this.rbJsNA.Checked = true;
-      this.rbJsNA.Enabled = false;
-      this.rbJsNA.Location = new System.Drawing.Point(182, 19);
-      this.rbJsNA.Name = "rbJsNA";
-      this.rbJsNA.Size = new System.Drawing.Size(37, 17);
-      this.rbJsNA.TabIndex = 4;
-      this.rbJsNA.TabStop = true;
-      this.rbJsNA.Text = "jsx";
-      this.rbJsNA.UseVisualStyleBackColor = true;
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(9, 21);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(119, 13);
+      this.label1.TabIndex = 0;
+      this.label1.Text = "This device is listed as: ";
       // 
-      // rbJs4
+      // lblJsAssignment
       // 
-      this.rbJs4.AutoSize = true;
-      this.rbJs4.Enabled = false;
-      this.rbJs4.Location = new System.Drawing.Point(138, 19);
-      this.rbJs4.Name = "rbJs4";
-      this.rbJs4.Size = new System.Drawing.Size(38, 17);
-      this.rbJs4.TabIndex = 3;
-      this.rbJs4.Text = "js4";
-      this.rbJs4.UseVisualStyleBackColor = true;
-      // 
-      // rbJs3
-      // 
-      this.rbJs3.AutoSize = true;
-      this.rbJs3.Enabled = false;
-      this.rbJs3.Location = new System.Drawing.Point(94, 19);
-      this.rbJs3.Name = "rbJs3";
-      this.rbJs3.Size = new System.Drawing.Size(38, 17);
-      this.rbJs3.TabIndex = 2;
-      this.rbJs3.Text = "js3";
-      this.rbJs3.UseVisualStyleBackColor = true;
-      // 
-      // rbJs2
-      // 
-      this.rbJs2.AutoSize = true;
-      this.rbJs2.Enabled = false;
-      this.rbJs2.Location = new System.Drawing.Point(50, 19);
-      this.rbJs2.Name = "rbJs2";
-      this.rbJs2.Size = new System.Drawing.Size(38, 17);
-      this.rbJs2.TabIndex = 1;
-      this.rbJs2.Text = "js2";
-      this.rbJs2.UseVisualStyleBackColor = true;
-      // 
-      // rbJs1
-      // 
-      this.rbJs1.AutoSize = true;
-      this.rbJs1.Enabled = false;
-      this.rbJs1.Location = new System.Drawing.Point(6, 19);
-      this.rbJs1.Name = "rbJs1";
-      this.rbJs1.Size = new System.Drawing.Size(38, 17);
-      this.rbJs1.TabIndex = 0;
-      this.rbJs1.Text = "js1";
-      this.rbJs1.UseVisualStyleBackColor = true;
+      this.lblJsAssignment.AutoSize = true;
+      this.lblJsAssignment.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblJsAssignment.Location = new System.Drawing.Point(134, 21);
+      this.lblJsAssignment.Name = "lblJsAssignment";
+      this.lblJsAssignment.Size = new System.Drawing.Size(22, 13);
+      this.lblJsAssignment.TabIndex = 1;
+      this.lblJsAssignment.Text = "jsx";
       // 
       // UC_JoyPanel
       // 
@@ -559,10 +515,7 @@
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Label label2;
     private System.Windows.Forms.GroupBox groupBox1;
-    private System.Windows.Forms.RadioButton rbJsNA;
-    private System.Windows.Forms.RadioButton rbJs4;
-    private System.Windows.Forms.RadioButton rbJs3;
-    private System.Windows.Forms.RadioButton rbJs2;
-    private System.Windows.Forms.RadioButton rbJs1;
+    private System.Windows.Forms.Label lblJsAssignment;
+    private System.Windows.Forms.Label label1;
   }
 }

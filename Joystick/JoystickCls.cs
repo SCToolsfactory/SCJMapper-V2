@@ -28,7 +28,7 @@ namespace SCJMapper_V2
     public const String BlendedJsInput = JsUnknown + "reserved";  // the device name used throughout this app
 
     static private int JSnum_UNKNOWN = 0;
-    static private int JSnum_MAX = 4;   // can only assign 4 jsN devices in SC
+    static public int JSnum_MAX = 8;   // can only assign 4 jsN devices in SC
 
     static public System.Drawing.Color[] JColor = (System.Drawing.Color[])MyColors.JColor.Clone(); // default
 
