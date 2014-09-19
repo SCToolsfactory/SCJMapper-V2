@@ -15,7 +15,13 @@ namespace SCJMapper_V2
 
     // The jsSenseLimit property.
     private static readonly ConfigurationProperty _jsSenseLimit =
-              new ConfigurationProperty( "jsSenseLimit", typeof( int ), ( int )150, ConfigurationPropertyOptions.None );
+      new ConfigurationProperty( "jsSenseLimit", typeof( int ), ( int )150, ConfigurationPropertyOptions.None );
+
+    // The scActionmaps property.
+    private static String _defaultActionmaps = "multiplayer,singleplayer,player,flycam,spaceship_general,spaceship_view,spaceship_movement,spaceship_targeting,spaceship_turret"
+                + ",spaceship_weapons,spaceship_missiles,spaceship_defensive,spaceship_auto_weapons,spaceship_radar,spaceship_hud,IFCS_controls";
+    private static readonly ConfigurationProperty _scActionmaps = 
+      new ConfigurationProperty( "scActionmaps", typeof( String ), (String)_defaultActionmaps, ConfigurationPropertyOptions.None );
 
     // ctor
     public AppConfiguration( )
@@ -23,6 +29,7 @@ namespace SCJMapper_V2
       // initialization
       _Properties = new ConfigurationPropertyCollection( );
       _Properties.Add( _jsSenseLimit );
+      _Properties.Add( _scActionmaps );
     }
 
 
@@ -44,6 +51,19 @@ namespace SCJMapper_V2
       set
       {
         this["jsSenseLimit"] = value;
+      }
+    }
+
+    [StringValidator( InvalidCharacters = " ~!@#$%^&*()[]{}/;'\"|\\", MinLength = 10, MaxLength = 500 )]
+    public String scActionmaps
+    {
+      get
+      {
+        return ( String )this["scActionmaps"];
+      }
+      set
+      {
+        this["scActionmaps"] = value;
       }
     }
 
@@ -82,6 +102,19 @@ namespace SCJMapper_V2
           AppConfiguration s = GetAppSection( );
           if ( s != null ) return s.jsSenseLimit;
           else return 150; // default if things go wrong...
+        }
+      }
+
+      /// <summary>
+      /// The actionmaps supported
+      /// </summary>
+      static public String scActionmaps
+      {
+        get
+        {
+          AppConfiguration s = GetAppSection( );
+          if ( s != null ) return s.scActionmaps;
+          else return _defaultActionmaps; // default if things go wrong...
         }
       }
     }

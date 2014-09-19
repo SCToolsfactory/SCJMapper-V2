@@ -12,7 +12,7 @@ namespace SCJMapper_V2
   /// <actionmap name="spaceship_view">
   /// 		<action name="v_view_cycle_fwd">
   /// 			<rebind device="joystick" input="js2_button2" />
-	///     </action>
+  ///     </action>
   /// 		<action name="v_view_dynamic_focus_toggle">
   /// 			<rebind device="joystick" input="js2_button25" />
   /// 		</action>		
@@ -71,13 +71,19 @@ namespace SCJMapper_V2
     /// <returns>the action as XML fragment</returns>
     public String toXML( )
     {
-      String r = String.Format( "\t<actionmap name=\"{0}\">\n", name );
+      String acs = "";
       foreach ( ActionCls ac in this ) {
         String x =  ac.toXML( );
-        if ( !String.IsNullOrEmpty(x) ) r += String.Format( "\t{0}", x);
+        if ( !String.IsNullOrEmpty( x ) ) acs += String.Format( "\t{0}", x );
       }
-      r += String.Format( "\t</actionmap>\n");
-      return r;
+      if ( !String.IsNullOrWhiteSpace( acs ) ) {
+        String r = String.Format( "\t<actionmap name=\"{0}\">\n", name );
+        r += acs;
+        r += String.Format( "\t</actionmap>\n" );
+        return r;
+      }
+      // nothing to dump
+      return "";
     }
 
 
@@ -108,12 +114,12 @@ namespace SCJMapper_V2
       reader.Read( ); // move to next element
 
       String x = reader.ReadOuterXml( );
-      while ( ! String.IsNullOrEmpty(x)  ) {
+      while ( !String.IsNullOrEmpty( x ) ) {
         ActionCls ac = new ActionCls( );
         if ( ac.fromXML( x ) ) {
           this.Add( ac ); // add to list
         }
-        x=reader.ReadOuterXml();
+        x = reader.ReadOuterXml( );
       }
       return true;
     }

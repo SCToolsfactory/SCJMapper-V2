@@ -59,6 +59,9 @@ namespace SCJMapper_V2
           chkLbActionMaps.SetItemChecked(i, true);
         }
       }
+
+      // ForceIgnoreversion
+      cbxForceIgnoreversion.Checked = m_owner.ForceIgnoreversion;
     }
 
 
@@ -86,7 +89,10 @@ namespace SCJMapper_V2
         }
       }
       m_owner.IgnoreActionmaps = ignore;
-      
+
+      // ForceIgnoreversion
+      m_owner.ForceIgnoreversion = cbxForceIgnoreversion.Checked;
+
       m_owner.Save( );
     }
 
@@ -149,6 +155,11 @@ namespace SCJMapper_V2
       if ( fbDlg.ShowDialog( this ) == System.Windows.Forms.DialogResult.OK ) {
         txSCPath.Text = fbDlg.SelectedPath;
       }
+    }
+
+    private void label1_Click( object sender, EventArgs e )
+    {
+
     }
 
 

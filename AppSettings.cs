@@ -190,6 +190,15 @@ namespace SCJMapper_V2
     }
 
 
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "False" )] // false
+    public Boolean ForceIgnoreversion
+    {
+      get { return ( Boolean )this["ForceIgnoreversion"]; }
+      set { this["ForceIgnoreversion"] = value; }
+    }
+
+
     #endregion
 
 

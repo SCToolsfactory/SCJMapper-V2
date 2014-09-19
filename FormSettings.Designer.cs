@@ -55,14 +55,17 @@
       this.chkLbActionMaps = new System.Windows.Forms.CheckedListBox();
       this.btCancel = new System.Windows.Forms.Button();
       this.label1 = new System.Windows.Forms.Label();
+      this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.cbxForceIgnoreversion = new System.Windows.Forms.CheckBox();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
+      this.groupBox4.SuspendLayout();
       this.SuspendLayout();
       // 
       // btDone
       // 
-      this.btDone.Location = new System.Drawing.Point(657, 340);
+      this.btDone.Location = new System.Drawing.Point(658, 405);
       this.btDone.Name = "btDone";
       this.btDone.Size = new System.Drawing.Size(93, 31);
       this.btDone.TabIndex = 1;
@@ -291,7 +294,7 @@
       this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox3.Location = new System.Drawing.Point(579, 12);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(274, 322);
+      this.groupBox3.Size = new System.Drawing.Size(274, 387);
       this.groupBox3.TabIndex = 24;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "Ignore Actionmaps - check the ones to hide";
@@ -303,13 +306,13 @@
       this.chkLbActionMaps.FormattingEnabled = true;
       this.chkLbActionMaps.Location = new System.Drawing.Point(3, 18);
       this.chkLbActionMaps.Name = "chkLbActionMaps";
-      this.chkLbActionMaps.Size = new System.Drawing.Size(268, 301);
+      this.chkLbActionMaps.Size = new System.Drawing.Size(268, 366);
       this.chkLbActionMaps.TabIndex = 0;
       // 
       // btCancel
       // 
       this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-      this.btCancel.Location = new System.Drawing.Point(756, 340);
+      this.btCancel.Location = new System.Drawing.Point(757, 405);
       this.btCancel.Name = "btCancel";
       this.btCancel.Size = new System.Drawing.Size(93, 31);
       this.btCancel.TabIndex = 25;
@@ -320,19 +323,42 @@
       // label1
       // 
       this.label1.ForeColor = System.Drawing.Color.Red;
-      this.label1.Location = new System.Drawing.Point(227, 344);
+      this.label1.Location = new System.Drawing.Point(228, 409);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(414, 28);
       this.label1.TabIndex = 26;
       this.label1.Text = "Note: Accepting changes will clear the action tree to apply the new settings; Can" +
     "cel now if you want to save your work first.";
+      this.label1.Click += new System.EventHandler(this.label1_Click);
+      // 
+      // groupBox4
+      // 
+      this.groupBox4.Controls.Add(this.cbxForceIgnoreversion);
+      this.groupBox4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.groupBox4.Location = new System.Drawing.Point(12, 340);
+      this.groupBox4.Name = "groupBox4";
+      this.groupBox4.Size = new System.Drawing.Size(561, 59);
+      this.groupBox4.TabIndex = 27;
+      this.groupBox4.TabStop = false;
+      this.groupBox4.Text = "Advanced Options ...";
+      // 
+      // cbxForceIgnoreversion
+      // 
+      this.cbxForceIgnoreversion.AutoSize = true;
+      this.cbxForceIgnoreversion.Location = new System.Drawing.Point(6, 27);
+      this.cbxForceIgnoreversion.Name = "cbxForceIgnoreversion";
+      this.cbxForceIgnoreversion.Size = new System.Drawing.Size(133, 17);
+      this.cbxForceIgnoreversion.TabIndex = 5;
+      this.cbxForceIgnoreversion.Text = "force \'ignoreversion\'";
+      this.cbxForceIgnoreversion.UseVisualStyleBackColor = true;
       // 
       // FormSettings
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.CancelButton = this.btCancel;
-      this.ClientSize = new System.Drawing.Size(861, 381);
+      this.ClientSize = new System.Drawing.Size(861, 446);
+      this.Controls.Add(this.groupBox4);
       this.Controls.Add(this.label1);
       this.Controls.Add(this.btCancel);
       this.Controls.Add(this.groupBox3);
@@ -352,6 +378,8 @@
       this.groupBox2.ResumeLayout(false);
       this.groupBox2.PerformLayout();
       this.groupBox3.ResumeLayout(false);
+      this.groupBox4.ResumeLayout(false);
+      this.groupBox4.PerformLayout();
       this.ResumeLayout(false);
 
     }
@@ -385,5 +413,7 @@
     private System.Windows.Forms.CheckedListBox chkLbActionMaps;
     private System.Windows.Forms.Button btCancel;
     private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.GroupBox groupBox4;
+    private System.Windows.Forms.CheckBox cbxForceIgnoreversion;
   }
 }

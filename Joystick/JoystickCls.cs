@@ -74,7 +74,7 @@ namespace SCJMapper_V2
     static public int JSNum( String jsTag )
     {
       int retNum = JSnum_UNKNOWN;
-      if ( !String.IsNullOrEmpty( jsTag ) ) {
+      if ( !String.IsNullOrWhiteSpace( jsTag ) ) {
         if ( !int.TryParse( jsTag.Substring( 2, 1 ), out retNum ) ) {
           retNum = JSnum_UNKNOWN;
         }

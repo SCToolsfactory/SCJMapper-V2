@@ -26,8 +26,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>24</ApplicationRevision>
-    <ApplicationVersion>2.4.0.%2a</ApplicationVersion>
+    <ApplicationRevision>25</ApplicationRevision>
+    <ApplicationVersion>2.5.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="appConfiguration.cs" />
     <Compile Include="AppSettings.cs" />
+    <Compile Include="Joystick\Deviceoptions.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,12 +138,14 @@
     <Compile Include="Joystick\UC_JoyPanel.Designer.cs">
       <DependentUpon>UC_JoyPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Joystick\Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SC\SCDefaultProfile.cs" />
     <Compile Include="SC\SCMappings.cs" />
     <Compile Include="SC\SCPath.cs" />
     <Compile Include="TheUser.cs" />
+    <Compile Include="Joystick\UICustHeader.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
