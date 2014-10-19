@@ -18,7 +18,7 @@ namespace SCJMapper_V2
       new ConfigurationProperty( "jsSenseLimit", typeof( int ), ( int )150, ConfigurationPropertyOptions.None );
 
     // The scActionmaps property.
-    private static String _defaultActionmaps = "multiplayer,singleplayer,player,flycam,spaceship_general,spaceship_view,spaceship_movement,spaceship_targeting,spaceship_turret"
+    private static String _defaultActionmaps = "multiplayer,singleplayer,player,flycam,vehicle_driver,spaceship_general,spaceship_view,spaceship_movement,spaceship_targeting,spaceship_turret"
                 + ",spaceship_weapons,spaceship_missiles,spaceship_defensive,spaceship_auto_weapons,spaceship_radar,spaceship_hud,IFCS_controls";
     private static readonly ConfigurationProperty _scActionmaps = 
       new ConfigurationProperty( "scActionmaps", typeof( String ), (String)_defaultActionmaps, ConfigurationPropertyOptions.None );
@@ -113,7 +113,11 @@ namespace SCJMapper_V2
         get
         {
           AppConfiguration s = GetAppSection( );
-          if ( s != null ) return s.scActionmaps;
+          if ( s != null ) {
+            // get rid of blanks and CR,LFs from the config file
+            String t = s.scActionmaps.Replace( " ", "" ).Replace( String.Format( "\n" ), "" ).Replace( String.Format( "\r" ), "" );
+            return t;
+          }
           else return _defaultActionmaps; // default if things go wrong...
         }
       }

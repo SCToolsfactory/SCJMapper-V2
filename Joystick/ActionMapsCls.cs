@@ -188,6 +188,11 @@ namespace SCJMapper_V2
     {
       log.Debug( "fromXML - Entry" );
 
+      // Reset those options...
+      uiCustHeader = new UICustHeader( );
+      deviceOptions = new Deviceoptions( );
+      options = new Options( ); 
+      
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;
       settings.IgnoreWhitespace = true;
