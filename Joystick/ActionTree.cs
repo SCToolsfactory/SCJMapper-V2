@@ -48,14 +48,16 @@ namespace SCJMapper_V2
     public String IgnoreMaps { get; set; }
 
     private String  m_Filter = ""; // the tree content filter
-
+    private JoystickList m_jsList = null;
 
     /// <summary>
     /// ctor
     /// </summary>
-    public ActionTree( Boolean blendUnmapped )
+    public ActionTree( Boolean blendUnmapped, JoystickList jsList )
     {
       BlendUnmapped = blendUnmapped;
+      m_jsList = jsList;
+
       IgnoreMaps = ""; // nothing to ignore
     }
 
@@ -67,7 +69,7 @@ namespace SCJMapper_V2
     /// <returns>The ActionTree Copy with reassigned input</returns>
     public ActionTree ReassignJsN( Dictionary<int, int> newJsList )
     {
-      ActionTree nTree = new ActionTree( BlendUnmapped );
+      ActionTree nTree = new ActionTree( BlendUnmapped, m_jsList );
       // full copy from 'this'
       nTree.m_MasterTree = this.m_MasterTree;
       nTree.m_ctrl = this.m_ctrl;
@@ -184,7 +186,7 @@ namespace SCJMapper_V2
       ActionCls ac = null;
       ActionMapCls acm = null;
 
-      ActionMaps = new ActionMapsCls( );
+      ActionMaps = new ActionMapsCls( m_jsList );
       m_MasterTree.Nodes.Clear( );
 
 
@@ -413,6 +415,27 @@ namespace SCJMapper_V2
         }
         if ( found ) break; // exit all loops
       }
+    }
+
+
+    /// <summary>
+    /// Find a control that contains the string and mark it
+    ///   this method is applied to the GUI TreeView only
+    /// </summary>
+    /// <param name="m_MasterTree">The string to find</param>
+    public String FindCommand( String ctrl )
+    {
+      log.Debug( "FindCtrl - Entry" );
+
+      foreach ( TreeNode tn in Ctrl.Nodes ) {
+        // have to search nodes of nodes
+        foreach ( TreeNode stn in tn.Nodes ) {
+          if ( stn.Text.Contains( ctrl ) ) {
+            return stn.Text;
+          }
+        }
+      }
+      return "";
     }
 
 

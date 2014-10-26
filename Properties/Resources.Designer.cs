@@ -63,6 +63,26 @@ namespace SCJMapper_V2.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _300i1 {
+            get {
+                object obj = ResourceManager.GetObject("300i1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap aurora {
+            get {
+                object obj = ResourceManager.GetObject("aurora", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Cassini_Logo2_s {
             get {
                 object obj = ResourceManager.GetObject("Cassini_Logo2_s", resourceCulture);
@@ -83,14 +103,34 @@ namespace SCJMapper_V2.Properties {
         ///		&lt;action name=&quot;v_attack1_group2&quot; /&gt;
         ///		&lt;action name=&quot;v_attack1_group3&quot; /&gt;
         ///	&lt;/actiongroup&gt;
-        ///
-        ///	&lt;actionmap name=&quot;debug&quot; version=&quot;22&quot;&gt;
-        ///		&lt;!-- debug keys - move to debug when we can switch devmode--&gt;
-        ///		&lt;action name=&quot;flymode&quot; onPres [rest of string was truncated]&quot;;.
+        ///	
+        ///	&lt;CustomisationUIHeader&gt;
+        ///		&lt;keyboard label=&quot;Default&quot; description=&quot;@ui_KeyboardDefaultDesc&quot; image=&quot;KeyboardDefault&quot; /&gt;
+        ///		&lt;xboxpad labe [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string defaultProfile {
             get {
                 return ResourceManager.GetString("defaultProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap hornet {
+            get {
+                object obj = ResourceManager.GetObject("hornet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap YPR {
+            get {
+                object obj = ResourceManager.GetObject("YPR", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

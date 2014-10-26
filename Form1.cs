@@ -31,6 +31,8 @@ namespace SCJMapper_V2
     ///</remarks>
     private ActionTree m_AT = null;
 
+    private FormJSCalCurve JSCAL = null;
+
 
     #region Main Form Handling
 
@@ -239,7 +241,7 @@ namespace SCJMapper_V2
       log.Debug( "InitActionTree - Entry" );
 
       // build TreeView and the ActionMaps
-      m_AT = new ActionTree( cbxBlendUnmapped.Checked );
+      m_AT = new ActionTree( cbxBlendUnmapped.Checked, m_Joystick );
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
       m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
       m_AT.LoadTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
@@ -797,6 +799,82 @@ namespace SCJMapper_V2
 
 
     #endregion
+
+    private void button1_Click( object sender, EventArgs e )
+    {
+      timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
+
+      JSCAL = new FormJSCalCurve( );
+      // get current mapping from ActionMaps
+      String cmd = "";
+
+      // attach Yaw command
+      cmd = m_AT.FindCommand( "v_yaw - js" );
+      if ( cmd.ToLowerInvariant( ).EndsWith( "x" ) ) {
+        m_AT.ActionMaps.TuningX.Command = cmd;
+        JSCAL.YawTuning = m_AT.ActionMaps.TuningX;
+      }
+      else if ( cmd.ToLowerInvariant( ).EndsWith( "y" ) ) {
+        m_AT.ActionMaps.TuningY.Command = cmd;
+        JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
+      }
+      else if ( cmd.ToLowerInvariant( ).EndsWith( "z" ) ) {
+        m_AT.ActionMaps.TuningZ.Command = cmd;
+        JSCAL.YawTuning = m_AT.ActionMaps.TuningZ;
+      }
+
+      // attach Pitch command
+      cmd = m_AT.FindCommand( "v_pitch - js" );
+      if ( cmd.ToLowerInvariant( ).EndsWith( "x" ) ) {
+        m_AT.ActionMaps.TuningX.Command = cmd;
+        JSCAL.PitchTuning = m_AT.ActionMaps.TuningX;
+      }
+      else if ( cmd.ToLowerInvariant( ).EndsWith( "y" ) ) {
+        m_AT.ActionMaps.TuningY.Command = cmd;
+        JSCAL.PitchTuning = m_AT.ActionMaps.TuningY;
+      }
+      else if ( cmd.ToLowerInvariant( ).EndsWith( "z" ) ) {
+        m_AT.ActionMaps.TuningZ.Command = cmd;
+        JSCAL.PitchTuning = m_AT.ActionMaps.TuningZ;
+      }
+
+      // attach Roll command
+      cmd = m_AT.FindCommand( "v_roll - js" );
+      if ( cmd.ToLowerInvariant( ).EndsWith( "x" ) ) {
+        m_AT.ActionMaps.TuningX.Command = cmd;
+        JSCAL.RollTuning = m_AT.ActionMaps.TuningX;
+      }
+      else if ( cmd.ToLowerInvariant( ).EndsWith( "y" ) ) {
+        m_AT.ActionMaps.TuningY.Command = cmd;
+        JSCAL.RollTuning = m_AT.ActionMaps.TuningY;
+      }
+      else if ( cmd.ToLowerInvariant( ).EndsWith( "z" ) ) {
+        m_AT.ActionMaps.TuningZ.Command = cmd;
+        JSCAL.RollTuning = m_AT.ActionMaps.TuningZ;
+      }
+
+      // run
+      JSCAL.ShowDialog( );
+      m_AT.Dirty = true;
+
+      // get from dialog
+      JSCAL = null; // get rid and create a new one next time..
+
+      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      timer1.Enabled = true;      
+    }
+
+    private void MainForm_Deactivate( object sender, EventArgs e )
+    {
+      timer1.Enabled = false;
+      m_Joystick.Deactivate( );
+    }
+
+    private void MainForm_Activated( object sender, EventArgs e )
+    {
+      timer1.Enabled =true;
+      m_Joystick.Activate( );
+    }
 
 
 

@@ -15,7 +15,7 @@ namespace SCJMapper_V2
   /// In addition provide some static tools to handle JS props here in one place
   /// Also owns the GUI i.e. the user control that shows all values
   /// </summary>
-  class JoystickCls
+  public class JoystickCls
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
     private static readonly AppSettings  appSettings = new AppSettings( );
@@ -178,6 +178,7 @@ namespace SCJMapper_V2
     private int m_senseLimit = 150; // axis jitter avoidance...
     private int m_joystickNumber = 0; // seq number of the enumerated joystick
     private bool[] m_ignoreButtons;
+    private bool m_activated = false;
 
     private UC_JoyPanel m_jPanel = null; // the GUI panel
     private TabPage     m_jTab = null;
@@ -224,6 +225,14 @@ namespace SCJMapper_V2
     public int ButtonCount { get { return m_device.Capabilities.ButtonCount; } }
     public int POVCount { get { return m_device.Capabilities.PovCount; } }
 
+    public Boolean Activated 
+    { 
+      get { return m_activated;} 
+      set { m_activated = value;
+      if ( m_activated == false ) m_device.Unacquire( ); // explicitely if not longer active
+      } 
+    }
+
 
     /// <summary>
     /// ctor and init
@@ -240,6 +249,7 @@ namespace SCJMapper_V2
       m_joystickNumber = joystickNum;
       m_jPanel = panel;
       m_jTab = tab;
+      Activated = false;
 
       m_senseLimit = AppConfiguration.AppConfig.jsSenseLimit; // can be changed in the app.config file if it is still too little
 
@@ -260,7 +270,7 @@ namespace SCJMapper_V2
         // Set the data format to the c_dfDIJoystick pre-defined format.
         //m_device.SetDataFormat( DeviceDataFormat.Joystick );
         // Set the cooperative level for the device.
-        m_device.SetCooperativeLevel( m_hwnd, CooperativeLevel.Exclusive | CooperativeLevel.Foreground );
+        m_device.SetCooperativeLevel( m_hwnd, CooperativeLevel.NonExclusive | CooperativeLevel.Background );
         // Enumerate all the objects on the device.
         foreach ( DeviceObjectInstance d in m_device.GetObjects( ) ) {
           // For axes that are returned, set the DIPROP_RANGE property for the
@@ -278,6 +288,7 @@ namespace SCJMapper_V2
       }
 
       ApplySettings( ); // get whatever is needed here from Settings
+      Activated = true; 
     }
 
 
@@ -536,8 +547,10 @@ namespace SCJMapper_V2
     /// <summary>
     /// Collect the current data from the device
     /// </summary>
-    public void GetData( )
+    public void GetAxisData( out int x, out int y, out int rz )
     {
+      x = 0; y = 0; rz = 0;
+
       // Make sure there is a valid device.
       if ( null == m_device )
         return;
@@ -553,6 +566,121 @@ namespace SCJMapper_V2
           try {
             // Acquire the device.
             m_device.Acquire( );
+          }
+          catch ( SharpDXException ) {
+            // Failed to acquire the device. This could be because the app doesn't have focus.
+            return;  // EXIT unaquired
+          }
+        }
+        else {
+          log.Error( "Unexpected Poll Exception", e );
+          return;  // EXIT see ex code
+        }
+      }
+
+
+      // Get the state of the device - retaining the previous state to find the lates change
+      m_prevState = m_state;
+      try { m_state = m_device.GetCurrentState( ); }
+      // Catch any exceptions. None will be handled here, 
+      // any device re-aquisition will be handled above.  
+      catch ( SharpDXException ) {
+        return;
+      }
+
+      x = m_state.X; y = m_state.Y; rz = m_state.RotationZ;
+    }
+
+
+
+
+    /// <summary>
+    /// Collect the current data from the device
+    /// </summary>
+    public void GetCmdData( String cmd, out int data )
+    {
+      // TODO: Expand this out into a joystick class (see commit for details)
+      Dictionary<string, string> axies = new Dictionary<string, string>( )
+		    {
+			    {"x","X"},
+			    {"y","Y"},
+			    {"z","Z"}, 
+			    {"rotx","RotationX"},
+			    {"roty","RotationY"},
+			    {"rotz","RotationZ"}
+		    };
+
+      data = 0;
+
+      // Make sure there is a valid device.
+      if ( null == m_device )
+        return;
+
+      // Poll the device for info.
+      try {
+        m_device.Poll( );
+      }
+      catch ( SharpDXException e ) {
+        if ( ( e.ResultCode == ResultCode.NotAcquired ) || ( e.ResultCode == ResultCode.InputLost ) ) {
+          // Check to see if either the app needs to acquire the device, or
+          // if the app lost the device to another process.
+          try {
+            // Acquire the device.
+            m_device.Acquire( );
+          }
+          catch ( SharpDXException ) {
+            // Failed to acquire the device. This could be because the app doesn't have focus.
+            return;  // EXIT unaquired
+          }
+        }
+        else {
+          log.Error( "Unexpected Poll Exception", e );
+          return;  // EXIT see ex code
+        }
+      }
+
+
+      // Get the state of the device - retaining the previous state to find the lates change
+      m_prevState = m_state;
+      try { m_state = m_device.GetCurrentState( ); }
+      // Catch any exceptions. None will be handled here, 
+      // any device re-aquisition will be handled above.  
+      catch ( SharpDXException ) {
+        return;
+      }
+
+      try {
+        PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( axies[cmd] );
+        data = ( int )axisProperty.GetValue( this.m_state, null );
+      }
+      catch {
+        data = 0;
+      }
+    }
+
+
+
+
+    /// <summary>
+    /// Collect the current data from the device
+    /// </summary>
+    public void GetData( )
+    {
+      // Make sure there is a valid device.
+      if ( null == m_device )
+        return;
+
+      // Poll the device for info.
+      try {
+        m_device.Poll( );
+      }
+      catch ( SharpDXException e ) {
+        if ( ( e.ResultCode == ResultCode.NotAcquired ) || ( e.ResultCode == ResultCode.InputLost ) ) {
+          // Check to see if either the app needs to acquire the device, or
+          // if the app lost the device to another process.
+          try {
+            // Acquire the device - if the (main)window is active
+            if ( Activated ) m_device.Acquire( );
           }
           catch ( SharpDXException ) {
             // Failed to acquire the device. This could be because the app doesn't have focus.

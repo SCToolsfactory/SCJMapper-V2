@@ -26,8 +26,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>26</ApplicationRevision>
-    <ApplicationVersion>2.6.0.%2a</ApplicationVersion>
+    <ApplicationRevision>32</ApplicationRevision>
+    <ApplicationVersion>2.7.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -84,6 +84,12 @@
     <Reference Include="log4net">
       <HintPath>packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>packages\OpenTK.GLControl.1.1.1589.5942\lib\NET40\OpenTK.GLControl.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX">
       <HintPath>$(SharpDXPackageBinDir)\SharpDX.dll</HintPath>
     </Reference>
@@ -93,6 +99,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -105,6 +112,17 @@
   <ItemGroup>
     <Compile Include="appConfiguration.cs" />
     <Compile Include="AppSettings.cs" />
+    <Compile Include="OGL\BezierSeries.cs" />
+    <Compile Include="OGL\CalcBezierCurve.cs" />
+    <Compile Include="Joystick\JoystickTuningParameter.cs" />
+    <Compile Include="OGL\CubicSpline.cs" />
+    <Compile Include="OGL\LoaderStatics.cs" />
+    <Compile Include="OGL\FormJSCalCurve.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OGL\FormJSCalCurve.Designer.cs">
+      <DependentUpon>FormJSCalCurve.cs</DependentUpon>
+    </Compile>
     <Compile Include="Joystick\Deviceoptions.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -139,15 +157,23 @@
       <DependentUpon>UC_JoyPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Joystick\Options.cs" />
+    <Compile Include="OGL\LoaderDDS.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="OGL\RK4Integrator.cs" />
     <Compile Include="SC\SCDefaultProfile.cs" />
     <Compile Include="SC\SCMappings.cs" />
     <Compile Include="SC\SCPath.cs" />
     <Compile Include="TheUser.cs" />
     <Compile Include="Joystick\UICustHeader.cs" />
+    <Compile Include="OGL\TriDiagonalMatrix.cs" />
+    <Compile Include="Joystick\xyPoints.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OGL\FormJSCalCurve.resx">
+      <DependentUpon>FormJSCalCurve.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Joystick\FormReassign.resx">
       <DependentUpon>FormReassign.cs</DependentUpon>
@@ -169,6 +195,24 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="graphics\SB_BigSight.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="graphics\SB_Canyon.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="graphics\SB_Highway.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="graphics\SB_OutThere1.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="graphics\SB_Shiodome.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="graphics\Skybox.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -186,13 +230,20 @@
   <ItemGroup>
     <Content Include="Cassini_Logo_Icon.ico" />
     <Content Include="defaultProfile.xml" />
+    <None Include="graphics\YPR.png" />
+    <None Include="graphics\300i.jpg" />
+    <None Include="graphics\aurora.jpg" />
     <Content Include="graphics\Cassini_Logo2_s.jpg" />
     <Content Include="graphics\Cassini_Logo_Icon.ico" />
+    <None Include="graphics\hornet.jpg" />
     <Content Include="graphics\invalid.png" />
     <Content Include="graphics\Joystick.ico" />
     <Content Include="graphics\keyboard_key.ico" />
     <Content Include="graphics\map.png" />
     <Content Include="graphics\PS3.ico" />
+    <Content Include="graphics\Readme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="graphics\selected.png" />
     <Content Include="graphics\XBOX.ico" />
   </ItemGroup>

@@ -6,12 +6,22 @@ using System.Windows.Forms;
 
 namespace SCJMapper_V2
 {
-  class JoystickList : List<JoystickCls>
+  public class JoystickList : List<JoystickCls>
   {
     private FormReassign FR = null;
 
     public Dictionary<int, int> JsReassingList { get; set; } // oldJs, newJs
     public List<int> NewJsList { get; set; }  // index is this[idx]
+
+
+    public void Deactivate( )
+    {
+      foreach ( JoystickCls j in this ) j.Activated = false;
+    }
+    public void Activate( )
+    {
+      foreach ( JoystickCls j in this ) j.Activated =true;
+    }
 
     /// <summary>
     /// Show the jsN Reassign Dialog
