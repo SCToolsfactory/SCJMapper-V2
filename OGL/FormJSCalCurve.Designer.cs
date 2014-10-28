@@ -1154,7 +1154,7 @@
       this.btCopyToAllAxis.Name = "btCopyToAllAxis";
       this.btCopyToAllAxis.Size = new System.Drawing.Size(57, 44);
       this.btCopyToAllAxis.TabIndex = 38;
-      this.btCopyToAllAxis.Text = "Copy to all aixs";
+      this.btCopyToAllAxis.Text = "Copy to all axis";
       this.btCopyToAllAxis.UseVisualStyleBackColor = true;
       this.btCopyToAllAxis.Click += new System.EventHandler(this.btCopyToAllAxis_Click);
       // 

@@ -683,14 +683,15 @@ namespace SCJMapper_V2
 
         m_ticks = newTick; // prep next run
 
-        int i_x,i_y,i_z = 0; // Joystick Input
+        int i_x = 0, i_y = 0, i_z = 0; // Joystick Input
+        int x = 0; int y = 0; int z = 0; // retain real input as i_xyz
         // query the Josticks for the 3 controls
-        m_Yjs.GetCmdData( m_liveYawCommand, out i_x ); // + = right
-        m_Pjs.GetCmdData( m_livePitchCommand, out i_y ); // + = up
-        m_Rjs.GetCmdData( m_liveRollCommand, out i_z ); // += twist right
+        if ( m_Yjs != null ) m_Yjs.GetCmdData( m_liveYawCommand, out i_x ); // + = right
+        if ( m_Pjs != null ) m_Pjs.GetCmdData( m_livePitchCommand, out i_y ); // + = up
+        if ( m_Rjs != null ) m_Rjs.GetCmdData( m_liveRollCommand, out i_z ); // += twist right
 
         // apply the modifications of the control (deadzone, shape, sensitivity)
-        int x = i_x; int y = i_y; int z = i_z; // retain real input as i_xyz
+        x = i_x; y = i_y; z = i_z; // retain real input as i_xyz
         m_flightModel.Velocity = Vector3d.Zero;
 
         // Yaw
