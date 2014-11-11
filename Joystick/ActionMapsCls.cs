@@ -38,9 +38,10 @@ namespace SCJMapper_V2
     private String version { get; set; }
     private String ignoreversion { get; set; }
 
-    private UICustHeader uiCustHeader = new UICustHeader( );
-    private Deviceoptions deviceOptions = new Deviceoptions( );
-    private Options options = new Options( );
+    private JoystickList m_joystickList = null;
+    private UICustHeader m_uiCustHeader = null;
+    private Options m_options = null;
+    private Deviceoptions m_deviceOptions = null;
 
 
     // own additions for JS mapping - should not harm..
@@ -64,12 +65,38 @@ namespace SCJMapper_V2
     }
 
 
+    // provide access to Tuning items of the Options obj to the owner
+
+    /// <summary>
+    /// Returns the X-Tuning item
+    /// </summary>
+    public JoystickTuningParameter TuningX
+    {
+      get { return m_options.TuneX; }
+    }
+    /// <summary>
+    /// Returns the Y-Tuning item
+    /// </summary>
+    public JoystickTuningParameter TuningY
+    {
+      get { return m_options.TuneY; }
+    }
+    /// <summary>
+    /// Returns the Z-Tuning item
+    /// </summary>
+    public JoystickTuningParameter TuningZ
+    {
+      get { return m_options.TuneZ; }
+    }
+
+
     /// <summary>
     /// ctor
     /// </summary>
-    public ActionMapsCls( )
+    public ActionMapsCls( JoystickList jsList )
     {
       version = "0";
+      m_joystickList = jsList; // have to save this for Reassign
 
       // create the Joystick assignments
       Array.Resize( ref m_js, JoystickCls.JSnum_MAX + 1 );
@@ -77,6 +104,11 @@ namespace SCJMapper_V2
       for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
         m_js[i] = ""; m_GUIDs[i] = "";
       }
+
+      // create options objs
+      m_uiCustHeader = new UICustHeader( );
+      m_options = new Options( m_joystickList );
+      m_deviceOptions = new Deviceoptions( m_options );
 
       LoadActionMaps( ); // get them from config
     }
@@ -89,12 +121,12 @@ namespace SCJMapper_V2
     /// <returns>The ActionMaps copy with reassigned input</returns>
     public ActionMapsCls ReassignJsN( Dictionary<int, int> newJsList )
     {
-      ActionMapsCls newMaps = new ActionMapsCls( );
+      ActionMapsCls newMaps = new ActionMapsCls( m_joystickList );
       // full copy from 'this' 
 
-      newMaps.uiCustHeader = this.uiCustHeader;
-      newMaps.deviceOptions = this.deviceOptions;
-      newMaps.options = this.options;
+      newMaps.m_uiCustHeader = this.m_uiCustHeader;
+      newMaps.m_deviceOptions = this.m_deviceOptions;
+      newMaps.m_options = this.m_options;
 
       for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
         newMaps.jsN[i] = this.jsN[i]; newMaps.jsNGUID[i] = this.jsNGUID[i];
@@ -103,6 +135,8 @@ namespace SCJMapper_V2
       foreach ( ActionMapCls am in this ) {
         newMaps.Add( am.ReassignJsN( newJsList ) );
       }
+
+      m_options.ReassignJsN( newJsList );
 
       return newMaps;
     }
@@ -165,18 +199,18 @@ namespace SCJMapper_V2
       // close the tag
       r += String.Format( ">\n" );
 
-      // and dump the contents
-      if ( uiCustHeader.Count > 0 ) r += uiCustHeader.toXML( ) + String.Format( "\n" );
-      if ( deviceOptions.Count > 0 ) r += deviceOptions.toXML( ) + String.Format( "\n" );
-      if ( options.Count > 0 ) r += options.toXML( ) + String.Format( "\n" );
+      // and dump the option contents
+      if ( m_uiCustHeader.Count > 0 ) r += m_uiCustHeader.toXML( ) + String.Format( "\n" );
+      if ( m_options.Count > 0 ) r += m_options.toXML( ) + String.Format( "\n" );
+      if ( m_deviceOptions.Count > 0 ) r += m_deviceOptions.toXML( ) + String.Format( "\n" );
 
+      // finally the action maps
       foreach ( ActionMapCls amc in this ) {
         r += String.Format( "{0}\n", amc.toXML( ) );
       }
       r += String.Format( "</ActionMaps>\n" );
       return r;
     }
-
 
 
     /// <summary>
@@ -189,10 +223,11 @@ namespace SCJMapper_V2
       log.Debug( "fromXML - Entry" );
 
       // Reset those options...
-      uiCustHeader = new UICustHeader( );
-      deviceOptions = new Deviceoptions( );
-      options = new Options( ); 
-      
+      m_uiCustHeader = new UICustHeader( );
+      m_options = new Options( m_joystickList );
+      m_deviceOptions = new Deviceoptions( m_options );
+
+
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;
       settings.IgnoreWhitespace = true;
@@ -233,19 +268,20 @@ namespace SCJMapper_V2
         }
         else if ( reader.Name == "CustomisationUIHeader" ) {
           String x = reader.ReadOuterXml( );
-          uiCustHeader.fromXML( x );
+          m_uiCustHeader.fromXML( x );
         }
         else if ( reader.Name == "deviceoptions" ) {
           String x = reader.ReadOuterXml( );
-          deviceOptions.fromXML( x );
+          m_deviceOptions.fromXML( x );
         }
         else if ( reader.Name == "options" ) {
           String x = reader.ReadOuterXml( );
-          options.fromXML( x );
+          m_options.fromXML( x );
         }
         else {
           reader.Read( );
         }
+
       }
       return true;
     }

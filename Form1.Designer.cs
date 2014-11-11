@@ -16,6 +16,7 @@
       timer1.Stop( );
       // Unacquire all DirectInput objects.
       foreach ( JoystickCls js in m_Joystick ) js.FinishDX( );
+      m_Joystick.Clear( );
 
       if ( disposing && ( components != null ) ) {
         components.Dispose( );
@@ -34,7 +35,6 @@
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
       this.btDumpList = new System.Windows.Forms.Button();
-      this.label3 = new System.Windows.Forms.Label();
       this.rtb = new System.Windows.Forms.RichTextBox();
       this.cmCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.tsiCopy = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,6 +59,7 @@
       this.IL = new System.Windows.Forms.ImageList(this.components);
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.txRebind = new System.Windows.Forms.TextBox();
       this.linkLblReleases = new System.Windows.Forms.LinkLabel();
@@ -72,6 +73,7 @@
       this.tlpanel = new System.Windows.Forms.TableLayoutPanel();
       this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.button1 = new System.Windows.Forms.Button();
       this.cbxBlendUnmapped = new System.Windows.Forms.CheckBox();
       this.txFilter = new System.Windows.Forms.TextBox();
       this.btClearFilter = new System.Windows.Forms.Button();
@@ -83,7 +85,6 @@
       this.btLoadMyMapping = new System.Windows.Forms.Button();
       this.txMappingName = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
-      this.statusStrip1 = new System.Windows.Forms.StatusStrip();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
       this.tsDDbtProfiles = new System.Windows.Forms.ToolStripDropDownButton();
       this.tsBtReset = new System.Windows.Forms.ToolStripDropDownButton();
@@ -98,7 +99,7 @@
       this.loadAndGrabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
+      this.statusStrip1 = new System.Windows.Forms.StatusStrip();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.tc1.SuspendLayout();
@@ -121,16 +122,6 @@
       this.btDumpList.Text = "Dump List-->";
       this.btDumpList.UseVisualStyleBackColor = true;
       this.btDumpList.Click += new System.EventHandler(this.btDumpList_Click);
-      // 
-      // label3
-      // 
-      this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.label3.Location = new System.Drawing.Point(606, 823);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(372, 36);
-      this.label3.TabIndex = 22;
-      this.label3.Text = "Right click above to open the context menu";
-      this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // rtb
       // 
@@ -373,6 +364,15 @@
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
       // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
+      this.UC_JoyPanel.TabIndex = 0;
+      // 
       // panel1
       // 
       this.tlpanel.SetColumnSpan(this.panel1, 3);
@@ -470,7 +470,6 @@
       this.tlpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tlpanel.Controls.Add(this.rtb, 2, 1);
       this.tlpanel.Controls.Add(this.panel1, 0, 0);
-      this.tlpanel.Controls.Add(this.label3, 2, 4);
       this.tlpanel.Controls.Add(this.treeView1, 0, 1);
       this.tlpanel.Controls.Add(this.flowLayoutPanel1, 1, 1);
       this.tlpanel.Controls.Add(this.tableLayoutPanel1, 1, 2);
@@ -509,6 +508,7 @@
       this.tableLayoutPanel1.Controls.Add(this.btDump, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.btGrab, 1, 0);
       this.tableLayoutPanel1.Controls.Add(this.btDumpList, 0, 1);
+      this.tableLayoutPanel1.Controls.Add(this.button1, 1, 4);
       this.tableLayoutPanel1.Controls.Add(this.cbxBlendUnmapped, 0, 4);
       this.tableLayoutPanel1.Controls.Add(this.txFilter, 0, 2);
       this.tableLayoutPanel1.Controls.Add(this.btClearFilter, 0, 3);
@@ -524,6 +524,16 @@
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 153);
       this.tableLayoutPanel1.TabIndex = 23;
+      // 
+      // button1
+      // 
+      this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.button1.Location = new System.Drawing.Point(171, 123);
+      this.button1.Name = "button1";
+      this.button1.Size = new System.Drawing.Size(120, 24);
+      this.button1.TabIndex = 17;
+      this.button1.Text = "Joystick Tuning";
+      this.button1.Click += new System.EventHandler(this.button1_Click);
       // 
       // cbxBlendUnmapped
       // 
@@ -657,24 +667,6 @@
       this.label1.TabIndex = 16;
       this.label1.Text = "Mapping name:";
       // 
-      // statusStrip1
-      // 
-      this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel2,
-            this.tsDDbtProfiles,
-            this.tsBtReset,
-            this.toolStripStatusLabel3,
-            this.toolStripStatusLabel1,
-            this.tsDDbtMappings,
-            this.tsBtLoad});
-      this.statusStrip1.Location = new System.Drawing.Point(0, 832);
-      this.statusStrip1.Name = "statusStrip1";
-      this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-      this.statusStrip1.ShowItemToolTips = true;
-      this.statusStrip1.Size = new System.Drawing.Size(984, 30);
-      this.statusStrip1.TabIndex = 26;
-      this.statusStrip1.Text = "statusStrip1";
-      // 
       // toolStripStatusLabel2
       // 
       this.toolStripStatusLabel2.BackColor = System.Drawing.Color.DarkKhaki;
@@ -802,14 +794,23 @@
       this.loadToolStripMenuItem.Text = "Load !";
       this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
       // 
-      // UC_JoyPanel
+      // statusStrip1
       // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
-      this.UC_JoyPanel.TabIndex = 0;
+      this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel2,
+            this.tsDDbtProfiles,
+            this.tsBtReset,
+            this.toolStripStatusLabel3,
+            this.toolStripStatusLabel1,
+            this.tsDDbtMappings,
+            this.tsBtLoad});
+      this.statusStrip1.Location = new System.Drawing.Point(0, 832);
+      this.statusStrip1.Name = "statusStrip1";
+      this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+      this.statusStrip1.ShowItemToolTips = true;
+      this.statusStrip1.Size = new System.Drawing.Size(984, 30);
+      this.statusStrip1.TabIndex = 26;
+      this.statusStrip1.Text = "statusStrip1";
       // 
       // MainForm
       // 
@@ -823,6 +824,8 @@
       this.MinimumSize = new System.Drawing.Size(1000, 900);
       this.Name = "MainForm";
       this.Text = "SC Joystick Mapper";
+      this.Activated += new System.EventHandler(this.MainForm_Activated);
+      this.Deactivate += new System.EventHandler(this.MainForm_Deactivate);
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
       this.Load += new System.EventHandler(this.MainForm_Load);
       this.cmCopyPaste.ResumeLayout(false);
@@ -849,7 +852,6 @@
     #endregion
 
     private System.Windows.Forms.Button btDumpList;
-    private System.Windows.Forms.Label label3;
     private System.Windows.Forms.RichTextBox rtb;
     private System.Windows.Forms.Button btGrab;
     private System.Windows.Forms.Button btDump;
@@ -886,7 +888,6 @@
     private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-    private System.Windows.Forms.StatusStrip statusStrip1;
     private System.Windows.Forms.ToolStripDropDownButton tsDDbtProfiles;
     private System.Windows.Forms.ToolStripDropDownButton tsDDbtMappings;
     private System.Windows.Forms.ToolStripDropDownButton tsBtReset;
@@ -914,6 +915,8 @@
     private System.Windows.Forms.Button btSettings;
     private System.Windows.Forms.CheckBox cbxBlendUnmapped;
     private System.Windows.Forms.Button btJsReassign;
+    private System.Windows.Forms.Button button1;
+    private System.Windows.Forms.StatusStrip statusStrip1;
   }
 }
 
