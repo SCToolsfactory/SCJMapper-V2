@@ -46,9 +46,15 @@ namespace SCJMapper_V2
 
     public void ResetJsNAssignment( )
     {
+      ClearJsNAssignment( );
       foreach ( JoystickCls j in this ) j.JSAssignment = 0;
-      if ( this.Count > 0 ) this[0].JSAssignment = 1;
-      if ( this.Count > 1 ) this[1].JSAssignment = 2;
+      if ( this.Count > 0 ) this[0].JSAssignment = this[0].MyTabPageIndex + 1;
+      if ( this.Count > 1 ) this[1].JSAssignment = this[1].MyTabPageIndex + 1;
+    }
+
+    public void ClearJsNAssignment( )
+    {
+      foreach ( JoystickCls j in this ) j.JSAssignment = 0;
     }
 
 

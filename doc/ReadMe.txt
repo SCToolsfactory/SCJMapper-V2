@@ -1,29 +1,42 @@
-SC Joystick Mapper V 2.5
-(c) Cassini, StandardToaster - 20-September-2014
+SC Joystick Mapper V 2.7 - Build 33
+(c) Cassini, StandardToaster - 13-November-2014
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.5)
-SCJMapper.exe.config         Program config (V2.5)               - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.7)
+SCJMapper.exe.config         Program config (V2.7)               - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
+OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
+OpenTK.GLControl.dll         Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
 Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in the same folder as the Exe file
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.5.pdf    Quick Guide
+SCJMapper_QGuide V2.7.pdf    Quick Guide
 ReadMe.txt                   This file
+
+graphics folder              Skybox Images                       - graphics folder MUST be in the same folder as the Exe file
+
 
 Read the Guide first RTFM ;-)
 Put all files into one folder and hit SCJMapper.exe to run it
 
 For Updates and information visit:
-https://github.com/SCToolsfactory/SCJMapper-V2/releases
+https://github.com/bm98/SCJMapper-V2/
 
 Scanned for viruses before packing... 
 cassini@burri-web.org
 
 Changelog:
+V 2.7 - Build 33
+- fix - if an axis is not mapped the prog will not longer crash (was null ptr exception)
+- doc update 2.7
+V 2.7 - BETA
+- new feature - Joystick Tuning
+V 2.6
+- fix - taking actionmaps from config file now works
+- improvement - added actionmap vehicle_driver
 V 2.5
 - new feature - support and maintain option tags
 - improvement - support and maintain version and ignoreversion attribute / can force ignoreversion="1"

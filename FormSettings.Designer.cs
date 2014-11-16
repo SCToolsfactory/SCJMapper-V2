@@ -56,7 +56,10 @@
       this.btCancel = new System.Windows.Forms.Button();
       this.label1 = new System.Windows.Forms.Label();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.cbxDetectGamepad = new System.Windows.Forms.CheckBox();
       this.cbxForceIgnoreversion = new System.Windows.Forms.CheckBox();
+      this.cbxBlendJS = new System.Windows.Forms.CheckBox();
+      this.cbxBlendGP = new System.Windows.Forms.CheckBox();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -333,6 +336,9 @@
       // 
       // groupBox4
       // 
+      this.groupBox4.Controls.Add(this.cbxBlendGP);
+      this.groupBox4.Controls.Add(this.cbxBlendJS);
+      this.groupBox4.Controls.Add(this.cbxDetectGamepad);
       this.groupBox4.Controls.Add(this.cbxForceIgnoreversion);
       this.groupBox4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox4.Location = new System.Drawing.Point(12, 340);
@@ -341,6 +347,16 @@
       this.groupBox4.TabIndex = 27;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "Advanced Options ...";
+      // 
+      // cbxDetectGamepad
+      // 
+      this.cbxDetectGamepad.AutoSize = true;
+      this.cbxDetectGamepad.Location = new System.Drawing.Point(145, 27);
+      this.cbxDetectGamepad.Name = "cbxDetectGamepad";
+      this.cbxDetectGamepad.Size = new System.Drawing.Size(98, 17);
+      this.cbxDetectGamepad.TabIndex = 6;
+      this.cbxDetectGamepad.Text = "Use Gamepad";
+      this.cbxDetectGamepad.UseVisualStyleBackColor = true;
       // 
       // cbxForceIgnoreversion
       // 
@@ -351,6 +367,26 @@
       this.cbxForceIgnoreversion.TabIndex = 5;
       this.cbxForceIgnoreversion.Text = "force \'ignoreversion\'";
       this.cbxForceIgnoreversion.UseVisualStyleBackColor = true;
+      // 
+      // cbxBlendJS
+      // 
+      this.cbxBlendJS.AutoSize = true;
+      this.cbxBlendJS.Location = new System.Drawing.Point(439, 13);
+      this.cbxBlendJS.Name = "cbxBlendJS";
+      this.cbxBlendJS.Size = new System.Drawing.Size(100, 17);
+      this.cbxBlendJS.TabIndex = 16;
+      this.cbxBlendJS.Text = "Blend Joystick";
+      this.cbxBlendJS.UseVisualStyleBackColor = true;
+      // 
+      // cbxBlendGP
+      // 
+      this.cbxBlendGP.AutoSize = true;
+      this.cbxBlendGP.Location = new System.Drawing.Point(439, 36);
+      this.cbxBlendGP.Name = "cbxBlendGP";
+      this.cbxBlendGP.Size = new System.Drawing.Size(109, 17);
+      this.cbxBlendGP.TabIndex = 16;
+      this.cbxBlendGP.Text = "Blend Gamepad";
+      this.cbxBlendGP.UseVisualStyleBackColor = true;
       // 
       // FormSettings
       // 
@@ -415,5 +451,8 @@
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.GroupBox groupBox4;
     private System.Windows.Forms.CheckBox cbxForceIgnoreversion;
+    private System.Windows.Forms.CheckBox cbxDetectGamepad;
+    private System.Windows.Forms.CheckBox cbxBlendGP;
+    private System.Windows.Forms.CheckBox cbxBlendJS;
   }
 }

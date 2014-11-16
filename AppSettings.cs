@@ -92,10 +92,18 @@ namespace SCJMapper_V2
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "False" )] // false
-    public Boolean BlendUnmapped
+    public Boolean BlendUnmapped // Joystick (back compatibility)
     {
       get { return ( Boolean )this["BlendUnmapped"]; }
       set { this["BlendUnmapped"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "False" )] // false
+    public Boolean BlendUnmappedGP
+    {
+      get { return ( Boolean )this["BlendUnmappedGP"]; }
+      set { this["BlendUnmappedGP"] = value; }
     }
 
 
@@ -196,6 +204,15 @@ namespace SCJMapper_V2
     {
       get { return ( Boolean )this["ForceIgnoreversion"]; }
       set { this["ForceIgnoreversion"] = value; }
+    }
+
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "False" )] // false
+    public Boolean DetectGamepad
+    {
+      get { return ( Boolean )this["DetectGamepad"]; }
+      set { this["DetectGamepad"] = value; }
     }
 
 

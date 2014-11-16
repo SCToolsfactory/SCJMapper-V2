@@ -17,6 +17,10 @@ namespace SCJMapper_V2
     private static readonly ConfigurationProperty _jsSenseLimit =
       new ConfigurationProperty( "jsSenseLimit", typeof( int ), ( int )150, ConfigurationPropertyOptions.None );
 
+    // The gpSenseLimit property.
+    private static readonly ConfigurationProperty _gpSenseLimit =
+      new ConfigurationProperty( "gpSenseLimit", typeof( int ), ( int )500, ConfigurationPropertyOptions.None );
+
     // The scActionmaps property.
     private static String _defaultActionmaps = "multiplayer,singleplayer,player,flycam,vehicle_driver,spaceship_general,spaceship_view,spaceship_movement,spaceship_targeting,spaceship_turret"
                 + ",spaceship_weapons,spaceship_missiles,spaceship_defensive,spaceship_auto_weapons,spaceship_radar,spaceship_hud,IFCS_controls";
@@ -51,6 +55,19 @@ namespace SCJMapper_V2
       set
       {
         this["jsSenseLimit"] = value;
+      }
+    }
+
+    [IntegerValidator( MinValue = 1, MaxValue = 32000, ExcludeRange = false )]
+    public int gpSenseLimit
+    {
+      get
+      {
+        return ( int )this["gpSenseLimit"];
+      }
+      set
+      {
+        this["gpSenseLimit"] = value;
       }
     }
 
@@ -93,7 +110,7 @@ namespace SCJMapper_V2
 
 
       /// <summary>
-      /// The axis detection sense limit
+      /// The Joystick axis detection sense limit
       /// </summary>
       static public int jsSenseLimit
       {
@@ -102,6 +119,19 @@ namespace SCJMapper_V2
           AppConfiguration s = GetAppSection( );
           if ( s != null ) return s.jsSenseLimit;
           else return 150; // default if things go wrong...
+        }
+      }
+
+      /// <summary>
+      /// The Gamepad axis detection sense limit
+      /// </summary>
+      static public int gpSenseLimit
+      {
+        get
+        {
+          AppConfiguration s = GetAppSection( );
+          if ( s != null ) return s.gpSenseLimit;
+          else return 500; // default if things go wrong...
         }
       }
 

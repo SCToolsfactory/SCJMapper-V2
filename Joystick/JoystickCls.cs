@@ -15,31 +15,54 @@ namespace SCJMapper_V2
   /// In addition provide some static tools to handle JS props here in one place
   /// Also owns the GUI i.e. the user control that shows all values
   /// </summary>
-  public class JoystickCls
+  public class JoystickCls : DeviceCls
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
     private static readonly AppSettings  appSettings = new AppSettings( );
 
     #region Static Items
 
-    public const String DeviceName = "joystick";  // the device name used throughout this app
+    public new const String DeviceName = "joystick";  // the device name used throughout this app
 
     public const String JsUnknown = "jsx_";
-    public const String BlendedJsInput = JsUnknown + "reserved";  // the device name used throughout this app
+    public new const String BlendedInput = "jsx_reserved";
 
     static private int JSnum_UNKNOWN = 0;
     static public int JSnum_MAX = 8;   // can only assign 4 jsN devices in SC
 
-    static public System.Drawing.Color[] JColor = (System.Drawing.Color[])MyColors.JColor.Clone(); // default
 
+    /// <summary>
+    /// Reassigns the mapping color based on the jsAssignment list given
+    /// i.e. prepare the mapping colors for a given jsN assignment
+    /// </summary>
+    /// <param name="newJsList">List of 0.. tabs where the value is the jsN number </param>
     static public void ReassignJsColor( List<int> newJsList )
     {
+      // the default colors are aligned with the tabs - the tabs color is never changed but the jsN may
+      // i.e. if the first Tab is assigned as js2 then the second MapColor must get the color of the first Tab
       int idx = 0;
       foreach ( int i in newJsList ) {
+        // walk through the tabs
         if ( i > 0 ) {
-          JColor[i - 1] = MyColors.JColor[idx++];
+          // this is the jsN for the tab indexed (make it 0 based)
+          MyColors.MapColor[i - 1] = MyColors.TabColor[idx];
         }
+        idx++;
       }
+    }
+
+    /// <summary>
+    /// Returns the currently valid color for a jsN assignment
+    /// </summary>
+    /// <param name="jsN">The jsN number of the command</param>
+    /// <returns>A color</returns>
+    static public System.Drawing.Color JsNColor( int jsN )
+    {
+      if ( jsN == JSnum_UNKNOWN ) return MyColors.BlendedColor;
+      if ( jsN < 1 ) return MyColors.ErrorColor;
+      if ( jsN > JoystickCls.JSnum_MAX ) return MyColors.ErrorColor;
+
+      return MyColors.MapColor[jsN - 1]; // jsN is 1  based, color array is 0 based
     }
 
 
@@ -48,7 +71,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="device"></param>
     /// <returns></returns>
-    static public Boolean IsJoystick( String device )
+    static public new Boolean IsDevice( String device )
     {
       return ( device == DeviceName );
     }
@@ -100,7 +123,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    static public Bool IsJsN( String input )
+    static public Boolean IsJsN( String input )
     {
       return rgx_js.IsMatch( input );
     }
@@ -181,7 +204,7 @@ namespace SCJMapper_V2
     private bool m_activated = false;
 
     private UC_JoyPanel m_jPanel = null; // the GUI panel
-    private TabPage     m_jTab = null;
+    internal int  MyTabPageIndex = -1;
 
     /// <summary>
     /// Returns a CryEngine compatible hat direction
@@ -202,7 +225,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// The JS ProductName property
     /// </summary>
-    public String DevName { get { return m_device.Properties.ProductName; } }
+    public override String DevName { get { return m_device.Properties.ProductName; } }
     /// <summary>
     /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
     /// </summary>
@@ -220,12 +243,21 @@ namespace SCJMapper_V2
       set { m_jPanel.JsAssignment = value; }
     }
 
+    /// <summary>
+    /// Returns the mapping color for this device
+    /// </summary>
+    public override System.Drawing.Color MapColor
+    {
+      get { return JsNColor( JSAssignment ); }
+    }
+
+
     // device props
     public int AxisCount { get { return m_device.Capabilities.AxeCount; } }
     public int ButtonCount { get { return m_device.Capabilities.ButtonCount; } }
     public int POVCount { get { return m_device.Capabilities.PovCount; } }
 
-    public Boolean Activated 
+    public override Boolean Activated 
     { 
       get { return m_activated;} 
       set { m_activated = value;
@@ -240,15 +272,15 @@ namespace SCJMapper_V2
     /// <param name="device">A DXInput device</param>
     /// <param name="hwnd">The WinHandle of the main window</param>
     /// <param name="panel">The respective JS panel to show the properties</param>
-    public JoystickCls( Joystick device, Control hwnd, int joystickNum, UC_JoyPanel panel, TabPage tab )
+    public JoystickCls( Joystick device, Control hwnd, int joystickNum, UC_JoyPanel panel, int tabIndex )
     {
-      log.DebugFormat( "ctor - Entry with {0}", device.Information.ProductName );
+      log.DebugFormat( "JoystickCls ctor - Entry with {0}", device.Information.ProductName );
 
       m_device = device;
       m_hwnd = hwnd;
       m_joystickNumber = joystickNum;
       m_jPanel = panel;
-      m_jTab = tab;
+      MyTabPageIndex = tabIndex;
       Activated = false;
 
       m_senseLimit = AppConfiguration.AppConfig.jsSenseLimit; // can be changed in the app.config file if it is still too little
@@ -296,7 +328,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Shutdown device access
     /// </summary>
-    public void FinishDX( )
+    public override void FinishDX( )
     {
       if ( null != m_device ) {
         log.DebugFormat( "Release DirectInput device: {0}", m_device.Information.ProductName );
@@ -314,7 +346,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Tells the Joystick to re-read settings
     /// </summary>
-    public void ApplySettings( )
+    public override void ApplySettings( )
     {
       appSettings.Reload( );
 
@@ -422,7 +454,7 @@ namespace SCJMapper_V2
     /// Find the last change the user did on that device
     /// </summary>
     /// <returns>The last action as CryEngine compatible string</returns>
-    public String GetLastChange( )
+    public override String GetLastChange( )
     {
       // TODO: Expand this out into a joystick class (see commit for details)
       Dictionary<string, string> axies = new Dictionary<string, string>( )
@@ -664,7 +696,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Collect the current data from the device
     /// </summary>
-    public void GetData( )
+    public override void GetData( )
     {
       // Make sure there is a valid device.
       if ( null == m_device )
