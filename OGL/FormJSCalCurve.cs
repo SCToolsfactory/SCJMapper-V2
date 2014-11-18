@@ -57,7 +57,7 @@ namespace SCJMapper_V2
     private Int64 m_msElapsed = 0;
     private Int64 m_ticks = 0;
     private double DegPerMS = 360.0 / 3000.0;
-
+    private const Int64 m_frameTime = 25; // max Frametime msec 1/ = fps
     // location / acceleration
     private RK4Integrator m_flightModel = new RK4Integrator( );
     private double m_damping = 5000; // range is around 3000 .. 30000
@@ -137,9 +137,9 @@ namespace SCJMapper_V2
 
     #region YAW - Interaction
 
-    private JoystickTuningParameter m_Ytuning = new JoystickTuningParameter( null );
+    private DeviceTuningParameter m_Ytuning = new DeviceTuningParameter( );
     // live values
-    private JoystickCls m_Yjs = null;
+    private DeviceCls m_Ydev = null;
     private String m_liveYawCommand ="";
     private float m_liveYdeadzone = 0.0f;
     private float m_liveYsense = 1.0f;
@@ -150,7 +150,7 @@ namespace SCJMapper_V2
     /// Submit the tuning parameters
     /// </summary>
     /// 
-    public JoystickTuningParameter YawTuning
+    public DeviceTuningParameter YawTuning
     {
       get
       {
@@ -163,7 +163,7 @@ namespace SCJMapper_V2
         // populate from input
         lblYCmd.Text = m_Ytuning.Command;
         m_liveYawCommand = m_Ytuning.CommandCtrl;
-        m_Yjs = m_Ytuning.JsDevice;
+        m_Ydev = m_Ytuning.JsDevice;
         log.Info( "FormJSCalCurve : Yaw Command is: " + value );
 
         cbxYinvert.Checked = m_Ytuning.InvertUsed;
@@ -213,9 +213,9 @@ namespace SCJMapper_V2
 
     #region PITCH - Interaction
 
-    private JoystickTuningParameter m_Ptuning = new JoystickTuningParameter( null );
+    private DeviceTuningParameter m_Ptuning = new DeviceTuningParameter( );
     // live values
-    private JoystickCls m_Pjs = null;
+    private DeviceCls m_Pdev = null;
     private String m_livePitchCommand ="";
     private float m_livePdeadzone = 0.0f;
     private float m_livePsense = 1.0f;
@@ -226,7 +226,7 @@ namespace SCJMapper_V2
     /// Submit the tuning parameters
     /// </summary>
     /// 
-    public JoystickTuningParameter PitchTuning
+    public DeviceTuningParameter PitchTuning
     {
       get
       {
@@ -240,7 +240,7 @@ namespace SCJMapper_V2
         // populate from input
         lblPCmd.Text = m_Ptuning.Command;  // 
         m_livePitchCommand = m_Ptuning.CommandCtrl;
-        m_Pjs = m_Ptuning.JsDevice;
+        m_Pdev = m_Ptuning.JsDevice;
         log.Info( "FormJSCalCurve : Pitch Command is: " + value );
 
         cbxPinvert.Checked = m_Ptuning.InvertUsed;
@@ -290,9 +290,9 @@ namespace SCJMapper_V2
 
     #region ROLL - Interaction
 
-    private JoystickTuningParameter m_Rtuning = new JoystickTuningParameter( null );
+    private DeviceTuningParameter m_Rtuning = new DeviceTuningParameter( );
     // live values
-    private JoystickCls m_Rjs = null;
+    private DeviceCls m_Rdev = null;
     private String m_liveRollCommand;
     private float m_liveRdeadzone = 0.0f;
     private float m_liveRsense = 1.0f;
@@ -303,7 +303,7 @@ namespace SCJMapper_V2
     /// Submit the tuning parameters
     /// </summary>
     /// 
-    public JoystickTuningParameter RollTuning
+    public DeviceTuningParameter RollTuning
     {
       get
       {
@@ -317,7 +317,7 @@ namespace SCJMapper_V2
         // populate from input
         lblRCmd.Text = m_Rtuning.Command;  // 
         m_liveRollCommand = m_Rtuning.CommandCtrl;
-        m_Rjs = m_Rtuning.JsDevice;
+        m_Rdev = m_Rtuning.JsDevice;
         log.Info( "FormJSCalCurve : Roll Command is: " + value );
 
         cbxRinvert.Checked = m_Rtuning.InvertUsed;
@@ -679,16 +679,20 @@ namespace SCJMapper_V2
         // calculate the aim change while the user is handling the control (integrating the amount of control)
         Int64 newTick = DateTime.Now.Ticks;
         m_msElapsed = ( newTick - m_ticks ) / TimeSpan.TicksPerMillisecond;
-        if ( m_msElapsed < 20 ) continue; //pace updates with 20 ms minimum (50fps max)
+        if ( m_msElapsed < m_frameTime ) continue; //pace updates the max frametime allowed
+
+        // safeguard against locking (moving the window) so the integrator does not get crazy..
+        // if deltatime gets too big we fake a regular cycle for this round
+        if ( m_msElapsed > 200 ) m_msElapsed = m_frameTime; 
 
         m_ticks = newTick; // prep next run
 
         int i_x = 0, i_y = 0, i_z = 0; // Joystick Input
         int x = 0; int y = 0; int z = 0; // retain real input as i_xyz
         // query the Josticks for the 3 controls
-        if ( m_Yjs != null ) m_Yjs.GetCmdData( m_liveYawCommand, out i_x ); // + = right
-        if ( m_Pjs != null ) m_Pjs.GetCmdData( m_livePitchCommand, out i_y ); // + = up
-        if ( m_Rjs != null ) m_Rjs.GetCmdData( m_liveRollCommand, out i_z ); // += twist right
+        if ( m_Ydev != null ) m_Ydev.GetCmdData( m_liveYawCommand, out i_x ); // + = right
+        if ( m_Pdev != null ) m_Pdev.GetCmdData( m_livePitchCommand, out i_y ); // + = up
+        if ( m_Rdev != null ) m_Rdev.GetCmdData( m_liveRollCommand, out i_z ); // += twist right
 
         // apply the modifications of the control (deadzone, shape, sensitivity)
         x = i_x; y = i_y; z = i_z; // retain real input as i_xyz
@@ -761,7 +765,6 @@ namespace SCJMapper_V2
 
         // finalize
         m_flightModel.Velocity -= m; // new direction change vector
-        if ( m_msElapsed > 1000 ) m_msElapsed = 1000; // safeguard against locking (moving the window)
         Vector3d deltaAngleV = m_flightModel.Integrate( ( double )m_msElapsed / 1000.0, m_damping, 100.0 ); // heuristic K and B ..
 
         // rotate the view along the input 
@@ -1415,18 +1418,32 @@ namespace SCJMapper_V2
 
     private void btCopyToAllAxis_Click( object sender, EventArgs e )
     {
-      // just copy to all labels
       lblYin1.Text = lblIn1.Text; lblYout1.Text = lblOut1.Text;
       lblYin2.Text = lblIn2.Text; lblYout2.Text = lblOut2.Text;
       lblYin3.Text = lblIn3.Text; lblYout3.Text = lblOut3.Text;
+      if ( m_liveYnonLinCurve != null ) {
+        m_liveYnonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
+                              float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
+                              float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
+      }
 
       lblPin1.Text = lblIn1.Text; lblPout1.Text = lblOut1.Text;
       lblPin2.Text = lblIn2.Text; lblPout2.Text = lblOut2.Text;
       lblPin3.Text = lblIn3.Text; lblPout3.Text = lblOut3.Text;
+      if ( m_livePnonLinCurve != null ) {
+        m_livePnonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
+                              float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
+                              float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
+      }
 
       lblRin1.Text = lblIn1.Text; lblRout1.Text = lblOut1.Text;
       lblRin2.Text = lblIn2.Text; lblRout2.Text = lblOut2.Text;
       lblRin3.Text = lblIn3.Text; lblRout3.Text = lblOut3.Text;
+      if ( m_liveRnonLinCurve != null ) {
+        m_liveRnonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
+                              float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
+                              float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
+      }
     }
 
     private void btDone_Click( object sender, EventArgs e )

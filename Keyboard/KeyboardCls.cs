@@ -18,7 +18,7 @@ namespace SCJMapper_V2
 
     #region Static Items
 
-    public new const String DeviceName = "keyboard";  // the device name used throughout this app
+    public new const String DeviceClass = "keyboard";  // the device name used throughout this app
     public new const String BlendedInput = " ";  // the device name used throughout this app
 
 
@@ -35,11 +35,11 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns true if the devicename is a joystick
     /// </summary>
-    /// <param name="device"></param>
+    /// <param name="deviceClass"></param>
     /// <returns></returns>
-    static new public Boolean IsDevice( String device )
+    static new public Boolean IsDeviceClass( String deviceClass )
     {
-      return ( device == DeviceName );
+      return ( deviceClass == DeviceClass );
     }
 
 
@@ -164,6 +164,11 @@ namespace SCJMapper_V2
     private Control m_hwnd;
     private bool m_activated = false;
 
+
+    /// <summary>
+    /// The DeviceClass of this instance
+    /// </summary>
+    public override String DevClass { get { return KeyboardCls.DeviceClass; } }
     /// <summary>
     /// The JS ProductName property
     /// </summary>
@@ -242,6 +247,17 @@ namespace SCJMapper_V2
     {
       return DXKeyboardCmd( m_state.PressedKeys );
     }
+
+
+    /// <summary>
+    /// Collect the current data from the device (DUMMY for Kbd)
+    /// </summary>
+    public override void GetCmdData( String cmd, out int data )
+    {
+      // Make sure there is a valid device.
+      data = 0;
+    }
+
 
     /// <summary>
     /// Collect the current data from the device

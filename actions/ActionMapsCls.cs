@@ -78,21 +78,21 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns the X-Tuning item
     /// </summary>
-    public JoystickTuningParameter TuningX
+    public DeviceTuningParameter TuningX
     {
       get { return m_options.TuneX; }
     }
     /// <summary>
     /// Returns the Y-Tuning item
     /// </summary>
-    public JoystickTuningParameter TuningY
+    public DeviceTuningParameter TuningY
     {
       get { return m_options.TuneY; }
     }
     /// <summary>
     /// Returns the Z-Tuning item
     /// </summary>
-    public JoystickTuningParameter TuningZ
+    public DeviceTuningParameter TuningZ
     {
       get { return m_options.TuneZ; }
     }
@@ -144,7 +144,7 @@ namespace SCJMapper_V2
         newMaps.Add( am.ReassignJsN( newJsList ) );
       }
 
-      m_options.ReassignJsN( newJsList );
+      //m_options.ReassignJsN( newJsList );
 
       return newMaps;
     }

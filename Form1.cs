@@ -85,7 +85,7 @@ namespace SCJMapper_V2
           return DeviceCls.InputKind.Kbd;
         }
         else {
-          if ( IsGamepadTab( tc1.SelectedTab) ) {
+          if ( IsGamepadTab( tc1.SelectedTab ) ) {
             return DeviceCls.InputKind.Gamepad;
           }
           else {
@@ -414,6 +414,7 @@ namespace SCJMapper_V2
               UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
               log.Debug( "Create Gamepad instance" );
               gs = new GamepadCls( gpDevice, uUC_GpadPanelNew, 0 ); // does all device related activities for that particular item
+              gs.SetDeviceName( instance.ProductName );
             }
             else {
               log.Debug( "Add first Joystick panel" );
@@ -430,6 +431,7 @@ namespace SCJMapper_V2
               UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
               log.Debug( "Create Gamepad instance" );
               gs = new GamepadCls( gpDevice, uUC_GpadPanelNew, tabs ); // does all device related activities for that particular item
+              gs.SetDeviceName( instance.ProductName );
             }
             else {
               log.Debug( "Add next Joystick panel" );
@@ -508,8 +510,8 @@ namespace SCJMapper_V2
       // for all supported jsN
       for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
         j = null;
-        if ( !String.IsNullOrEmpty( m_AT.ActionMaps.jsNGUID[i] ) )   j = m_Joystick.Find_jsInstance( m_AT.ActionMaps.jsNGUID[i] );
-        else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.jsN[i] ) )  j = m_Joystick.Find_jsDev( m_AT.ActionMaps.jsN[i] );
+        if ( !String.IsNullOrEmpty( m_AT.ActionMaps.jsNGUID[i] ) ) j = m_Joystick.Find_jsInstance( m_AT.ActionMaps.jsNGUID[i] );
+        else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.jsN[i] ) ) j = m_Joystick.Find_jsDev( m_AT.ActionMaps.jsN[i] );
 
         if ( j != null ) {
           m_AT.ActionMaps.jsNGUID[i] = j.DevInstanceGUID; // subst for missing one (version up etc.)
@@ -526,8 +528,8 @@ namespace SCJMapper_V2
       // maintain the new JsN assignment and update the colorlist
       List<int> newL = new List<int>( );
       foreach ( TabPage tp in tc1.TabPages ) {
-        if ( IsGamepadTab( tp ) )  newL.Add( 0 );
-        else  newL.Add( m_Joystick[(int)tp.Tag].JSAssignment );
+        if ( IsGamepadTab( tp ) ) newL.Add( 0 );
+        else newL.Add( m_Joystick[( int )tp.Tag].JSAssignment );
       }
       JoystickCls.ReassignJsColor( newL );
 
@@ -962,51 +964,108 @@ namespace SCJMapper_V2
 
       JSCAL = new FormJSCalCurve( );
       // get current mapping from ActionMaps
-      String cmd = "";
+      String nodeText = "";
 
       // attach Yaw command
-      cmd = m_AT.FindCommand( "v_yaw - js" );
-      if ( cmd.ToLowerInvariant( ).EndsWith( "x" ) ) {
-        m_AT.ActionMaps.TuningX.Command = cmd;
-        JSCAL.YawTuning = m_AT.ActionMaps.TuningX;
+      DeviceCls dev =  null;
+      nodeText = m_AT.FindText( "v_yaw - js" ); // returns "" or a complete text ("action - command")
+      if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
+        dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
       }
-      else if ( cmd.ToLowerInvariant( ).EndsWith( "y" ) ) {
-        m_AT.ActionMaps.TuningY.Command = cmd;
-        JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
+      else {
+        nodeText = m_AT.FindText( "v_yaw - xi" );
+        if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
+          dev = m_Gamepad;
+        }
       }
-      else if ( cmd.ToLowerInvariant( ).EndsWith( "z" ) ) {
-        m_AT.ActionMaps.TuningZ.Command = cmd;
-        JSCAL.YawTuning = m_AT.ActionMaps.TuningZ;
+
+      if ( dev != null ) {
+        // JS commands that are supported
+        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
+          m_AT.ActionMaps.TuningX.JsDevice = dev;
+          m_AT.ActionMaps.TuningX.Command = nodeText;
+          JSCAL.YawTuning = m_AT.ActionMaps.TuningX;
+        }
+        else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
+          m_AT.ActionMaps.TuningY.JsDevice = dev;
+          m_AT.ActionMaps.TuningY.Command = nodeText;
+          JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
+        }
+        else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
+          m_AT.ActionMaps.TuningZ.JsDevice = dev;
+          m_AT.ActionMaps.TuningZ.Command = nodeText;
+          JSCAL.YawTuning = m_AT.ActionMaps.TuningZ;
+        }
+        // GP commands that are supported - X
+        else if ( nodeText.ToLowerInvariant( ).Contains( "_thumblx" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbrx" ) ) {
+          m_AT.ActionMaps.TuningX.JsDevice = dev;
+          m_AT.ActionMaps.TuningX.Command = nodeText;
+          JSCAL.YawTuning = m_AT.ActionMaps.TuningX;
+        }
       }
 
       // attach Pitch command
-      cmd = m_AT.FindCommand( "v_pitch - js" );
-      if ( cmd.ToLowerInvariant( ).EndsWith( "x" ) ) {
-        m_AT.ActionMaps.TuningX.Command = cmd;
-        JSCAL.PitchTuning = m_AT.ActionMaps.TuningX;
+      dev = null;
+      nodeText = m_AT.FindText( "v_pitch - js" );
+      if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
+        dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
       }
-      else if ( cmd.ToLowerInvariant( ).EndsWith( "y" ) ) {
-        m_AT.ActionMaps.TuningY.Command = cmd;
-        JSCAL.PitchTuning = m_AT.ActionMaps.TuningY;
-      }
-      else if ( cmd.ToLowerInvariant( ).EndsWith( "z" ) ) {
-        m_AT.ActionMaps.TuningZ.Command = cmd;
-        JSCAL.PitchTuning = m_AT.ActionMaps.TuningZ;
+      else {
+        nodeText = m_AT.FindText( "v_pitch - xi" );
+        if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
+          dev = m_Gamepad;
+        }
       }
 
-      // attach Roll command
-      cmd = m_AT.FindCommand( "v_roll - js" );
-      if ( cmd.ToLowerInvariant( ).EndsWith( "x" ) ) {
-        m_AT.ActionMaps.TuningX.Command = cmd;
-        JSCAL.RollTuning = m_AT.ActionMaps.TuningX;
+      if ( dev != null ) {
+        // JS commands that are supported
+        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
+          m_AT.ActionMaps.TuningX.JsDevice = dev;
+          m_AT.ActionMaps.TuningX.Command = nodeText;
+          JSCAL.PitchTuning = m_AT.ActionMaps.TuningX;
+        }
+        else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
+          m_AT.ActionMaps.TuningY.JsDevice = dev;
+          m_AT.ActionMaps.TuningY.Command = nodeText;
+          JSCAL.PitchTuning = m_AT.ActionMaps.TuningY;
+        }
+        else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
+          m_AT.ActionMaps.TuningZ.JsDevice = dev;
+          m_AT.ActionMaps.TuningZ.Command = nodeText;
+          JSCAL.PitchTuning = m_AT.ActionMaps.TuningZ;
+        }
+        // GP commands that are supported - either Y
+        else if ( nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
+          m_AT.ActionMaps.TuningY.JsDevice = dev;
+          m_AT.ActionMaps.TuningY.Command = nodeText;
+          JSCAL.PitchTuning = m_AT.ActionMaps.TuningY;
+        }
       }
-      else if ( cmd.ToLowerInvariant( ).EndsWith( "y" ) ) {
-        m_AT.ActionMaps.TuningY.Command = cmd;
-        JSCAL.RollTuning = m_AT.ActionMaps.TuningY;
+
+      // attach Roll command - cannot use gamepad here
+      dev = null;
+      nodeText = m_AT.FindText( "v_roll - js" );
+      if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
+        dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
       }
-      else if ( cmd.ToLowerInvariant( ).EndsWith( "z" ) ) {
-        m_AT.ActionMaps.TuningZ.Command = cmd;
-        JSCAL.RollTuning = m_AT.ActionMaps.TuningZ;
+
+      if ( dev != null ) {
+        // JS commands that are supported
+        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
+          m_AT.ActionMaps.TuningX.JsDevice = dev;
+          m_AT.ActionMaps.TuningX.Command = nodeText;
+          JSCAL.RollTuning = m_AT.ActionMaps.TuningX;
+        }
+        else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
+          m_AT.ActionMaps.TuningY.JsDevice = dev;
+          m_AT.ActionMaps.TuningY.Command = nodeText;
+          JSCAL.RollTuning = m_AT.ActionMaps.TuningY;
+        }
+        else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
+          m_AT.ActionMaps.TuningZ.JsDevice = dev;
+          m_AT.ActionMaps.TuningZ.Command = nodeText;
+          JSCAL.RollTuning = m_AT.ActionMaps.TuningZ;
+        }
       }
 
       // run

@@ -22,7 +22,7 @@ namespace SCJMapper_V2
 
     #region Static Items
 
-    public new const String DeviceName = "xboxpad";  // the device name used throughout this app
+    public new const String DeviceClass = "xboxpad";  // the device name used throughout this app
     public const String JsUnknown = "xi_";
     public new const String BlendedInput = "xi_reserved";
 
@@ -39,11 +39,11 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns true if the devicename is a gamepad
     /// </summary>
-    /// <param name="device"></param>
+    /// <param name="deviceClass"></param>
     /// <returns></returns>
-    static public new Boolean IsDevice( String device )
+    static public new Boolean IsDeviceClass( String deviceClass )
     {
-      return ( device == DeviceName );
+      return ( deviceClass == DeviceClass );
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ namespace SCJMapper_V2
     #endregion
 
     private Controller m_device;
-
+    private String m_devName = "Generic Gamepad";
     private Capabilities m_gpCaps = new Capabilities( );
 
     private State m_state = new State( );
@@ -87,10 +87,21 @@ namespace SCJMapper_V2
 
 
     /// <summary>
+    /// The DeviceClass of this instance
+    /// </summary>
+    public override String DevClass { get { return GamepadCls.DeviceClass; } }
+    /// <summary>
     /// The JS ProductName property
     /// </summary>
-    public override String DevName { get { return "Generic Gamepad"; } }
+    public override String DevName { get { return m_devName; } }
     /// <summary>
+
+    public void SetDeviceName( String devName )
+    {
+      m_devName = devName;
+      m_gPanel.Caption = DevName;
+    }
+
 
     /// <summary>
     /// Returns the mapping color for this device
@@ -349,6 +360,40 @@ namespace SCJMapper_V2
       m_gPanel.Button = buttons;
     }
 
+
+    /// <summary>
+    /// Collect the current data from the device
+    /// </summary>
+    public override void GetCmdData( String cmd, out int data )
+    {
+      // Make sure there is a valid device.
+      if ( m_device == null ) {
+        data = 0;
+        return;
+      }
+
+      // Get the state of the device - retaining the previous state to find the lates change
+      m_prevState = m_state;
+
+      // Poll the device for info.
+      try {
+        m_state = m_device.GetState( );
+
+        switch ( cmd ) {
+          case "xi_thumblx": data = (int) ((float)m_state.Gamepad.LeftThumbX/32.767f); break; // data should be -1000..1000
+          case "xi_thumbly": data = (int) ((float)m_state.Gamepad.LeftThumbY/32.767f); break;
+          case "xi_thumbrx": data = (int) ((float)m_state.Gamepad.RightThumbX/32.767f); break;
+          case "xi_thumbry": data = ( int )( ( float )m_state.Gamepad.RightThumbY / 32.767f ); break;
+          default: data = 0; break;
+        }
+
+      }
+      catch ( SharpDXException e ) {
+        log.Error( "Gamepad-GetData: Unexpected Poll Exception", e );
+        data = 0;
+        return;  // EXIT see ex code
+      }
+    }
 
 
     /// <summary>

@@ -27,8 +27,8 @@ namespace SCJMapper_V2
     static public String DevID( String device )
     {
       switch ( device.ToLower( ) ) {
-        case KeyboardCls.DeviceName: return "K";
-        case JoystickCls.DeviceName: return "J";
+        case KeyboardCls.DeviceClass: return "K";
+        case JoystickCls.DeviceClass: return "J";
         case "xboxpad": return "X";
         case "ps3pad": return "P";
         default: return "Z";
@@ -43,8 +43,8 @@ namespace SCJMapper_V2
     static public String DeviceFromID( String devID )
     {
       switch ( devID ) {
-        case "K": return KeyboardCls.DeviceName;
-        case "J": return JoystickCls.DeviceName;
+        case "K": return KeyboardCls.DeviceClass;
+        case "J": return JoystickCls.DeviceClass;
         case "X": return "xboxpad";
         case "P": return "ps3pad";
         default: return "unknown";
@@ -65,7 +65,7 @@ namespace SCJMapper_V2
     /// </summary>
     public ActionCls( )
     {
-      device = JoystickCls.DeviceName;
+      device = JoystickCls.DeviceClass;
     }
 
 
@@ -84,7 +84,7 @@ namespace SCJMapper_V2
       newAc.defBinding = this.defBinding;
       newAc.input = this.input;
       // reassign the jsX part for Joystick commands
-      if ( ( this.device == JoystickCls.DeviceName ) && ( newAc.device == JoystickCls.DeviceName ) ) {
+      if ( ( this.device == JoystickCls.DeviceClass ) && ( newAc.device == JoystickCls.DeviceClass ) ) {
         int oldJsN = JoystickCls.JSNum( this.input );
         if ( JoystickCls.IsJSValid( oldJsN ) ) {
           if ( newJsList.ContainsKey( oldJsN ) ) newAc.input = JoystickCls.ReassignJSTag( this.input, newJsList[oldJsN] );

@@ -22,7 +22,7 @@ namespace SCJMapper_V2
 
     #region Static Items
 
-    public new const String DeviceName = "joystick";  // the device name used throughout this app
+    public new const String DeviceClass = "joystick";  // the device name used throughout this app
 
     public const String JsUnknown = "jsx_";
     public new const String BlendedInput = "jsx_reserved";
@@ -69,12 +69,50 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns true if the devicename is a joystick
     /// </summary>
-    /// <param name="device"></param>
+    /// <param name="deviceClass"></param>
     /// <returns></returns>
-    static public new Boolean IsDevice( String device )
+    static public new Boolean IsDeviceClass( String deviceClass )
     {
-      return ( device == DeviceName );
+      return ( deviceClass == DeviceClass );
     }
+
+    public static void DecompJsCommand( String jsCmd, out String jsTag, out String sAction )
+    {
+      jsTag = ""; sAction = "";
+      String[] e = jsCmd.Split( new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries );
+      if ( e.Length > 1 ) {
+        jsTag = e[0].Trim( ) + "_";
+        sAction = e[1].Trim( );
+      }
+    }
+
+    /// <summary>
+    /// Returns the jsN part from a joystick command
+    /// i.e.  js1_x returns js1
+    /// </summary>
+    /// <param name="jsCmd">The joystick command in 'jsN_command' notation</param>
+    /// <returns>the jsN part or an empty string</returns>
+    public static String JsTagFromJsCommand( String jsCmd )
+    {
+      String jsTag, sAction;
+      DecompJsCommand( jsCmd, out jsTag, out sAction );
+      return jsTag;
+    }
+
+    /// <summary>
+    /// Returns the stick action part from a node text
+    /// i.e.  js1_x returns x
+    /// </summary>
+    /// <param name="jsCmd">The joystick command in 'jsN_command' notation</param>
+    /// <returns>the stick action part or an empty string</returns>
+    public static String ActionFromJsCommand( String jsCmd )
+    {
+      String jsTag, sAction;
+      DecompJsCommand( jsCmd, out jsTag, out sAction );
+      return sAction;
+    }
+
+
 
 
     /// <summary>
@@ -222,6 +260,10 @@ namespace SCJMapper_V2
     }
 
 
+    /// <summary>
+    /// The DeviceClass of this instance
+    /// </summary>
+    public override String DevClass { get { return JoystickCls.DeviceClass; } }
     /// <summary>
     /// The JS ProductName property
     /// </summary>
@@ -629,7 +671,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Collect the current data from the device
     /// </summary>
-    public void GetCmdData( String cmd, out int data )
+    public override void GetCmdData( String cmd, out int data )
     {
       // TODO: Expand this out into a joystick class (see commit for details)
       Dictionary<string, string> axies = new Dictionary<string, string>( )

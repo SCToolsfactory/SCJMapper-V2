@@ -5,7 +5,7 @@ SC Joystick Mapper  (.Net 4; using sharpDX/OpenTK wrapper)<br>
 this should work with Win8.x out of the box<br>
 <br>
 <br>
-using sharpDX 2.6.2 .net wrapper  (http://sharpdx.org/)<br>
+using sharpDX 2.6.3 .net wrapper  (http://sharpdx.org/)<br>
 <br>
 Use References to:<br>
 DirectX11-net40\SharpDX.dll<br>

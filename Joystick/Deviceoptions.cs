@@ -28,9 +28,9 @@ namespace SCJMapper_V2
 
     List<String> m_stringOptions = new List<String>( );
     Options m_options = null;
-    JoystickTuningParameter m_tuningX = null;
-    JoystickTuningParameter m_tuningY = null;
-    JoystickTuningParameter m_tuningZ = null;
+    DeviceTuningParameter m_tuningX = null;
+    DeviceTuningParameter m_tuningY = null;
+    DeviceTuningParameter m_tuningZ = null;
 
     // ctor
     public Deviceoptions( Options options )

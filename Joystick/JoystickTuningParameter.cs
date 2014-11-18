@@ -9,13 +9,14 @@ namespace SCJMapper_V2
   /// <summary>
   /// set of parameters to tune the Joystick
   /// </summary>
-  public class JoystickTuningParameter
+  public class DeviceTuningParameter
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     private String m_command = "";  // v_pitch - js1_x ..
     private String m_cmdCtrl = "";  // x, y, rotz ...
-    private int m_jsN = 0;   // jsN
+    private String m_type = "";     // joystick OR xboxpad
+    private int m_devInstanceNo = -1;         // jsN - instance in XML
 
     String m_option = ""; // the option name (level where it applies)
 
@@ -36,31 +37,35 @@ namespace SCJMapper_V2
     private List<String> m_PtsIn = new List<String>( );
     private List<String> m_PtsOut = new List<String>( );
 
-    private JoystickList m_joystickList = null;
-    private JoystickCls m_js = null;
+    private DeviceCls m_device = null;
 
-    public JoystickTuningParameter( JoystickList jsList )
+    public DeviceTuningParameter(  )
     {
-      m_joystickList = jsList;
     }
 
     #region Properties
 
-    public JoystickCls JsDevice
+    public DeviceCls JsDevice
     {
-      get { return m_js; }
+      get { return m_device; }
+      set { m_device = value;
+        m_type = "";
+        m_devInstanceNo = -1;
+        if ( JoystickCls.IsDeviceClass( m_device.DevClass ) ) {
+          m_type = m_device.DevClass;
+          m_devInstanceNo = (m_device as JoystickCls).JSAssignment;
+        }
+        else if ( GamepadCls.IsDeviceClass( m_device.DevClass ) ) {
+          m_type = m_device.DevClass;
+          m_devInstanceNo = 1; // supports ONE gamepad
+        }
+       }
     }
 
 
-    public int JsN
+    public int DevInstanceNo
     {
-      get { return m_jsN; }
-      set
-      {
-        m_jsN = value;
-        m_js = m_joystickList.Find_jsN( m_jsN );
-        m_deviceName = m_js.DevName;
-      }
+      get { return m_devInstanceNo; }
     }
 
     public String DeviceName
@@ -151,15 +156,47 @@ namespace SCJMapper_V2
     private void DecomposeCommand( )
     {
       // pobulate from input
-      String[] e = Command.Split( new Char[] { '-' } );  // v_pitch - js1_x
-      m_cmdCtrl = ""; m_jsN = 0;
-      if ( e.Length > 1 ) {
-        // get parts
-        m_cmdCtrl = e[1].Trim( ).Split( new Char[] { '_' } )[1]; //js1_x -> x
-        m_jsN = JoystickCls.JSNum( e[1].Trim( ) ); // get the right Joystick from jsN
-        m_js = m_joystickList.Find_jsN( m_jsN );
-        m_deviceName = m_js.DevName;
-        m_option = String.Format( "pilot_move_{0}", m_cmdCtrl ); // update from Command
+      // something like "v_pitch - js1_x" OR "v_pitch - xi_thumbl" OR "v_pitch - ximod+xi_thumbl+xi_mod"
+      String cmd = ActionTreeNode.CommandFromNodeText( Command );
+      String action = ActionTreeNode.ActionFromNodeText( Command );
+      m_cmdCtrl = "";
+      if ( !String.IsNullOrWhiteSpace(cmd) ) {
+        // decomp gamepad entries - could have modifiers so check for contains...
+        if ( cmd.Contains( "xi_thumblx" ) ) {
+          // gamepad
+          m_cmdCtrl = "xi_thumblx";
+          m_deviceName = m_device.DevName;
+          if ( action.Contains( "pitch" ) ) m_option = String.Format( "pilot_movepitch" );
+          else m_option = String.Format( "pilot_moveyaw" );
+        }
+        else if ( cmd.Contains( "xi_thumbly" ) ) {
+          // gamepad
+          m_cmdCtrl = "xi_thumbly";
+          m_deviceName = m_device.DevName;
+          if ( action.Contains( "pitch" ) ) m_option = String.Format( "pilot_movepitch" );
+          else m_option = String.Format( "pilot_moveyaw" );
+        }
+        else if ( cmd.Contains( "xi_thumbrx" ) ) {
+          // gamepad
+          m_cmdCtrl = "xi_thumbrx";
+          m_deviceName = m_device.DevName;
+          if ( action.Contains( "pitch" ) ) m_option = String.Format( "pilot_movepitch" );
+          else m_option = String.Format( "pilot_moveyaw" );
+        }
+        else if ( cmd.Contains( "xi_thumbry" ) ) {
+          // gamepad
+          m_cmdCtrl = "xi_thumbry";
+          m_deviceName = m_device.DevName;
+          if ( action.Contains( "pitch" ) ) m_option = String.Format( "pilot_movepitch" );
+          else m_option = String.Format( "pilot_moveyaw" );
+        }
+        // assume joystick
+        else {
+          // get parts
+          m_cmdCtrl = JoystickCls.ActionFromJsCommand( cmd ); //js1_x -> x; js2_rotz -> rotz
+          m_deviceName = m_device.DevName;
+          m_option = String.Format( "pilot_move_{0}", m_cmdCtrl ); // update from Command
+        }
       }
     }
 
@@ -196,7 +233,7 @@ namespace SCJMapper_V2
       if ( ( m_senseEnabled || m_expEnabled || m_invertEnabled || m_ptsEnabled ) == false ) return ""; // not used
 
       String tmp = "";
-      tmp += String.Format( "\t<options type=\"joystick\" instance=\"{0}\">\n", m_jsN.ToString( ) );
+      tmp += String.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", m_type, m_devInstanceNo.ToString( ) );
       tmp += String.Format( "\t\t<{0} ", m_option );
 
       if ( InvertUsed ) {
@@ -232,24 +269,26 @@ namespace SCJMapper_V2
 
     /// <summary>
     /// Read the options from the XML
-    ///  can get only the 3 ones for Move X,Y,RotZ right now
+    ///  can get only the 3 ones for Move X,Y,RotZ, pitch and yaq right now
     /// </summary>
     /// <param name="reader">A prepared XML reader</param>
     /// <param name="instance">the Josyticj instance number</param>
     /// <returns></returns>
-    public Boolean Options_fromXML( XmlReader reader, int instance )
+    public Boolean Options_fromXML( XmlReader reader, String type, int instance )
     {
+      m_type = type;
+
       String invert = "";
       String sensitivity = "";
       String exponent = "";
       String instance_inv = "";
 
       m_option = reader.Name;
-      JsN = instance;
+      m_devInstanceNo = instance;
 
-      // derive from pilot_move_x || pilot_move_rotx (nothing bad should arrive here)
+      // derive from pilot_move_x || pilot_move_rotx || pilot_moveyaw (nothing bad should arrive here)
       String[] e = m_option.ToLowerInvariant( ).Split( new char[] { '_' } );
-      if ( e.Length >= 2 ) m_cmdCtrl = e[2];
+      if ( e.Length > 2 ) m_cmdCtrl = e[2]; // TODO - see if m_cmdCtrl is needed to be derived here
 
 
       if ( reader.HasAttributes ) {

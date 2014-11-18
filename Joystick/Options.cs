@@ -28,16 +28,16 @@ namespace SCJMapper_V2
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     List<String> m_stringOptions = new List<String>( );
-    JoystickTuningParameter m_tuningX = null;
-    JoystickTuningParameter m_tuningY = null;
-    JoystickTuningParameter m_tuningZ = null;
+    DeviceTuningParameter m_tuningX = null;
+    DeviceTuningParameter m_tuningY = null;
+    DeviceTuningParameter m_tuningZ = null;
 
     // ctor
     public Options( JoystickList jsList )
     {
-      m_tuningX = new JoystickTuningParameter( jsList ); // can be x or rotx
-      m_tuningY = new JoystickTuningParameter( jsList ); // can be y or roty
-      m_tuningZ = new JoystickTuningParameter( jsList ); // can be z or rotz
+      m_tuningX = new DeviceTuningParameter(  ); // can be x or rotx
+      m_tuningY = new DeviceTuningParameter(  ); // can be y or roty
+      m_tuningZ = new DeviceTuningParameter(  ); // can be z or rotz
     }
 
     public int Count
@@ -51,26 +51,26 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns the X-Tuning item
     /// </summary>
-    public JoystickTuningParameter TuneX
+    public DeviceTuningParameter TuneX
     {
       get { return m_tuningX; }
     }
     /// <summary>
     /// Returns the Y-Tuning item
     /// </summary>
-    public JoystickTuningParameter TuneY
+    public DeviceTuningParameter TuneY
     {
       get { return m_tuningY; }
     }
     /// <summary>
     /// Returns the Z-Tuning item
     /// </summary>
-    public JoystickTuningParameter TuneZ
+    public DeviceTuningParameter TuneZ
     {
       get { return m_tuningZ; }
     }
 
-
+    /*
     /// <summary>
     /// reassign the JsN Tag
     /// </summary>
@@ -83,7 +83,7 @@ namespace SCJMapper_V2
         if ( m_tuningZ.JsN == kv.Key ) m_tuningZ.JsN = kv.Value;
       }
     }
-
+    */
 
     private String[] FormatXml( string xml )
     {
@@ -176,7 +176,7 @@ namespace SCJMapper_V2
 
       if ( reader.HasAttributes ) {
         type = reader["type"];
-        if ( type.ToLowerInvariant( ) != "joystick" ) {
+        if ( !(( type.ToLowerInvariant( ) == "joystick") || (type.ToLowerInvariant( ) == "xboxpad") ) ) {
           // save as plain text
           if ( !m_stringOptions.Contains( xml ) ) m_stringOptions.Add( xml );
           return true;
@@ -226,13 +226,20 @@ namespace SCJMapper_V2
         while ( !reader.EOF ) {
 
           if ( reader.Name == "pilot_move_x" || reader.Name == "pilot_move_rotx" ) {
-            m_tuningX.Options_fromXML( reader, int.Parse( instance ) );
+            m_tuningX.Options_fromXML( reader, type, int.Parse( instance ) );
           }
           else if ( reader.Name == "pilot_move_y" || reader.Name == "pilot_move_roty" ) {
-            m_tuningY.Options_fromXML( reader, int.Parse( instance ) );
+            m_tuningY.Options_fromXML( reader, type, int.Parse( instance ) );
           }
           else if ( reader.Name == "pilot_move_z" || reader.Name == "pilot_move_rotz" ) {
-            m_tuningZ.Options_fromXML( reader, int.Parse( instance ) );
+            m_tuningZ.Options_fromXML( reader, type, int.Parse( instance ) );
+          }
+          // fixed - get pitch as X and Yaw as Y
+          else if ( reader.Name == "pilot_movepitch" ) {
+            m_tuningX.Options_fromXML( reader, type, int.Parse( instance ) );
+          }
+          else if ( reader.Name == "pilot_moveyaw" ) {
+            m_tuningY.Options_fromXML( reader, type, int.Parse( instance ) );
           }
 
           else if ( reader.Name == "pilot_throttle" ) {

@@ -116,6 +116,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="actions\ActionTreeNode.cs" />
     <Compile Include="appConfiguration.cs" />
     <Compile Include="AppSettings.cs" />
     <Compile Include="DeviceCls.cs" />

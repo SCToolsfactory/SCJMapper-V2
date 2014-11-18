@@ -11,9 +11,9 @@ namespace SCJMapper_V2
   /// </summary>
   public abstract class DeviceCls
   {
-    public const String DeviceName ="UNDEF";
+    public const String DeviceClass ="UNDEF";
     public const String BlendedInput = " ";
-    static public Boolean IsDevice( String device ) { return false; }
+    static public Boolean IsDeviceClass( String deviceClass ) { return false; }
 
     public enum InputKind
     {
@@ -23,6 +23,7 @@ namespace SCJMapper_V2
       Gamepad,
     }
 
+    public abstract String DevClass { get; }
     public abstract String DevName { get; }
     public abstract System.Drawing.Color MapColor { get; }
 
@@ -31,6 +32,7 @@ namespace SCJMapper_V2
     public virtual void ApplySettings( ){}
 
     public abstract String GetLastChange( );
+    public abstract void GetCmdData( String cmd, out int data );
     public abstract void GetData( );
   }
 }
