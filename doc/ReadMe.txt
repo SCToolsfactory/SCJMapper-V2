@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.7 - Build 33
-(c) Cassini, StandardToaster - 13-November-2014
+SC Joystick Mapper V 2.8 - Build 34 BETA
+(c) Cassini, StandardToaster - 18-November-2014
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.7)
-SCJMapper.exe.config         Program config (V2.7)               - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.8 BETA)
+SCJMapper.exe.config         Program config (V2.8)               - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -13,7 +13,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.7.pdf    Quick Guide
+SCJMapper_QGuide V2.8beta.pdf    Quick Guide
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images                       - graphics folder MUST be in the same folder as the Exe file
@@ -29,6 +29,12 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.8 - BETA
+- new feature - add keyboard input
+- new feature - add gamepad input as xboxpad
+- new feature - add gamepad for tuning 
+- fix - tuning copy to all axis now applies immediately
+- improvement - cleanup of some inconsistencies
 V 2.7 - Build 33
 - fix - if an axis is not mapped the prog will not longer crash (was null ptr exception)
 - doc update 2.7

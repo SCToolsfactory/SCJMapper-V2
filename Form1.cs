@@ -594,10 +594,14 @@ namespace SCJMapper_V2
       lblLastJ.Text = ctrl;
       if ( JoystickCls.CanThrottle( ctrl ) ) {
         cbxThrottle.Enabled = true;
+        cbxInvert.Enabled = true;
+      }
+      else if ( GamepadCls.CanInvert( ctrl ) ) {
+        cbxInvert.Enabled = true;
       }
       else {
-        cbxThrottle.Checked = false;
-        cbxThrottle.Enabled = false;
+        cbxThrottle.Checked = false; cbxThrottle.Enabled = false;
+        cbxInvert.Checked = false; cbxInvert.Enabled = false;
       }
     }
 
@@ -621,12 +625,12 @@ namespace SCJMapper_V2
 
     private void btFind_Click( object sender, EventArgs e )
     {
-      m_AT.FindCtrl( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ) ); // find the action for a Control (joystick input)
+      m_AT.FindAndSelectCtrl( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ) ); // find the action for a Control (joystick input)
     }
 
     private void btAssign_Click( object sender, EventArgs e )
     {
-      m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), InputMode );
+      m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), cbxInvert.Checked, InputMode );
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
 
@@ -636,7 +640,7 @@ namespace SCJMapper_V2
     private void btClear_Click( object sender, EventArgs e )
     {
 
-      m_AT.UpdateSelectedItem( "", InputMode );
+      m_AT.UpdateSelectedItem( "", false, InputMode );
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
 
@@ -952,7 +956,7 @@ namespace SCJMapper_V2
 
     private void btBlend_Click( object sender, EventArgs e )
     {
-      m_AT.UpdateSelectedItem( DeviceCls.BlendedInput, InputMode );
+      m_AT.UpdateSelectedItem( DeviceCls.BlendedInput, false, InputMode );
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
 
@@ -968,12 +972,24 @@ namespace SCJMapper_V2
 
       // attach Yaw command
       DeviceCls dev =  null;
-      nodeText = m_AT.FindText( "v_yaw - js" ); // returns "" or a complete text ("action - command")
+      String find = "";
+
+      find = ActionTreeNode.ComposeNodeText( "v_yaw", ActionTreeNode.REG_MOD, "js" );
+      nodeText = m_AT.FindText( "spaceship_movement", find ); // returns "" or a complete text ("action - command")
+      if ( String.IsNullOrWhiteSpace( nodeText ) ) {
+        find = ActionTreeNode.ComposeNodeText( "v_yaw", ActionTreeNode.INV_MOD, "js" );
+        nodeText = m_AT.FindText( "spaceship_movement", find ); // find inverted ones too
+      }
       if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
         dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
       }
       else {
-        nodeText = m_AT.FindText( "v_yaw - xi" );
+        find = ActionTreeNode.ComposeNodeText( "v_yaw", ActionTreeNode.REG_MOD, "xi" );
+        nodeText = m_AT.FindText( "spaceship_movement", find );
+        if ( String.IsNullOrWhiteSpace( nodeText ) ) {
+          find = ActionTreeNode.ComposeNodeText( "v_yaw", ActionTreeNode.INV_MOD, "xi" );
+          nodeText = m_AT.FindText( "spaceship_movement", find ); // find inverted ones too
+        }
         if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
           dev = m_Gamepad;
         }
@@ -982,36 +998,46 @@ namespace SCJMapper_V2
       if ( dev != null ) {
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
-          m_AT.ActionMaps.TuningX.JsDevice = dev;
-          m_AT.ActionMaps.TuningX.Command = nodeText;
+          m_AT.ActionMaps.TuningX.GameDevice = dev;
+          m_AT.ActionMaps.TuningX.ActionCommand = nodeText;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningX;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
-          m_AT.ActionMaps.TuningY.JsDevice = dev;
-          m_AT.ActionMaps.TuningY.Command = nodeText;
+          m_AT.ActionMaps.TuningY.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
-          m_AT.ActionMaps.TuningZ.JsDevice = dev;
-          m_AT.ActionMaps.TuningZ.Command = nodeText;
+          m_AT.ActionMaps.TuningZ.GameDevice = dev;
+          m_AT.ActionMaps.TuningZ.ActionCommand = nodeText;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningZ;
         }
         // GP commands that are supported - X
         else if ( nodeText.ToLowerInvariant( ).Contains( "_thumblx" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbrx" ) ) {
-          m_AT.ActionMaps.TuningX.JsDevice = dev;
-          m_AT.ActionMaps.TuningX.Command = nodeText;
+          m_AT.ActionMaps.TuningX.GameDevice = dev;
+          m_AT.ActionMaps.TuningX.ActionCommand = nodeText;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningX;
         }
       }
 
       // attach Pitch command
       dev = null;
-      nodeText = m_AT.FindText( "v_pitch - js" );
+      find = ActionTreeNode.ComposeNodeText( "v_pitch", ActionTreeNode.REG_MOD, "js" );
+      nodeText = m_AT.FindText( "spaceship_movement", find ); // returns "" or a complete text ("action - command")
+      if ( String.IsNullOrWhiteSpace( nodeText ) ) {
+        find = ActionTreeNode.ComposeNodeText( "v_pitch", ActionTreeNode.INV_MOD, "js" );
+        nodeText = m_AT.FindText( "spaceship_movement", find ); // find inverted ones too
+      }
       if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
         dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
       }
       else {
-        nodeText = m_AT.FindText( "v_pitch - xi" );
+        find = ActionTreeNode.ComposeNodeText( "v_pitch", ActionTreeNode.REG_MOD, "xi" );
+        nodeText = m_AT.FindText( "spaceship_movement", find );
+        if ( String.IsNullOrWhiteSpace( nodeText ) ) {
+          find = ActionTreeNode.ComposeNodeText( "v_pitch", ActionTreeNode.INV_MOD, "xi" );
+          nodeText = m_AT.FindText( "spaceship_movement", find ); // find inverted ones too
+        }
         if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
           dev = m_Gamepad;
         }
@@ -1020,31 +1046,36 @@ namespace SCJMapper_V2
       if ( dev != null ) {
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
-          m_AT.ActionMaps.TuningX.JsDevice = dev;
-          m_AT.ActionMaps.TuningX.Command = nodeText;
+          m_AT.ActionMaps.TuningX.GameDevice = dev;
+          m_AT.ActionMaps.TuningX.ActionCommand = nodeText;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningX;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
-          m_AT.ActionMaps.TuningY.JsDevice = dev;
-          m_AT.ActionMaps.TuningY.Command = nodeText;
+          m_AT.ActionMaps.TuningY.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningY;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
-          m_AT.ActionMaps.TuningZ.JsDevice = dev;
-          m_AT.ActionMaps.TuningZ.Command = nodeText;
+          m_AT.ActionMaps.TuningZ.GameDevice = dev;
+          m_AT.ActionMaps.TuningZ.ActionCommand = nodeText;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningZ;
         }
         // GP commands that are supported - either Y
         else if ( nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
-          m_AT.ActionMaps.TuningY.JsDevice = dev;
-          m_AT.ActionMaps.TuningY.Command = nodeText;
+          m_AT.ActionMaps.TuningY.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningY;
         }
       }
 
       // attach Roll command - cannot use gamepad here
       dev = null;
-      nodeText = m_AT.FindText( "v_roll - js" );
+      find = ActionTreeNode.ComposeNodeText( "v_roll", ActionTreeNode.REG_MOD, "js" );
+      nodeText = m_AT.FindText( "spaceship_movement", find ); // returns "" or a complete text ("action - command")
+      if ( String.IsNullOrWhiteSpace( nodeText ) ) {
+        find = ActionTreeNode.ComposeNodeText( "v_roll", ActionTreeNode.INV_MOD, "js" );
+        nodeText = m_AT.FindText( "spaceship_movement", find ); // find inverted ones too
+      }
       if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
         dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
       }
@@ -1052,18 +1083,18 @@ namespace SCJMapper_V2
       if ( dev != null ) {
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
-          m_AT.ActionMaps.TuningX.JsDevice = dev;
-          m_AT.ActionMaps.TuningX.Command = nodeText;
+          m_AT.ActionMaps.TuningX.GameDevice = dev;
+          m_AT.ActionMaps.TuningX.ActionCommand = nodeText;
           JSCAL.RollTuning = m_AT.ActionMaps.TuningX;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
-          m_AT.ActionMaps.TuningY.JsDevice = dev;
-          m_AT.ActionMaps.TuningY.Command = nodeText;
+          m_AT.ActionMaps.TuningY.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
           JSCAL.RollTuning = m_AT.ActionMaps.TuningY;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
-          m_AT.ActionMaps.TuningZ.JsDevice = dev;
-          m_AT.ActionMaps.TuningZ.Command = nodeText;
+          m_AT.ActionMaps.TuningZ.GameDevice = dev;
+          m_AT.ActionMaps.TuningZ.ActionCommand = nodeText;
           JSCAL.RollTuning = m_AT.ActionMaps.TuningZ;
         }
       }

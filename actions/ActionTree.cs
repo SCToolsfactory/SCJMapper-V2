@@ -98,7 +98,7 @@ namespace SCJMapper_V2
       // could return more than one if the action is the same in different actionmaps
       foreach ( ActionTreeNode mtn in masterNode ) {
         if ( mtn.Parent.Name == node.Parent.Name ) {
-          mtn.Command = node.Command; mtn.BackColor = node.BackColor;
+          mtn.Command = node.Command; mtn.InvertCommand = node.InvertCommand; mtn.BackColor = node.BackColor;
         }
       }
     }
@@ -307,15 +307,15 @@ namespace SCJMapper_V2
     /// First apply to the GUI tree where the selection happend then copy it over to master tree
     /// </summary>
     /// <param name="input">The new Text property</param>
-    public void UpdateSelectedItem( String input, DeviceCls.InputKind inKind )
+    public void UpdateSelectedItem( String input, Boolean invert, DeviceCls.InputKind inKind )
     {
       log.Debug( "UpdateSelectedItem - Entry" );
 
       if ( Ctrl.SelectedNode == null ) return;
 
-      ActionCls ac = FindAction( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name );
-      UpdateActionFromInput( input, ac );
-      UpdateNodeFromAction((ActionTreeNode)Ctrl.SelectedNode, ac, inKind );
+      ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name );
+      UpdateActionFromInput( input, invert, ac );
+      UpdateNodeFromAction( ( ActionTreeNode )Ctrl.SelectedNode, ac, inKind );
     }
 
     /// <summary>
@@ -324,15 +324,15 @@ namespace SCJMapper_V2
     /// <param name="actionMap">The actionmap name</param>
     /// <param name="action">The action</param>
     /// <returns>An action or null if not found</returns>
-    private ActionCls FindAction( String actionMap, String action )
+    private ActionCls FindActionObject( String actionMap, String action )
     {
-      log.Debug( "UpdateAction - Entry" );
+      log.Debug( "FindActionObject - Entry" );
       // Apply the input to the ActionTree
       ActionCls ac = null;
       ActionMapCls ACM = ActionMaps.Find( delegate( ActionMapCls acm ) { return acm.name == actionMap; } );
       if ( ACM != null ) ac = ACM.Find( delegate( ActionCls _AC ) { return _AC.key == action; } );
       if ( ac == null ) {
-        log.Error( "FindAction - Action Not found in tree" );
+        log.Error( "FindActionObject - Action Not found in tree" );
         return null;  // ERROR - Action Not found in tree
       }
       return ac;
@@ -345,14 +345,15 @@ namespace SCJMapper_V2
     /// <param name="input">The input command</param>
     /// <param name="action">The action to update</param>
     /// <param name="inKind">The input device</param>
-    private void UpdateActionFromInput( String input, ActionCls action )
+    private void UpdateActionFromInput( String input, Boolean invert, ActionCls action )
     {
-      log.Debug( "UpdateAction - Entry" );
+      log.Debug( "UpdateActionFromInput - Entry" );
       if ( action == null ) return;
 
       // Apply the input to the ActionTree
       if ( String.IsNullOrEmpty( input ) ) {
         // unmapped - handle the blended ones from setting
+        action.inverted = false; // reset in any case
         if ( JoystickCls.IsDeviceClass( action.device ) && BlendUnmappedJS ) action.input = JoystickCls.BlendedInput;
         else if ( GamepadCls.IsDeviceClass( action.device ) && BlendUnmappedGP ) action.input = GamepadCls.BlendedInput;
         else action.input = "";
@@ -360,6 +361,7 @@ namespace SCJMapper_V2
       else {
         // mapped ones
         action.input = input;
+        action.inverted = invert;
       }
       Dirty = true;
     }
@@ -374,7 +376,7 @@ namespace SCJMapper_V2
     /// <param name="inKind">The input device</param>
     private void UpdateNodeFromAction( ActionTreeNode node, ActionCls action, DeviceCls.InputKind inKind )
     {
-      log.Debug( "UpdateNode - Entry" );
+      log.Debug( "UpdateNodeFromAction - Entry" );
       if ( action == null ) return;
 
       // applies only to ActionNodes
@@ -382,22 +384,24 @@ namespace SCJMapper_V2
         // input is either "" or a valid mapping or a blended mapping
         if ( String.IsNullOrEmpty( action.input ) ) {
           // new unmapped
-          node.Command = ""; node.BackColor = MyColors.UnassignedColor;
+          node.Command = ""; node.InvertCommand = false; node.BackColor = MyColors.UnassignedColor;
         }
         // blended mapped ones - can only get a Blend Background
         else if ( JoystickCls.IsDeviceClass( action.device ) && ( action.input == JoystickCls.BlendedInput ) ) {
-          node.Command = action.input; node.BackColor = MyColors.BlendedColor;
+          node.Command = action.input; node.InvertCommand = false; node.BackColor = MyColors.BlendedColor;
         }
         else if ( GamepadCls.IsDeviceClass( action.device ) && ( action.input == GamepadCls.BlendedInput ) ) {
-          node.Command = action.input; node.BackColor = MyColors.BlendedColor;
+          node.Command = action.input; node.InvertCommand = false; node.BackColor = MyColors.BlendedColor;
         }
         else if ( action.input == DeviceCls.BlendedInput ) {
           // Manually Blended input
-          node.Command = action.input;  node.BackColor = MyColors.BlendedColor;
+          node.Command = action.input; node.InvertCommand = false; node.BackColor = MyColors.BlendedColor;
         }
         else {
           // mapped ( regular ones )
           node.Command = action.input;
+          node.InvertCommand = action.inverted; 
+
           // background is along the input 
           if ( inKind == DeviceCls.InputKind.Joystick ) {
             int jNum = JoystickCls.JSNum( action.input );
@@ -431,12 +435,12 @@ namespace SCJMapper_V2
       foreach ( ActionMapCls acm in ActionMaps ) {
         if ( IgnoreMaps.Contains( "," + acm.name + "," ) ) break; // next
         try {
-          ActionTreeNode amTn = (ActionTreeNode)m_MasterTree.Nodes[acm.name]; // get the map node
+          ActionTreeNode amTn = ( ActionTreeNode )m_MasterTree.Nodes[acm.name]; // get the map node
           // find the item to reload into the treeview
           foreach ( ActionCls ac in acm ) {
             try {
-              ActionTreeNode tnl = (ActionTreeNode)amTn.Nodes[ac.key];
-              UpdateActionFromInput(ac.input, ac ); // this may apply (un)Blending if needed
+              ActionTreeNode tnl = ( ActionTreeNode )amTn.Nodes[ac.key];
+              UpdateActionFromInput( ac.input, ac.inverted, ac ); // this may apply (un)Blending if needed
               // input kind priority first
               if ( JoystickCls.IsJsN( ac.input ) ) {
                 UpdateNodeFromAction( tnl, ac, DeviceCls.InputKind.Joystick );
@@ -480,9 +484,9 @@ namespace SCJMapper_V2
     ///   this method is applied to the GUI TreeView only
     /// </summary>
     /// <param name="m_MasterTree">The string to find</param>
-    public void FindCtrl( String ctrl )
+    public void FindAndSelectCtrl( String ctrl )
     {
-      log.Debug( "FindCtrl - Entry" );
+      log.Debug( "FindAndSelectCtrl - Entry" );
 
       Boolean found = false;
       foreach ( ActionTreeNode tn in Ctrl.Nodes ) {
@@ -503,40 +507,96 @@ namespace SCJMapper_V2
     /// <summary>
     /// Find a control that contains the Command
     /// </summary>
-    /// <param name="m_MasterTree">The string to find</param>
-    public String FindCommand( String ctrl )
+    /// <param name="actionmap">The actionmap to find the string</param>
+    /// <param name="text">The string to find</param>
+    public String FindAction( String actionmap, String action )
     {
-      log.Debug( "FindCtrl - Entry" );
+      log.Debug( "FindAction - Entry" );
 
       foreach ( ActionTreeNode tn in Ctrl.Nodes ) {
-        // have to search nodes of nodes
-        foreach ( ActionTreeNode stn in tn.Nodes ) {
-          if ( stn.Command.Contains( ctrl ) ) {
-            return stn.Text;
+        if ( String.IsNullOrEmpty( actionmap ) || ( tn.Text == actionmap ) ) {
+          // have to search nodes of nodes
+          foreach ( ActionTreeNode stn in tn.Nodes ) {
+            if ( stn.Action.Contains( action ) ) {
+              return stn.Text;
+            }
           }
         }
       }
       return "";
     }
 
+    /// <summary>
+    /// Find a control that contains the Action
+    /// </summary>
+    /// <param name="text">The string to find</param>
+    public String FindAction( String action )
+    {
+      return FindAction( "", action );
+    }
+
 
     /// <summary>
-    /// Find a control that contains the Text
+    /// Find a control that contains the Command
     /// </summary>
-    /// <param name="m_MasterTree">The string to find</param>
-    public String FindText( String text )
+    /// <param name="actionmap">The actionmap to find the string</param>
+    /// <param name="text">The string to find</param>
+    public String FindCommand( String actionmap, String command )
     {
-      log.Debug( "FindText - Entry" );
+      log.Debug( "FindCommand - Entry" );
 
       foreach ( ActionTreeNode tn in Ctrl.Nodes ) {
-        // have to search nodes of nodes
-        foreach ( ActionTreeNode stn in tn.Nodes ) {
-          if ( stn.Text.Contains( text ) ) {
-            return stn.Text;
+        if ( String.IsNullOrEmpty( actionmap ) || ( tn.Text == actionmap ) ) {
+          // have to search nodes of nodes
+          foreach ( ActionTreeNode stn in tn.Nodes ) {
+            if ( stn.Command.Contains( command ) ) {
+              return stn.Text;
+            }
           }
         }
       }
       return "";
+    }
+
+    /// <summary>
+    /// Find a control that contains the Command
+    /// </summary>
+    /// <param name="text">The string to find</param>
+    public String FindCommand( String command )
+    {
+      return FindCommand( "", command );
+    }
+
+
+    /// <summary>
+    /// Find a control the the actionmap that contains the Text
+    /// </summary>
+    /// <param name="actionmap">The actionmap to find the string</param>
+    /// <param name="text">The string to find</param>
+    public String FindText( String actionmap, String text )
+    {
+      log.Debug( "FindText - Entry" );
+
+      foreach ( ActionTreeNode tn in Ctrl.Nodes ) {
+        if ( String.IsNullOrEmpty( actionmap ) || ( tn.Text == actionmap ) ) {
+          // have to search nodes of nodes
+          foreach ( ActionTreeNode stn in tn.Nodes ) {
+            if ( stn.Text.Contains( text ) ) {
+              return stn.Text;
+            }
+          }
+        }
+      }
+      return "";
+    }
+
+    /// <summary>
+    /// Find a control that contains the Text
+    /// </summary>
+    /// <param name="text">The string to find</param>
+    public String FindText( String text )
+    {
+      return FindText( "", text );
     }
 
 

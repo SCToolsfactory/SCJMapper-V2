@@ -69,6 +69,21 @@ namespace SCJMapper_V2
       return rgx_xi.IsMatch( input );
     }
 
+
+    const string xil_pattern = @"^xi_thumb[lr][xy]$";
+    static Regex rgx_xil = new Regex( xil_pattern, RegexOptions.IgnoreCase );
+
+    /// <summary>
+    /// returns true if the ctrl can be inverted - for now this is thumb[lr][xyz]
+    /// </summary>
+    /// <param name="control"></param>
+    /// <returns></returns>
+    static public Boolean CanInvert( String control )
+    {
+      return rgx_xil.IsMatch( control );
+    }
+
+
     #endregion
 
     private Controller m_device;

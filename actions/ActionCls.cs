@@ -59,13 +59,18 @@ namespace SCJMapper_V2
     public String device { get; set; }
     public String input { get; set; }
     public String defBinding { get; set; }  // the default binding
-
+    public Boolean inverted { get; set; } 
     /// <summary>
     /// ctor
     /// </summary>
     public ActionCls( )
     {
       device = JoystickCls.DeviceClass;
+      key = "";
+      name = "";
+      input = "";
+      defBinding = "";
+      inverted = false;
     }
 
 
@@ -83,8 +88,10 @@ namespace SCJMapper_V2
       newAc.device = this.device;
       newAc.defBinding = this.defBinding;
       newAc.input = this.input;
+      newAc.inverted = this.inverted;
+
       // reassign the jsX part for Joystick commands
-      if ( ( this.device == JoystickCls.DeviceClass ) && ( newAc.device == JoystickCls.DeviceClass ) ) {
+      if ( JoystickCls.IsDeviceClass( this.device ) && JoystickCls.IsDeviceClass( newAc.device ) ) {
         int oldJsN = JoystickCls.JSNum( this.input );
         if ( JoystickCls.IsJSValid( oldJsN ) ) {
           if ( newJsList.ContainsKey( oldJsN ) ) newAc.input = JoystickCls.ReassignJSTag( this.input, newJsList[oldJsN] );
@@ -103,6 +110,7 @@ namespace SCJMapper_V2
     public void Merge( ActionCls newAc )
     {
       input = newAc.input;
+      inverted = newAc.inverted;
     }
 
     /// <summary>
@@ -112,7 +120,11 @@ namespace SCJMapper_V2
     public String toXML( )
     {
       String r = "";
-      if ( !String.IsNullOrEmpty( input ) ) r = String.Format( "\t<action name=\"{0}\">\n\t\t\t<rebind device=\"{1}\" input=\"{2}\" />\n\t\t</action>\n", name, device, input );
+      if ( !String.IsNullOrEmpty( input ) ) {
+        if ( inverted ) r = String.Format( "\t<action name=\"{0}\">\n\t\t\t<rebind device=\"{1}\" input=\"{2}\" invert=\"1\" />\n\t\t</action>\n", name, device, input );
+        else r = String.Format( "\t<action name=\"{0}\">\n\t\t\t<rebind device=\"{1}\" input=\"{2}\" />\n\t\t</action>\n", name, device, input );
+      }
+      
       return r;
     }
 
@@ -145,8 +157,15 @@ namespace SCJMapper_V2
         if ( reader.HasAttributes ) {
           device = reader["device"];
           input = reader["input"];
-          if ( input == JoystickCls.BlendedInput ) input = ""; // don't carry jsx reserved into the action
+          if ( ( input == JoystickCls.BlendedInput ) || ( input == GamepadCls.BlendedInput ) ) input = ""; // don't carry jsx_reserved or xi_reserved into the action
           key = DevID( device ) + name; // unique id of the action
+          String inv = reader["invert"];
+          if ( String.IsNullOrWhiteSpace( inv ) ) {
+            inverted = false;
+          }
+          else {
+            inverted = ( inv == "1" ) ? true : false;
+          }
           // Move the reader back to the element node.
           reader.ReadStartElement( "rebind" );
         }

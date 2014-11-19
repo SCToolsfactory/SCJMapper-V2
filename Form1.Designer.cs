@@ -102,6 +102,7 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+      this.cbxInvert = new System.Windows.Forms.CheckBox();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.tc1.SuspendLayout();
@@ -224,6 +225,7 @@
       // panel2
       // 
       this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.panel2.Controls.Add(this.cbxInvert);
       this.panel2.Controls.Add(this.btJsKbd);
       this.panel2.Controls.Add(this.btBlend);
       this.panel2.Controls.Add(this.lblLastJ);
@@ -236,7 +238,7 @@
       this.panel2.Controls.Add(this.btAssign);
       this.panel2.Location = new System.Drawing.Point(3, 358);
       this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(289, 133);
+      this.panel2.Size = new System.Drawing.Size(289, 142);
       this.panel2.TabIndex = 17;
       // 
       // btJsKbd
@@ -244,7 +246,7 @@
       this.btJsKbd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.btJsKbd.ImageKey = "J";
       this.btJsKbd.ImageList = this.IL;
-      this.btJsKbd.Location = new System.Drawing.Point(104, 98);
+      this.btJsKbd.Location = new System.Drawing.Point(104, 112);
       this.btJsKbd.Name = "btJsKbd";
       this.btJsKbd.Size = new System.Drawing.Size(79, 25);
       this.btJsKbd.TabIndex = 16;
@@ -267,7 +269,7 @@
       // 
       // btBlend
       // 
-      this.btBlend.Location = new System.Drawing.Point(10, 98);
+      this.btBlend.Location = new System.Drawing.Point(10, 112);
       this.btBlend.Name = "btBlend";
       this.btBlend.Size = new System.Drawing.Size(73, 25);
       this.btBlend.TabIndex = 15;
@@ -289,7 +291,7 @@
       // cbxThrottle
       // 
       this.cbxThrottle.AutoSize = true;
-      this.cbxThrottle.Location = new System.Drawing.Point(90, 72);
+      this.cbxThrottle.Location = new System.Drawing.Point(89, 67);
       this.cbxThrottle.Name = "cbxThrottle";
       this.cbxThrottle.Size = new System.Drawing.Size(66, 17);
       this.cbxThrottle.TabIndex = 13;
@@ -326,7 +328,7 @@
       // 
       // btClear
       // 
-      this.btClear.Location = new System.Drawing.Point(201, 98);
+      this.btClear.Location = new System.Drawing.Point(201, 112);
       this.btClear.Name = "btClear";
       this.btClear.Size = new System.Drawing.Size(73, 25);
       this.btClear.TabIndex = 2;
@@ -839,6 +841,16 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
+      // cbxInvert
+      // 
+      this.cbxInvert.AutoSize = true;
+      this.cbxInvert.Location = new System.Drawing.Point(89, 86);
+      this.cbxInvert.Name = "cbxInvert";
+      this.cbxInvert.Size = new System.Drawing.Size(55, 17);
+      this.cbxInvert.TabIndex = 17;
+      this.cbxInvert.Text = "Invert";
+      this.cbxInvert.UseVisualStyleBackColor = true;
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -946,6 +958,7 @@
     private System.Windows.Forms.Button btJsKbd;
     private System.Windows.Forms.Button btBlend;
     private System.Windows.Forms.Button btClip;
+    private System.Windows.Forms.CheckBox cbxInvert;
   }
 }
 

@@ -13,7 +13,7 @@ namespace SCJMapper_V2
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    private String m_command = "";  // v_pitch - js1_x ..
+    private String m_actionCommand = "";  // v_pitch - js1_x ..
     private String m_cmdCtrl = "";  // x, y, rotz ...
     private String m_type = "";     // joystick OR xboxpad
     private int m_devInstanceNo = -1;         // jsN - instance in XML
@@ -45,7 +45,7 @@ namespace SCJMapper_V2
 
     #region Properties
 
-    public DeviceCls JsDevice
+    public DeviceCls GameDevice
     {
       get { return m_device; }
       set { m_device = value;
@@ -74,10 +74,10 @@ namespace SCJMapper_V2
       set { m_deviceName = value; }
     }
 
-    public String Command
+    public String ActionCommand
     {
-      get { return m_command; }
-      set { m_command = value; DecomposeCommand( ); }
+      get { return m_actionCommand; }
+      set { m_actionCommand = value; DecomposeCommand( ); }
     }
 
     public String CommandCtrl
@@ -157,8 +157,8 @@ namespace SCJMapper_V2
     {
       // pobulate from input
       // something like "v_pitch - js1_x" OR "v_pitch - xi_thumbl" OR "v_pitch - ximod+xi_thumbl+xi_mod"
-      String cmd = ActionTreeNode.CommandFromNodeText( Command );
-      String action = ActionTreeNode.ActionFromNodeText( Command );
+      String cmd = ActionTreeNode.CommandFromNodeText( ActionCommand );
+      String action = ActionTreeNode.ActionFromNodeText( ActionCommand );
       m_cmdCtrl = "";
       if ( !String.IsNullOrWhiteSpace(cmd) ) {
         // decomp gamepad entries - could have modifiers so check for contains...
