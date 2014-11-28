@@ -337,22 +337,25 @@ namespace SCJMapper_V2
       m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
       m_AT.LoadTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
 
-      // default JS to Joystick mapping - can be changed and reloaded from XML mappings
-      int jsTab = 0;
+      // apply a default JS to Joystick mapping - can be changed and reloaded from XML mappings
+      // must take care of Gamepads if there are (but we take care of one only...)
 
-      if ( IsGamepadTab( tc1.TabPages[jsTab] ) ) jsTab++;
-      if ( m_Joystick.Count > 0 ) { m_Joystick[0].JSAssignment = jsTab + 1; m_AT.ActionMaps.jsN[0] = m_Joystick[0].DevName; m_AT.ActionMaps.jsNGUID[0] = m_Joystick[0].DevInstanceGUID; }
-
-      jsTab++; if ( IsGamepadTab( tc1.TabPages[jsTab] ) ) jsTab++;
-      if ( m_Joystick.Count > 1 ) { m_Joystick[1].JSAssignment = jsTab + 1; m_AT.ActionMaps.jsN[1] = m_Joystick[1].DevName; m_AT.ActionMaps.jsNGUID[1] = m_Joystick[1].DevInstanceGUID; }
-
-      if ( m_Joystick.Count > 2 ) { m_Joystick[2].JSAssignment = 0; } // unmapped ones go with default 0
-      if ( m_Joystick.Count > 3 ) { m_Joystick[3].JSAssignment = 0; }
-      if ( m_Joystick.Count > 4 ) { m_Joystick[4].JSAssignment = 0; }
-      if ( m_Joystick.Count > 5 ) { m_Joystick[5].JSAssignment = 0; }
-      if ( m_Joystick.Count > 6 ) { m_Joystick[6].JSAssignment = 0; }
-      if ( m_Joystick.Count > 7 ) { m_Joystick[7].JSAssignment = 0; }
-
+      int joyStickIndex = 0; // Joystick List Index
+      for ( int deviceTabIndex=0; deviceTabIndex < JoystickCls.JSnum_MAX; deviceTabIndex++ ) {
+        if ( tc1.TabPages.Count > deviceTabIndex ) {
+          // valid Device Tab
+          if ( IsGamepadTab( tc1.TabPages[deviceTabIndex] ) ) {
+            ; // ignore gamepads
+          }
+          else if ( m_Joystick.Count > joyStickIndex ) {
+            // there is a joystick device left..
+            m_Joystick[joyStickIndex].JSAssignment = joyStickIndex + 1; // assign number 1..
+            m_AT.ActionMaps.jsN[deviceTabIndex] = m_Joystick[joyStickIndex].DevName;
+            m_AT.ActionMaps.jsNGUID[deviceTabIndex] = m_Joystick[joyStickIndex].DevInstanceGUID;
+            joyStickIndex++;
+          }
+        }
+      }
     }
 
 
@@ -378,7 +381,7 @@ namespace SCJMapper_V2
 
         // scan the Input for attached devices
         log.Debug( "Scan GameControl devices" );
-
+        int nJs = 1; // number the Joystick Tabs
         foreach ( DeviceInstance instance in directInput.GetDevices( DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly ) ) {
 
           log.InfoFormat( "GameControl: #{0} Type:{1} Device:{2}", tabs, instance.Type.ToString( ), instance.ProductName );
@@ -419,6 +422,7 @@ namespace SCJMapper_V2
             else {
               log.Debug( "Add first Joystick panel" );
               log.Debug( "Create Joystick instance" );
+              tc1.TabPages[tabs].Text = String.Format( "Joystick {0}", nJs++ );
               js = new JoystickCls( jsDevice, this, tabs + 1, UC_JoyPanel, 0 ); // does all device related activities for that particular item
             }
           }
@@ -436,7 +440,7 @@ namespace SCJMapper_V2
             else {
               log.Debug( "Add next Joystick panel" );
               // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
-              tc1.TabPages.Add( "Joystick " + ( tabs + 1 ).ToString( ) );
+              tc1.TabPages.Add( String.Format( "Joystick {0}", nJs++ ) );
               UC_JoyPanel uUC_JoyPanelNew = new UC_JoyPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
               uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
               log.Debug( "Create Joystick instance" );
@@ -457,16 +461,9 @@ namespace SCJMapper_V2
 
           // next tab
           tabs++;
-          if ( tabs == 8 ) break; // cannot load more JSticks than predefined Tabs
+          if ( tabs >= JoystickCls.JSnum_MAX ) break; // cannot load more JSticks than predefined Tabs
         }
         log.DebugFormat( "Added {0} GameControl devices", tabs );
-
-        /*
-        // TEST CREATE ALL 8 TABS
-        for ( int i=(tabs+1); i < 9; i++ ) {
-          tc1.TabPages.Add( "Joystick " + i.ToString( ) );
-        }
-        */
 
         if ( tabs == 0 ) {
           log.Warn( "Unable to find and/or create any joystick devices." );
