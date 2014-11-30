@@ -33,6 +33,13 @@ namespace SCJMapper_V2
       }
     }
 
+
+    private Boolean m_showJoy = true;
+    private Boolean m_showGameP = true;
+    private Boolean m_showKbd = true;
+    private Boolean m_showMappedOnly = false;
+
+
     /// <summary>
     /// maintains the change status (gets reset by reloading the complete tree)
     /// </summary>
@@ -152,8 +159,12 @@ namespace SCJMapper_V2
       foreach ( ActionTreeNode tn in m_MasterTree.Nodes ) {
         // have to search nodes of nodes
         foreach ( ActionTreeNode stn in tn.Nodes ) {
+          stn.Tag = null; // default
+          if ( ( !m_showJoy ) && stn.IsJoystickAction ) stn.Tag = true;
+          if ( ( !m_showGameP ) && stn.IsGamepadAction ) stn.Tag = true;
+          if ( ( !m_showKbd ) && stn.IsKeyboardAction ) stn.Tag = true;
+          if ( m_showMappedOnly && ( !stn.IsMappedAction ) ) stn.Tag = true;
           if ( !stn.Text.Contains( m_Filter ) ) stn.Tag = hidden;
-          else stn.Tag = null;
         }
       }
       ApplyFilter( ); // to the GUI tree
@@ -223,7 +234,8 @@ namespace SCJMapper_V2
                   cn.BackColor = Color.White; // some stuff does not work properly...
 
                   Array.Resize( ref cnl, cnl.Length + 1 ); cnl[cnl.Length - 1] = cn;
-                  ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.defBinding = defBinding;
+                  ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.actionDevice = ActionCls.ADevice( device ); ac.defBinding = defBinding;
+                  cn.ActionDevice = ac.actionDevice; // should be known now
                   acm.Add( ac ); // add to our map
 
                   if ( applyDefaults ) {
@@ -421,6 +433,21 @@ namespace SCJMapper_V2
         UpdateMasterNode( node );
 
       }
+    }
+
+    /// <summary>
+    /// Defines what to show in the tree
+    /// </summary>
+    /// <param name="showJoystick">True to show Joystick actions</param>
+    /// <param name="showGamepad">True to show Gamepad actions</param>
+    /// <param name="showKeyboard">True to show Keyboard actions</param>
+    /// <param name="showMappedOnly">True to show mapped actions only </param>
+    public void DefineShowOptions(Boolean showJoystick, Boolean showGamepad, Boolean showKeyboard, Boolean showMappedOnly)
+    {
+      m_showJoy = showJoystick;
+      m_showGameP = showGamepad;
+      m_showKbd = showKeyboard;
+      m_showMappedOnly = showMappedOnly;
     }
 
 

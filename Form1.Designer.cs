@@ -47,6 +47,7 @@
       this.btGrab = new System.Windows.Forms.Button();
       this.btDump = new System.Windows.Forms.Button();
       this.panel2 = new System.Windows.Forms.Panel();
+      this.cbxInvert = new System.Windows.Forms.CheckBox();
       this.btJsKbd = new System.Windows.Forms.Button();
       this.IL = new System.Windows.Forms.ImageList(this.components);
       this.btBlend = new System.Windows.Forms.Button();
@@ -61,7 +62,6 @@
       this.treeView1 = new System.Windows.Forms.TreeView();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -87,6 +87,11 @@
       this.btLoadMyMapping = new System.Windows.Forms.Button();
       this.txMappingName = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
+      this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+      this.cbxShowJoystick = new System.Windows.Forms.CheckBox();
+      this.cbxShowGamepad = new System.Windows.Forms.CheckBox();
+      this.cbxShowKeyboard = new System.Windows.Forms.CheckBox();
+      this.cbxShowMappedOnly = new System.Windows.Forms.CheckBox();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
       this.tsDDbtProfiles = new System.Windows.Forms.ToolStripDropDownButton();
       this.tsBtReset = new System.Windows.Forms.ToolStripDropDownButton();
@@ -102,7 +107,7 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.cbxInvert = new System.Windows.Forms.CheckBox();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.tc1.SuspendLayout();
@@ -113,6 +118,7 @@
       this.tableLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel2.SuspendLayout();
       this.tableLayoutPanel3.SuspendLayout();
+      this.flowLayoutPanel2.SuspendLayout();
       this.statusStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -241,6 +247,16 @@
       this.panel2.Size = new System.Drawing.Size(289, 142);
       this.panel2.TabIndex = 17;
       // 
+      // cbxInvert
+      // 
+      this.cbxInvert.AutoSize = true;
+      this.cbxInvert.Location = new System.Drawing.Point(89, 86);
+      this.cbxInvert.Name = "cbxInvert";
+      this.cbxInvert.Size = new System.Drawing.Size(55, 17);
+      this.cbxInvert.TabIndex = 17;
+      this.cbxInvert.Text = "Invert";
+      this.cbxInvert.UseVisualStyleBackColor = true;
+      // 
       // btJsKbd
       // 
       this.btJsKbd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -364,9 +380,9 @@
       this.treeView1.ImageList = this.IL;
       this.treeView1.Location = new System.Drawing.Point(6, 81);
       this.treeView1.Name = "treeView1";
-      this.tlpanel.SetRowSpan(this.treeView1, 3);
+      this.tlpanel.SetRowSpan(this.treeView1, 2);
       this.treeView1.SelectedImageKey = "Selected";
-      this.treeView1.Size = new System.Drawing.Size(364, 739);
+      this.treeView1.Size = new System.Drawing.Size(364, 666);
       this.treeView1.TabIndex = 16;
       this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
       // 
@@ -394,15 +410,6 @@
       this.tabJS1.Size = new System.Drawing.Size(281, 321);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -517,6 +524,7 @@
       this.tlpanel.Controls.Add(this.tableLayoutPanel1, 1, 2);
       this.tlpanel.Controls.Add(this.tableLayoutPanel2, 1, 3);
       this.tlpanel.Controls.Add(this.tableLayoutPanel3, 2, 3);
+      this.tlpanel.Controls.Add(this.flowLayoutPanel2, 0, 3);
       this.tlpanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tlpanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tlpanel.Location = new System.Drawing.Point(0, 0);
@@ -696,6 +704,68 @@
       this.label1.TabIndex = 16;
       this.label1.Text = "Mapping name:";
       // 
+      // flowLayoutPanel2
+      // 
+      this.flowLayoutPanel2.Controls.Add(this.cbxShowJoystick);
+      this.flowLayoutPanel2.Controls.Add(this.cbxShowGamepad);
+      this.flowLayoutPanel2.Controls.Add(this.cbxShowKeyboard);
+      this.flowLayoutPanel2.Controls.Add(this.cbxShowMappedOnly);
+      this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 753);
+      this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+      this.flowLayoutPanel2.Size = new System.Drawing.Size(364, 67);
+      this.flowLayoutPanel2.TabIndex = 26;
+      // 
+      // cbxShowJoystick
+      // 
+      this.cbxShowJoystick.AutoSize = true;
+      this.cbxShowJoystick.Checked = true;
+      this.cbxShowJoystick.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.cbxShowJoystick.Location = new System.Drawing.Point(3, 3);
+      this.cbxShowJoystick.Name = "cbxShowJoystick";
+      this.cbxShowJoystick.Size = new System.Drawing.Size(65, 17);
+      this.cbxShowJoystick.TabIndex = 0;
+      this.cbxShowJoystick.Text = "Joystick";
+      this.cbxShowJoystick.UseVisualStyleBackColor = true;
+      this.cbxShowJoystick.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
+      // 
+      // cbxShowGamepad
+      // 
+      this.cbxShowGamepad.AutoSize = true;
+      this.cbxShowGamepad.Checked = true;
+      this.cbxShowGamepad.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.cbxShowGamepad.Location = new System.Drawing.Point(74, 3);
+      this.cbxShowGamepad.Name = "cbxShowGamepad";
+      this.cbxShowGamepad.Size = new System.Drawing.Size(75, 17);
+      this.cbxShowGamepad.TabIndex = 1;
+      this.cbxShowGamepad.Text = "Gamepad";
+      this.cbxShowGamepad.UseVisualStyleBackColor = true;
+      this.cbxShowGamepad.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
+      // 
+      // cbxShowKeyboard
+      // 
+      this.cbxShowKeyboard.AutoSize = true;
+      this.cbxShowKeyboard.Checked = true;
+      this.cbxShowKeyboard.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.cbxShowKeyboard.Location = new System.Drawing.Point(155, 3);
+      this.cbxShowKeyboard.Name = "cbxShowKeyboard";
+      this.cbxShowKeyboard.Size = new System.Drawing.Size(74, 17);
+      this.cbxShowKeyboard.TabIndex = 1;
+      this.cbxShowKeyboard.Text = "Keyboard";
+      this.cbxShowKeyboard.UseVisualStyleBackColor = true;
+      this.cbxShowKeyboard.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
+      // 
+      // cbxShowMappedOnly
+      // 
+      this.cbxShowMappedOnly.AutoSize = true;
+      this.cbxShowMappedOnly.Location = new System.Drawing.Point(235, 3);
+      this.cbxShowMappedOnly.Name = "cbxShowMappedOnly";
+      this.cbxShowMappedOnly.Size = new System.Drawing.Size(94, 17);
+      this.cbxShowMappedOnly.TabIndex = 1;
+      this.cbxShowMappedOnly.Text = "Mapped only";
+      this.cbxShowMappedOnly.UseVisualStyleBackColor = true;
+      this.cbxShowMappedOnly.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
+      // 
       // toolStripStatusLabel2
       // 
       this.toolStripStatusLabel2.BackColor = System.Drawing.Color.DarkKhaki;
@@ -841,15 +911,14 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
-      // cbxInvert
+      // UC_JoyPanel
       // 
-      this.cbxInvert.AutoSize = true;
-      this.cbxInvert.Location = new System.Drawing.Point(89, 86);
-      this.cbxInvert.Name = "cbxInvert";
-      this.cbxInvert.Size = new System.Drawing.Size(55, 17);
-      this.cbxInvert.TabIndex = 17;
-      this.cbxInvert.Text = "Invert";
-      this.cbxInvert.UseVisualStyleBackColor = true;
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
+      this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm
       // 
@@ -881,6 +950,8 @@
       this.tableLayoutPanel2.ResumeLayout(false);
       this.tableLayoutPanel3.ResumeLayout(false);
       this.tableLayoutPanel3.PerformLayout();
+      this.flowLayoutPanel2.ResumeLayout(false);
+      this.flowLayoutPanel2.PerformLayout();
       this.statusStrip1.ResumeLayout(false);
       this.statusStrip1.PerformLayout();
       this.ResumeLayout(false);
@@ -959,6 +1030,11 @@
     private System.Windows.Forms.Button btBlend;
     private System.Windows.Forms.Button btClip;
     private System.Windows.Forms.CheckBox cbxInvert;
+    private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+    private System.Windows.Forms.CheckBox cbxShowJoystick;
+    private System.Windows.Forms.CheckBox cbxShowGamepad;
+    private System.Windows.Forms.CheckBox cbxShowKeyboard;
+    private System.Windows.Forms.CheckBox cbxShowMappedOnly;
   }
 }
 

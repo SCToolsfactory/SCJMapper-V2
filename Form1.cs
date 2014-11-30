@@ -618,6 +618,17 @@ namespace SCJMapper_V2
       }
     }
 
+
+    // Show options
+
+    private void cbxShowTreeOptions_CheckedChanged( object sender, EventArgs e )
+    {
+      m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMappedOnly.Checked );
+      m_AT.ReloadTreeView( );
+    }
+
+
+
     // Assign Panel Items
 
     private void btFind_Click( object sender, EventArgs e )
@@ -1179,7 +1190,6 @@ namespace SCJMapper_V2
 
 
     #endregion
-
 
 
 

@@ -36,11 +36,16 @@ namespace SCJMapper_V2
       action = ""; cmd = ""; mod = ( nodeText.Contains( INV_MOD ) ) ? INV_MOD : REG_MOD;
       String[] e = nodeText.Split( new char[] { REG_MOD, INV_MOD }, StringSplitOptions.RemoveEmptyEntries );
       if ( e.Length > 1 ) {
-        action = e[0].Trim( );
-        cmd = e[1].Trim( );
+        action = e[0].TrimEnd( );
+        if ( e[1] == " " + DeviceCls.BlendedInput ) {
+          cmd = e[1];
+        }
+        else {
+          cmd = e[1].Trim( );
+        }
       }
       else if ( e.Length > 0 ) {
-        action = e[0].Trim( );
+        action = e[0].TrimEnd( );
         cmd = "";
       }
     }
@@ -88,12 +93,15 @@ namespace SCJMapper_V2
     #endregion
 
 
+    // Object defs
 
+    // ctor
     public ActionTreeNode( )
       : base( )
     {
     }
 
+    // ctor
     public ActionTreeNode( ActionTreeNode srcNode )
       : base( )
     {
@@ -106,44 +114,28 @@ namespace SCJMapper_V2
       this.ImageKey = srcNode.ImageKey;
       this.Tag = srcNode.Tag;
       this.m_action = srcNode.m_action;
+      this.m_actionDevice = srcNode.m_actionDevice;
       this.m_command = srcNode.m_command;
       this.m_modifier = srcNode.m_modifier;
     }
 
+    // ctor
     public ActionTreeNode( string text )
     {
       this.Text = text;
     }
 
+    // ctor
     public ActionTreeNode( string text, ActionTreeNode[] children )
       : base( text, children )
     {
     }
 
 
-    /// <summary>
-    /// Instantiates a copy of the node - copies only the needed properties
-    /// </summary>
-    /// <param name="srcNode">A source node</param>
-    /// <returns>A new TreeNode</returns>
-    private ActionTreeNode TNCopy( ActionTreeNode srcNode )
-    {
-      if ( srcNode == null ) return null;
-
-      ActionTreeNode nn = new ActionTreeNode( );
-      nn.Name = srcNode.Name;
-      nn.Text = srcNode.Text;
-      nn.BackColor = srcNode.BackColor;
-      nn.ForeColor = srcNode.ForeColor;
-      nn.NodeFont = srcNode.NodeFont;
-      nn.ImageKey = srcNode.ImageKey;
-      return nn;
-    }
-
-
     private String m_action = "";
     private String m_command ="";
     private char m_modifier = REG_MOD;
+    private ActionCls.ActionDevice m_actionDevice = ActionCls.ActionDevice.AD_Unknown;
 
     public new String Text
     {
@@ -186,6 +178,37 @@ namespace SCJMapper_V2
       }
     }
 
+    public ActionCls.ActionDevice ActionDevice
+    {
+      get { return m_actionDevice; }
+      set
+      {
+        m_actionDevice = value;
+      }
+    }
+
+    public Boolean IsJoystickAction
+    {
+      get { return ( m_actionDevice == ActionCls.ActionDevice.AD_Joystick ); }
+    }
+
+    public Boolean IsGamepadAction
+    {
+      get { return ( m_actionDevice == ActionCls.ActionDevice.AD_Gamepad ); }
+    }
+
+    public Boolean IsKeyboardAction
+    {
+      get { return ( m_actionDevice == ActionCls.ActionDevice.AD_Keyboard ); }
+    }
+
+    public Boolean IsMappedAction
+    {
+      get {  return !( String.IsNullOrEmpty(m_command)
+        || ( m_command == JoystickCls.BlendedInput ) 
+        || ( m_command == GamepadCls.BlendedInput ) );
+      }
+    }
 
 
   }

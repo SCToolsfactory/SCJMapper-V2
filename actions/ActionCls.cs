@@ -17,6 +17,26 @@ namespace SCJMapper_V2
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
+
+    public enum ActionDevice
+    {
+      AD_Unknown = -1,
+      AD_Joystick = 0,
+      AD_Gamepad,
+      AD_Keyboard,
+    }
+
+    static public ActionDevice ADevice( String device )
+    {
+      switch ( device.ToLower( ) ) {
+        case KeyboardCls.DeviceClass: return ActionDevice.AD_Keyboard;
+        case JoystickCls.DeviceClass: return ActionDevice.AD_Joystick;
+        case GamepadCls.DeviceClass: return ActionDevice.AD_Gamepad;
+        case "ps3pad": return ActionDevice.AD_Gamepad;
+        default: return ActionDevice.AD_Unknown;
+      }
+    }
+
     // Static items to have this mapping in only one place
 
     /// <summary>
@@ -29,7 +49,7 @@ namespace SCJMapper_V2
       switch ( device.ToLower( ) ) {
         case KeyboardCls.DeviceClass: return "K";
         case JoystickCls.DeviceClass: return "J";
-        case "xboxpad": return "X";
+        case GamepadCls.DeviceClass: return "X";
         case "ps3pad": return "P";
         default: return "Z";
       }
@@ -45,7 +65,7 @@ namespace SCJMapper_V2
       switch ( devID ) {
         case "K": return KeyboardCls.DeviceClass;
         case "J": return JoystickCls.DeviceClass;
-        case "X": return "xboxpad";
+        case "X": return GamepadCls.DeviceClass;
         case "P": return "ps3pad";
         default: return "unknown";
       }
@@ -59,7 +79,8 @@ namespace SCJMapper_V2
     public String device { get; set; }
     public String input { get; set; }
     public String defBinding { get; set; }  // the default binding
-    public Boolean inverted { get; set; } 
+    public Boolean inverted { get; set; }
+    public ActionDevice actionDevice { get; set; }
     /// <summary>
     /// ctor
     /// </summary>
@@ -71,6 +92,7 @@ namespace SCJMapper_V2
       input = "";
       defBinding = "";
       inverted = false;
+      actionDevice = ActionDevice.AD_Unknown;
     }
 
 
@@ -159,6 +181,7 @@ namespace SCJMapper_V2
           input = reader["input"];
           if ( ( input == JoystickCls.BlendedInput ) || ( input == GamepadCls.BlendedInput ) ) input = ""; // don't carry jsx_reserved or xi_reserved into the action
           key = DevID( device ) + name; // unique id of the action
+          actionDevice = ADevice( device ); // get the enum of the input device
           String inv = reader["invert"];
           if ( String.IsNullOrWhiteSpace( inv ) ) {
             inverted = false;
