@@ -335,6 +335,7 @@ namespace SCJMapper_V2
       m_AT = new ActionTree( m_AppSettings.BlendUnmapped, m_AppSettings.BlendUnmappedGP, m_Joystick );
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
       m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
+      m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMappedOnly.Checked );
       m_AT.LoadTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
 
       // apply a default JS to Joystick mapping - can be changed and reloaded from XML mappings
