@@ -108,6 +108,7 @@
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
+      this.label2 = new System.Windows.Forms.Label();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.tc1.SuspendLayout();
@@ -558,9 +559,7 @@
       this.tableLayoutPanel1.Controls.Add(this.btDump, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.btGrab, 1, 0);
       this.tableLayoutPanel1.Controls.Add(this.btDumpList, 0, 1);
-      this.tableLayoutPanel1.Controls.Add(this.txFilter, 0, 2);
-      this.tableLayoutPanel1.Controls.Add(this.btClearFilter, 0, 3);
-      this.tableLayoutPanel1.Controls.Add(this.btJSTuning, 1, 3);
+      this.tableLayoutPanel1.Controls.Add(this.btJSTuning, 0, 3);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel1.Location = new System.Drawing.Point(376, 616);
@@ -576,7 +575,7 @@
       // txFilter
       // 
       this.txFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.txFilter.Location = new System.Drawing.Point(3, 65);
+      this.txFilter.Location = new System.Drawing.Point(92, 28);
       this.txFilter.Name = "txFilter";
       this.txFilter.Size = new System.Drawing.Size(120, 22);
       this.txFilter.TabIndex = 25;
@@ -585,7 +584,7 @@
       // 
       // btClearFilter
       // 
-      this.btClearFilter.Location = new System.Drawing.Point(3, 93);
+      this.btClearFilter.Location = new System.Drawing.Point(218, 26);
       this.btClearFilter.Name = "btClearFilter";
       this.btClearFilter.Size = new System.Drawing.Size(120, 24);
       this.btClearFilter.TabIndex = 26;
@@ -595,8 +594,7 @@
       // 
       // btJSTuning
       // 
-      this.btJSTuning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btJSTuning.Location = new System.Drawing.Point(171, 93);
+      this.btJSTuning.Location = new System.Drawing.Point(3, 93);
       this.btJSTuning.Name = "btJSTuning";
       this.btJSTuning.Size = new System.Drawing.Size(120, 24);
       this.btJSTuning.TabIndex = 17;
@@ -710,6 +708,9 @@
       this.flowLayoutPanel2.Controls.Add(this.cbxShowGamepad);
       this.flowLayoutPanel2.Controls.Add(this.cbxShowKeyboard);
       this.flowLayoutPanel2.Controls.Add(this.cbxShowMappedOnly);
+      this.flowLayoutPanel2.Controls.Add(this.label2);
+      this.flowLayoutPanel2.Controls.Add(this.txFilter);
+      this.flowLayoutPanel2.Controls.Add(this.btClearFilter);
       this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 753);
       this.flowLayoutPanel2.Name = "flowLayoutPanel2";
@@ -920,6 +921,16 @@
       this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
       this.UC_JoyPanel.TabIndex = 0;
       // 
+      // label2
+      // 
+      this.label2.Location = new System.Drawing.Point(3, 26);
+      this.label2.Margin = new System.Windows.Forms.Padding(3);
+      this.label2.Name = "label2";
+      this.label2.Size = new System.Drawing.Size(83, 24);
+      this.label2.TabIndex = 27;
+      this.label2.Text = "Action Filter:";
+      this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -946,7 +957,6 @@
       this.tlpanel.ResumeLayout(false);
       this.flowLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel1.ResumeLayout(false);
-      this.tableLayoutPanel1.PerformLayout();
       this.tableLayoutPanel2.ResumeLayout(false);
       this.tableLayoutPanel3.ResumeLayout(false);
       this.tableLayoutPanel3.PerformLayout();
@@ -1035,6 +1045,7 @@
     private System.Windows.Forms.CheckBox cbxShowGamepad;
     private System.Windows.Forms.CheckBox cbxShowKeyboard;
     private System.Windows.Forms.CheckBox cbxShowMappedOnly;
+    private System.Windows.Forms.Label label2;
   }
 }
 
