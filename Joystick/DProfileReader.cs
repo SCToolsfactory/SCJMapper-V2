@@ -31,7 +31,7 @@ namespace SCJMapper_V2
       public String name { get; set; }    // the action name
       public String input { get; set; }  // the input method K,J,X,P
       private String m_defBinding = "";
-      public String defBinding { get { return m_defBinding; } set { m_defBinding = value.Trim( ); } }  // need to clean this one, found spaces...
+      public String defBinding { get { return m_defBinding; } set { m_defBinding = value; } }  // DONT! need to clean this one, found spaces...
       public String keyName
       { get { return input + name; } } // prep for TreView usage - create a key from input+name
     }
@@ -85,6 +85,7 @@ namespace SCJMapper_V2
         ac.name = attr["name"];
         ac.input = "J";
         ac.defBinding = attr["joystick"];
+        if ( ac.defBinding == " " ) ac.defBinding = JoystickCls.BlendedInput;
         if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
       }
       if ( attr.ContainsKey( "keyboard" ) ) {
@@ -92,6 +93,7 @@ namespace SCJMapper_V2
         ac.name = attr["name"];
         ac.input = "K";
         ac.defBinding = attr["keyboard"];
+        if ( ac.defBinding == " " ) ac.defBinding = KeyboardCls.BlendedInput;
         if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
       }
       if ( attr.ContainsKey( "xboxpad" ) ) {
@@ -99,6 +101,7 @@ namespace SCJMapper_V2
         ac.name = attr["name"];
         ac.input = "X";
         ac.defBinding = attr["xboxpad"];
+        if ( ac.defBinding == " " ) ac.defBinding = GamepadCls.BlendedInput;
         if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
       }
       if ( attr.ContainsKey( "ps3pad" ) ) {
@@ -106,6 +109,7 @@ namespace SCJMapper_V2
         ac.name = attr["name"];
         ac.input = "P";
         ac.defBinding = attr["ps3pad"];
+        if ( ac.defBinding == " " ) ac.defBinding = GamepadCls.BlendedInput;
         if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
       }
     }

@@ -1,4 +1,4 @@
-<profile version="0">
+<profile version="1">
 	<platforms>
 		<PC keyboard="1" xboxpad="1" ps3pad="1" joystick="1" />
 		<Xbox keyboard="1" xboxpad="1" ps3pad="0" />
@@ -12,101 +12,150 @@
 	</actiongroup>
 	
 	<CustomisationUIHeader>
-		<keyboard label="Default" description="@ui_KeyboardDefaultDesc" image="KeyboardDefault" />
-		<xboxpad label="Default" description="@ui_GamepadDefaultDesc" image="GamePadDefault" />
-		<joystick label="Default" description="@ui_JoystickDefaultDesc" image="JoystickDefault" />
+		<keyboard label="@ui_ResetToDefaults" description="@ui_KeyboardDefaultDesc" image="KeyboardDefault" />
+		<xboxpad label="@ui_ResetToDefaults" description="@ui_GamepadDefaultDesc" image="GamePadDefault" />
+		<joystick label="@ui_ResetToDefaults" description="@ui_JoystickDefaultDesc" image="JoystickDefault" />
 	</CustomisationUIHeader>
-	
-	<!-- Setup default input options -->
-	<optiontree type="shared" name="root">
-		<!-- Digital -->
-		<optiongroup name="pilot">
-			<optiongroup name="pilot_aim" />
+
+	<!-- Setup input options structure and their default values -->
+	<optiontree type="keyboard" name="root" UIShowInvert="-1" UIShowSensitivity="-1" UISensitivityMin="0.01" UISensitivityMax="6.25">
+		<optiongroup name="master" UILabel="@ui_COMasterSensitivity" UIShowSensitivity="1" UIShowInvert="0" >
+			<optiongroup name="inversion" UILabel="@ui_COInversionSettings" UIShowSensitivity="0" UIShowInvert="-1">
+				<optiongroup name="fps" UILabel="@ui_COFPS" UIShowSensitivity="1" UIShowInvert="0" >
+					<optiongroup name="fps_view">
+						<optiongroup name="fps_view_pitch" UILabel="@ui_COFPSViewPitch" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="fps_view_yaw" UILabel="@ui_COFPSViewYaw" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
+				</optiongroup>
+				<optiongroup name="flight" UILabel="@ui_COFlight" UIShowSensitivity="0" UIShowInvert="0">
+					<optiongroup name="flight_move" UILabel="@ui_COFlightMove" UIShowSensitivity="1" >
+						<optiongroup name="flight_move_pitch" invert_cvar="v_mouseInvert" UILabel="@ui_COFlightPitch" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="flight_move_yaw" UILabel="@ui_COFlightYaw" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
+					<optiongroup name="flight_view" UILabel="@ui_COFreeLook" UIShowSensitivity="1" >
+						<optiongroup name="flight_view_pitch" invert_cvar="cl_invertMouse" UILabel="@ui_COFlightViewY" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="flight_view_yaw" UILabel="@ui_COFlightViewX" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
+				</optiongroup>
+				<optiongroup name="any_vehicle" UILabel="@ui_COAnyVehicle" UIShowSensitivity="0" >
+					<optiongroup name="av_vj_mode" UILabel="@ui_COVJMode" UIShowSensitivity="1" >
+						<optiongroup name="av_vj_mode_pitch" UILabel="@ui_COVJModePitch" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="av_vj_mode_yaw" UILabel="@ui_COVJModeYaw" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
+					<optiongroup name="av_relative_mode" UILabel="@ui_CORelativeMode" UIShowSensitivity="1">
+						<optiongroup name="av_relative_mode_pitch" UILabel="@ui_CORelativeModePitch" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="av_relative_mode_yaw" UILabel="@ui_CORelativeModeYaw" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
+					<optiongroup name="av_aim_mode" UILabel="@ui_COAimMode" UIShowSensitivity="1" >
+						<optiongroup name="av_aim_mode_pitch" UILabel="@ui_COAimModePitch" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="av_aim_mode_yaw" UILabel="@ui_COAimModeYaw" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
+				</optiongroup>
+				<optiongroup name="manned_ground_vehicle" UILabel="@ui_COMannedGroundVehicle" UIShowSensitivity="1" >
+					<optiongroup name="mgv_view_pitch" invert_cvar="cl_invertMouse" UILabel="@ui_COGroundVehicleViewY" UIShowSensitivity="1" UIShowInvert="1" />
+					<optiongroup name="mgv_view_yaw" UILabel="@ui_COGroundVehicleViewX" UIShowSensitivity="1" UIShowInvert="1" />
+				</optiongroup>
+			</optiongroup>
 		</optiongroup>
 	</optiontree>
-	<optiontree type="keyboard" name="root">
-		<!-- Mouse axis -->
-		<optiongroup name="pilot">
-			<optiongroup name="pilot_movepitch" invert_cvar="v_mouseInvert" />
-		</optiongroup>
-	</optiontree>
-	<optiontree type="xboxpad" name="root">
+	<optiontree type="xboxpad" name="root" UISensitivityMin="0.01" UISensitivityMax="2.0">
 		<!-- LS / RS -->
-		<optiongroup name="pilot">			
-			<nonlinearity_curve>
-        <point in="0.1"  out="0.0"/>
-				<point in="0.2"  out="0.01"/>
-				<point in="0.3"  out="0.02"/>
-				<point in="0.4"  out="0.03"/>
-				<point in="0.5"  out="0.041"/>
-				<point in="0.6"  out="0.064"/>
-				<point in="0.7"  out="0.105"/>
-				<point in="0.75" out="0.137"/>
-				<point in="0.8"  out="0.178"/>
-				<point in="0.85" out="0.236"/>
-				<point in="0.88" out="0.283"/>
-				<point in="0.9"  out="0.324"/>
-				<point in="0.91" out="0.348"/>
-				<point in="0.92" out="0.375"/>
-				<point in="0.93" out="0.408"/>
-				<point in="0.94" out="0.449"/>
-				<point in="0.95" out="0.506"/>
-				<point in="0.96" out="0.6"/>
-				<point in="0.98" out="0.8"/>
-				<point in="0.99" out="0.9"/>
-			</nonlinearity_curve>
-			<optiongroup name="pilot_aim">
-				<optiongroup name="pilot_aimpitch" invert="0" />
+		<optiongroup name="master" UILabel="@ui_COMasterSensitivity" UIShowSensitivity="1" UIShowInvert="0" >
+			<optiongroup name="inversion" UILabel="@ui_COInversionSettings" UIShowSensitivity="0" UIShowInvert="-1">
+				<optiongroup name="fps" UILabel="@ui_COFPS" UIShowSensitivity="1" UIShowInvert="0" >
+					<optiongroup name="fps_view">
+						<optiongroup name="fps_view_pitch" UILabel="@ui_COFPSViewPitch" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="fps_view_yaw" UILabel="@ui_COFPSViewYaw" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
+					<optiongroup name="fps_move">
+						<optiongroup name="fps_move_lateral" UILabel="@ui_COFPSMoveLeftRight" UIShowSensitivity="1" UIShowInvert="0" />
+						<optiongroup name="fps_move_longitudinal" UILabel="@ui_COFPSMoveForwardBackward" UIShowSensitivity="1" UIShowInvert="0" />
+					</optiongroup>			
+				</optiongroup>
+				<optiongroup name="flight" UILabel="@ui_COFlight" UIShowSensitivity="0" >
+					<nonlinearity_curve>
+						<point in="0.1"  out="0.0"/>
+						<point in="0.2"  out="0.01"/>
+						<point in="0.3"  out="0.02"/>
+						<point in="0.4"  out="0.03"/>
+						<point in="0.5"  out="0.041"/>
+						<point in="0.6"  out="0.064"/>
+						<point in="0.7"  out="0.105"/>
+						<point in="0.75" out="0.137"/>
+						<point in="0.8"  out="0.178"/>
+						<point in="0.85" out="0.236"/>
+						<point in="0.88" out="0.283"/>
+						<point in="0.9"  out="0.324"/>
+						<point in="0.91" out="0.348"/>
+						<point in="0.92" out="0.375"/>
+						<point in="0.93" out="0.408"/>
+						<point in="0.94" out="0.449"/>
+						<point in="0.95" out="0.506"/>
+						<point in="0.96" out="0.6"/>
+						<point in="0.98" out="0.8"/>
+						<point in="0.99" out="0.9"/>
+					</nonlinearity_curve>		
+					<optiongroup name="flight_move" UILabel="@ui_COFlightMove" UIShowSensitivity="1" >
+						<optiongroup name="flight_move_pitch" invert_cvar="v_gamepadInvert" UILabel="@ui_COFlightPitch" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="flight_move_yaw" invert_cvar="cl_invertYaw" UILabel="@ui_COFlightYaw" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="flight_move_roll" UILabel="@ui_COFlightRoll" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="flight_move_strafe_vertical" UILabel="@ui_COStrafeUpDown" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="flight_move_strafe_lateral" UILabel="@ui_COStrafeLeftRight" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="flight_move_strafe_longitudinal" UILabel="@ui_COStrafeForwardBackward" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
+					<optiongroup name="flight_aim" UILabel="@ui_COFlightAim" UIShowSensitivity="1" >
+						<optiongroup name="flight_aim_pitch" UILabel="@ui_COFlightAimPitch" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="flight_aim_yaw" UILabel="@ui_COFlightAimYaw" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
+					<optiongroup name="flight_throttle" UILabel="@ui_COFlightThrottle" UIShowInvert="1" >
+						<nonlinearity_curve reset="1" />
+						<optiongroup name="flight_throttle_abs" />
+						<optiongroup name="flight_throttle_rel" />
+					</optiongroup>
+					<optiongroup name="flight_view" exponent="2.5">
+						<nonlinearity_curve reset="1" />
+						<optiongroup name="flight_view_pitch" invert_cvar="cl_invertController" />
+						<optiongroup name="flight_view_yaw" />
+					</optiongroup>			
+				</optiongroup>
+				<optiongroup name="manned_ground_vehicle" UILabel="@ui_COMannedGroundVehicle" UIShowSensitivity="1" >
+					<optiongroup name="mgv_view_pitch" invert_cvar="cl_invertController" UILabel="@ui_COGroundVehicleViewY" UIShowSensitivity="1" UIShowInvert="1" />
+					<optiongroup name="mgv_view_yaw" UILabel="@ui_COGroundVehicleViewX" UIShowSensitivity="1" UIShowInvert="1" />
+				</optiongroup>
 			</optiongroup>
-			<optiongroup name="pilot_move">
-				<optiongroup name="pilot_movepitch" invert_cvar="v_gamepadInvert" />
-				<optiongroup name="pilot_moveyaw" invert_cvar="cl_invertYaw" />
-			</optiongroup>
-			<optiongroup name="pilot_view">
-				<nonlinearity_curve reset="1" />
-				<optiongroup name="pilot_viewpitch" invert_cvar="cl_invertController" />
-			</optiongroup>				
 		</optiongroup>
 	</optiontree>
-	<optiontree type="joystick" instances="4" name="root">
+	<optiontree type="joystick" instances="4" name="root" UISensitivityMin="0.01" UISensitivityMax="2.0">
 		<!-- Normal and twist axis -->
-		<optiongroup name="pilot">
-			<optiongroup name="pilot_move">
-				<optiongroup name="pilot_move_main">
-					<optiongroup name="pilot_move_x" />
-					<optiongroup name="pilot_move_y" />
-					<optiongroup name="pilot_move_z" />
-				</optiongroup>
-				<optiongroup name="pilot_move_rot">
-					<optiongroup name="pilot_move_rotx" />
-					<optiongroup name="pilot_move_roty" />
-					<optiongroup name="pilot_move_rotz" />
-				</optiongroup>
-				<optiongroup name="pilot_move_sliders">
-					<optiongroup name="pilot_move_slider1" />
-					<optiongroup name="pilot_move_slider2" />
-				</optiongroup>
-			</optiongroup>
-			<optiongroup name="pilot_aim">
-				<optiongroup name="pilot_aim_main">
-					<optiongroup name="pilot_aim_x" />
-					<optiongroup name="pilot_aim_y" />
-				</optiongroup>
-				<optiongroup name="pilot_aim_rot">
-					<optiongroup name="pilot_aim_rotz" />
-				</optiongroup>
-			</optiongroup>
-			<optiongroup name="pilot_view">
-				<optiongroup name="pilot_view_main">
-					<optiongroup name="pilot_view_x" />
-					<optiongroup name="pilot_view_y" />
-				</optiongroup>
-				<optiongroup name="pilot_view_rot">
-					<optiongroup name="pilot_view_rotz" />
+		<optiongroup name="master" UILabel="@ui_COMasterSensitivity" UIShowSensitivity="1" UIShowInvert="0" >
+			<optiongroup name="inversion" UILabel="@ui_COInversionSettings" UIShowSensitivity="0" UIShowInvert="-1">
+				<optiongroup name="flight" UILabel="@ui_COFlight" UIShowSensitivity="0">
+					<optiongroup name="flight_move" UILabel="@ui_COFlightMove" UIShowSensitivity="1" >
+							<optiongroup name="flight_move_pitch" UILabel="@ui_COFlightPitch" UIShowSensitivity="1" UIShowInvert="1" />
+							<optiongroup name="flight_move_yaw" UILabel="@ui_COFlightYaw" UIShowSensitivity="1" UIShowInvert="1" />
+							<optiongroup name="flight_move_roll" UILabel="@ui_COFlightRoll" UIShowSensitivity="1" UIShowInvert="1" />
+							<optiongroup name="flight_move_strafe_vertical" UILabel="@ui_COStrafeUpDown" UIShowSensitivity="1" UIShowInvert="1" />
+							<optiongroup name="flight_move_strafe_lateral" UILabel="@ui_COStrafeLeftRight" UIShowSensitivity="1" UIShowInvert="1" />
+							<optiongroup name="flight_move_strafe_longitudinal" UILabel="@ui_COStrafeForwardBackward" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
+					<optiongroup name="flight_aim" UILabel="@ui_COFlightAim" UIShowSensitivity="1" >
+						<optiongroup name="flight_aim_pitch" UILabel="@ui_COFlightAimPitch" UIShowSensitivity="1" UIShowInvert="1"/>
+						<optiongroup name="flight_aim_yaw" UILabel="@ui_COFlightAimYaw" UIShowSensitivity="1" UIShowInvert="1"/>
+					</optiongroup>
+					<optiongroup name="flight_throttle">
+						<optiongroup name="flight_throttle_abs" invert="1" UILabel="@ui_COFlightThrottle" UIShowInvert="1" />
+						<optiongroup name="flight_throttle_rel" UILabel="@ui_COFlightThrottleRel" UIShowInvert="1" />
+					</optiongroup>
+					<optiongroup name="flight_view" exponent="2.5" UILabel="@ui_COFreeLook" UIShowSensitivity="1" >
+						<nonlinearity_curve reset="1" />
+						<optiongroup name="flight_view_pitch" invert_cvar="cl_invertController" UILabel="@ui_COFlightViewY" UIShowSensitivity="1" UIShowInvert="1" />
+						<optiongroup name="flight_view_yaw" UILabel="@ui_COFlightViewX" UIShowSensitivity="1" UIShowInvert="1" />
+					</optiongroup>
 				</optiongroup>
 			</optiongroup>
 		</optiongroup>
 	</optiontree>
+	
 
 	<actionmap name="debug" version="22">
 		<!-- debug keys - move to debug when we can switch devmode-->
@@ -179,12 +228,10 @@
 			<xboxpad>
 				<inputdata input="xi_dpad_down" />
 				<inputdata input="xi_thumbly" useAnalogCompare="1" analogCompareVal="-0.5" analogCompareOp="LESSTHAN" />
-				<inputdata input="xi_thumbry" useAnalogCompare="1" analogCompareVal="-0.5" analogCompareOp="LESSTHAN" />
 			</xboxpad>
 			<ps3pad>
 				<inputdata input="pad_down"/>
 				<inputdata input="pad_stickly" useAnalogCompare="1" analogCompareVal="-0.5" analogCompareOp="LESSTHAN" />
-				<inputdata input="pad_stickry" useAnalogCompare="1" analogCompareVal="-0.5" analogCompareOp="LESSTHAN" />
 			</ps3pad>
 		</action>
 
@@ -195,12 +242,10 @@
 			<xboxpad>
 				<inputdata input="xi_dpad_left" />
 				<inputdata input="xi_thumblx" useAnalogCompare="1" analogCompareVal="-0.5" analogCompareOp="LESSTHAN" />
-				<inputdata input="xi_thumbrx" useAnalogCompare="1" analogCompareVal="-0.5" analogCompareOp="LESSTHAN" />
 			</xboxpad>
 			<ps3pad>
 				<inputdata input="pad_left"/>
 				<inputdata input="pad_sticklx" useAnalogCompare="1" analogCompareVal="-0.5" analogCompareOp="LESSTHAN" />
-				<inputdata input="pad_stickrx" useAnalogCompare="1" analogCompareVal="-0.5" analogCompareOp="LESSTHAN" />
 			</ps3pad>
 		</action>
 
@@ -211,12 +256,10 @@
 			<xboxpad>
 				<inputdata input="xi_dpad_right" />
 				<inputdata input="xi_thumblx" useAnalogCompare="1" analogCompareVal="0.5" analogCompareOp="GREATERTHAN" />
-				<inputdata input="xi_thumbrx" useAnalogCompare="1" analogCompareVal="0.5" analogCompareOp="GREATERTHAN" />
 			</xboxpad>
 			<ps3pad>
 				<inputdata input="pad_right"/>
 				<inputdata input="pad_sticklx" useAnalogCompare="1" analogCompareVal="0.5" analogCompareOp="GREATERTHAN" />
-				<inputdata input="pad_stickrx" useAnalogCompare="1" analogCompareVal="0.5" analogCompareOp="GREATERTHAN" />
 			</ps3pad>
 		</action>
 
@@ -225,17 +268,15 @@
 		<action name="ui_skip_video" onPress="1" onRelease="1" keyboard="space" xboxpad="xi_a" ps3pad="pad_cross"/>
 	</actionmap>
 
-	<actionmap name="player" version="25">
-		<!-- player keys -->
+	<actionmap name="player" version="26">
 		<action name="use" onPress="1" onRelease="1" keyboard="f" xboxpad="xi_y" ps3pad="pad_triangle" />
 		<action name="attack1" onPress="1" onRelease="1" onHold="1" keyboard="mouse1" xboxpad="xi_triggerr_btn" ps3pad="pad_r2" joystick="js1_button1"/>
-		<action name="zoom" onPress="1" onRelease="1" keyboard="mouse2" />
-		<action name="xi_zoom" onPress="1" onRelease="1" onHold="1" xboxpad="xi_triggerl_btn" ps3pad="pad_l2"/>
-		<action name="firemode" onPress="1" keyboard="x" xboxpad="xi_dpad_down" ps3pad="pad_down"/>
-		<action name="cycle_spectator_mode" onPress="1" keyboard="space" />
+		<action name="zoom" onPress="1" onRelease="1" keyboard="mouse2" xboxpad="xi_triggerl_btn" ps3pad="pad_l2"/>
 		<action name="stabilize" onPress="1" onRelease="1" keyboard="lshift" xboxpad="xi_thumbl" ps3pad="pad_l1" />
-		<action name="prone" onPress="1" keyboard="x" xboxpad="xi_dpad_down" ps3pad="pad_down"/>
-		<action name="cycle_spectator_mode" onPress="1" keyboard="space" />
+
+		<!-- Spectator mode -->
+		<action name="spectate_cctv_nextcam" onPress="1" keyboard="mouse2" xboxpad="xi_shoulderr" joystick="js1_button1"/>
+		<action name="spectate_cctv_prevcam" onPress="1" keyboard="mouse1" xboxpad="xi_shoulderl" joystick="js1_button2"/>
 		<action name="spectate_next_target" onPress="1" keyboard="mouse2" xboxpad="xi_shoulderr" joystick="js1_button1"/>
 		<action name="spectate_prev_target" onPress="1" keyboard="mouse1" xboxpad="xi_shoulderl" joystick="js1_button2"/>
 		<action name="spectate_zoom" keyboard="maxis_z"/>
@@ -243,71 +284,102 @@
 		<action name="spectate_zoom_out" onPress="1" onHold="1" xboxpad="xi_triggerl_btn" joystick="js1_hat1_down"/>
 		<action name="spectate_rotateyaw" joystick="js1_x" xboxpad="xi_thumblx" ps3pad="pad_sticklx"/>
 		<action name="spectate_rotatepitch" joystick="js1_y" xboxpad="xi_thumbly" ps3pad="pad_stickly"/>
+		<action name="spectate_gen_nextmode" onPress="1" joystick=" " xboxpad="xi_b">
+			<keyboard>
+				<inputdata input="mouse3"/>
+				<inputdata input="insert"/>
+			</keyboard>
+		</action>
+		<action name="spectate_gen_prevmode" onPress="1" keyboard="" joystick=" " xboxpad="xi_a"/>
+
+		<!-- Movement -->
 		<action name="moveleft" onPress="1" onRelease="1" retriggerable="1" keyboard="a" />
 		<action name="moveright" onPress="1" onRelease="1" retriggerable="1" keyboard="d" />
 		<action name="moveforward" onPress="1" onRelease="1" retriggerable="1" keyboard="w" />
 		<action name="moveback" onPress="1" onRelease="1" retriggerable="1" keyboard="s" />
 		<action name="jump" onPress="1" onRelease="1" keyboard="space"/>
 		<action name="crouch" onPress="1" onRelease="1" retriggerable="1" keyboard="c"/>
-		<action name="sprint" onPress="1" onRelease="1" retriggerable="1" keyboard="lshift" xboxpad="xi_thumbl" ps3pad="pad_l1" />
-		<action name="special" onPress="1" onRelease="1" keyboard="t" xboxpad="xi_thumbr" />
+		<action name="prone" onPress="1" keyboard="x" xboxpad="xi_dpad_right" ps3pad="pad_right"/>
+		<action name="sprint" onPress="1" onRelease="1" onHold="1" retriggerable="1" keyboard="lshift" xboxpad="xi_thumbl" ps3pad="pad_l1" />
+		<action name="walk" onPress="1" onRelease="1" keyboard="capslock" xboxpad="xi_thumbl" />
+		<action name="toggle_magnetic_boots" onPress="1" keyboard="b" xboxpad="xi_x" ps3pad="pad_square"/>
 		<action name="leanleft" onPress="1" onRelease="1" onHold="1" keyboard="q" />
 		<action name="leanright" onPress="1" onRelease="1" onHold="1" keyboard="e" />
+		<action name="visor_next_mode" onPress="1" keyboard="semicolon" />
+		<action name="visor_prev_mode" onPress="1" keyboard="apostrophe" />
+
+		<!-- Actions -->
+		<action name="toggle_flashlight" onPress="1" onRelease="1" keyboard="t" xboxpad="xi_thumbr" />
 		<action name="reload" onPress="1" keyboard="r" xboxpad="xi_shoulderr" ps3pad="pad_r1"/>
 		<action name="drop" onPress="1" onRelease="1" keyboard="j"/>
-		<action name="nextitem" onPress="1" keyboard="mwheel_up" xboxpad="xi_dpad_right" ps3pad="pad_right"/>
-		<action name="previtem" onPress="1" keyboard="mwheel_down" />
 		<action name="handgrenade" onPress="1" keyboard="h" />
 		<action name="grenade" onPress="1" onRelease="1" keyboard="g" />
-		<action name="rotateyaw" keyboard="maxis_x" />
-		<action name="rotatepitch" keyboard="maxis_y" />
+
+		<!-- Weapon Selection -->
+		<action name="listsmallweapons" onPress="1" keyboard="1" />
+		<action name="listmediumweapons" onPress="1" keyboard="2" />
+		<action name="listlargeweapons" onPress="1" keyboard="3" />
+		<action name="listgrenades" onPress="1" keyboard="4" />
+		<action name="listgadgets" onPress="1" keyboard="5" />
+		<action name="nextitem" onPress="1" keyboard="mwheel_down" xboxpad="xi_dpad_up" ps3pad="pad_up"/>
+		<action name="previtem" onPress="1" keyboard="mwheel_up" xboxpad="xi_dpad_down" ps3pad="pad_down"/>
+		<action name="selectitem" onPress="1" onRelease="1" keyboard="mouse1" xboxpad="xi_a" ps3pad="pad_cross" />
+		<action name="cancelweaponselect" onPress="1" onRelease="1" keyboard="mouse2" xboxpad="xi_b" ps3pad="pad_circle" />
+
+		<action name="rotateyaw" keyboard="maxis_x" optionGroup="fps_view_yaw" />
+		<action name="rotatepitch" keyboard="maxis_y" optionGroup="fps_view_pitch" />
+
 		<action name="skip_dialogfragment" onRelease="1" noModifiers="1" xboxpad="xi_b" ps3pad="pad_circle">
 			<keyboard>
 				<inputdata input="enter"/>
 				<inputdata input="np_enter"/>
 			</keyboard>
 		</action>
-		<!-- CIG BEGIN - ernst @ IllFonic : Adding magnetic boot support. -->
-		<action name="toggle_magnetic_boots" onPress="1" keyboard="b" xboxpad="xi_x" ps3pad="pad_square"/>
-		<!-- CIG BEGIN - nick @ IllFonic : Adding visor mode switching. -->
-		<action name="visor_next_mode" onPress="1" keyboard="semicolon" />
-		<action name="visor_prev_mode" onPress="1" keyboard="apostrophe" />
-		<!-- CIG END -->
-		<!-- CONSOLE SPECIFIC CONTROLS START -->
-		<action name="xi_movey" xboxpad="xi_thumbly" ps3pad="pad_stickly"/>
-		<action name="xi_movex" xboxpad="xi_thumblx" ps3pad="pad_sticklx"/>
-		<action name="xi_rotateyaw" xboxpad="xi_thumbrx" ps3pad="pad_stickrx"/>
-		<action name="xi_rotatepitch" xboxpad="xi_thumbry" ps3pad="pad_stickry"/>
+
+		<action name="xi_movey" xboxpad="xi_thumbly" ps3pad="pad_stickly" optionGroup="fps_move_longitudinal" />
+		<action name="xi_movex" xboxpad="xi_thumblx" ps3pad="pad_sticklx" optionGroup="fps_move_lateral" />
+		<action name="xi_rotateyaw" xboxpad="xi_thumbrx" ps3pad="pad_stickrx" optionGroup="fps_view_yaw" />
+		<action name="xi_rotatepitch" xboxpad="xi_thumbry" ps3pad="pad_stickry" optionGroup="fps_view_pitch" />
 		<action name="xi_jump" onPress="1" onRelease="1" xboxpad="xi_a" ps3pad="pad_cross"/>
 		<action name="xi_crouch" onPress="1" onRelease="1" xboxpad="xi_b" ps3pad="pad_circle"/>
 
-		<!-- CONSOLE SPECIFIC CONTROLS END -->
 		<action name="thirdperson" onPress="1" noModifiers="1" keyboard="insert" xboxpad="xi_triggerl_btn+xi_thumbr" ps3pad="pad_up"/>
 		<action name="toggle_cursor_input" onPress="1" onRelease="1" retriggerable="0" keyboard="tab" xboxpad="xi_back" />
 		<action name="free_thirdperson_camera" onPress="1" onRelease="1" retriggerable="0" keyboard="g" xboxpad="xi_dpad_left"/>
+
 		<!-- HMD -->
 		<action name="hmd_rotateyaw" keyboard="HMD_Yaw" />
 		<action name="hmd_rotatepitch" keyboard="HMD_Pitch" />
 		<action name="hmd_rotateroll" keyboard="HMD_Roll" />
+
 		<!-- CIG BEGIN David Campbell BHVR -->
 		<action name="mobiglas" onPress="1" keyboard="p" />
 		<action name="mobiglas_entity_interaction" onPress="1" keyboard="i" />
-		<action name="v_hud_open_scoreboard" onPress="1" onRelease="1" keyboard="lalt" xboxpad="xi_reserved" joystick=""/>
+		<action name="pl_hud_open_scoreboard" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="lctrl+space" xboxpad=" " joystick=" " UILabel="@ui_CIOpenScoreboard" UIDescription="@ui_CIOpenScoreboardDesc" />
 		<!-- CIG END David Campbell BHVR -->
+		<!-- CIG BEGIN Marc-Andre Perrault BHVR -->
+		<action name="menu_friends_accept_invite" onPress="1" keyboard="j" />
+		<action name="menu_friends_refuse_invite" onPress="1" keyboard="k" />
+		<action name="toggle_contact" onPress="1" keyboard="l" />
+		<!-- CIG END Marc-Andre Perrault BHVR -->
+
 		<!-- CIG BEGIN dhumphries @ Illfonic: Listen for eject hold to play cinematic camera -->
-		<action name="v_eject" onHold="1" keyboard="ralt+l"/>
+		<action name="v_eject" onPress="1" onHold="1" keyboard="ralt+l" xboxpad="xi_triggerl_btn+xi_back" joystick=" " />
 		<!-- CIG END -->
 	</actionmap>
 
-	<actionmap name="flycam">
-		<action name="flycam_movey" onPress="1" onRelease="1" keyboard="w" xboxpad="xi_thumbly" ps3pad="pad_stickly"/>
-		<action name="flycam_movey_neg" onPress="1" onRelease="1" keyboard="s"/>
-		<action name="flycam_movex" onPress="1" onRelease="1" keyboard="d" xboxpad="xi_thumblx" ps3pad="pad_sticklx"/>
-		<action name="flycam_movex_neg" onPress="1" onRelease="1" keyboard="a"/>
+	<actionmap name="flycam" version="2">
 		<action name="flycam_rotateyaw" xboxpad="xi_thumbrx" ps3pad="pad_stickrx" />
 		<action name="flycam_rotatepitch" xboxpad="xi_thumbry" ps3pad="pad_stickry" />
 		<action name="flycam_rotateyaw_mouse" keyboard="maxis_x"/>
 		<action name="flycam_rotatepitch_mouse" keyboard="maxis_y" />
+		<action name="flycam_movey" xboxpad="xi_thumbly" ps3pad="pad_stickly" />
+		<action name="flycam_movefwd" onPress="1" onRelease="1" keyboard="w" />
+		<action name="flycam_moveback" onPress="1" onRelease="1" keyboard="s" />
+		<action name="flycam_movex" xboxpad="xi_thumblx" ps3pad="pad_sticklx" />
+		<action name="flycam_moveright" onPress="1" onRelease="1" keyboard="d" />
+		<action name="flycam_moveleft" onPress="1" onRelease="1" keyboard="a" />		
+		<action name="flycam_movez" />		
 		<action name="flycam_moveup" onPress="1" onRelease="1" keyboard="q" xboxpad="xi_triggerr" ps3pad="pad_r2" />
 		<action name="flycam_movedown" onPress="1" onRelease="1" keyboard="e" xboxpad="xi_triggerl" ps3pad="pad_l2" />
 		<action name="flycam_speedup" onPress="1" keyboard="up" xboxpad="xi_dpad_up" ps3pad="pad_up" />
@@ -321,7 +393,7 @@
 	<actionmap name="vehicle_general" version="27">
 		<!-- vehicle keys -->
 		<action name="v_boost" onPress="1" onRelease="1" keyboard="lshift" xboxpad="xi_thumbr" ps3pad="pad_l1"/>
-		<action name="v_exit" onPress="1" onRelease="1" onHold="1" xboxpad="xi_y" ps3pad="pad_triangle" keyboard="f"/>
+		<action name="v_exit" onPress="1" xboxpad="xi_y" ps3pad="pad_triangle" keyboard="f"/>
 		<action name="v_horn" onPress="1" onRelease="1" keyboard="h" xboxpad="xi_thumbr" ps3pad="pad_r3"/>
 
 		<action name="v_lights" onPress="1" keyboard="o" />
@@ -330,10 +402,10 @@
 		<action name="v_view_option" onPress="1" onRelease="1" keyboard="k" xboxpad="xi_thumbl" ps3pad="pad_l3"/>
 		<action name="v_view_zoom_in" onPress="1" onHold ="1" keyboard="mwheel_up" xboxpad="xi_dpad_left" ps3pad="pad_left"/>
 		<action name="v_view_zoom_out" onPress="1" onHold ="1" keyboard="mwheel_down" xboxpad="xi_dpad_right" ps3pad="pad_right"/>
-		<action name="v_view_yaw_mouse" keyboard="maxis_x"/>
-		<action name="v_view_pitch_mouse" keyboard="maxis_y"/>
-		<action name="v_view_yaw" xboxpad="xi_thumbrx" ps3pad="pad_stickrx"/>
-		<action name="v_view_pitch" xboxpad="xi_thumbry" ps3pad="pad_stickry"/>
+		<action name="v_view_yaw_mouse" keyboard="maxis_x" optionGroup="mgv_view_yaw" />
+		<action name="v_view_pitch_mouse" keyboard="maxis_y" optionGroup="mgv_view_pitch" />
+		<action name="v_view_yaw" xboxpad="xi_thumbrx" ps3pad="pad_stickrx" optionGroup="mgv_view_yaw" />
+		<action name="v_view_pitch" xboxpad="xi_thumbry" ps3pad="pad_stickry" optionGroup="mgv_view_pitch" />
 		<action name="v_toggle_cursor_input" onPress="0" onRelease="1" retriggerable="0" keyboard="tab" xboxpad="xi_back" />
 		<action name="v_target_cycle_all_fwd" onPress="0" onRelease="1" retriggerable="0" keyboard="lshift"/>
 		<!-- This needs to be in vehicle_general to allow the weapons mount to fire in the hangar -->
@@ -343,8 +415,6 @@
 		<action name="v_view_yaw_absolute" keyboard="HMD_Yaw" />
 		<action name="v_view_pitch_absolute" keyboard="HMD_Pitch" />
 		<action name="v_view_roll_absolute" keyboard="HMD_Roll" />
-
-
 	</actionmap>
 
 	<actionmap name="vehicle_driver" version="23">
@@ -357,7 +427,7 @@
 		<action name="v_roll_right" onPress="1" onRelease="1" keyboard="t" />
 		<action name="v_attack1" onPress="1" onRelease="1" onHold="1" keyboard="mouse1" xboxpad="xi_shoulderr" ps3pad="pad_r1"/>
 		<action name="v_attack2" onPress="1" onRelease="1" onHold="1" keyboard="mouse2" xboxpad="xi_shoulderl" ps3pad="pad_l1"/>
-		<action name="v_yaw" onPress="1" onRelease="1" xboxpad="xi_thumblx" ps3pad="pad_sticklx"/>
+		<action name="v_yaw" xboxpad="xi_thumblx" ps3pad="pad_sticklx"/>
 	</actionmap>
 
 	<actionmap name="vehicle_gunner" version="23">
@@ -371,289 +441,201 @@
 		<!-- Action map for a spaceship bits and pieces -->
 
 		<!-- Exit -->
-		<action name="v_exit" onPress="1" onRelease="1" onHold="1" keyboard="f" xboxpad="xi_a" joystick="" UILabel="@ui_CIExit" UIDescription="@ui_CIExitDesc" />
-		<action name="v_eject" onPress="1" onHold="1" keyboard="ralt+l" xboxpad="xi_triggerl_btn+xi_back" joystick="jsx_reserved" UILabel="@ui_CIEject" UIDescription="@ui_CIEjectDesc" />
+		<action name="v_exit" onPress="1" keyboard="f" xboxpad="xi_a" joystick="" UILabel="@ui_CIExit" UIDescription="@ui_CIExitDesc" />
+		<action name="v_eject" onPress="1" onHold="1" keyboard="ralt+l" xboxpad="xi_triggerl_btn+xi_back" joystick=" " UILabel="@ui_CIEject" UIDescription="@ui_CIEjectDesc" />
 
 		<!-- Self destruct -->
-		<action name="v_self_destruct" onHold="1" holdRepeatDelay="-1" holdTriggerDelay="0.5" keyboard="ralt+backspace" xboxpad="" joystick="" />
-		
+		<action name="v_self_destruct" onPress="1" keyboard="ralt+backspace" xboxpad=" " joystick=" " />
+
 		<!-- Lights -->
-		<action name="v_toggle_cabin_lights" onPress="1" keyboard="o" joystick="jsx_reserved" UILabel="@ui_CIToggleLights" UIDescription="@ui_CIToggleLightsDesc" />
-		<action name="v_toggle_running_lights" onPress="1" keyboard="o" joystick="jsx_reserved" />
+		<action name="v_toggle_cabin_lights" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="o" joystick=" " UILabel="@ui_CIToggleLights" UIDescription="@ui_CIToggleLightsDesc" />
+		<action name="v_toggle_running_lights" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="o" joystick=" " />
 
 		<!-- Power managements -->
-		<action name="v_power_cycle_preset_fwd" onPress="1" keyboard="u" xboxpad="" joystick="" />
-		<action name="v_power_cycle_preset_back" onPress="1" keyboard="i" xboxpad="" joystick="" />
-		<action name="v_power_focus_group_1" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="1" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIPowerPreset1" UIDescription="@ui_CIPowerPreset1Desc" />
-		<action name="v_power_focus_group_2" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="2" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIPowerPreset2" UIDescription="@ui_CIPowerPreset2Desc" />
-		<action name="v_power_focus_group_3" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="3" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIPowerPreset3" UIDescription="@ui_CIPowerPreset3Desc" />
-		<action name="v_power_reset_focus" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="4" xboxpad="" joystick="" />		
+		<action name="v_power_focus_group_1" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="1" xboxpad=" " joystick=" " UILabel="@ui_CIPowerPreset1" UIDescription="@ui_CIPowerPreset1Desc" />
+		<action name="v_power_focus_group_2" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="2" xboxpad=" " joystick=" " UILabel="@ui_CIPowerPreset2" UIDescription="@ui_CIPowerPreset2Desc" />
+		<action name="v_power_focus_group_3" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="3" xboxpad=" " joystick=" " UILabel="@ui_CIPowerPreset3" UIDescription="@ui_CIPowerPreset3Desc" />
+		<action name="v_power_reset_focus" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="0" xboxpad=" " joystick=" " />
+
+		<!-- Landing Gear -->
+		<action name="v_toggle_landing_gear" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="end" joystick=" " />
 
 		<!-- Debuging / Test Inputs -->
 		<action name="v_debug_1" onPress="1" onRelease="1" keyboard="" />
-		<!-- CIG BEGIN David Campbell BHVR -->
-		<action name="v_matchmaking_ui" onPress="1" keyboard="f12" />
-		<!-- CIG END David Campbell BHVR -->
 	</actionmap>
 
-	<actionmap name="spaceship_view" version="20" UILabel="@ui_CGSpaceFlight">
+	<actionmap name="spaceship_view" version="20" UILabel="@ui_CGSpaceFlightView">
 		<!-- Camera view -->
-		<action name="v_view_yaw_left" onPress="1" onHold ="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_left" UILabel="@ui_CIRotateViewLeft" UIDescription="@ui_CIRotateViewLeftDesc" />
-		<action name="v_view_yaw_right" onPress="1" onHold ="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_right" UILabel="@ui_CIRotateViewRight" UIDescription="@ui_CIRotateViewRightDesc" />
-		<action name="v_view_yaw" xboxpad="xi_thumbrx" joystick="jsx_reserved" UILabel="@ui_CIYawView" UIDescription="@ui_CIYawViewDesc" />
-		<action name="v_view_yaw_mouse" keyboard="maxis_x" UILabel="@ui_CIYawView" UIDescription="@ui_CIYawViewDesc" />
+		<action name="v_view_yaw_left" onPress="1" onRelease="1" keyboard=" " joystick="js1_hat2_left" UILabel="@ui_CIRotateViewLeft" UIDescription="@ui_CIRotateViewLeftDesc" />
+		<action name="v_view_yaw_right" onPress="1" onRelease="1" keyboard=" " joystick="js1_hat2_right" UILabel="@ui_CIRotateViewRight" UIDescription="@ui_CIRotateViewRightDesc" />
+		<action name="v_view_yaw" xboxpad="xi_thumbrx" joystick=" " optionGroup="flight_view_yaw" UILabel="@ui_CIYawView" UIDescription="@ui_CIYawViewDesc" />
+		<action name="v_view_yaw_mouse" keyboard="maxis_x" optionGroup="flight_view_yaw" UILabel="@ui_CIYawView" UIDescription="@ui_CIYawViewDesc" />
 		<action name="v_view_yaw_absolute" keyboard="HMD_Yaw"/>
-		<action name="v_view_pitch_up" onPress="1" onHold ="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_down" UILabel="@ui_CIRotateViewUp" UIDescription="@ui_CIRotateViewUpDesc" />
-		<action name="v_view_pitch_down" onPress="1" onHold ="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_up" UILabel="@ui_CIRotateViewDown" UIDescription="@ui_CIRotateViewDownDesc" />
-		<action name="v_view_pitch" xboxpad="xi_thumbry" joystick="jsx_reserved" UILabel="@ui_CIPitchView" UIDescription="@ui_CIPitchViewDesc" />
-		<action name="v_view_pitch_mouse" keyboard="maxis_y" UILabel="@ui_CIPitchView" UIDescription="@ui_CIPitchViewDesc" />
+		<action name="v_view_pitch_up" onPress="1" onRelease="1" keyboard=" " joystick="js1_hat2_down" UILabel="@ui_CIRotateViewUp" UIDescription="@ui_CIRotateViewUpDesc" />
+		<action name="v_view_pitch_down" onPress="1" onRelease="1" keyboard=" " joystick="js1_hat2_up" UILabel="@ui_CIRotateViewDown" UIDescription="@ui_CIRotateViewDownDesc" />
+		<action name="v_view_pitch" xboxpad="xi_thumbry" joystick=" " optionGroup="flight_view_pitch" UILabel="@ui_CIPitchView" UIDescription="@ui_CIPitchViewDesc" />
+		<action name="v_view_pitch_mouse" keyboard="maxis_y" optionGroup="flight_view_pitch" UILabel="@ui_CIPitchView" UIDescription="@ui_CIPitchViewDesc" />
 		<action name="v_view_pitch_absolute" keyboard="HMD_Pitch"/>
 		<action name="v_view_roll_absolute" keyboard="HMD_Roll" />
 		<action name="v_view_cycle_fwd" onPress="1" keyboard="insert" xboxpad="xi_triggerl_btn+xi_thumbr" joystick="js1_button6" UILabel="@ui_CICycleView" UIDescription="@ui_CICycleViewDesc" />
 		<action name="v_view_cycle_internal_fwd" onPress="1" keyboard="home" xboxpad="" joystick=""/>
-		<action name="v_view_option" onPress="1" onRelease="1" keyboard=" " xboxpad="xi_reserved" joystick="jsx_reserved"/>
-		<action name="v_view_mode" onPress="1" keyboard="pgup" xboxpad="xi_thumbr" joystick="jsx_reserved" UILabel="@ui_CICycleViewMode" UIDescription="@ui_CICycleViewModeDesc" />
-		<action name="v_view_zoom_in" onPress="1" onHold ="1" keyboard="mwheel_up" xboxpad="xi_triggerl_btn+xi_dpad_up" joystick="jsx_reserved" UILabel="@ui_CIZoomIn" UIDescription="@ui_CIZoomInDesc" />
-		<action name="v_view_zoom_out" onPress="1" onHold ="1" keyboard="mwheel_down" xboxpad="xi_triggerl_btn+xi_dpad_down" joystick="jsx_reserved" UILabel="@ui_CIZoomOut" UIDescription="@ui_CIZoomOutDesc" />
+		<action name="v_view_option" onPress="1" onRelease="1" keyboard=" " xboxpad=" " joystick=" "/>
+		<action name="v_view_mode" onPress="1" keyboard="pgup" xboxpad="xi_thumbr" joystick=" " UILabel="@ui_CICycleViewMode" UIDescription="@ui_CICycleViewModeDesc" />
+		<action name="v_view_zoom_in" onPress="1" onHold ="1" keyboard="mwheel_up" xboxpad="xi_triggerl_btn+xi_dpad_up" joystick=" " UILabel="@ui_CIZoomIn" UIDescription="@ui_CIZoomInDesc" />
+		<action name="v_view_zoom_out" onPress="1" onHold ="1" keyboard="mwheel_down" xboxpad="xi_triggerl_btn+xi_dpad_down" joystick=" " UILabel="@ui_CIZoomOut" UIDescription="@ui_CIZoomOutDesc" />
 		<action name="v_view_interact" onPress="1" onRelease="1" keyboard="f" xboxpad="xi_a" joystick=""/>
-		<action name="v_view_cycle_headlook_mode" onRelease="1" releaseTriggerThreshold="0.25" keyboard="tab" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIUnlockView" UIDescription="@ui_CIUnlockViewDesc" />
-		<action name="v_view_dynamic_focus" keyboard="maxis_z" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIDynamicZoomInOut" UIDescription="@ui_CIDynamicZoomInOutDesc" />
-		<action name="v_view_dynamic_focus_in" onPress="1" onHold="1" onRelease="1" keyboard="rbracket" xboxpad="xi_triggerl_btn+xi_dpad_up" joystick="jsx_reserved" UILabel="@ui_CIDynamicZoomIn" UIDescription="@ui_CIDynamicZoomInDesc" />
-		<action name="v_view_dynamic_focus_out" onPress="1" onHold="1" onRelease="1" keyboard="lbracket" xboxpad="xi_triggerl_btn+xi_dpad_down" joystick="jsx_reserved" UILabel="@ui_CIDynamicZoomOut" UIDescription="@ui_CIDynamicZoomOutDesc" />
-
-		<!-- Pad stick input options -->
-		<optiongroup type="xboxpad">
-			<option group="pilot_view" />
-			<!-- currently done directly in PlayerInput code: <option action="v_view_pitch" group="pilot_viewpitch" /> -->
-		</optiongroup>
-		<!-- Joystick input options -->
-		<optiongroup type="joystick">
-			<!-- main stick -->
-			<option input="_x" group="pilot_view_x" />
-			<option input="_y" group="pilot_view_y" />
-			<!-- twist -->
-			<option input="_rotz" group="pilot_view_rotz" />
-		</optiongroup>
+		<action name="v_view_cycle_headlook_mode" onRelease="1" releaseTriggerThreshold="0.25" keyboard="tab" xboxpad=" " joystick=" " UILabel="@ui_CIUnlockView" UIDescription="@ui_CIUnlockViewDesc" />
+		<action name="v_view_dynamic_focus" keyboard="maxis_z" xboxpad=" " joystick=" " UILabel="@ui_CIDynamicZoomInOut" UIDescription="@ui_CIDynamicZoomInOutDesc" />
+		<action name="v_view_dynamic_focus_in" onPress="1" onHold="1" onRelease="1" xboxpad="xi_triggerl_btn+xi_dpad_up" joystick=" " UILabel="@ui_CIDynamicZoomIn" UIDescription="@ui_CIDynamicZoomInDesc" />
+		<action name="v_view_dynamic_focus_out" onPress="1" onHold="1" onRelease="1" xboxpad="xi_triggerl_btn+xi_dpad_down" joystick=" " UILabel="@ui_CIDynamicZoomOut" UIDescription="@ui_CIDynamicZoomOutDesc" />
+		<action name="v_view_look_behind" onPress="1" onRelease="1" keyboard="period" xboxpad="xi_thumbl" joystick=" " UILabel="@ui_CILookBehind" UIDescription="@ui_CILookBehindDesc" />
 	</actionmap>
-	
-	<actionmap name="spaceship_movement" version="17" UILabel="@ui_CGSpaceFlight">
+
+	<actionmap name="spaceship_movement" version="17" UILabel="@ui_CGSpaceFlightMovement">
 		<!-- Action map for a spaceship piloting -->
 
 		<!-- IFCS (requires avionics) -->
-		<action name="v_pitch_up" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " xboxpad="" joystick="" UILabel="@ui_CIPitchUp" UIDescription="@ui_CIPitchUpDesc" />
-		<action name="v_pitch_down" onPress="1" onHold="1" onRelease="1" retriggerable="1"  keyboard=" " xboxpad="" joystick="" UILabel="@ui_CIPitchDown" UIDescription="@ui_CIPitchDownDesc" />
-		<action name="v_pitch" xboxpad="xi_thumbly" joystick="js1_y" UILabel="@ui_CIPitch" UIDescription="@ui_CIPitchDesc" />
-		<action name="v_pitch_mouse" keyboard="maxis_y" UILabel="@ui_CIPitch" UIDescription="@ui_CIPitchDesc" />
-		<action name="v_yaw_left" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " xboxpad="" joystick="jsx_reserved" UILabel="@ui_CIYawLeft" UIDescription="@ui_CIYawLeftDesc" />
-		<action name="v_yaw_right" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " xboxpad="" joystick="jsx_reserved" UILabel="@ui_CIYawRight" UIDescription="@ui_CIYawRightDesc" />
-		<action name="v_yaw" xboxpad="xi_thumblx" joystick="js1_x" UILabel="@ui_CIYaw" UIDescription="@ui_CIYawDesc"  />
-		<action name="v_yaw_mouse" keyboard="maxis_x" UILabel="@ui_CIYaw" UIDescription="@ui_CIYawDesc" />
-		<action name="v_toggle_relative_mouse_mode" onPress="1" onRelease="1" releaseTriggerDelay="0.15" keyboard="lctrl+c" xboxpad="" joystick="" UILabel="@ui_CICycleMouseMoveMode" UIDescription="@ui_CICycleMouseMoveModeDesc" />
-		<action name="v_roll_left" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="a" xboxpad="" joystick="jsx_reserved" UILabel="@ui_CIRollLeft" UIDescription="@ui_CIRollLeftDesc" />
-		<action name="v_roll_right" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="d" xboxpad="" joystick="jsx_reserved" UILabel="@ui_CIRollRight" UIDescription="@ui_CIRollRightDesc" />
-		<action name="v_roll" xboxpad="xi_triggerl_btn+xi_thumblx" joystick="js1_rotz" UILabel="@ui_CIRoll" UIDescription="@ui_CIRollDesc" />
+		<action name="v_pitch_up" onPress="1" onRelease="1" keyboard=" " xboxpad="" joystick="" UILabel="@ui_CIPitchUp" UIDescription="@ui_CIPitchUpDesc" />
+		<action name="v_pitch_down" onPress="1" onRelease="1" keyboard=" " xboxpad="" joystick="" UILabel="@ui_CIPitchDown" UIDescription="@ui_CIPitchDownDesc" />
+		<action name="v_pitch" xboxpad="xi_thumbly" joystick="js1_y" optionGroup="flight_move_pitch" UILabel="@ui_CIPitch" UIDescription="@ui_CIPitchDesc" />
+		<action name="v_pitch_mouse" keyboard="maxis_y" optionGroup="flight_move_pitch" UILabel="@ui_CIPitch" UIDescription="@ui_CIPitchDesc" />
+		<action name="v_yaw_left" onPress="1" onRelease="1" always="1" keyboard=" " xboxpad=" " joystick=" " UILabel="@ui_CIYawLeft" UIDescription="@ui_CIYawLeftDesc" />
+		<action name="v_yaw_right" onPress="1" onRelease="1" always="1" keyboard=" " xboxpad=" " joystick=" " UILabel="@ui_CIYawRight" UIDescription="@ui_CIYawRightDesc" />
+		<action name="v_yaw" xboxpad="xi_thumblx" joystick="js1_x" optionGroup="flight_move_yaw" UILabel="@ui_CIYaw" UIDescription="@ui_CIYawDesc"  />
+		<action name="v_yaw_mouse" keyboard="maxis_x" optionGroup="flight_move_yaw" UILabel="@ui_CIYaw" UIDescription="@ui_CIYawDesc" />
+		<action name="v_toggle_relative_mouse_mode" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="lctrl+c" xboxpad="" joystick="" UILabel="@ui_CICycleMouseMoveMode" UIDescription="@ui_CICycleMouseMoveModeDesc" />
+		<action name="v_roll_left" onPress="1" onRelease="1" always="1" keyboard="a" xboxpad=" " joystick=" " UILabel="@ui_CIRollLeft" UIDescription="@ui_CIRollLeftDesc" />
+		<action name="v_roll_right" onPress="1" onRelease="1" always="1" keyboard="d" xboxpad=" " joystick=" " UILabel="@ui_CIRollRight" UIDescription="@ui_CIRollRightDesc" />
+		<action name="v_roll" xboxpad="xi_triggerl_btn+xi_thumblx" joystick="js1_rotz" optionGroup="flight_move_roll" UILabel="@ui_CIRoll" UIDescription="@ui_CIRollDesc" />
 		<action name="v_throttle_toggle_minmax" onPress="1" keyboard="backspace" xboxpad="" joystick="" UILabel="@ui_CIThrottleMinMax" UIDescription="@ui_CIThrottleMinMaxDesc" />
-		<action name="v_throttle_zero" onPress="1" joystick="jsx_reserved" UILabel="@ui_CIThrottleZero" UIDescription="@ui_CIThrottleZeroDesc">
+		<action name="v_throttle_zero" onPress="1" joystick=" " UILabel="@ui_CIThrottleZero" UIDescription="@ui_CIThrottleZeroDesc">
 			<xboxpad multiTap="2" input="xi_shoulderl" />
 			<keyboard multiTap="2" input="s" />
 		</action>
-		<action name="v_throttle_100" onPress="1" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIThrottleMax" UIDescription="@ui_CIThrottleMaxDesc" >
+		<action name="v_throttle_100" onPress="1" xboxpad=" " joystick=" " UILabel="@ui_CIThrottleMax" UIDescription="@ui_CIThrottleMaxDesc" >
 			<keyboard multiTap="2" input="w" />
 		</action>
-		<action name="v_throttle_up" onPress="1" onHold="1" onRelease="1" keyboard="w" xboxpad="xi_shoulderr" joystick="" UILabel="@ui_CIThrottleUp" UIDescription="@ui_CIThrottleUpDesc" />
-		<action name="v_throttle_down" onPress="1" onHold="1" onRelease="1" keyboard ="s" xboxpad="xi_shoulderl" joystick="" UILabel="@ui_CIThrottleDown" UIDescription="@ui_CIThrottleDownDesc" />
-		<action name="v_throttle_abs" keyboard="" xboxpad="" UILabel="@ui_CIThrottle" UIDescription="@ui_CIThrottleDesc">
-			<joystick invert="1" input="js1_throttlez" />
-		</action>
-		<action name="v_throttle_rel" keyboard=" " xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIThrottleRel" UIDescription="@ui_CIThrottleRelDesc" />
-		<action name="v_brake" onPress="1" onRelease="1" keyboard="space" xboxpad="xi_shoulderl+xi_shoulderr" joystick="jsx_reserved" UILabel="@ui_CIBrake" UIDescription="@ui_CIBrakeDesc" />
+		<action name="v_throttle_up" onPress="1" onRelease="1" always="1" keyboard="w" xboxpad="xi_shoulderr" joystick=" " UILabel="@ui_CIThrottleUp" UIDescription="@ui_CIThrottleUpDesc" />
+		<action name="v_throttle_down" onPress="1" onRelease="1" always="1" keyboard ="s" xboxpad="xi_shoulderl" joystick=" " UILabel="@ui_CIThrottleDown" UIDescription="@ui_CIThrottleDownDesc" />
+		<action name="v_throttle_abs" keyboard="" xboxpad="" joystick="js1_throttlez" optionGroup="flight_throttle_abs" UILabel="@ui_CIThrottle" UIDescription="@ui_CIThrottleDesc" />
+		<action name="v_throttle_rel" keyboard=" " xboxpad=" " joystick=" " optionGroup="flight_throttle_rel" UILabel="@ui_CIThrottleRel" UIDescription="@ui_CIThrottleRelDesc" />
+		<action name="v_brake" onPress="1" onRelease="1" keyboard="space" xboxpad="xi_shoulderl+xi_shoulderr" joystick=" " UILabel="@ui_CIBrake" UIDescription="@ui_CIBrakeDesc" />
 		<action name="v_target_match_vel" onPress="1" onRelease="1" keyboard="m" joystick="js1_button8" UILabel="@ui_CIMatchTargetSpeed" UIDescription="@ui_CIMatchTargetSpeedDesc">
 			<xboxpad multiTap="2" input="xi_shoulderr" />
 		</action>
 		<!-- Advanced IFCS on (requires IFCS) -->
-		<action name="v_ifcs_toggle_vector_decoupling" onPress="1" keyboard="capslock" xboxpad="xi_triggerl_btn+xi_thumbl" joystick="jsx_reserved" UILabel="@ui_CIToggleDecoupledMode" UIDescription="@ui_CIToggleDecoupledModeDesc" />
-		<action name="v_strafe_up" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="r" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIStrafeUp" UIDescription="@ui_CIStrafeUpDesc" />
-		<action name="v_strafe_down" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="f" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIStrafeDown" UIDescription="@ui_CIStrafeDownDesc" />
-		<action name="v_strafe_vertical" xboxpad="xi_triggerl_btn+xi_thumbry" joystick="jsx_reserved" UILabel="@ui_CIStrafeUpDown" UIDescription="@ui_CIStrafeUpDownDesc" />		
-		<action name="v_strafe_left" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="q" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIStrafeLeft" UIDescription="@ui_CIStrafeLeftDesc" />
-		<action name="v_strafe_right" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="e" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIStrafeRight" UIDescription="@ui_CIStrafeRightDesc" />
-		<action name="v_strafe_lateral" xboxpad="xi_triggerl_btn+xi_thumbrx" joystick="jsx_reserved" UILabel="@ui_CIStrafeLeftRight" UIDescription="@ui_CIStrafeLeftRightDesc" />
-		<action name="v_strafe_forward" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIStrafeFwd" UIDescription="@ui_CIStrafeFwdDesc" />
-		<action name="v_strafe_back" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIStrafeBack" UIDescription="@ui_CIStrafeBackDesc" />
-		<action name="v_strafe_longitudinal" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIStrafeFwdBack" UIDescription="@ui_CIStrafeFwdBackDesc" />
-		<action name="v_ifcs_toggle_safeties" onPress="1" keyboard="lctrl+capslock" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CICycleIFCSSafeties" UIDescription="@ui_CICycleIFCSSafetiesDesc" />
-		<action name="v_ifcs_toggle_gforce_safety" onPress="1" keyboard=" " xboxpad="xi_triggerl_btn+xi_dpad_right" joystick="jsx_reserved" UILabel="@ui_CIToggleGSafe" UIDescription="@ui_CIToggleGSafeDesc" />
-		<action name="v_ifcs_toggle_comstab" onPress="1" keyboard=" " xboxpad="xi_triggerl_btn+xi_dpad_left" joystick="jsx_reserved" UILabel="@ui_CIToggleComstab" UIDescription="@ui_CIToggleComstabDesc" />
+		<action name="v_ifcs_toggle_vector_decoupling" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="capslock" xboxpad="xi_triggerl_btn+xi_thumbl" joystick=" " UILabel="@ui_CIToggleDecoupledMode" UIDescription="@ui_CIToggleDecoupledModeDesc" />
+		<action name="v_strafe_up" onPress="1" onRelease="1" always="1" keyboard="r" xboxpad=" " joystick=" " optionGroup="flight_move_strafe_vertical" UILabel="@ui_CIStrafeUp" UIDescription="@ui_CIStrafeUpDesc" />
+		<action name="v_strafe_down" onPress="1" onRelease="1" always="1" keyboard="f" xboxpad=" " joystick=" " optionGroup="flight_move_strafe_vertical" UILabel="@ui_CIStrafeDown" UIDescription="@ui_CIStrafeDownDesc" />
+		<action name="v_strafe_vertical" xboxpad="xi_triggerl_btn+xi_thumbry" joystick=" " optionGroup="flight_move_strafe_vertical" UILabel="@ui_CIStrafeUpDown" UIDescription="@ui_CIStrafeUpDownDesc" />
+		<action name="v_strafe_left" onPress="1" onRelease="1" always="1" keyboard="q" xboxpad=" " joystick=" " optionGroup="flight_move_strafe_lateral" UILabel="@ui_CIStrafeLeft" UIDescription="@ui_CIStrafeLeftDesc" />
+		<action name="v_strafe_right" onPress="1" onRelease="1" always="1" keyboard="e" xboxpad=" " joystick=" " optionGroup="flight_move_strafe_lateral" UILabel="@ui_CIStrafeRight" UIDescription="@ui_CIStrafeRightDesc" />
+		<action name="v_strafe_lateral" xboxpad="xi_triggerl_btn+xi_thumbrx" joystick=" " optionGroup="flight_move_strafe_lateral" UILabel="@ui_CIStrafeLeftRight" UIDescription="@ui_CIStrafeLeftRightDesc" />
+		<action name="v_strafe_forward" onPress="1" onRelease="1" always="1" keyboard=" " xboxpad=" " joystick=" " optionGroup="flight_move_strafe_longitudinal" UILabel="@ui_CIStrafeFwd" UIDescription="@ui_CIStrafeFwdDesc" />
+		<action name="v_strafe_back" onPress="1" onRelease="1" always="1" keyboard=" " xboxpad=" " joystick=" " optionGroup="flight_move_strafe_longitudinal" UILabel="@ui_CIStrafeBack" UIDescription="@ui_CIStrafeBackDesc" />
+		<action name="v_strafe_longitudinal" xboxpad=" " joystick=" " optionGroup="flight_move_strafe_longitudinal" UILabel="@ui_CIStrafeFwdBack" UIDescription="@ui_CIStrafeFwdBackDesc" />
+		<action name="v_ifcs_toggle_safeties" onPress="1" keyboard="lctrl+capslock" xboxpad=" " joystick=" " UILabel="@ui_CICycleIFCSSafeties" UIDescription="@ui_CICycleIFCSSafetiesDesc" />
+		<action name="v_ifcs_toggle_gforce_safety" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard=" " xboxpad="xi_triggerl_btn+xi_dpad_right" joystick=" " UILabel="@ui_CIToggleGSafe" UIDescription="@ui_CIToggleGSafeDesc" />
+		<action name="v_ifcs_toggle_comstab" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard=" " xboxpad="xi_triggerl_btn+xi_dpad_left" joystick=" " UILabel="@ui_CIToggleComstab" UIDescription="@ui_CIToggleComstabDesc" />
 		<!-- Decoupled flight mode (requires advanced IFCS) -->
-		<action name="v_decoupled_strafe_up" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="r" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIDecoupledStrafeUp" UIDescription="@ui_CIDecoupledStrafeUpDesc" />
-		<action name="v_decoupled_strafe_down" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="f" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIDecoupledStrafeDown" UIDescription="@ui_CIDecoupledStrafeDownDesc" />
-		<action name="v_decoupled_strafe_vertical" xboxpad="xi_triggerl_btn+xi_thumbry" joystick="jsx_reserved" UILabel="@ui_CIDecoupledStrafeUpDown" UIDescription="@ui_CIDecoupledStrafeUpDownDesc" />		
-		<action name="v_decoupled_strafe_left" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="q" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIDecoupledStrafeLeft" UIDescription="@ui_CIDecoupledStrafeLeftDesc" />
-		<action name="v_decoupled_strafe_right" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="e" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIDecoupledStrafeRight" UIDescription="@ui_CIDecoupledStrafeRightDesc" />
-		<action name="v_decoupled_strafe_lateral" xboxpad="xi_triggerl_btn+xi_thumbrx" joystick="jsx_reserved" UILabel="@ui_CIDecoupledStrafeLeftRight" UIDescription="@ui_CIDecoupledStrafeLeftRightDesc" />
-		<action name="v_decoupled_strafe_forward" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="w" xboxpad="xi_shoulderr" joystick="jsx_reserved" UILabel="@ui_CIDecoupledStrafeFwd" UIDescription="@ui_CIDecoupledStrafeFwdDesc" />
-		<action name="v_decoupled_strafe_back" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="s" xboxpad="xi_shoulderl" joystick="jsx_reserved" UILabel="@ui_CIDecoupledStrafeBack" UIDescription="@ui_CIDecoupledStrafeBackDesc" />
-		<action name="v_decoupled_strafe_longitudinal" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIDecoupledStrafeFwdBack" UIDescription="@ui_CIDecoupledStrafeFwdBackDesc" />
-		<action name="v_decoupled_yaw" xboxpad="xi_thumblx" joystick="js1_x" UILabel="@ui_CIDecoupledYaw" UIDescription="@ui_CIDecoupledYawDesc" />
-		<action name="v_decoupled_yaw_left" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " xboxpad="" joystick="jsx_reserved" UILabel="@ui_CIDecoupledYawLeft" UIDescription="@ui_CIDecoupledYawLeftDesc" />
-		<action name="v_decoupled_yaw_right" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " xboxpad="" joystick="jsx_reserved" UILabel="@ui_CIDecoupledYawRight" UIDescription="@ui_CIDecoupledYawRightDesc" />
-		<action name="v_decoupled_pitch" xboxpad="xi_thumbly" joystick="js1_y" UILabel="@ui_CIDecoupledPitch" UIDescription="@ui_CIDecoupledPitchDesc" />
-		<action name="v_decoupled_pitch_up" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " UILabel="@ui_CIDecoupledPitchUp" UIDescription="@ui_CIDecoupledPitchUpDesc" />
-		<action name="v_decoupled_pitch_down" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " UILabel="@ui_CIDecoupledPitchDown" UIDescription="@ui_CIDecoupledPitchDownDesc" />
-		<action name="v_decoupled_roll_left" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="a" joystick="jsx_reserved" UILabel="@ui_CIDecoupledRollLeft" UIDescription="@ui_CIDecoupledRollLeftDesc" />
-		<action name="v_decoupled_roll_right" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard="d" joystick="jsx_reserved" UILabel="@ui_CIDecoupledRollRight" UIDescription="@ui_CIDecoupledRollRightDesc" />		
-		<action name="v_decoupled_roll" xboxpad="xi_triggerl_btn+xi_thumblx" joystick="js1_rotz" UILabel="@ui_CIDecoupledRoll" UIDescription="@ui_CIDecoupledRollDesc" />
-		<action name="v_decoupled_brake" onPress="1" onRelease="1" keyboard="space" xboxpad="xi_shoulderr+xi_shoulderl" joystick="jsx_reserved" UILabel="@ui_CIDecoupledBrake" UIDescription="@ui_CIDecoupledBrakeDesc" />
+		<action name="v_decoupled_strafe_up" onPress="1" onRelease="1" always="1" keyboard="r" xboxpad=" " joystick=" " optionGroup="flight_move_strafe_vertical" UILabel="@ui_CIDecoupledStrafeUp" UIDescription="@ui_CIDecoupledStrafeUpDesc" />
+		<action name="v_decoupled_strafe_down" onPress="1"  onRelease="1" always="1" keyboard="f" xboxpad=" " joystick=" " optionGroup="flight_move_strafe_vertical" UILabel="@ui_CIDecoupledStrafeDown" UIDescription="@ui_CIDecoupledStrafeDownDesc" />
+		<action name="v_decoupled_strafe_vertical" xboxpad="xi_triggerl_btn+xi_thumbry" joystick=" " optionGroup="flight_move_strafe_vertical" UILabel="@ui_CIDecoupledStrafeUpDown" UIDescription="@ui_CIDecoupledStrafeUpDownDesc" />
+		<action name="v_decoupled_strafe_left" onPress="1" onRelease="1" always="1" keyboard="q" xboxpad=" " joystick=" " optionGroup="flight_move_strafe_lateral" UILabel="@ui_CIDecoupledStrafeLeft" UIDescription="@ui_CIDecoupledStrafeLeftDesc" />
+		<action name="v_decoupled_strafe_right" onPress="1" onRelease="1" always="1" keyboard="e" xboxpad=" " joystick=" " optionGroup="flight_move_strafe_lateral" UILabel="@ui_CIDecoupledStrafeRight" UIDescription="@ui_CIDecoupledStrafeRightDesc" />
+		<action name="v_decoupled_strafe_lateral" xboxpad="xi_triggerl_btn+xi_thumbrx" joystick=" " optionGroup="flight_move_strafe_lateral" UILabel="@ui_CIDecoupledStrafeLeftRight" UIDescription="@ui_CIDecoupledStrafeLeftRightDesc" />
+		<action name="v_decoupled_strafe_forward" onPress="1" onRelease="1" always="1" keyboard="w" xboxpad="xi_shoulderr" joystick=" " optionGroup="flight_move_strafe_longitudinal" UILabel="@ui_CIDecoupledStrafeFwd" UIDescription="@ui_CIDecoupledStrafeFwdDesc" />
+		<action name="v_decoupled_strafe_back" onPress="1" onRelease="1" always="1" keyboard="s" xboxpad="xi_shoulderl" joystick=" " optionGroup="flight_move_strafe_longitudinal" UILabel="@ui_CIDecoupledStrafeBack" UIDescription="@ui_CIDecoupledStrafeBackDesc" />
+		<action name="v_decoupled_strafe_longitudinal" xboxpad=" " joystick=" " optionGroup="flight_move_strafe_longitudinal" UILabel="@ui_CIDecoupledStrafeFwdBack" UIDescription="@ui_CIDecoupledStrafeFwdBackDesc" />
+		<action name="v_decoupled_yaw" xboxpad="xi_thumblx" joystick="js1_x" optionGroup="flight_move_yaw" UILabel="@ui_CIDecoupledYaw" UIDescription="@ui_CIDecoupledYawDesc" />
+		<action name="v_decoupled_yaw_left" onPress="1" onRelease="1" always="1" keyboard=" " xboxpad=" " joystick=" " UILabel="@ui_CIDecoupledYawLeft" UIDescription="@ui_CIDecoupledYawLeftDesc" />
+		<action name="v_decoupled_yaw_right" onPress="1" onRelease="1" always="1" keyboard=" " xboxpad=" " joystick=" " UILabel="@ui_CIDecoupledYawRight" UIDescription="@ui_CIDecoupledYawRightDesc" />
+		<action name="v_decoupled_pitch" xboxpad="xi_thumbly" joystick="js1_y" optionGroup="flight_move_pitch" UILabel="@ui_CIDecoupledPitch" UIDescription="@ui_CIDecoupledPitchDesc" />
+		<action name="v_decoupled_pitch_up" onPress="1" onRelease="1" keyboard=" " UILabel="@ui_CIDecoupledPitchUp" UIDescription="@ui_CIDecoupledPitchUpDesc" />
+		<action name="v_decoupled_pitch_down" onPress="1" onRelease="1" keyboard=" " UILabel="@ui_CIDecoupledPitchDown" UIDescription="@ui_CIDecoupledPitchDownDesc" />
+		<action name="v_decoupled_roll_left" onPress="1" onRelease="1" always="1" keyboard="a" xboxpad=" " joystick=" " UILabel="@ui_CIDecoupledRollLeft" UIDescription="@ui_CIDecoupledRollLeftDesc" />
+		<action name="v_decoupled_roll_right" onPress="1" onRelease="1" always="1" keyboard="d" xboxpad=" " joystick=" " UILabel="@ui_CIDecoupledRollRight" UIDescription="@ui_CIDecoupledRollRightDesc" />
+		<action name="v_decoupled_roll" xboxpad="xi_triggerl_btn+xi_thumblx" joystick="js1_rotz" optionGroup="flight_move_roll" UILabel="@ui_CIDecoupledRoll" UIDescription="@ui_CIDecoupledRollDesc" />
+		<action name="v_decoupled_brake" onPress="1" onRelease="1" keyboard="space" xboxpad="xi_shoulderr+xi_shoulderl" joystick=" " UILabel="@ui_CIDecoupledBrake" UIDescription="@ui_CIDecoupledBrakeDesc" />
 		<!-- Afterburner installed (requires IFCS) -->
 		<action name="v_afterburner" onPress="1" onHold="1" onRelease="1" keyboard="lshift" xboxpad="xi_b" joystick="js1_button7" UILabel="@ui_CIBoost" UIDescription="@ui_CIBoostDesc" />
-		<action name="v_toggle_landing_gear" onPress="1" onRelease="1" keyboard="end" joystick="jsx_reserved" />
-		
-		<!-- Mouse input options -->
-		<optiongroup type="keyboard">
-			<option input="_y" group="pilot_movepitch" />
-		</optiongroup>
-		<!-- Pad stick input options -->
-		<optiongroup type="xboxpad">
-			<option group="pilot_move" />
-			<option action="v_yaw" group="pilot_moveyaw" />
-			<option action="v_decoupled_yaw" group="pilot_moveyaw" />			
-			<option action="v_pitch" group="pilot_movepitch" />
-			<option action="v_decoupled_pitch" group="pilot_movepitch" />			
-		</optiongroup>
-		<!-- Joystick input options -->
-		<optiongroup type="joystick">
-			<!-- main stick -->
-			<option input="_x" group="pilot_move_x" />
-			<option input="_y" group="pilot_move_y" />
-			<option input="_z" group="pilot_move_z" />
-			<!-- twist -->
-			<option input="_rotx" group="pilot_move_rotx" />
-			<option input="_roty" group="pilot_move_roty" />
-			<option input="_rotz" group="pilot_move_rotz" />			
-			<!-- sliders -->
-			<option input="_slider1" group="pilot_move_slider1" />
-			<option input="_slider2" group="pilot_move_silder2" />
-		</optiongroup>
+		<action name="v_toggle_autoland" onPress="1" keyboard="delete" xboxpad=" " joystick=" " />
 	</actionmap>
 
-	<actionmap name="spaceship_targeting" version="8" UILabel="@ui_CGSpaceFlight">
+	<actionmap name="spaceship_targeting" version="8" UILabel="@ui_CGSpaceFlightTargeting">
 		<!-- Action map for a spaceship targeting controls -->
 
 		<!-- Aiming -->
-		<action name="v_aim_yaw" xboxpad="xi_thumbrx" joystick="jsx_reserved" UILabel="@ui_CIYawAim" UIDescription="@ui_CIYawAimDesc" />
-		<action name="v_aim_yaw_left" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_left" UILabel="@ui_CIRotateAimLeft" UIDescription="@ui_CIRotateAimLeftDesc" />
-		<action name="v_aim_yaw_right" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_right" UILabel="@ui_CIRotateAimRight" UIDescription="@ui_CIRotateAimRightDesc" />		
-		<action name="v_aim_pitch" xboxpad="xi_thumbry" joystick="jsx_reserved" UILabel="@ui_CIPitchAim" UIDescription="@ui_CIPitchAimDesc" />
-		<action name="v_aim_pitch_up" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_down" UILabel="@ui_CIRotateAimUp" UIDescription="@ui_CIRotateAimUpDesc" />
-		<action name="v_aim_pitch_down" onPress="1"  onHold="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_up" UILabel="@ui_CIRotateAimDown" UIDescription="@ui_CIRotateAimDownDesc" />		
-		<action name="v_aim_yaw_mouse" keyboard="maxis_x" UILabel="@ui_CIYawAim" UIDescription="@ui_CIYawAimDesc" />
-		<action name="v_aim_pitch_mouse" keyboard="maxis_y" UILabel="@ui_CIPitchAim" UIDescription="@ui_CIPitchAimDesc" />
-		<action name="v_aim_snap" onPress="1" joystick="jsx_reserved" UILabel="@ui_CICenterAim" UIDescription="@ui_CICenterAim">
+		<action name="v_aim_yaw" xboxpad="xi_thumbrx" joystick=" " optionGroup="flight_aim_yaw" UILabel="@ui_CIYawAim" UIDescription="@ui_CIYawAimDesc" />
+		<action name="v_aim_yaw_left" onPress="1" onRelease="1" keyboard=" " joystick="js1_hat2_left" UILabel="@ui_CIRotateAimLeft" UIDescription="@ui_CIRotateAimLeftDesc" />
+		<action name="v_aim_yaw_right" onPress="1" onRelease="1" keyboard=" " joystick="js1_hat2_right" UILabel="@ui_CIRotateAimRight" UIDescription="@ui_CIRotateAimRightDesc" />
+		<action name="v_aim_pitch" xboxpad="xi_thumbry" joystick=" " optionGroup="flight_aim_pitch" UILabel="@ui_CIPitchAim" UIDescription="@ui_CIPitchAimDesc" />
+		<action name="v_aim_pitch_up" onPress="1" onRelease="1" keyboard=" " joystick="js1_hat2_down" UILabel="@ui_CIRotateAimUp" UIDescription="@ui_CIRotateAimUpDesc" />
+		<action name="v_aim_pitch_down" onPress="1" onRelease="1" keyboard=" " joystick="js1_hat2_up" UILabel="@ui_CIRotateAimDown" UIDescription="@ui_CIRotateAimDownDesc" />
+		<action name="v_aim_yaw_mouse" keyboard="maxis_x" optionGroup="flight_move_yaw" UILabel="@ui_CIYawAim" UIDescription="@ui_CIYawAimDesc" />
+		<action name="v_aim_pitch_mouse" keyboard="maxis_y" optionGroup="flight_move_pitch" UILabel="@ui_CIPitchAim" UIDescription="@ui_CIPitchAimDesc" />
+		<action name="v_aim_snap" onPress="1" joystick=" " UILabel="@ui_CICenterAim" UIDescription="@ui_CICenterAim">
 			<xboxpad multiTap="2" input="xi_thumbr" />
 		</action>
-		<action name="v_couple_aim_to_move" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="ralt+m" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CICoupleAimMove" UIDescription="@ui_CICoupleAimMoveDesc" />
-		<action name="v_toggle_vj_mouse_aim_only" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="rshift" xboxpad="" joystick="" UILabel="@ui_CICycleMouseAimMode" UIDescription="@ui_CICycleMouseAimModeDesc" />
-		<action name="v_toggle_weapon_gimbal_lock" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="lalt" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIGimbalLock" UIDescription="@ui_CIGimbalLockDesc" />
+		<action name="v_couple_aim_to_move" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="ralt+m" xboxpad=" " joystick=" " UILabel="@ui_CICoupleAimMove" UIDescription="@ui_CICoupleAimMoveDesc" />
+		<action name="v_toggle_mouse_aim_only" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="rshift" UILabel="@ui_CICycleMouseAimMode" UIDescription="@ui_CICycleMouseAimModeDesc" />
+		<action name="v_toggle_weapon_gimbal_lock" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="lalt" xboxpad=" " joystick=" " UILabel="@ui_CIGimbalLock" UIDescription="@ui_CIGimbalLockDesc" />
 		<!-- Targeting computer controls (requires avionics) -->
 		<action name="v_target_toggle_computer_onoff" onPress="1" onRelease="1" keyboard="" xboxpad="" joystick=""/>
-		<action name="v_target_reticle_focus" onPress="1" onRelease="1" keyboard="v" xboxpad="xi_dpad_up" joystick="js1_hat1_up" UILabel="@ui_CITargetReticleFocus" UIDescription="@ui_CITargetReticleFocusDesc"/>
-		<action name="v_target_cycle_all_fwd" onPress="1" onRelease="1" keyboard="y" xboxpad="xi_dpad_down" joystick="js1_hat1_down" UILabel="@ui_CICycleTargetsFwd" UIDescription="@ui_CICycleTargetsFwdDesc" />
-		<action name="v_target_cycle_all_back" onPress="1" onRelease="1" keyboard="lctrl+y" xboxpad="" joystick="" UILabel="@ui_CICycleTargetsBack" UIDescription="@ui_CICycleTargetsBackDesc"/>
-		<action name="v_target_cycle_friendly_fwd" onPress="1" onRelease="1" keyboard="h" xboxpad="" joystick="jsx_reserved" UILabel="@ui_CICycleFriendlyFwd" UIDescription="@ui_CICycleFriendlyFwdDesc" />
-		<action name="v_target_cycle_friendly_back" onPress="1" onRelease="1" keyboard="lctrl+h" xboxpad="" joystick="jsx_reserved" UILabel="@ui_CICycleFriendlyBack" UIDescription="@ui_CICycleFriendlyBackDesc" />
-		<action name="v_target_toggle_pinned_focused" onPress="1" onRelease="1" keyboard="g" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIPinTargeted" UIDescription="@ui_CIPinTargetedDesc" />
-		<action name="v_target_missile_lock_focused" onPress="1" onRelease="1" keyboard="mouse3" xboxpad="xi_y" joystick="js1_button4" UILabel="@ui_CILockMissile" UIDescription="@ui_CILockMissileDesc" />
+		<action name="v_target_reticle_focus" onPress="1" keyboard="v" xboxpad="xi_dpad_up" joystick="js1_hat1_up" UILabel="@ui_CITargetReticleFocus" UIDescription="@ui_CITargetReticleFocusDesc"/>
+		<action name="v_target_cycle_all_fwd" onPress="1" keyboard="y" xboxpad="xi_dpad_down" joystick="js1_hat1_down" UILabel="@ui_CICycleTargetsFwd" UIDescription="@ui_CICycleTargetsFwdDesc" />
+		<action name="v_target_cycle_all_back" onPress="1" keyboard="lctrl+y" xboxpad="" joystick="" UILabel="@ui_CICycleTargetsBack" UIDescription="@ui_CICycleTargetsBackDesc"/>
+		<action name="v_target_cycle_friendly_fwd" onPress="1" keyboard="h" xboxpad="" joystick=" " UILabel="@ui_CICycleFriendlyFwd" UIDescription="@ui_CICycleFriendlyFwdDesc" />
+		<action name="v_target_cycle_friendly_back" onPress="1" keyboard="lctrl+h" xboxpad="" joystick=" " UILabel="@ui_CICycleFriendlyBack" UIDescription="@ui_CICycleFriendlyBackDesc" />
+		<action name="v_target_toggle_pinned_focused" onPress="1" keyboard="g" xboxpad=" " joystick=" " UILabel="@ui_CIPinTargeted" UIDescription="@ui_CIPinTargetedDesc" />
+		<action name="v_target_cycle_pinned_fwd" onPress="1" keyboard="u" xboxpad=" " joystick=" " UILabel="@ui_CICyclePinnedFwd" UIDescription="@ui_CICyclePinnedFwdDesc" />		
+		<action name="v_target_cycle_pinned_back" onPress="1" keyboard=" " xboxpad=" " joystick=" " UILabel="@ui_CICyclePinnedBack" UIDescription="@ui_CICyclePinnedBackDesc" />		
+		<action name="v_target_missile_lock_focused" onRelease="1" keyboard="mouse3" xboxpad="xi_y" joystick="js1_button4" UILabel="@ui_CILockMissile" UIDescription="@ui_CILockMissileDesc" />
 		<!-- Additional targeting computer controls (requires flight avionics) -->
-		<action name="v_target_cycle_hostile_fwd" onPress="1" onRelease="1" keyboard="t" xboxpad="xi_dpad_right" joystick="js1_hat1_right" UILabel="@ui_CICycleHostileFwd" UIDescription="@ui_CICycleHostileFwdDesc" />
-		<action name="v_target_cycle_hostile_back" onPress="1" onRelease="1" keyboard="lctrl+t" xboxpad="" joystick="jsx_reserved" UILabel="@ui_CICycleHostileBack" UIDescription="@ui_CICycleHostileBackDesc" />
-		<action name="v_target_nearest_hostile" onPress="1" onRelease="1" keyboard="c" xboxpad="xi_dpad_left" joystick="js1_hat1_left" UILabel="@ui_CITargetNearestHostile" UIDescription="@ui_CITargetNearestHostileDesc" />
-		<action name="v_target_nearest_landzone" onPress="1" onRelease="1" keyboard="n" xboxpad="" joystick=""/>
-		<action name="v_target_pin_reticule" onPress="1" onRelease="1" keyboard="lctrl+g" xboxpad="" joystick="jsx_reserved" />
-		<action name="v_target_cycle_subsystem_fwd" onPress="1" onRelease="1" keyboard="b" xboxpad="" joystick=""/>
-		<action name="v_target_cycle_subsystem_back" onPress="1" onRelease="1" keyboard="lctrl+b" xboxpad="" joystick=""/>
+		<action name="v_target_cycle_hostile_fwd" onPress="1" keyboard="t" xboxpad="xi_dpad_right" joystick="js1_hat1_right" UILabel="@ui_CICycleHostileFwd" UIDescription="@ui_CICycleHostileFwdDesc" />
+		<action name="v_target_cycle_hostile_back" onPress="1" keyboard="lctrl+t" xboxpad="" joystick=" " UILabel="@ui_CICycleHostileBack" UIDescription="@ui_CICycleHostileBackDesc" />
+		<action name="v_target_nearest_hostile" onPress="1" keyboard="c" xboxpad="xi_dpad_left" joystick="js1_hat1_left" UILabel="@ui_CITargetNearestHostile" UIDescription="@ui_CITargetNearestHostileDesc" />
+		<action name="v_target_cycle_subsystem_fwd" onPress="1" keyboard="b" xboxpad="" joystick=""/>
+		<action name="v_target_cycle_subsystem_back" onPress="1" keyboard="lctrl+b" xboxpad="" joystick=""/>
 		<!-- Advanced assisted camera tracking -->
 		<action name="v_target_head_tracking" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="l" xboxpad="xi_thumbr" joystick="js1_button11" UILabel="@ui_CITargetHeadTracking" UIDescription="@ui_CITargetHeadTrackingDesc" />
-			
-		<optiongroup type="shared">
-			<!-- Digital buttons input options -->
-			<option action="v_aim_yaw_left" group="pilot_aim" />
-			<option action="v_aim_yaw_right" group="pilot_aim" />
-			<option action="v_aim_pitch_up" group="pilot_aim" />
-			<option action="v_aim_pitch_down" group="pilot_aim" />			
-		</optiongroup>
-		<optiongroup type="keyboard">
-			<!-- Mouse input options -->
-			<option input="_y" group="pilot_movepitch" />
-		</optiongroup>
-		<optiongroup type="xboxpad">
-			<!-- Pad stick input options -->
-			<option group="pilot_aim" />
-			<option action="v_aim_yaw" group="pilot_aim" />
-			<option action="v_aim_pitch" group="pilot_aimpitch" />
-		</optiongroup>	
-		<!-- Joystick input options -->
-		<optiongroup type="joystick">
-			<!-- main stick -->
-			<option input="_x" group="pilot_aim_x" />
-			<option input="_y" group="pilot_aim_y" />
-			<!-- twist -->
-			<option input="_rotz" group="pilot_aim_rotz" />
-		</optiongroup>
 	</actionmap>
-	
+
 	<actionmap name="spaceship_turret" version="1">
 		<!-- Action map for a spaceship targeting controls -->
 
 		<!-- Aiming -->
-		<action name="v_aim_yaw" xboxpad="xi_thumblx" joystick="jsx_reserved" />
+		<action name="v_aim_yaw" xboxpad="xi_thumblx" joystick=" " optionGroup="flight_aim_yaw" />
 		<action name="v_aim_yaw_left" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_left"/>
-		<action name="v_aim_yaw_right" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_right"/>		
-		<action name="v_aim_pitch" xboxpad="xi_thumbly" joystick="jsx_reserved" />
+		<action name="v_aim_yaw_right" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_right"/>
+		<action name="v_aim_pitch" xboxpad="xi_thumbly" joystick=" " optionGroup="flight_aim_pitch" />
 		<action name="v_aim_pitch_up" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_down"/>
-		<action name="v_aim_pitch_down" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_up"/>		
-		<action name="v_aim_yaw_mouse" keyboard="maxis_x" />
-		<action name="v_aim_pitch_mouse" keyboard="maxis_y" />
-		<action name="v_aim_snap" onPress="1" joystick="jsx_reserved" >
+		<action name="v_aim_pitch_down" onPress="1" onHold="1" onRelease="1" retriggerable="1" keyboard=" " joystick="js1_hat2_up"/>
+		<action name="v_aim_yaw_mouse" optionGroup="flight_move_yaw" keyboard="maxis_x" />
+		<action name="v_aim_pitch_mouse" optionGroup="flight_move_pitch" keyboard="maxis_y" />
+		<action name="v_aim_snap" onPress="1" joystick=" " >
 			<xboxpad multiTap="2" input="xi_thumbr" />
 		</action>
 		<!-- Targeting computer controls (requires avionics) -->
 		<action name="v_target_toggle_computer_onoff" onPress="1" onRelease="1" keyboard="" xboxpad="" joystick=""/>
-		<action name="v_target_reticle_focus" onPress="1" onRelease="1" keyboard="v" xboxpad="xi_dpad_up" joystick="js1_hat1_up"/>
-		<action name="v_target_cycle_all_fwd" onPress="1" onRelease="1" keyboard="y" xboxpad="xi_dpad_down" joystick="js1_hat1_down"/>
-		<action name="v_target_cycle_all_back" onPress="1" onRelease="1" keyboard="lctrl+y" xboxpad="" joystick=""/>
-		<action name="v_target_cycle_friendly_fwd" onPress="1" onRelease="1" keyboard="h" xboxpad="" joystick="jsx_reserved" />
-		<action name="v_target_cycle_friendly_back" onPress="1" onRelease="1" keyboard="lctrl+h" xboxpad="" joystick="jsx_reserved" />
-		<action name="v_target_toggle_pinned_focused" onPress="1" onRelease="1" keyboard="g" xboxpad="xi_reserved" joystick="jsx_reserved" />
-		<action name="v_target_missile_lock_focused" onPress="1" onRelease="1" keyboard="mouse3" xboxpad="xi_y" joystick="js1_button4" />
+		<action name="v_target_reticle_focus" onPress="1" keyboard="v" xboxpad="xi_dpad_up" joystick="js1_hat1_up"/>
+		<action name="v_target_cycle_all_fwd" onPress="1" keyboard="y" xboxpad="xi_dpad_down" joystick="js1_hat1_down"/>
+		<action name="v_target_cycle_all_back" onPress="1" keyboard="lctrl+y" xboxpad="" joystick=""/>
+		<action name="v_target_cycle_friendly_fwd" onPress="1" keyboard="h" xboxpad="" joystick=" " />
+		<action name="v_target_cycle_friendly_back" onPress="1" keyboard="lctrl+h" xboxpad="" joystick=" " />
+		<action name="v_target_toggle_pinned_focused" onPress="1" keyboard="g" xboxpad=" " joystick=" " />
+		<action name="v_target_missile_lock_focused" onPress="1" onHold="1" onRelease="1" keyboard="mouse3" xboxpad="xi_y" joystick="js1_button4" />
 		<!--Additional targeting computer controls (requires flight avionics) -->
-		<action name="v_target_cycle_hostile_fwd" onPress="1" onRelease="1" keyboard="t" xboxpad="xi_dpad_right" joystick="js1_hat1_right"/>
-		<action name="v_target_cycle_hostile_back" onPress="1" onRelease="1" keyboard="lctrl+t" xboxpad="" joystick="jsx_reserved" />
-		<action name="v_target_nearest_hostile" onPress="1" onRelease="1" keyboard="r" xboxpad="xi_dpad_left" joystick="js1_hat1_left"/>
-		<action name="v_target_nearest_landzone" onPress="1" onRelease="1" keyboard="n" xboxpad="" joystick=""/>
-		<action name="v_target_pin_reticule" onPress="1" onRelease="1" keyboard="lctrl+g" xboxpad="" joystick="jsx_reserved" />
-		<action name="v_target_cycle_subsystem_fwd" onPress="1" onRelease="1" keyboard="b" xboxpad="" joystick=""/>
-		<action name="v_target_cycle_subsystem_back" onPress="1" onRelease="1" keyboard="lctrl+b" xboxpad="" joystick=""/>
-			
-		<optiongroup type="shared">
-			<!-- Digital buttons input options -->
-			<option action="v_aim_yaw_left" group="pilot_aim" />
-			<option action="v_aim_yaw_right" group="pilot_aim" />
-			<option action="v_aim_pitch_up" group="pilot_aim" />
-			<option action="v_aim_pitch_down" group="pilot_aim" />			
-		</optiongroup>
-		<optiongroup type="keyboard">
-			<!-- Mouse input options -->
-			<option input="_y" group="pilot_movepitch" />
-		</optiongroup>
-		<optiongroup type="xboxpad">
-			<!-- Pad stick input options -->
-			<option group="pilot_aim" />
-			<option action="v_aim_yaw" group="pilot_aim" />
-			<option action="v_aim_pitch" group="pilot_aimpitch" />
-		</optiongroup>	
+		<action name="v_target_cycle_hostile_fwd" onPress="1" keyboard="t" xboxpad="xi_dpad_right" joystick="js1_hat1_right"/>
+		<action name="v_target_cycle_hostile_back" onPress="1" keyboard="lctrl+t" xboxpad="" joystick=" " />
+		<action name="v_target_nearest_hostile" onPress="1" keyboard="r" xboxpad="xi_dpad_left" joystick="js1_hat1_left"/>
+		<action name="v_target_nearest_landzone" onPress="1" keyboard="n" xboxpad="" joystick=""/>
+		<action name="v_target_pin_reticule" onPress="1" keyboard="lctrl+g" xboxpad="" joystick=" " />
+		<action name="v_target_cycle_subsystem_fwd" onPress="1" keyboard="b" xboxpad="" joystick=""/>
+		<action name="v_target_cycle_subsystem_back" onPress="1" keyboard="lctrl+b" xboxpad="" joystick=""/>
 	</actionmap>
 
-	<actionmap name="spaceship_weapons" version="2" UILabel="@ui_CGSpaceFlight">
+	<actionmap name="spaceship_weapons" version="2" UILabel="@ui_CGSpaceFlightWeapons">
 		<!-- Action map for a spaceship standard weapons controls -->
 
 		<!-- Weapons control (requires flight avionics) -->
@@ -665,34 +647,34 @@
 		<action name="v_weapon_cycle_ammo_back" onPress="1" onRelease="1" keyboard="" xboxpad="" joystick=""/>
 	</actionmap>
 
-	<actionmap name="spaceship_missiles" version="1" UILabel="@ui_CGSpaceFlight">
+	<actionmap name="spaceship_missiles" version="1" UILabel="@ui_CGSpaceFlightMissiles">
 		<!-- Action map for a spaceship missiles -->
 
-		<action name="v_weapon_cycle_missile_fwd" onPress="1" onRelease="1" keyboard="mwheel_up" xboxpad="" joystick="js1_button6" />
-		<action name="v_weapon_cycle_missile_back" onPress="1" onRelease="1" keyboard="mwheel_down" xboxpad="" joystick="" />
-		<action name="v_weapon_toggle_arm_missile" onPress="1" onHold="1" holdRepeatDelay="-1" holdTriggerDelay="0.4" onRelease="1" keyboard="" xboxpad="xi_reserved" joystick="" />
+		<!--<action name="v_weapon_cycle_missile_fwd" onPress="1" keyboard="mwheel_up" xboxpad=" " joystick="js1_button6" />
+		<action name="v_weapon_cycle_missile_back" onPress="1" keyboard="mwheel_down" xboxpad="" joystick="" />
+		<action name="v_weapon_toggle_arm_missile" onPress="1" onHold="1" holdRepeatDelay="-1" holdTriggerDelay="0.4" onRelease="1" keyboard="" xboxpad=" " joystick="" />-->
 		<action name="v_weapon_launch_missile" onPress="1" onHold="1" onRelease="1" keyboard="mouse3" xboxpad="xi_y" joystick="js1_button4" UILabel="@ui_CILaunchMissile" UIDescription="@ui_CILaunchMissileDesc"  />
 	</actionmap>
 
-	<actionmap name="spaceship_defensive" version="2" UILabel="@ui_CGSpaceFlight">
+	<actionmap name="spaceship_defensive" version="2" UILabel="@ui_CGSpaceFlightDefensive">
 		<!-- Action map for a spaceship countermeasures and shields -->
 
 		<!-- Countermeasures installed (requires weapons control on)  -->
-		<action name="v_weapon_launch_countermeasure" onPress="1" onRelease="1" keyboard="z" xboxpad="xi_triggerl_btn+xi_y" joystick="js1_button5" UILabel="@ui_CILaunchCM" UIDescription="@ui_CILaunchCMDesc" />
-		<action name="v_weapon_cycle_countermeasure_fwd" onPress="1" keyboard="x" xboxpad="xi_reserved" joystick="js1_button8" UILabel="@ui_CICycleCM" UIDescription="@ui_CICycleCMDesc" />
+		<action name="v_weapon_launch_countermeasure" onPress="1" onHold="1" onRelease="1" keyboard="z" xboxpad="xi_triggerl_btn+xi_y" joystick="js1_button5" UILabel="@ui_CILaunchCM" UIDescription="@ui_CILaunchCMDesc" />
+		<action name="v_weapon_cycle_countermeasure_fwd" onPress="1" keyboard="x" xboxpad=" " joystick="js1_button8" UILabel="@ui_CICycleCM" UIDescription="@ui_CICycleCMDesc" />
 		<action name="v_weapon_cycle_countermeasure_back" onPress="1" keyboard="" xboxpad="" joystick=""/>
 
 		<!-- Shields -->
-		<action name="v_shield_raise_level_forward" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_8" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIShieldLevelFront" UIDescription="@ui_CIShieldLevelFrontDesc" />
-		<action name="v_shield_raise_level_back" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_2" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIShieldLevelBack" UIDescription="@ui_CIShieldLevelBackDesc" />
-		<action name="v_shield_raise_level_left" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_4" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIShieldLevelLeft" UIDescription="@ui_CIShieldLevelLeftDesc" />
-		<action name="v_shield_raise_level_right" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_6" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIShieldLevelRight" UIDescription="@ui_CIShieldLevelRightDesc" />
-		<action name="v_shield_raise_level_up" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_9" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIShieldLevelTop" UIDescription="@ui_CIShieldLevelTopDesc" />
-		<action name="v_shield_raise_level_down" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_7" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIShieldLevelBottom" UIDescription="@ui_CIShieldLevelBottomDesc" />
-		<action name="v_shield_reset_level" onPress="0" onRelease="1" onHold="0" holdTriggerDelay="0.15" keyboard="np_5" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIShieldLevelReset" UIDescription="@ui_CIShieldLevelResetDesc" />
+		<action name="v_shield_raise_level_forward" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_8" xboxpad=" " joystick=" " UILabel="@ui_CIShieldLevelFront" UIDescription="@ui_CIShieldLevelFrontDesc" />
+		<action name="v_shield_raise_level_back" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_2" xboxpad=" " joystick=" " UILabel="@ui_CIShieldLevelBack" UIDescription="@ui_CIShieldLevelBackDesc" />
+		<action name="v_shield_raise_level_left" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_4" xboxpad=" " joystick=" " UILabel="@ui_CIShieldLevelLeft" UIDescription="@ui_CIShieldLevelLeftDesc" />
+		<action name="v_shield_raise_level_right" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_6" xboxpad=" " joystick=" " UILabel="@ui_CIShieldLevelRight" UIDescription="@ui_CIShieldLevelRightDesc" />
+		<action name="v_shield_raise_level_up" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_9" xboxpad=" " joystick=" " UILabel="@ui_CIShieldLevelTop" UIDescription="@ui_CIShieldLevelTopDesc" />
+		<action name="v_shield_raise_level_down" onPress="1" onRelease="1" onHold="1" holdTriggerDelay="0.15" keyboard="np_7" xboxpad=" " joystick=" " UILabel="@ui_CIShieldLevelBottom" UIDescription="@ui_CIShieldLevelBottomDesc" />
+		<action name="v_shield_reset_level" onPress="0" onRelease="1" onHold="0" holdTriggerDelay="0.15" keyboard="np_5" xboxpad=" " joystick=" " UILabel="@ui_CIShieldLevelReset" UIDescription="@ui_CIShieldLevelResetDesc" />
 		<!-- Shields control (requires flight avionics) -->
 		<action name="v_shield_toggle_generator_onoff" onPress="1" keyboard="" xboxpad="" joystick=""/>
-		<action name="v_shield_power_up" onPress="1" keyboard="equal" xboxpad="" joystick=""/>
+		<action name="v_shield_power_up" onPress="1" keyboard="equals" xboxpad="" joystick=""/>
 		<action name="v_shield_power_down" onPress="1" keyboard="minus" xboxpad="" joystick=""/>
 		<action name="v_shield_power" keyboard="" xboxpad="" joystick=""/>
 		<!-- Shield management system installed -->
@@ -708,7 +690,7 @@
 		<action name="v_weapon_toggle_ai" onPress="1" keyboard="slash" xboxpad="" joystick=""/>
 	</actionmap>
 
-	<actionmap name="spaceship_radar" version="2" UILabel="@ui_CGSpaceFlight">
+	<actionmap name="spaceship_radar" version="2" UILabel="@ui_CGSpaceFlightRadar">
 		<!-- Action map for a spaceship radar controls -->
 
 		<!-- Radar control (requires avionic) -->
@@ -716,26 +698,26 @@
 		<action name="v_radar_toggle_active_or_passive" onPress="1" keyboard="" xboxpad="" joystick=""/>
 		<action name="v_radar_cycle_mode_fwd" onPress="1" keyboard="" xboxpad="" joystick=""/>
 		<action name="v_radar_cycle_mode_back" onPress="1" keyboard="" xboxpad="" joystick=""/>
-		<action name="v_radar_cycle_zoom_fwd" onPress="1" keyboard="comma" xboxpad="" joystick="jsx_reserved" UILabel="@ui_CICycleRadarRange" UIDescription="@ui_CICycleRadarRangeDesc" />
+		<action name="v_radar_cycle_zoom_fwd" onPress="1" keyboard="comma" xboxpad="" joystick=" " UILabel="@ui_CICycleRadarRange" UIDescription="@ui_CICycleRadarRangeDesc" />
 		<action name="v_radar_cycle_zoom_back" onPress="1" keyboard="" xboxpad="" joystick=""/>
 		<action name="v_radar_cycle_focus_fwd" onPress="1" keyboard="j" xboxpad="" joystick=""/>
 		<action name="v_radar_cycle_focus_back" onPress="1" keyboard="k" xboxpad="" joystick=""/>
 		<action name="v_radar_toggle_view_focus" onPress="1" keyboard="" xboxpad="" joystick=""/>
 	</actionmap>
 
-	<actionmap name="spaceship_hud" version="2" UILabel="@ui_CGSpaceFlight">
+	<actionmap name="spaceship_hud" version="2" UILabel="@ui_CGSpaceFlightHUD">
 		<!-- Action map for a spaceship HUD controls-->
 
 		<!-- HUD controls (general) -->
-		<action name="v_hud_cycle_mode_fwd" onPress="1" onRelease="1" keyboard="semicolon" xboxpad="" joystick="jsx_reserved" />
-		<action name="v_hud_cycle_mode_back" onPress="1" onRelease="1" keyboard="apostrophe" xboxpad="" joystick="jsx_reserved" />
+		<action name="v_hud_cycle_mode_fwd" onPress="1" onRelease="1" keyboard="apostrophe" xboxpad="" joystick=" " />
+		<action name="v_hud_cycle_mode_back" onPress="1" onRelease="1" keyboard="semicolon" xboxpad="" joystick=" " />
 		<action name="v_hud_focused_cycle_mode_fwd" onPress="1" onRelease="1" keyboard="" xboxpad="xi_shoulderr" joystick="" />
-		<action name="v_hud_focused_cycle_mode_back" onPress="1" onRelease="1" keyboard="" xboxpad="xi_shoulderl" joystick="" />		
+		<action name="v_hud_focused_cycle_mode_back" onPress="1" onRelease="1" keyboard="" xboxpad="xi_shoulderl" joystick="" />
 		<!-- HUD controls (quick keys) -->
-		<action name="v_hud_open_tab1" onPress="1" onRelease="1" keyboard="f1" xboxpad="" joystick="jsx_reserved" UILabel="@ui_CIHUDOverview" UIDescription="@ui_CIHUDOverviewDesc" />
-		<action name="v_hud_open_tab2" onPress="1" onRelease="1" keyboard="f2" xboxpad="" joystick="jsx_reserved" UILabel="@ui_CIHUDWeapons" UIDescription="@ui_CIHUDWeaponsDesc" />
-		<action name="v_hud_open_tab3" onPress="1" onRelease="1" keyboard="f3" xboxpad="" joystick="jsx_reserved" UILabel="@ui_CIHUDPower" UIDescription="@ui_CIHUDPowerDesc" />
-		<action name="v_hud_open_tab4" onPress="1" onRelease="1" keyboard="f4" xboxpad="" joystick="jsx_reserved" UILabel="@ui_CIHUDShields" UIDescription="@ui_CIHUDShieldsDesc" />
+		<action name="v_hud_open_tab1" onPress="1" onRelease="1" keyboard="f1" xboxpad="" joystick=" " UILabel="@ui_CIHUDOverview" UIDescription="@ui_CIHUDOverviewDesc" />
+		<action name="v_hud_open_tab2" onPress="1" onRelease="1" keyboard="f2" xboxpad="" joystick=" " UILabel="@ui_CIHUDWeapons" UIDescription="@ui_CIHUDWeaponsDesc" />
+		<action name="v_hud_open_tab3" onPress="1" onRelease="1" keyboard="f3" xboxpad="" joystick=" " UILabel="@ui_CIHUDPower" UIDescription="@ui_CIHUDPowerDesc" />
+		<action name="v_hud_open_tab4" onPress="1" onRelease="1" keyboard="f4" xboxpad="" joystick=" " UILabel="@ui_CIHUDShields" UIDescription="@ui_CIHUDShieldsDesc" />
 		<action name="v_hud_open_tab5" onPress="1" onRelease="1" keyboard="f5" xboxpad="" joystick=""/>
 		<action name="v_hud_open_tab6" onPress="1" onRelease="1" keyboard="f6" xboxpad="" joystick=""/>
 		<action name="v_hud_open_tab7" onPress="1" onRelease="1" keyboard="f7" xboxpad="" joystick=""/>
@@ -756,16 +738,18 @@
 		<action name="v_hud_num_8" onPress="1" onRelease="1" keyboard="np_8" xboxpad="" joystick=""/>
 		<action name="v_hud_num_9" onPress="1" onRelease="1" keyboard="np_9" xboxpad="" joystick=""/>
 		-->
-		<action name="v_hud_open_scoreboard" onPress="1" onRelease="1" keyboard="lctrl+space" xboxpad="xi_reserved" joystick="jsx_reserved" UILabel="@ui_CIOpenScoreboard" UIDescription="@ui_CIOpenScoreboardDesc" />
+		<action name="v_hud_open_scoreboard" onPress="1" onRelease="1" releaseTriggerDelay="0.25" keyboard="lctrl+space" xboxpad=" " joystick=" " UILabel="@ui_CIOpenScoreboard" UIDescription="@ui_CIOpenScoreboardDesc" />
 		<action name="v_hud_toggle_maximised" onPress="1" onRelease="1" keyboard="f11" xboxpad="" joystick="" UILabel="@ui_CIHUDMaximise" UIDescription="@ui_CIHUDMaximiseDesc"/>
 		<!-- HUD controls (interaction) -->
-		<action name="v_hud_interact_toggle" onPress="1" onRelease="0" keyboard="home" xboxpad="xi_back" joystick="jsx_reserved" UILabel="@ui_CIHUDInteract" UIDescription="@ui_CIHUDInteractDesc" />
-		<action name="v_hud_confirm" onPress="1" onRelease="1" keyboard="enter" xboxpad="xi_a" joystick="jsx_reserved" UILabel="@ui_CIHUDConfirm" UIDescription="@ui_CIHUDConfirmDesc" />
-		<action name="v_hud_cancel" onPress="1" onRelease="1" keyboard="rctrl" xboxpad="xi_b" joystick="jsx_reserved" UILabel="@ui_CIHUDCancel" UIDescription="@ui_CIHUDCancelDesc" />
+		<action name="v_hud_interact_toggle" onPress="1" onRelease="0" keyboard="home" xboxpad="xi_back" joystick=" " UILabel="@ui_CIHUDInteract" UIDescription="@ui_CIHUDInteractDesc" />
+		<action name="v_hud_confirm" onPress="1" onRelease="1" keyboard="enter" xboxpad="xi_a" joystick=" " UILabel="@ui_CIHUDConfirm" UIDescription="@ui_CIHUDConfirmDesc" />
+		<action name="v_hud_cancel" onPress="1" onRelease="1" keyboard="rctrl" xboxpad="xi_b" joystick=" " UILabel="@ui_CIHUDCancel" UIDescription="@ui_CIHUDCancelDesc" />
 		<action name="v_hud_left_panel_up" onPress="1" onRelease="1" keyboard="up" xboxpad="xi_dpad_up" joystick="" UILabel="@ui_CIHUDPanelUp" UIDescription="@ui_CIHUDPanelUpDesc" />
 		<action name="v_hud_left_panel_down" onPress="1" onRelease="1" keyboard="down" xboxpad="xi_dpad_down" joystick="" UILabel="@ui_CIHUDPanelDown" UIDescription="@ui_CIHUDPanelDownDesc" />
 		<action name="v_hud_left_panel_left" onPress="1" onRelease="1" keyboard="left" xboxpad="xi_dpad_left" joystick="" UILabel="@ui_CIHUDPanelLeft" UIDescription="@ui_CIHUDPanelLeftDesc" />
 		<action name="v_hud_left_panel_right" onPress="1" onRelease="1" keyboard="right" xboxpad="xi_dpad_right" joystick="" UILabel="@ui_CIHUDPanelRight" UIDescription="@ui_CIHUDPanelRightDesc" />
+		<action name="v_hud_stick_x" onPress="1" onRelease="1" xboxpad="xi_thumbrx" joystick=""/>
+		<action name="v_hud_stick_y" onPress="1" onRelease="1" xboxpad="xi_thumbry" joystick=""/>
 		<action name="v_hud_toggle_cursor_input" onHold="1" onRelease="1" holdTriggerDelay="0.25" holdRepeatDelay="-1" retriggerable="0" keyboard="tab" xboxpad="" joystick="" UILabel="@ui_CIHUDToggleCursor" UIDescription="@ui_CIHUDToggleCursorDesc" />
 
 		<!-- Comm system controls -->
@@ -777,7 +761,7 @@
 		<action name="v_comm_select_precanned_3" onPress="1" onRelease="1" keyboard="" xboxpad="" joystick=""/>
 		<action name="v_comm_select_precanned_4" onPress="1" onRelease="1" keyboard="" xboxpad="" joystick=""/>
 		<action name="v_comm_select_precanned_5" onPress="1" onRelease="1" keyboard="" xboxpad="" joystick=""/>
-		
+
 		<!-- Comm system controls -->
 		<!--
 		<action name="v_preset_load_current_1" onPress="1" onRelease="0" keyboard="1" xboxpad="" joystick=""/>
@@ -815,7 +799,7 @@
 
 	<actionmap name="zero_gravity_general" version="1">
 		<!-- general zero-gravity keys, applies to thruster and non-thruster movement -->
-    <action name="z_brake" onPress="1" onRelease="1" keyboard="lctrl+b" xboxpad="xi_triggerl_btn+xi_x" ps3pad="pad_l2+pad_square" joystick=""/>
+		<action name="z_brake" onPress="1" onRelease="1" keyboard="lctrl+b" xboxpad="xi_triggerl_btn+xi_x" ps3pad="pad_l2+pad_square" joystick=""/>
 		<action name="z_override_joystick" onPress="1" onRelease="1" retriggerable="1" xboxpad="xi_triggerl_btn" ps3pad="pad_l2"/>
 
 		<action name="z_roll" xboxpad="xi_triggerl_btn+xi_thumblx" ps3pad="pad_l2+pad_sticklx" joystick="js1_x"/>

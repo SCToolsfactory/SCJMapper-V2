@@ -215,7 +215,7 @@ namespace SCJMapper_V2
       using ( TextReader sr = txReader ) {
         String buf = sr.ReadLine( );
         while ( !String.IsNullOrEmpty( buf ) ) {
-          String[] elem = buf.Split( new char[] { ';', ',', ' ' } );
+          String[] elem = buf.Split( new char[] { ';', ',' } );
           if ( elem.Length > 1 ) {
             if ( !IgnoreMaps.Contains( "," + elem[0] + "," ) ) {
               // must have 2 elements min
@@ -321,8 +321,6 @@ namespace SCJMapper_V2
     /// <param name="input">The new Text property</param>
     public void UpdateSelectedItem( String input, Boolean invert, DeviceCls.InputKind inKind )
     {
-      log.Debug( "UpdateSelectedItem - Entry" );
-
       if ( Ctrl.SelectedNode == null ) return;
 
       ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name );
