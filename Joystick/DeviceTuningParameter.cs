@@ -14,16 +14,13 @@ namespace SCJMapper_V2
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     private String m_actionCommand = "";  // v_pitch - js1_x ..
-    private String m_cmdCtrl = "";  // x, y, rotz ...
-    private String m_type = "";     // joystick OR xboxpad
-    private int m_devInstanceNo = -1;         // jsN - instance in XML
+    private String m_cmdCtrl = "";        // x, y, rotz ...
+    private String m_type = "";           // joystick OR xboxpad
+    private int m_devInstanceNo = -1;     // jsN - instance in XML
 
     String m_option = ""; // the option name (level where it applies)
 
     private String m_deviceName = "";
-
-    private bool   m_deadzoneEnabled = false;  // default
-    private String m_deadzone = "0.000";
 
     private bool   m_senseEnabled = false;  // default
     private String m_sense = "1.00";
@@ -38,6 +35,8 @@ namespace SCJMapper_V2
     private List<String> m_PtsOut = new List<String>( );
 
     private DeviceCls m_device = null;
+
+    private DeviceDeadzoneParameter m_deadzone = null;
 
     public DeviceTuningParameter(  )
     {
@@ -87,13 +86,7 @@ namespace SCJMapper_V2
     }
 
 
-    public bool DeadzoneUsed
-    {
-      get { return m_deadzoneEnabled; }
-      set { m_deadzoneEnabled = value; }
-    }
-
-    public String Deadzone
+    public DeviceDeadzoneParameter Deadzone
     {
       get { return m_deadzone; }
       set { m_deadzone = value; }
@@ -155,72 +148,51 @@ namespace SCJMapper_V2
     /// </summary>
     private void DecomposeCommand( )
     {
-      // pobulate from input
+      // populate from input
       // something like "v_pitch - js1_x" OR "v_pitch - xi_thumbl" OR "v_pitch - ximod+xi_thumbl+xi_mod"
       String cmd = ActionTreeNode.CommandFromNodeText( ActionCommand );
       String action = ActionTreeNode.ActionFromNodeText( ActionCommand );
       m_cmdCtrl = "";
-      if ( !String.IsNullOrWhiteSpace(cmd) ) {
+      if ( !String.IsNullOrWhiteSpace( cmd ) ) {
         // decomp gamepad entries - could have modifiers so check for contains...
         if ( cmd.Contains( "xi_thumblx" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumblx";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = String.Format( "pilot_movepitch" );
-          else m_option = String.Format( "pilot_moveyaw" );
+          if ( action.Contains( "pitch" ) ) m_option = String.Format( "flight_move_pitch" );
+          else m_option = String.Format( "flight_move_yaw" );
         }
         else if ( cmd.Contains( "xi_thumbly" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbly";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = String.Format( "pilot_movepitch" );
-          else m_option = String.Format( "pilot_moveyaw" );
+          if ( action.Contains( "pitch" ) ) m_option = String.Format( "flight_move_pitch" );
+          else m_option = String.Format( "flight_move_yaw" );
         }
         else if ( cmd.Contains( "xi_thumbrx" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbrx";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = String.Format( "pilot_movepitch" );
-          else m_option = String.Format( "pilot_moveyaw" );
+          if ( action.Contains( "pitch" ) ) m_option = String.Format( "flight_move_pitch" );
+          else m_option = String.Format( "flight_move_yaw" );
         }
         else if ( cmd.Contains( "xi_thumbry" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbry";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = String.Format( "pilot_movepitch" );
-          else m_option = String.Format( "pilot_moveyaw" );
+          if ( action.Contains( "pitch" ) ) m_option = String.Format( "flight_move_pitch" );
+          else m_option = String.Format( "flight_move_yaw" );
         }
         // assume joystick
         else {
           // get parts
           m_cmdCtrl = JoystickCls.ActionFromJsCommand( cmd ); //js1_x -> x; js2_rotz -> rotz
           m_deviceName = m_device.DevName;
-          m_option = String.Format( "pilot_move_{0}", m_cmdCtrl ); // update from Command
+          if ( action.Contains( "pitch" ) ) m_option = String.Format( "flight_move_pitch" );
+          else if ( action.Contains( "yaw" ) ) m_option = String.Format( "flight_move_yaw" );
+          else m_option = String.Format( "flight_move_roll" );
         }
       }
-    }
-
-
-    /// <summary>
-    /// Format an XML -deviceoptions- node from the tuning contents
-    /// </summary>
-    /// <returns>The XML string or an empty string</returns>
-    public String Deviceoptions_toXML( )
-    {
-      /*
-	         <deviceoptions name="Joystick - HOTAS Warthog">
-		        <!-- Reduce the deadzone -->
-		        <option input="x" deadzone="0.015" />
-		        <option input="y" deadzone="0.015" />	
-	        </deviceoptions>
-       */
-      String tmp = "";
-      if ( m_deadzoneEnabled ) {
-        tmp += String.Format( "\t<deviceoptions name=\"{0}\">\n", m_deviceName );
-        tmp += String.Format( "\t\t<option input=\"{0}\" deadzone=\"{1}\" />\n", m_cmdCtrl, m_deadzone );
-        tmp += String.Format( "\t</deviceoptions>\n \n" );
-      }
-      return tmp;
     }
 
 

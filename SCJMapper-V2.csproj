@@ -120,12 +120,13 @@
     <Compile Include="appConfiguration.cs" />
     <Compile Include="AppSettings.cs" />
     <Compile Include="DeviceCls.cs" />
+    <Compile Include="Joystick\DeviceDeadzoneParameter.cs" />
     <Compile Include="Gamepad\GamepadCls.cs" />
     <Compile Include="Keyboard\KeyboardCls.cs" />
     <Compile Include="Mouse\MouseCls.cs" />
     <Compile Include="OGL\BezierSeries.cs" />
     <Compile Include="OGL\CalcBezierCurve.cs" />
-    <Compile Include="Joystick\JoystickTuningParameter.cs" />
+    <Compile Include="Joystick\DeviceTuningParameter.cs" />
     <Compile Include="OGL\CubicSpline.cs" />
     <Compile Include="OGL\LoaderStatics.cs" />
     <Compile Include="OGL\FormJSCalCurve.cs">

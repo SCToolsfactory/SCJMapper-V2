@@ -27,25 +27,49 @@ namespace SCJMapper_V2
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     List<String> m_stringOptions = new List<String>( );
-    Options m_options = null;
-    DeviceTuningParameter m_tuningX = null;
-    DeviceTuningParameter m_tuningY = null;
-    DeviceTuningParameter m_tuningZ = null;
+
+    DeviceDeadzoneParameter m_deadzoneX = null;
+    DeviceDeadzoneParameter m_deadzoneY = null;
+    DeviceDeadzoneParameter m_deadzoneZ = null;
 
     // ctor
     public Deviceoptions( Options options )
     {
-      m_options = options;
-      m_tuningX = m_options.TuneX;
-      m_tuningY = m_options.TuneY;
-      m_tuningZ = m_options.TuneZ;
+      m_deadzoneX = new DeviceDeadzoneParameter();
+      m_deadzoneY = new DeviceDeadzoneParameter( );
+      m_deadzoneZ = new DeviceDeadzoneParameter( );
     }
 
 
     public int Count
     {
-      get { return ( m_stringOptions.Count + ( ( m_tuningX != null ) ? 1 : 0 ) + ( ( m_tuningY != null ) ? 1 : 0 ) + ( ( m_tuningZ != null ) ? 1 : 0 ) ); }
+      get { return ( m_stringOptions.Count + ( ( m_deadzoneX != null ) ? 1 : 0 ) + ( ( m_deadzoneY != null ) ? 1 : 0 ) + ( ( m_deadzoneZ != null ) ? 1 : 0 ) ); }
     }
+
+    // provide access to Sense items
+
+    /// <summary>
+    /// Returns the Z-sensitivity item
+    /// </summary>
+    public DeviceDeadzoneParameter DeadzoneX
+    {
+      get { return m_deadzoneX; }
+    }
+    /// <summary>
+    /// Returns the Z-sensitivity item
+    /// </summary>
+    public DeviceDeadzoneParameter DeadzoneY
+    {
+      get { return m_deadzoneY; }
+    }
+    /// <summary>
+    /// Returns the Z-sensitivity item
+    /// </summary>
+    public DeviceDeadzoneParameter DeadzoneZ
+    {
+      get { return m_deadzoneZ; }
+    }
+
 
 
     private String[] FormatXml( string xml )
@@ -80,9 +104,9 @@ namespace SCJMapper_V2
       }
 
       // dump Tuning 
-      r += m_tuningX.Deviceoptions_toXML( );
-      r += m_tuningY.Deviceoptions_toXML( );
-      r += m_tuningZ.Deviceoptions_toXML( );
+      r += m_deadzoneX.Deviceoptions_toXML( );
+      r += m_deadzoneY.Deviceoptions_toXML( );
+      r += m_deadzoneZ.Deviceoptions_toXML( );
 
       return r;
     }
@@ -130,19 +154,19 @@ namespace SCJMapper_V2
               String deadzone = reader["deadzone"];
               if ( ! (String.IsNullOrWhiteSpace( input ) || String.IsNullOrWhiteSpace( deadzone )) ) {
                 if ( input.ToLowerInvariant( ).EndsWith("x") ) {
-                  if ( String.IsNullOrWhiteSpace( m_tuningX.CommandCtrl ) ) m_tuningX.CommandCtrl = input; // if no options have been given...
-                  if ( string.IsNullOrWhiteSpace( m_tuningX.DeviceName ) ) m_tuningX.DeviceName = name; // if no devicename has been given...
-                  m_tuningX.DeadzoneUsed = true; m_tuningX.Deadzone = deadzone;
+                  if ( String.IsNullOrWhiteSpace( m_deadzoneX.CommandCtrl ) ) m_deadzoneX.CommandCtrl = input; // if no options have been given...
+                  if ( String.IsNullOrWhiteSpace( m_deadzoneX.DeviceName ) ) m_deadzoneX.DeviceName = name; // if no devicename has been given...
+                  m_deadzoneX.DeadzoneUsed = true; m_deadzoneX.Deadzone = deadzone;
                 }
                 else if ( input.ToLowerInvariant( ).EndsWith("y") ) {
-                  if ( String.IsNullOrWhiteSpace( m_tuningY.CommandCtrl ) ) m_tuningY.CommandCtrl = input; // if no options have been given...
-                  if ( string.IsNullOrWhiteSpace( m_tuningY.DeviceName ) ) m_tuningY.DeviceName = name; // if no devicename has been given...
-                  m_tuningY.DeadzoneUsed = true; m_tuningY.Deadzone = deadzone;
+                  if ( String.IsNullOrWhiteSpace( m_deadzoneY.CommandCtrl ) ) m_deadzoneY.CommandCtrl = input; // if no options have been given...
+                  if ( String.IsNullOrWhiteSpace( m_deadzoneY.DeviceName ) ) m_deadzoneY.DeviceName = name; // if no devicename has been given...
+                  m_deadzoneY.DeadzoneUsed = true; m_deadzoneY.Deadzone = deadzone;
                 }
                 else if ( input.ToLowerInvariant( ).EndsWith( "z" ) ) {
-                  if ( String.IsNullOrWhiteSpace( m_tuningZ.CommandCtrl )) m_tuningZ.CommandCtrl=input; // if no options have been given...
-                  if ( string.IsNullOrWhiteSpace( m_tuningZ.DeviceName ) ) m_tuningZ.DeviceName = name; // if no devicename has been given...
-                  m_tuningZ.DeadzoneUsed = true; m_tuningZ.Deadzone = deadzone;
+                  if ( String.IsNullOrWhiteSpace( m_deadzoneZ.CommandCtrl )) m_deadzoneZ.CommandCtrl=input; // if no options have been given...
+                  if ( String.IsNullOrWhiteSpace( m_deadzoneZ.DeviceName ) ) m_deadzoneZ.DeviceName = name; // if no devicename has been given...
+                  m_deadzoneZ.DeadzoneUsed = true; m_deadzoneZ.Deadzone = deadzone;
                 }
                 else {
                   //?? option node refers to unknown axis (not x,y,rotz)

@@ -169,8 +169,8 @@ namespace SCJMapper_V2
         log.Info( "FormJSCalCurve : Yaw Command is: " + value );
 
         cbxYinvert.Checked = m_Ytuning.InvertUsed;
-        cbxYdeadzone.Checked = m_Ytuning.DeadzoneUsed;
-        lblYdeadzone.Text = m_Ytuning.Deadzone;
+        cbxYdeadzone.Checked = m_Ytuning.Deadzone.DeadzoneUsed;
+        lblYdeadzone.Text = m_Ytuning.Deadzone.Deadzone;
         cbxYsense.Checked = m_Ytuning.SensitivityUsed;
         lblYsense.Text = m_Ytuning.Sensitivity;
         cbxYexpo.Checked = m_Ytuning.ExponentUsed;
@@ -199,7 +199,7 @@ namespace SCJMapper_V2
     private void YawUpdateTuning( )
     {
       // update from left area labels (xyUsed items are updated on change - so they are actual allready)
-      m_Ytuning.Deadzone = lblYdeadzone.Text;
+      m_Ytuning.Deadzone.Deadzone = lblYdeadzone.Text;
       m_Ytuning.Sensitivity = lblYsense.Text;
       m_Ytuning.Exponent = lblYexponent.Text;
       List<String> pts = new List<String>( );
@@ -249,8 +249,8 @@ namespace SCJMapper_V2
         log.Info( "FormJSCalCurve : Pitch Command is: " + value );
 
         cbxPinvert.Checked = m_Ptuning.InvertUsed;
-        cbxPdeadzone.Checked = m_Ptuning.DeadzoneUsed;
-        lblPdeadzone.Text = m_Ptuning.Deadzone;
+        cbxPdeadzone.Checked = m_Ptuning.Deadzone.DeadzoneUsed;
+        lblPdeadzone.Text = m_Ptuning.Deadzone.Deadzone;
         cbxPsense.Checked = m_Ptuning.SensitivityUsed;
         lblPsense.Text = m_Ptuning.Sensitivity;
         cbxPexpo.Checked = m_Ptuning.ExponentUsed;
@@ -279,7 +279,7 @@ namespace SCJMapper_V2
     private void PitchUpdateTuning( )
     {
       // update from left area labels (xyUsed items are updated on change - so they are actual allready)
-      m_Ptuning.Deadzone = lblPdeadzone.Text;
+      m_Ptuning.Deadzone.Deadzone = lblPdeadzone.Text;
       m_Ptuning.Sensitivity = lblPsense.Text;
       m_Ptuning.Exponent = lblPexponent.Text;
       List<String> pts = new List<String>( );
@@ -328,8 +328,8 @@ namespace SCJMapper_V2
         log.Info( "FormJSCalCurve : Roll Command is: " + value );
 
         cbxRinvert.Checked = m_Rtuning.InvertUsed;
-        cbxRdeadzone.Checked = m_Rtuning.DeadzoneUsed;
-        lblRdeadzone.Text = m_Rtuning.Deadzone;
+        cbxRdeadzone.Checked = m_Rtuning.Deadzone.DeadzoneUsed;
+        lblRdeadzone.Text = m_Rtuning.Deadzone.Deadzone;
         cbxRsense.Checked = m_Rtuning.SensitivityUsed;
         lblRsense.Text = m_Rtuning.Sensitivity;
         cbxRexpo.Checked = m_Rtuning.ExponentUsed;
@@ -358,7 +358,7 @@ namespace SCJMapper_V2
     private void RollUpdateTuning( )
     {
       // update from left area labels (xyUsed items are updated on change - so they are actual allready)
-      m_Rtuning.Deadzone = lblRdeadzone.Text;
+      m_Rtuning.Deadzone.Deadzone = lblRdeadzone.Text;
       m_Rtuning.Sensitivity = lblRsense.Text;
       m_Rtuning.Exponent = lblRexponent.Text;
       List<String> pts = new List<String>( );
@@ -706,7 +706,7 @@ namespace SCJMapper_V2
         m_flightModel.Velocity = Vector3d.Zero;
 
         // Yaw
-        if ( m_Ytuning.DeadzoneUsed ) {
+        if ( m_Ytuning.Deadzone.DeadzoneUsed ) {
           int sx = Math.Sign( x );
           x = ( int )( Math.Abs( x ) - m_liveYdeadzone ); x = ( x < 0 ) ? 0 : x * sx; // DZ is subtracted from the input
         }
@@ -729,7 +729,7 @@ namespace SCJMapper_V2
         }
 
         // Pitch
-        if ( m_Ptuning.DeadzoneUsed ) {
+        if ( m_Ptuning.Deadzone.DeadzoneUsed ) {
           int sy = Math.Sign( y );
           y = ( int )( Math.Abs( y ) - m_livePdeadzone ); y = ( y < 0 ) ? 0 : y * sy;
         }
@@ -750,7 +750,7 @@ namespace SCJMapper_V2
         }
 
         // Roll
-        if ( m_Rtuning.DeadzoneUsed ) {
+        if ( m_Rtuning.Deadzone.DeadzoneUsed ) {
           int sz = Math.Sign( z );
           z = ( int )( Math.Abs( z ) - m_liveRdeadzone ); z = ( z < 0 ) ? 0 : z * sz;
         }
@@ -1195,9 +1195,9 @@ namespace SCJMapper_V2
 
     private void cbxYdeadzone_CheckedChanged( object sender, EventArgs e )
     {
-      m_Ytuning.DeadzoneUsed = false;
+      m_Ytuning.Deadzone.DeadzoneUsed = false;
       if ( cbxYdeadzone.Checked == true ) {
-        m_Ytuning.DeadzoneUsed = true; // update storage
+        m_Ytuning.Deadzone.DeadzoneUsed = true; // update storage
         rbY.Checked = true; // auto switch
         if ( rbY.Checked == true ) tbDeadzone.Value = ( int )( float.Parse( lblYdeadzone.Text ) * 0.2f ); // go live
       }
@@ -1205,9 +1205,9 @@ namespace SCJMapper_V2
 
     private void cbxPdeadzone_CheckedChanged( object sender, EventArgs e )
     {
-      m_Ptuning.DeadzoneUsed = false;
+      m_Ptuning.Deadzone.DeadzoneUsed = false;
       if ( cbxPdeadzone.Checked == true ) {
-        m_Ptuning.DeadzoneUsed = true; // update storage
+        m_Ptuning.Deadzone.DeadzoneUsed = true; // update storage
         rbP.Checked = true; // auto switch
         if ( rbP.Checked == true ) tbDeadzone.Value = ( int )( float.Parse( lblPdeadzone.Text ) * 0.2f ); // go live
       }
@@ -1215,9 +1215,9 @@ namespace SCJMapper_V2
 
     private void cbxRdeadzone_CheckedChanged( object sender, EventArgs e )
     {
-      m_Rtuning.DeadzoneUsed = false;
+      m_Rtuning.Deadzone.DeadzoneUsed = false;
       if ( cbxRdeadzone.Checked == true ) {
-        m_Rtuning.DeadzoneUsed = true; // update storage
+        m_Rtuning.Deadzone.DeadzoneUsed = true; // update storage
         rbR.Checked = true; // auto switch
         if ( rbR.Checked == true ) tbDeadzone.Value = ( int )( float.Parse( lblRdeadzone.Text ) * 0.2f ); // go live
       }

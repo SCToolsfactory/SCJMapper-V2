@@ -28,62 +28,48 @@ namespace SCJMapper_V2
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     List<String> m_stringOptions = new List<String>( );
-    DeviceTuningParameter m_tuningX = null;
-    DeviceTuningParameter m_tuningY = null;
-    DeviceTuningParameter m_tuningZ = null;
+    DeviceTuningParameter m_tuningP = null; // pitch
+    DeviceTuningParameter m_tuningY = null; // yaw
+    DeviceTuningParameter m_tuningR = null; // roll
 
     // ctor
     public Options( JoystickList jsList )
     {
-      m_tuningX = new DeviceTuningParameter(  ); // can be x or rotx
-      m_tuningY = new DeviceTuningParameter(  ); // can be y or roty
-      m_tuningZ = new DeviceTuningParameter(  ); // can be z or rotz
+      m_tuningP = new DeviceTuningParameter( );
+      m_tuningY = new DeviceTuningParameter( );
+      m_tuningR = new DeviceTuningParameter( );
     }
 
     public int Count
     {
-      get { return ( m_stringOptions.Count + ( ( m_tuningX != null ) ? 1 : 0 ) + ( ( m_tuningY != null ) ? 1 : 0 ) + ( ( m_tuningZ != null ) ? 1 : 0 ) ); }
+      get { return ( m_stringOptions.Count + ( ( m_tuningP != null ) ? 1 : 0 ) + ( ( m_tuningY != null ) ? 1 : 0 ) + ( ( m_tuningR != null ) ? 1 : 0 ) ); }
     }
 
 
     // provide access to Tuning items
 
     /// <summary>
-    /// Returns the X-Tuning item
+    /// Returns the Pitch-Tuning item
     /// </summary>
-    public DeviceTuningParameter TuneX
+    public DeviceTuningParameter TuneP
     {
-      get { return m_tuningX; }
+      get { return m_tuningP; }
     }
     /// <summary>
-    /// Returns the Y-Tuning item
+    /// Returns the Yaw-Tuning item
     /// </summary>
     public DeviceTuningParameter TuneY
     {
       get { return m_tuningY; }
     }
     /// <summary>
-    /// Returns the Z-Tuning item
+    /// Returns the Roll-Tuning item
     /// </summary>
-    public DeviceTuningParameter TuneZ
+    public DeviceTuningParameter TuneR
     {
-      get { return m_tuningZ; }
+      get { return m_tuningR; }
     }
 
-    /*
-    /// <summary>
-    /// reassign the JsN Tag
-    /// </summary>
-    /// <param name="newJsList">The JsN reassign list (old,new)</param>
-    public void ReassignJsN( Dictionary<int, int> newJsList )
-    {
-      foreach ( KeyValuePair<int,int> kv in newJsList ) {
-        if ( m_tuningX.JsN == kv.Key ) m_tuningX.JsN = kv.Value;
-        if ( m_tuningY.JsN == kv.Key ) m_tuningY.JsN = kv.Value;
-        if ( m_tuningZ.JsN == kv.Key ) m_tuningZ.JsN = kv.Value;
-      }
-    }
-    */
 
     private String[] FormatXml( string xml )
     {
@@ -117,9 +103,9 @@ namespace SCJMapper_V2
       }
 
       // dump Tuning 
-      r += m_tuningX.Options_toXML( );
+      r += m_tuningP.Options_toXML( );
       r += m_tuningY.Options_toXML( );
-      r += m_tuningZ.Options_toXML( );
+      r += m_tuningR.Options_toXML( );
 
       return r;
     }
@@ -141,13 +127,9 @@ namespace SCJMapper_V2
         		<pilot_rot_moveyaw instance="1" sensitivity="0.8" exponent="1.2" />
 	        </options>  
 
-       * 	 <options type="joystick" instance="1">
-		          <!-- Make all main stick piloting input linear -->
-		          <pilot_move_main exponent="1" />
-	          </options>
        * 
            <options type="joystick" instance="1">
-		          <pilot>
+		          <flight>
 			          <nonlinearity_curve>
 				          <point in="0.1"  out="0.001"/>
 				          <point in="0.25"  out="0.02"/>
@@ -159,7 +141,7 @@ namespace SCJMapper_V2
 				          <point in="0.94"  out="0.45"/>
 				          <point in="0.95"  out="0.75"/>
 			          </nonlinearity_curve>
-		          </pilot>
+		          </flight>
 	          </options>
 
        */
@@ -187,32 +169,23 @@ namespace SCJMapper_V2
         reader.Read( );
         // try to disassemble the items
         /*
-         * <pilot> instance="0/1" sensitivity="n.nn" exponent="n.nn"  (instance should be invert)
-         *   <pilot_move>
-         *     <pilot_move_main> 
-         *       <pilot_move_x>  
-         *       <pilot_move_y>  
-         *       <pilot_move_z>  
-         *     <pilot_move_rot>
-         *       <pilot_move_rotx>  
-         *       <pilot_move_roty>  
-         *       <pilot_move_rotz>  
-         *     <pilot_move_sliders>
-         *       <pilot_move_slider1>
-         *       <pilot_move_slider2>
-         *   <pilot_throttle> invert="0/1"
-         *   <pilot_aim>
-         *     <pilot_aim_main>
-         *       <pilot_aim_x>  
-         *       <pilot_aim_y>  
-         *     <pilot_aim_rot>
-         *       <pilot_aim_rotz>  
-         *   <pilot_view>
-         *     <pilot_view_main>
-         *       <pilot_view_x>  
-         *       <pilot_view_y>  
-         *     <pilot_view_rot>
-         *       <pilot_view_rotz>  
+         * <flight> instance="0/1" sensitivity="n.nn" exponent="n.nn"  (instance should be invert)
+         *   <flight_move>
+         *     <flight_move_pitch>  
+         *     <flight_move_yaw>  
+         *     <flight_move_roll>  
+         *     <flight_move_strafe_vertical>  
+         *     <flight_move_strafe_lateral>  
+         *     <flight_move_strafe_longitudinal>  
+         *   <flight_throttle> invert="0/1"
+         *     <flight_throttle_abs>
+         *     <flight_throttle_rel>
+         *   <flight_aim>
+         *       <flight_aim_pitch>  
+         *       <flight_aim_yaw>  
+         *   <flight_view>
+         *       <flight_view_pitch>  
+         *       <flight_view_yaw>  
          *   
          * 
 			          <nonlinearity_curve>
@@ -225,27 +198,14 @@ namespace SCJMapper_V2
          */
         while ( !reader.EOF ) {
 
-          if ( reader.Name == "pilot_move_x" || reader.Name == "pilot_move_rotx" ) {
-            m_tuningX.Options_fromXML( reader, type, int.Parse( instance ) );
+          if ( reader.Name == "flight_move_pitch" ) {
+            m_tuningP.Options_fromXML( reader, type, int.Parse( instance ) );
           }
-          else if ( reader.Name == "pilot_move_y" || reader.Name == "pilot_move_roty" ) {
+          else if ( reader.Name == "flight_move_yaw" ) {
             m_tuningY.Options_fromXML( reader, type, int.Parse( instance ) );
           }
-          else if ( reader.Name == "pilot_move_z" || reader.Name == "pilot_move_rotz" ) {
-            m_tuningZ.Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          // fixed - get pitch as X and Yaw as Y
-          else if ( reader.Name == "pilot_movepitch" ) {
-            m_tuningX.Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name == "pilot_moveyaw" ) {
-            m_tuningY.Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-
-          else if ( reader.Name == "pilot_throttle" ) {
-            // supports invert
-            //jtp.Options_fromXML( reader, int.Parse( instance ) );
-            log.InfoFormat( "Options.fromXML: pilot_throttle node not yet supported" );
+          else if ( reader.Name == "flight_move_roll" ) {
+            m_tuningR.Options_fromXML( reader, type, int.Parse( instance ) );
           }
 
           else {

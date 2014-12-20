@@ -78,9 +78,9 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns the X-Tuning item
     /// </summary>
-    public DeviceTuningParameter TuningX
+    public DeviceTuningParameter TuningP
     {
-      get { return m_options.TuneX; }
+      get { return m_options.TuneP; }
     }
     /// <summary>
     /// Returns the Y-Tuning item
@@ -92,9 +92,31 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns the Z-Tuning item
     /// </summary>
-    public DeviceTuningParameter TuningZ
+    public DeviceTuningParameter TuningR
     {
-      get { return m_options.TuneZ; }
+      get { return m_options.TuneR; }
+    }
+
+    /// <summary>
+    /// Returns the X-Sensitivity item
+    /// </summary>
+    public DeviceDeadzoneParameter DeadzoneX
+    {
+      get { return m_deviceOptions.DeadzoneX; }
+    }
+    /// <summary>
+    /// Returns the Y-Sensitivity item
+    /// </summary>
+    public DeviceDeadzoneParameter DeadzoneY
+    {
+      get { return m_deviceOptions.DeadzoneY; }
+    }
+    /// <summary>
+    /// Returns the Z-Sensitivity item
+    /// </summary>
+    public DeviceDeadzoneParameter DeadzoneZ
+    {
+      get { return m_deviceOptions.DeadzoneZ; }
     }
 
 

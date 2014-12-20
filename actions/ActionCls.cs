@@ -12,6 +12,14 @@ namespace SCJMapper_V2
   /// 		<action name="v_view_cycle_fwd">
   /// 					<rebind device="joystick" input="js2_button2" />
   /// 				</action>
+  /// 				
+  /// 
+  /// AC1.0
+  /// <action name="v_roll">
+  ///   <rebind device="joystick" input="js1_rotz" />
+  ///   <addbind device="joystick" input="js2_x" />
+  /// </action>
+  /// 
   /// </summary>
   class ActionCls
   {

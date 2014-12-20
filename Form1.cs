@@ -1007,25 +1007,33 @@ namespace SCJMapper_V2
       if ( dev != null ) {
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
-          m_AT.ActionMaps.TuningX.GameDevice = dev;
-          m_AT.ActionMaps.TuningX.ActionCommand = nodeText;
-          JSCAL.YawTuning = m_AT.ActionMaps.TuningX;
+          m_AT.ActionMaps.TuningY.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneX;
+          JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
           m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneY;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
-          m_AT.ActionMaps.TuningZ.GameDevice = dev;
-          m_AT.ActionMaps.TuningZ.ActionCommand = nodeText;
-          JSCAL.YawTuning = m_AT.ActionMaps.TuningZ;
+          m_AT.ActionMaps.TuningY.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneZ.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneZ;
+          JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
         // GP commands that are supported - X
         else if ( nodeText.ToLowerInvariant( ).Contains( "_thumblx" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbrx" ) ) {
-          m_AT.ActionMaps.TuningX.GameDevice = dev;
-          m_AT.ActionMaps.TuningX.ActionCommand = nodeText;
-          JSCAL.YawTuning = m_AT.ActionMaps.TuningX;
+          m_AT.ActionMaps.TuningY.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
+          m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneX;
+          JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
       }
 
@@ -1055,25 +1063,33 @@ namespace SCJMapper_V2
       if ( dev != null ) {
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
-          m_AT.ActionMaps.TuningX.GameDevice = dev;
-          m_AT.ActionMaps.TuningX.ActionCommand = nodeText;
-          JSCAL.PitchTuning = m_AT.ActionMaps.TuningX;
+          m_AT.ActionMaps.TuningP.GameDevice = dev;
+          m_AT.ActionMaps.TuningP.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
+          m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneX;
+          JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
-          m_AT.ActionMaps.TuningY.GameDevice = dev;
-          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
-          JSCAL.PitchTuning = m_AT.ActionMaps.TuningY;
+          m_AT.ActionMaps.TuningP.GameDevice = dev;
+          m_AT.ActionMaps.TuningP.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
+          m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneY;
+          JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
-          m_AT.ActionMaps.TuningZ.GameDevice = dev;
-          m_AT.ActionMaps.TuningZ.ActionCommand = nodeText;
-          JSCAL.PitchTuning = m_AT.ActionMaps.TuningZ;
+          m_AT.ActionMaps.TuningP.GameDevice = dev;
+          m_AT.ActionMaps.TuningP.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneZ.GameDevice = dev;
+          m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneZ;
+          JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
         // GP commands that are supported - either Y
         else if ( nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
-          m_AT.ActionMaps.TuningY.GameDevice = dev;
-          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
-          JSCAL.PitchTuning = m_AT.ActionMaps.TuningY;
+          m_AT.ActionMaps.TuningP.GameDevice = dev;
+          m_AT.ActionMaps.TuningP.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
+          m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneY;
+          JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
       }
 
@@ -1092,19 +1108,25 @@ namespace SCJMapper_V2
       if ( dev != null ) {
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
-          m_AT.ActionMaps.TuningX.GameDevice = dev;
-          m_AT.ActionMaps.TuningX.ActionCommand = nodeText;
-          JSCAL.RollTuning = m_AT.ActionMaps.TuningX;
+          m_AT.ActionMaps.TuningR.GameDevice = dev;
+          m_AT.ActionMaps.TuningR.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
+          m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneX;
+          JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
-          m_AT.ActionMaps.TuningY.GameDevice = dev;
-          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
-          JSCAL.RollTuning = m_AT.ActionMaps.TuningY;
+          m_AT.ActionMaps.TuningR.GameDevice = dev;
+          m_AT.ActionMaps.TuningR.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
+          m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneY;
+          JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
-          m_AT.ActionMaps.TuningZ.GameDevice = dev;
-          m_AT.ActionMaps.TuningZ.ActionCommand = nodeText;
-          JSCAL.RollTuning = m_AT.ActionMaps.TuningZ;
+          m_AT.ActionMaps.TuningR.GameDevice = dev;
+          m_AT.ActionMaps.TuningR.ActionCommand = nodeText;
+          m_AT.ActionMaps.DeadzoneZ.GameDevice = dev;
+          m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneZ;
+          JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
         }
       }
 
