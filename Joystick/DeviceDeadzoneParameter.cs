@@ -10,12 +10,9 @@ namespace SCJMapper_V2
 
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    private String m_actionCommand = "";  // v_pitch - js1_x ..
     private String m_cmdCtrl = "";        // x, y, rotz ...
     private String m_type = "";           // joystick OR xboxpad
     private int m_devInstanceNo = -1;     // jsN - instance in XML
-
-    String m_option = ""; // the option name (level where it applies)
 
     private String m_deviceName = "";
 
@@ -33,18 +30,20 @@ namespace SCJMapper_V2
     public DeviceCls GameDevice
     {
       get { return m_device; }
-      set { m_device = value;
+      set
+      {
+        m_device = value;
         m_type = "";
         m_devInstanceNo = -1;
         if ( JoystickCls.IsDeviceClass( m_device.DevClass ) ) {
           m_type = m_device.DevClass;
-          m_devInstanceNo = (m_device as JoystickCls).JSAssignment;
+          m_devInstanceNo = ( m_device as JoystickCls ).JSAssignment;
         }
         else if ( GamepadCls.IsDeviceClass( m_device.DevClass ) ) {
           m_type = m_device.DevClass;
           m_devInstanceNo = 1; // supports ONE gamepad
         }
-       }
+      }
     }
 
 
@@ -104,6 +103,6 @@ namespace SCJMapper_V2
     }
 
 
-  
+
   }
 }

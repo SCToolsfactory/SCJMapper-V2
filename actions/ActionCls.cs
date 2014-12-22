@@ -21,7 +21,7 @@ namespace SCJMapper_V2
   /// </action>
   /// 
   /// </summary>
-  class ActionCls
+  public class ActionCls
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
@@ -33,6 +33,8 @@ namespace SCJMapper_V2
       AD_Gamepad,
       AD_Keyboard,
     }
+
+    #region Static Items
 
     static public ActionDevice ADevice( String device )
     {
@@ -79,28 +81,29 @@ namespace SCJMapper_V2
       }
     }
 
+    #endregion
+
 
     // Class items
 
     public String key { get; set; }  // the key is the "Daction" formatted item (as we can have the same name multiple times)
-    public String name { get; set; }
-    public String device { get; set; }
-    public String input { get; set; }
-    public String defBinding { get; set; }  // the default binding
-    public Boolean inverted { get; set; }
-    public ActionDevice actionDevice { get; set; }
+    public String name { get; set; }                // the plain action name e.g. v_yaw
+    public ActionDevice actionDevice { get; set; }  // the enum of the device
+    public String device { get; set; }              // name of the device (uses DeviceClass)
+    public String defBinding { get; set; }          // the default binding
+    public List<ActionCommandCls> inputList { get; set; }
+
     /// <summary>
     /// ctor
     /// </summary>
     public ActionCls( )
     {
-      device = JoystickCls.DeviceClass;
       key = "";
-      name = "";
-      input = "";
-      defBinding = "";
-      inverted = false;
       actionDevice = ActionDevice.AD_Unknown;
+      device = JoystickCls.DeviceClass;
+      name = "";
+      defBinding = "";
+      inputList = new List<ActionCommandCls>( ); // empty list
     }
 
 
@@ -114,21 +117,36 @@ namespace SCJMapper_V2
       ActionCls newAc = new ActionCls( );
       // full copy from 'this'
       newAc.key = this.key;
-      newAc.name = this.name;
+      newAc.actionDevice = this.actionDevice;
       newAc.device = this.device;
+      newAc.name = this.name;
       newAc.defBinding = this.defBinding;
-      newAc.input = this.input;
-      newAc.inverted = this.inverted;
 
-      // reassign the jsX part for Joystick commands
-      if ( JoystickCls.IsDeviceClass( this.device ) && JoystickCls.IsDeviceClass( newAc.device ) ) {
-        int oldJsN = JoystickCls.JSNum( this.input );
-        if ( JoystickCls.IsJSValid( oldJsN ) ) {
-          if ( newJsList.ContainsKey( oldJsN ) ) newAc.input = JoystickCls.ReassignJSTag( this.input, newJsList[oldJsN] );
-        }
+      foreach ( ActionCommandCls acc in inputList ) {
+        newAc.inputList.Add( acc.ReassignJsN( newJsList ) );
       }
 
       return newAc;
+    }
+
+
+    public ActionCommandCls AddCommand( String input, int index )
+    {
+      ActionCommandCls acc = new ActionCommandCls( );
+      acc.input = input; acc.nodeIndex = index;
+      inputList.Add( acc );
+      return acc;
+    }
+
+    public void DelCommand( int index )
+    {
+      int removeIt = -1;
+
+      for ( int i = 0; i < inputList.Count; i++ ) {
+        if ( inputList[i].nodeIndex == index ) removeIt = i;
+        if ( inputList[i].nodeIndex > index ) inputList[i].nodeIndex -= 1; // reorder trailing ones
+      }
+      if ( removeIt >= 0 ) inputList.RemoveAt( removeIt );
     }
 
 
@@ -139,8 +157,10 @@ namespace SCJMapper_V2
     /// <param name="newAc"></param>
     public void Merge( ActionCls newAc )
     {
-      input = newAc.input;
-      inverted = newAc.inverted;
+      this.inputList.Clear( );
+      foreach ( ActionCommandCls acc in newAc.inputList ) {
+        this.inputList.Add( acc );
+      }
     }
 
     /// <summary>
@@ -149,12 +169,21 @@ namespace SCJMapper_V2
     /// <returns>the action as XML fragment</returns>
     public String toXML( )
     {
-      String r = "";
-      if ( !String.IsNullOrEmpty( input ) ) {
-        if ( inverted ) r = String.Format( "\t<action name=\"{0}\">\n\t\t\t<rebind device=\"{1}\" input=\"{2}\" invert=\"1\" />\n\t\t</action>\n", name, device, input );
-        else r = String.Format( "\t<action name=\"{0}\">\n\t\t\t<rebind device=\"{1}\" input=\"{2}\" />\n\t\t</action>\n", name, device, input );
+      String r = ""; String 
+      bindCmd = "rebind";
+      if ( inputList.Count > 0 ) {
+        if ( !String.IsNullOrEmpty( inputList[0].input ) ) {
+          r = String.Format( "\t<action name=\"{0}\">\n", name );
+          foreach ( ActionCommandCls acc in inputList ) {
+            if ( !String.IsNullOrEmpty( acc.input ) ) {
+              r += String.Format( "\t\t\t<{0} device=\"{1}\" {2}", bindCmd, device, acc.toXML( ) );
+              bindCmd = "addbind";
+            }
+          }
+          r += String.Format( "\t\t</action>\n" );
+        }
       }
-      
+
       return r;
     }
 
@@ -176,34 +205,43 @@ namespace SCJMapper_V2
       if ( reader.Name == "action" ) {
         if ( reader.HasAttributes ) {
           name = reader["name"];
-          // Move the reader back to the element node.
-          reader.ReadStartElement( "action" );
+          reader.ReadStartElement( "action" ); // Checks that the current content node is an element with the given Name and advances the reader to the next node
         }
         else {
           return false;
         }
       }
-      if ( reader.Name == "rebind" ) {
-        if ( reader.HasAttributes ) {
-          device = reader["device"];
-          input = reader["input"];
-          if ( ( input == JoystickCls.BlendedInput ) || ( input == GamepadCls.BlendedInput ) ) input = ""; // don't carry jsx_reserved or xi_reserved into the action
-          key = DevID( device ) + name; // unique id of the action
-          actionDevice = ADevice( device ); // get the enum of the input device
-          String inv = reader["invert"];
-          if ( String.IsNullOrWhiteSpace( inv ) ) {
-            inverted = false;
+      do {
+        if ( reader.Name == "rebind" ) {
+          if ( reader.HasAttributes ) {
+            device = reader["device"];
+            ActionCommandCls acc = new ActionCommandCls( );
+            acc.input = reader["input"];
+            if ( ( acc.input == JoystickCls.BlendedInput ) || ( acc.input == GamepadCls.BlendedInput ) ) acc.input = ""; // don't carry jsx_reserved or xi_reserved into the action
+            key = DevID( device ) + name; // unique id of the action
+            actionDevice = ADevice( device ); // get the enum of the input device
+            inputList.Add( acc );
+            // advances the reader to the next node
+            reader.ReadStartElement( "rebind" );
           }
-          else {
-            inverted = ( inv == "1" ) ? true : false;
-          }
-          // Move the reader back to the element node.
-          reader.ReadStartElement( "rebind" );
         }
-      }
-      else {
-        return false;
-      }
+        else if ( reader.Name == "addbind" ) {
+          if ( reader.HasAttributes ) {
+            device = reader["device"];
+            ActionCommandCls acc = new ActionCommandCls( );
+            acc.input = reader["input"];
+            if ( ( acc.input == JoystickCls.BlendedInput ) || ( acc.input == GamepadCls.BlendedInput ) ) acc.input = ""; // don't carry jsx_reserved or xi_reserved into the action
+            key = DevID( device ) + name; // unique id of the action
+            actionDevice = ADevice( device ); // get the enum of the input device
+            inputList.Add( acc );
+            // advances the reader to the next node
+            reader.ReadStartElement( "addbind" );
+          }
+        }
+        else {
+          return false;
+        }
+      } while ( reader.Name == "addbind" );
       return true;
     }
 

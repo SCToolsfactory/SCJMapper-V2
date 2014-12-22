@@ -97,6 +97,82 @@ namespace SCJMapper_V2
     }
 
 
+    public Boolean CanBlendBinding
+    {
+      get
+      {
+        if ( Ctrl.SelectedNode == null ) return false;
+        else return ( Ctrl.SelectedNode.Level == 1 );
+      }
+    }
+
+    public Boolean CanClearBinding
+    {
+      get
+      {
+        if ( Ctrl.SelectedNode == null ) return false;
+        else return ( Ctrl.SelectedNode.Level == 1 );
+      }
+    }
+
+    public Boolean CanAddBinding
+    {
+      get
+      {
+        if ( Ctrl.SelectedNode == null ) return false;
+        else return ( Ctrl.SelectedNode.Level == 1 );
+      }
+    }
+
+    public Boolean CanDelBinding
+    {
+      get {
+        if ( Ctrl.SelectedNode == null ) return false;
+        else return ( Ctrl.SelectedNode.Level == 2 );
+      }
+    }
+
+
+    /// <summary>
+    /// Add a new Action Child to the selected Node to apply an addtional mapping
+    /// </summary>
+    public void AddBinding( )
+    {
+      if ( Ctrl.SelectedNode == null ) return;
+      if ( Ctrl.SelectedNode.Level != 1 ) return; // can only add to level 1 nodes
+
+      ActionTreeNode matn = FindMasterAction( ( ActionTreeNode )Ctrl.SelectedNode );
+      ActionCls ac = FindActionObject( matn.Parent.Name, matn.Name );   // the related action
+      // make new items
+      ActionTreeInputNode matin = new ActionTreeInputNode( "UNDEF" ); matin.ImageKey = "Add";
+      matn.Nodes.Add( matin ); // add to master tree
+      ActionCommandCls acc = ac.AddCommand( "", matin.Index );
+      // show stuff
+      FilterTree( );
+      FindAndSelectCtrlByName( matn.Name );
+    }
+
+
+    /// <summary>
+    /// Delete the selected ActionChild and remove corresponding ActionCommands
+    /// </summary>
+    public void DelBinding( )
+    {
+      if ( Ctrl.SelectedNode == null ) return;
+      if ( Ctrl.SelectedNode.Level != 2 ) return; // can only delete level 2 nodes
+
+      ActionTreeNode matn = FindMasterAction( ( ActionTreeNode )Ctrl.SelectedNode.Parent ); // the parent treenode
+      ActionCls ac = FindActionObject( matn.Parent.Name, matn.Name );   // the related action
+      // delete items
+      ac.DelCommand( m_ctrl.SelectedNode.Index );
+      matn.Nodes.RemoveAt( m_ctrl.SelectedNode.Index );
+      Dirty = true;
+      // show stuff
+      FilterTree( );
+      FindAndSelectCtrlByName( matn.Name );
+    }
+
+
     private void UpdateMasterNode( ActionTreeNode node )
     {
       // copy to master node
@@ -105,10 +181,45 @@ namespace SCJMapper_V2
       // could return more than one if the action is the same in different actionmaps
       foreach ( ActionTreeNode mtn in masterNode ) {
         if ( mtn.Parent.Name == node.Parent.Name ) {
-          mtn.Command = node.Command; mtn.InvertCommand = node.InvertCommand; mtn.BackColor = node.BackColor;
+          mtn.Command = node.Command; mtn.BackColor = node.BackColor;
         }
       }
     }
+
+    private void UpdateMasterNode( ActionTreeInputNode node )
+    {
+      // copy to master node
+      TreeNode[] masterNode = m_MasterTree.Nodes.Find( node.Name, true ); // find the same node in master
+      if ( masterNode.Length == 0 ) throw new IndexOutOfRangeException( "ActionTree ERROR - cannot find synched node in master" ); // OUT OF SYNC
+      // could return more than one if the action is the same in different actionmaps
+      foreach ( ActionTreeInputNode mtn in masterNode ) {
+        if ( mtn.Parent.Name == node.Parent.Name ) {
+          mtn.Command = node.Command; mtn.BackColor = node.BackColor;
+        }
+      }
+    }
+
+
+    /// <summary>
+    /// Find the master element for the given ActionNode
+    /// </summary>
+    /// <param name="atn">The ActionNode to find</param>
+    /// <returns>The sought node or null</returns>
+    private ActionTreeNode FindMasterAction( ActionTreeNode atn )
+    {
+      if ( atn.Level != 1 ) return null; // sanity
+
+      TreeNode[] masterNode = m_MasterTree.Nodes.Find( atn.Name, true ); // find the same node in master
+      if ( masterNode.Length == 0 ) throw new IndexOutOfRangeException( "ActionTree ERROR - cannot find synched node in master" ); // OUT OF SYNC
+      // could return more than one if the action is the same in different actionmaps
+      foreach ( ActionTreeNode mtn in masterNode ) {
+        if ( mtn.Parent.Name == atn.Parent.Name ) {
+          return mtn;
+        }
+      }
+      return null;
+    }
+
 
 
     /// <summary>
@@ -136,12 +247,15 @@ namespace SCJMapper_V2
           }
           else {
             ActionTreeNode tnAction = new ActionTreeNode( stn ); tnMap.Nodes.Add( tnAction ); // copy level 1 nodes
+            foreach ( ActionTreeInputNode istn in stn.Nodes ) {
+              ActionTreeInputNode tnActionInput = new ActionTreeInputNode( istn ); tnAction.Nodes.Add( tnActionInput ); // copy level 2 nodes
+            }
             allHidden = false;
           }
         }
         // make it tidier..
         if ( allHidden ) tnMap.Collapse( );
-        else tnMap.Expand( );
+        else tnMap.ExpandAll( );
       }
       if ( topNode != null ) Ctrl.TopNode = topNode; // set view to topnode
 
@@ -187,17 +301,18 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="defaultProfileName">The name of the profile to load (w/o extension)</param>
     /// <param name="applyDefaults">True if default mappings should be carried on</param>
-    public void LoadTree( String defaultProfileName, Boolean applyDefaults )
+    public void LoadProfileTree( String defaultProfileName, Boolean applyDefaults )
     {
-      log.Debug( "LoadTree - Entry" );
+      log.Debug( "LoadProfileTree - Entry" );
 
       ActionTreeNode tn = null;
       ActionTreeNode[] cnl = { };
       ActionTreeNode cn = null;
       ActionTreeNode topNode = null;
 
-      ActionCls ac = null;
       ActionMapCls acm = null;
+      ActionCls ac = null;
+      ActionCommandCls acc = null;
 
       ActionMaps = new ActionMapsCls( m_jsList );
       m_MasterTree.Nodes.Clear( );
@@ -212,6 +327,9 @@ namespace SCJMapper_V2
         txReader = new StringReader( dpReader.CSVMap );
       }
 
+      // we assume no addbind items in the profile
+      //  so all actions are shown in the ActionTreeNode and no ActionTreeNode childs must be created here
+      //  however we create the ActionCommand for each entry that is supported - even if it is not mapped (input= "")
       using ( TextReader sr = txReader ) {
         String buf = sr.ReadLine( );
         while ( !String.IsNullOrEmpty( buf ) ) {
@@ -227,59 +345,64 @@ namespace SCJMapper_V2
                   // default assignments
                   String action = elem[ei].Substring( 1 );
                   String defBinding = elem[ei + 1].Substring( 0 );
-                  cn = new ActionTreeNode( "UNDEF" ); cn.Name = elem[ei]; cn.Action = action; cn.BackColor = Color.White; // name with the key it to find it..                
                   String devID = elem[ei].Substring( 0, 1 );
                   String device = ActionCls.DeviceFromID( devID );
-                  cn.ImageKey = devID;
-                  cn.BackColor = Color.White; // some stuff does not work properly...
 
+                  // visual item for the action
+                  cn = new ActionTreeNode( "UNDEF" ); cn.Name = elem[ei]; cn.Action = action; cn.BackColor = Color.White; // name with the key it to find it..                
+                  cn.ImageKey = devID; cn.BackColor = Color.White; // some stuff does not work properly...
                   Array.Resize( ref cnl, cnl.Length + 1 ); cnl[cnl.Length - 1] = cn;
-                  ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.actionDevice = ActionCls.ADevice( device ); ac.defBinding = defBinding;
-                  cn.ActionDevice = ac.actionDevice; // should be known now
-                  acm.Add( ac ); // add to our map
 
+                  // derive content tree
+                  ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.actionDevice = ActionCls.ADevice( device ); ac.defBinding = defBinding;
+                  acm.Add( ac ); // add to our map
+                  cn.ActionDevice = ac.actionDevice; // should be known now
+                  // create just an unmapped ActionCommand item 
+                  acc = new ActionCommandCls( ); acc.input = ""; acc.nodeIndex = -1; // profile items are shown in the ActionTreeNode (not in a child)
+                  ac.inputList.Add( acc );// add to our Action
+
+                  // modify defaults and blendings
                   if ( applyDefaults ) {
                     // apply the default mappings
-                    if ( JoystickCls.IsDeviceClass( ac.device ) ) {
+                    if ( ac.actionDevice == ActionCls.ActionDevice.AD_Joystick ) {
                       int jNum = JoystickCls.JSNum( ac.defBinding );
                       if ( JoystickCls.IsJSValid( jNum ) ) {
-                        ac.input = ac.defBinding;
+                        acc.input = ac.defBinding;
                         cn.Command = ac.defBinding; cn.BackColor = JoystickCls.JsNColor( jNum );
                       }
                       else if ( BlendUnmappedJS ) {
                         // jsx_reserved gets here
-                        ac.input = JoystickCls.BlendedInput;
+                        acc.input = JoystickCls.BlendedInput;
                         cn.Command = JoystickCls.BlendedInput; cn.BackColor = MyColors.BlendedColor;
                       }
                     }
-                    else if ( GamepadCls.IsDeviceClass( ac.device ) ) {
+                    else if ( ac.actionDevice == ActionCls.ActionDevice.AD_Gamepad ) {
                       if ( GamepadCls.IsXiValid( ac.defBinding ) ) {
-                        ac.input = ac.defBinding;
+                        acc.input = ac.defBinding;
                         cn.Command = ac.defBinding; cn.BackColor = GamepadCls.XiColor( );
                       }
                       else if ( BlendUnmappedGP ) {
                         // xi_reserved gets here
-                        ac.input = GamepadCls.BlendedInput;
+                        acc.input = GamepadCls.BlendedInput;
                         cn.Command = GamepadCls.BlendedInput; cn.BackColor = MyColors.BlendedColor;
                       }
                     }
-                    else if ( KeyboardCls.IsDeviceClass( ac.device ) ) {
+                    else if ( ac.actionDevice == ActionCls.ActionDevice.AD_Keyboard ) {
                       if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
-                        ac.input = ac.defBinding;
+                        acc.input = ac.defBinding;
                         cn.Command = ac.defBinding; cn.BackColor = KeyboardCls.KbdColor( );
                       }
                     }
                   }
                   // Don't apply defaults - but blend if checked
                   else {
-                    // init empty
-                    if ( JoystickCls.IsDeviceClass( ac.device ) && BlendUnmappedJS ) {
-                      ac.input = JoystickCls.BlendedInput;
+                    if ( ( ac.actionDevice == ActionCls.ActionDevice.AD_Joystick ) && BlendUnmappedJS ) {
                       cn.Command = JoystickCls.BlendedInput; cn.BackColor = MyColors.BlendedColor;
+                      acc.input = JoystickCls.BlendedInput;
                     }
-                    else if ( GamepadCls.IsDeviceClass( ac.device ) && BlendUnmappedGP ) {
-                      ac.input = GamepadCls.BlendedInput;
+                    else if ( ( ac.actionDevice == ActionCls.ActionDevice.AD_Gamepad ) && BlendUnmappedGP ) {
                       cn.Command = GamepadCls.BlendedInput; cn.BackColor = MyColors.BlendedColor;
+                      acc.input = GamepadCls.BlendedInput;
                     }
                   }
                 }
@@ -319,14 +442,104 @@ namespace SCJMapper_V2
     /// First apply to the GUI tree where the selection happend then copy it over to master tree
     /// </summary>
     /// <param name="input">The new Text property</param>
-    public void UpdateSelectedItem( String input, Boolean invert, DeviceCls.InputKind inKind )
+    public Boolean UpdateSelectedItem( String input, ActionCls.ActionDevice inKind )
     {
-      if ( Ctrl.SelectedNode == null ) return;
+      if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return false; // ERROR exit
+      if ( Ctrl.SelectedNode == null ) return false; // ERROR exit
+      if ( Ctrl.SelectedNode.Parent == null ) return false; // ERROR exit
 
-      ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name );
-      UpdateActionFromInput( input, invert, ac );
-      UpdateNodeFromAction( ( ActionTreeNode )Ctrl.SelectedNode, ac, inKind );
+      // has a parent - must be level 1 or 2 
+      if ( Ctrl.SelectedNode.Level == 1 ) {
+        // this is the main node with Action Cmd
+        ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name );
+        if ( ac == null ) return false; // ERROR exit
+        if ( ac.actionDevice != inKind ) return false; // ERROR exit
+
+        ActionCommandCls acc = FindActionInputObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name, CommandFromNodeText( Ctrl.SelectedNode.Text ) );
+        if ( acc == null ) return false; // ERROR exit
+        UpdateActionCommandFromInput( input, acc, inKind );
+        UpdateNodeFromAction( ( ActionTreeNode )Ctrl.SelectedNode, acc, inKind );
+      }
+      else if ( Ctrl.SelectedNode.Level == 2 ) {
+        // this is a child of an action with further commands
+        ActionTreeNode atn = ( m_ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode
+        ActionCls ac = FindActionObject( atn.Parent.Name, atn.Name );   // the related action
+        if ( ac == null ) return false; // ERROR exit
+        if ( ac.actionDevice != inKind ) return false; // ERROR exit
+
+        ActionCommandCls acc = FindActionInputObject( ac, m_ctrl.SelectedNode.Index );
+        if ( acc == null ) return false; // ERROR exit
+        UpdateActionCommandFromInput( input, acc, inKind );
+        UpdateInputNodeFromAction( ( ActionTreeInputNode )Ctrl.SelectedNode, acc, inKind );
+      }
+      return true;
     }
+
+    /// <summary>
+    /// Find an action with name in a actionmap
+    /// </summary>
+    /// <param name="actionMap">The actionmap name</param>
+    /// <param name="action">The action</param>
+    /// <param name="input">The input</param>
+    /// <returns>An actionCommand or null if not found</returns>
+    private ActionCommandCls FindActionInputObject( String actionMap, String action, String input )
+    {
+      log.Debug( "FindActionInputObject - Entry" );
+      // Apply the input to the ActionTree
+      ActionCls ac = null; ActionCommandCls acc = null;
+      ActionMapCls ACM = ActionMaps.Find( delegate( ActionMapCls _ACM ) { return _ACM.name == actionMap; } );
+      if ( ACM != null ) ac = ACM.Find( delegate( ActionCls _AC ) { return _AC.key == action; } );
+      if ( ac != null ) acc = ac.inputList.Find( delegate( ActionCommandCls _ACC ) { return _ACC.input == input; } );
+      if ( acc == null ) {
+        log.Error( "FindActionInputObject - Action Input not found in tree" );
+        return null;  // ERROR - Action Input not found in tree
+      }
+      return acc;
+    }
+
+    /// <summary>
+    /// Find an action with name in a actionmap
+    /// </summary>
+    /// <param name="actionMap">The actionmap name</param>
+    /// <param name="action">The action</param>
+    /// <param name="input">The input</param>
+    /// <returns>An actionCommand or null if not found</returns>
+    private ActionCommandCls FindActionInputObject( String actionMap, String action, int index )
+    {
+      log.Debug( "FindActionInputObject - Entry" );
+      // Apply the input to the ActionTree
+      ActionCls ac = null; ActionCommandCls acc = null;
+      ActionMapCls ACM = ActionMaps.Find( delegate( ActionMapCls _ACM ) { return _ACM.name == actionMap; } );
+      if ( ACM != null ) ac = ACM.Find( delegate( ActionCls _AC ) { return _AC.key == action; } );
+      if ( ac != null ) acc = ac.inputList.Find( delegate( ActionCommandCls _ACC ) { return _ACC.nodeIndex == index; } );
+      if ( acc == null ) {
+        log.Error( "FindActionInputObject - Action Input not found in tree" );
+        return null;  // ERROR - Action Input not found in tree
+      }
+      return acc;
+    }
+
+
+    /// <summary>
+    /// Find an ActionCommand with index in an Action
+    /// </summary>
+    /// <param name="actionMap">The actionmap name</param>
+    /// <param name="action">The action</param>
+    /// <param name="input">The input</param>
+    /// <returns>An actionCommand or null if not found</returns>
+    private ActionCommandCls FindActionInputObject( ActionCls ac, int index )
+    {
+      log.Debug( "FindActionInputObject - Entry" );
+      // Apply the input to the ActionTree
+      ActionCommandCls acc = null;
+      if ( ac != null ) acc = ac.inputList.Find( delegate( ActionCommandCls _ACC ) { return _ACC.nodeIndex == index; } );
+      if ( acc == null ) {
+        log.Error( "FindActionInputObject - Action Input not found in Action" );
+        return null;  // ERROR - Action Input not found in tree
+      }
+      return acc;
+    }
+
 
     /// <summary>
     /// Find an action with name in a actionmap
@@ -350,28 +563,26 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Updates an action with a new input (command)
+    /// Updates an actionCommand with a new input (command)
     /// </summary>
     /// <param name="input">The input command</param>
-    /// <param name="action">The action to update</param>
-    /// <param name="inKind">The input device</param>
-    private void UpdateActionFromInput( String input, Boolean invert, ActionCls action )
+    /// <param name="action">The action to containing the command</param>
+    /// <param name="actionCmd">The actionCommand to update</param>
+    private void UpdateActionCommandFromInput( String input, ActionCommandCls actionCmd, ActionCls.ActionDevice inKind )
     {
-      log.Debug( "UpdateActionFromInput - Entry" );
-      if ( action == null ) return;
+      log.Debug( "UpdateActionCommandFromInput - Entry" );
+      if ( actionCmd == null ) return;
 
       // Apply the input to the ActionTree
       if ( String.IsNullOrEmpty( input ) ) {
         // unmapped - handle the blended ones from setting
-        action.inverted = false; // reset in any case
-        if ( JoystickCls.IsDeviceClass( action.device ) && BlendUnmappedJS ) action.input = JoystickCls.BlendedInput;
-        else if ( GamepadCls.IsDeviceClass( action.device ) && BlendUnmappedGP ) action.input = GamepadCls.BlendedInput;
-        else action.input = "";
+        if ( ( inKind == ActionCls.ActionDevice.AD_Joystick ) && BlendUnmappedJS ) actionCmd.input = JoystickCls.BlendedInput;
+        else if ( ( inKind == ActionCls.ActionDevice.AD_Gamepad ) && BlendUnmappedGP ) actionCmd.input = GamepadCls.BlendedInput;
+        else actionCmd.input = "";
       }
       else {
         // mapped ones
-        action.input = input;
-        action.inverted = invert;
+        actionCmd.input = input;
       }
       Dirty = true;
     }
@@ -384,43 +595,42 @@ namespace SCJMapper_V2
     /// <param name="node">The TreeNode to update</param>
     /// <param name="action">The action that carries the update</param>
     /// <param name="inKind">The input device</param>
-    private void UpdateNodeFromAction( ActionTreeNode node, ActionCls action, DeviceCls.InputKind inKind )
+    private void UpdateNodeFromAction( ActionTreeNode node, ActionCommandCls actionCmd, ActionCls.ActionDevice inKind )
     {
       log.Debug( "UpdateNodeFromAction - Entry" );
-      if ( action == null ) return;
+      if ( actionCmd == null ) return;
 
-      // applies only to ActionNodes
+      // applies only to ActionTreeNode 
       if ( node.Level == 1 ) {
         // input is either "" or a valid mapping or a blended mapping
-        if ( String.IsNullOrEmpty( action.input ) ) {
+        if ( String.IsNullOrEmpty( actionCmd.input ) ) {
           // new unmapped
-          node.Command = ""; node.InvertCommand = false; node.BackColor = MyColors.UnassignedColor;
+          node.Command = ""; node.BackColor = MyColors.UnassignedColor;
         }
         // blended mapped ones - can only get a Blend Background
-        else if ( JoystickCls.IsDeviceClass( action.device ) && ( action.input == JoystickCls.BlendedInput ) ) {
-          node.Command = action.input; node.InvertCommand = false; node.BackColor = MyColors.BlendedColor;
+        else if ( ( inKind == ActionCls.ActionDevice.AD_Joystick ) && ( actionCmd.input == JoystickCls.BlendedInput ) ) {
+          node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
         }
-        else if ( GamepadCls.IsDeviceClass( action.device ) && ( action.input == GamepadCls.BlendedInput ) ) {
-          node.Command = action.input; node.InvertCommand = false; node.BackColor = MyColors.BlendedColor;
+        else if ( ( inKind == ActionCls.ActionDevice.AD_Gamepad ) && ( actionCmd.input == GamepadCls.BlendedInput ) ) {
+          node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
         }
-        else if ( action.input == DeviceCls.BlendedInput ) {
+        else if ( actionCmd.input == DeviceCls.BlendedInput ) {
           // Manually Blended input
-          node.Command = action.input; node.InvertCommand = false; node.BackColor = MyColors.BlendedColor;
+          node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
         }
         else {
           // mapped ( regular ones )
-          node.Command = action.input;
-          node.InvertCommand = action.inverted; 
+          node.Command = actionCmd.input;
 
           // background is along the input 
-          if ( inKind == DeviceCls.InputKind.Joystick ) {
-            int jNum = JoystickCls.JSNum( action.input );
+          if ( inKind == ActionCls.ActionDevice.AD_Joystick ) {
+            int jNum = JoystickCls.JSNum( actionCmd.input );
             node.BackColor = JoystickCls.JsNColor( jNum );
           }
-          else if ( inKind == DeviceCls.InputKind.Gamepad ) {
+          else if ( inKind == ActionCls.ActionDevice.AD_Gamepad ) {
             node.BackColor = GamepadCls.XiColor( );
           }
-          else if ( inKind == DeviceCls.InputKind.Kbd ) {
+          else if ( inKind == ActionCls.ActionDevice.AD_Keyboard ) {
             node.BackColor = KeyboardCls.KbdColor( );
           }
           else {
@@ -433,6 +643,62 @@ namespace SCJMapper_V2
       }
     }
 
+
+    /// <summary>
+    /// Apply an update from the action to the treenode
+    /// First apply to the GUI tree where the selection happend then copy it over to master tree
+    /// </summary>
+    /// <param name="input">The input command</param>
+    /// <param name="node">The TreeNode to update</param>
+    /// <param name="actionCmd">The actionCommand that carries the update</param>
+    /// <param name="inKind">The input device</param>
+    private void UpdateInputNodeFromAction( ActionTreeInputNode node, ActionCommandCls actionCmd, ActionCls.ActionDevice inKind )
+    {
+      log.Debug( "UpdateInputNodeFromAction - Entry" );
+      if ( actionCmd == null ) return;
+      if ( node.Level != 2 ) return; // applies only to ActionTreeInputNode
+
+      // input is either "" or a valid mapping or a blended mapping
+      if ( String.IsNullOrEmpty( actionCmd.input ) ) {
+        // new unmapped
+        node.Command = ""; node.BackColor = MyColors.UnassignedColor;
+      }
+
+      // blended mapped ones - can only get a Blend Background
+      else if ( ( inKind == ActionCls.ActionDevice.AD_Joystick ) && ( actionCmd.input == JoystickCls.BlendedInput ) ) {
+        node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
+      }
+      else if ( ( inKind == ActionCls.ActionDevice.AD_Gamepad ) && ( actionCmd.input == GamepadCls.BlendedInput ) ) {
+        node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
+      }
+      else if ( actionCmd.input == DeviceCls.BlendedInput ) {
+        // Manually Blended input
+        node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
+      }
+      else {
+        // mapped ( regular ones )
+        node.Command = actionCmd.input;
+
+        // background is along the input 
+        if ( inKind == ActionCls.ActionDevice.AD_Joystick ) {
+          int jNum = JoystickCls.JSNum( actionCmd.input );
+          node.BackColor = JoystickCls.JsNColor( jNum );
+        }
+        else if ( inKind == ActionCls.ActionDevice.AD_Gamepad ) {
+          node.BackColor = GamepadCls.XiColor( );
+        }
+        else if ( inKind == ActionCls.ActionDevice.AD_Keyboard ) {
+          node.BackColor = KeyboardCls.KbdColor( );
+        }
+        else {
+          // ?? what else
+          node.BackColor = MyColors.UnassignedColor;
+        }
+      }
+      UpdateMasterNode( node );
+
+    }
+
     /// <summary>
     /// Defines what to show in the tree
     /// </summary>
@@ -440,7 +706,7 @@ namespace SCJMapper_V2
     /// <param name="showGamepad">True to show Gamepad actions</param>
     /// <param name="showKeyboard">True to show Keyboard actions</param>
     /// <param name="showMappedOnly">True to show mapped actions only </param>
-    public void DefineShowOptions(Boolean showJoystick, Boolean showGamepad, Boolean showKeyboard, Boolean showMappedOnly)
+    public void DefineShowOptions( Boolean showJoystick, Boolean showGamepad, Boolean showKeyboard, Boolean showMappedOnly )
     {
       m_showJoy = showJoystick;
       m_showGameP = showGamepad;
@@ -460,37 +726,32 @@ namespace SCJMapper_V2
       foreach ( ActionMapCls acm in ActionMaps ) {
         if ( IgnoreMaps.Contains( "," + acm.name + "," ) ) break; // next
         try {
-          ActionTreeNode amTn = ( ActionTreeNode )m_MasterTree.Nodes[acm.name]; // get the map node
+          ActionTreeNode mtn = ( ActionTreeNode )m_MasterTree.Nodes[acm.name]; // get the map node
           // find the item to reload into the treeview
           foreach ( ActionCls ac in acm ) {
-            try {
-              ActionTreeNode tnl = ( ActionTreeNode )amTn.Nodes[ac.key];
-              UpdateActionFromInput( ac.input, ac.inverted, ac ); // this may apply (un)Blending if needed
-              // input kind priority first
-              if ( JoystickCls.IsJsN( ac.input ) ) {
-                UpdateNodeFromAction( tnl, ac, DeviceCls.InputKind.Joystick );
+            ActionTreeNode matn = ( ActionTreeNode )mtn.Nodes[ac.key];  // get the action node
+            Boolean first=true;
+            // refresh commands
+            foreach ( ActionCommandCls acc in ac.inputList ) {
+              try {
+                UpdateActionCommandFromInput( acc.input, acc, ac.actionDevice ); // this may apply (un)Blending if needed
+                // the first one goes into the node, further must be created if not existing
+                if ( first ) {
+                  UpdateNodeFromAction( matn, acc, ac.actionDevice );
+                  matn.Nodes.Clear( ); // clear add childs - those don't persist from newly loaded actionmaps
+                  first = false;
+                }
+                else {
+                  // have to recreate the action child nodes
+                  ActionTreeInputNode matin = new ActionTreeInputNode( "UNDEF" ); matin.ImageKey = "Add";
+                  acc.nodeIndex = matin.Index; // assign visual reference
+                  matn.Nodes.Add( matin ); // add to master tree
+                  UpdateInputNodeFromAction( matin, acc, ac.actionDevice );
+                }
               }
-              else if ( GamepadCls.IsXiValid( ac.input ) ) {
-                UpdateNodeFromAction( tnl, ac, DeviceCls.InputKind.Gamepad );
+              catch {
+                ; // key not found
               }
-              // device priority second
-              else if ( JoystickCls.IsDeviceClass( ac.device ) ) {
-                UpdateNodeFromAction( tnl, ac, DeviceCls.InputKind.Joystick );
-              }
-              else if ( GamepadCls.IsDeviceClass( ac.device ) ) {
-                UpdateNodeFromAction( tnl, ac, DeviceCls.InputKind.Gamepad );
-              }
-              else if ( KeyboardCls.IsDeviceClass( ac.device ) ) {
-                UpdateNodeFromAction( tnl, ac, DeviceCls.InputKind.Kbd );
-              }
-              else {
-                // ?? defaults to unassigned color 
-                UpdateNodeFromAction( tnl, ac, DeviceCls.InputKind.Other );
-              }
-
-            }
-            catch {
-              ; // key not found
             }
           }
         }
@@ -513,24 +774,59 @@ namespace SCJMapper_V2
     {
       log.Debug( "FindAndSelectCtrl - Entry" );
 
-      Boolean found = false;
       foreach ( ActionTreeNode tn in Ctrl.Nodes ) {
         // have to search nodes of nodes
         foreach ( ActionTreeNode stn in tn.Nodes ) {
           if ( stn.Text.Contains( ctrl ) ) {
             Ctrl.SelectedNode = stn;
             Ctrl.SelectedNode.EnsureVisible( );
-            found = true;
-            break;
+            return; // exit all loops
+          }
+          // have to search nodes of nodes
+          foreach ( ActionTreeInputNode sstn in stn.Nodes ) {
+            if ( sstn.Text.Contains( ctrl ) ) {
+              Ctrl.SelectedNode = sstn;
+              Ctrl.SelectedNode.EnsureVisible( );
+              return; // exit all loops
+            }
           }
         }
-        if ( found ) break; // exit all loops
       }
     }
 
 
     /// <summary>
-    /// Find a control that contains the Command
+    /// Find a control that contains the string and mark it
+    ///   this method is applied to the GUI TreeView only
+    /// </summary>
+    /// <param name="m_MasterTree">The string to find</param>
+    public void FindAndSelectCtrlByName( String ctrlName )
+    {
+      log.Debug( "FindAndSelectCtrlByName - Entry" );
+
+      foreach ( ActionTreeNode tn in Ctrl.Nodes ) {
+        // have to search nodes of nodes
+        foreach ( ActionTreeNode stn in tn.Nodes ) {
+          if ( stn.Name == ctrlName ) {
+            Ctrl.SelectedNode = stn;
+            Ctrl.SelectedNode.EnsureVisible( );
+            return; // exit all loops
+          }
+          // have to search nodes of nodes
+          foreach ( ActionTreeInputNode sstn in stn.Nodes ) {
+            if ( sstn.Name == ctrlName ) {
+              Ctrl.SelectedNode = sstn;
+              Ctrl.SelectedNode.EnsureVisible( );
+              return; // exit all loops
+            }
+          }
+        }
+      }
+    }
+
+
+    /// <summary>
+    /// Find a control that contains the Action
     /// </summary>
     /// <param name="actionmap">The actionmap to find the string</param>
     /// <param name="text">The string to find</param>
@@ -561,6 +857,14 @@ namespace SCJMapper_V2
     }
 
 
+
+    static public String CommandFromNodeText( String actionCommand )
+    {
+      String[] e = actionCommand.Split( new char[] { '-' } );
+      if ( e.Length > 1 ) return e[1].Substring( 1 );
+      return "";
+    }
+
     /// <summary>
     /// Find a control that contains the Command
     /// </summary>
@@ -574,8 +878,10 @@ namespace SCJMapper_V2
         if ( String.IsNullOrEmpty( actionmap ) || ( tn.Text == actionmap ) ) {
           // have to search nodes of nodes
           foreach ( ActionTreeNode stn in tn.Nodes ) {
-            if ( stn.Command.Contains( command ) ) {
-              return stn.Text;
+            foreach ( ActionTreeInputNode istn in stn.Nodes ) {
+              if ( istn.Command.Contains( command ) ) {
+                return stn.Text + " - " + istn.Text;
+              }
             }
           }
         }
@@ -625,6 +931,23 @@ namespace SCJMapper_V2
     }
 
 
+    public String SelectedAction
+    {
+      get {
+        if ( Ctrl.SelectedNode == null ) return "";
+        if ( Ctrl.SelectedNode.Level == 1 ) {
+          ActionTreeNode matn = FindMasterAction( ( ActionTreeNode )Ctrl.SelectedNode );
+          return ActionTreeNode.ActionFromNodeText( matn.Text );
+        }
+        else if ( Ctrl.SelectedNode.Level == 2 ) {
+          ActionTreeNode matn = FindMasterAction( ( ActionTreeNode )Ctrl.SelectedNode.Parent ); // the parent treenode
+          return ActionTreeNode.ActionFromNodeText( matn.Text );
+        }
+        else return "";
+      }
+    }
+
+
     /// <summary>
     /// Reports a summary list of the mapped items
     /// </summary>
@@ -644,9 +967,11 @@ namespace SCJMapper_V2
         String rep = String.Format( "*** {0}\n", acm.name );
         repList += rep;
         foreach ( ActionCls ac in acm ) {
-          if ( !String.IsNullOrEmpty( ac.input ) && !( ac.input == JoystickCls.BlendedInput ) ) {
-            rep = String.Format( " {0} - {1} - ({2})\n", ac.name.PadRight( 35 ), ac.input.PadRight( 30 ), ac.device );
-            repList += rep;
+          foreach ( ActionCommandCls acc in ac.inputList ) {
+            if ( !String.IsNullOrEmpty( acc.input ) && !( acc.input == JoystickCls.BlendedInput ) ) {
+              rep = String.Format( " {0} - {1} - ({2})\n", ac.name.PadRight( 35 ), acc.input.PadRight( 30 ), ac.device );
+              repList += rep;
+            }
           }
         }
         repList += String.Format( "\n" );

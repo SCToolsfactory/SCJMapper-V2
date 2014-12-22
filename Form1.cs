@@ -20,6 +20,8 @@ namespace SCJMapper_V2
     private const String c_GithubLink = @"https://github.com/SCToolsfactory/SCJMapper-V2/releases";
 
     private AppSettings m_AppSettings = new AppSettings( );
+    private Boolean m_appLoading = true; // used to detect if we are loading (or running)
+
 
     ///<remarks>
     /// Holds the DXInput Joystick List
@@ -77,19 +79,19 @@ namespace SCJMapper_V2
     /// <summary>
     /// Detects and returns the current Input device
     /// </summary>
-    private DeviceCls.InputKind InputMode
+    private ActionCls.ActionDevice InputMode
     {
       get
       {
         if ( m_keyIn ) {
-          return DeviceCls.InputKind.Kbd;
+          return ActionCls.ActionDevice.AD_Keyboard;
         }
         else {
           if ( IsGamepadTab( tc1.SelectedTab ) ) {
-            return DeviceCls.InputKind.Gamepad;
+            return ActionCls.ActionDevice.AD_Gamepad;
           }
           else {
-            return DeviceCls.InputKind.Joystick;
+            return ActionCls.ActionDevice.AD_Joystick;
           }
         }
       }
@@ -240,9 +242,17 @@ namespace SCJMapper_V2
         txMappingName.BackColor = MyColors.ErrorColor;
       }
 
+      // load show checkboxes
+      cbxShowJoystick.Checked = m_AppSettings.ShowJoystick;
+      cbxShowGamepad.Checked = m_AppSettings.ShowGamepad;
+      cbxShowKeyboard.Checked = m_AppSettings.ShowKeyboard;
+      cbxShowMappedOnly.Checked = m_AppSettings.ShowMapped;
+
       // poll the XInput
       log.Debug( "Start XInput polling" );
       timer1.Start( ); // this one polls the joysticks to show the props
+
+      m_appLoading = false; // no longer
     }
 
 
@@ -336,7 +346,7 @@ namespace SCJMapper_V2
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
       m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
       m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMappedOnly.Checked );
-      m_AT.LoadTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
+      m_AT.LoadProfileTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
 
       // apply a default JS to Joystick mapping - can be changed and reloaded from XML mappings
       // must take care of Gamepads if there are (but we take care of one only...)
@@ -575,6 +585,7 @@ namespace SCJMapper_V2
     private void timer1_Tick( object sender, System.EventArgs e )
     {
       if ( m_keyIn ) return; // allow keyboard / mouse input
+      if ( tc1.SelectedTab.Tag == null ) return;
 
       String ctrl = "";
       int jsIndex = ( int )tc1.SelectedTab.Tag; // gets the index into the JS list
@@ -592,14 +603,9 @@ namespace SCJMapper_V2
       lblLastJ.Text = ctrl;
       if ( JoystickCls.CanThrottle( ctrl ) ) {
         cbxThrottle.Enabled = true;
-        cbxInvert.Enabled = true;
-      }
-      else if ( GamepadCls.CanInvert( ctrl ) ) {
-        cbxInvert.Enabled = true;
       }
       else {
         cbxThrottle.Checked = false; cbxThrottle.Enabled = false;
-        cbxInvert.Checked = false; cbxInvert.Enabled = false;
       }
     }
 
@@ -608,15 +614,8 @@ namespace SCJMapper_V2
 
     private void treeView1_AfterSelect( object sender, TreeViewEventArgs e )
     {
-      if ( e.Node.Level == 1 ) {
-        // actions cannot have a blank - if there is one it's mapped
-        if ( e.Node.Text.IndexOf( " ", 0 ) > 0 ) {
-          lblAction.Text = e.Node.Text.Substring( 0, e.Node.Text.IndexOf( " ", 0 ) ); // get only the action part as Cmd.
-        }
-        else {
-          lblAction.Text = e.Node.Text;
-        }
-      }
+      String atx = m_AT.SelectedAction;
+      if ( !String.IsNullOrEmpty( atx ) ) lblAction.Text = atx;
     }
 
 
@@ -624,8 +623,13 @@ namespace SCJMapper_V2
 
     private void cbxShowTreeOptions_CheckedChanged( object sender, EventArgs e )
     {
+      if (m_AT==null) return; // on init
       m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMappedOnly.Checked );
       m_AT.ReloadTreeView( );
+
+      if ( m_appLoading ) return; // don't assign while loading defaults
+      m_AppSettings.ShowJoystick = cbxShowJoystick.Checked; m_AppSettings.ShowGamepad = cbxShowGamepad.Checked;
+      m_AppSettings.ShowKeyboard = cbxShowKeyboard.Checked; m_AppSettings.ShowMapped = cbxShowMappedOnly.Checked;
     }
 
 
@@ -639,19 +643,32 @@ namespace SCJMapper_V2
 
     private void btAssign_Click( object sender, EventArgs e )
     {
-      m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), cbxInvert.Checked, InputMode );
-      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      if ( m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), InputMode ) ) {
+        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+      else MySounds.PlayNotfound( );
+    }
+
+    private void btBlend_Click( object sender, EventArgs e )
+    {
+      if ( m_AT.CanBlendBinding ) {
+        m_AT.UpdateSelectedItem( DeviceCls.BlendedInput, InputMode );
+        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+      else MySounds.PlayCannot( );
+    }
+
+    private void btClear_Click( object sender, EventArgs e )
+    {
+      if ( m_AT.CanClearBinding ) {
+        m_AT.UpdateSelectedItem( "", InputMode );
+        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+      else MySounds.PlayCannot( );
     }
 
 
     // General Area Items
-
-    private void btClear_Click( object sender, EventArgs e )
-    {
-
-      m_AT.UpdateSelectedItem( "", false, InputMode );
-      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-    }
 
     private void btDump_Click( object sender, EventArgs e )
     {
@@ -766,6 +783,7 @@ namespace SCJMapper_V2
 
     // Context Menu Items
 
+    // RTB Menu
     private void tsiCopy_Click( object sender, EventArgs e )
     {
       rtb.Focus( );
@@ -806,6 +824,28 @@ namespace SCJMapper_V2
       if ( SFD.ShowDialog( this ) == System.Windows.Forms.DialogResult.OK ) {
         rtb.SaveFile( SFD.FileName, RichTextBoxStreamType.PlainText );
       }
+    }
+
+    // Node Menu
+    private void cmAddDel_Opening( object sender, CancelEventArgs e )
+    {
+      ContextMenuStrip cts = ( sender as ContextMenuStrip );
+      Boolean any=false;
+      cts.Items[0].Visible = m_AT.CanAddBinding; any = any || m_AT.CanAddBinding;
+      cts.Items[1].Visible = m_AT.CanDelBinding; any = any || m_AT.CanDelBinding;
+      e.Cancel = !any;
+    }
+
+    private void tsiAddBinding_Click( object sender, EventArgs e )
+    {
+      m_AT.AddBinding( );
+      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+    }
+
+    private void tdiDelBinding_Click( object sender, EventArgs e )
+    {
+      m_AT.DelBinding( );
+      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
 
 
@@ -961,14 +1001,6 @@ namespace SCJMapper_V2
     }
 
 
-    // Blend
-
-    private void btBlend_Click( object sender, EventArgs e )
-    {
-      m_AT.UpdateSelectedItem( DeviceCls.BlendedInput, false, InputMode );
-      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-    }
-
     // Joystick Tuning
 
     private void btJSTuning_Click( object sender, EventArgs e )
@@ -983,22 +1015,15 @@ namespace SCJMapper_V2
       DeviceCls dev =  null;
       String find = "";
 
-      find = ActionTreeNode.ComposeNodeText( "v_yaw", ActionTreeNode.REG_MOD, "js" );
+      // find action item for yaw
+      find = ActionTreeNode.ComposeNodeText( "v_yaw", "js" );
       nodeText = m_AT.FindText( "spaceship_movement", find ); // returns "" or a complete text ("action - command")
-      if ( String.IsNullOrWhiteSpace( nodeText ) ) {
-        find = ActionTreeNode.ComposeNodeText( "v_yaw", ActionTreeNode.INV_MOD, "js" );
-        nodeText = m_AT.FindText( "spaceship_movement", find ); // find inverted ones too
-      }
       if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
         dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
       }
       else {
-        find = ActionTreeNode.ComposeNodeText( "v_yaw", ActionTreeNode.REG_MOD, "xi" );
+        find = ActionTreeNode.ComposeNodeText( "v_yaw", "xi" );
         nodeText = m_AT.FindText( "spaceship_movement", find );
-        if ( String.IsNullOrWhiteSpace( nodeText ) ) {
-          find = ActionTreeNode.ComposeNodeText( "v_yaw", ActionTreeNode.INV_MOD, "xi" );
-          nodeText = m_AT.FindText( "spaceship_movement", find ); // find inverted ones too
-        }
         if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
           dev = m_Gamepad;
         }
@@ -1008,21 +1033,21 @@ namespace SCJMapper_V2
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
-          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningY.Action = nodeText;
           m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneX;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
-          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningY.Action = nodeText;
           m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneY;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
-          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningY.Action = nodeText;
           m_AT.ActionMaps.DeadzoneZ.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneZ;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
@@ -1030,7 +1055,7 @@ namespace SCJMapper_V2
         // GP commands that are supported - X
         else if ( nodeText.ToLowerInvariant( ).Contains( "_thumblx" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbrx" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
-          m_AT.ActionMaps.TuningY.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningY.Action = nodeText;
           m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneX;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
@@ -1039,22 +1064,14 @@ namespace SCJMapper_V2
 
       // attach Pitch command
       dev = null;
-      find = ActionTreeNode.ComposeNodeText( "v_pitch", ActionTreeNode.REG_MOD, "js" );
+      find = ActionTreeNode.ComposeNodeText( "v_pitch", "js" );
       nodeText = m_AT.FindText( "spaceship_movement", find ); // returns "" or a complete text ("action - command")
-      if ( String.IsNullOrWhiteSpace( nodeText ) ) {
-        find = ActionTreeNode.ComposeNodeText( "v_pitch", ActionTreeNode.INV_MOD, "js" );
-        nodeText = m_AT.FindText( "spaceship_movement", find ); // find inverted ones too
-      }
       if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
         dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
       }
       else {
-        find = ActionTreeNode.ComposeNodeText( "v_pitch", ActionTreeNode.REG_MOD, "xi" );
+        find = ActionTreeNode.ComposeNodeText( "v_pitch", "xi" );
         nodeText = m_AT.FindText( "spaceship_movement", find );
-        if ( String.IsNullOrWhiteSpace( nodeText ) ) {
-          find = ActionTreeNode.ComposeNodeText( "v_pitch", ActionTreeNode.INV_MOD, "xi" );
-          nodeText = m_AT.FindText( "spaceship_movement", find ); // find inverted ones too
-        }
         if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
           dev = m_Gamepad;
         }
@@ -1064,21 +1081,21 @@ namespace SCJMapper_V2
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
           m_AT.ActionMaps.TuningP.GameDevice = dev;
-          m_AT.ActionMaps.TuningP.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningP.Action = nodeText;
           m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneX;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
           m_AT.ActionMaps.TuningP.GameDevice = dev;
-          m_AT.ActionMaps.TuningP.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningP.Action = nodeText;
           m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneY;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
           m_AT.ActionMaps.TuningP.GameDevice = dev;
-          m_AT.ActionMaps.TuningP.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningP.Action = nodeText;
           m_AT.ActionMaps.DeadzoneZ.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneZ;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
@@ -1086,7 +1103,7 @@ namespace SCJMapper_V2
         // GP commands that are supported - either Y
         else if ( nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
           m_AT.ActionMaps.TuningP.GameDevice = dev;
-          m_AT.ActionMaps.TuningP.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningP.Action = nodeText;
           m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneY;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
@@ -1095,12 +1112,8 @@ namespace SCJMapper_V2
 
       // attach Roll command - cannot use gamepad here
       dev = null;
-      find = ActionTreeNode.ComposeNodeText( "v_roll", ActionTreeNode.REG_MOD, "js" );
+      find = ActionTreeNode.ComposeNodeText( "v_roll", "js" );
       nodeText = m_AT.FindText( "spaceship_movement", find ); // returns "" or a complete text ("action - command")
-      if ( String.IsNullOrWhiteSpace( nodeText ) ) {
-        find = ActionTreeNode.ComposeNodeText( "v_roll", ActionTreeNode.INV_MOD, "js" );
-        nodeText = m_AT.FindText( "spaceship_movement", find ); // find inverted ones too
-      }
       if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
         dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
       }
@@ -1109,21 +1122,21 @@ namespace SCJMapper_V2
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
           m_AT.ActionMaps.TuningR.GameDevice = dev;
-          m_AT.ActionMaps.TuningR.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningR.Action = nodeText;
           m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
           m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneX;
           JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
           m_AT.ActionMaps.TuningR.GameDevice = dev;
-          m_AT.ActionMaps.TuningR.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningR.Action = nodeText;
           m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
           m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneY;
           JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
           m_AT.ActionMaps.TuningR.GameDevice = dev;
-          m_AT.ActionMaps.TuningR.ActionCommand = nodeText;
+          m_AT.ActionMaps.TuningR.Action = nodeText;
           m_AT.ActionMaps.DeadzoneZ.GameDevice = dev;
           m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneZ;
           JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
@@ -1213,6 +1226,8 @@ namespace SCJMapper_V2
 
 
     #endregion
+
+
 
 
 

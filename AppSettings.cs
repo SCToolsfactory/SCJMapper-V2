@@ -91,7 +91,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "False" )] // false
+    [DefaultSettingValueAttribute( "False" )]
     public Boolean BlendUnmapped // Joystick (back compatibility)
     {
       get { return ( Boolean )this["BlendUnmapped"]; }
@@ -99,18 +99,50 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "False" )] // false
+    [DefaultSettingValueAttribute( "False" )]
     public Boolean BlendUnmappedGP
     {
       get { return ( Boolean )this["BlendUnmappedGP"]; }
       set { this["BlendUnmappedGP"] = value; }
     }
 
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "True" )]
+    public Boolean ShowJoystick
+    {
+      get { return ( Boolean )this["ShowJoystick"]; }
+      set { this["ShowJoystick"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "True" )]
+    public Boolean ShowGamepad
+    {
+      get { return ( Boolean )this["ShowGamepad"]; }
+      set { this["ShowGamepad"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "True" )]
+    public Boolean ShowKeyboard
+    {
+      get { return ( Boolean )this["ShowKeyboard"]; }
+      set { this["ShowKeyboard"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "False" )]
+    public Boolean ShowMapped
+    {
+      get { return ( Boolean )this["ShowMapped"]; }
+      set { this["ShowMapped"] = value; }
+    }
+
 
     // Seetings Window
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "" )] // empty
+    [DefaultSettingValueAttribute( "" )]
     public String IgnoreJS1
     {
       get { return ( String )this["IgnoreJS1"]; }
@@ -118,7 +150,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "" )] // empty
+    [DefaultSettingValueAttribute( "" )]
     public String IgnoreJS2
     {
       get { return ( String )this["IgnoreJS2"]; }
@@ -126,7 +158,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "" )] // empty
+    [DefaultSettingValueAttribute( "" )]
     public String IgnoreJS3
     {
       get { return ( String )this["IgnoreJS3"]; }
@@ -134,7 +166,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "" )] // empty
+    [DefaultSettingValueAttribute( "" )]
     public String IgnoreJS4
     {
       get { return ( String )this["IgnoreJS4"]; }
@@ -142,7 +174,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "" )] // empty
+    [DefaultSettingValueAttribute( "" )]
     public String IgnoreJS5
     {
       get { return ( String )this["IgnoreJS5"]; }
@@ -150,7 +182,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "" )] // empty
+    [DefaultSettingValueAttribute( "" )]
     public String IgnoreJS6
     {
       get { return ( String )this["IgnoreJS6"]; }
@@ -158,7 +190,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "" )] // empty
+    [DefaultSettingValueAttribute( "" )]
     public String IgnoreJS7
     {
       get { return ( String )this["IgnoreJS7"]; }
@@ -166,7 +198,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "" )] // empty
+    [DefaultSettingValueAttribute( "" )]
     public String IgnoreJS8
     {
       get { return ( String )this["IgnoreJS8"]; }
@@ -174,7 +206,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "" )] // empty
+    [DefaultSettingValueAttribute( "" )]
     public String UserSCPath
     {
       get { return ( String )this["UserSCPath"]; }
@@ -182,7 +214,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "False" )] // false
+    [DefaultSettingValueAttribute( "False" )]
     public Boolean UserSCPathUsed
     {
       get { return ( Boolean )this["UserSCPathUsed"]; }
@@ -199,7 +231,7 @@ namespace SCJMapper_V2
 
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "False" )] // false
+    [DefaultSettingValueAttribute( "False" )]
     public Boolean ForceIgnoreversion
     {
       get { return ( Boolean )this["ForceIgnoreversion"]; }
@@ -208,7 +240,7 @@ namespace SCJMapper_V2
 
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "False" )] // false
+    [DefaultSettingValueAttribute( "False" )]
     public Boolean DetectGamepad
     {
       get { return ( Boolean )this["DetectGamepad"]; }

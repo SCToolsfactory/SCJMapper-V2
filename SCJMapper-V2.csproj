@@ -26,8 +26,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>37</ApplicationRevision>
-    <ApplicationVersion>2.8.0.%2a</ApplicationVersion>
+    <ApplicationRevision>40</ApplicationRevision>
+    <ApplicationVersion>2.10.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -116,6 +116,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="actions\ActionCommandCls.cs" />
+    <Compile Include="actions\ActionTreeInputNode.cs" />
     <Compile Include="actions\ActionTreeNode.cs" />
     <Compile Include="appConfiguration.cs" />
     <Compile Include="AppSettings.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="Gamepad\GamepadCls.cs" />
     <Compile Include="Keyboard\KeyboardCls.cs" />
     <Compile Include="Mouse\MouseCls.cs" />
+    <Compile Include="MySounds.cs" />
     <Compile Include="OGL\BezierSeries.cs" />
     <Compile Include="OGL\CalcBezierCurve.cs" />
     <Compile Include="Joystick\DeviceTuningParameter.cs" />

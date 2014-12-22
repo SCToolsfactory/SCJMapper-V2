@@ -35,6 +35,8 @@ namespace SCJMapper_V2
 
     #endregion Static Part of ActionMaps
 
+    private const String ACM_VERSION = "1"; // the default version 
+
     private String version { get; set; }
     private String ignoreversion { get; set; }
 
@@ -125,7 +127,7 @@ namespace SCJMapper_V2
     /// </summary>
     public ActionMapsCls( JoystickList jsList )
     {
-      version = "0";
+      version = ACM_VERSION;
       m_joystickList = jsList; // have to save this for Reassign
 
       // create the Joystick assignments
@@ -216,7 +218,7 @@ namespace SCJMapper_V2
         r += String.Format( "version=\"{0}\" \n", version );
       }
       else {
-        version = "0"; // preset if missing
+        version = ACM_VERSION; // preset if missing
         r += String.Format( "version=\"{0}\" \n", version );
       }
 
@@ -270,6 +272,8 @@ namespace SCJMapper_V2
       if ( reader.Name == "ActionMaps" ) {
         if ( reader.HasAttributes ) {
           version = reader["version"];
+          if ( version == "0" ) version = ACM_VERSION; // update from legacy to actual version 
+
           ignoreversion = reader["ignoreVersion"]; // could be either / or ..
 
           // get the joystick mapping if there is one

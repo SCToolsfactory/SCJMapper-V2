@@ -47,7 +47,6 @@
       this.btGrab = new System.Windows.Forms.Button();
       this.btDump = new System.Windows.Forms.Button();
       this.panel2 = new System.Windows.Forms.Panel();
-      this.cbxInvert = new System.Windows.Forms.CheckBox();
       this.btJsKbd = new System.Windows.Forms.Button();
       this.IL = new System.Windows.Forms.ImageList(this.components);
       this.btBlend = new System.Windows.Forms.Button();
@@ -76,8 +75,6 @@
       this.tlpanel = new System.Windows.Forms.TableLayoutPanel();
       this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-      this.txFilter = new System.Windows.Forms.TextBox();
-      this.btClearFilter = new System.Windows.Forms.Button();
       this.btJSTuning = new System.Windows.Forms.Button();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.btSettings = new System.Windows.Forms.Button();
@@ -92,6 +89,9 @@
       this.cbxShowGamepad = new System.Windows.Forms.CheckBox();
       this.cbxShowKeyboard = new System.Windows.Forms.CheckBox();
       this.cbxShowMappedOnly = new System.Windows.Forms.CheckBox();
+      this.label2 = new System.Windows.Forms.Label();
+      this.txFilter = new System.Windows.Forms.TextBox();
+      this.btClearFilter = new System.Windows.Forms.Button();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
       this.tsDDbtProfiles = new System.Windows.Forms.ToolStripDropDownButton();
       this.tsBtReset = new System.Windows.Forms.ToolStripDropDownButton();
@@ -107,8 +107,10 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+      this.cmAddDel = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.tsiAddBinding = new System.Windows.Forms.ToolStripMenuItem();
+      this.tdiDelBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
-      this.label2 = new System.Windows.Forms.Label();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.tc1.SuspendLayout();
@@ -121,6 +123,7 @@
       this.tableLayoutPanel3.SuspendLayout();
       this.flowLayoutPanel2.SuspendLayout();
       this.statusStrip1.SuspendLayout();
+      this.cmAddDel.SuspendLayout();
       this.SuspendLayout();
       // 
       // btDumpList
@@ -232,7 +235,6 @@
       // panel2
       // 
       this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.panel2.Controls.Add(this.cbxInvert);
       this.panel2.Controls.Add(this.btJsKbd);
       this.panel2.Controls.Add(this.btBlend);
       this.panel2.Controls.Add(this.lblLastJ);
@@ -247,16 +249,6 @@
       this.panel2.Name = "panel2";
       this.panel2.Size = new System.Drawing.Size(289, 142);
       this.panel2.TabIndex = 17;
-      // 
-      // cbxInvert
-      // 
-      this.cbxInvert.AutoSize = true;
-      this.cbxInvert.Location = new System.Drawing.Point(89, 86);
-      this.cbxInvert.Name = "cbxInvert";
-      this.cbxInvert.Size = new System.Drawing.Size(55, 17);
-      this.cbxInvert.TabIndex = 17;
-      this.cbxInvert.Text = "Invert";
-      this.cbxInvert.UseVisualStyleBackColor = true;
       // 
       // btJsKbd
       // 
@@ -283,6 +275,7 @@
       this.IL.Images.SetKeyName(4, "X");
       this.IL.Images.SetKeyName(5, "P");
       this.IL.Images.SetKeyName(6, "Z");
+      this.IL.Images.SetKeyName(7, "Add");
       // 
       // btBlend
       // 
@@ -308,7 +301,7 @@
       // cbxThrottle
       // 
       this.cbxThrottle.AutoSize = true;
-      this.cbxThrottle.Location = new System.Drawing.Point(89, 67);
+      this.cbxThrottle.Location = new System.Drawing.Point(89, 72);
       this.cbxThrottle.Name = "cbxThrottle";
       this.cbxThrottle.Size = new System.Drawing.Size(66, 17);
       this.cbxThrottle.TabIndex = 13;
@@ -375,6 +368,7 @@
       // 
       // treeView1
       // 
+      this.treeView1.ContextMenuStrip = this.cmAddDel;
       this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.treeView1.HotTracking = true;
       this.treeView1.ImageKey = "Map";
@@ -572,26 +566,6 @@
       this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 131);
       this.tableLayoutPanel1.TabIndex = 23;
       // 
-      // txFilter
-      // 
-      this.txFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.txFilter.Location = new System.Drawing.Point(92, 28);
-      this.txFilter.Name = "txFilter";
-      this.txFilter.Size = new System.Drawing.Size(120, 22);
-      this.txFilter.TabIndex = 25;
-      this.txFilter.WordWrap = false;
-      this.txFilter.TextChanged += new System.EventHandler(this.txFilter_TextChanged);
-      // 
-      // btClearFilter
-      // 
-      this.btClearFilter.Location = new System.Drawing.Point(218, 26);
-      this.btClearFilter.Name = "btClearFilter";
-      this.btClearFilter.Size = new System.Drawing.Size(120, 24);
-      this.btClearFilter.TabIndex = 26;
-      this.btClearFilter.Text = "Clear Filter";
-      this.btClearFilter.UseVisualStyleBackColor = true;
-      this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
-      // 
       // btJSTuning
       // 
       this.btJSTuning.Location = new System.Drawing.Point(3, 93);
@@ -767,6 +741,36 @@
       this.cbxShowMappedOnly.UseVisualStyleBackColor = true;
       this.cbxShowMappedOnly.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
       // 
+      // label2
+      // 
+      this.label2.Location = new System.Drawing.Point(3, 26);
+      this.label2.Margin = new System.Windows.Forms.Padding(3);
+      this.label2.Name = "label2";
+      this.label2.Size = new System.Drawing.Size(83, 24);
+      this.label2.TabIndex = 27;
+      this.label2.Text = "Action Filter:";
+      this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
+      // txFilter
+      // 
+      this.txFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.txFilter.Location = new System.Drawing.Point(92, 28);
+      this.txFilter.Name = "txFilter";
+      this.txFilter.Size = new System.Drawing.Size(120, 22);
+      this.txFilter.TabIndex = 25;
+      this.txFilter.WordWrap = false;
+      this.txFilter.TextChanged += new System.EventHandler(this.txFilter_TextChanged);
+      // 
+      // btClearFilter
+      // 
+      this.btClearFilter.Location = new System.Drawing.Point(218, 26);
+      this.btClearFilter.Name = "btClearFilter";
+      this.btClearFilter.Size = new System.Drawing.Size(120, 24);
+      this.btClearFilter.TabIndex = 26;
+      this.btClearFilter.Text = "Clear Filter";
+      this.btClearFilter.UseVisualStyleBackColor = true;
+      this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
+      // 
       // toolStripStatusLabel2
       // 
       this.toolStripStatusLabel2.BackColor = System.Drawing.Color.DarkKhaki;
@@ -912,6 +916,29 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
+      // cmAddDel
+      // 
+      this.cmAddDel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsiAddBinding,
+            this.tdiDelBinding});
+      this.cmAddDel.Name = "cmAddDel";
+      this.cmAddDel.Size = new System.Drawing.Size(159, 48);
+      this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
+      // 
+      // tsiAddBinding
+      // 
+      this.tsiAddBinding.Name = "tsiAddBinding";
+      this.tsiAddBinding.Size = new System.Drawing.Size(158, 22);
+      this.tsiAddBinding.Text = "Add Mapping";
+      this.tsiAddBinding.Click += new System.EventHandler(this.tsiAddBinding_Click);
+      // 
+      // tdiDelBinding
+      // 
+      this.tdiDelBinding.Name = "tdiDelBinding";
+      this.tdiDelBinding.Size = new System.Drawing.Size(158, 22);
+      this.tdiDelBinding.Text = "Delete Mapping";
+      this.tdiDelBinding.Click += new System.EventHandler(this.tdiDelBinding_Click);
+      // 
       // UC_JoyPanel
       // 
       this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -920,16 +947,6 @@
       this.UC_JoyPanel.Name = "UC_JoyPanel";
       this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
       this.UC_JoyPanel.TabIndex = 0;
-      // 
-      // label2
-      // 
-      this.label2.Location = new System.Drawing.Point(3, 26);
-      this.label2.Margin = new System.Windows.Forms.Padding(3);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(83, 24);
-      this.label2.TabIndex = 27;
-      this.label2.Text = "Action Filter:";
-      this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // MainForm
       // 
@@ -964,6 +981,7 @@
       this.flowLayoutPanel2.PerformLayout();
       this.statusStrip1.ResumeLayout(false);
       this.statusStrip1.PerformLayout();
+      this.cmAddDel.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1039,13 +1057,15 @@
     private System.Windows.Forms.Button btJsKbd;
     private System.Windows.Forms.Button btBlend;
     private System.Windows.Forms.Button btClip;
-    private System.Windows.Forms.CheckBox cbxInvert;
     private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
     private System.Windows.Forms.CheckBox cbxShowJoystick;
     private System.Windows.Forms.CheckBox cbxShowGamepad;
     private System.Windows.Forms.CheckBox cbxShowKeyboard;
     private System.Windows.Forms.CheckBox cbxShowMappedOnly;
     private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.ContextMenuStrip cmAddDel;
+    private System.Windows.Forms.ToolStripMenuItem tsiAddBinding;
+    private System.Windows.Forms.ToolStripMenuItem tdiDelBinding;
   }
 }
 

@@ -145,7 +145,6 @@ namespace SCJMapper_V2
     private float m_liveYsense = 1.0f;
     private float m_liveYexponent = 1.0f;
     private xyPoints m_liveYnonLinCurve = new xyPoints( 1000 );  // max val of Joystick Input
-    private bool m_YcmdInvert = false; // inverted by command (not as Tuning)
 
     /// <summary>
     /// Submit the tuning parameters
@@ -163,8 +162,7 @@ namespace SCJMapper_V2
         m_Ytuning = value;
         m_Ydev = m_Ytuning.GameDevice;
         // populate from input
-        lblYCmd.Text = m_Ytuning.ActionCommand;
-        m_YcmdInvert = ActionTreeNode.CommandInvertFromNodeText( m_Ytuning.ActionCommand );
+        lblYCmd.Text = m_Ytuning.Action;
         m_liveYawCommand = m_Ytuning.CommandCtrl;
         log.Info( "FormJSCalCurve : Yaw Command is: " + value );
 
@@ -223,7 +221,6 @@ namespace SCJMapper_V2
     private float m_livePsense = 1.0f;
     private float m_livePexponent = 1.0f;
     private xyPoints m_livePnonLinCurve = new xyPoints( 1000 );  // max val of Joystick Input
-    private bool m_PcmdInvert = false; // inverted by command (not as Tuning)
 
     /// <summary>
     /// Submit the tuning parameters
@@ -242,9 +239,7 @@ namespace SCJMapper_V2
         m_Ptuning = value;
         m_Pdev = m_Ptuning.GameDevice;
         // populate from input
-        lblPCmd.Text = m_Ptuning.ActionCommand;  // 
-        m_PcmdInvert = ActionTreeNode.CommandInvertFromNodeText( m_Ptuning.ActionCommand );
-        if ( GamepadCls.IsDeviceClass( m_Pdev.DevClass ) ) m_PcmdInvert = !m_PcmdInvert; // Gamepad Pitch Movement is inverted by default in AC
+        lblPCmd.Text = m_Ptuning.Action;  // 
         m_livePitchCommand = m_Ptuning.CommandCtrl;
         log.Info( "FormJSCalCurve : Pitch Command is: " + value );
 
@@ -303,7 +298,6 @@ namespace SCJMapper_V2
     private float m_liveRsense = 1.0f;
     private float m_liveRexponent = 1.0f;
     private xyPoints m_liveRnonLinCurve = new xyPoints( 1000 );  // max val of Joystick Input
-    private bool m_RcmdInvert = false; // inverted by command (not as Tuning)
 
     /// <summary>
     /// Submit the tuning parameters
@@ -322,8 +316,7 @@ namespace SCJMapper_V2
         m_Rtuning = value;
         m_Rdev = m_Rtuning.GameDevice;
         // populate from input
-        lblRCmd.Text = m_Rtuning.ActionCommand;  // 
-        m_RcmdInvert = ActionTreeNode.CommandInvertFromNodeText( m_Rtuning.ActionCommand );
+        lblRCmd.Text = m_Rtuning.Action;  // 
         m_liveRollCommand = m_Rtuning.CommandCtrl;
         log.Info( "FormJSCalCurve : Roll Command is: " + value );
 
@@ -725,7 +718,7 @@ namespace SCJMapper_V2
           // update in/out labels if active axis
           lblYInput.Text = ( i_x / 1000.0 ).ToString( "0.00" ); lblYOutput.Text = ( fout ).ToString( "0.00" );
           // calculate new direction vector
-          m.X = ( ( m_YcmdInvert ) ? -1 : 1 ) * ( ( m_Ytuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbYuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
+          m.X = ( ( m_Ytuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbYuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
         }
 
         // Pitch
@@ -746,7 +739,7 @@ namespace SCJMapper_V2
           }
           fout = ( fout > 1.0 ) ? 1.0 : fout;
           lblPInput.Text = ( i_y / 1000.0 ).ToString( "0.00" ); lblPOutput.Text = ( fout ).ToString( "0.00" );
-          m.Y = ( ( m_PcmdInvert ) ? -1 : 1 ) * ( ( m_Ptuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbPuse.Checked ) ? -fout : 0 ) * m_msElapsed * DegPerMS;
+          m.Y = ( ( m_Ptuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbPuse.Checked ) ? -fout : 0 ) * m_msElapsed * DegPerMS;
         }
 
         // Roll
@@ -767,7 +760,7 @@ namespace SCJMapper_V2
           }
           fout = ( fout > 1.0 ) ? 1.0 : fout;
           lblRInput.Text = ( i_z / 1000.0 ).ToString( "0.00" ); lblROutput.Text = ( fout ).ToString( "0.00" );
-          m.Z = ( ( m_RcmdInvert ) ? -1 : 1 ) * ( ( m_Rtuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbRuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
+          m.Z = ( ( m_Rtuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbRuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
         }
 
         // finalize

@@ -13,10 +13,10 @@ namespace SCJMapper_V2
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    private String m_actionCommand = "";  // v_pitch - js1_x ..
-    private String m_cmdCtrl = "";        // x, y, rotz ...
-    private String m_type = "";           // joystick OR xboxpad
-    private int m_devInstanceNo = -1;     // jsN - instance in XML
+    private String m_action = "";       // v_pitch
+    private String m_cmdCtrl = "";      // js1_x, js1_y, js1_rotz ...
+    private String m_type = "";         // joystick OR xboxpad
+    private int m_devInstanceNo = -1;   // jsN - instance in XML
 
     String m_option = ""; // the option name (level where it applies)
 
@@ -38,7 +38,7 @@ namespace SCJMapper_V2
 
     private DeviceDeadzoneParameter m_deadzone = null;
 
-    public DeviceTuningParameter(  )
+    public DeviceTuningParameter( )
     {
     }
 
@@ -47,18 +47,20 @@ namespace SCJMapper_V2
     public DeviceCls GameDevice
     {
       get { return m_device; }
-      set { m_device = value;
+      set
+      {
+        m_device = value;
         m_type = "";
         m_devInstanceNo = -1;
         if ( JoystickCls.IsDeviceClass( m_device.DevClass ) ) {
           m_type = m_device.DevClass;
-          m_devInstanceNo = (m_device as JoystickCls).JSAssignment;
+          m_devInstanceNo = ( m_device as JoystickCls ).JSAssignment;
         }
         else if ( GamepadCls.IsDeviceClass( m_device.DevClass ) ) {
           m_type = m_device.DevClass;
           m_devInstanceNo = 1; // supports ONE gamepad
         }
-       }
+      }
     }
 
 
@@ -73,10 +75,10 @@ namespace SCJMapper_V2
       set { m_deviceName = value; }
     }
 
-    public String ActionCommand
+    public String Action
     {
-      get { return m_actionCommand; }
-      set { m_actionCommand = value; DecomposeCommand( ); }
+      get { return m_action; }
+      set { m_action = value; DecomposeCommand( ); }
     }
 
     public String CommandCtrl
@@ -150,8 +152,8 @@ namespace SCJMapper_V2
     {
       // populate from input
       // something like "v_pitch - js1_x" OR "v_pitch - xi_thumbl" OR "v_pitch - ximod+xi_thumbl+xi_mod"
-      String cmd = ActionTreeNode.CommandFromNodeText( ActionCommand );
-      String action = ActionTreeNode.ActionFromNodeText( ActionCommand );
+      String cmd = ActionTree.CommandFromNodeText( Action );
+      String action = ActionTreeNode.ActionFromNodeText( Action );
       m_cmdCtrl = "";
       if ( !String.IsNullOrWhiteSpace( cmd ) ) {
         // decomp gamepad entries - could have modifiers so check for contains...
