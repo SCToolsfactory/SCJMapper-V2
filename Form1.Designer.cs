@@ -95,6 +95,18 @@
       this.label2 = new System.Windows.Forms.Label();
       this.txFilter = new System.Windows.Forms.TextBox();
       this.btClearFilter = new System.Windows.Forms.Button();
+      this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+      this.cbxInvFlightPitch = new System.Windows.Forms.CheckBox();
+      this.cbxInvAimPitch = new System.Windows.Forms.CheckBox();
+      this.cbxInvViewPitch = new System.Windows.Forms.CheckBox();
+      this.cbxInvFlightYaw = new System.Windows.Forms.CheckBox();
+      this.cbxInvAimYaw = new System.Windows.Forms.CheckBox();
+      this.cbxInvViewYaw = new System.Windows.Forms.CheckBox();
+      this.cbxInvFlightRoll = new System.Windows.Forms.CheckBox();
+      this.cbxInvThrottle = new System.Windows.Forms.CheckBox();
+      this.cbxInvStrafeVert = new System.Windows.Forms.CheckBox();
+      this.cbxInvStrafeLat = new System.Windows.Forms.CheckBox();
+      this.cbxInvStrafeLon = new System.Windows.Forms.CheckBox();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
       this.tsDDbtProfiles = new System.Windows.Forms.ToolStripDropDownButton();
       this.tsBtReset = new System.Windows.Forms.ToolStripDropDownButton();
@@ -110,18 +122,7 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-      this.cbxInvFlightPitch = new System.Windows.Forms.CheckBox();
-      this.cbxInvFlightYaw = new System.Windows.Forms.CheckBox();
-      this.cbxInvFlightRoll = new System.Windows.Forms.CheckBox();
-      this.cbxInvStrafeVert = new System.Windows.Forms.CheckBox();
-      this.cbxInvStrafeLat = new System.Windows.Forms.CheckBox();
-      this.cbxInvStrafeLon = new System.Windows.Forms.CheckBox();
-      this.cbxInvAimPitch = new System.Windows.Forms.CheckBox();
-      this.cbxInvAimYaw = new System.Windows.Forms.CheckBox();
-      this.cbxInvThrottle = new System.Windows.Forms.CheckBox();
-      this.cbxInvViewPitch = new System.Windows.Forms.CheckBox();
-      this.cbxInvViewYaw = new System.Windows.Forms.CheckBox();
+      this.btDumpLog = new System.Windows.Forms.Button();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
@@ -135,8 +136,8 @@
       this.tableLayoutPanel2.SuspendLayout();
       this.tableLayoutPanel3.SuspendLayout();
       this.flowLayoutPanel2.SuspendLayout();
-      this.statusStrip1.SuspendLayout();
       this.flowLayoutPanel3.SuspendLayout();
+      this.statusStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
       // btDumpList
@@ -389,7 +390,7 @@
       this.treeView1.Name = "treeView1";
       this.tlpanel.SetRowSpan(this.treeView1, 2);
       this.treeView1.SelectedImageKey = "Selected";
-      this.treeView1.Size = new System.Drawing.Size(364, 685);
+      this.treeView1.Size = new System.Drawing.Size(364, 686);
       this.treeView1.TabIndex = 16;
       this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
       // 
@@ -564,8 +565,8 @@
       this.tlpanel.RowCount = 5;
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 535F));
-      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
-      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 84F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
       this.tlpanel.Size = new System.Drawing.Size(1054, 892);
       this.tlpanel.TabIndex = 25;
@@ -589,22 +590,24 @@
       this.tableLayoutPanel1.Controls.Add(this.btDump, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.btGrab, 1, 0);
       this.tableLayoutPanel1.Controls.Add(this.btDumpList, 0, 1);
-      this.tableLayoutPanel1.Controls.Add(this.btJSTuning, 0, 3);
+      this.tableLayoutPanel1.Controls.Add(this.btDumpLog, 0, 2);
+      this.tableLayoutPanel1.Controls.Add(this.btJSTuning, 0, 4);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel1.Location = new System.Drawing.Point(376, 616);
       this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-      this.tableLayoutPanel1.RowCount = 4;
+      this.tableLayoutPanel1.RowCount = 5;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 150);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 151);
       this.tableLayoutPanel1.TabIndex = 23;
       // 
       // btJSTuning
       // 
-      this.btJSTuning.Location = new System.Drawing.Point(3, 93);
+      this.btJSTuning.Location = new System.Drawing.Point(3, 123);
       this.btJSTuning.Name = "btJSTuning";
       this.btJSTuning.Size = new System.Drawing.Size(120, 24);
       this.btJSTuning.TabIndex = 17;
@@ -621,7 +624,7 @@
       this.tableLayoutPanel2.Controls.Add(this.btJsReassign, 0, 0);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel2.Location = new System.Drawing.Point(376, 772);
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(376, 773);
       this.tableLayoutPanel2.Name = "tableLayoutPanel2";
       this.tableLayoutPanel2.RowCount = 2;
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -660,7 +663,7 @@
       this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
       this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel3.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel3.Location = new System.Drawing.Point(676, 772);
+      this.tableLayoutPanel3.Location = new System.Drawing.Point(676, 773);
       this.tableLayoutPanel3.Name = "tableLayoutPanel3";
       this.tableLayoutPanel3.RowCount = 2;
       this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -722,7 +725,7 @@
       this.flowLayoutPanel2.Controls.Add(this.txFilter);
       this.flowLayoutPanel2.Controls.Add(this.btClearFilter);
       this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 772);
+      this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 773);
       this.flowLayoutPanel2.Name = "flowLayoutPanel2";
       this.flowLayoutPanel2.Size = new System.Drawing.Size(364, 78);
       this.flowLayoutPanel2.TabIndex = 26;
@@ -806,6 +809,126 @@
       this.btClearFilter.Text = "Clear Filter";
       this.btClearFilter.UseVisualStyleBackColor = true;
       this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
+      // 
+      // flowLayoutPanel3
+      // 
+      this.flowLayoutPanel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightPitch);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvAimPitch);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvViewPitch);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightYaw);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvAimYaw);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvViewYaw);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightRoll);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvThrottle);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeVert);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeLat);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeLon);
+      this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+      this.flowLayoutPanel3.Location = new System.Drawing.Point(676, 616);
+      this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+      this.flowLayoutPanel3.Size = new System.Drawing.Size(372, 151);
+      this.flowLayoutPanel3.TabIndex = 27;
+      // 
+      // cbxInvFlightPitch
+      // 
+      this.cbxInvFlightPitch.Location = new System.Drawing.Point(3, 3);
+      this.cbxInvFlightPitch.Name = "cbxInvFlightPitch";
+      this.cbxInvFlightPitch.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvFlightPitch.TabIndex = 0;
+      this.cbxInvFlightPitch.Text = "Inv. Flight Pitch";
+      this.cbxInvFlightPitch.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvAimPitch
+      // 
+      this.cbxInvAimPitch.Location = new System.Drawing.Point(3, 27);
+      this.cbxInvAimPitch.Name = "cbxInvAimPitch";
+      this.cbxInvAimPitch.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvAimPitch.TabIndex = 0;
+      this.cbxInvAimPitch.Text = "Inv. Aim Pitch";
+      this.cbxInvAimPitch.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvViewPitch
+      // 
+      this.cbxInvViewPitch.Location = new System.Drawing.Point(3, 51);
+      this.cbxInvViewPitch.Name = "cbxInvViewPitch";
+      this.cbxInvViewPitch.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvViewPitch.TabIndex = 0;
+      this.cbxInvViewPitch.Text = "Inv. View Pitch";
+      this.cbxInvViewPitch.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvFlightYaw
+      // 
+      this.cbxInvFlightYaw.Location = new System.Drawing.Point(3, 75);
+      this.cbxInvFlightYaw.Name = "cbxInvFlightYaw";
+      this.cbxInvFlightYaw.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvFlightYaw.TabIndex = 0;
+      this.cbxInvFlightYaw.Text = "Inv. Flight Yaw";
+      this.cbxInvFlightYaw.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvAimYaw
+      // 
+      this.cbxInvAimYaw.Location = new System.Drawing.Point(3, 99);
+      this.cbxInvAimYaw.Name = "cbxInvAimYaw";
+      this.cbxInvAimYaw.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvAimYaw.TabIndex = 0;
+      this.cbxInvAimYaw.Text = "Inv. Aim Yaw";
+      this.cbxInvAimYaw.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvViewYaw
+      // 
+      this.cbxInvViewYaw.Location = new System.Drawing.Point(3, 123);
+      this.cbxInvViewYaw.Name = "cbxInvViewYaw";
+      this.cbxInvViewYaw.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvViewYaw.TabIndex = 0;
+      this.cbxInvViewYaw.Text = "Inv. View Yaw";
+      this.cbxInvViewYaw.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvFlightRoll
+      // 
+      this.cbxInvFlightRoll.Location = new System.Drawing.Point(177, 3);
+      this.cbxInvFlightRoll.Name = "cbxInvFlightRoll";
+      this.cbxInvFlightRoll.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvFlightRoll.TabIndex = 0;
+      this.cbxInvFlightRoll.Text = "Inv. Flight Roll";
+      this.cbxInvFlightRoll.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvThrottle
+      // 
+      this.cbxInvThrottle.Location = new System.Drawing.Point(177, 27);
+      this.cbxInvThrottle.Name = "cbxInvThrottle";
+      this.cbxInvThrottle.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvThrottle.TabIndex = 0;
+      this.cbxInvThrottle.Text = "Inv. Throttle";
+      this.cbxInvThrottle.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvStrafeVert
+      // 
+      this.cbxInvStrafeVert.Location = new System.Drawing.Point(177, 51);
+      this.cbxInvStrafeVert.Name = "cbxInvStrafeVert";
+      this.cbxInvStrafeVert.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvStrafeVert.TabIndex = 0;
+      this.cbxInvStrafeVert.Text = "Inv. Strafe vertical";
+      this.cbxInvStrafeVert.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvStrafeLat
+      // 
+      this.cbxInvStrafeLat.Location = new System.Drawing.Point(177, 75);
+      this.cbxInvStrafeLat.Name = "cbxInvStrafeLat";
+      this.cbxInvStrafeLat.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvStrafeLat.TabIndex = 0;
+      this.cbxInvStrafeLat.Text = "Inv. Strafe lateral";
+      this.cbxInvStrafeLat.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvStrafeLon
+      // 
+      this.cbxInvStrafeLon.Location = new System.Drawing.Point(177, 99);
+      this.cbxInvStrafeLon.Name = "cbxInvStrafeLon";
+      this.cbxInvStrafeLon.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvStrafeLon.TabIndex = 0;
+      this.cbxInvStrafeLon.Text = "Inv. Strafe longitudinal";
+      this.cbxInvStrafeLon.UseVisualStyleBackColor = true;
       // 
       // toolStripStatusLabel2
       // 
@@ -952,125 +1075,15 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
-      // flowLayoutPanel3
+      // btDumpLog
       // 
-      this.flowLayoutPanel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightPitch);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvAimPitch);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvViewPitch);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightYaw);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvAimYaw);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvViewYaw);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightRoll);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvThrottle);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeVert);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeLat);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeLon);
-      this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      this.flowLayoutPanel3.Location = new System.Drawing.Point(676, 616);
-      this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-      this.flowLayoutPanel3.Size = new System.Drawing.Size(372, 150);
-      this.flowLayoutPanel3.TabIndex = 27;
-      // 
-      // cbxInvFlightPitch
-      // 
-      this.cbxInvFlightPitch.Location = new System.Drawing.Point(3, 3);
-      this.cbxInvFlightPitch.Name = "cbxInvFlightPitch";
-      this.cbxInvFlightPitch.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvFlightPitch.TabIndex = 0;
-      this.cbxInvFlightPitch.Text = "Inv. Flight Pitch";
-      this.cbxInvFlightPitch.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvFlightYaw
-      // 
-      this.cbxInvFlightYaw.Location = new System.Drawing.Point(3, 75);
-      this.cbxInvFlightYaw.Name = "cbxInvFlightYaw";
-      this.cbxInvFlightYaw.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvFlightYaw.TabIndex = 0;
-      this.cbxInvFlightYaw.Text = "Inv. Flight Yaw";
-      this.cbxInvFlightYaw.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvFlightRoll
-      // 
-      this.cbxInvFlightRoll.Location = new System.Drawing.Point(177, 3);
-      this.cbxInvFlightRoll.Name = "cbxInvFlightRoll";
-      this.cbxInvFlightRoll.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvFlightRoll.TabIndex = 0;
-      this.cbxInvFlightRoll.Text = "Inv. Flight Roll";
-      this.cbxInvFlightRoll.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvStrafeVert
-      // 
-      this.cbxInvStrafeVert.Location = new System.Drawing.Point(177, 51);
-      this.cbxInvStrafeVert.Name = "cbxInvStrafeVert";
-      this.cbxInvStrafeVert.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvStrafeVert.TabIndex = 0;
-      this.cbxInvStrafeVert.Text = "Inv. Strafe vertical";
-      this.cbxInvStrafeVert.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvStrafeLat
-      // 
-      this.cbxInvStrafeLat.Location = new System.Drawing.Point(177, 75);
-      this.cbxInvStrafeLat.Name = "cbxInvStrafeLat";
-      this.cbxInvStrafeLat.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvStrafeLat.TabIndex = 0;
-      this.cbxInvStrafeLat.Text = "Inv. Strafe lateral";
-      this.cbxInvStrafeLat.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvStrafeLon
-      // 
-      this.cbxInvStrafeLon.Location = new System.Drawing.Point(177, 99);
-      this.cbxInvStrafeLon.Name = "cbxInvStrafeLon";
-      this.cbxInvStrafeLon.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvStrafeLon.TabIndex = 0;
-      this.cbxInvStrafeLon.Text = "Inv. Strafe longitudinal";
-      this.cbxInvStrafeLon.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvAimPitch
-      // 
-      this.cbxInvAimPitch.Location = new System.Drawing.Point(3, 27);
-      this.cbxInvAimPitch.Name = "cbxInvAimPitch";
-      this.cbxInvAimPitch.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvAimPitch.TabIndex = 0;
-      this.cbxInvAimPitch.Text = "Inv. Aim Pitch";
-      this.cbxInvAimPitch.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvAimYaw
-      // 
-      this.cbxInvAimYaw.Location = new System.Drawing.Point(3, 99);
-      this.cbxInvAimYaw.Name = "cbxInvAimYaw";
-      this.cbxInvAimYaw.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvAimYaw.TabIndex = 0;
-      this.cbxInvAimYaw.Text = "Inv. Aim Yaw";
-      this.cbxInvAimYaw.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvThrottle
-      // 
-      this.cbxInvThrottle.Location = new System.Drawing.Point(177, 27);
-      this.cbxInvThrottle.Name = "cbxInvThrottle";
-      this.cbxInvThrottle.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvThrottle.TabIndex = 0;
-      this.cbxInvThrottle.Text = "Inv. Throttle";
-      this.cbxInvThrottle.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvViewPitch
-      // 
-      this.cbxInvViewPitch.Location = new System.Drawing.Point(3, 51);
-      this.cbxInvViewPitch.Name = "cbxInvViewPitch";
-      this.cbxInvViewPitch.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvViewPitch.TabIndex = 0;
-      this.cbxInvViewPitch.Text = "Inv. View Pitch";
-      this.cbxInvViewPitch.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvViewYaw
-      // 
-      this.cbxInvViewYaw.Location = new System.Drawing.Point(3, 123);
-      this.cbxInvViewYaw.Name = "cbxInvViewYaw";
-      this.cbxInvViewYaw.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvViewYaw.TabIndex = 0;
-      this.cbxInvViewYaw.Text = "Inv. View Yaw";
-      this.cbxInvViewYaw.UseVisualStyleBackColor = true;
+      this.btDumpLog.Location = new System.Drawing.Point(3, 63);
+      this.btDumpLog.Name = "btDumpLog";
+      this.btDumpLog.Size = new System.Drawing.Size(120, 24);
+      this.btDumpLog.TabIndex = 25;
+      this.btDumpLog.Text = "Dump Log-->";
+      this.btDumpLog.UseVisualStyleBackColor = true;
+      this.btDumpLog.Click += new System.EventHandler(this.btDumpLog_Click);
       // 
       // UC_JoyPanel
       // 
@@ -1113,9 +1126,9 @@
       this.tableLayoutPanel3.PerformLayout();
       this.flowLayoutPanel2.ResumeLayout(false);
       this.flowLayoutPanel2.PerformLayout();
+      this.flowLayoutPanel3.ResumeLayout(false);
       this.statusStrip1.ResumeLayout(false);
       this.statusStrip1.PerformLayout();
-      this.flowLayoutPanel3.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1212,6 +1225,7 @@
     private System.Windows.Forms.CheckBox cbxInvStrafeLat;
     private System.Windows.Forms.CheckBox cbxInvStrafeLon;
     private System.Windows.Forms.CheckBox cbxInvThrottle;
+    private System.Windows.Forms.Button btDumpLog;
   }
 }
 

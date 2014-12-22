@@ -177,6 +177,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OGL\RK4Integrator.cs" />
+    <Compile Include="SC\SCLogExtract.cs" />
     <Compile Include="SC\SCDefaultProfile.cs" />
     <Compile Include="SC\SCMappings.cs" />
     <Compile Include="SC\SCPath.cs" />

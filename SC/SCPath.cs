@@ -145,6 +145,26 @@ namespace SCJMapper_V2
 
 
     /// <summary>
+    /// Returns the SC Client path  e.g.  "E:\G\StarCitizen\CitizenClient"
+    /// </summary>
+    static public String SCClientPath
+    {
+      get
+      {
+        log.Debug( "SCClientPath - Entry" );
+        String scp = SCBasePath;
+        if ( String.IsNullOrEmpty( scp ) ) return ""; // no valid one can be found
+        //
+        scp = Path.Combine( scp, "CitizenClient" );
+        if ( Directory.Exists( scp ) ) return scp;
+
+        log.WarnFormat( "SCClientDataPath - CitizenClient subfolder does not exist: {0}", scp );
+        return "";
+      }
+    }
+
+
+    /// <summary>
     /// Returns the SC ClientData path  e.g.  "E:\G\StarCitizen\CitizenClient\Data"
     /// </summary>
     static public String SCClientDataPath
@@ -152,10 +172,9 @@ namespace SCJMapper_V2
       get
       {
         log.Debug( "SCClientDataPath - Entry" );
-        String scp = SCBasePath;
+        String scp = SCClientPath;
         if ( String.IsNullOrEmpty( scp ) ) return ""; // no valid one can be found
         //
-        scp = Path.Combine( scp, "CitizenClient" );
         scp = Path.Combine( scp, "Data" );
         if ( Directory.Exists( scp ) ) return scp;
 
@@ -173,14 +192,33 @@ namespace SCJMapper_V2
       get
       {
         log.Debug( "SCClientUSERPath - Entry" );
-        String scp = SCBasePath;
+        String scp = SCClientPath;
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
-        scp = Path.Combine( scp, "CitizenClient" );
         scp = Path.Combine( scp, "USER" );
         if ( Directory.Exists( scp ) ) return scp;
 
         log.WarnFormat( "SCClientUSERPath - CitizenClient.USER subfolder does not exist: {0}", scp );
+        return "";
+      }
+    }
+
+
+    /// <summary>
+    /// Returns the SC ClientData path  e.g.  "E:\G\StarCitizen\CitizenClient\logs"
+    /// </summary>
+    static public String SCClientLogsPath
+    {
+      get
+      {
+        log.Debug( "SCClientLogsPath - Entry" );
+        String scp = SCClientPath;
+        if ( String.IsNullOrEmpty( scp ) ) return "";
+        //
+        scp = Path.Combine( scp, "logs" );
+        if ( Directory.Exists( scp ) ) return scp;
+
+        log.WarnFormat( "SCClientUSERPath - CitizenClient.logs subfolder does not exist: {0}", scp );
         return "";
       }
     }
@@ -222,6 +260,40 @@ namespace SCJMapper_V2
         if ( File.Exists( scp ) ) return scp;
 
         log.WarnFormat( "SCGameData_pak - CitizenClient.Data.GameData.pak file does not exist: {0}", scp );
+        return "";
+      }
+    }
+
+
+    /// <summary>
+    /// Returns the SC log file path to the latest logfile  e.g.  "E:\G\StarCitizen\CitizenClient\logs\2014-12-22_17-53-01_Log_0.log"
+    /// </summary>
+    static public String SCLastLog
+    {
+      get
+      {
+        log.Debug( "SCLastLog - Entry" );
+        String scp = SCClientLogsPath;
+        if ( String.IsNullOrEmpty( scp ) ) return "";
+        //
+        try {
+          var files = Directory.EnumerateFiles( scp, "*.log", SearchOption.TopDirectoryOnly );
+          DateTime newestT = DateTime.FromFileTime( 1 ); // very old...
+          String   newestF = "";
+          foreach ( String f in files ) {
+            try {
+              FileInfo finfo = new FileInfo( f );
+              if ( finfo.LastWriteTime > newestT ) {
+                newestF = f; newestT = finfo.LastWriteTime;
+              }
+            }
+            catch {
+            }
+          }
+          return newestF;
+        }
+        catch {
+        }
         return "";
       }
     }

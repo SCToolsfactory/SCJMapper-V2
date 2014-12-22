@@ -653,7 +653,7 @@ namespace SCJMapper_V2
 
     private void btAssign_Click( object sender, EventArgs e )
     {
-      if ( m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), InputMode ) ) {
+      if ( m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), InputMode, true ) ) {
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
       else MySounds.PlayNotfound( );
@@ -662,7 +662,7 @@ namespace SCJMapper_V2
     private void btBlend_Click( object sender, EventArgs e )
     {
       if ( m_AT.CanBlendBinding ) {
-        m_AT.UpdateSelectedItem( DeviceCls.BlendedInput, InputMode );
+        m_AT.UpdateSelectedItem( DeviceCls.BlendedInput, InputMode, false );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
       else MySounds.PlayCannot( );
@@ -671,7 +671,7 @@ namespace SCJMapper_V2
     private void btClear_Click( object sender, EventArgs e )
     {
       if ( m_AT.CanClearBinding ) {
-        m_AT.UpdateSelectedItem( "", InputMode );
+        m_AT.UpdateSelectedItem( "", InputMode, false );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
       else MySounds.PlayCannot( );
@@ -688,6 +688,12 @@ namespace SCJMapper_V2
     private void btDumpList_Click( object sender, EventArgs e )
     {
       rtb.Text = String.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActions( ) );
+    }
+
+    private void btDumpLog_Click( object sender, EventArgs e )
+    {
+      rtb.Text = String.Format( "-- {0} - SC Joystick AC Log Controller Detection --\n{1}", DateTime.Now, SCLogExtract.ExtractLog( ) );
+
     }
 
     private void btGrab_Click( object sender, EventArgs e )
@@ -1236,6 +1242,7 @@ namespace SCJMapper_V2
 
 
     #endregion
+
 
 
 

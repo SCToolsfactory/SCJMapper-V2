@@ -517,7 +517,7 @@ namespace SCJMapper_V2
     /// First apply to the GUI tree where the selection happend then copy it over to master tree
     /// </summary>
     /// <param name="input">The new Text property</param>
-    public Boolean UpdateSelectedItem( String input, ActionCls.ActionDevice inKind )
+    public Boolean UpdateSelectedItem( String input, ActionCls.ActionDevice inKind, Boolean checkKind )
     {
       if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return false; // ERROR exit
       if ( Ctrl.SelectedNode == null ) return false; // ERROR exit
@@ -528,7 +528,7 @@ namespace SCJMapper_V2
         // this is the main node with Action Cmd
         ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name );
         if ( ac == null ) return false; // ERROR exit
-        if ( ac.actionDevice != inKind ) return false; // ERROR exit
+        if ( checkKind && ( ac.actionDevice != inKind ) ) return false; // ERROR exit
 
         ActionCommandCls acc = FindActionInputObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name, CommandFromNodeText( Ctrl.SelectedNode.Text ) );
         if ( acc == null ) return false; // ERROR exit
@@ -540,7 +540,7 @@ namespace SCJMapper_V2
         ActionTreeNode atn = ( m_ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode
         ActionCls ac = FindActionObject( atn.Parent.Name, atn.Name );   // the related action
         if ( ac == null ) return false; // ERROR exit
-        if ( ac.actionDevice != inKind ) return false; // ERROR exit
+        if ( checkKind && ( ac.actionDevice != inKind ) ) return false; // ERROR exit
 
         ActionCommandCls acc = FindActionInputObject( ac, m_ctrl.SelectedNode.Index );
         if ( acc == null ) return false; // ERROR exit
