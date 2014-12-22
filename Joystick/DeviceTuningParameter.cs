@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Windows.Forms;
 
 namespace SCJMapper_V2
 {
@@ -25,8 +26,6 @@ namespace SCJMapper_V2
     private bool   m_senseEnabled = false;  // default
     private String m_sense = "1.00";
 
-    private bool   m_invertEnabled = false;  // default
-
     private bool   m_expEnabled = false;  // default
     private String m_exponent = "1.000";
 
@@ -37,6 +36,8 @@ namespace SCJMapper_V2
     private DeviceCls m_device = null;
 
     private DeviceDeadzoneParameter m_deadzone = null;
+
+    private CheckBox m_cbInvert = null;
 
     public DeviceTuningParameter( )
     {
@@ -52,6 +53,8 @@ namespace SCJMapper_V2
         m_device = value;
         m_type = "";
         m_devInstanceNo = -1;
+        if ( m_device == null ) return; // got a null device
+
         if ( JoystickCls.IsDeviceClass( m_device.DevClass ) ) {
           m_type = m_device.DevClass;
           m_devInstanceNo = ( m_device as JoystickCls ).JSAssignment;
@@ -108,8 +111,12 @@ namespace SCJMapper_V2
 
     public bool InvertUsed
     {
-      get { return m_invertEnabled; }
-      set { m_invertEnabled = value; }
+      get { return m_cbInvert.Checked; }
+      set { m_cbInvert.Checked = value; }
+    }
+    public CheckBox CBInvert
+    {
+      set { m_cbInvert = value; }
     }
 
     public bool ExponentUsed
@@ -204,7 +211,7 @@ namespace SCJMapper_V2
     /// <returns>The XML string or an empty string</returns>
     public String Options_toXML( )
     {
-      if ( ( m_senseEnabled || m_expEnabled || m_invertEnabled || m_ptsEnabled ) == false ) return ""; // not used
+      if ( ( SensitivityUsed || ExponentUsed || InvertUsed || NonLinCurveUsed ) == false ) return ""; // not used
 
       String tmp = "";
       tmp += String.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", m_type, m_devInstanceNo.ToString( ) );
@@ -214,7 +221,7 @@ namespace SCJMapper_V2
         tmp += String.Format( "invert=\"1\" " );
       }
       if ( SensitivityUsed ) {
-        tmp += String.Format( "sensitivity=\"{0}\" ", m_sense );
+        tmp += String.Format( "sensitivity=\"{0}\" ", Sensitivity );
       }
       if ( NonLinCurveUsed ) {
         // add exp to avoid merge of things...
@@ -228,7 +235,7 @@ namespace SCJMapper_V2
       }
       else if ( ExponentUsed ) {
         // only exp used
-        tmp += String.Format( "exponent=\"{0}\" /> \n", m_exponent );
+        tmp += String.Format( "exponent=\"{0}\" /> \n", Exponent );
       }
       else {
         // neither exp or curve
@@ -243,10 +250,10 @@ namespace SCJMapper_V2
 
     /// <summary>
     /// Read the options from the XML
-    ///  can get only the 3 ones for Move X,Y,RotZ, pitch and yaq right now
+    ///  can get only the 3 ones for Move Pitch, Yaw, Roll right now
     /// </summary>
     /// <param name="reader">A prepared XML reader</param>
-    /// <param name="instance">the Josyticj instance number</param>
+    /// <param name="instance">the Joystick instance number</param>
     /// <returns></returns>
     public Boolean Options_fromXML( XmlReader reader, String type, int instance )
     {
@@ -255,12 +262,11 @@ namespace SCJMapper_V2
       String invert = "";
       String sensitivity = "";
       String exponent = "";
-      String instance_inv = "";
 
       m_option = reader.Name;
       m_devInstanceNo = instance;
 
-      // derive from pilot_move_x || pilot_move_rotx || pilot_moveyaw (nothing bad should arrive here)
+      // derive from flight_move_pitch || flight_move_yaw || flight_move_roll (nothing bad should arrive here)
       String[] e = m_option.ToLowerInvariant( ).Split( new char[] { '_' } );
       if ( e.Length > 2 ) m_cmdCtrl = e[2]; // TODO - see if m_cmdCtrl is needed to be derived here
 
@@ -268,26 +274,20 @@ namespace SCJMapper_V2
       if ( reader.HasAttributes ) {
         invert = reader["invert"];
         if ( !String.IsNullOrWhiteSpace( invert ) ) {
-          m_invertEnabled = false;
-          if ( invert == "1" ) m_invertEnabled = true;
-        }
-
-        instance_inv = reader["instance"]; // CIG wrong attr name ?!
-        if ( !String.IsNullOrWhiteSpace( instance_inv ) ) {
-          m_invertEnabled = false;
-          if ( instance_inv == "1" ) m_invertEnabled = true;
+          InvertUsed = false;
+          if ( invert == "1" ) InvertUsed = true;
         }
 
         sensitivity = reader["sensitivity"];
         if ( !String.IsNullOrWhiteSpace( sensitivity ) ) {
-          m_sense = sensitivity;
-          m_senseEnabled = true;
+          Sensitivity = sensitivity;
+          SensitivityUsed = true;
         }
 
         exponent = reader["exponent"];
         if ( !String.IsNullOrWhiteSpace( exponent ) ) {
-          m_exponent = exponent;
-          m_expEnabled = true;
+          Exponent = exponent;
+          ExponentUsed = true;
         }
       }
       // we may have a nonlin curve...

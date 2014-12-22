@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.IO;
 using System.Xml.Linq;
+using System.Windows.Forms;
 
 namespace SCJMapper_V2
 {
@@ -32,13 +33,24 @@ namespace SCJMapper_V2
     DeviceTuningParameter m_tuningY = null; // yaw
     DeviceTuningParameter m_tuningR = null; // roll
 
+    List<OptionsInvert> m_inverter = new List<OptionsInvert>( ); // all invertes
+
+    private List<CheckBox> m_invertCB = null; // Options owns and handles all Inversions
+
     // ctor
     public Options( JoystickList jsList )
     {
       m_tuningP = new DeviceTuningParameter( );
       m_tuningY = new DeviceTuningParameter( );
       m_tuningR = new DeviceTuningParameter( );
+
+      // create inverters (
+      for (int i=0; i<(int)OptionsInvert.Inversions.I_LAST; i++) {
+        OptionsInvert inv = new OptionsInvert((OptionsInvert.Inversions)i);
+        m_inverter.Add(inv);
+      }
     }
+
 
     public int Count
     {
@@ -69,6 +81,47 @@ namespace SCJMapper_V2
     {
       get { return m_tuningR; }
     }
+
+    /// <summary>
+    /// Returns the inverter based on the enum given
+    /// </summary>
+    /// <param name="item">The inverter enum</param>
+    /// <returns>An Inverter object</returns>
+    public OptionsInvert Inverter( OptionsInvert.Inversions item )
+    {
+      return m_inverter[( int )item];
+    }
+
+    /// <summary>
+    /// Assign the GUI Invert Checkboxes for further handling
+    /// </summary>
+    public List<CheckBox> InvertCheckList
+    {
+      set { 
+        m_invertCB = value; 
+        // forward the Tuning GUI items for handling
+        m_tuningP.CBInvert = m_invertCB[( int )OptionsInvert.Inversions.flight_move_pitch];
+        m_tuningY.CBInvert = m_invertCB[( int )OptionsInvert.Inversions.flight_move_yaw];
+        m_tuningR.CBInvert = m_invertCB[( int )OptionsInvert.Inversions.flight_move_roll];
+        // assuming the ENUM sequence of Checkboxes here...
+        // Note: the flight Flight ones above are not handled twice i.e. are assigned below but not used
+        int i = 0;
+        foreach ( OptionsInvert inv in m_inverter ) {
+          inv.CBInvert = m_invertCB[i++];
+        }
+      }
+    }
+
+    /// <summary>
+    /// Clears all Inverters
+    /// </summary>
+    public void ResetInverter( )
+    {
+      foreach ( OptionsInvert inv in m_inverter ) {
+        inv.Reset();
+      }
+    }
+
 
 
     private String[] FormatXml( string xml )
@@ -106,6 +159,18 @@ namespace SCJMapper_V2
       r += m_tuningP.Options_toXML( );
       r += m_tuningY.Options_toXML( );
       r += m_tuningR.Options_toXML( );
+
+      r += m_inverter[( int )OptionsInvert.Inversions.flight_aim_pitch].Options_toXML( );
+      r += m_inverter[( int )OptionsInvert.Inversions.flight_aim_yaw].Options_toXML( );
+
+      r += m_inverter[( int )OptionsInvert.Inversions.flight_view_pitch].Options_toXML( );
+      r += m_inverter[( int )OptionsInvert.Inversions.flight_view_yaw].Options_toXML( );
+
+      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_toXML( );
+      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_toXML( );
+      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_toXML( );
+
+      r += m_inverter[( int )OptionsInvert.Inversions.flight_throttle].Options_toXML( );
 
       return r;
     }
@@ -206,6 +271,35 @@ namespace SCJMapper_V2
           }
           else if ( reader.Name == "flight_move_roll" ) {
             m_tuningR.Options_fromXML( reader, type, int.Parse( instance ) );
+          }
+
+          else if ( reader.Name == "flight_move_strafe_vertical" ) {
+            m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_fromXML( reader, type, int.Parse( instance ) );
+          }
+          else if ( reader.Name == "flight_move_strafe_lateral" ) {
+            m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_fromXML( reader, type, int.Parse( instance ) );
+          }
+          else if ( reader.Name == "flight_move_strafe_longitudinal" ) {
+            m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_fromXML( reader, type, int.Parse( instance ) );
+          }
+
+          else if ( reader.Name == "flight_aim_pitch" ) {
+            m_inverter[( int )OptionsInvert.Inversions.flight_aim_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
+          }
+          else if ( reader.Name == "flight_aim_yaw" ) {
+            m_inverter[( int )OptionsInvert.Inversions.flight_aim_yaw].Options_fromXML( reader, type, int.Parse( instance ) );
+          }
+
+          else if ( reader.Name == "flight_view_pitch" ) {
+            m_inverter[( int )OptionsInvert.Inversions.flight_view_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
+          }
+          else if ( reader.Name == "flight_view_yaw" ) {
+            m_inverter[( int )OptionsInvert.Inversions.flight_view_yaw].Options_fromXML( reader, type, int.Parse( instance ) );
+          }
+
+          // Throttle abs/rel are treated the same and use the throttle group only 
+          else if ( reader.Name == "flight_throttle" ) {
+            m_inverter[( int )OptionsInvert.Inversions.flight_throttle].Options_fromXML( reader, type, int.Parse( instance ) );
           }
 
           else {

@@ -27,7 +27,7 @@ namespace SCJMapper_V2
     public const String JsUnknown = "jsx_";
     public new const String BlendedInput = "jsx_reserved";
 
-    static private int JSnum_UNKNOWN = 0;
+    static public int JSnum_UNKNOWN = 0;
     static public int JSnum_MAX = 8;   // can only assign 4 jsN devices in SC
 
 

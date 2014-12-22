@@ -274,7 +274,7 @@ namespace SCJMapper_V2
 
       Boolean retVal = true;
 
-      if ( ActionMapsCls.ActionMaps.Length == 0 ) ActionMapsCls.LoadActionMaps( ); // make sure we have them loaded ( refactoring to get a singleton or so...)
+      if ( ActionMapsCls.ActionMaps.Length == 0 ) ActionMapsCls.LoadSupportedActionMaps( ); // make sure we have them loaded ( refactoring to get a singleton or so...)
 
 
       try {

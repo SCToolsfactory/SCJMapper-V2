@@ -342,11 +342,21 @@ namespace SCJMapper_V2
       log.Debug( "InitActionTree - Entry" );
 
       // build TreeView and the ActionMaps
-      m_AT = new ActionTree( m_AppSettings.BlendUnmapped, m_AppSettings.BlendUnmappedGP, m_Joystick );
+      m_AT = new ActionTree( m_AppSettings.BlendUnmapped, m_AppSettings.BlendUnmappedGP, m_Joystick, m_Gamepad );
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
       m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
+      // provide the display items (init)
       m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMappedOnly.Checked );
-      m_AT.LoadProfileTree( m_AppSettings.DefProfileName, addDefaultBinding );       // Init with default profile filepath
+      // Init with default profile filepath
+      m_AT.LoadProfileTree( m_AppSettings.DefProfileName, addDefaultBinding );
+      // provide an array of checkboxes to Options (all is handled there)
+      List<CheckBox> inversions = new List<CheckBox>( );
+      inversions.Add( cbxInvFlightPitch ); inversions.Add( cbxInvAimPitch ); inversions.Add( cbxInvViewPitch );
+      inversions.Add( cbxInvFlightYaw ); inversions.Add( cbxInvAimYaw ); inversions.Add( cbxInvViewYaw );
+      inversions.Add( cbxInvFlightRoll );
+      inversions.Add( cbxInvThrottle );
+      inversions.Add( cbxInvStrafeVert ); inversions.Add( cbxInvStrafeLat ); inversions.Add( cbxInvStrafeLon );
+      m_AT.InvertCheckList = inversions;
 
       // apply a default JS to Joystick mapping - can be changed and reloaded from XML mappings
       // must take care of Gamepads if there are (but we take care of one only...)
@@ -555,7 +565,7 @@ namespace SCJMapper_V2
     {
       log.Debug( "Dump - Entry" );
 
-      rtb.Text = String.Format( "<!-- {0} - SC Joystick Mapping -->\n{1}", DateTime.Now, m_AT.ActionMaps.toXML( ) );
+      rtb.Text = String.Format( "<!-- {0} - SC Joystick Mapping -->\n{1}", DateTime.Now, m_AT.toXML( ) );
 
       btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
       btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
@@ -1226,6 +1236,7 @@ namespace SCJMapper_V2
 
 
     #endregion
+
 
 
 

@@ -59,6 +59,9 @@
       this.lblAction = new System.Windows.Forms.Label();
       this.btAssign = new System.Windows.Forms.Button();
       this.treeView1 = new System.Windows.Forms.TreeView();
+      this.cmAddDel = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.tsiAddBinding = new System.Windows.Forms.ToolStripMenuItem();
+      this.tdiDelBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
       this.panel1 = new System.Windows.Forms.Panel();
@@ -107,12 +110,22 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.cmAddDel = new System.Windows.Forms.ContextMenuStrip(this.components);
-      this.tsiAddBinding = new System.Windows.Forms.ToolStripMenuItem();
-      this.tdiDelBinding = new System.Windows.Forms.ToolStripMenuItem();
+      this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+      this.cbxInvFlightPitch = new System.Windows.Forms.CheckBox();
+      this.cbxInvFlightYaw = new System.Windows.Forms.CheckBox();
+      this.cbxInvFlightRoll = new System.Windows.Forms.CheckBox();
+      this.cbxInvStrafeVert = new System.Windows.Forms.CheckBox();
+      this.cbxInvStrafeLat = new System.Windows.Forms.CheckBox();
+      this.cbxInvStrafeLon = new System.Windows.Forms.CheckBox();
+      this.cbxInvAimPitch = new System.Windows.Forms.CheckBox();
+      this.cbxInvAimYaw = new System.Windows.Forms.CheckBox();
+      this.cbxInvThrottle = new System.Windows.Forms.CheckBox();
+      this.cbxInvViewPitch = new System.Windows.Forms.CheckBox();
+      this.cbxInvViewYaw = new System.Windows.Forms.CheckBox();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
+      this.cmAddDel.SuspendLayout();
       this.tc1.SuspendLayout();
       this.tabJS1.SuspendLayout();
       this.panel1.SuspendLayout();
@@ -123,7 +136,7 @@
       this.tableLayoutPanel3.SuspendLayout();
       this.flowLayoutPanel2.SuspendLayout();
       this.statusStrip1.SuspendLayout();
-      this.cmAddDel.SuspendLayout();
+      this.flowLayoutPanel3.SuspendLayout();
       this.SuspendLayout();
       // 
       // btDumpList
@@ -145,8 +158,7 @@
       this.rtb.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.rtb.Location = new System.Drawing.Point(676, 81);
       this.rtb.Name = "rtb";
-      this.tlpanel.SetRowSpan(this.rtb, 2);
-      this.rtb.Size = new System.Drawing.Size(372, 666);
+      this.rtb.Size = new System.Drawing.Size(372, 529);
       this.rtb.TabIndex = 21;
       this.rtb.Text = "";
       this.rtb.WordWrap = false;
@@ -377,9 +389,32 @@
       this.treeView1.Name = "treeView1";
       this.tlpanel.SetRowSpan(this.treeView1, 2);
       this.treeView1.SelectedImageKey = "Selected";
-      this.treeView1.Size = new System.Drawing.Size(364, 666);
+      this.treeView1.Size = new System.Drawing.Size(364, 685);
       this.treeView1.TabIndex = 16;
       this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+      // 
+      // cmAddDel
+      // 
+      this.cmAddDel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsiAddBinding,
+            this.tdiDelBinding});
+      this.cmAddDel.Name = "cmAddDel";
+      this.cmAddDel.Size = new System.Drawing.Size(159, 48);
+      this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
+      // 
+      // tsiAddBinding
+      // 
+      this.tsiAddBinding.Name = "tsiAddBinding";
+      this.tsiAddBinding.Size = new System.Drawing.Size(158, 22);
+      this.tsiAddBinding.Text = "Add Mapping";
+      this.tsiAddBinding.Click += new System.EventHandler(this.tsiAddBinding_Click);
+      // 
+      // tdiDelBinding
+      // 
+      this.tdiDelBinding.Name = "tdiDelBinding";
+      this.tdiDelBinding.Size = new System.Drawing.Size(158, 22);
+      this.tdiDelBinding.Text = "Delete Mapping";
+      this.tdiDelBinding.Click += new System.EventHandler(this.tdiDelBinding_Click);
       // 
       // tc1
       // 
@@ -481,7 +516,7 @@
       // buttonExit
       // 
       this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.buttonExit.Location = new System.Drawing.Point(171, 40);
+      this.buttonExit.Location = new System.Drawing.Point(171, 51);
       this.buttonExit.Name = "buttonExit";
       this.buttonExit.Size = new System.Drawing.Size(120, 24);
       this.buttonExit.TabIndex = 13;
@@ -520,6 +555,7 @@
       this.tlpanel.Controls.Add(this.tableLayoutPanel2, 1, 3);
       this.tlpanel.Controls.Add(this.tableLayoutPanel3, 2, 3);
       this.tlpanel.Controls.Add(this.flowLayoutPanel2, 0, 3);
+      this.tlpanel.Controls.Add(this.flowLayoutPanel3, 2, 2);
       this.tlpanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tlpanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tlpanel.Location = new System.Drawing.Point(0, 0);
@@ -531,7 +567,7 @@
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.tlpanel.Size = new System.Drawing.Size(1054, 862);
+      this.tlpanel.Size = new System.Drawing.Size(1054, 892);
       this.tlpanel.TabIndex = 25;
       // 
       // flowLayoutPanel1
@@ -563,7 +599,7 @@
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 131);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 150);
       this.tableLayoutPanel1.TabIndex = 23;
       // 
       // btJSTuning
@@ -585,18 +621,18 @@
       this.tableLayoutPanel2.Controls.Add(this.btJsReassign, 0, 0);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel2.Location = new System.Drawing.Point(376, 753);
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(376, 772);
       this.tableLayoutPanel2.Name = "tableLayoutPanel2";
       this.tableLayoutPanel2.RowCount = 2;
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 67);
+      this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 78);
       this.tableLayoutPanel2.TabIndex = 24;
       // 
       // btSettings
       // 
-      this.btSettings.Location = new System.Drawing.Point(3, 40);
+      this.btSettings.Location = new System.Drawing.Point(3, 51);
       this.btSettings.Name = "btSettings";
       this.btSettings.Size = new System.Drawing.Size(120, 24);
       this.btSettings.TabIndex = 14;
@@ -606,7 +642,7 @@
       // btJsReassign
       // 
       this.btJsReassign.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btJsReassign.Location = new System.Drawing.Point(3, 10);
+      this.btJsReassign.Location = new System.Drawing.Point(3, 21);
       this.btJsReassign.Name = "btJsReassign";
       this.btJsReassign.Size = new System.Drawing.Size(120, 24);
       this.btJsReassign.TabIndex = 16;
@@ -624,19 +660,19 @@
       this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
       this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel3.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel3.Location = new System.Drawing.Point(676, 753);
+      this.tableLayoutPanel3.Location = new System.Drawing.Point(676, 772);
       this.tableLayoutPanel3.Name = "tableLayoutPanel3";
       this.tableLayoutPanel3.RowCount = 2;
       this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-      this.tableLayoutPanel3.Size = new System.Drawing.Size(372, 67);
+      this.tableLayoutPanel3.Size = new System.Drawing.Size(372, 78);
       this.tableLayoutPanel3.TabIndex = 25;
       // 
       // btSaveMyMapping
       // 
       this.btSaveMyMapping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.btSaveMyMapping.Image = ((System.Drawing.Image)(resources.GetObject("btSaveMyMapping.Image")));
-      this.btSaveMyMapping.Location = new System.Drawing.Point(164, 40);
+      this.btSaveMyMapping.Location = new System.Drawing.Point(164, 51);
       this.btSaveMyMapping.Name = "btSaveMyMapping";
       this.btSaveMyMapping.Size = new System.Drawing.Size(205, 24);
       this.btSaveMyMapping.TabIndex = 15;
@@ -647,7 +683,7 @@
       // 
       // btLoadMyMapping
       // 
-      this.btLoadMyMapping.Location = new System.Drawing.Point(3, 40);
+      this.btLoadMyMapping.Location = new System.Drawing.Point(3, 51);
       this.btLoadMyMapping.Name = "btLoadMyMapping";
       this.btLoadMyMapping.Size = new System.Drawing.Size(120, 24);
       this.btLoadMyMapping.TabIndex = 14;
@@ -659,7 +695,7 @@
       // 
       this.txMappingName.Anchor = System.Windows.Forms.AnchorStyles.Right;
       this.txMappingName.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
-      this.txMappingName.Location = new System.Drawing.Point(135, 7);
+      this.txMappingName.Location = new System.Drawing.Point(135, 13);
       this.txMappingName.Name = "txMappingName";
       this.txMappingName.Size = new System.Drawing.Size(234, 22);
       this.txMappingName.TabIndex = 0;
@@ -670,7 +706,7 @@
       // 
       this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(41, 12);
+      this.label1.Location = new System.Drawing.Point(41, 17);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(88, 13);
       this.label1.TabIndex = 16;
@@ -686,9 +722,9 @@
       this.flowLayoutPanel2.Controls.Add(this.txFilter);
       this.flowLayoutPanel2.Controls.Add(this.btClearFilter);
       this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 753);
+      this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 772);
       this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-      this.flowLayoutPanel2.Size = new System.Drawing.Size(364, 67);
+      this.flowLayoutPanel2.Size = new System.Drawing.Size(364, 78);
       this.flowLayoutPanel2.TabIndex = 26;
       // 
       // cbxShowJoystick
@@ -908,7 +944,7 @@
             this.toolStripStatusLabel1,
             this.tsDDbtMappings,
             this.tsBtLoad});
-      this.statusStrip1.Location = new System.Drawing.Point(0, 832);
+      this.statusStrip1.Location = new System.Drawing.Point(0, 862);
       this.statusStrip1.Name = "statusStrip1";
       this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
       this.statusStrip1.ShowItemToolTips = true;
@@ -916,28 +952,125 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
-      // cmAddDel
+      // flowLayoutPanel3
       // 
-      this.cmAddDel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsiAddBinding,
-            this.tdiDelBinding});
-      this.cmAddDel.Name = "cmAddDel";
-      this.cmAddDel.Size = new System.Drawing.Size(159, 48);
-      this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
+      this.flowLayoutPanel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightPitch);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvAimPitch);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvViewPitch);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightYaw);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvAimYaw);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvViewYaw);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightRoll);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvThrottle);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeVert);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeLat);
+      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeLon);
+      this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+      this.flowLayoutPanel3.Location = new System.Drawing.Point(676, 616);
+      this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+      this.flowLayoutPanel3.Size = new System.Drawing.Size(372, 150);
+      this.flowLayoutPanel3.TabIndex = 27;
       // 
-      // tsiAddBinding
+      // cbxInvFlightPitch
       // 
-      this.tsiAddBinding.Name = "tsiAddBinding";
-      this.tsiAddBinding.Size = new System.Drawing.Size(158, 22);
-      this.tsiAddBinding.Text = "Add Mapping";
-      this.tsiAddBinding.Click += new System.EventHandler(this.tsiAddBinding_Click);
+      this.cbxInvFlightPitch.Location = new System.Drawing.Point(3, 3);
+      this.cbxInvFlightPitch.Name = "cbxInvFlightPitch";
+      this.cbxInvFlightPitch.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvFlightPitch.TabIndex = 0;
+      this.cbxInvFlightPitch.Text = "Inv. Flight Pitch";
+      this.cbxInvFlightPitch.UseVisualStyleBackColor = true;
       // 
-      // tdiDelBinding
+      // cbxInvFlightYaw
       // 
-      this.tdiDelBinding.Name = "tdiDelBinding";
-      this.tdiDelBinding.Size = new System.Drawing.Size(158, 22);
-      this.tdiDelBinding.Text = "Delete Mapping";
-      this.tdiDelBinding.Click += new System.EventHandler(this.tdiDelBinding_Click);
+      this.cbxInvFlightYaw.Location = new System.Drawing.Point(3, 75);
+      this.cbxInvFlightYaw.Name = "cbxInvFlightYaw";
+      this.cbxInvFlightYaw.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvFlightYaw.TabIndex = 0;
+      this.cbxInvFlightYaw.Text = "Inv. Flight Yaw";
+      this.cbxInvFlightYaw.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvFlightRoll
+      // 
+      this.cbxInvFlightRoll.Location = new System.Drawing.Point(177, 3);
+      this.cbxInvFlightRoll.Name = "cbxInvFlightRoll";
+      this.cbxInvFlightRoll.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvFlightRoll.TabIndex = 0;
+      this.cbxInvFlightRoll.Text = "Inv. Flight Roll";
+      this.cbxInvFlightRoll.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvStrafeVert
+      // 
+      this.cbxInvStrafeVert.Location = new System.Drawing.Point(177, 51);
+      this.cbxInvStrafeVert.Name = "cbxInvStrafeVert";
+      this.cbxInvStrafeVert.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvStrafeVert.TabIndex = 0;
+      this.cbxInvStrafeVert.Text = "Inv. Strafe vertical";
+      this.cbxInvStrafeVert.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvStrafeLat
+      // 
+      this.cbxInvStrafeLat.Location = new System.Drawing.Point(177, 75);
+      this.cbxInvStrafeLat.Name = "cbxInvStrafeLat";
+      this.cbxInvStrafeLat.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvStrafeLat.TabIndex = 0;
+      this.cbxInvStrafeLat.Text = "Inv. Strafe lateral";
+      this.cbxInvStrafeLat.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvStrafeLon
+      // 
+      this.cbxInvStrafeLon.Location = new System.Drawing.Point(177, 99);
+      this.cbxInvStrafeLon.Name = "cbxInvStrafeLon";
+      this.cbxInvStrafeLon.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvStrafeLon.TabIndex = 0;
+      this.cbxInvStrafeLon.Text = "Inv. Strafe longitudinal";
+      this.cbxInvStrafeLon.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvAimPitch
+      // 
+      this.cbxInvAimPitch.Location = new System.Drawing.Point(3, 27);
+      this.cbxInvAimPitch.Name = "cbxInvAimPitch";
+      this.cbxInvAimPitch.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvAimPitch.TabIndex = 0;
+      this.cbxInvAimPitch.Text = "Inv. Aim Pitch";
+      this.cbxInvAimPitch.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvAimYaw
+      // 
+      this.cbxInvAimYaw.Location = new System.Drawing.Point(3, 99);
+      this.cbxInvAimYaw.Name = "cbxInvAimYaw";
+      this.cbxInvAimYaw.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvAimYaw.TabIndex = 0;
+      this.cbxInvAimYaw.Text = "Inv. Aim Yaw";
+      this.cbxInvAimYaw.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvThrottle
+      // 
+      this.cbxInvThrottle.Location = new System.Drawing.Point(177, 27);
+      this.cbxInvThrottle.Name = "cbxInvThrottle";
+      this.cbxInvThrottle.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvThrottle.TabIndex = 0;
+      this.cbxInvThrottle.Text = "Inv. Throttle";
+      this.cbxInvThrottle.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvViewPitch
+      // 
+      this.cbxInvViewPitch.Location = new System.Drawing.Point(3, 51);
+      this.cbxInvViewPitch.Name = "cbxInvViewPitch";
+      this.cbxInvViewPitch.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvViewPitch.TabIndex = 0;
+      this.cbxInvViewPitch.Text = "Inv. View Pitch";
+      this.cbxInvViewPitch.UseVisualStyleBackColor = true;
+      // 
+      // cbxInvViewYaw
+      // 
+      this.cbxInvViewYaw.Location = new System.Drawing.Point(3, 123);
+      this.cbxInvViewYaw.Name = "cbxInvViewYaw";
+      this.cbxInvViewYaw.Size = new System.Drawing.Size(168, 18);
+      this.cbxInvViewYaw.TabIndex = 0;
+      this.cbxInvViewYaw.Text = "Inv. View Yaw";
+      this.cbxInvViewYaw.UseVisualStyleBackColor = true;
       // 
       // UC_JoyPanel
       // 
@@ -952,12 +1085,12 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1054, 862);
+      this.ClientSize = new System.Drawing.Size(1054, 892);
       this.Controls.Add(this.statusStrip1);
       this.Controls.Add(this.tlpanel);
       this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-      this.MinimumSize = new System.Drawing.Size(1070, 900);
+      this.MinimumSize = new System.Drawing.Size(1070, 930);
       this.Name = "MainForm";
       this.Text = "SC Joystick Mapper";
       this.Activated += new System.EventHandler(this.MainForm_Activated);
@@ -967,6 +1100,7 @@
       this.cmCopyPaste.ResumeLayout(false);
       this.panel2.ResumeLayout(false);
       this.panel2.PerformLayout();
+      this.cmAddDel.ResumeLayout(false);
       this.tc1.ResumeLayout(false);
       this.tabJS1.ResumeLayout(false);
       this.panel1.ResumeLayout(false);
@@ -981,7 +1115,7 @@
       this.flowLayoutPanel2.PerformLayout();
       this.statusStrip1.ResumeLayout(false);
       this.statusStrip1.PerformLayout();
-      this.cmAddDel.ResumeLayout(false);
+      this.flowLayoutPanel3.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1066,6 +1200,18 @@
     private System.Windows.Forms.ContextMenuStrip cmAddDel;
     private System.Windows.Forms.ToolStripMenuItem tsiAddBinding;
     private System.Windows.Forms.ToolStripMenuItem tdiDelBinding;
+    private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+    private System.Windows.Forms.CheckBox cbxInvFlightPitch;
+    private System.Windows.Forms.CheckBox cbxInvFlightYaw;
+    private System.Windows.Forms.CheckBox cbxInvAimPitch;
+    private System.Windows.Forms.CheckBox cbxInvViewPitch;
+    private System.Windows.Forms.CheckBox cbxInvAimYaw;
+    private System.Windows.Forms.CheckBox cbxInvViewYaw;
+    private System.Windows.Forms.CheckBox cbxInvFlightRoll;
+    private System.Windows.Forms.CheckBox cbxInvStrafeVert;
+    private System.Windows.Forms.CheckBox cbxInvStrafeLat;
+    private System.Windows.Forms.CheckBox cbxInvStrafeLon;
+    private System.Windows.Forms.CheckBox cbxInvThrottle;
   }
 }
 

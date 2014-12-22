@@ -61,16 +61,18 @@ namespace SCJMapper_V2
 
     private String  m_Filter = ""; // the tree content filter
     private JoystickList m_jsList = null;
+    private GamepadCls   m_gamepad = null;
 
     /// <summary>
     /// ctor
     /// </summary>
-    public ActionTree( Boolean blendUnmappedJS, Boolean blendUnmappedGP, JoystickList jsList )
+    public ActionTree( Boolean blendUnmappedJS, Boolean blendUnmappedGP, JoystickList jsList, GamepadCls gamepad )
     {
       BlendUnmappedJS = blendUnmappedJS;
       BlendUnmappedGP = blendUnmappedGP;
 
       m_jsList = jsList;
+      m_gamepad = gamepad;
 
       IgnoreMaps = ""; // nothing to ignore
     }
@@ -83,7 +85,7 @@ namespace SCJMapper_V2
     /// <returns>The ActionTree Copy with reassigned input</returns>
     public ActionTree ReassignJsN( Dictionary<int, int> newJsList )
     {
-      ActionTree nTree = new ActionTree( BlendUnmappedJS, BlendUnmappedGP, m_jsList );
+      ActionTree nTree = new ActionTree( BlendUnmappedJS, BlendUnmappedGP, m_jsList, m_gamepad );
       // full copy from 'this'
       nTree.m_MasterTree = this.m_MasterTree;
       nTree.m_ctrl = this.m_ctrl;
@@ -96,6 +98,7 @@ namespace SCJMapper_V2
       return nTree;
     }
 
+    #region Properties
 
     public Boolean CanBlendBinding
     {
@@ -132,6 +135,7 @@ namespace SCJMapper_V2
       }
     }
 
+    #endregion
 
     /// <summary>
     /// Add a new Action Child to the selected Node to apply an addtional mapping
@@ -172,6 +176,76 @@ namespace SCJMapper_V2
       FindAndSelectCtrlByName( matn.Name );
     }
 
+
+    /// <summary>
+    /// Assign the GUI Invert Checkboxes for further handling
+    /// </summary>
+    public List<CheckBox> InvertCheckList
+    {
+      set
+      {
+        if ( ActionMaps != null ) ActionMaps.InvertCheckList = value; // just propagate if possible
+        else {
+          log.Error( "ActionTree-InvertCheckList: Program error - ActionMaps not yet created" );
+        }
+      }
+    }
+
+
+    /// <summary>
+    /// Gets the JS device that is used for one of the Inversion Items supported
+    /// </summary>
+    /// <param name="item">The Inversion item</param>
+    /// <returns>The device used or null</returns>
+    private DeviceCls GetActionInstance( OptionsInvert.Inversions item )
+    {
+      // must get the jsN information used for Options
+      String nodeText = "";
+      nodeText = FindAction( OptionsInvert.MappedActions[( int )item].Map, OptionsInvert.MappedActions[( int )item].Action );
+      if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
+        DeviceCls dev = m_jsList.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
+        if ( dev != null ) return dev;
+        else {
+          // could be a gamepad then
+          if ( ActionTreeNode.CommandFromNodeText( nodeText ).Contains( "xi_" ) ) {
+            return m_gamepad;
+          }
+          else return null; // nope...
+        }
+      }
+      return null;
+    }
+
+    /// <summary>
+    /// Collects and forwards the device information (instances) to the consuming invert Options
+    /// </summary>
+    private void UpdateDeviceInformation( )
+    {
+      // must get the jsN information used for Options Inverters
+      for ( int item=0; item<(int)OptionsInvert.Inversions.I_LAST; item++) {
+        ActionMaps.Options.Inverter( (OptionsInvert.Inversions)item ).GameDevice = GetActionInstance( (OptionsInvert.Inversions)item );
+      }
+    }
+
+
+    /// <summary>
+    /// Dumps the actions to an XML String
+    /// </summary>
+    /// <returns>A string containing the XML</returns>
+    public String toXML()
+    {
+      if ( ActionMaps != null ) {
+        // must update the devices and instances for inversion before dumping the XML
+        UpdateDeviceInformation( );
+        return ActionMaps.toXML( ); // just propagate if possible
+      }
+      else {
+        log.Error( "ActionTree-toXML: Program error - ActionMaps not yet created" );
+        return "";
+      }
+    }
+
+    #region MasterTree Actions
 
     private void UpdateMasterNode( ActionTreeNode node )
     {
@@ -295,6 +369,7 @@ namespace SCJMapper_V2
       FilterTree( );
     }
 
+    #endregion
 
     /// <summary>
     /// Load Mappings into the ActionList and create the Master TreeView 
@@ -826,7 +901,7 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Find a control that contains the Action
+    /// Find a control that contains the Action (exact match)
     /// </summary>
     /// <param name="actionmap">The actionmap to find the string</param>
     /// <param name="text">The string to find</param>
@@ -838,7 +913,7 @@ namespace SCJMapper_V2
         if ( String.IsNullOrEmpty( actionmap ) || ( tn.Text == actionmap ) ) {
           // have to search nodes of nodes
           foreach ( ActionTreeNode stn in tn.Nodes ) {
-            if ( stn.Action.Contains( action ) ) {
+            if ( stn.Action == action ) {
               return stn.Text;
             }
           }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Windows.Forms;
 
 namespace SCJMapper_V2
 {
@@ -26,7 +27,7 @@ namespace SCJMapper_V2
 
     // actionmap names to gather (do we need them to be cofigurable ??)
     public static String[] ActionMaps = { };
-    public static void LoadActionMaps( )
+    public static void LoadSupportedActionMaps( )
     {
       // load actionmaps
       String acm = AppConfiguration.AppConfig.scActionmaps;
@@ -45,6 +46,7 @@ namespace SCJMapper_V2
     private Options m_options = null;
     private Deviceoptions m_deviceOptions = null;
 
+    private List<CheckBox> m_invertCB = null; // Options owns and handles all Inversions
 
     // own additions for JS mapping - should not harm..
     private String[] m_js;
@@ -121,6 +123,26 @@ namespace SCJMapper_V2
       get { return m_deviceOptions.DeadzoneZ; }
     }
 
+    /// <summary>
+    /// Returns the Options item
+    /// </summary>
+    public Options Options
+    {
+      get { return m_options; }
+    }
+
+    /// <summary>
+    /// Assign the GUI Invert Checkboxes for further handling
+    /// </summary>
+    public List<CheckBox> InvertCheckList
+    {
+      set { 
+        m_invertCB = value;
+        m_options.InvertCheckList = m_invertCB;
+      }
+    }
+
+
 
     /// <summary>
     /// ctor
@@ -137,14 +159,19 @@ namespace SCJMapper_V2
         m_js[i] = ""; m_GUIDs[i] = "";
       }
 
+      CreateNewOptions( );
+
+      LoadSupportedActionMaps( ); // get them from config
+    }
+
+
+    private void CreateNewOptions( )
+    {
       // create options objs
       m_uiCustHeader = new UICustHeader( );
       m_options = new Options( m_joystickList );
       m_deviceOptions = new Deviceoptions( m_options );
-
-      LoadActionMaps( ); // get them from config
     }
-
 
     /// <summary>
     /// Copy return all ActionMaps while reassigning the JsN Tag
@@ -254,11 +281,9 @@ namespace SCJMapper_V2
     {
       log.Debug( "fromXML - Entry" );
 
-      // Reset those options...
-      m_uiCustHeader = new UICustHeader( );
-      m_options = new Options( m_joystickList );
-      m_deviceOptions = new Deviceoptions( m_options );
-
+      CreateNewOptions( ); // Reset those options...
+      m_options.InvertCheckList = m_invertCB;
+      m_options.ResetInverter( ); // have to reset when reading a new mapping
 
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;
