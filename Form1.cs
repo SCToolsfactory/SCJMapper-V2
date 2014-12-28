@@ -191,7 +191,10 @@ namespace SCJMapper_V2
       this.Location = m_AppSettings.FormLocation;
 
       String version = Application.ProductVersion;  // get the version information
-      lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // get the first two elements
+      // BETA VERSION; TODO -  comment out if not longer
+      //lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // PRODUCTION
+      lblTitle.Text += " - V " + version + " beta"; // BETA
+
       log.InfoFormat( "Application Version: {0}", version.ToString( ) );
 
       // tooltips where needed
@@ -432,19 +435,23 @@ namespace SCJMapper_V2
             // first panel - The Tab content exists already 
             if ( gpDevice != null ) {
               log.Debug( "Add first Gamepad panel" );
-              tc1.TabPages[0].Text = "Gamepad ";
-              UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[0].Controls.Add( uUC_GpadPanelNew );
+              tc1.TabPages[tabs].Text = "Gamepad ";
+              UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
               uUC_GpadPanelNew.Size = UC_JoyPanel.Size; uUC_GpadPanelNew.Location = UC_JoyPanel.Location;
               UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
               log.Debug( "Create Gamepad instance" );
-              gs = new GamepadCls( gpDevice, uUC_GpadPanelNew, 0 ); // does all device related activities for that particular item
+              gs = new GamepadCls( gpDevice, uUC_GpadPanelNew, tabs ); // does all device related activities for that particular item
               gs.SetDeviceName( instance.ProductName );
+              tc1.TabPages[tabs].ToolTipText = String.Format( "{0}\n{1}", gs.DevName, " " );
+              toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
             }
             else {
               log.Debug( "Add first Joystick panel" );
               log.Debug( "Create Joystick instance" );
               tc1.TabPages[tabs].Text = String.Format( "Joystick {0}", nJs++ );
-              js = new JoystickCls( jsDevice, this, tabs + 1, UC_JoyPanel, 0 ); // does all device related activities for that particular item
+              js = new JoystickCls( jsDevice, this, tabs + 1, UC_JoyPanel, tabs ); // does all device related activities for that particular item
+              tc1.TabPages[tabs].ToolTipText = String.Format( "{0}\n{1}", js.DevName, js.DevInstanceGUID );
+              toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
             }
           }
           else {
@@ -453,10 +460,11 @@ namespace SCJMapper_V2
               tc1.TabPages.Add( "Gamepad " );
               UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
               uUC_GpadPanelNew.Size = UC_JoyPanel.Size; uUC_GpadPanelNew.Location = UC_JoyPanel.Location;
-              UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
               log.Debug( "Create Gamepad instance" );
               gs = new GamepadCls( gpDevice, uUC_GpadPanelNew, tabs ); // does all device related activities for that particular item
               gs.SetDeviceName( instance.ProductName );
+              tc1.TabPages[tabs].ToolTipText = String.Format( "{0}\n{1}", gs.DevName, " " );
+              toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
             }
             else {
               log.Debug( "Add next Joystick panel" );
@@ -466,6 +474,8 @@ namespace SCJMapper_V2
               uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
               log.Debug( "Create Joystick instance" );
               js = new JoystickCls( jsDevice, this, tabs + 1, uUC_JoyPanelNew, tabs ); // does all device related activities for that particular item
+              tc1.TabPages[tabs].ToolTipText = String.Format( "{0}\n{1}", js.DevName, js.DevInstanceGUID );
+              toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
             }
           }
 
@@ -1045,6 +1055,7 @@ namespace SCJMapper_V2
         }
       }
 
+      m_AT.ActionMaps.TuningY.Reset( );  // set defaults
       if ( dev != null ) {
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
@@ -1093,6 +1104,7 @@ namespace SCJMapper_V2
         }
       }
 
+      m_AT.ActionMaps.TuningP.Reset( );  // set defaults
       if ( dev != null ) {
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
@@ -1134,6 +1146,7 @@ namespace SCJMapper_V2
         dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
       }
 
+      m_AT.ActionMaps.TuningR.Reset( );  // set defaults
       if ( dev != null ) {
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {

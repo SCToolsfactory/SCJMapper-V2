@@ -111,8 +111,8 @@ namespace SCJMapper_V2
 
     public bool InvertUsed
     {
-      get { return m_cbInvert.Checked; }
-      set { m_cbInvert.Checked = value; }
+      get { return ( m_cbInvert == null ) ?  false : m_cbInvert.Checked; }
+      set { if ( m_cbInvert != null ) m_cbInvert.Checked = value; }
     }
     public CheckBox CBInvert
     {
@@ -150,6 +150,14 @@ namespace SCJMapper_V2
     }
 
     #endregion
+
+    // reset some defaults
+    public void Reset()
+    {
+      GameDevice = null;
+      Deadzone = null;
+      Action = "";
+    }
 
 
     /// <summary>

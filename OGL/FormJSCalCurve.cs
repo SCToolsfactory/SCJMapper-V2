@@ -139,7 +139,6 @@ namespace SCJMapper_V2
 
     private DeviceTuningParameter m_Ytuning = new DeviceTuningParameter( );
     // live values
-    private DeviceCls m_Ydev = null;
     private String m_liveYawCommand ="";
     private float m_liveYdeadzone = 0.0f;
     private float m_liveYsense = 1.0f;
@@ -160,7 +159,6 @@ namespace SCJMapper_V2
       set
       {
         m_Ytuning = value;
-        m_Ydev = m_Ytuning.GameDevice;
         // populate from input
         lblYCmd.Text = m_Ytuning.Action;
         m_liveYawCommand = m_Ytuning.CommandCtrl;
@@ -197,7 +195,7 @@ namespace SCJMapper_V2
     private void YawUpdateTuning( )
     {
       // update from left area labels (xyUsed items are updated on change - so they are actual allready)
-      m_Ytuning.Deadzone.Deadzone = lblYdeadzone.Text;
+      if ( m_Ytuning.Deadzone != null ) m_Ytuning.Deadzone.Deadzone = lblYdeadzone.Text;
       m_Ytuning.Sensitivity = lblYsense.Text;
       m_Ytuning.Exponent = lblYexponent.Text;
       List<String> pts = new List<String>( );
@@ -215,7 +213,6 @@ namespace SCJMapper_V2
 
     private DeviceTuningParameter m_Ptuning = new DeviceTuningParameter( );
     // live values
-    private DeviceCls m_Pdev = null;
     private String m_livePitchCommand ="";
     private float m_livePdeadzone = 0.0f;
     private float m_livePsense = 1.0f;
@@ -237,7 +234,6 @@ namespace SCJMapper_V2
       set
       {
         m_Ptuning = value;
-        m_Pdev = m_Ptuning.GameDevice;
         // populate from input
         lblPCmd.Text = m_Ptuning.Action;  // 
         m_livePitchCommand = m_Ptuning.CommandCtrl;
@@ -274,7 +270,7 @@ namespace SCJMapper_V2
     private void PitchUpdateTuning( )
     {
       // update from left area labels (xyUsed items are updated on change - so they are actual allready)
-      m_Ptuning.Deadzone.Deadzone = lblPdeadzone.Text;
+      if ( m_Ptuning.Deadzone != null ) m_Ptuning.Deadzone.Deadzone = lblPdeadzone.Text;
       m_Ptuning.Sensitivity = lblPsense.Text;
       m_Ptuning.Exponent = lblPexponent.Text;
       List<String> pts = new List<String>( );
@@ -292,7 +288,6 @@ namespace SCJMapper_V2
 
     private DeviceTuningParameter m_Rtuning = new DeviceTuningParameter( );
     // live values
-    private DeviceCls m_Rdev = null;
     private String m_liveRollCommand;
     private float m_liveRdeadzone = 0.0f;
     private float m_liveRsense = 1.0f;
@@ -314,7 +309,6 @@ namespace SCJMapper_V2
       set
       {
         m_Rtuning = value;
-        m_Rdev = m_Rtuning.GameDevice;
         // populate from input
         lblRCmd.Text = m_Rtuning.Action;  // 
         m_liveRollCommand = m_Rtuning.CommandCtrl;
@@ -351,7 +345,7 @@ namespace SCJMapper_V2
     private void RollUpdateTuning( )
     {
       // update from left area labels (xyUsed items are updated on change - so they are actual allready)
-      m_Rtuning.Deadzone.Deadzone = lblRdeadzone.Text;
+      if ( m_Rtuning.Deadzone != null ) m_Rtuning.Deadzone.Deadzone = lblRdeadzone.Text;
       m_Rtuning.Sensitivity = lblRsense.Text;
       m_Rtuning.Exponent = lblRexponent.Text;
       List<String> pts = new List<String>( );
@@ -690,77 +684,83 @@ namespace SCJMapper_V2
         int i_x = 0, i_y = 0, i_z = 0; // Joystick Input
         int x = 0; int y = 0; int z = 0; // retain real input as i_xyz
         // query the Josticks for the 3 controls
-        if ( m_Ydev != null ) m_Ydev.GetCmdData( m_liveYawCommand, out i_x ); // + = right
-        if ( m_Pdev != null ) m_Pdev.GetCmdData( m_livePitchCommand, out i_y ); // + = up
-        if ( m_Rdev != null ) m_Rdev.GetCmdData( m_liveRollCommand, out i_z ); // += twist right
+        if ( m_Ytuning.GameDevice != null ) m_Ytuning.GameDevice.GetCmdData( m_liveYawCommand, out i_x ); // + = right
+        if ( m_Ptuning.GameDevice != null ) m_Ptuning.GameDevice.GetCmdData( m_livePitchCommand, out i_y ); // + = up
+        if ( m_Rtuning.GameDevice != null ) m_Rtuning.GameDevice.GetCmdData( m_liveRollCommand, out i_z ); // += twist right
 
         // apply the modifications of the control (deadzone, shape, sensitivity)
         x = i_x; y = i_y; z = i_z; // retain real input as i_xyz
         m_flightModel.Velocity = Vector3d.Zero;
 
         // Yaw
-        if ( m_Ytuning.Deadzone.DeadzoneUsed ) {
-          int sx = Math.Sign( x );
-          x = ( int )( Math.Abs( x ) - m_liveYdeadzone ); x = ( x < 0 ) ? 0 : x * sx; // DZ is subtracted from the input
-        }
-        {
-          double fout = 0.0;
-          if ( m_Ytuning.ExponentUsed ) {
-            fout = Math.Pow( Math.Abs( x / 1000.0 ), m_liveYexponent ) * ( ( m_Ytuning.SensitivityUsed ) ? m_liveYsense : 1.0 ) * Math.Sign( x );
+        if ( m_Ytuning.GameDevice != null ) {
+          if ( ( m_Ytuning.Deadzone != null ) && m_Ytuning.Deadzone.DeadzoneUsed ) {
+            int sx = Math.Sign( x );
+            x = ( int )( Math.Abs( x ) - m_liveYdeadzone ); x = ( x < 0 ) ? 0 : x * sx; // DZ is subtracted from the input
           }
-          else if ( m_Ytuning.NonLinCurveUsed ) {
-            fout = m_liveYnonLinCurve.EvalX( x ) * ( ( m_Ytuning.SensitivityUsed ) ? m_liveYsense : 1.0 );
+          {
+            double fout = 0.0;
+            if ( m_Ytuning.ExponentUsed ) {
+              fout = Math.Pow( Math.Abs( x / 1000.0 ), m_liveYexponent ) * ( ( m_Ytuning.SensitivityUsed ) ? m_liveYsense : 1.0 ) * Math.Sign( x );
+            }
+            else if ( m_Ytuning.NonLinCurveUsed ) {
+              fout = m_liveYnonLinCurve.EvalX( x ) * ( ( m_Ytuning.SensitivityUsed ) ? m_liveYsense : 1.0 );
+            }
+            else {
+              fout = Math.Abs( x / 1000.0 ) * ( ( m_Ytuning.SensitivityUsed ) ? m_liveYsense : 1.0 ) * Math.Sign( x );
+            }
+            fout = ( fout > 1.0 ) ? 1.0 : fout; // safeguard against any overshoots
+            // update in/out labels if active axis
+            lblYInput.Text = ( i_x / 1000.0 ).ToString( "0.00" ); lblYOutput.Text = ( fout ).ToString( "0.00" );
+            // calculate new direction vector
+            m.X = ( ( m_Ytuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbYuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
           }
-          else {
-            fout = Math.Abs( x / 1000.0 ) * ( ( m_Ytuning.SensitivityUsed ) ? m_liveYsense : 1.0 ) * Math.Sign( x );
-          }
-          fout = ( fout > 1.0 ) ? 1.0 : fout; // safeguard against any overshoots
-          // update in/out labels if active axis
-          lblYInput.Text = ( i_x / 1000.0 ).ToString( "0.00" ); lblYOutput.Text = ( fout ).ToString( "0.00" );
-          // calculate new direction vector
-          m.X = ( ( m_Ytuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbYuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
         }
 
         // Pitch
-        if ( m_Ptuning.Deadzone.DeadzoneUsed ) {
-          int sy = Math.Sign( y );
-          y = ( int )( Math.Abs( y ) - m_livePdeadzone ); y = ( y < 0 ) ? 0 : y * sy;
-        }
-        {
-          double fout = 0.0;
-          if ( m_Ptuning.ExponentUsed ) {
-            fout = Math.Pow( Math.Abs( y / 1000.0 ), m_livePexponent ) * ( ( m_Ptuning.SensitivityUsed ) ? m_livePsense : 1.0 ) * Math.Sign( y );
+        if ( m_Ptuning.GameDevice != null ) {
+          if ( ( m_Ptuning.Deadzone != null ) && m_Ptuning.Deadzone.DeadzoneUsed ) {
+            int sy = Math.Sign( y );
+            y = ( int )( Math.Abs( y ) - m_livePdeadzone ); y = ( y < 0 ) ? 0 : y * sy;
           }
-          else if ( m_Ptuning.NonLinCurveUsed ) {
-            fout = m_livePnonLinCurve.EvalX( y ) * ( ( m_Ptuning.SensitivityUsed ) ? m_livePsense : 1.0 );
+          {
+            double fout = 0.0;
+            if ( m_Ptuning.ExponentUsed ) {
+              fout = Math.Pow( Math.Abs( y / 1000.0 ), m_livePexponent ) * ( ( m_Ptuning.SensitivityUsed ) ? m_livePsense : 1.0 ) * Math.Sign( y );
+            }
+            else if ( m_Ptuning.NonLinCurveUsed ) {
+              fout = m_livePnonLinCurve.EvalX( y ) * ( ( m_Ptuning.SensitivityUsed ) ? m_livePsense : 1.0 );
+            }
+            else {
+              fout = Math.Abs( y / 1000.0 ) * ( ( m_Ptuning.SensitivityUsed ) ? m_livePsense : 1.0 ) * Math.Sign( y );
+            }
+            fout = ( fout > 1.0 ) ? 1.0 : fout;
+            lblPInput.Text = ( i_y / 1000.0 ).ToString( "0.00" ); lblPOutput.Text = ( fout ).ToString( "0.00" );
+            m.Y = ( ( m_Ptuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbPuse.Checked ) ? -fout : 0 ) * m_msElapsed * DegPerMS;
           }
-          else {
-            fout = Math.Abs( y / 1000.0 ) * ( ( m_Ptuning.SensitivityUsed ) ? m_livePsense : 1.0 ) * Math.Sign( y );
-          }
-          fout = ( fout > 1.0 ) ? 1.0 : fout;
-          lblPInput.Text = ( i_y / 1000.0 ).ToString( "0.00" ); lblPOutput.Text = ( fout ).ToString( "0.00" );
-          m.Y = ( ( m_Ptuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbPuse.Checked ) ? -fout : 0 ) * m_msElapsed * DegPerMS;
         }
 
         // Roll
-        if ( m_Rtuning.Deadzone.DeadzoneUsed ) {
-          int sz = Math.Sign( z );
-          z = ( int )( Math.Abs( z ) - m_liveRdeadzone ); z = ( z < 0 ) ? 0 : z * sz;
-        }
-        {
-          double fout = 0.0;
-          if ( m_Rtuning.ExponentUsed ) {
-            fout = Math.Pow( Math.Abs( z / 1000.0 ), m_liveRexponent ) * ( ( m_Rtuning.SensitivityUsed ) ? m_liveRsense : 1.0 ) * Math.Sign( z );
+        if ( m_Rtuning.GameDevice != null ) {
+          if ( ( m_Rtuning.Deadzone != null ) && m_Rtuning.Deadzone.DeadzoneUsed ) {
+            int sz = Math.Sign( z );
+            z = ( int )( Math.Abs( z ) - m_liveRdeadzone ); z = ( z < 0 ) ? 0 : z * sz;
           }
-          else if ( m_Rtuning.NonLinCurveUsed ) {
-            fout = m_liveRnonLinCurve.EvalX( z ) * ( ( m_Rtuning.SensitivityUsed ) ? m_liveRsense : 1.0 );
+          {
+            double fout = 0.0;
+            if ( m_Rtuning.ExponentUsed ) {
+              fout = Math.Pow( Math.Abs( z / 1000.0 ), m_liveRexponent ) * ( ( m_Rtuning.SensitivityUsed ) ? m_liveRsense : 1.0 ) * Math.Sign( z );
+            }
+            else if ( m_Rtuning.NonLinCurveUsed ) {
+              fout = m_liveRnonLinCurve.EvalX( z ) * ( ( m_Rtuning.SensitivityUsed ) ? m_liveRsense : 1.0 );
+            }
+            else {
+              fout = Math.Abs( z / 1000.0 ) * ( ( m_Rtuning.SensitivityUsed ) ? m_liveRsense : 1.0 ) * Math.Sign( z );
+            }
+            fout = ( fout > 1.0 ) ? 1.0 : fout;
+            lblRInput.Text = ( i_z / 1000.0 ).ToString( "0.00" ); lblROutput.Text = ( fout ).ToString( "0.00" );
+            m.Z = ( ( m_Rtuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbRuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
           }
-          else {
-            fout = Math.Abs( z / 1000.0 ) * ( ( m_Rtuning.SensitivityUsed ) ? m_liveRsense : 1.0 ) * Math.Sign( z );
-          }
-          fout = ( fout > 1.0 ) ? 1.0 : fout;
-          lblRInput.Text = ( i_z / 1000.0 ).ToString( "0.00" ); lblROutput.Text = ( fout ).ToString( "0.00" );
-          m.Z = ( ( m_Rtuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbRuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
         }
 
         // finalize
@@ -1188,6 +1188,8 @@ namespace SCJMapper_V2
 
     private void cbxYdeadzone_CheckedChanged( object sender, EventArgs e )
     {
+      if ( m_Ytuning.Deadzone == null ) return; // just not...
+
       m_Ytuning.Deadzone.DeadzoneUsed = false;
       if ( cbxYdeadzone.Checked == true ) {
         m_Ytuning.Deadzone.DeadzoneUsed = true; // update storage
@@ -1198,6 +1200,8 @@ namespace SCJMapper_V2
 
     private void cbxPdeadzone_CheckedChanged( object sender, EventArgs e )
     {
+      if ( m_Ptuning.Deadzone == null ) return; // just not...
+
       m_Ptuning.Deadzone.DeadzoneUsed = false;
       if ( cbxPdeadzone.Checked == true ) {
         m_Ptuning.Deadzone.DeadzoneUsed = true; // update storage
@@ -1208,6 +1212,8 @@ namespace SCJMapper_V2
 
     private void cbxRdeadzone_CheckedChanged( object sender, EventArgs e )
     {
+      if ( m_Rtuning.Deadzone == null ) return; // just not...
+
       m_Rtuning.Deadzone.DeadzoneUsed = false;
       if ( cbxRdeadzone.Checked == true ) {
         m_Rtuning.Deadzone.DeadzoneUsed = true; // update storage

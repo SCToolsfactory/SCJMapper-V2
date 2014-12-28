@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.8 - Build 34 BETA
-(c) Cassini, StandardToaster - 18-November-2014
+SC Joystick Mapper V 2.10 - Build 40 BETA
+(c) Cassini, StandardToaster - 22-December-2014
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.8 BETA)
-SCJMapper.exe.config         Program config (V2.8)               - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.10 BETA)
+SCJMapper.exe.config         Program config (V2.10)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -29,10 +29,25 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
-V 2.8 - BETA
+V 2.10 - BETA Build 40
+- rework for AC 1.0
+- new feature - add DumpLog to get the AC detected Controller assignments from logfile
+- new feature - add Invert checkboxes for supported option items
+- new feature - context menu in treeview allows to add/delete action sub items (support addbind mapping in XML)
+- update - cannot longer assign cross device mappings (AC 1.0 related - use addbind above)
+- update - new options naming and structure (not compatible with pre 2.10 - delete them in the file and then reload)
+- update - Profile Version to 1
+V 2.8 - BETA Build 37
+- new feature - add checkboxes to show Joystick, Gamepad, Kbd and Mapped Only
+- fix - Blended ones don't reload with proper visual
+V 2.8 - BETA Build 36
+- new feature - add invert for single mappings
+- improvement - initialization and assignment of Joystick devices
+V 2.8 - BETA Build 34
 - new feature - add keyboard input
 - new feature - add gamepad input as xboxpad
 - new feature - add gamepad for tuning 
+- new feature - blend single entries with <Space>
 - fix - tuning copy to all axis now applies immediately
 - improvement - cleanup of some inconsistencies
 V 2.7 - Build 33

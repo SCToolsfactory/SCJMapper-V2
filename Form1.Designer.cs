@@ -64,6 +64,7 @@
       this.tdiDelBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -78,6 +79,7 @@
       this.tlpanel = new System.Windows.Forms.TableLayoutPanel();
       this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.btDumpLog = new System.Windows.Forms.Button();
       this.btJSTuning = new System.Windows.Forms.Button();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.btSettings = new System.Windows.Forms.Button();
@@ -122,8 +124,6 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.btDumpLog = new System.Windows.Forms.Button();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmAddDel.SuspendLayout();
@@ -428,6 +428,7 @@
       this.tc1.Multiline = true;
       this.tc1.Name = "tc1";
       this.tc1.SelectedIndex = 0;
+      this.tc1.ShowToolTips = true;
       this.tc1.Size = new System.Drawing.Size(289, 349);
       this.tc1.TabIndex = 15;
       this.tc1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tc1_DrawItem);
@@ -441,6 +442,15 @@
       this.tabJS1.Size = new System.Drawing.Size(281, 321);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
+      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -604,6 +614,16 @@
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 151);
       this.tableLayoutPanel1.TabIndex = 23;
+      // 
+      // btDumpLog
+      // 
+      this.btDumpLog.Location = new System.Drawing.Point(3, 63);
+      this.btDumpLog.Name = "btDumpLog";
+      this.btDumpLog.Size = new System.Drawing.Size(120, 24);
+      this.btDumpLog.TabIndex = 25;
+      this.btDumpLog.Text = "Dump Log-->";
+      this.btDumpLog.UseVisualStyleBackColor = true;
+      this.btDumpLog.Click += new System.EventHandler(this.btDumpLog_Click);
       // 
       // btJSTuning
       // 
@@ -1074,25 +1094,6 @@
       this.statusStrip1.Size = new System.Drawing.Size(1054, 30);
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
-      // 
-      // btDumpLog
-      // 
-      this.btDumpLog.Location = new System.Drawing.Point(3, 63);
-      this.btDumpLog.Name = "btDumpLog";
-      this.btDumpLog.Size = new System.Drawing.Size(120, 24);
-      this.btDumpLog.TabIndex = 25;
-      this.btDumpLog.Text = "Dump Log-->";
-      this.btDumpLog.UseVisualStyleBackColor = true;
-      this.btDumpLog.Click += new System.EventHandler(this.btDumpLog_Click);
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm
       // 

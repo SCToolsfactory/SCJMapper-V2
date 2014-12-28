@@ -438,9 +438,10 @@
       // lblYCmd
       // 
       this.lblYCmd.AutoSize = true;
+      this.lblYCmd.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.lblYCmd.Location = new System.Drawing.Point(37, 0);
       this.lblYCmd.Name = "lblYCmd";
-      this.lblYCmd.Size = new System.Drawing.Size(59, 13);
+      this.lblYCmd.Size = new System.Drawing.Size(47, 12);
       this.lblYCmd.TabIndex = 2;
       this.lblYCmd.Text = "Command";
       // 
@@ -648,9 +649,10 @@
       // lblPCmd
       // 
       this.lblPCmd.AutoSize = true;
+      this.lblPCmd.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.lblPCmd.Location = new System.Drawing.Point(37, 0);
       this.lblPCmd.Name = "lblPCmd";
-      this.lblPCmd.Size = new System.Drawing.Size(59, 13);
+      this.lblPCmd.Size = new System.Drawing.Size(47, 12);
       this.lblPCmd.TabIndex = 3;
       this.lblPCmd.Text = "Command";
       // 
@@ -858,9 +860,10 @@
       // lblRCmd
       // 
       this.lblRCmd.AutoSize = true;
+      this.lblRCmd.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.lblRCmd.Location = new System.Drawing.Point(37, 0);
       this.lblRCmd.Name = "lblRCmd";
-      this.lblRCmd.Size = new System.Drawing.Size(59, 13);
+      this.lblRCmd.Size = new System.Drawing.Size(47, 12);
       this.lblRCmd.TabIndex = 4;
       this.lblRCmd.Text = "Command";
       // 

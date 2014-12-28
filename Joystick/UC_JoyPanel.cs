@@ -29,7 +29,7 @@ namespace SCJMapper_V2
     /// <returns>A string</returns>
     private String Chk( String s, String d )
     {
-      if ( s.Length > 12 ) return d; else return s;
+      if ( s.Length > 12 ) return s.Substring(0,12) ; else return s;
     }
 
 
