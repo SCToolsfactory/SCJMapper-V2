@@ -124,7 +124,7 @@
     <Compile Include="DeviceCls.cs" />
     <Compile Include="Joystick\DeviceDeadzoneParameter.cs" />
     <Compile Include="Gamepad\GamepadCls.cs" />
-    <Compile Include="JsReassingList.cs" />
+    <Compile Include="Joystick\JsReassingList.cs" />
     <Compile Include="Keyboard\KeyboardCls.cs" />
     <Compile Include="Mouse\MouseCls.cs" />
     <Compile Include="MySounds.cs" />
