@@ -26,7 +26,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>41</ApplicationRevision>
+    <ApplicationRevision>42</ApplicationRevision>
     <ApplicationVersion>2.10.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -124,6 +124,7 @@
     <Compile Include="DeviceCls.cs" />
     <Compile Include="Joystick\DeviceDeadzoneParameter.cs" />
     <Compile Include="Gamepad\GamepadCls.cs" />
+    <Compile Include="JsReassingList.cs" />
     <Compile Include="Keyboard\KeyboardCls.cs" />
     <Compile Include="Mouse\MouseCls.cs" />
     <Compile Include="MySounds.cs" />

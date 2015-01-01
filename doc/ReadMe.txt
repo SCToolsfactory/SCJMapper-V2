@@ -1,5 +1,5 @@
-SC Joystick Mapper V 2.10 - Build 40 BETA
-(c) Cassini, StandardToaster - 22-December-2014
+SC Joystick Mapper V 2.10 - Build 41 BETA
+(c) Cassini, StandardToaster - 28-December-2014
 
 Contains 9 files:
 
@@ -29,6 +29,11 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.10 - BETA Build 41
+- fix - issue with null ptr assignment in Device Tuning (review and fix of AC1.0 changes)
+- fix - disabled first joystick tab when gamepad is second or later
+- improvement - added tooltips for device tabs showing Name and GUID
+- improvement - added full 4 number version for beta builds
 V 2.10 - BETA Build 40
 - rework for AC 1.0
 - new feature - add DumpLog to get the AC detected Controller assignments from logfile

@@ -29,7 +29,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="newJsList">The JsN reassign list</param>
     /// <returns>The action copy with reassigned input</returns>
-    public ActionCommandCls ReassignJsN( Dictionary<int, int> newJsList )
+    public ActionCommandCls ReassignJsN( JsReassingList newJsList )
     {
       ActionCommandCls newAc = new ActionCommandCls( );
       // full copy from 'this'
@@ -39,7 +39,7 @@ namespace SCJMapper_V2
       if ( this.input.Contains( "js1_" ) || this.input.Contains( "js2_" ) || this.input.Contains( "js3_" ) || this.input.Contains( "js4_" ) ) {
         int oldJsN = JoystickCls.JSNum( this.input );
         if ( JoystickCls.IsJSValid( oldJsN ) ) {
-          if ( newJsList.ContainsKey( oldJsN ) ) newAc.input = JoystickCls.ReassignJSTag( this.input, newJsList[oldJsN] );
+          if ( newJsList.ContainsOldJs( oldJsN ) ) newAc.input = JoystickCls.ReassignJSTag( this.input, newJsList.newJsFromOldJs(oldJsN) );
         }
       }
 

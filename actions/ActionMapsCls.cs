@@ -178,7 +178,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="newJsList">The JsN reassign list</param>
     /// <returns>The ActionMaps copy with reassigned input</returns>
-    public ActionMapsCls ReassignJsN( Dictionary<int, int> newJsList )
+    public ActionMapsCls ReassignJsN( JsReassingList newJsList )
     {
       ActionMapsCls newMaps = new ActionMapsCls( m_joystickList );
       // full copy from 'this' 

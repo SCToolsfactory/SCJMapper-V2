@@ -83,7 +83,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="newJsList">The JsN reassign list</param>
     /// <returns>The ActionTree Copy with reassigned input</returns>
-    public ActionTree ReassignJsN( Dictionary<int, int> newJsList )
+    public ActionTree ReassignJsN( JsReassingList newJsList )
     {
       ActionTree nTree = new ActionTree( BlendUnmappedJS, BlendUnmappedGP, m_jsList, m_gamepad );
       // full copy from 'this'

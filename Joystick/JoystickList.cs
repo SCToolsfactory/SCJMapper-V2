@@ -10,7 +10,7 @@ namespace SCJMapper_V2
   {
     private FormReassign FR = null;
 
-    public Dictionary<int, int> JsReassingList { get; set; } // oldJs, newJs
+    public JsReassingList JsReassingList { get; set; } // index - oldJs, newJs
     public List<int> NewJsList { get; set; }  // index is this[idx]
 
 
@@ -30,7 +30,7 @@ namespace SCJMapper_V2
     {
       if ( FR == null ) {
         FR = new FormReassign( this );
-        JsReassingList = new Dictionary<int, int>( );
+        JsReassingList = new JsReassingList( ); // used in ReassignJsN
         NewJsList = new List<int>( );
       }
       FR.ShowDialog( );
