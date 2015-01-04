@@ -1,9 +1,9 @@
-SC Joystick Mapper V 2.10 - Build 41 BETA
-(c) Cassini, StandardToaster - 28-December-2014
+SC Joystick Mapper V 2.10 - Build 43
+(c) Cassini, StandardToaster - 04-January-2015
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.10 BETA)
+SCJMapper.exe                The program (V2.10)
 SCJMapper.exe.config         Program config (V2.10)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
@@ -13,7 +13,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.8beta.pdf    Quick Guide
+SCJMapper_QGuide V2.10.pdf    Quick Guide
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images                       - graphics folder MUST be in the same folder as the Exe file
@@ -29,6 +29,10 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.10 - Build 43 - Production
+- new feature - added Action Tree context menu for Assign, Clear and Blend
+- fix - issue for Js Reassignment if more than one was not yet assigned
+- improvement - Right click in Action Tree selects the items (no need to select and then right click anymore)
 V 2.10 - BETA Build 41
 - fix - issue with null ptr assignment in Device Tuning (review and fix of AC1.0 changes)
 - fix - disabled first joystick tab when gamepad is second or later

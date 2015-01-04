@@ -56,7 +56,7 @@ namespace SCJMapper_V2
     public static String ActionFromNodeText( String nodeText )
     {
       String action, cmd;
-      DecompNodeText( nodeText, out action, out cmd );
+      ActionTreeNode.DecompNodeText( nodeText, out action, out cmd );
       return action;
     }
 
@@ -69,7 +69,7 @@ namespace SCJMapper_V2
     public static String CommandFromNodeText( String nodeText )
     {
       String action, cmd;
-      DecompNodeText( nodeText, out action, out cmd );
+      ActionTreeNode.DecompNodeText( nodeText, out action, out cmd );
       return cmd;
     }
 
@@ -114,7 +114,7 @@ namespace SCJMapper_V2
 
 
     private String m_action = "";
-    private String m_command ="";
+    protected String m_command ="";
     private ActionCls.ActionDevice m_actionDevice = ActionCls.ActionDevice.AD_Unknown;
 
     public new String Text
@@ -122,8 +122,8 @@ namespace SCJMapper_V2
       get { return base.Text; }
       set
       {
-        DecompNodeText( value, out m_action, out m_command );
-        base.Text = ComposeNodeText( m_action, m_command );
+        ActionTreeNode.DecompNodeText( value, out m_action, out m_command );
+        base.Text = ActionTreeNode.ComposeNodeText( m_action, m_command );
       }
     }
 
@@ -134,7 +134,7 @@ namespace SCJMapper_V2
       set
       {
         m_action = value;
-        base.Text = ComposeNodeText( m_action, m_command );
+        base.Text = ActionTreeNode.ComposeNodeText( m_action, m_command );
       }
     }
 
@@ -144,7 +144,7 @@ namespace SCJMapper_V2
       set
       {
         m_command = value;
-        base.Text = ComposeNodeText( m_action, m_command );
+        base.Text = ActionTreeNode.ComposeNodeText( m_action, m_command );
       }
     }
 

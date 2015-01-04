@@ -100,6 +100,15 @@ namespace SCJMapper_V2
 
     #region Properties
 
+    public Boolean CanAssignBinding
+    {
+      get
+      {
+        if ( Ctrl.SelectedNode == null ) return false;
+        else return ( Ctrl.SelectedNode.Level == 1 ) || ( Ctrl.SelectedNode.Level == 2 );
+      }
+    }
+
     public Boolean CanBlendBinding
     {
       get
@@ -118,6 +127,7 @@ namespace SCJMapper_V2
       }
     }
 
+
     public Boolean CanAddBinding
     {
       get
@@ -129,7 +139,8 @@ namespace SCJMapper_V2
 
     public Boolean CanDelBinding
     {
-      get {
+      get
+      {
         if ( Ctrl.SelectedNode == null ) return false;
         else return ( Ctrl.SelectedNode.Level == 2 );
       }
@@ -138,14 +149,14 @@ namespace SCJMapper_V2
     #endregion
 
     /// <summary>
-    /// Add a new Action Child to the selected Node to apply an addtional mapping
+    /// Add a new Action Child to the selected node to apply an addtional mapping
     /// </summary>
     public void AddBinding( )
     {
       if ( Ctrl.SelectedNode == null ) return;
       if ( Ctrl.SelectedNode.Level != 1 ) return; // can only add to level 1 nodes
 
-      ActionTreeNode matn = FindMasterAction( ( ActionTreeNode )Ctrl.SelectedNode );
+      ActionTreeNode matn = FindMasterAction( (ActionTreeNode)Ctrl.SelectedNode );
       ActionCls ac = FindActionObject( matn.Parent.Name, matn.Name );   // the related action
       // make new items
       ActionTreeInputNode matin = new ActionTreeInputNode( "UNDEF" ); matin.ImageKey = "Add";
@@ -154,6 +165,10 @@ namespace SCJMapper_V2
       // show stuff
       FilterTree( );
       FindAndSelectCtrlByName( matn.Name );
+      // jump to the latest
+      if ( m_ctrl.SelectedNode.LastNode != null ) {
+        m_ctrl.SelectedNode = m_ctrl.SelectedNode.LastNode;
+      }
     }
 
 
@@ -168,14 +183,24 @@ namespace SCJMapper_V2
       ActionTreeNode matn = FindMasterAction( ( ActionTreeNode )Ctrl.SelectedNode.Parent ); // the parent treenode
       ActionCls ac = FindActionObject( matn.Parent.Name, matn.Name );   // the related action
       // delete items
-      ac.DelCommand( m_ctrl.SelectedNode.Index );
-      matn.Nodes.RemoveAt( m_ctrl.SelectedNode.Index );
+      ac.DelCommand( Ctrl.SelectedNode.Index );
+      matn.Nodes.RemoveAt( Ctrl.SelectedNode.Index );
       Dirty = true;
       // show stuff
       FilterTree( );
       FindAndSelectCtrlByName( matn.Name );
     }
 
+
+    public void BlendBinding( )
+    {
+      UpdateSelectedItem( DeviceCls.BlendedInput, ActionCls.ActionDevice.AD_Unknown, false );
+    }
+
+    public void ClearBinding( )
+    {
+      UpdateSelectedItem( "", ActionCls.ActionDevice.AD_Unknown, false );
+    }
 
     /// <summary>
     /// Assign the GUI Invert Checkboxes for further handling
@@ -222,8 +247,8 @@ namespace SCJMapper_V2
     private void UpdateDeviceInformation( )
     {
       // must get the jsN information used for Options Inverters
-      for ( int item=0; item<(int)OptionsInvert.Inversions.I_LAST; item++) {
-        ActionMaps.Options.Inverter( (OptionsInvert.Inversions)item ).GameDevice = GetActionInstance( (OptionsInvert.Inversions)item );
+      for ( int item=0; item < ( int )OptionsInvert.Inversions.I_LAST; item++ ) {
+        ActionMaps.Options.Inverter( ( OptionsInvert.Inversions )item ).GameDevice = GetActionInstance( ( OptionsInvert.Inversions )item );
       }
     }
 
@@ -232,7 +257,7 @@ namespace SCJMapper_V2
     /// Dumps the actions to an XML String
     /// </summary>
     /// <returns>A string containing the XML</returns>
-    public String toXML()
+    public String toXML( )
     {
       if ( ActionMaps != null ) {
         // must update the devices and instances for inversion before dumping the XML
@@ -1008,7 +1033,8 @@ namespace SCJMapper_V2
 
     public String SelectedAction
     {
-      get {
+      get
+      {
         if ( Ctrl.SelectedNode == null ) return "";
         if ( Ctrl.SelectedNode.Level == 1 ) {
           ActionTreeNode matn = FindMasterAction( ( ActionTreeNode )Ctrl.SelectedNode );

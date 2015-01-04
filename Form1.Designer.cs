@@ -64,7 +64,6 @@
       this.tdiDelBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -124,6 +123,11 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+      this.tdiClearBinding = new System.Windows.Forms.ToolStripMenuItem();
+      this.tdiBlendBinding = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
+      this.tdiAssignBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmAddDel.SuspendLayout();
@@ -383,6 +387,7 @@
       // 
       this.treeView1.ContextMenuStrip = this.cmAddDel;
       this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.treeView1.FullRowSelect = true;
       this.treeView1.HotTracking = true;
       this.treeView1.ImageKey = "Map";
       this.treeView1.ImageList = this.IL;
@@ -393,27 +398,32 @@
       this.treeView1.Size = new System.Drawing.Size(364, 686);
       this.treeView1.TabIndex = 16;
       this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+      this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
       // 
       // cmAddDel
       // 
       this.cmAddDel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tdiAssignBinding,
+            this.tdiBlendBinding,
+            this.tdiClearBinding,
+            this.toolStripSeparator2,
             this.tsiAddBinding,
             this.tdiDelBinding});
       this.cmAddDel.Name = "cmAddDel";
-      this.cmAddDel.Size = new System.Drawing.Size(159, 48);
+      this.cmAddDel.Size = new System.Drawing.Size(161, 142);
       this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
       // 
       // tsiAddBinding
       // 
       this.tsiAddBinding.Name = "tsiAddBinding";
-      this.tsiAddBinding.Size = new System.Drawing.Size(158, 22);
+      this.tsiAddBinding.Size = new System.Drawing.Size(160, 22);
       this.tsiAddBinding.Text = "Add Mapping";
       this.tsiAddBinding.Click += new System.EventHandler(this.tsiAddBinding_Click);
       // 
       // tdiDelBinding
       // 
       this.tdiDelBinding.Name = "tdiDelBinding";
-      this.tdiDelBinding.Size = new System.Drawing.Size(158, 22);
+      this.tdiDelBinding.Size = new System.Drawing.Size(160, 22);
       this.tdiDelBinding.Text = "Delete Mapping";
       this.tdiDelBinding.Click += new System.EventHandler(this.tdiDelBinding_Click);
       // 
@@ -442,15 +452,6 @@
       this.tabJS1.Size = new System.Drawing.Size(281, 321);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -1095,6 +1096,41 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
+      // tdiClearBinding
+      // 
+      this.tdiClearBinding.Name = "tdiClearBinding";
+      this.tdiClearBinding.Size = new System.Drawing.Size(160, 22);
+      this.tdiClearBinding.Text = "Clear Mapping";
+      this.tdiClearBinding.Click += new System.EventHandler(this.tdiClearBinding_Click);
+      // 
+      // tdiBlendBinding
+      // 
+      this.tdiBlendBinding.Name = "tdiBlendBinding";
+      this.tdiBlendBinding.Size = new System.Drawing.Size(160, 22);
+      this.tdiBlendBinding.Text = "Blend Mapping";
+      this.tdiBlendBinding.Click += new System.EventHandler(this.tdiBlendBinding_Click);
+      // 
+      // toolStripSeparator2
+      // 
+      this.toolStripSeparator2.Name = "toolStripSeparator2";
+      this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
+      this.UC_JoyPanel.TabIndex = 0;
+      // 
+      // tdiAssignBinding
+      // 
+      this.tdiAssignBinding.Name = "tdiAssignBinding";
+      this.tdiAssignBinding.Size = new System.Drawing.Size(160, 22);
+      this.tdiAssignBinding.Text = "Assign Mapping";
+      this.tdiAssignBinding.Click += new System.EventHandler(this.tdiAssignBinding_Click);
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1227,6 +1263,10 @@
     private System.Windows.Forms.CheckBox cbxInvStrafeLon;
     private System.Windows.Forms.CheckBox cbxInvThrottle;
     private System.Windows.Forms.Button btDumpLog;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+    private System.Windows.Forms.ToolStripMenuItem tdiBlendBinding;
+    private System.Windows.Forms.ToolStripMenuItem tdiClearBinding;
+    private System.Windows.Forms.ToolStripMenuItem tdiAssignBinding;
   }
 }
 

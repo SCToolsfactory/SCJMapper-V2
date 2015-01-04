@@ -11,7 +11,7 @@ namespace SCJMapper_V2
   /// 
   /// contains the input command  i.e.  - js2_button3 OR ! js1_x  (MODs applies at the very beginning of the string)
   /// </summary>
-  class ActionTreeInputNode : TreeNode
+  class ActionTreeInputNode : ActionTreeNode
   {
 
     #region Static items
@@ -42,10 +42,10 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="nodeText">The node text in 'action - command' notation</param>
     /// <returns>the command part or an empty string</returns>
-    public static String CommandFromNodeText( String nodeText )
+    public new static String CommandFromNodeText( String nodeText )
     {
       String cmd;
-      DecompNodeText( nodeText, out cmd );
+      ActionTreeInputNode.DecompNodeText( nodeText, out cmd );
       return cmd;
     }
 
@@ -62,9 +62,10 @@ namespace SCJMapper_V2
 
     // ctor
     public ActionTreeInputNode( ActionTreeInputNode srcNode )
-      : base( )
+      : base( srcNode )
     {
       if ( srcNode == null ) return;
+      /*
       this.Name = srcNode.Name;
       this.Text = srcNode.Text;
       this.BackColor = srcNode.BackColor;
@@ -73,12 +74,14 @@ namespace SCJMapper_V2
       this.ImageKey = srcNode.ImageKey;
       this.Tag = srcNode.Tag;
       this.m_command = srcNode.m_command;
+       */
     }
 
     // ctor
     public ActionTreeInputNode( string text )
+      : base ( text )
     {
-      this.Text = text;
+      //this.Text = text;
     }
 
     // ctor
@@ -88,29 +91,29 @@ namespace SCJMapper_V2
     }
 
 
-    private String m_command ="";
+    //private String m_command ="";
 
     public new String Text
     {
       get { return base.Text; }
       set
       {
-        DecompNodeText( value, out m_command );
-        base.Text = ComposeNodeText( m_command );
+        ActionTreeInputNode.DecompNodeText( value, out m_command );
+        base.Text = ActionTreeInputNode.ComposeNodeText( m_command );
       }
     }
 
 
-    public String Command
+    public new String Command
     {
       get { return m_command; }
       set
       {
         m_command = value;
-        base.Text = ComposeNodeText( m_command );
+        base.Text = ActionTreeInputNode.ComposeNodeText( m_command );
       }
     }
-
+    /*
     public Boolean IsMappedAction
     {
       get
@@ -120,6 +123,6 @@ namespace SCJMapper_V2
           || ( m_command == GamepadCls.BlendedInput ) );
       }
     }
-
+    */
   }
 }

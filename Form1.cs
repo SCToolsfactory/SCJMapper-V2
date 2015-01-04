@@ -192,8 +192,8 @@ namespace SCJMapper_V2
 
       String version = Application.ProductVersion;  // get the version information
       // BETA VERSION; TODO -  comment out if not longer
-      //lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // PRODUCTION
-      lblTitle.Text += " - V " + version + " beta"; // BETA
+      lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // PRODUCTION
+      //lblTitle.Text += " - V " + version + " beta"; // BETA
 
       log.InfoFormat( "Application Version: {0}", version.ToString( ) );
 
@@ -639,6 +639,14 @@ namespace SCJMapper_V2
     }
 
 
+    private void treeView1_NodeMouseClick( object sender, TreeNodeMouseClickEventArgs e )
+    {
+      if ( e.Button == System.Windows.Forms.MouseButtons.Right ) {
+        treeView1.SelectedNode = e.Node;
+      }
+    }
+
+
     // Show options
 
     private void cbxShowTreeOptions_CheckedChanged( object sender, EventArgs e )
@@ -672,7 +680,7 @@ namespace SCJMapper_V2
     private void btBlend_Click( object sender, EventArgs e )
     {
       if ( m_AT.CanBlendBinding ) {
-        m_AT.UpdateSelectedItem( DeviceCls.BlendedInput, InputMode, false );
+        m_AT.BlendBinding( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
       else MySounds.PlayCannot( );
@@ -681,7 +689,7 @@ namespace SCJMapper_V2
     private void btClear_Click( object sender, EventArgs e )
     {
       if ( m_AT.CanClearBinding ) {
-        m_AT.UpdateSelectedItem( "", InputMode, false );
+        m_AT.ClearBinding( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
       else MySounds.PlayCannot( );
@@ -855,21 +863,57 @@ namespace SCJMapper_V2
     // Node Menu
     private void cmAddDel_Opening( object sender, CancelEventArgs e )
     {
+      // note: the right click selected the node
       ContextMenuStrip cts = ( sender as ContextMenuStrip );
-      Boolean any=false;
-      cts.Items[0].Visible = m_AT.CanAddBinding; any = any || m_AT.CanAddBinding;
-      cts.Items[1].Visible = m_AT.CanDelBinding; any = any || m_AT.CanDelBinding;
-      e.Cancel = !any;
+      Boolean any=false;    // above separator
+      Boolean any2 = false; // below separator
+      if ( m_AT.CanAssignBinding ) {
+        cts.Items[0].Text = "Assign: " + JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked );
+      }
+      cts.Items[0].Visible = m_AT.CanAssignBinding; any = any || m_AT.CanAssignBinding; // Assign
+      cts.Items[1].Visible = m_AT.CanBlendBinding; any = any || m_AT.CanBlendBinding; // Blend
+      cts.Items[2].Visible = m_AT.CanClearBinding; any = any || m_AT.CanClearBinding; // Clear
+
+      cts.Items[4].Visible = m_AT.CanAddBinding; any2 = any2 || m_AT.CanAddBinding; // Add
+      cts.Items[5].Visible = m_AT.CanDelBinding; any2 = any2 || m_AT.CanDelBinding; // Del
+
+      cts.Items[3].Visible = any2; // separator
+
+      e.Cancel = ! ( any || any2 );
+    }
+
+    private void tdiAssignBinding_Click( object sender, EventArgs e )
+    { // same as btAssign_Click
+      if ( m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), InputMode, true ) ) {
+        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+      else MySounds.PlayNotfound( );
+    }
+
+    private void tdiBlendBinding_Click( object sender, EventArgs e )
+    {
+      // note: the right click selected the node
+      m_AT.BlendBinding( );
+      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+    }
+
+    private void tdiClearBinding_Click( object sender, EventArgs e )
+    {
+      // note: the right click selected the node
+      m_AT.ClearBinding( );
+      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
 
     private void tsiAddBinding_Click( object sender, EventArgs e )
     {
+      // note: the right click selected the node
       m_AT.AddBinding( );
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
 
     private void tdiDelBinding_Click( object sender, EventArgs e )
     {
+      // note: the right click selected the node
       m_AT.DelBinding( );
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
@@ -1256,13 +1300,7 @@ namespace SCJMapper_V2
 
     #endregion
 
-
-
-
-
-
-
-
+ 
 
   }
 }
