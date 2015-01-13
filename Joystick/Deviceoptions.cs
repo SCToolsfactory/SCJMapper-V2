@@ -156,17 +156,35 @@ namespace SCJMapper_V2
                 if ( input.ToLowerInvariant( ).EndsWith("x") ) {
                   if ( String.IsNullOrWhiteSpace( m_deadzoneX.CommandCtrl ) ) m_deadzoneX.CommandCtrl = input; // if no options have been given...
                   if ( String.IsNullOrWhiteSpace( m_deadzoneX.DeviceName ) ) m_deadzoneX.DeviceName = name; // if no devicename has been given...
-                  m_deadzoneX.DeadzoneUsed = true; m_deadzoneX.Deadzone = deadzone;
+                  float testF;
+                  if ( float.TryParse( deadzone, out testF ) ) { // check for valid number in string
+                    m_deadzoneX.DeadzoneUsed = true; m_deadzoneX.Deadzone = deadzone;
+                  }
+                  else {
+                    m_deadzoneX.DeadzoneUsed = false; m_deadzoneX.Deadzone = "0.00";
+                  }
                 }
                 else if ( input.ToLowerInvariant( ).EndsWith("y") ) {
                   if ( String.IsNullOrWhiteSpace( m_deadzoneY.CommandCtrl ) ) m_deadzoneY.CommandCtrl = input; // if no options have been given...
                   if ( String.IsNullOrWhiteSpace( m_deadzoneY.DeviceName ) ) m_deadzoneY.DeviceName = name; // if no devicename has been given...
+                  float testF;
+                  if ( float.TryParse( deadzone, out testF ) ) { // check for valid number in string
                   m_deadzoneY.DeadzoneUsed = true; m_deadzoneY.Deadzone = deadzone;
+                  }
+                  else {
+                    m_deadzoneY.DeadzoneUsed = false; m_deadzoneY.Deadzone = "0.00";
+                  }
                 }
                 else if ( input.ToLowerInvariant( ).EndsWith( "z" ) ) {
                   if ( String.IsNullOrWhiteSpace( m_deadzoneZ.CommandCtrl )) m_deadzoneZ.CommandCtrl=input; // if no options have been given...
                   if ( String.IsNullOrWhiteSpace( m_deadzoneZ.DeviceName ) ) m_deadzoneZ.DeviceName = name; // if no devicename has been given...
+                  float testF;
+                  if ( float.TryParse( deadzone, out testF ) ) { // check for valid number in string
                   m_deadzoneZ.DeadzoneUsed = true; m_deadzoneZ.Deadzone = deadzone;
+                  }
+                  else {
+                    m_deadzoneZ.DeadzoneUsed = false; m_deadzoneZ.Deadzone = "0.00";
+                  }
                 }
                 else {
                   //?? option node refers to unknown axis (not x,y,rotz)

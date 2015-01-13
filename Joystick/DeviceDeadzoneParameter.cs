@@ -10,16 +10,12 @@ namespace SCJMapper_V2
 
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    private String m_cmdCtrl = "";        // x, y, rotz ...
-    private String m_type = "";           // joystick OR xboxpad
-    private int m_devInstanceNo = -1;     // jsN - instance in XML
-
     private String m_deviceName = "";
+    private String m_cmdCtrl = "";        // x, y, rotz ...
 
     private bool   m_deadzoneEnabled = false;  // default
     private String m_deadzone = "0.000";
 
-    private DeviceCls m_device = null;
 
     public DeviceDeadzoneParameter( )
     {
@@ -27,30 +23,6 @@ namespace SCJMapper_V2
 
     #region Properties
 
-    public DeviceCls GameDevice
-    {
-      get { return m_device; }
-      set
-      {
-        m_device = value;
-        m_type = "";
-        m_devInstanceNo = -1;
-        if ( JoystickCls.IsDeviceClass( m_device.DevClass ) ) {
-          m_type = m_device.DevClass;
-          m_devInstanceNo = ( m_device as JoystickCls ).JSAssignment;
-        }
-        else if ( GamepadCls.IsDeviceClass( m_device.DevClass ) ) {
-          m_type = m_device.DevClass;
-          m_devInstanceNo = 1; // supports ONE gamepad
-        }
-      }
-    }
-
-
-    public int DevInstanceNo
-    {
-      get { return m_devInstanceNo; }
-    }
 
     public String DeviceName
     {
@@ -78,6 +50,7 @@ namespace SCJMapper_V2
     }
 
     #endregion
+
 
 
     /// <summary>

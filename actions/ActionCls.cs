@@ -130,6 +130,14 @@ namespace SCJMapper_V2
     }
 
 
+    public ActionCommandCls AddCommand( String input )
+    {
+      ActionCommandCls acc = new ActionCommandCls( );
+      acc.input = input; acc.nodeIndex = inputList.Count - 1; // starts from -1 ...
+      inputList.Add( acc );      
+      return acc;
+    }
+
     public ActionCommandCls AddCommand( String input, int index )
     {
       ActionCommandCls acc = new ActionCommandCls( );
@@ -215,12 +223,11 @@ namespace SCJMapper_V2
         if ( reader.Name == "rebind" ) {
           if ( reader.HasAttributes ) {
             device = reader["device"];
-            ActionCommandCls acc = new ActionCommandCls( );
-            acc.input = reader["input"];
-            if ( ( acc.input == JoystickCls.BlendedInput ) || ( acc.input == GamepadCls.BlendedInput ) ) acc.input = ""; // don't carry jsx_reserved or xi_reserved into the action
+            String input = reader["input"];
+            if ( ( input == JoystickCls.BlendedInput ) || ( input == GamepadCls.BlendedInput ) ) input = ""; // don't carry jsx_reserved or xi_reserved into the action
             key = DevID( device ) + name; // unique id of the action
             actionDevice = ADevice( device ); // get the enum of the input device
-            inputList.Add( acc );
+            AddCommand( input );
             // advances the reader to the next node
             reader.ReadStartElement( "rebind" );
           }
@@ -228,12 +235,11 @@ namespace SCJMapper_V2
         else if ( reader.Name == "addbind" ) {
           if ( reader.HasAttributes ) {
             device = reader["device"];
-            ActionCommandCls acc = new ActionCommandCls( );
-            acc.input = reader["input"];
-            if ( ( acc.input == JoystickCls.BlendedInput ) || ( acc.input == GamepadCls.BlendedInput ) ) acc.input = ""; // don't carry jsx_reserved or xi_reserved into the action
-            key = DevID( device ) + name; // unique id of the action
-            actionDevice = ADevice( device ); // get the enum of the input device
-            inputList.Add( acc );
+            String input = reader["input"];
+            if ( ( input == JoystickCls.BlendedInput ) || ( input == GamepadCls.BlendedInput ) ) input = ""; // don't carry jsx_reserved or xi_reserved into the action
+            //key = DevID( device ) + name; // unique id of the action
+            //actionDevice = ADevice( device ); // get the enum of the input device
+            AddCommand( input );
             // advances the reader to the next node
             reader.ReadStartElement( "addbind" );
           }

@@ -33,6 +33,7 @@ namespace SCJMapper_V2
       // initialization
       _Properties = new ConfigurationPropertyCollection( );
       _Properties.Add( _jsSenseLimit );
+      _Properties.Add( _gpSenseLimit );
       _Properties.Add( _scActionmaps );
     }
 

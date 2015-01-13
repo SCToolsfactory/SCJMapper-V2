@@ -670,7 +670,7 @@ namespace SCJMapper_V2
     /// <param name="actionCmd">The actionCommand to update</param>
     private void UpdateActionCommandFromInput( String input, ActionCommandCls actionCmd, ActionCls.ActionDevice inKind )
     {
-      log.Debug( "UpdateActionCommandFromInput - Entry" );
+      //log.Debug( "UpdateActionCommandFromInput - Entry" );
       if ( actionCmd == null ) return;
 
       // Apply the input to the ActionTree
@@ -697,7 +697,7 @@ namespace SCJMapper_V2
     /// <param name="inKind">The input device</param>
     private void UpdateNodeFromAction( ActionTreeNode node, ActionCommandCls actionCmd, ActionCls.ActionDevice inKind )
     {
-      log.Debug( "UpdateNodeFromAction - Entry" );
+      //log.Debug( "UpdateNodeFromAction - Entry" );
       if ( actionCmd == null ) return;
 
       // applies only to ActionTreeNode 

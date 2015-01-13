@@ -21,6 +21,9 @@ namespace SCJMapper_V2
       if ( String.IsNullOrEmpty( cmd ) ) {
         return action;
       }
+      else if ( String.IsNullOrEmpty( action ) ) {
+        return cmd;
+      }
       else {
         return action + " - " + cmd;
       }
@@ -43,6 +46,13 @@ namespace SCJMapper_V2
       else if ( e.Length > 0 ) {
         action = e[0].TrimEnd( );
         cmd = "";
+        // consider if the single item is not an action but a command (from ActionTreeInputNode)
+        // it is then starting with the tag $ (that must be removed)
+        if ( action.StartsWith( "$" ) ) {
+          cmd = action.Substring( 1 );
+          action = "";
+        }
+
       }
     }
 

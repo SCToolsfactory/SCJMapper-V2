@@ -192,8 +192,8 @@ namespace SCJMapper_V2
 
       String version = Application.ProductVersion;  // get the version information
       // BETA VERSION; TODO -  comment out if not longer
-      lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // PRODUCTION
-      //lblTitle.Text += " - V " + version + " beta"; // BETA
+      //lblTitle.Text += " - V " + version.Substring( 0, version.IndexOf( ".", version.IndexOf( "." ) + 1 ) ); // PRODUCTION
+      lblTitle.Text += " - V " + version + " beta"; // BETA
 
       log.InfoFormat( "Application Version: {0}", version.ToString( ) );
 
@@ -223,7 +223,13 @@ namespace SCJMapper_V2
       log.Debug( "Loading Other" );
       txMappingName.Text = m_AppSettings.MyMappingName;
       SetRebindField( txMappingName.Text );
-
+      foreach ( ToolStripDropDownItem d in tsDDbtMappings.DropDownItems ) {
+        if ( d.Text == txMappingName.Text ) {
+          tsDDbtMappings.Text = txMappingName.Text;
+          m_AppSettings.DefMappingName = txMappingName.Text; m_AppSettings.Save( ); // update if it exists
+          break;
+        }
+      }
       // Init X things
       log.Debug( "Loading DirectX" );
       if ( !InitDirectInput( ) ) {
@@ -237,7 +243,7 @@ namespace SCJMapper_V2
         rtb.LoadFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
         InitActionTree( false );
         Grab( );
-        m_AppSettings.MyMappingName = txMappingName.Text; // last used - persist
+        m_AppSettings.MyMappingName = txMappingName.Text; m_AppSettings.Save( );// last used - persist
         txMappingName.BackColor = MyColors.SuccessColor;
       }
       else {
@@ -575,7 +581,7 @@ namespace SCJMapper_V2
     {
       log.Debug( "Dump - Entry" );
 
-      rtb.Text = String.Format( "<!-- {0} - SC Joystick Mapping -->\n{1}", DateTime.Now, m_AT.toXML( ) );
+      rtb.Text = String.Format( "<!-- {0} - SC Joystick Mapping - {1} -->\n{2}", DateTime.Now, txMappingName.Text, m_AT.toXML( ) );
 
       btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
       btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
@@ -961,7 +967,7 @@ namespace SCJMapper_V2
         rtb.LoadFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
         InitActionTree( false );
         Grab( );
-        m_AppSettings.MyMappingName = txMappingName.Text; // last used - persist
+        m_AppSettings.MyMappingName = txMappingName.Text; m_AppSettings.Save( );// last used - persist
         txMappingName.BackColor = MyColors.SuccessColor;
       }
       else {
@@ -985,7 +991,7 @@ namespace SCJMapper_V2
 
           // get the new one into the list
           LoadMappingDD( );
-          m_AppSettings.MyMappingName = txMappingName.Text; // last used - persist
+          m_AppSettings.MyMappingName = txMappingName.Text; m_AppSettings.Save( );// last used - persist
           txMappingName.BackColor = MyColors.SuccessColor;
         }
       }
@@ -1105,21 +1111,18 @@ namespace SCJMapper_V2
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneX;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneY;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneZ.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneZ;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
@@ -1127,7 +1130,6 @@ namespace SCJMapper_V2
         else if ( nodeText.ToLowerInvariant( ).Contains( "_thumblx" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbrx" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneX;
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
@@ -1154,21 +1156,18 @@ namespace SCJMapper_V2
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
           m_AT.ActionMaps.TuningP.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneX;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
           m_AT.ActionMaps.TuningP.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneY;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
           m_AT.ActionMaps.TuningP.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneZ.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneZ;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
@@ -1176,7 +1175,6 @@ namespace SCJMapper_V2
         else if ( nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
           m_AT.ActionMaps.TuningP.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneY;
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
@@ -1196,21 +1194,18 @@ namespace SCJMapper_V2
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
           m_AT.ActionMaps.TuningR.GameDevice = dev;
           m_AT.ActionMaps.TuningR.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneX.GameDevice = dev;
           m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneX;
           JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
           m_AT.ActionMaps.TuningR.GameDevice = dev;
           m_AT.ActionMaps.TuningR.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneY.GameDevice = dev;
           m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneY;
           JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
         }
         else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
           m_AT.ActionMaps.TuningR.GameDevice = dev;
           m_AT.ActionMaps.TuningR.Action = nodeText;
-          m_AT.ActionMaps.DeadzoneZ.GameDevice = dev;
           m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneZ;
           JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
         }

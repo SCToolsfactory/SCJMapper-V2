@@ -99,7 +99,7 @@ namespace SCJMapper_V2
       set
       {
         ActionTreeInputNode.DecompNodeText( value, out m_command );
-        base.Text = ActionTreeInputNode.ComposeNodeText( m_command );
+        base.Text = ActionTreeInputNode.ComposeNodeText( "$" + m_command ); // tag for the node processing
       }
     }
 
@@ -110,7 +110,7 @@ namespace SCJMapper_V2
       set
       {
         m_command = value;
-        base.Text = ActionTreeInputNode.ComposeNodeText( m_command );
+        Text = ActionTreeInputNode.ComposeNodeText( m_command ); // compose - later it will be decomposed again
       }
     }
     /*

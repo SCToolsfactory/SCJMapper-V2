@@ -94,7 +94,14 @@ namespace SCJMapper_V2
     public DeviceDeadzoneParameter Deadzone
     {
       get { return m_deadzone; }
-      set { m_deadzone = value; }
+      set
+      {
+        m_deadzone = value;
+        if ( m_deadzone != null ) {
+          m_deadzone.DeviceName = DeviceName;     // must know too
+          m_deadzone.CommandCtrl = CommandCtrl;   // must know too
+        }
+      }
     }
 
     public bool SensitivityUsed
@@ -111,7 +118,7 @@ namespace SCJMapper_V2
 
     public bool InvertUsed
     {
-      get { return ( m_cbInvert == null ) ?  false : m_cbInvert.Checked; }
+      get { return ( m_cbInvert == null ) ? false : m_cbInvert.Checked; }
       set { if ( m_cbInvert != null ) m_cbInvert.Checked = value; }
     }
     public CheckBox CBInvert
@@ -152,7 +159,7 @@ namespace SCJMapper_V2
     #endregion
 
     // reset some defaults
-    public void Reset()
+    public void Reset( )
     {
       GameDevice = null;
       Deadzone = null;
