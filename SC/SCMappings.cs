@@ -14,8 +14,8 @@ namespace SCJMapper_V2
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-
-    private const String c_UserMapStartsWith = "layout_my_";  // we only allow those mapping names
+    public  const String c_MapStartsWith = "layout_";  // we only allow those mapping names
+    private const String c_UserMapStartsWith =  c_MapStartsWith + "my_";  // we only allow those mapping names
 
     static private List<String> m_scMappings = new List<string>( );
 

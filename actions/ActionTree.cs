@@ -257,12 +257,12 @@ namespace SCJMapper_V2
     /// Dumps the actions to an XML String
     /// </summary>
     /// <returns>A string containing the XML</returns>
-    public String toXML( )
+    public String toXML( String fileName )
     {
       if ( ActionMaps != null ) {
         // must update the devices and instances for inversion before dumping the XML
         UpdateDeviceInformation( );
-        return ActionMaps.toXML( ); // just propagate if possible
+        return ActionMaps.toXML( fileName ); // just propagate if possible
       }
       else {
         log.Error( "ActionTree-toXML: Program error - ActionMaps not yet created" );

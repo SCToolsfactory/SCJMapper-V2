@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.10 - Build 43
-(c) Cassini, StandardToaster - 04-January-2015
+SC Joystick Mapper V 2.11 - Build 44 BETA
+(c) Cassini, StandardToaster - 14-January-2015
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.10)
-SCJMapper.exe.config         Program config (V2.10)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.11)
+SCJMapper.exe.config         Program config (V2.11)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -29,6 +29,12 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.11 - BETA Build 44
+- fix - reading of deadzone value (if not a number should not break anymore)
+- fix - writing the proper deadzone XML if first used
+- fix - reading addbind commands from existing mappings will appear now in the tree
+- improvement - better handling of the default mapping name from config file
+- improvement - mapping name added to XML mapping (first line comment extended with mapping name)
 V 2.10 - Build 43 - Production
 - new feature - added Action Tree context menu for Assign, Clear and Blend
 - fix - issue for Js Reassignment if more than one was not yet assigned

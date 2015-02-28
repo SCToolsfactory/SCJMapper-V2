@@ -232,14 +232,14 @@ namespace SCJMapper_V2
       get
       {
         log.Debug( "SCClientMappingPath - Entry" );
-        String scp = SCClientDataPath;
+        String scp = SCClientUSERPath; // AC1.03 new here
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
         scp = Path.Combine( scp, "Controls" );
         scp = Path.Combine( scp, "Mappings" );
         if ( Directory.Exists( scp ) ) return scp;
 
-        log.WarnFormat( "SCClientMappingPath - CitizenClient.Data.Controls.Mappings subfolder does not exist: {0}", scp );
+        log.WarnFormat( "SCClientMappingPath - CitizenClient.USER.Controls.Mappings subfolder does not exist: {0}", scp );
         return "";
       }
     }
