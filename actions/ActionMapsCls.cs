@@ -259,19 +259,18 @@ namespace SCJMapper_V2
       r += String.Format( ">\n" );
 
       // and dump the option contents
-      if ( m_uiCustHeader.Count > 0 ) {
-        // prepare with new data
-        m_uiCustHeader.ClearInstances( );
-        UICustHeader.DevRec dr = new UICustHeader.DevRec( );
-        for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
-          if ( !String.IsNullOrEmpty( jsN[i] ) ) {
-            dr.devType = "joystick"; dr.instNo = i + 1;
-            m_uiCustHeader.AddInstances( dr );
-          }
+      // prepare with new data
+      m_uiCustHeader.ClearInstances( );
+      UICustHeader.DevRec dr = new UICustHeader.DevRec( );
+      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+        if ( !String.IsNullOrEmpty( jsN[i] ) ) {
+          dr.devType = "joystick"; dr.instNo = i + 1;
+          m_uiCustHeader.AddInstances( dr );
         }
-        m_uiCustHeader.Label = fileName.Replace( SCMappings.c_MapStartsWith, "" ); // remove redundant part
-        r += m_uiCustHeader.toXML( ) + String.Format( "\n" );
       }
+      m_uiCustHeader.Label = fileName.Replace( SCMappings.c_MapStartsWith, "" ); // remove redundant part
+      r += m_uiCustHeader.toXML( ) + String.Format( "\n" );
+
       if ( m_options.Count > 0 ) r += m_options.toXML( ) + String.Format( "\n" );
       if ( m_deviceOptions.Count > 0 ) r += m_deviceOptions.toXML( ) + String.Format( "\n" );
 

@@ -22,8 +22,9 @@ namespace SCJMapper_V2
       new ConfigurationProperty( "gpSenseLimit", typeof( int ), ( int )500, ConfigurationPropertyOptions.None );
 
     // The scActionmaps property.
-    private static String _defaultActionmaps = "multiplayer,singleplayer,player,flycam,vehicle_driver,spaceship_general,spaceship_view,spaceship_movement,spaceship_targeting,spaceship_turret"
-                + ",spaceship_weapons,spaceship_missiles,spaceship_defensive,spaceship_auto_weapons,spaceship_radar,spaceship_hud,IFCS_controls";
+    private static String _defaultActionmaps = "multiplayer,singleplayer,player,flycam,vehicle_general,vehicle_driver,vehicle_gunner"
+                + ",spaceship_general,spaceship_view,spaceship_movement,spaceship_targeting,spaceship_turret,spaceship_weapons,spaceship_missiles"
+                + ",spaceship_defensive,spaceship_auto_weapons,spaceship_power,spaceship_radar,spaceship_hud,IFCS_controls,zero_gravity_general";
     private static readonly ConfigurationProperty _scActionmaps = 
       new ConfigurationProperty( "scActionmaps", typeof( String ), (String)_defaultActionmaps, ConfigurationPropertyOptions.None );
 

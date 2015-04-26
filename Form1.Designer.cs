@@ -60,10 +60,15 @@
       this.btAssign = new System.Windows.Forms.Button();
       this.treeView1 = new System.Windows.Forms.TreeView();
       this.cmAddDel = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.tdiAssignBinding = new System.Windows.Forms.ToolStripMenuItem();
+      this.tdiBlendBinding = new System.Windows.Forms.ToolStripMenuItem();
+      this.tdiClearBinding = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
       this.tsiAddBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiDelBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -97,13 +102,10 @@
       this.txFilter = new System.Windows.Forms.TextBox();
       this.btClearFilter = new System.Windows.Forms.Button();
       this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-      this.cbxInvFlightPitch = new System.Windows.Forms.CheckBox();
       this.cbxInvAimPitch = new System.Windows.Forms.CheckBox();
       this.cbxInvViewPitch = new System.Windows.Forms.CheckBox();
-      this.cbxInvFlightYaw = new System.Windows.Forms.CheckBox();
       this.cbxInvAimYaw = new System.Windows.Forms.CheckBox();
       this.cbxInvViewYaw = new System.Windows.Forms.CheckBox();
-      this.cbxInvFlightRoll = new System.Windows.Forms.CheckBox();
       this.cbxInvThrottle = new System.Windows.Forms.CheckBox();
       this.cbxInvStrafeVert = new System.Windows.Forms.CheckBox();
       this.cbxInvStrafeLat = new System.Windows.Forms.CheckBox();
@@ -123,11 +125,6 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.tdiClearBinding = new System.Windows.Forms.ToolStripMenuItem();
-      this.tdiBlendBinding = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
-      this.tdiAssignBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmAddDel.SuspendLayout();
@@ -308,12 +305,12 @@
       // 
       this.lblLastJ.Location = new System.Drawing.Point(52, 38);
       this.lblLastJ.Name = "lblLastJ";
+      this.lblLastJ.ShortcutsEnabled = false;
       this.lblLastJ.Size = new System.Drawing.Size(222, 22);
       this.lblLastJ.TabIndex = 14;
       this.lblLastJ.Text = "...";
-      this.lblLastJ.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lblLastJ_MouseClick);
       this.lblLastJ.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lblLastJ_KeyDown);
-      this.lblLastJ.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lblLastJ_MouseDoubleClick);
+      this.lblLastJ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblLastJ_MouseDown);
       // 
       // cbxThrottle
       // 
@@ -410,8 +407,34 @@
             this.tsiAddBinding,
             this.tdiDelBinding});
       this.cmAddDel.Name = "cmAddDel";
-      this.cmAddDel.Size = new System.Drawing.Size(161, 142);
+      this.cmAddDel.Size = new System.Drawing.Size(161, 120);
       this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
+      // 
+      // tdiAssignBinding
+      // 
+      this.tdiAssignBinding.Name = "tdiAssignBinding";
+      this.tdiAssignBinding.Size = new System.Drawing.Size(160, 22);
+      this.tdiAssignBinding.Text = "Assign Mapping";
+      this.tdiAssignBinding.Click += new System.EventHandler(this.tdiAssignBinding_Click);
+      // 
+      // tdiBlendBinding
+      // 
+      this.tdiBlendBinding.Name = "tdiBlendBinding";
+      this.tdiBlendBinding.Size = new System.Drawing.Size(160, 22);
+      this.tdiBlendBinding.Text = "Blend Mapping";
+      this.tdiBlendBinding.Click += new System.EventHandler(this.tdiBlendBinding_Click);
+      // 
+      // tdiClearBinding
+      // 
+      this.tdiClearBinding.Name = "tdiClearBinding";
+      this.tdiClearBinding.Size = new System.Drawing.Size(160, 22);
+      this.tdiClearBinding.Text = "Clear Mapping";
+      this.tdiClearBinding.Click += new System.EventHandler(this.tdiClearBinding_Click);
+      // 
+      // toolStripSeparator2
+      // 
+      this.toolStripSeparator2.Name = "toolStripSeparator2";
+      this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
       // 
       // tsiAddBinding
       // 
@@ -452,6 +475,15 @@
       this.tabJS1.Size = new System.Drawing.Size(281, 321);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
+      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -545,6 +577,7 @@
       // 
       // timer1
       // 
+      this.timer1.Interval = 150;
       this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
       // 
       // SFD
@@ -834,13 +867,10 @@
       // flowLayoutPanel3
       // 
       this.flowLayoutPanel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightPitch);
       this.flowLayoutPanel3.Controls.Add(this.cbxInvAimPitch);
       this.flowLayoutPanel3.Controls.Add(this.cbxInvViewPitch);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightYaw);
       this.flowLayoutPanel3.Controls.Add(this.cbxInvAimYaw);
       this.flowLayoutPanel3.Controls.Add(this.cbxInvViewYaw);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvFlightRoll);
       this.flowLayoutPanel3.Controls.Add(this.cbxInvThrottle);
       this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeVert);
       this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeLat);
@@ -852,104 +882,85 @@
       this.flowLayoutPanel3.Size = new System.Drawing.Size(372, 151);
       this.flowLayoutPanel3.TabIndex = 27;
       // 
-      // cbxInvFlightPitch
-      // 
-      this.cbxInvFlightPitch.Location = new System.Drawing.Point(3, 3);
-      this.cbxInvFlightPitch.Name = "cbxInvFlightPitch";
-      this.cbxInvFlightPitch.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvFlightPitch.TabIndex = 0;
-      this.cbxInvFlightPitch.Text = "Inv. Flight Pitch";
-      this.cbxInvFlightPitch.UseVisualStyleBackColor = true;
-      // 
       // cbxInvAimPitch
       // 
-      this.cbxInvAimPitch.Location = new System.Drawing.Point(3, 27);
+      this.cbxInvAimPitch.Location = new System.Drawing.Point(3, 3);
       this.cbxInvAimPitch.Name = "cbxInvAimPitch";
       this.cbxInvAimPitch.Size = new System.Drawing.Size(168, 18);
       this.cbxInvAimPitch.TabIndex = 0;
       this.cbxInvAimPitch.Text = "Inv. Aim Pitch";
       this.cbxInvAimPitch.UseVisualStyleBackColor = true;
+      this.cbxInvAimPitch.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // cbxInvViewPitch
       // 
-      this.cbxInvViewPitch.Location = new System.Drawing.Point(3, 51);
+      this.cbxInvViewPitch.Location = new System.Drawing.Point(3, 27);
       this.cbxInvViewPitch.Name = "cbxInvViewPitch";
       this.cbxInvViewPitch.Size = new System.Drawing.Size(168, 18);
       this.cbxInvViewPitch.TabIndex = 0;
       this.cbxInvViewPitch.Text = "Inv. View Pitch";
       this.cbxInvViewPitch.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvFlightYaw
-      // 
-      this.cbxInvFlightYaw.Location = new System.Drawing.Point(3, 75);
-      this.cbxInvFlightYaw.Name = "cbxInvFlightYaw";
-      this.cbxInvFlightYaw.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvFlightYaw.TabIndex = 0;
-      this.cbxInvFlightYaw.Text = "Inv. Flight Yaw";
-      this.cbxInvFlightYaw.UseVisualStyleBackColor = true;
+      this.cbxInvViewPitch.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // cbxInvAimYaw
       // 
-      this.cbxInvAimYaw.Location = new System.Drawing.Point(3, 99);
+      this.cbxInvAimYaw.Location = new System.Drawing.Point(3, 51);
       this.cbxInvAimYaw.Name = "cbxInvAimYaw";
       this.cbxInvAimYaw.Size = new System.Drawing.Size(168, 18);
       this.cbxInvAimYaw.TabIndex = 0;
       this.cbxInvAimYaw.Text = "Inv. Aim Yaw";
       this.cbxInvAimYaw.UseVisualStyleBackColor = true;
+      this.cbxInvAimYaw.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // cbxInvViewYaw
       // 
-      this.cbxInvViewYaw.Location = new System.Drawing.Point(3, 123);
+      this.cbxInvViewYaw.Location = new System.Drawing.Point(3, 75);
       this.cbxInvViewYaw.Name = "cbxInvViewYaw";
       this.cbxInvViewYaw.Size = new System.Drawing.Size(168, 18);
       this.cbxInvViewYaw.TabIndex = 0;
       this.cbxInvViewYaw.Text = "Inv. View Yaw";
       this.cbxInvViewYaw.UseVisualStyleBackColor = true;
-      // 
-      // cbxInvFlightRoll
-      // 
-      this.cbxInvFlightRoll.Location = new System.Drawing.Point(177, 3);
-      this.cbxInvFlightRoll.Name = "cbxInvFlightRoll";
-      this.cbxInvFlightRoll.Size = new System.Drawing.Size(168, 18);
-      this.cbxInvFlightRoll.TabIndex = 0;
-      this.cbxInvFlightRoll.Text = "Inv. Flight Roll";
-      this.cbxInvFlightRoll.UseVisualStyleBackColor = true;
+      this.cbxInvViewYaw.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // cbxInvThrottle
       // 
-      this.cbxInvThrottle.Location = new System.Drawing.Point(177, 27);
+      this.cbxInvThrottle.Location = new System.Drawing.Point(3, 99);
       this.cbxInvThrottle.Name = "cbxInvThrottle";
       this.cbxInvThrottle.Size = new System.Drawing.Size(168, 18);
       this.cbxInvThrottle.TabIndex = 0;
       this.cbxInvThrottle.Text = "Inv. Throttle";
       this.cbxInvThrottle.UseVisualStyleBackColor = true;
+      this.cbxInvThrottle.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // cbxInvStrafeVert
       // 
-      this.cbxInvStrafeVert.Location = new System.Drawing.Point(177, 51);
+      this.cbxInvStrafeVert.Location = new System.Drawing.Point(3, 123);
       this.cbxInvStrafeVert.Name = "cbxInvStrafeVert";
       this.cbxInvStrafeVert.Size = new System.Drawing.Size(168, 18);
       this.cbxInvStrafeVert.TabIndex = 0;
       this.cbxInvStrafeVert.Text = "Inv. Strafe vertical";
       this.cbxInvStrafeVert.UseVisualStyleBackColor = true;
+      this.cbxInvStrafeVert.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // cbxInvStrafeLat
       // 
-      this.cbxInvStrafeLat.Location = new System.Drawing.Point(177, 75);
+      this.cbxInvStrafeLat.Location = new System.Drawing.Point(177, 3);
       this.cbxInvStrafeLat.Name = "cbxInvStrafeLat";
       this.cbxInvStrafeLat.Size = new System.Drawing.Size(168, 18);
       this.cbxInvStrafeLat.TabIndex = 0;
       this.cbxInvStrafeLat.Text = "Inv. Strafe lateral";
       this.cbxInvStrafeLat.UseVisualStyleBackColor = true;
+      this.cbxInvStrafeLat.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // cbxInvStrafeLon
       // 
-      this.cbxInvStrafeLon.Location = new System.Drawing.Point(177, 99);
+      this.cbxInvStrafeLon.Location = new System.Drawing.Point(177, 27);
       this.cbxInvStrafeLon.Name = "cbxInvStrafeLon";
       this.cbxInvStrafeLon.Size = new System.Drawing.Size(168, 18);
       this.cbxInvStrafeLon.TabIndex = 0;
       this.cbxInvStrafeLon.Text = "Inv. Strafe longitudinal";
       this.cbxInvStrafeLon.UseVisualStyleBackColor = true;
+      this.cbxInvStrafeLon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // toolStripStatusLabel2
       // 
@@ -1096,41 +1107,6 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
-      // tdiClearBinding
-      // 
-      this.tdiClearBinding.Name = "tdiClearBinding";
-      this.tdiClearBinding.Size = new System.Drawing.Size(160, 22);
-      this.tdiClearBinding.Text = "Clear Mapping";
-      this.tdiClearBinding.Click += new System.EventHandler(this.tdiClearBinding_Click);
-      // 
-      // tdiBlendBinding
-      // 
-      this.tdiBlendBinding.Name = "tdiBlendBinding";
-      this.tdiBlendBinding.Size = new System.Drawing.Size(160, 22);
-      this.tdiBlendBinding.Text = "Blend Mapping";
-      this.tdiBlendBinding.Click += new System.EventHandler(this.tdiBlendBinding_Click);
-      // 
-      // toolStripSeparator2
-      // 
-      this.toolStripSeparator2.Name = "toolStripSeparator2";
-      this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
-      this.UC_JoyPanel.TabIndex = 0;
-      // 
-      // tdiAssignBinding
-      // 
-      this.tdiAssignBinding.Name = "tdiAssignBinding";
-      this.tdiAssignBinding.Size = new System.Drawing.Size(160, 22);
-      this.tdiAssignBinding.Text = "Assign Mapping";
-      this.tdiAssignBinding.Click += new System.EventHandler(this.tdiAssignBinding_Click);
-      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1251,13 +1227,10 @@
     private System.Windows.Forms.ToolStripMenuItem tsiAddBinding;
     private System.Windows.Forms.ToolStripMenuItem tdiDelBinding;
     private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
-    private System.Windows.Forms.CheckBox cbxInvFlightPitch;
-    private System.Windows.Forms.CheckBox cbxInvFlightYaw;
     private System.Windows.Forms.CheckBox cbxInvAimPitch;
     private System.Windows.Forms.CheckBox cbxInvViewPitch;
     private System.Windows.Forms.CheckBox cbxInvAimYaw;
     private System.Windows.Forms.CheckBox cbxInvViewYaw;
-    private System.Windows.Forms.CheckBox cbxInvFlightRoll;
     private System.Windows.Forms.CheckBox cbxInvStrafeVert;
     private System.Windows.Forms.CheckBox cbxInvStrafeLat;
     private System.Windows.Forms.CheckBox cbxInvStrafeLon;

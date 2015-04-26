@@ -99,10 +99,6 @@ namespace SCJMapper_V2
     {
       set { 
         m_invertCB = value; 
-        // forward the Tuning GUI items for handling
-        m_tuningP.CBInvert = m_invertCB[( int )OptionsInvert.Inversions.flight_move_pitch];
-        m_tuningY.CBInvert = m_invertCB[( int )OptionsInvert.Inversions.flight_move_yaw];
-        m_tuningR.CBInvert = m_invertCB[( int )OptionsInvert.Inversions.flight_move_roll];
         // assuming the ENUM sequence of Checkboxes here...
         // Note: the flight Flight ones above are not handled twice i.e. are assigned below but not used
         int i = 0;

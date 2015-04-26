@@ -19,7 +19,8 @@ namespace SCJMapper_V2
     #region Static Items
 
     public new const String DeviceClass = "keyboard";  // the device name used throughout this app
-    public new const String BlendedInput = " ";  // the device name used throughout this app
+    public new const String BlendedInput = " ";
+    public const String ClearMods = "escape";
 
 
     /// <summary>
@@ -55,7 +56,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="pressedKeys">The list of pressed DX keys</param>
     /// <returns>The SC keycode string</returns>
-    public static String DXKeyboardCmd( List<Key> pressedKeys )
+    public static String DXKeyboardCmd( List<Key> pressedKeys, Boolean modAndKey )
     {
       String altMod = "";
       String shiftMod = "";
@@ -151,8 +152,15 @@ namespace SCJMapper_V2
             break;
         }
 
+      }//for
+      if ( modAndKey ) {
+        key = altMod + shiftMod + ctrlMod + key;
       }
-      key = altMod + shiftMod + ctrlMod + key; // combine in proper order
+      else {
+        // mods only OR space to kill mods
+        if ( !key.Contains( ClearMods ) ) key = altMod + shiftMod + ctrlMod;
+      }
+
       return key.TrimEnd( new char[] { '+' } );  // return killing the last +
     }
 
@@ -245,7 +253,17 @@ namespace SCJMapper_V2
     /// <returns>The last action as CryEngine compatible string</returns>
     public override String GetLastChange( )
     {
-      return DXKeyboardCmd( m_state.PressedKeys );
+      return DXKeyboardCmd( m_state.PressedKeys, true );
+    }
+
+
+    /// <summary>
+    /// Find the last change the user did on that device
+    /// </summary>
+    /// <returns>The last action as CryEngine compatible string</returns>
+    public String GetLastChange( Boolean modAndKey )
+    {
+      return DXKeyboardCmd( m_state.PressedKeys, modAndKey );
     }
 
 
@@ -299,7 +317,7 @@ namespace SCJMapper_V2
       catch ( SharpDXException ) {
         return;
       }
-      
+
     }
 
 

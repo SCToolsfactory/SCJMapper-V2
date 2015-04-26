@@ -360,9 +360,8 @@ namespace SCJMapper_V2
       m_AT.LoadProfileTree( m_AppSettings.DefProfileName, addDefaultBinding );
       // provide an array of checkboxes to Options (all is handled there)
       List<CheckBox> inversions = new List<CheckBox>( );
-      inversions.Add( cbxInvFlightPitch ); inversions.Add( cbxInvAimPitch ); inversions.Add( cbxInvViewPitch );
-      inversions.Add( cbxInvFlightYaw ); inversions.Add( cbxInvAimYaw ); inversions.Add( cbxInvViewYaw );
-      inversions.Add( cbxInvFlightRoll );
+      inversions.Add( cbxInvAimPitch ); inversions.Add( cbxInvViewPitch );
+      inversions.Add( cbxInvAimYaw ); inversions.Add( cbxInvViewYaw );
       inversions.Add( cbxInvThrottle );
       inversions.Add( cbxInvStrafeVert ); inversions.Add( cbxInvStrafeLat ); inversions.Add( cbxInvStrafeLon );
       m_AT.InvertCheckList = inversions;
@@ -608,6 +607,9 @@ namespace SCJMapper_V2
     }
 
 
+    String m_persistentMods = "";
+
+    // polls the devices to get the latest update
     private void timer1_Tick( object sender, System.EventArgs e )
     {
       if ( m_keyIn ) return; // allow keyboard / mouse input
@@ -622,8 +624,23 @@ namespace SCJMapper_V2
       }
       else {
         m_Joystick[jsIndex].GetData( );  // poll the device
-        ctrl = JSStr( ) + m_Joystick[jsIndex].GetLastChange( ); // show last handled JS control
-        timer1.Interval = 100; // standard polling
+        if ( m_Keyboard == null ) {
+          ctrl = JSStr( ) + m_Joystick[jsIndex].GetLastChange( ); // show last handled JS control
+        }
+        else {
+          m_Keyboard.GetData( );
+          String modS = m_Keyboard.GetLastChange( false );
+          if ( !String.IsNullOrEmpty( modS ) ) {
+            if ( modS.Contains( KeyboardCls.ClearMods ) ) {
+              m_persistentMods = ""; // kill persistent ones
+            }
+            else {
+              m_persistentMods = modS + "+";
+            }
+          }
+          ctrl = m_persistentMods + JSStr( ) + m_Joystick[jsIndex].GetLastChange( ); // show last handled JS control
+        }
+        timer1.Interval = 150; // standard polling
       }
 
       lblLastJ.Text = ctrl;
@@ -1069,6 +1086,7 @@ namespace SCJMapper_V2
         }
 
         m_AT = newTree; // make it the valid one
+        m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMappedOnly.Checked );
         m_AT.ReloadTreeView( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
@@ -1078,6 +1096,13 @@ namespace SCJMapper_V2
 
 
     // Joystick Tuning
+
+    private void cbxInv_XY_MouseClick( object sender, MouseEventArgs e )
+    {
+      m_AT.Dirty = true;
+      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+    }
+
 
     private void btJSTuning_Click( object sender, EventArgs e )
     {
@@ -1227,26 +1252,6 @@ namespace SCJMapper_V2
 
     Boolean m_keyIn = false;
 
-    // Right no a double click triggers the switch between JS and Mouse+Kbd
-    private void lblLastJ_MouseDoubleClick( object sender, MouseEventArgs e )
-    {
-      m_keyIn = ( !m_keyIn );
-      if ( m_keyIn ) {
-        if ( m_Keyboard == null ) {
-          m_keyIn = false;
-          return;
-        } // bail out ..
-
-        lblLastJ.BackColor = MyColors.KeyboardColor;
-        m_Keyboard.Activate( );
-        m_Keyboard.GetData( ); // poll to aquire once
-      }
-      else {
-        lblLastJ.BackColor = MyColors.ValidColor;
-        m_Keyboard.Deactivate( );
-      }
-
-    }
 
     private void btJsKbd_Click( object sender, EventArgs e )
     {
@@ -1267,24 +1272,29 @@ namespace SCJMapper_V2
       else {
         lblLastJ.BackColor = MyColors.ValidColor;
         btJsKbd.ImageKey = "J";
-        m_Keyboard.Deactivate( );
+        // m_Keyboard.Deactivate( );  // not longer with modifier mappings in AC 1.1
       }
     }
 
+
     // read mouse commands (TODO only buttons no movement so far)
-    private void lblLastJ_MouseClick( object sender, MouseEventArgs e )
+    private void lblLastJ_MouseDown( object sender, MouseEventArgs e )
     {
       if ( !m_keyIn ) return;
       // capture mouse things
       lblLastJ.Text = MouseCls.MouseCmd( e );
+
+      // don't spill the field with regular input
     }
+
+
 
     // Key down triggers the readout via DX Input
     private void lblLastJ_KeyDown( object sender, KeyEventArgs e )
     {
       if ( m_keyIn ) {
         m_Keyboard.GetData( );
-        lblLastJ.Text = m_Keyboard.GetLastChange( );
+        lblLastJ.Text = m_Keyboard.GetLastChange( true );
       }
       // don't spill the field with regular input
       e.SuppressKeyPress = true;
@@ -1294,6 +1304,7 @@ namespace SCJMapper_V2
 
 
     #endregion
+
 
  
 

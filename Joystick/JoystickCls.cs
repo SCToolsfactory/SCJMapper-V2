@@ -129,6 +129,7 @@ namespace SCJMapper_V2
 
     /// <summary>
     /// Extract the JS number from a JS string (jsx_ returns 0 - UNKNOWN)
+    /// AC 1.1  can be something as "rctrl+js2_nn"
     /// </summary>
     /// <param name="jsTag">The JS string</param>
     /// <returns>The JS number</returns>
@@ -136,8 +137,17 @@ namespace SCJMapper_V2
     {
       int retNum = JSnum_UNKNOWN;
       if ( !String.IsNullOrWhiteSpace( jsTag ) ) {
-        if ( !int.TryParse( jsTag.Substring( 2, 1 ), out retNum ) ) {
-          retNum = JSnum_UNKNOWN;
+        // find jsN start 
+        int jsPos = jsTag.IndexOf( "+js" );
+        if ( jsPos > 0 ) {
+          if ( !int.TryParse( jsTag.Substring( jsPos+3, 1 ), out retNum ) ) {
+            retNum = JSnum_UNKNOWN;
+          }
+        }
+        else {
+          if ( !int.TryParse( jsTag.Substring( 2, 1 ), out retNum ) ) {
+            retNum = JSnum_UNKNOWN;
+          }
         }
       }
       return retNum;
@@ -169,14 +179,21 @@ namespace SCJMapper_V2
 
     /// <summary>
     /// Returns an adjusted jsN_ tag with the new number
+    /// AC 1.1  can be something as "rctrl+js2_nn"
     /// </summary>
     /// <param name="input">An input directive</param>
     /// <param name="newJsN">the new JsN number</param>
     /// <returns>The modified js directive or the directive if no mod can be done</returns>
     static public String ReassignJSTag( String input, int newJsN )
     {
-      if ( IsJsN( input ) ) {
-        return input.Replace( input.Substring( 0, 4 ), JSTag( newJsN ) );
+      // find jsN start 
+      int jsPos = input.IndexOf( "+js" );
+      String inputValidateJsN = input;
+      if ( jsPos > 0 ) {
+        inputValidateJsN = input.Substring( jsPos + 1, 5 );
+      }
+      if ( IsJsN( inputValidateJsN ) ) {
+        return input.Replace( input.Substring( jsPos + 1, 4 ), JSTag( newJsN ) ); // jsPos=-1 + 1 => 0 (case of no modifier)
       }
       else {
         return input;

@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.11 - Build 44 BETA
-(c) Cassini, StandardToaster - 14-January-2015
+SC Joystick Mapper V 2.12 - Build 45 BETA
+(c) Cassini, StandardToaster - 28-February-2015
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.11)
-SCJMapper.exe.config         Program config (V2.11)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.12)
+SCJMapper.exe.config         Program config (V2.12)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -29,6 +29,9 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.12 - BETA Build 45
+- improvement - SCJM maintains mappings in USER rather than data folder (AC 1.03)
+- improvement - UICustomization Header for joystick updated (label is the filename minus "layout_") (AC 1.03)
 V 2.11 - BETA Build 44
 - fix - reading of deadzone value (if not a number should not break anymore)
 - fix - writing the proper deadzone XML if first used

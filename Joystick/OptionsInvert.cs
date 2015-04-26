@@ -12,13 +12,10 @@ namespace SCJMapper_V2
 
     public enum Inversions
     {
-      flight_move_pitch = 0, // used also as array index - MUST remain 0
-      flight_aim_pitch,
+      flight_aim_pitch = 0, // used also as array index - MUST remain 0,
       flight_view_pitch,
-      flight_move_yaw,
       flight_aim_yaw,
       flight_view_yaw,
-      flight_move_roll,
       flight_throttle,
       flight_move_strafe_vertical,
       flight_move_strafe_lateral,
@@ -37,13 +34,10 @@ namespace SCJMapper_V2
     // setup of mapped actions as of AC 1.0 (may need a change once in a while...)
     //Note: sequence is matched with the Enum above
     static public  MappedActionRec[] MappedActions = {
-        new MappedActionRec("spaceship_movement", "v_pitch"),
         new MappedActionRec("spaceship_targeting", "v_aim_pitch"),
         new MappedActionRec("spaceship_view", "v_view_pitch"),
-        new MappedActionRec("spaceship_movement", "v_yaw"),
         new MappedActionRec("spaceship_targeting", "v_aim_yaw"),
         new MappedActionRec("spaceship_view", "v_view_yaw"),
-        new MappedActionRec("spaceship_movement", "v_roll"),
         new MappedActionRec("spaceship_movement", "v_throttle_abs"),
         new MappedActionRec("spaceship_movement", "v_strafe_vertical"),
         new MappedActionRec("spaceship_movement", "v_strafe_lateral"),

@@ -33,11 +33,11 @@ namespace SCJMapper_V2
     private List<String> m_PtsIn = new List<String>( );
     private List<String> m_PtsOut = new List<String>( );
 
+    private bool   m_invertEnabled = false; // default
+
     private DeviceCls m_device = null;
 
     private DeviceDeadzoneParameter m_deadzone = null;
-
-    private CheckBox m_cbInvert = null;
 
     public DeviceTuningParameter( )
     {
@@ -118,12 +118,8 @@ namespace SCJMapper_V2
 
     public bool InvertUsed
     {
-      get { return ( m_cbInvert == null ) ? false : m_cbInvert.Checked; }
-      set { if ( m_cbInvert != null ) m_cbInvert.Checked = value; }
-    }
-    public CheckBox CBInvert
-    {
-      set { m_cbInvert = value; }
+      get { return m_invertEnabled; }
+      set { m_invertEnabled = value; }
     }
 
     public bool ExponentUsed
@@ -254,7 +250,7 @@ namespace SCJMapper_V2
       }
       else {
         // neither exp or curve
-        tmp += String.Format( "exponent=\"1.00\" /> \n" );// CIG get to default expo 2.something if not set to 1 here
+        tmp += String.Format( " /> \n" );// nothing...
       }
 
       tmp += String.Format( "\t</options>\n \n" );
