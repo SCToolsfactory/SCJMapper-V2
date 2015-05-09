@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.12 - Build 45 BETA
-(c) Cassini, StandardToaster - 28-February-2015
+SC Joystick Mapper V 2.14 - Build 47 BETA
+(c) Cassini, StandardToaster - 09-May-2015
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.12)
-SCJMapper.exe.config         Program config (V2.12)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.14)
+SCJMapper.exe.config         Program config (V2.14)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -29,6 +29,14 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.14 - BETA Build 47
+- update - added new defaultProfile (CIG allows some more joystick mappings)
+V 2.13 - BETA Build 46
+- update - added new defaultProfile and actionmaps from AC 1.1.1
+- add - keyboard modifier for joystick (e.g. rctrl+js1_xy) - Press ESC to clear modifiers
+- fix - device checkboxes are now applied after Reassign
+- fix - invert checkbox handling (removed flight invert - use the one in Tuning)
+- fix - Add UICustomization Header and Devices List in any case
 V 2.12 - BETA Build 45
 - improvement - SCJM maintains mappings in USER rather than data folder (AC 1.03)
 - improvement - UICustomization Header for joystick updated (label is the filename minus "layout_") (AC 1.03)
