@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.14 - Build 47 BETA
-(c) Cassini, StandardToaster - 09-May-2015
+SC Joystick Mapper V 2.16 - Build 49 BETA
+(c) Cassini, StandardToaster - 26-October-2015
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.14)
-SCJMapper.exe.config         Program config (V2.14)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.16)
+SCJMapper.exe.config         Program config (V2.16)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -29,6 +29,12 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.16 - BETA Build 49
+- update - Updated for AC Alpha 1.3 defaultProfile does no longer have js1_ or xi_ marks form commands
+- NOTE: - Dump Log does not work right now as CIG does no longer list detected controllers in the log file
+V 2.15 - BETA Build 48
+- update - Updated for AC Alpha 1.1.6 new files locations to find files and mappings
+- NOTE: - Dump Log does not work right now as CIG does no longer list detected controllers in the log file
 V 2.14 - BETA Build 47
 - update - added new defaultProfile (CIG allows some more joystick mappings)
 V 2.13 - BETA Build 46

@@ -86,7 +86,10 @@ namespace SCJMapper_V2
         ac.input = "J";
         ac.defBinding = attr["joystick"];
         if ( ac.defBinding == " " ) ac.defBinding = JoystickCls.BlendedInput;
-        if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+          if ( !ac.defBinding.StartsWith( "js1_" ) && !ac.defBinding.StartsWith( "jsx_" ) ) ac.defBinding = "js1_" + ac.defBinding; // fix AC 1.3
+          m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        }
       }
       if ( attr.ContainsKey( "keyboard" ) ) {
         Action ac = new Action( );
@@ -102,7 +105,10 @@ namespace SCJMapper_V2
         ac.input = "X";
         ac.defBinding = attr["xboxpad"];
         if ( ac.defBinding == " " ) ac.defBinding = GamepadCls.BlendedInput;
-        if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+          if ( !ac.defBinding.StartsWith( "xi_" ) ) ac.defBinding = "xi_" + ac.defBinding; // fix AC 1.3
+          m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        }
       }
       if ( attr.ContainsKey( "ps3pad" ) ) {
         Action ac = new Action( );
