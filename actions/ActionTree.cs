@@ -37,6 +37,7 @@ namespace SCJMapper_V2
     private Boolean m_showJoy = true;
     private Boolean m_showGameP = true;
     private Boolean m_showKbd = true;
+    private Boolean m_showMouse = true;
     private Boolean m_showMappedOnly = false;
 
 
@@ -376,6 +377,7 @@ namespace SCJMapper_V2
           if ( ( !m_showJoy ) && stn.IsJoystickAction ) stn.Tag = true;
           if ( ( !m_showGameP ) && stn.IsGamepadAction ) stn.Tag = true;
           if ( ( !m_showKbd ) && stn.IsKeyboardAction ) stn.Tag = true;
+          if ( ( !m_showMouse ) && stn.IsMouseAction ) stn.Tag = true;
           if ( m_showMappedOnly && ( !stn.IsMappedAction ) ) stn.Tag = true;
           if ( !stn.Text.Contains( m_Filter ) ) stn.Tag = hidden;
         }
@@ -447,6 +449,10 @@ namespace SCJMapper_V2
                   String defBinding = elem[ei + 1].Substring( 0 );
                   String devID = elem[ei].Substring( 0, 1 );
                   String device = ActionCls.DeviceFromID( devID );
+                  // Format for AC2 style inputs - reformat mouse/kbd
+                  if ( KeyboardCls.IsDeviceClass( device ) ) defBinding = KeyboardCls.FromAC1( defBinding );
+                  else if ( MouseCls.IsDeviceClass( device ) ) defBinding = MouseCls.FromAC1( defBinding );
+                  else if ( GamepadCls.IsDeviceClass( device ) ) defBinding = GamepadCls.FromAC1( defBinding );
 
                   // visual item for the action
                   cn = new ActionTreeNode( "UNDEF" ); cn.Name = elem[ei]; cn.Action = action; cn.BackColor = Color.White; // name with the key it to find it..                
@@ -491,6 +497,12 @@ namespace SCJMapper_V2
                       if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
                         acc.input = ac.defBinding;
                         cn.Command = ac.defBinding; cn.BackColor = KeyboardCls.KbdColor( );
+                      }
+                    }
+                    else if ( ac.actionDevice == ActionCls.ActionDevice.AD_Mouse ) {  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
+                      if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+                        acc.input = ac.defBinding;
+                        cn.Command = ac.defBinding; cn.BackColor = MouseCls.MouseColor( );
                       }
                     }
                   }
@@ -714,6 +726,12 @@ namespace SCJMapper_V2
         else if ( ( inKind == ActionCls.ActionDevice.AD_Gamepad ) && ( actionCmd.input == GamepadCls.BlendedInput ) ) {
           node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
         }
+        else if ( ( inKind == ActionCls.ActionDevice.AD_Keyboard ) && ( actionCmd.input == KeyboardCls.BlendedInput ) ) {
+          node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
+        }
+        else if ( ( inKind == ActionCls.ActionDevice.AD_Mouse ) && ( actionCmd.input == MouseCls.BlendedInput ) ) {
+          node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
+        }
         else if ( actionCmd.input == DeviceCls.BlendedInput ) {
           // Manually Blended input
           node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
@@ -732,6 +750,9 @@ namespace SCJMapper_V2
           }
           else if ( inKind == ActionCls.ActionDevice.AD_Keyboard ) {
             node.BackColor = KeyboardCls.KbdColor( );
+          }
+          else if ( inKind == ActionCls.ActionDevice.AD_Mouse ) {   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
+            node.BackColor = MouseCls.MouseColor( );
           }
           else {
             // ?? what else
@@ -771,6 +792,12 @@ namespace SCJMapper_V2
       else if ( ( inKind == ActionCls.ActionDevice.AD_Gamepad ) && ( actionCmd.input == GamepadCls.BlendedInput ) ) {
         node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
       }
+      else if ( ( inKind == ActionCls.ActionDevice.AD_Keyboard ) && ( actionCmd.input == KeyboardCls.BlendedInput ) ) {
+        node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
+      }
+      else if ( ( inKind == ActionCls.ActionDevice.AD_Mouse ) && ( actionCmd.input == MouseCls.BlendedInput ) ) {
+        node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
+      }
       else if ( actionCmd.input == DeviceCls.BlendedInput ) {
         // Manually Blended input
         node.Command = actionCmd.input; node.BackColor = MyColors.BlendedColor;
@@ -790,6 +817,9 @@ namespace SCJMapper_V2
         else if ( inKind == ActionCls.ActionDevice.AD_Keyboard ) {
           node.BackColor = KeyboardCls.KbdColor( );
         }
+        else if ( inKind == ActionCls.ActionDevice.AD_Mouse ) {   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
+          node.BackColor = MouseCls.MouseColor( );
+        }
         else {
           // ?? what else
           node.BackColor = MyColors.UnassignedColor;
@@ -806,11 +836,12 @@ namespace SCJMapper_V2
     /// <param name="showGamepad">True to show Gamepad actions</param>
     /// <param name="showKeyboard">True to show Keyboard actions</param>
     /// <param name="showMappedOnly">True to show mapped actions only </param>
-    public void DefineShowOptions( Boolean showJoystick, Boolean showGamepad, Boolean showKeyboard, Boolean showMappedOnly )
+    public void DefineShowOptions( Boolean showJoystick, Boolean showGamepad, Boolean showKeyboard, Boolean showMouse, Boolean showMappedOnly )
     {
       m_showJoy = showJoystick;
       m_showGameP = showGamepad;
       m_showKbd = showKeyboard;
+      m_showMouse = showMouse;
       m_showMappedOnly = showMappedOnly;
     }
 

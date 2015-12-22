@@ -18,32 +18,12 @@ namespace SCJMapper_V2
 
     /// <summary>
     /// Returns a list of files found that match 'defaultProfile*.xml'
+    /// 20151220BM: return only the single defaultProfile name
     /// </summary>
     /// <returns>A list of filenames - can be empty</returns>
-    static public List<String> DefaultProfileNames
+    static public String DefaultProfileName
     {
-      get
-      {
-        log.Debug( "DefaultProfileNames - Entry" );
-        List<String> retVal = new List<String>( );
-        if ( File.Exists( SCPath.SCGameData_pak ) ) {
-          using ( ZipFile zip = ZipFile.Read( SCPath.SCGameData_pak ) ) {
-            try {
-              zip.CaseSensitiveRetrieval = false;
-              ICollection<ZipEntry> gdpak = zip.SelectEntries( "name = " + "'" + SCPath.DefaultProfileName + "*.xml'", SCPath.DefaultProfilePath_rel );
-              if ( gdpak != null ) {
-                foreach ( ZipEntry ze in gdpak ) {
-                  retVal.Add( ze.FileName );
-                }
-              }
-            }
-            catch ( Exception ex ) {
-              log.Error( "Unexpected", ex );
-            }
-          }
-        }
-        return retVal;
-      }
+      get { return "defaultProfile.xml"; }
     }
 
     /// <summary>
@@ -67,7 +47,7 @@ namespace SCJMapper_V2
       else {
         // second try to get the SC defaultProfile from the GameData.pak
         retVal = ExtractDefaultProfile( defaultProfileName );
-        if ( ! String.IsNullOrEmpty( retVal ) ) {
+        if ( !String.IsNullOrEmpty( retVal ) ) {
           log.Info( "- Use GamePack defaultProfile" );
         }
         else {

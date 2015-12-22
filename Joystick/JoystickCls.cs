@@ -23,12 +23,20 @@ namespace SCJMapper_V2
     #region Static Items
 
     public new const String DeviceClass = "joystick";  // the device name used throughout this app
+    static public int RegisteredDevices = 0;
 
-    public const String JsUnknown = "jsx_";
-    public new const String BlendedInput = "jsx_reserved";
 
     static public int JSnum_UNKNOWN = 0;
-    static public int JSnum_MAX = 8;   // can only assign 4 jsN devices in SC
+    static public int JSnum_MAX = 8;
+
+    public const String JsUnknown = "jsx_";
+
+    public new const String BlendedInput = "js1_" + DeviceCls.BlendedInput; //AC2 ..
+    static public new Boolean IsBlendedInput( String input )
+    {
+      if ( input == BlendedInput ) return true;
+      return false;
+    }
 
 
     /// <summary>
@@ -85,6 +93,20 @@ namespace SCJMapper_V2
         sAction = e[1].Trim( );
       }
     }
+
+    /// <summary>
+    /// Return this deviceClass if the input string contains something like jsN_
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    static public new String DeviceClassFromInput( String input )
+    {
+      if ( JSNum( input ) != JSnum_UNKNOWN )
+        return DeviceClass; // this
+      else
+        return DeviceCls.DeviceClass; // unknown
+    }
+
 
     /// <summary>
     /// Returns the jsN part from a joystick command
@@ -145,7 +167,7 @@ namespace SCJMapper_V2
           }
         }
         else {
-          if ( !int.TryParse( jsTag.Substring( 2, 1 ), out retNum ) ) {
+          if ( ! ( jsTag.StartsWith("js") && int.TryParse( jsTag.Substring( 2, 1 ), out retNum ) ) ) {
             retNum = JSnum_UNKNOWN;
           }
         }
@@ -379,6 +401,8 @@ namespace SCJMapper_V2
       }
 
       ApplySettings( ); // get whatever is needed here from Settings
+      JoystickCls.RegisteredDevices++;
+
       Activated = true; 
     }
 
@@ -517,14 +541,14 @@ namespace SCJMapper_V2
     {
       // TODO: Expand this out into a joystick class (see commit for details)
       Dictionary<string, string> axies = new Dictionary<string, string>( )
-		    {
-			    {"X","x"},
-			    {"Y","y"},
-			    {"Z","z"}, 
-			    {"RotationX","rotx"},
-			    {"RotationY","roty"},
-			    {"RotationZ","rotz"}
-		    };
+        {
+          {"X","x"},
+          {"Y","y"},
+          {"Z","z"}, 
+          {"RotationX","rotx"},
+          {"RotationY","roty"},
+          {"RotationZ","rotz"}
+        };
 
       foreach ( KeyValuePair<string, string> entry in axies ) {
         PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( entry.Key );
@@ -692,14 +716,14 @@ namespace SCJMapper_V2
     {
       // TODO: Expand this out into a joystick class (see commit for details)
       Dictionary<string, string> axies = new Dictionary<string, string>( )
-		    {
-			    {"x","X"},
-			    {"y","Y"},
-			    {"z","Z"}, 
-			    {"rotx","RotationX"},
-			    {"roty","RotationY"},
-			    {"rotz","RotationZ"}
-		    };
+        {
+          {"x","X"},
+          {"y","Y"},
+          {"z","Z"}, 
+          {"rotx","RotationX"},
+          {"roty","RotationY"},
+          {"rotz","RotationZ"}
+        };
 
       data = 0;
 

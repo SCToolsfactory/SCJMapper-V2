@@ -182,6 +182,11 @@ namespace SCJMapper_V2
       get { return ( m_actionDevice == ActionCls.ActionDevice.AD_Keyboard ); }
     }
 
+    public Boolean IsMouseAction  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
+    {
+      get { return ( m_actionDevice == ActionCls.ActionDevice.AD_Mouse ); }
+    }
+
     public Boolean IsMappedAction
     {
       get

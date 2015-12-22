@@ -60,11 +60,11 @@ namespace SCJMapper_V2
     public String Deviceoptions_toXML( )
     {
       /*
-	         <deviceoptions name="Joystick - HOTAS Warthog">
-		        <!-- Reduce the deadzone -->
-		        <option input="x" deadzone="0.015" />
-		        <option input="y" deadzone="0.015" />	
-	        </deviceoptions>
+           <deviceoptions name="Joystick - HOTAS Warthog">
+            <!-- Reduce the deadzone -->
+            <option input="x" deadzone="0.015" />
+            <option input="y" deadzone="0.015" />	
+          </deviceoptions>
        */
       String tmp = "";
       if ( m_deadzoneEnabled ) {

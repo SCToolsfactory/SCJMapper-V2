@@ -5,6 +5,7 @@ using System.Text;
 using SharpDX.DirectInput;
 using System.Windows.Forms;
 using SharpDX;
+using System.Text.RegularExpressions;
 
 namespace SCJMapper_V2
 {
@@ -19,9 +20,17 @@ namespace SCJMapper_V2
     #region Static Items
 
     public new const String DeviceClass = "keyboard";  // the device name used throughout this app
-    public new const String BlendedInput = " ";
+    public const String DeviceTag = "kb1_";
+    static public int RegisteredDevices = 0;  // devices add here once they are created (though will not decrement as they are not deleted)
+
     public const String ClearMods = "escape";
 
+    public new const String BlendedInput = DeviceTag + DeviceCls.BlendedInput;
+    static public new Boolean IsBlendedInput ( String input )
+    {
+      if ( input == BlendedInput ) return true;
+      return false;
+    }
 
     /// <summary>
     /// Returns the currently valid color
@@ -38,11 +47,55 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="deviceClass"></param>
     /// <returns></returns>
-    static new public Boolean IsDeviceClass( String deviceClass )
+    static public new Boolean IsDeviceClass( String deviceClass )
     {
       return ( deviceClass == DeviceClass );
     }
 
+    /// <summary>
+    /// Return this deviceClass if the input string contains something like kbN_
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    static public new String DeviceClassFromInput( String input )
+    {
+      if ( IsKbN( input ) )
+        return DeviceClass; // this
+      else
+        return DeviceCls.DeviceClass; // unknown
+    }
+
+
+    const string kbN_pattern = @"^*kb[1..9]_*";
+    static Regex rgx_kbN = new Regex( kbN_pattern, RegexOptions.IgnoreCase );
+    /// <summary>
+    /// Returns true if the input starts with a valid kbN_ formatting (TODO what kind of kbd modifiers here?)
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    static public Boolean IsKbN( String input )
+    {
+      return rgx_kbN.IsMatch( input );
+    }
+
+
+    /// <summary>
+    /// Reformat the input from AC1 style to AC2 style
+    /// </summary>
+    /// <param name="input">The AC1 input string</param>
+    /// <returns>An AC2 style input string</returns>
+    static public String FromAC1( String input )
+    {
+      // input is something like a letter or a composition like lctrl+c 
+      // try easy: add kb1_ at the beginning and before any +; first remove spaces
+      String retVal = input.Replace(" ","");
+      int plPos = retVal.IndexOf("+");
+      while (plPos>0) {
+        retVal.Insert( plPos + 1, "kb1_" );
+        plPos = retVal.IndexOf("+", plPos+1);
+      }
+      return "kb1_" + retVal;
+    }
 
     // See also SC keybinding_localization.xml
 
@@ -232,6 +285,8 @@ namespace SCJMapper_V2
       catch ( Exception ex ) {
         log.Error( "Get Keyboard Object failed", ex );
       }
+
+      KeyboardCls.RegisteredDevices++;
 
       Activated = true;
     }

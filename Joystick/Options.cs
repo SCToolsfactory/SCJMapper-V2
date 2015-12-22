@@ -185,25 +185,25 @@ namespace SCJMapper_V2
        * try to do our best....
        * 
        *  <options type="joystick" instance="1">
-        		<pilot_rot_moveyaw instance="1" sensitivity="0.8" exponent="1.2" />
-	        </options>  
+            <pilot_rot_moveyaw instance="1" sensitivity="0.8" exponent="1.2" />
+          </options>  
 
        * 
            <options type="joystick" instance="1">
-		          <flight>
-			          <nonlinearity_curve>
-				          <point in="0.1"  out="0.001"/>
-				          <point in="0.25"  out="0.02"/>
-				          <point in="0.5"  out="0.1"/>
-				          <point in="0.75"  out="0.125"/>
-				          <point in="0.85"  out="0.15"/>
-				          <point in="0.90"  out="0.175"/>
-				          <point in="0.925"  out="0.25"/>
-				          <point in="0.94"  out="0.45"/>
-				          <point in="0.95"  out="0.75"/>
-			          </nonlinearity_curve>
-		          </flight>
-	          </options>
+              <flight>
+                <nonlinearity_curve>
+                  <point in="0.1"  out="0.001"/>
+                  <point in="0.25"  out="0.02"/>
+                  <point in="0.5"  out="0.1"/>
+                  <point in="0.75"  out="0.125"/>
+                  <point in="0.85"  out="0.15"/>
+                  <point in="0.90"  out="0.175"/>
+                  <point in="0.925"  out="0.25"/>
+                  <point in="0.94"  out="0.45"/>
+                  <point in="0.95"  out="0.75"/>
+                </nonlinearity_curve>
+              </flight>
+            </options>
 
        */
       XmlReaderSettings settings = new XmlReaderSettings( );
@@ -249,52 +249,52 @@ namespace SCJMapper_V2
          *       <flight_view_yaw>  
          *   
          * 
-			          <nonlinearity_curve>
-				          <point in="0.1"  out="0.001"/>
+                <nonlinearity_curve>
+                  <point in="0.1"  out="0.001"/>
          *          ..
-			          </nonlinearity_curve>
+                </nonlinearity_curve>
          * 
          * 
          * 
          */
         while ( !reader.EOF ) {
 
-          if ( reader.Name == "flight_move_pitch" ) {
+          if ( reader.Name.ToLowerInvariant() == "flight_move_pitch" ) {
             m_tuningP.Options_fromXML( reader, type, int.Parse( instance ) );
           }
-          else if ( reader.Name == "flight_move_yaw" ) {
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_yaw" ) {
             m_tuningY.Options_fromXML( reader, type, int.Parse( instance ) );
           }
-          else if ( reader.Name == "flight_move_roll" ) {
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_roll" ) {
             m_tuningR.Options_fromXML( reader, type, int.Parse( instance ) );
           }
 
-          else if ( reader.Name == "flight_move_strafe_vertical" ) {
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_vertical" ) {
             m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_fromXML( reader, type, int.Parse( instance ) );
           }
-          else if ( reader.Name == "flight_move_strafe_lateral" ) {
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_lateral" ) {
             m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_fromXML( reader, type, int.Parse( instance ) );
           }
-          else if ( reader.Name == "flight_move_strafe_longitudinal" ) {
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_longitudinal" ) {
             m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_fromXML( reader, type, int.Parse( instance ) );
           }
 
-          else if ( reader.Name == "flight_aim_pitch" ) {
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_pitch" ) {
             m_inverter[( int )OptionsInvert.Inversions.flight_aim_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
           }
-          else if ( reader.Name == "flight_aim_yaw" ) {
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_yaw" ) {
             m_inverter[( int )OptionsInvert.Inversions.flight_aim_yaw].Options_fromXML( reader, type, int.Parse( instance ) );
           }
 
-          else if ( reader.Name == "flight_view_pitch" ) {
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_view_pitch" ) {
             m_inverter[( int )OptionsInvert.Inversions.flight_view_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
           }
-          else if ( reader.Name == "flight_view_yaw" ) {
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_view_yaw" ) {
             m_inverter[( int )OptionsInvert.Inversions.flight_view_yaw].Options_fromXML( reader, type, int.Parse( instance ) );
           }
 
           // Throttle abs/rel are treated the same and use the throttle group only 
-          else if ( reader.Name == "flight_throttle" ) {
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle" ) {
             m_inverter[( int )OptionsInvert.Inversions.flight_throttle].Options_fromXML( reader, type, int.Parse( instance ) );
           }
 

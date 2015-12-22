@@ -26,8 +26,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>49</ApplicationRevision>
-    <ApplicationVersion>2.16.0.%2a</ApplicationVersion>
+    <ApplicationRevision>50</ApplicationRevision>
+    <ApplicationVersion>2.17.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -163,7 +163,7 @@
     <Compile Include="actions\ActionMapCls.cs" />
     <Compile Include="actions\ActionMapsCls.cs" />
     <Compile Include="actions\ActionTree.cs" />
-    <Compile Include="Joystick\DProfileReader.cs" />
+    <Compile Include="SC\DProfileReader.cs" />
     <Compile Include="Joystick\JoystickCls.cs" />
     <Compile Include="actions\MyColors.cs" />
     <Compile Include="Joystick\UC_JoyPanel.cs">
@@ -255,6 +255,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AC_Examples.txt" />
     <Content Include="Cassini_Logo_Icon.ico" />
     <Content Include="defaultProfile.xml" />
     <None Include="graphics\YPR.png" />

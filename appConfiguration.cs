@@ -21,10 +21,14 @@ namespace SCJMapper_V2
     private static readonly ConfigurationProperty _gpSenseLimit =
       new ConfigurationProperty( "gpSenseLimit", typeof( int ), ( int )500, ConfigurationPropertyOptions.None );
 
+    // The msSenseLimit property. (Mouse)
+    private static readonly ConfigurationProperty _msSenseLimit =
+      new ConfigurationProperty( "msSenseLimit", typeof( int ), ( int )150, ConfigurationPropertyOptions.None );
+
     // The scActionmaps property.
-    private static String _defaultActionmaps = "multiplayer,singleplayer,player,flycam,vehicle_general,vehicle_driver,vehicle_gunner"
+    private static String _defaultActionmaps = "multiplayer,singleplayer,invite,player,flycam,vehicle_general,vehicle_driver,vehicle_gunner"
                 + ",spaceship_general,spaceship_view,spaceship_movement,spaceship_targeting,spaceship_turret,spaceship_weapons,spaceship_missiles"
-                + ",spaceship_defensive,spaceship_auto_weapons,spaceship_power,spaceship_radar,spaceship_hud,IFCS_controls,zero_gravity_general";
+                + ",spaceship_defensive,spaceship_auto_weapons,spaceship_power,spaceship_radar,spaceship_hud,zero_gravity_general,zero_gravity_eva,IFCS_controls";
     private static readonly ConfigurationProperty _scActionmaps = 
       new ConfigurationProperty( "scActionmaps", typeof( String ), (String)_defaultActionmaps, ConfigurationPropertyOptions.None );
 
@@ -35,6 +39,7 @@ namespace SCJMapper_V2
       _Properties = new ConfigurationPropertyCollection( );
       _Properties.Add( _jsSenseLimit );
       _Properties.Add( _gpSenseLimit );
+      _Properties.Add( _msSenseLimit );
       _Properties.Add( _scActionmaps );
     }
 
@@ -70,6 +75,19 @@ namespace SCJMapper_V2
       set
       {
         this["gpSenseLimit"] = value;
+      }
+    }
+
+    [IntegerValidator( MinValue = 1, MaxValue = 32000, ExcludeRange = false )]
+    public int msSenseLimit
+    {
+      get
+      {
+        return ( int )this["msSenseLimit"];
+      }
+      set
+      {
+        this["msSenseLimit"] = value;
       }
     }
 
@@ -134,6 +152,19 @@ namespace SCJMapper_V2
           AppConfiguration s = GetAppSection( );
           if ( s != null ) return s.gpSenseLimit;
           else return 500; // default if things go wrong...
+        }
+      }
+
+      /// <summary>
+      /// The Mouse axis detection sense limit
+      /// </summary>
+      static public int msSenseLimit
+      {
+        get
+        {
+          AppConfiguration s = GetAppSection( );
+          if ( s != null ) return s.msSenseLimit;
+          else return 150; // default if things go wrong...
         }
       }
 

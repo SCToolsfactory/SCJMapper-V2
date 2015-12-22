@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-using System.IO;
 using System.Windows.Forms;
+using System.IO;
 
 namespace SCJMapper_V2
 {
   /// <summary>
   ///   Maintains the complete ActionMaps - something like:
   ///   
-  /// <ActionMaps version="0" >
+  /// <ActionMaps ActionMaps version="1" optionsVersion="2" rebindVersion="2" profileName="sdsd" > // AC2
   /// 	<actionmap name="spaceship_view">
   ///		<action name="v_view_cycle_fwd">
   ///			<rebind device="joystick" input="js2_button2" />
@@ -36,7 +36,7 @@ namespace SCJMapper_V2
 
     #endregion Static Part of ActionMaps
 
-    private const String ACM_VERSION = "1"; // the default version 
+    private const String ACM_VERSION = "version=\"1\" optionsVersion=\"2\" rebindVersion=\"2\"";  //AC2  the FIXED version 
 
     private String version { get; set; }
     private String ignoreversion { get; set; }
@@ -228,26 +228,16 @@ namespace SCJMapper_V2
     /// <returns>the action as XML fragment</returns>
     public String toXML( String fileName )
     {
-      log.Debug( "toXML - Entry" );
+      log.Debug( "ActionMapsCls.toXML - Entry" );
 
       AppSettings  appSettings = new AppSettings( );
 
+      // *** HEADER  
+
       // handle the versioning of the actionmaps
-      String r = "<ActionMaps ";
-      if ( !String.IsNullOrEmpty( ignoreversion ) ) {
-        r += String.Format( "ignoreVersion=\"{0}\" \n", ignoreversion );
-      }
-      else if ( appSettings.ForceIgnoreversion ) {
-        ignoreversion = "1"; // preset if missing
-        r += String.Format( "ignoreVersion=\"{0}\" \n", ignoreversion );
-      }
-      else if ( !String.IsNullOrEmpty( version ) ) {
-        r += String.Format( "version=\"{0}\" \n", version );
-      }
-      else {
-        version = ACM_VERSION; // preset if missing
-        r += String.Format( "version=\"{0}\" \n", version );
-      }
+      // AC2 do not longer support ignoreversion... enter the new fixed header
+      String r = "<ActionMaps " + ACM_VERSION;
+      r += String.Format( " profileName=\"{0}\" \n", fileName.Replace( SCMappings.c_MapStartsWith, "" ) ); //AC2 add profilename
 
       // now the devices (our addition)
       for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
@@ -258,23 +248,36 @@ namespace SCJMapper_V2
       // close the tag
       r += String.Format( ">\n" );
 
-      // and dump the option contents
-      // prepare with new data
+
+      // *** CustomisationUIHeader
+
+      // and dump the option contents - prepare with new data
       m_uiCustHeader.ClearInstances( );
       UICustHeader.DevRec dr = new UICustHeader.DevRec( );
+      dr.devType = KeyboardCls.DeviceClass; dr.instNo = 1; m_uiCustHeader.AddInstances( dr );
+      dr.devType = MouseCls.DeviceClass; dr.instNo = 1; m_uiCustHeader.AddInstances( dr );
+      // do we use Gamepad ??
+      if ( GamepadCls.RegisteredDevices>0 ) {
+        dr.devType = GamepadCls.DeviceClass; dr.instNo = 1; m_uiCustHeader.AddInstances( dr );
+      }
+
+      // all Joysticks
       for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
         if ( !String.IsNullOrEmpty( jsN[i] ) ) {
-          dr.devType = "joystick"; dr.instNo = i + 1;
-          m_uiCustHeader.AddInstances( dr );
+          dr.devType = JoystickCls.DeviceClass; dr.instNo = i + 1; m_uiCustHeader.AddInstances( dr );
         }
       }
       m_uiCustHeader.Label = fileName.Replace( SCMappings.c_MapStartsWith, "" ); // remove redundant part
       r += m_uiCustHeader.toXML( ) + String.Format( "\n" );
 
+      // *** OPTIONS 
       if ( m_options.Count > 0 ) r += m_options.toXML( ) + String.Format( "\n" );
+
+      // *** DEVICE OPTIONS
       if ( m_deviceOptions.Count > 0 ) r += m_deviceOptions.toXML( ) + String.Format( "\n" );
 
-      // finally the action maps
+      // *** ACTION MAPS
+
       foreach ( ActionMapCls amc in this ) {
         r += String.Format( "{0}\n", amc.toXML( ) );
       }
@@ -290,7 +293,7 @@ namespace SCJMapper_V2
     /// <returns>True if an action was decoded</returns>
     public Boolean fromXML( String xml )
     {
-      log.Debug( "fromXML - Entry" );
+      log.Debug( "ActionMapsCls.fromXML - Entry" );
 
       CreateNewOptions( ); // Reset those options...
       m_options.InvertCheckList = m_invertCB;

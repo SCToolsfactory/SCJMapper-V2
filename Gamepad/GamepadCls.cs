@@ -23,8 +23,15 @@ namespace SCJMapper_V2
     #region Static Items
 
     public new const String DeviceClass = "xboxpad";  // the device name used throughout this app
+    static public int RegisteredDevices = 0;
+
     public const String JsUnknown = "xi_";
-    public new const String BlendedInput = "xi_reserved";
+    public new const String BlendedInput = "xi1_" + DeviceCls.BlendedInput;
+    static public new Boolean IsBlendedInput( String input )
+    {
+      if ( input == BlendedInput ) return true;
+      return false;
+    }
 
     /// <summary>
     /// Returns the currently valid color
@@ -47,6 +54,20 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
+    /// Return this deviceClass if the input string contains something like xiN_
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    static public new String DeviceClassFromInput( String input )
+    {
+      if ( IsXi( input ) )
+        return DeviceClass; // this
+      else
+        return DeviceCls.DeviceClass; // unknown
+    }
+
+
+    /// <summary>
     /// Returns true if the input is an xi_ but not xi_reserved
     /// </summary>
     /// <param name="device"></param>
@@ -60,7 +81,7 @@ namespace SCJMapper_V2
     const string xi_pattern = @"^xi_*";
     static Regex rgx_xi = new Regex( xi_pattern, RegexOptions.IgnoreCase );
     /// <summary>
-    /// Returns true if the input starts with a valid xi_ formatting
+    /// Returns true if the input starts with a valid xi_ formatting (TODO can we have kbd modifiers here?)
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
@@ -82,6 +103,26 @@ namespace SCJMapper_V2
     {
       return rgx_xil.IsMatch( control );
     }
+
+    /// <summary>
+    /// Reformat the input from AC1 style to AC2 style
+    /// </summary>
+    /// <param name="input">The AC1 input string</param>
+    /// <returns>An AC2 style input string</returns>
+    static public String FromAC1( String input )
+    {
+      // input is something like a xi_something or compositions like triggerl_btn+thumbrx 
+      // try easy: add xi1_ at the beginning; if xi_start subst with xi1_
+      String retVal = input.Replace(" ","");
+
+      if ( retVal.StartsWith( "xi_" ) )
+        retVal = retVal.Insert( 2, "1" );
+      else
+        retVal = "xi1_" + retVal;
+
+      return retVal;
+    }
+
 
 
     #endregion
@@ -201,6 +242,8 @@ namespace SCJMapper_V2
       m_gPanel.ButtonE = true; // what else ...
 
       ApplySettings( ); // get whatever is needed here from Settings
+
+      GamepadCls.RegisteredDevices++;
       Activated = true;
     }
 

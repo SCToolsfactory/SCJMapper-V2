@@ -25,6 +25,12 @@ namespace SCJMapper_V2
   ///   <rebind device="joystick" input="rctrl+js1_rotz" />
   /// </action>
   /// 
+  /// AC2.0
+  /// <action name="v_roll">
+  ///   <rebind input="js1_rotz" />  // jsN, moN, kbN (gamepad ?)
+  ///   <addbind input="js1_rotz" />  // jsN, moN, kbN (gamepad ?) still possible together with rebind?
+  /// </action>
+  /// 
   /// </summary>
   public class ActionCls
   {
@@ -37,6 +43,7 @@ namespace SCJMapper_V2
       AD_Joystick = 0,
       AD_Gamepad,
       AD_Keyboard,
+      AD_Mouse,   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
     }
 
     #region Static Items
@@ -47,6 +54,7 @@ namespace SCJMapper_V2
         case KeyboardCls.DeviceClass: return ActionDevice.AD_Keyboard;
         case JoystickCls.DeviceClass: return ActionDevice.AD_Joystick;
         case GamepadCls.DeviceClass: return ActionDevice.AD_Gamepad;
+        case MouseCls.DeviceClass: return ActionDevice.AD_Mouse;   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
         case "ps3pad": return ActionDevice.AD_Gamepad;
         default: return ActionDevice.AD_Unknown;
       }
@@ -65,6 +73,7 @@ namespace SCJMapper_V2
         case KeyboardCls.DeviceClass: return "K";
         case JoystickCls.DeviceClass: return "J";
         case GamepadCls.DeviceClass: return "X";
+        case MouseCls.DeviceClass: return "M";  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
         case "ps3pad": return "P";
         default: return "Z";
       }
@@ -81,17 +90,79 @@ namespace SCJMapper_V2
         case "K": return KeyboardCls.DeviceClass;
         case "J": return JoystickCls.DeviceClass;
         case "X": return GamepadCls.DeviceClass;
+        case "M": return MouseCls.DeviceClass;  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
         case "P": return "ps3pad";
         default: return "unknown";
+      }
+    }
+
+
+    /// <summary>
+    /// Try to derive the device class from the input string
+    /// </summary>
+    /// <param name="input">The input command string</param>
+    /// <returns>A proper DeviceClass string</returns>
+    static public String DeviceClassFromInput( String input )
+    {
+      String deviceClass = DeviceCls.DeviceClass;
+
+      deviceClass = JoystickCls.DeviceClassFromInput(input);
+      if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
+      deviceClass = GamepadCls.DeviceClassFromInput( input );
+      if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
+      deviceClass = KeyboardCls.DeviceClassFromInput( input );
+      if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
+      deviceClass = MouseCls.DeviceClassFromInput( input );
+      if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
+      // others..
+      return deviceClass;
+    }
+
+
+    /// <summary>
+    /// Query the devices if the input is blended
+    /// </summary>
+    /// <param name="input">The input command</param>
+    /// <returns>True if blended input</returns>
+    static public Boolean IsBlendedInput (String input )
+    {
+      Boolean blendedInput = false;
+
+      blendedInput = JoystickCls.IsBlendedInput( input );
+      if ( blendedInput ) return blendedInput;
+      blendedInput = GamepadCls.IsBlendedInput( input );
+      if ( blendedInput ) return blendedInput;
+      blendedInput = KeyboardCls.IsBlendedInput( input );
+      if ( blendedInput ) return blendedInput;
+      blendedInput = MouseCls.IsBlendedInput( input );
+      if ( blendedInput ) return blendedInput;
+      // others..
+      return blendedInput;
+    }
+
+
+    static public String BlendInput( String input, ActionDevice aDevice )
+    {
+      if ( DeviceCls.IsBlendedInput( input ) ) {
+        switch ( aDevice ) {
+          case ActionDevice.AD_Gamepad: return GamepadCls.BlendedInput;
+          case ActionDevice.AD_Joystick: return JoystickCls.BlendedInput;
+          case ActionDevice.AD_Keyboard: return KeyboardCls.BlendedInput;
+          case ActionDevice.AD_Mouse: return MouseCls.BlendedInput;
+          default: return "";
+        }
+      }
+      else {
+        return input; // just return
       }
     }
 
     #endregion
 
 
-    // Class items
+    // ****************  Class items **********************
 
-    public String key { get; set; }  // the key is the "Daction" formatted item (as we can have the same name multiple times)
+    public String key { get; set; }                 // the key is the "Daction" formatted item (as we can have the same name multiple times)
     public String name { get; set; }                // the plain action name e.g. v_yaw
     public ActionDevice actionDevice { get; set; }  // the enum of the device
     public String device { get; set; }              // name of the device (uses DeviceClass)
@@ -135,6 +206,12 @@ namespace SCJMapper_V2
     }
 
 
+    /// <summary>
+    /// Created and adds the inputCommand list with given input string
+    /// AC2 style input is used i.e. with device tag in front
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns>Returns the ActionCommand created</returns>
     public ActionCommandCls AddCommand( String input )
     {
       ActionCommandCls acc = new ActionCommandCls( );
@@ -189,8 +266,9 @@ namespace SCJMapper_V2
           r = String.Format( "\t<action name=\"{0}\">\n", name );
           foreach ( ActionCommandCls acc in inputList ) {
             if ( !String.IsNullOrEmpty( acc.input ) ) {
-              r += String.Format( "\t\t\t<{0} device=\"{1}\" {2}", bindCmd, device, acc.toXML( ) );
-              bindCmd = "addbind";
+              // r += String.Format( "\t\t\t<{0} device=\"{1}\" {2}", bindCmd, device, acc.toXML( ) ); // OLD style
+              r += String.Format( "\t\t\t<{0} {1}", bindCmd, acc.toXML( actionDevice ) ); // 20151220BM: format for AC2 style 
+              bindCmd = "addbind"; // switch to addbind
             }
           }
           r += String.Format( "\t\t</action>\n" );
@@ -215,7 +293,7 @@ namespace SCJMapper_V2
 
       reader.Read( );
 
-      if ( reader.Name == "action" ) {
+      if ( reader.Name.ToLowerInvariant( ) == "action" ) {
         if ( reader.HasAttributes ) {
           name = reader["name"];
           reader.ReadStartElement( "action" ); // Checks that the current content node is an element with the given Name and advances the reader to the next node
@@ -225,11 +303,23 @@ namespace SCJMapper_V2
         }
       }
       do {
-        if ( reader.Name == "rebind" ) {
+        // support AC2 and AC1 i.e. without and with device attribute 
+        if ( reader.Name.ToLowerInvariant( ) == "rebind" ) {
           if ( reader.HasAttributes ) {
             device = reader["device"];
             String input = reader["input"];
-            if ( ( input == JoystickCls.BlendedInput ) || ( input == GamepadCls.BlendedInput ) ) input = ""; // don't carry jsx_reserved or xi_reserved into the action
+            if ( String.IsNullOrEmpty( input ) ) return false; // ERROR exit
+            input = DeviceCls.fromXML( input ); // move from external to internal blend
+            if ( String.IsNullOrEmpty( device ) ) {
+              // AC2 style - derive the device (Device.DeviceClass)
+              device = DeviceClassFromInput( input );
+            }
+            else {
+              // AC1 style - need to reformat mouse and keyboard according to AC2 style now
+              if ( KeyboardCls.IsDeviceClass( device ) ) input = KeyboardCls.FromAC1( input );
+              else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
+              else if ( GamepadCls.IsDeviceClass( device ) ) input = GamepadCls.FromAC1( input );
+            }
             key = DevID( device ) + name; // unique id of the action
             actionDevice = ADevice( device ); // get the enum of the input device
             AddCommand( input );
@@ -237,13 +327,22 @@ namespace SCJMapper_V2
             reader.ReadStartElement( "rebind" );
           }
         }
-        else if ( reader.Name == "addbind" ) {
+        else if ( reader.Name.ToLowerInvariant( ) == "addbind" ) {
           if ( reader.HasAttributes ) {
             device = reader["device"];
             String input = reader["input"];
-            if ( ( input == JoystickCls.BlendedInput ) || ( input == GamepadCls.BlendedInput ) ) input = ""; // don't carry jsx_reserved or xi_reserved into the action
-            //key = DevID( device ) + name; // unique id of the action
-            //actionDevice = ADevice( device ); // get the enum of the input device
+            if ( String.IsNullOrEmpty( input ) ) return false; // ERROR exit
+            input = DeviceCls.fromXML( input ); // move from external to internal blend
+            if ( String.IsNullOrEmpty( device ) ) {
+              // AC2 style - derive the device (Device.DeviceClass)
+              device = DeviceClassFromInput( input );
+            }
+            else {
+              // AC1 style - need to reformat according to AC2 style now
+              if ( KeyboardCls.IsDeviceClass( device ) ) input = KeyboardCls.FromAC1( input );
+              else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
+              else if ( GamepadCls.IsDeviceClass( device ) ) input = GamepadCls.FromAC1( input );
+            }
             AddCommand( input );
             // advances the reader to the next node
             reader.ReadStartElement( "addbind" );

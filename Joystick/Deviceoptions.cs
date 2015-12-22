@@ -125,10 +125,10 @@ namespace SCJMapper_V2
        * try to do our best....
        * 
        * 	<deviceoptions name="Joystick - HOTAS Warthog">
-		        <!-- Reduce the deadzone -->
-		        <option input="x" deadzone="0.015" />
-		        <option input="y" deadzone="0.015" />	
-	        </deviceoptions>
+            <!-- Reduce the deadzone -->
+            <option input="x" deadzone="0.015" />
+            <option input="y" deadzone="0.015" />	
+          </deviceoptions>
        * 
       */
 
@@ -148,7 +148,7 @@ namespace SCJMapper_V2
         reader.Read( );
         // try to disassemble the items
         while ( !reader.EOF ) {
-          if ( reader.Name == "option" ) {
+          if ( reader.Name.ToLowerInvariant( ) == "option" ) {
             if ( reader.HasAttributes ) {
               String input = reader["input"];
               String deadzone = reader["deadzone"];

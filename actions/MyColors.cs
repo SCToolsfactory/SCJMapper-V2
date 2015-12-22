@@ -17,6 +17,7 @@ namespace SCJMapper_V2
     static public Color GamepadColor = GamepadColorDefault;
 
     static public Color KeyboardColor = Color.Lavender;
+    static public Color MouseColor = Color.Moccasin;
     static public Color BlendedColor = Color.LightGray;
     static public Color UnassignedColor = Color.White;
 

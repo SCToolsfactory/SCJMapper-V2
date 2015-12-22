@@ -67,14 +67,6 @@ namespace SCJMapper_V2
 
     // User Config Settings
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( "defaultProfile" )] // from Game Bundle
-    public String DefProfileName
-    {
-      get { return ( String )this["DefProfileName"]; }
-      set { this["DefProfileName"] = value; }
-    }
-
-    [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "layout_joystick_spacesim" )] // from Game Bundle
     public String DefMappingName
     {
@@ -128,6 +120,14 @@ namespace SCJMapper_V2
     {
       get { return ( Boolean )this["ShowKeyboard"]; }
       set { this["ShowKeyboard"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "True" )]
+    public Boolean ShowMouse  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
+    {
+      get { return ( Boolean )this["ShowMouse"]; }
+      set { this["ShowMouse"] = value; }
     }
 
     [UserScopedSettingAttribute( )]

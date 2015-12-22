@@ -78,17 +78,30 @@ namespace SCJMapper_V2
     /// <returns>the action as XML fragment</returns>
     public String toXML( )
     {
+      /*
+       <CustomisationUIHeader label="sdsd" description="" image="">
+        <devices>
+         <keyboard instance="1"/>
+         <mouse instance="1"/>
+         <joystick instance="1"/>
+         <joystick instance="2"/>
+        </devices>
+        <categories />
+       </CustomisationUIHeader>
+      */
+
+
       String r = "";
 
       r += String.Format( "\t<CustomisationUIHeader label=\"{0}\" description=\"{1}\" image=\"{2}\">\n", m_label, m_description, m_image );
       if ( m_devInstances.Count > 0 ) {
-        r += String.Format( "\t\t<Devices>\n" );
+        r += String.Format( "\t\t<devices>\n" );
 
         foreach ( DevRec dr in m_devInstances ) {
           r += String.Format( "\t\t\t<{0} instance=\"{1}\"/>\n", dr.devType, dr.instNo.ToString( ) );
         }
 
-        r += String.Format( "\t\t</Devices>\n" );
+        r += String.Format( "\t\t</devices>\n" );
       }
       r += String.Format( "\t</CustomisationUIHeader>\n" );
 
@@ -173,7 +186,7 @@ namespace SCJMapper_V2
          */
         while ( !reader.EOF ) {
 
-          if ( reader.Name == "Devices" ) {
+          if ( reader.Name.ToLowerInvariant( ) == "devices" ) {
             Instance_fromXML( reader );
           }
           else {

@@ -12,8 +12,24 @@ namespace SCJMapper_V2
   public abstract class DeviceCls
   {
     public const String DeviceClass ="UNDEF";
-    public const String BlendedInput = " ";
+    static public Boolean IsUndefined( String deviceClass )
+    {
+      return ( deviceClass == DeviceClass );
+    }
+    
+    public const String BlendedInput = "~"; // internal used only
+    static public Boolean IsBlendedInput( String input ) { return ( input == BlendedInput ); }
+    static public String toXML( String blendedInput )
+    {
+      return blendedInput.Replace( BlendedInput, " " ); // must make spaces (tilde is for internal processing only)
+    }
+    static public String fromXML( String blendedInput )
+    {
+      return blendedInput.Replace( " ", BlendedInput ); // must make tilde (spaces is for external processing only)
+    }
+
     static public Boolean IsDeviceClass( String deviceClass ) { return false; }
+    static public String DeviceClassFromInput( String input ) { return DeviceClass; }
 
     public abstract String DevClass { get; }
     public abstract String DevName { get; }

@@ -8,6 +8,8 @@ namespace SCJMapper_V2
 {
   /// <summary>
   /// should read the default profile - may be replacing the MappingVars once
+  /// Reads the profile as is and creates a CSV Map (internal legacy format) for clients
+  /// default bindings are read as AC1 style items i.e. not containing the device
   /// </summary>
   class DProfileReader
   {
@@ -29,12 +31,13 @@ namespace SCJMapper_V2
     class Action
     {
       public String name { get; set; }    // the action name
-      public String input { get; set; }  // the input method K,J,X,P
-      private String m_defBinding = "";
+      public String devID { get; set; }  // the input method K,J,X,P
+      private String m_defBinding = "";   // NOTE: this is AC1 style in the Profile - need to conver later when dumping out
       public String defBinding { get { return m_defBinding; } set { m_defBinding = value; } }  // DONT! need to clean this one, found spaces...
       public String keyName
-      { get { return input + name; } } // prep for TreView usage - create a key from input+name
+      { get { return devID + name; } } // prep for TreView usage - create a key from input+name
     }
+
     class ActionMap : List<Action>  // carries the action list
     {
       public String name { get; set; } // the map name
@@ -43,6 +46,11 @@ namespace SCJMapper_V2
     ActionMap m_currentMap = null;
 
 
+    // ****************** CLASS **********************
+
+    /// <summary>
+    /// cTor
+    /// </summary>
     public DProfileReader( )
     {
       ValidContent = false; // default
@@ -57,7 +65,7 @@ namespace SCJMapper_V2
     {
       get
       {
-        log.Debug( "CSVMap - Entry" );
+        log.Debug( "DProfileReader.CSVMap - Entry" );
 
         String buf = "";
         foreach ( ActionMap am in m_aMap.Values ) {
@@ -83,7 +91,7 @@ namespace SCJMapper_V2
       if ( attr.ContainsKey( "joystick" ) ) {
         Action ac = new Action( );
         ac.name = attr["name"];
-        ac.input = "J";
+        ac.devID = "J";
         ac.defBinding = attr["joystick"];
         if ( ac.defBinding == " " ) ac.defBinding = JoystickCls.BlendedInput;
         if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
@@ -94,15 +102,23 @@ namespace SCJMapper_V2
       if ( attr.ContainsKey( "keyboard" ) ) {
         Action ac = new Action( );
         ac.name = attr["name"];
-        ac.input = "K";
+        ac.devID = "K";
         ac.defBinding = attr["keyboard"];
         if ( ac.defBinding == " " ) ac.defBinding = KeyboardCls.BlendedInput;
+        if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+      }
+      if ( attr.ContainsKey( "mouse" ) ) {   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
+        Action ac = new Action( );
+        ac.name = attr["name"];
+        ac.devID = "M";
+        ac.defBinding = attr["mouse"];
+        if ( ac.defBinding == " " ) ac.defBinding = MouseCls.BlendedInput;
         if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
       }
       if ( attr.ContainsKey( "xboxpad" ) ) {
         Action ac = new Action( );
         ac.name = attr["name"];
-        ac.input = "X";
+        ac.devID = "X";
         ac.defBinding = attr["xboxpad"];
         if ( ac.defBinding == " " ) ac.defBinding = GamepadCls.BlendedInput;
         if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
@@ -113,7 +129,7 @@ namespace SCJMapper_V2
       if ( attr.ContainsKey( "ps3pad" ) ) {
         Action ac = new Action( );
         ac.name = attr["name"];
-        ac.input = "P";
+        ac.devID = "P";
         ac.defBinding = attr["ps3pad"];
         if ( ac.defBinding == " " ) ac.defBinding = GamepadCls.BlendedInput;
         if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
@@ -187,6 +203,7 @@ namespace SCJMapper_V2
           //Console.Write( " {0}='{1}'", xr.Name, xr.Value );
         }
         xr.MoveToElement( ); // backup
+
         Action ac = new Action( );
         ac.name = actionName;
         // the element name is a control
@@ -195,14 +212,14 @@ namespace SCJMapper_V2
         }
         else if ( xr.IsEmptyElement ) {
           // an attribute only element
-          ac.input = ActionCls.DevID( eName );
+          ac.devID = ActionCls.DevID( eName );
           ac.defBinding = attr["input"];
           if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
         else {
           // one with subelements again
           xr.Read( );
-          ac.input = ActionCls.DevID( eName );
+          ac.devID = ActionCls.DevID( eName );
           ac.defBinding = xr["input"];
           if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
@@ -276,7 +293,7 @@ namespace SCJMapper_V2
     /// <returns></returns>
     private Boolean ReadXML( XmlReader xr )
     {
-      log.Debug( "ReadXML - Entry" );
+      log.Debug( "DProfileReader.ReadXML - Entry" );
 
       Boolean retVal = true;
 
@@ -312,7 +329,7 @@ namespace SCJMapper_V2
       }
       catch ( Exception ex ) {
         // get any exceptions from reading
-        log.Error( "ReadXML - unexpected", ex );
+        log.Error( "DProfileReader.ReadXML - unexpected", ex );
         return false;
       }
     }
@@ -324,7 +341,7 @@ namespace SCJMapper_V2
     /// <returns>True if an action was decoded</returns>
     public Boolean fromXML( String xml )
     {
-      log.Debug( "fromXML - Entry" );
+      log.Debug( "DProfileReader.fromXML - Entry" );
 
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;

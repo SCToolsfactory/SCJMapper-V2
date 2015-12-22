@@ -51,6 +51,13 @@
       this.IL = new System.Windows.Forms.ImageList(this.components);
       this.btBlend = new System.Windows.Forms.Button();
       this.lblLastJ = new System.Windows.Forms.TextBox();
+      this.cmMouseEntry = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.tmeXAxis = new System.Windows.Forms.ToolStripMenuItem();
+      this.tmeYAxis = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+      this.tmeWUp = new System.Windows.Forms.ToolStripMenuItem();
+      this.tmeWDown = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
       this.cbxThrottle = new System.Windows.Forms.CheckBox();
       this.btFind = new System.Windows.Forms.Button();
       this.label7 = new System.Windows.Forms.Label();
@@ -68,7 +75,6 @@
       this.tdiDelBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -97,6 +103,7 @@
       this.cbxShowJoystick = new System.Windows.Forms.CheckBox();
       this.cbxShowGamepad = new System.Windows.Forms.CheckBox();
       this.cbxShowKeyboard = new System.Windows.Forms.CheckBox();
+      this.cbxShowMouse = new System.Windows.Forms.CheckBox();
       this.cbxShowMappedOnly = new System.Windows.Forms.CheckBox();
       this.label2 = new System.Windows.Forms.Label();
       this.txFilter = new System.Windows.Forms.TextBox();
@@ -111,7 +118,6 @@
       this.cbxInvStrafeLat = new System.Windows.Forms.CheckBox();
       this.cbxInvStrafeLon = new System.Windows.Forms.CheckBox();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-      this.tsDDbtProfiles = new System.Windows.Forms.ToolStripDropDownButton();
       this.tsBtReset = new System.Windows.Forms.ToolStripDropDownButton();
       this.resetDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.resetEmptyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,8 +131,10 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
+      this.cmMouseEntry.SuspendLayout();
       this.cmAddDel.SuspendLayout();
       this.tc1.SuspendLayout();
       this.tabJS1.SuspendLayout();
@@ -286,23 +294,25 @@
       this.IL.Images.SetKeyName(1, "Selected");
       this.IL.Images.SetKeyName(2, "J");
       this.IL.Images.SetKeyName(3, "K");
-      this.IL.Images.SetKeyName(4, "X");
-      this.IL.Images.SetKeyName(5, "P");
-      this.IL.Images.SetKeyName(6, "Z");
-      this.IL.Images.SetKeyName(7, "Add");
+      this.IL.Images.SetKeyName(4, "M");
+      this.IL.Images.SetKeyName(5, "X");
+      this.IL.Images.SetKeyName(6, "P");
+      this.IL.Images.SetKeyName(7, "Z");
+      this.IL.Images.SetKeyName(8, "Add");
       // 
       // btBlend
       // 
       this.btBlend.Location = new System.Drawing.Point(10, 112);
       this.btBlend.Name = "btBlend";
       this.btBlend.Size = new System.Drawing.Size(73, 25);
-      this.btBlend.TabIndex = 15;
+      this.btBlend.TabIndex = 16;
       this.btBlend.Text = "Blend";
       this.btBlend.UseVisualStyleBackColor = true;
       this.btBlend.Click += new System.EventHandler(this.btBlend_Click);
       // 
       // lblLastJ
       // 
+      this.lblLastJ.ContextMenuStrip = this.cmMouseEntry;
       this.lblLastJ.Location = new System.Drawing.Point(52, 38);
       this.lblLastJ.Name = "lblLastJ";
       this.lblLastJ.ShortcutsEnabled = false;
@@ -310,7 +320,61 @@
       this.lblLastJ.TabIndex = 14;
       this.lblLastJ.Text = "...";
       this.lblLastJ.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lblLastJ_KeyDown);
-      this.lblLastJ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblLastJ_MouseDown);
+      // 
+      // cmMouseEntry
+      // 
+      this.cmMouseEntry.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tmeXAxis,
+            this.tmeYAxis,
+            this.toolStripSeparator3,
+            this.tmeWUp,
+            this.tmeWDown,
+            this.toolStripSeparator4});
+      this.cmMouseEntry.Name = "cmMouseEntry";
+      this.cmMouseEntry.Size = new System.Drawing.Size(172, 126);
+      this.cmMouseEntry.Opening += new System.ComponentModel.CancelEventHandler(this.cmMouseEntry_Opening);
+      // 
+      // tmeXAxis
+      // 
+      this.tmeXAxis.Name = "tmeXAxis";
+      this.tmeXAxis.Size = new System.Drawing.Size(171, 22);
+      this.tmeXAxis.Tag = "X";
+      this.tmeXAxis.Text = "X-Axis (horizontal)";
+      this.tmeXAxis.Click += new System.EventHandler(this.tmeItem_Click);
+      // 
+      // tmeYAxis
+      // 
+      this.tmeYAxis.Name = "tmeYAxis";
+      this.tmeYAxis.Size = new System.Drawing.Size(171, 22);
+      this.tmeYAxis.Tag = "Y";
+      this.tmeYAxis.Text = "Y-Axis (vertical)";
+      this.tmeYAxis.Click += new System.EventHandler(this.tmeItem_Click);
+      // 
+      // toolStripSeparator3
+      // 
+      this.toolStripSeparator3.Name = "toolStripSeparator3";
+      this.toolStripSeparator3.Size = new System.Drawing.Size(168, 6);
+      // 
+      // tmeWUp
+      // 
+      this.tmeWUp.Name = "tmeWUp";
+      this.tmeWUp.Size = new System.Drawing.Size(171, 22);
+      this.tmeWUp.Tag = "U";
+      this.tmeWUp.Text = "Wheel Up";
+      this.tmeWUp.Click += new System.EventHandler(this.tmeItem_Click);
+      // 
+      // tmeWDown
+      // 
+      this.tmeWDown.Name = "tmeWDown";
+      this.tmeWDown.Size = new System.Drawing.Size(171, 22);
+      this.tmeWDown.Tag = "D";
+      this.tmeWDown.Text = "Wheel Down";
+      this.tmeWDown.Click += new System.EventHandler(this.tmeItem_Click);
+      // 
+      // toolStripSeparator4
+      // 
+      this.toolStripSeparator4.Name = "toolStripSeparator4";
+      this.toolStripSeparator4.Size = new System.Drawing.Size(168, 6);
       // 
       // cbxThrottle
       // 
@@ -375,7 +439,7 @@
       this.btAssign.Location = new System.Drawing.Point(10, 67);
       this.btAssign.Name = "btAssign";
       this.btAssign.Size = new System.Drawing.Size(73, 25);
-      this.btAssign.TabIndex = 0;
+      this.btAssign.TabIndex = 15;
       this.btAssign.Text = "Assign";
       this.btAssign.UseVisualStyleBackColor = true;
       this.btAssign.Click += new System.EventHandler(this.btAssign_Click);
@@ -475,15 +539,6 @@
       this.tabJS1.Size = new System.Drawing.Size(281, 321);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -774,6 +829,7 @@
       this.flowLayoutPanel2.Controls.Add(this.cbxShowJoystick);
       this.flowLayoutPanel2.Controls.Add(this.cbxShowGamepad);
       this.flowLayoutPanel2.Controls.Add(this.cbxShowKeyboard);
+      this.flowLayoutPanel2.Controls.Add(this.cbxShowMouse);
       this.flowLayoutPanel2.Controls.Add(this.cbxShowMappedOnly);
       this.flowLayoutPanel2.Controls.Add(this.label2);
       this.flowLayoutPanel2.Controls.Add(this.txFilter);
@@ -817,20 +873,31 @@
       this.cbxShowKeyboard.CheckState = System.Windows.Forms.CheckState.Checked;
       this.cbxShowKeyboard.Location = new System.Drawing.Point(155, 3);
       this.cbxShowKeyboard.Name = "cbxShowKeyboard";
-      this.cbxShowKeyboard.Size = new System.Drawing.Size(74, 17);
+      this.cbxShowKeyboard.Size = new System.Drawing.Size(53, 17);
       this.cbxShowKeyboard.TabIndex = 1;
-      this.cbxShowKeyboard.Text = "Keyboard";
+      this.cbxShowKeyboard.Text = "Keyb.";
       this.cbxShowKeyboard.UseVisualStyleBackColor = true;
       this.cbxShowKeyboard.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
+      // 
+      // cbxShowMouse
+      // 
+      this.cbxShowMouse.AutoSize = true;
+      this.cbxShowMouse.Location = new System.Drawing.Point(214, 3);
+      this.cbxShowMouse.Name = "cbxShowMouse";
+      this.cbxShowMouse.Size = new System.Drawing.Size(61, 17);
+      this.cbxShowMouse.TabIndex = 28;
+      this.cbxShowMouse.Text = "Mouse";
+      this.cbxShowMouse.UseVisualStyleBackColor = true;
+      this.cbxShowMouse.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
       // 
       // cbxShowMappedOnly
       // 
       this.cbxShowMappedOnly.AutoSize = true;
-      this.cbxShowMappedOnly.Location = new System.Drawing.Point(235, 3);
+      this.cbxShowMappedOnly.Location = new System.Drawing.Point(281, 3);
       this.cbxShowMappedOnly.Name = "cbxShowMappedOnly";
-      this.cbxShowMappedOnly.Size = new System.Drawing.Size(94, 17);
+      this.cbxShowMappedOnly.Size = new System.Drawing.Size(69, 17);
       this.cbxShowMappedOnly.TabIndex = 1;
-      this.cbxShowMappedOnly.Text = "Mapped only";
+      this.cbxShowMappedOnly.Text = "Mapped";
       this.cbxShowMappedOnly.UseVisualStyleBackColor = true;
       this.cbxShowMappedOnly.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
       // 
@@ -970,17 +1037,6 @@
       this.toolStripStatusLabel2.Size = new System.Drawing.Size(52, 25);
       this.toolStripStatusLabel2.Text = "Profiles:";
       // 
-      // tsDDbtProfiles
-      // 
-      this.tsDDbtProfiles.AutoSize = false;
-      this.tsDDbtProfiles.BackColor = System.Drawing.Color.DarkKhaki;
-      this.tsDDbtProfiles.Image = ((System.Drawing.Image)(resources.GetObject("tsDDbtProfiles.Image")));
-      this.tsDDbtProfiles.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.tsDDbtProfiles.Name = "tsDDbtProfiles";
-      this.tsDDbtProfiles.Size = new System.Drawing.Size(250, 28);
-      this.tsDDbtProfiles.Text = "Available Profiles";
-      this.tsDDbtProfiles.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsDDbtProfiles_DropDownItemClicked);
-      // 
       // tsBtReset
       // 
       this.tsBtReset.AutoSize = false;
@@ -1016,8 +1072,9 @@
       this.toolStripStatusLabel3.AutoSize = false;
       this.toolStripStatusLabel3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
       this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-      this.toolStripStatusLabel3.Size = new System.Drawing.Size(100, 25);
-      this.toolStripStatusLabel3.Text = "                            ";
+      this.toolStripStatusLabel3.Size = new System.Drawing.Size(450, 25);
+      this.toolStripStatusLabel3.Text = "            Support: profile version=\"1\" optionsVersion=\"2\" rebindVersion=\"2\"    " +
+    "                    ";
       // 
       // toolStripStatusLabel1
       // 
@@ -1093,7 +1150,6 @@
       // 
       this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel2,
-            this.tsDDbtProfiles,
             this.tsBtReset,
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel1,
@@ -1106,6 +1162,15 @@
       this.statusStrip1.Size = new System.Drawing.Size(1054, 30);
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
+      this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm
       // 
@@ -1126,6 +1191,7 @@
       this.cmCopyPaste.ResumeLayout(false);
       this.panel2.ResumeLayout(false);
       this.panel2.PerformLayout();
+      this.cmMouseEntry.ResumeLayout(false);
       this.cmAddDel.ResumeLayout(false);
       this.tc1.ResumeLayout(false);
       this.tabJS1.ResumeLayout(false);
@@ -1185,7 +1251,6 @@
     private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-    private System.Windows.Forms.ToolStripDropDownButton tsDDbtProfiles;
     private System.Windows.Forms.ToolStripDropDownButton tsDDbtMappings;
     private System.Windows.Forms.ToolStripDropDownButton tsBtReset;
     private System.Windows.Forms.ToolStripMenuItem resetDefaultsToolStripMenuItem;
@@ -1240,6 +1305,14 @@
     private System.Windows.Forms.ToolStripMenuItem tdiBlendBinding;
     private System.Windows.Forms.ToolStripMenuItem tdiClearBinding;
     private System.Windows.Forms.ToolStripMenuItem tdiAssignBinding;
+    private System.Windows.Forms.CheckBox cbxShowMouse;
+    private System.Windows.Forms.ContextMenuStrip cmMouseEntry;
+    private System.Windows.Forms.ToolStripMenuItem tmeXAxis;
+    private System.Windows.Forms.ToolStripMenuItem tmeYAxis;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+    private System.Windows.Forms.ToolStripMenuItem tmeWUp;
+    private System.Windows.Forms.ToolStripMenuItem tmeWDown;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
   }
 }
 

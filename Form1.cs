@@ -40,6 +40,12 @@ namespace SCJMapper_V2
 
 
     ///<remarks>
+    /// Holds the DXInput mouse
+    ///</remarks>
+    private MouseCls m_Mouse = null;
+
+
+    ///<remarks>
     /// Holds the ActionTree that manages the TreeView and the action lists
     ///</remarks>
     private ActionTree m_AT = null;
@@ -83,7 +89,11 @@ namespace SCJMapper_V2
     {
       get
       {
-        if ( m_keyIn ) {
+        // take care of the sequence.. mouse overrides key but both override joy and game
+        if ( m_mouseIn ) {   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
+          return ActionCls.ActionDevice.AD_Mouse;
+        }
+        else if ( m_keyIn ) {
           return ActionCls.ActionDevice.AD_Keyboard;
         }
         else {
@@ -145,14 +155,6 @@ namespace SCJMapper_V2
     }
 
 
-    private void LoadProfileDD( )
-    {
-      tsDDbtProfiles.DropDownItems.Clear( );
-      foreach ( String s in SCDefaultProfile.DefaultProfileNames ) {
-        tsDDbtProfiles.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ) );
-      }
-    }
-
     private void LoadMappingDD( )
     {
       SCMappings.UpdateMappingNames( );
@@ -167,9 +169,6 @@ namespace SCJMapper_V2
     /// </summary>
     private void SCFileIndication( )
     {
-      if ( String.IsNullOrEmpty( SCPath.SCGameData_pak ) ) tsDDbtProfiles.BackColor = MyColors.InvalidColor;
-      else tsDDbtProfiles.BackColor = MyColors.ProfileColor;
-
       if ( String.IsNullOrEmpty( SCPath.SCClientMappingPath ) ) tsDDbtMappings.BackColor = MyColors.InvalidColor;
       else tsDDbtMappings.BackColor = MyColors.MappingColor;
     }
@@ -209,8 +208,6 @@ namespace SCJMapper_V2
 
       // load profiles
       log.Debug( "Loading Profiles" );
-      LoadProfileDD( );
-      tsDDbtProfiles.Text = m_AppSettings.DefProfileName;
 
       // load mappings
       log.Debug( "Loading Mappings" );
@@ -251,10 +248,21 @@ namespace SCJMapper_V2
         txMappingName.BackColor = MyColors.ErrorColor;
       }
 
+      // load Mouse menu strip
+      if ( m_Mouse != null ) {
+        for ( int i = 0; i < m_Mouse.NumberOfButtons; i++ ) {
+          ToolStripMenuItem ts = new ToolStripMenuItem("Button " + ( i + 1 ).ToString( ), null, new EventHandler( tmeItem_Click ));
+          ts.Tag = ( i + 1 ).ToString( );
+          cmMouseEntry.Items.Add( ts );
+        }
+      }
+
+
       // load show checkboxes
       cbxShowJoystick.Checked = m_AppSettings.ShowJoystick;
       cbxShowGamepad.Checked = m_AppSettings.ShowGamepad;
       cbxShowKeyboard.Checked = m_AppSettings.ShowKeyboard;
+      cbxShowMouse.Checked = m_AppSettings.ShowMouse;
       cbxShowMappedOnly.Checked = m_AppSettings.ShowMapped;
 
       // poll the XInput
@@ -355,9 +363,9 @@ namespace SCJMapper_V2
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
       m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
       // provide the display items (init)
-      m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMappedOnly.Checked );
+      m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
       // Init with default profile filepath
-      m_AT.LoadProfileTree( m_AppSettings.DefProfileName, addDefaultBinding );
+      m_AT.LoadProfileTree( SCDefaultProfile.DefaultProfileName, addDefaultBinding );
       // provide an array of checkboxes to Options (all is handled there)
       List<CheckBox> inversions = new List<CheckBox>( );
       inversions.Add( cbxInvAimPitch ); inversions.Add( cbxInvViewPitch );
@@ -370,7 +378,7 @@ namespace SCJMapper_V2
       // must take care of Gamepads if there are (but we take care of one only...)
 
       int joyStickIndex = 0; // Joystick List Index
-      for ( int deviceTabIndex=0; deviceTabIndex < JoystickCls.JSnum_MAX; deviceTabIndex++ ) {
+      for ( int deviceTabIndex = 0; deviceTabIndex < JoystickCls.JSnum_MAX; deviceTabIndex++ ) {
         if ( tc1.TabPages.Count > deviceTabIndex ) {
           // valid Device Tab
           if ( IsGamepadTab( tc1.TabPages[deviceTabIndex] ) ) {
@@ -400,14 +408,24 @@ namespace SCJMapper_V2
       int tabs = 0;
       SharpDX.XInput.UserIndex gpDeviceIndex = SharpDX.XInput.UserIndex.Any;
 
-      try {
-        // Initialize DirectInput
-        log.Debug( "Instantiate DirectInput" );
-        var directInput = new DirectInput( );
+      // Initialize DirectInput
+      log.Debug( "Instantiate DirectInput" );
+      var directInput = new DirectInput( );
 
+      try {
         log.Debug( "Get Keyboard device" );
         m_Keyboard = new KeyboardCls( new Keyboard( directInput ), this );
 
+        log.Debug( "Get Mouse device" );
+        m_Mouse = new MouseCls( new Mouse( directInput ), this );
+
+      }
+      catch ( Exception ex ) {
+        log.Debug( "InitDirectInput phase 1 failed unexpectedly", ex );
+        return false;
+      }
+
+      try {
         // scan the Input for attached devices
         log.Debug( "Scan GameControl devices" );
         int nJs = 1; // number the Joystick Tabs
@@ -421,7 +439,7 @@ namespace SCJMapper_V2
           JoystickCls js = null; GamepadCls gs = null;
           if ( m_AppSettings.DetectGamepad && ( instance.Usage == SharpDX.Multimedia.UsageId.GenericGamepad ) ) {
             // detect Gamepad only if the user wishes to do so
-            for ( SharpDX.XInput.UserIndex i =  SharpDX.XInput.UserIndex.One; i < SharpDX.XInput.UserIndex.Four; i++ ) {
+            for ( SharpDX.XInput.UserIndex i = SharpDX.XInput.UserIndex.One; i < SharpDX.XInput.UserIndex.Four; i++ ) {
               gpDevice = new SharpDX.XInput.Controller( i );
               if ( gpDevice.IsConnected ) {
                 log.InfoFormat( "Scan Input {0} for gamepad - {1}", i, gpDevice.GetCapabilities( SharpDX.XInput.DeviceQueryType.Gamepad ).ToString( ) );
@@ -500,22 +518,22 @@ namespace SCJMapper_V2
           if ( tabs >= JoystickCls.JSnum_MAX ) break; // cannot load more JSticks than predefined Tabs
         }
         log.DebugFormat( "Added {0} GameControl devices", tabs );
-
-        if ( tabs == 0 ) {
-          log.Warn( "Unable to find and/or create any joystick devices." );
-          MessageBox.Show( "Unable to create a joystick device. Program will exit.", "No joystick found", MessageBoxButtons.OK, MessageBoxIcon.Information );
-          return false;
-        }
-
-        // load the profile items from the XML
-        log.Debug( "Init ActionTree" );
-        InitActionTree( true );
-
       }
       catch ( Exception ex ) {
-        log.Debug( "InitDirectInput failed unexpectedly", ex );
+        log.Debug( "InitDirectInput phase 2 failed unexpectedly", ex );
         return false;
       }
+
+      if ( tabs == 0 ) {
+        log.Warn( "Unable to find and/or create any joystick devices." );
+        MessageBox.Show( "Unable to create a joystick device. Program will exit.", "No joystick found", MessageBoxButtons.OK, MessageBoxIcon.Information );
+        return false;
+      }
+
+      // load the profile items from the XML
+      log.Debug( "Init ActionTree" );
+      InitActionTree( true );
+
 
       return true;
     }
@@ -541,7 +559,7 @@ namespace SCJMapper_V2
 
       m_Joystick.ClearJsNAssignment( );
       // for all supported jsN
-      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+      for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
         j = null;
         if ( !String.IsNullOrEmpty( m_AT.ActionMaps.jsNGUID[i] ) ) j = m_Joystick.Find_jsInstance( m_AT.ActionMaps.jsNGUID[i] );
         else if ( !String.IsNullOrEmpty( m_AT.ActionMaps.jsN[i] ) ) j = m_Joystick.Find_jsDev( m_AT.ActionMaps.jsN[i] );
@@ -618,32 +636,27 @@ namespace SCJMapper_V2
       String ctrl = "";
       int jsIndex = ( int )tc1.SelectedTab.Tag; // gets the index into the JS list
       if ( jsIndex < 0 ) {
+        // poll Gamepad if active
         m_Gamepad.GetData( );
         ctrl = m_Gamepad.GetLastChange( );
         timer1.Interval = 750; // allow more time to release buttons
       }
       else {
+        // poll active Joystick
         m_Joystick[jsIndex].GetData( );  // poll the device
         if ( m_Keyboard == null ) {
+          // no keyboard = no modifier 
           ctrl = JSStr( ) + m_Joystick[jsIndex].GetLastChange( ); // show last handled JS control
         }
         else {
-          m_Keyboard.GetData( );
-          String modS = m_Keyboard.GetLastChange( false );
-          if ( !String.IsNullOrEmpty( modS ) ) {
-            if ( modS.Contains( KeyboardCls.ClearMods ) ) {
-              m_persistentMods = ""; // kill persistent ones
-            }
-            else {
-              m_persistentMods = modS + "+";
-            }
-          }
-          ctrl = m_persistentMods + JSStr( ) + m_Joystick[jsIndex].GetLastChange( ); // show last handled JS control
+          UpdateModifiers( );           // get the last keyboard modifer to compose the command
+          ctrl = JSStr( ) + m_persistentMods + m_Joystick[jsIndex].GetLastChange( ); // show last handled JS control
         }
         timer1.Interval = 150; // standard polling
       }
 
       lblLastJ.Text = ctrl;
+
       if ( JoystickCls.CanThrottle( ctrl ) ) {
         cbxThrottle.Enabled = true;
       }
@@ -674,13 +687,14 @@ namespace SCJMapper_V2
 
     private void cbxShowTreeOptions_CheckedChanged( object sender, EventArgs e )
     {
-      if (m_AT==null) return; // on init
-      m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMappedOnly.Checked );
+      if ( m_AT == null ) return; // on init
+      m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
       m_AT.ReloadTreeView( );
 
       if ( m_appLoading ) return; // don't assign while loading defaults
       m_AppSettings.ShowJoystick = cbxShowJoystick.Checked; m_AppSettings.ShowGamepad = cbxShowGamepad.Checked;
-      m_AppSettings.ShowKeyboard = cbxShowKeyboard.Checked; m_AppSettings.ShowMapped = cbxShowMappedOnly.Checked;
+      m_AppSettings.ShowKeyboard = cbxShowKeyboard.Checked; m_AppSettings.ShowMouse = cbxShowMouse.Checked;
+      m_AppSettings.ShowMapped = cbxShowMappedOnly.Checked;
     }
 
 
@@ -757,13 +771,6 @@ namespace SCJMapper_V2
 
     private void tsBtReset_ButtonClick( object sender, EventArgs e )
     {
-    }
-
-    private void tsDDbtProfiles_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
-    {
-      tsDDbtProfiles.Text = e.ClickedItem.Text;
-      m_AppSettings.DefProfileName = e.ClickedItem.Text; m_AppSettings.Save( );
-      // InitActionTree( ( Settings.Default.ResetMode == Settings.Default.ResetModeDefault ) ); // start over
     }
 
     private void resetEmptyToolStripMenuItem_Click( object sender, EventArgs e )
@@ -902,7 +909,7 @@ namespace SCJMapper_V2
 
       cts.Items[3].Visible = any2; // separator
 
-      e.Cancel = ! ( any || any2 );
+      e.Cancel = !( any || any2 );
     }
 
     private void tdiAssignBinding_Click( object sender, EventArgs e )
@@ -948,7 +955,7 @@ namespace SCJMapper_V2
     {
       bool dropEnabled = true;
       if ( e.Data.GetDataPresent( DataFormats.FileDrop, true ) ) {
-        string[] filenames = 
+        string[] filenames =
                        e.Data.GetData( DataFormats.FileDrop, true ) as string[];
 
         foreach ( string filename in filenames ) {
@@ -1050,7 +1057,6 @@ namespace SCJMapper_V2
       if ( m_AppSettings.ShowSettings( ) != System.Windows.Forms.DialogResult.Cancel ) {
         m_AppSettings.Reload( ); // must reload in case of any changes in the form
         // then reload the profile and mappings
-        LoadProfileDD( );
         LoadMappingDD( );
         // indicates (in)valid folders
         SCFileIndication( );
@@ -1075,7 +1081,7 @@ namespace SCJMapper_V2
         // we have still the old assignment in the ActionMap - change it here (map does not know about the devices)
         JoystickCls j = null;
         // for all supported jsN devices
-        for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+        for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
           j = m_Joystick.Find_jsN( i + 1 );
           if ( j != null ) {
             newTree.ActionMaps.jsN[i] = j.DevName; newTree.ActionMaps.jsNGUID[i] = j.DevInstanceGUID;
@@ -1086,7 +1092,7 @@ namespace SCJMapper_V2
         }
 
         m_AT = newTree; // make it the valid one
-        m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMappedOnly.Checked );
+        m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
         m_AT.ReloadTreeView( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
@@ -1251,6 +1257,7 @@ namespace SCJMapper_V2
     // Keyboard Input
 
     Boolean m_keyIn = false;
+    Boolean m_mouseIn = false;
 
 
     private void btJsKbd_Click( object sender, EventArgs e )
@@ -1270,23 +1277,12 @@ namespace SCJMapper_V2
         m_Keyboard.GetData( ); // poll to aquire once
       }
       else {
+        m_mouseIn = false; // not longer
         lblLastJ.BackColor = MyColors.ValidColor;
         btJsKbd.ImageKey = "J";
         // m_Keyboard.Deactivate( );  // not longer with modifier mappings in AC 1.1
       }
     }
-
-
-    // read mouse commands (TODO only buttons no movement so far)
-    private void lblLastJ_MouseDown( object sender, MouseEventArgs e )
-    {
-      if ( !m_keyIn ) return;
-      // capture mouse things
-      lblLastJ.Text = MouseCls.MouseCmd( e );
-
-      // don't spill the field with regular input
-    }
-
 
 
     // Key down triggers the readout via DX Input
@@ -1295,6 +1291,21 @@ namespace SCJMapper_V2
       if ( m_keyIn ) {
         m_Keyboard.GetData( );
         lblLastJ.Text = m_Keyboard.GetLastChange( true );
+        m_mouseIn = false; // clear on kbd input
+        // also maintain persistent mods
+        String modS = m_Keyboard.GetLastChange( false );
+        if ( !String.IsNullOrEmpty( modS ) ) {
+          if ( modS.Contains( KeyboardCls.ClearMods ) ) {
+            // allow to cancel modifiers
+            m_persistentMods = ""; // kill persistent ones
+          }
+          else {
+            m_persistentMods = modS + "+";
+          }
+        }
+        else
+          m_persistentMods = ""; // kill persistent ones
+
       }
       // don't spill the field with regular input
       e.SuppressKeyPress = true;
@@ -1303,10 +1314,71 @@ namespace SCJMapper_V2
 
 
 
+    // maintain the global modifier store 
+    private void UpdateModifiers( )
+    {
+      if ( m_Keyboard == null ) return;
+
+      m_Keyboard.GetData( );
+      String modS = m_Keyboard.GetLastChange( false );
+      if ( !String.IsNullOrEmpty( modS ) ) {
+        if ( modS.Contains( KeyboardCls.ClearMods ) ) {
+          // allow to cancel modifiers
+          m_persistentMods = ""; // kill persistent ones
+        }
+        else {
+          m_persistentMods = modS + "+";
+        }
+      }
+    }
+
+    // Mouse Input
+
+    private void cmMouseEntry_Opening( object sender, CancelEventArgs e )
+    {
+      if ( !m_keyIn ) e.Cancel = true;
+    }
+
+
+    // processes all mouse context menue item clicks
+    private void tmeItem_Click( object sender, EventArgs e )
+    {
+      ToolStripMenuItem ts = (ToolStripMenuItem)sender;
+      if ( String.IsNullOrEmpty( ( string )ts.Tag ) ) return;
+
+      String item = "";
+      int btNum = 0;
+      if ( int.TryParse( ( string )ts.Tag, out btNum ) ) {
+        // got a button (most likely..)
+        item = "mouse" + btNum.ToString( );
+      }
+      else if ( ( string )ts.Tag == "X" )
+        item = "maxis_x";
+      else if ( ( string )ts.Tag == "Y" )
+        item = "maxis_y";
+      else if ( ( string )ts.Tag == "U" )
+        item = "mwheel_up";
+      else if ( ( string )ts.Tag == "D" )
+        item = "mwheel_down";
+
+      String ctrl = "";
+      if ( m_Keyboard == null ) {
+        // no keyboard = no modifier 
+        ctrl = MouseCls.MakeCtrl( item, "" ); // show last handled JS control
+      }
+      else {
+        UpdateModifiers( );
+        ctrl = MouseCls.MakeCtrl( item, m_persistentMods ); // show last handled JS control
+      }
+
+      m_mouseIn = true; // for this one
+      lblLastJ.Text = ctrl;
+    }
+
+
+
+
     #endregion
-
-
- 
 
   }
 }

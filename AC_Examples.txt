@@ -1,0 +1,234 @@
+﻿
+Examples for SC - XML commands 
+
+As of 21.12.2015 - AC Version 2.0
+
+Contains 
+ - Export Format
+ - DefaultProfile Format - at the end of the file
+
+
+Exports from Keybinding Screen in AC
+
+MINIMUM EXPORT:
+
+<ActionMaps version="1" optionsVersion="2" rebindVersion="2" profileName="sdsd">
+ <CustomisationUIHeader label="sdsd" description="" image="">
+  <devices>
+   <keyboard instance="1"/>
+   <mouse instance="1"/>
+   <joystick instance="1"/>
+   <joystick instance="2"/>
+  </devices>
+  <categories />
+ </CustomisationUIHeader>
+ <options type="keyboard" instance="1"/>
+ <options type="joystick" instance="1"/>
+ <options type="joystick" instance="2"/>
+ <modifiers />
+</ActionMaps>
+
+****************************************************************************************
+
+Start Section
+==============
+
+<ActionMaps version="1" optionsVersion="2" rebindVersion="2" profileName="my5">
+
+ <CustomisationUIHeader label="my5" description="" image="">
+
+Contains all connected devices
+
+   <keyboard instance="1"/>
+   <mouse instance="1"/>
+   <xboxpad instance="1"/>
+   <joystick instance="1"/>
+   <joystick instance="2"/>
+
+
+Has a categories entry 
+
+  <categories>
+   <category label="@ui_CCSpaceFlight"/>
+  </categories>
+ </CustomisationUIHeader>
+
+
+
+Options
+================
+
+Options entries for all devices - some just empty
+
+ <options type="keyboard" instance="1"/>
+ <options type="xboxpad" instance="1"/>
+ <options type="joystick" instance="1"/>
+
+ <options type="joystick" instance="2">
+..
+..
+ </options>
+
+
+Modifiers
+===============
+
+ An empty one was listed
+
+ <modifiers />
+
+
+ActionMaps
+===========
+
+
+Gamepad Actions
+================
+ <rebind input="xi1_y"/>
+ <rebind input="xi1_thumbl_down"/>
+
+Undefining
+ <rebind input="xi1_ "/>
+
+with kbd modifier - NOT ACCEPTED BY AC - use pad modifiers only
+
+
+
+Keyboard Actions
+================
+
+ <rebind input="kb1_r"/>
+
+with kbd modifier
+ <rebind input="kb1_ralt+f"/>
+
+Undefining
+ <rebind input="kb1_ "/>
+
+
+Joystick Actions
+================
+
+ <rebind input="js2_rotz"/>
+ <rebind input="js2_button1"/>
+
+with kbd modifier
+ <rebind input="js2_ralt+button1"/>
+
+Undefining
+ <rebind input="js1_ "/>  TODO ???? jsx_ or what
+
+
+Mouse Actions
+================
+
+ <rebind input="mo1_mouse2"/>
+
+ with kbd modifier
+ <rebind input="mo1_lctrl+mouse1"/>
+
+Undefining
+ <rebind input="mo1_ "/>  TODO ????
+
+
+
+
+Multiple bindings for different devices
+========================================
+
+  <action name="v_eject">
+   <rebind input="kb1_ralt+f"/>
+   <rebind input="js2_ralt+button1"/>
+   <rebind input="xi1_ "/>
+  </action>
+
+
+ADD BIND worked not with rebind ...
+
+   <addbind input="js1_button34"/>
+
+
+***********************************************************
+
+DefaultProfile Format
+=====================
+
+<profile version="1" optionsVersion="2" rebindVersion="2">
+
+Default Option Trees:
+
+	<optiontree type="keyboard" name="root" UIShowInvert="-1" UIShowSensitivity="-1" UISensitivityMin="0.01" UISensitivityMax="6.25">
+	 .. structure
+	</optiontree>
+
+
+	<optiontree type="xboxpad" name="root" UISensitivityMin="0.01" UISensitivityMax="2.0">
+	 .. structure
+	</optiontree>
+
+
+	<optiontree type="joystick" instances="4" name="root" UISensitivityMin="0.01" UISensitivityMax="2.0">
+		<!-- Normal and twist axis -->
+		<optiongroup name="inversion" UILabel="@ui_COInversionSettings" UIShowSensitivity="0" UIShowInvert="-1">
+			<optiongroup name="master" UILabel="@ui_COMasterSensitivityCurves" UIShowCurve="1" UIShowInvert="0" >			
+				<optiongroup name="flight" UILabel="@ui_COFlight" UIShowSensitivity="0">
+					<optiongroup name="flight_move" UILabel="@ui_COFlightMove" UIShowCurve="1" >
+							<optiongroup name="flight_move_pitch" UILabel="@ui_COFlightPitch" UIShowCurve="1" UIShowInvert="1" />
+							<optiongroup name="flight_move_yaw" UILabel="@ui_COFlightYaw" UIShowCurve="1" UIShowInvert="1" />
+							<optiongroup name="flight_move_roll" UILabel="@ui_COFlightRoll" UIShowCurve="1" UIShowInvert="1" />
+							<optiongroup name="flight_move_strafe_vertical" UILabel="@ui_COStrafeUpDown" UIShowCurve="1" UIShowInvert="1" />
+							<optiongroup name="flight_move_strafe_lateral" UILabel="@ui_COStrafeLeftRight" UIShowCurve="1" UIShowInvert="1" />
+							<optiongroup name="flight_move_strafe_longitudinal" UILabel="@ui_COStrafeForwardBackward" UIShowCurve="1" UIShowInvert="1" />
+					</optiongroup>
+					<optiongroup name="flight_aim" UILabel="@ui_COFlightAim" UIShowCurve="1" >
+						<optiongroup name="flight_aim_pitch" UILabel="@ui_COFlightAimPitch" UIShowCurve="1" UIShowInvert="1"/>
+						<optiongroup name="flight_aim_yaw" UILabel="@ui_COFlightAimYaw" UIShowCurve="1" UIShowInvert="1"/>
+					</optiongroup>					
+					<optiongroup name="flight_view" exponent="2.5" UILabel="@ui_COFreeLook" UIShowCurve="1" >
+						<nonlinearity_curve reset="1" />
+						<optiongroup name="flight_view_pitch" invert_cvar="cl_invertController" UILabel="@ui_COFlightViewY" UIShowCurve="1" UIShowInvert="1" />
+						<optiongroup name="flight_view_yaw" UILabel="@ui_COFlightViewX" UIShowCurve="1" UIShowInvert="1" />
+					</optiongroup>		
+					<optiongroup name="Turret_aim" UILabel="@ui_COTurretAim" UIShowCurve="1" >
+						<optiongroup name="turret_aim_pitch" UILabel="@ui_COTurretAimPitch" UIShowCurve="1" UIShowInvert="1" />
+						<optiongroup name="turret_aim_yaw" UILabel="@ui_COTurretAimYaw" UIShowCurve="1" UIShowInvert="1" />
+					</optiongroup>					
+				</optiongroup>				
+			</optiongroup>
+			<optiongroup name="flight_throttle">
+				<optiongroup name="flight_throttle_abs" invert="1" UILabel="@ui_COFlightThrottle" UIShowInvert="1" />
+				<optiongroup name="flight_throttle_rel" UILabel="@ui_COFlightThrottleRel" UIShowInvert="1" />
+				<optiongroup name="flight_zoom" UILabel="@ui_CODynamicZoom" UIShowInvert="1" />
+			</optiongroup>	
+		</optiongroup>		
+		<optiongroup name="throttle" UILabel="@ui_COFlightThrottleRel" UIShowSensitivity="1" UIShowInvert="0" UISensitivityMin="0.01" UISensitivityMax="10.00">
+			<optiongroup name="flight_move_throttle_up" UILabel="@ui_CIThrottleUp" UIShowSensitivity="1" />
+			<optiongroup name="flight_move_throttle_down" UILabel="@ui_CIThrottleDown" UIShowSensitivity="1" />
+		</optiongroup>
+		<optiongroup name="viewaim" UILabel="@ui_CGSpaceFlightView" UIShowSensitivity="1" UIShowInvert="0" UISensitivityMin="0.01" UISensitivityMax="1.00" >
+			<optiongroup name="flight_view_pitch_up" UILabel="@ui_CIRotateViewUp" UIShowSensitivity="1" />
+			<optiongroup name="flight_view_pitch_down" UILabel="@ui_CIRotateViewDown" UIShowSensitivity="1" />
+			<optiongroup name="flight_view_yaw_left" UILabel="@ui_CIRotateViewLeft" UIShowSensitivity="1" />
+			<optiongroup name="flight_view_yaw_right" UILabel="@ui_CIRotateViewRight" UIShowSensitivity="1" />
+			<optiongroup name="flight_aim_pitch_up" UILabel="@ui_CIRotateAimUp" UIShowSensitivity="1" />
+			<optiongroup name="flight_aim_pitch_down" UILabel="@ui_CIRotateAimDown" UIShowSensitivity="1" />
+			<optiongroup name="flight_aim_yaw_left" UILabel="@ui_CIRotateAimLeft" UIShowSensitivity="1" />
+			<optiongroup name="flight_aim_yaw_right" UILabel="@ui_CIRotateAimRight" UIShowSensitivity="1" />
+		</optiongroup>	
+	</optiontree>
+
+
+Modifiers
+============
+
+Predefined only for the XBOXPAD
+
+	<!-- Key modifiers -->
+	<modifiers>
+		<mod input="xi1_shoulderl" />
+		<mod input="xi1_shoulderr" />
+		<mod input="xi1_triggerl_btn" />
+		<mod input="xi1_triggerr_btn" />
+		<mod input="xi1_back" />
+	</modifiers>
+
