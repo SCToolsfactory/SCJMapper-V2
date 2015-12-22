@@ -23,10 +23,11 @@ namespace SCJMapper_V2
     #region Static Items
 
     public new const String DeviceClass = "xboxpad";  // the device name used throughout this app
+    public new const String DeviceID = "xi1_";
     static public int RegisteredDevices = 0;
 
     public const String JsUnknown = "xi_";
-    public new const String BlendedInput = "xi1_" + DeviceCls.BlendedInput;
+    public new const String BlendedInput = DeviceID + DeviceCls.BlendedInput;
     static public new Boolean IsBlendedInput( String input )
     {
       if ( input == BlendedInput ) return true;
@@ -56,11 +57,11 @@ namespace SCJMapper_V2
     /// <summary>
     /// Return this deviceClass if the input string contains something like xiN_
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="devInput"></param>
     /// <returns></returns>
-    static public new String DeviceClassFromInput( String input )
+    static public new String DeviceClassFromInput( String devInput )
     {
-      if ( IsXi( input ) )
+      if ( DevMatch( devInput ) )
         return DeviceClass; // this
       else
         return DeviceCls.DeviceClass; // unknown
@@ -68,32 +69,18 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Returns true if the input is an xi_ but not xi_reserved
+    /// Returns true if the input matches this device
     /// </summary>
-    /// <param name="device"></param>
-    /// <returns></returns>
-    static public Boolean IsXiValid( String input )
+    /// <param name="devInput">A devInput string</param>
+    /// <returns>True for a match</returns>
+    static public new Boolean DevMatch( String devInput )
     {
-      return (IsXi(input) && (String.Compare(input, BlendedInput)!= 0));
-    }
-
-
-    const string xi_pattern = @"^xi_*";
-    static Regex rgx_xi = new Regex( xi_pattern, RegexOptions.IgnoreCase );
-    /// <summary>
-    /// Returns true if the input starts with a valid xi_ formatting (TODO can we have kbd modifiers here?)
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    static public Boolean IsXi( String input )
-    {
-      return rgx_xi.IsMatch( input );
+      return devInput.StartsWith( DeviceID );
     }
 
 
     const string xil_pattern = @"^xi_thumb[lr][xy]$";
     static Regex rgx_xil = new Regex( xil_pattern, RegexOptions.IgnoreCase );
-
     /// <summary>
     /// returns true if the ctrl can be inverted - for now this is thumb[lr][xyz]
     /// </summary>
@@ -114,6 +101,7 @@ namespace SCJMapper_V2
       // input is something like a xi_something or compositions like triggerl_btn+thumbrx 
       // try easy: add xi1_ at the beginning; if xi_start subst with xi1_
       String retVal = input.Replace(" ","");
+      if ( IsBlendedInput( input ) ) return input;
 
       if ( retVal.StartsWith( "xi_" ) )
         retVal = retVal.Insert( 2, "1" );

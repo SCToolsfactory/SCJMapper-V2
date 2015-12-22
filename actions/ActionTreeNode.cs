@@ -189,11 +189,8 @@ namespace SCJMapper_V2
 
     public Boolean IsMappedAction
     {
-      get
-      {
-        return !( String.IsNullOrEmpty( m_command )
-          || ( m_command == JoystickCls.BlendedInput )
-          || ( m_command == GamepadCls.BlendedInput ) );
+      get {
+        return !( string.IsNullOrEmpty( m_command ) || ActionCls.IsBlendedInput( m_command ) );
       }
     }
 

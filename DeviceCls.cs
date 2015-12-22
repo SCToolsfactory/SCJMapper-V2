@@ -12,6 +12,7 @@ namespace SCJMapper_V2
   public abstract class DeviceCls
   {
     public const String DeviceClass ="UNDEF";
+    public const String DeviceID = "NA0_"; 
     static public Boolean IsUndefined( String deviceClass )
     {
       return ( deviceClass == DeviceClass );
@@ -19,17 +20,11 @@ namespace SCJMapper_V2
     
     public const String BlendedInput = "~"; // internal used only
     static public Boolean IsBlendedInput( String input ) { return ( input == BlendedInput ); }
-    static public String toXML( String blendedInput )
-    {
-      return blendedInput.Replace( BlendedInput, " " ); // must make spaces (tilde is for internal processing only)
-    }
-    static public String fromXML( String blendedInput )
-    {
-      return blendedInput.Replace( " ", BlendedInput ); // must make tilde (spaces is for external processing only)
-    }
 
+    
     static public Boolean IsDeviceClass( String deviceClass ) { return false; }
     static public String DeviceClassFromInput( String input ) { return DeviceClass; }
+    static public Boolean DevMatch( String devInput ) { return false; }
 
     public abstract String DevClass { get; }
     public abstract String DevName { get; }
@@ -42,5 +37,15 @@ namespace SCJMapper_V2
     public abstract String GetLastChange( );
     public abstract void GetCmdData( String cmd, out int data );
     public abstract void GetData( );
+
+    static public String toXML( String blendedInput )
+    {
+      return blendedInput.Replace( BlendedInput, " " ); // must make spaces (tilde is for internal processing only)
+    }
+    static public String fromXML( String blendedInput )
+    {
+      return blendedInput.Replace( " ", BlendedInput ); // must make tilde (spaces is for external processing only)
+    }
+
   }
 }

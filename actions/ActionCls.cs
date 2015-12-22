@@ -106,7 +106,7 @@ namespace SCJMapper_V2
     {
       String deviceClass = DeviceCls.DeviceClass;
 
-      deviceClass = JoystickCls.DeviceClassFromInput(input);
+      deviceClass = JoystickCls.DeviceClassFromInput( input );
       if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
       deviceClass = GamepadCls.DeviceClassFromInput( input );
       if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
@@ -124,7 +124,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="input">The input command</param>
     /// <returns>True if blended input</returns>
-    static public Boolean IsBlendedInput (String input )
+    static public Boolean IsBlendedInput( String input )
     {
       Boolean blendedInput = false;
 
@@ -198,6 +198,7 @@ namespace SCJMapper_V2
       newAc.name = this.name;
       newAc.defBinding = this.defBinding;
 
+      // creates a copy of the list with reassigned jsN devs
       foreach ( ActionCommandCls acc in inputList ) {
         newAc.inputList.Add( acc.ReassignJsN( newJsList ) );
       }
@@ -210,20 +211,18 @@ namespace SCJMapper_V2
     /// Created and adds the inputCommand list with given input string
     /// AC2 style input is used i.e. with device tag in front
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="devInput"></param>
     /// <returns>Returns the ActionCommand created</returns>
-    public ActionCommandCls AddCommand( String input )
+    public ActionCommandCls AddCommand( String devInput )
     {
-      ActionCommandCls acc = new ActionCommandCls( );
-      acc.input = input; acc.nodeIndex = inputList.Count - 1; // starts from -1 ...
-      inputList.Add( acc );      
+      ActionCommandCls acc = new ActionCommandCls( devInput, inputList.Count - 1 ); // starts from -1 ...
+      inputList.Add( acc );
       return acc;
     }
 
-    public ActionCommandCls AddCommand( String input, int index )
+    public ActionCommandCls AddCommand( String devInput, int index )
     {
-      ActionCommandCls acc = new ActionCommandCls( );
-      acc.input = input; acc.nodeIndex = index;
+      ActionCommandCls acc = new ActionCommandCls( devInput, index );
       inputList.Add( acc );
       return acc;
     }
@@ -233,14 +232,13 @@ namespace SCJMapper_V2
       int removeIt = -1;
 
       for ( int i = 0; i < inputList.Count; i++ ) {
-        if ( inputList[i].nodeIndex == index ) removeIt = i;
-        if ( inputList[i].nodeIndex > index ) inputList[i].nodeIndex -= 1; // reorder trailing ones
+        if ( inputList[i].NodeIndex == index ) removeIt = i;
+        if ( inputList[i].NodeIndex > index ) inputList[i].NodeIndex -= 1; // reorder trailing ones
       }
       if ( removeIt >= 0 ) inputList.RemoveAt( removeIt );
     }
 
-
-
+    
     /// <summary>
     /// Merge action is simply copying the new input control
     /// </summary>
@@ -253,21 +251,75 @@ namespace SCJMapper_V2
       }
     }
 
+
+
+    /// <summary>
+    /// Updates an actionCommand with a new input (command)
+    /// </summary>
+    /// <param name="devInput">The input command</param>
+    /// <param name="actionCmd">The actionCommand to update</param>
+    public void UpdateCommandFromInput( String devInput, ActionCommandCls actionCmd )
+    {
+      //log.Debug( "UpdateCommandFromInput - Entry" );
+      if ( actionCmd == null ) return;
+
+      // Apply the input to the ActionTree
+      actionCmd.DevInput = BlendInput( devInput, this.actionDevice );
+    }
+
+    /// <summary>
+    /// Find an ActionCommand with input in an Action
+    /// </summary>
+    /// <param name="input">The input</param>
+    /// <returns>An actionCommand or null if not found</returns>
+    public ActionCommandCls FindActionInputObject( String devInput )
+    {
+      log.Debug( "FindActionInputObject - Entry" );
+      // Apply the input to the ActionTree
+      ActionCommandCls acc = null;
+      acc = this.inputList.Find( delegate ( ActionCommandCls _ACC ) { return _ACC.DevInput == devInput; } );
+      if ( acc == null ) {
+        log.Error( "FindActionInputObject - Action Input not found in Action" );
+        return null;  // ERROR - Action Input not found in tree
+      }
+      return acc;
+    }
+
+
+    /// <summary>
+    /// Find an ActionCommand with index in an Action
+    /// </summary>
+    /// <param name="input">The input</param>
+    /// <returns>An actionCommand or null if not found</returns>
+    public ActionCommandCls FindActionInputObject( int index )
+    {
+      log.Debug( "FindActionInputObject - Entry" );
+      // Apply the input to the ActionTree
+      ActionCommandCls acc = null;
+      acc = this.inputList.Find( delegate ( ActionCommandCls _ACC ) { return _ACC.NodeIndex == index; } );
+      if ( acc == null ) {
+        log.Error( "FindActionInputObject - Action Input not found in Action" );
+        return null;  // ERROR - Action Input not found in tree
+      }
+      return acc;
+    }
+
+
     /// <summary>
     /// Dump the action as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
     public String toXML( )
     {
-      String r = ""; String 
+      String r = ""; String
       bindCmd = "rebind";
       if ( inputList.Count > 0 ) {
-        if ( !String.IsNullOrEmpty( inputList[0].input ) ) {
+        if ( !String.IsNullOrEmpty( inputList[0].Input ) ) {
           r = String.Format( "\t<action name=\"{0}\">\n", name );
           foreach ( ActionCommandCls acc in inputList ) {
-            if ( !String.IsNullOrEmpty( acc.input ) ) {
+            if ( !String.IsNullOrEmpty( acc.Input ) ) {
               // r += String.Format( "\t\t\t<{0} device=\"{1}\" {2}", bindCmd, device, acc.toXML( ) ); // OLD style
-              r += String.Format( "\t\t\t<{0} {1}", bindCmd, acc.toXML( actionDevice ) ); // 20151220BM: format for AC2 style 
+              r += String.Format( "\t\t\t<{0} {1}", bindCmd, acc.toXML( ) ); // 20151220BM: format for AC2 style 
               bindCmd = "addbind"; // switch to addbind
             }
           }

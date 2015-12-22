@@ -23,10 +23,10 @@ namespace SCJMapper_V2
     #region Static Items
 
     public new const String DeviceClass = "mouse";   // the device name used throughout this app
-    public const String DeviceTag = "mo1_";
+    public new const String DeviceID = "mo1_";
     static public int RegisteredDevices = 0;  // devices add here once they are created (though will not decrement as they are not deleted)
 
-    public new const String BlendedInput = DeviceTag + DeviceCls.BlendedInput;
+    public new const String BlendedInput = DeviceID + DeviceCls.BlendedInput;
     static public new Boolean IsBlendedInput( String input )
     {
       if ( input == BlendedInput ) return true;
@@ -55,30 +55,28 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
-    /// Return this deviceClass if the input string contains something like moN_
+    /// Return this deviceClass if the input string starts with mo1_
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="devInput"></param>
     /// <returns></returns>
-    static public new String DeviceClassFromInput( String input )
+    static public new String DeviceClassFromInput( String devInput )
     {
-      if ( IsMoN( input ) )
+      if ( DevMatch( devInput ) )
         return DeviceClass; // this 
       else
         return DeviceCls.DeviceClass; // unknown
     }
 
-
-    const string moN_pattern = @"^*mo[1..9]_*";
-    static Regex rgx_moN = new Regex( moN_pattern, RegexOptions.IgnoreCase );
     /// <summary>
-    /// Returns true if the input starts with a valid kbN_ formatting (TODO what kind of kbd modifiers here?)
+    /// Returns true if the input matches this device
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    static public Boolean IsMoN( String input )
+    /// <param name="devInput">A devInput string</param>
+    /// <returns>True for a match</returns>
+    static public new Boolean DevMatch( String devInput )
     {
-      return rgx_moN.IsMatch( input );
+      return devInput.StartsWith( DeviceID );
     }
+
 
     /// <summary>
     /// Reformat the input from AC1 style to AC2 style
@@ -90,6 +88,8 @@ namespace SCJMapper_V2
       // input is something like a mouse1 (TODO compositions like lctrl+mouse1 ??)
       // try easy: add mo1_ at the beginning
       String retVal = input.Replace(" ","");
+      if ( IsBlendedInput( input ) ) return input;
+
       return "mo1_" + retVal;
     }
 
@@ -102,7 +102,7 @@ namespace SCJMapper_V2
     /// <returns></returns>
     static public String MakeCtrl( String input, String modifiers )
     {
-      return DeviceTag + modifiers + input;
+      return DeviceID + modifiers + input;
     }
 
     #endregion

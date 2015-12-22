@@ -20,12 +20,12 @@ namespace SCJMapper_V2
     #region Static Items
 
     public new const String DeviceClass = "keyboard";  // the device name used throughout this app
-    public const String DeviceTag = "kb1_";
+    public new const String DeviceID = "kb1_";
     static public int RegisteredDevices = 0;  // devices add here once they are created (though will not decrement as they are not deleted)
 
     public const String ClearMods = "escape";
 
-    public new const String BlendedInput = DeviceTag + DeviceCls.BlendedInput;
+    public new const String BlendedInput = DeviceID + DeviceCls.BlendedInput;
     static public new Boolean IsBlendedInput ( String input )
     {
       if ( input == BlendedInput ) return true;
@@ -53,29 +53,27 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
-    /// Return this deviceClass if the input string contains something like kbN_
+    /// Return this deviceClass if the input string starts with kb1_
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="devInput"></param>
     /// <returns></returns>
-    static public new String DeviceClassFromInput( String input )
+    static public new String DeviceClassFromInput( String devInput )
     {
-      if ( IsKbN( input ) )
+      if ( DevMatch( devInput ) )
         return DeviceClass; // this
       else
         return DeviceCls.DeviceClass; // unknown
     }
 
 
-    const string kbN_pattern = @"^*kb[1..9]_*";
-    static Regex rgx_kbN = new Regex( kbN_pattern, RegexOptions.IgnoreCase );
     /// <summary>
-    /// Returns true if the input starts with a valid kbN_ formatting (TODO what kind of kbd modifiers here?)
+    /// Returns true if the input matches this device
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    static public Boolean IsKbN( String input )
+    /// <param name="devInput">A devInput string</param>
+    /// <returns>True for a match</returns>
+    static public new Boolean DevMatch( String devInput )
     {
-      return rgx_kbN.IsMatch( input );
+      return devInput.StartsWith( DeviceID );
     }
 
 
@@ -89,6 +87,8 @@ namespace SCJMapper_V2
       // input is something like a letter or a composition like lctrl+c 
       // try easy: add kb1_ at the beginning and before any +; first remove spaces
       String retVal = input.Replace(" ","");
+      if ( IsBlendedInput( input ) ) return input;
+
       int plPos = retVal.IndexOf("+");
       while (plPos>0) {
         retVal.Insert( plPos + 1, "kb1_" );

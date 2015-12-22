@@ -168,7 +168,7 @@
       this.rtb.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.rtb.Location = new System.Drawing.Point(676, 81);
       this.rtb.Name = "rtb";
-      this.rtb.Size = new System.Drawing.Size(372, 529);
+      this.rtb.Size = new System.Drawing.Size(372, 531);
       this.rtb.TabIndex = 21;
       this.rtb.Text = "";
       this.rtb.WordWrap = false;
@@ -267,9 +267,10 @@
       this.panel2.Controls.Add(this.btClear);
       this.panel2.Controls.Add(this.lblAction);
       this.panel2.Controls.Add(this.btAssign);
+      this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panel2.Location = new System.Drawing.Point(3, 358);
       this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(289, 142);
+      this.panel2.Size = new System.Drawing.Size(289, 170);
       this.panel2.TabIndex = 17;
       // 
       // btJsKbd
@@ -277,7 +278,7 @@
       this.btJsKbd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.btJsKbd.ImageKey = "J";
       this.btJsKbd.ImageList = this.IL;
-      this.btJsKbd.Location = new System.Drawing.Point(104, 112);
+      this.btJsKbd.Location = new System.Drawing.Point(104, 125);
       this.btJsKbd.Name = "btJsKbd";
       this.btJsKbd.Size = new System.Drawing.Size(79, 25);
       this.btJsKbd.TabIndex = 16;
@@ -302,7 +303,7 @@
       // 
       // btBlend
       // 
-      this.btBlend.Location = new System.Drawing.Point(10, 112);
+      this.btBlend.Location = new System.Drawing.Point(10, 125);
       this.btBlend.Name = "btBlend";
       this.btBlend.Size = new System.Drawing.Size(73, 25);
       this.btBlend.TabIndex = 16;
@@ -313,7 +314,7 @@
       // lblLastJ
       // 
       this.lblLastJ.ContextMenuStrip = this.cmMouseEntry;
-      this.lblLastJ.Location = new System.Drawing.Point(52, 38);
+      this.lblLastJ.Location = new System.Drawing.Point(52, 42);
       this.lblLastJ.Name = "lblLastJ";
       this.lblLastJ.ShortcutsEnabled = false;
       this.lblLastJ.Size = new System.Drawing.Size(222, 22);
@@ -331,7 +332,7 @@
             this.tmeWDown,
             this.toolStripSeparator4});
       this.cmMouseEntry.Name = "cmMouseEntry";
-      this.cmMouseEntry.Size = new System.Drawing.Size(172, 126);
+      this.cmMouseEntry.Size = new System.Drawing.Size(172, 104);
       this.cmMouseEntry.Opening += new System.ComponentModel.CancelEventHandler(this.cmMouseEntry_Opening);
       // 
       // tmeXAxis
@@ -379,7 +380,7 @@
       // cbxThrottle
       // 
       this.cbxThrottle.AutoSize = true;
-      this.cbxThrottle.Location = new System.Drawing.Point(89, 72);
+      this.cbxThrottle.Location = new System.Drawing.Point(89, 86);
       this.cbxThrottle.Name = "cbxThrottle";
       this.cbxThrottle.Size = new System.Drawing.Size(66, 17);
       this.cbxThrottle.TabIndex = 13;
@@ -388,7 +389,7 @@
       // 
       // btFind
       // 
-      this.btFind.Location = new System.Drawing.Point(201, 67);
+      this.btFind.Location = new System.Drawing.Point(201, 81);
       this.btFind.Name = "btFind";
       this.btFind.Size = new System.Drawing.Size(73, 25);
       this.btFind.TabIndex = 12;
@@ -399,7 +400,7 @@
       // label7
       // 
       this.label7.AutoSize = true;
-      this.label7.Location = new System.Drawing.Point(7, 41);
+      this.label7.Location = new System.Drawing.Point(7, 45);
       this.label7.Name = "label7";
       this.label7.Size = new System.Drawing.Size(28, 13);
       this.label7.TabIndex = 3;
@@ -416,7 +417,7 @@
       // 
       // btClear
       // 
-      this.btClear.Location = new System.Drawing.Point(201, 112);
+      this.btClear.Location = new System.Drawing.Point(201, 125);
       this.btClear.Name = "btClear";
       this.btClear.Size = new System.Drawing.Size(73, 25);
       this.btClear.TabIndex = 2;
@@ -436,7 +437,7 @@
       // 
       // btAssign
       // 
-      this.btAssign.Location = new System.Drawing.Point(10, 67);
+      this.btAssign.Location = new System.Drawing.Point(10, 81);
       this.btAssign.Name = "btAssign";
       this.btAssign.Size = new System.Drawing.Size(73, 25);
       this.btAssign.TabIndex = 15;
@@ -663,8 +664,8 @@
       this.tlpanel.Padding = new System.Windows.Forms.Padding(3);
       this.tlpanel.RowCount = 5;
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
-      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 535F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 155F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 84F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
       this.tlpanel.Size = new System.Drawing.Size(1054, 892);
@@ -678,7 +679,7 @@
       this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
       this.flowLayoutPanel1.Location = new System.Drawing.Point(376, 81);
       this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-      this.flowLayoutPanel1.Size = new System.Drawing.Size(294, 529);
+      this.flowLayoutPanel1.Size = new System.Drawing.Size(294, 531);
       this.flowLayoutPanel1.TabIndex = 22;
       // 
       // tableLayoutPanel1
@@ -693,7 +694,7 @@
       this.tableLayoutPanel1.Controls.Add(this.btJSTuning, 0, 4);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel1.Location = new System.Drawing.Point(376, 616);
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(376, 618);
       this.tableLayoutPanel1.Name = "tableLayoutPanel1";
       this.tableLayoutPanel1.RowCount = 5;
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -701,7 +702,7 @@
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 151);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 149);
       this.tableLayoutPanel1.TabIndex = 23;
       // 
       // btDumpLog
@@ -718,7 +719,7 @@
       // 
       this.btJSTuning.Location = new System.Drawing.Point(3, 123);
       this.btJSTuning.Name = "btJSTuning";
-      this.btJSTuning.Size = new System.Drawing.Size(120, 24);
+      this.btJSTuning.Size = new System.Drawing.Size(120, 23);
       this.btJSTuning.TabIndex = 17;
       this.btJSTuning.Text = "Device Tuning";
       this.btJSTuning.Click += new System.EventHandler(this.btJSTuning_Click);
@@ -944,9 +945,9 @@
       this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeLon);
       this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
       this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      this.flowLayoutPanel3.Location = new System.Drawing.Point(676, 616);
+      this.flowLayoutPanel3.Location = new System.Drawing.Point(676, 618);
       this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-      this.flowLayoutPanel3.Size = new System.Drawing.Size(372, 151);
+      this.flowLayoutPanel3.Size = new System.Drawing.Size(372, 149);
       this.flowLayoutPanel3.TabIndex = 27;
       // 
       // cbxInvAimPitch

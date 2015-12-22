@@ -60,13 +60,6 @@ namespace SCJMapper_V2
         }
       }
 
-      // Blend options
-      cbxBlendJS.Checked = m_owner.BlendUnmapped;
-      cbxBlendGP.Checked = m_owner.BlendUnmappedGP;
-
-      // ForceIgnoreversion
-      cbxForceIgnoreversion.Checked = m_owner.ForceIgnoreversion;
-
       // DetectGamepad
       cbxDetectGamepad.Checked = m_owner.DetectGamepad;
     }
@@ -96,13 +89,6 @@ namespace SCJMapper_V2
         }
       }
       m_owner.IgnoreActionmaps = ignore;
-
-      // Blend options
-      m_owner.BlendUnmapped = cbxBlendJS.Checked;
-      m_owner.BlendUnmappedGP = cbxBlendGP.Checked;
-
-      // ForceIgnoreversion
-      m_owner.ForceIgnoreversion = cbxForceIgnoreversion.Checked;
 
       // DetectGamepad
       if ( m_owner.DetectGamepad != cbxDetectGamepad.Checked ) {

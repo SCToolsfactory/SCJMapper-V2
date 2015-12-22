@@ -359,7 +359,7 @@ namespace SCJMapper_V2
       log.Debug( "InitActionTree - Entry" );
 
       // build TreeView and the ActionMaps
-      m_AT = new ActionTree( m_AppSettings.BlendUnmapped, m_AppSettings.BlendUnmappedGP, m_Joystick, m_Gamepad );
+      m_AT = new ActionTree( m_Joystick, m_Gamepad );
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
       m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
       // provide the display items (init)

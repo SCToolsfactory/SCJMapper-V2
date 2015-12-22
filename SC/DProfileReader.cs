@@ -85,7 +85,7 @@ namespace SCJMapper_V2
     /// retrieves the attributes and collects the various control=binding pairs
     /// </summary>
     /// <param name="xr">An XML reader @ StartElement</param>
-    private void CollectActions( XmlReader xr, Dictionary<string, string> attr )
+    private void CollectActions( Dictionary<string, string> attr )
     {
       // we collect actions for each input ie for K,J,X and P
       if ( attr.ContainsKey( "joystick" ) ) {
@@ -93,46 +93,62 @@ namespace SCJMapper_V2
         ac.name = attr["name"];
         ac.devID = "J";
         ac.defBinding = attr["joystick"];
-        if ( ac.defBinding == " " ) ac.defBinding = JoystickCls.BlendedInput;
-        if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
-          if ( !ac.defBinding.StartsWith( "js1_" ) && !ac.defBinding.StartsWith( "jsx_" ) ) ac.defBinding = "js1_" + ac.defBinding; // fix AC 1.3
+        if ( ac.defBinding == " " ) {
+          ac.defBinding = JoystickCls.BlendedInput;
+          m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        }
+        else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+          ac.defBinding = "js1_" + ac.defBinding;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
       }
+
       if ( attr.ContainsKey( "keyboard" ) ) {
         Action ac = new Action( );
         ac.name = attr["name"];
         ac.devID = "K";
         ac.defBinding = attr["keyboard"];
-        if ( ac.defBinding == " " ) ac.defBinding = KeyboardCls.BlendedInput;
-        if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        if ( ac.defBinding == " " ) {
+          ac.defBinding = KeyboardCls.BlendedInput;
+          m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        }
+        else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+          ac.defBinding = "kb1_" + ac.defBinding;
+          m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        }
       }
+
       if ( attr.ContainsKey( "mouse" ) ) {   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
         Action ac = new Action( );
         ac.name = attr["name"];
         ac.devID = "M";
         ac.defBinding = attr["mouse"];
-        if ( ac.defBinding == " " ) ac.defBinding = MouseCls.BlendedInput;
-        if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        if ( ac.defBinding == " " ) {
+          ac.defBinding = MouseCls.BlendedInput;
+          m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        }
+        else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+          ac.defBinding = "mo1_" + ac.defBinding;
+          m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        }
       }
+
       if ( attr.ContainsKey( "xboxpad" ) ) {
         Action ac = new Action( );
         ac.name = attr["name"];
         ac.devID = "X";
         ac.defBinding = attr["xboxpad"];
-        if ( ac.defBinding == " " ) ac.defBinding = GamepadCls.BlendedInput;
-        if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
-          if ( !ac.defBinding.StartsWith( "xi_" ) ) ac.defBinding = "xi_" + ac.defBinding; // fix AC 1.3
+        if ( ac.defBinding == " " ) {
+          ac.defBinding = GamepadCls.BlendedInput;
+          m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        }
+        else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+          ac.defBinding = "xi1_" + ac.defBinding;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
       }
       if ( attr.ContainsKey( "ps3pad" ) ) {
-        Action ac = new Action( );
-        ac.name = attr["name"];
-        ac.devID = "P";
-        ac.defBinding = attr["ps3pad"];
-        if ( ac.defBinding == " " ) ac.defBinding = GamepadCls.BlendedInput;
-        if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+        // ignore
       }
     }
 
@@ -160,7 +176,7 @@ namespace SCJMapper_V2
             // processing a valid action map - collect actions
             if ( eName.ToLower( ) == "action" ) {
               // this is an action.. - collect it
-              CollectActions( xr, attr );
+              CollectActions( attr );
             }
           }// if inmap
           //Console.Write( ">\n" );
@@ -198,32 +214,29 @@ namespace SCJMapper_V2
         xr.Read( ); // get next element
         Dictionary<String, String> attr = new Dictionary<string, string>( );
         String eName = xr.Name;
+
+        // read attributes if any
         while ( xr.MoveToNextAttribute( ) ) {
           attr.Add( xr.Name, xr.Value );  // save the attributes
           //Console.Write( " {0}='{1}'", xr.Name, xr.Value );
         }
         xr.MoveToElement( ); // backup
 
-        Action ac = new Action( );
-        ac.name = actionName;
         // the element name is a control
         if ( xr.NodeType == XmlNodeType.EndElement ) {
-          done = ( xr.Name == "action" );
+          done = ( xr.Name == m_nodeNameStack.Peek() ); // EXIT if the end element matches the entry
         }
         else if ( xr.IsEmptyElement ) {
           // an attribute only element
-          ac.devID = ActionCls.DevID( eName );
-          ac.defBinding = attr["input"];
-          if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+          CollectActions( attr );
         }
         else {
           // one with subelements again
-          xr.Read( );
-          ac.devID = ActionCls.DevID( eName );
-          ac.defBinding = xr["input"];
-          if ( !String.IsNullOrEmpty( ac.defBinding ) ) m_currentMap.Add( ac );  // finally add it to the current map if it was bound
+          m_nodeNameStack.Push( xr.Name ); // recursive .. push element name to terminate later
+          ReadActionSub( xr, actionName );
         }
       } while ( !done );
+
       m_nodeNameStack.Pop( ); // action is finished
     }
 
@@ -269,7 +282,7 @@ namespace SCJMapper_V2
             // processing a valid action map - collect actions
             if ( eName.ToLower( ) == "action" ) {
               // this is an action.. - collect it
-              CollectActions( xr, attr );
+              CollectActions( attr );
               ReadActionSub( xr, attr["name"] ); // a non empty action element may have a sub element
             }
           }

@@ -276,7 +276,7 @@ namespace SCJMapper_V2
 
     public String JsName
     {
-      get { return JoystickCls.JSTag(m_jsAssignment); }
+      get { return JoystickCls.JSTag(m_jsAssignment) + "_"; }
     }
 
     #endregion

@@ -8,26 +8,104 @@ namespace SCJMapper_V2
   /// <summary>
   /// Maintains one ActionCommand 
   /// AC2 style input is used i.e. with device tag in front
+  /// commands are a built from as devID_input where ..
+  ///   devID: jsN, mo1, xi1, kb1, thumbl_down and modified ones: ralt+button1 (modifier+deviceinput)
+  ///   input:  x, mouse1, r,  and ~ as internal blend (defined in DeviceCls)
   /// </summary>
   public class ActionCommandCls
   {
 
+    /// <summary>
+    /// The Input commands used incl. modifiers (mod+command)
+    /// </summary>
+    public String Input { get; set; }     // AC2 style: input command name AC2  e.g. x, mouse1, r, "~" to blend
+    /// <summary>
+    /// The device ID of the device (jsN, mo1, kb1, xi1)
+    /// </summary>
+    public String DevID { get; set; }     // the device ID (jsN, mo1, xi1, kb1) 
 
+    /// <summary>
+    /// The complete input string  (devID_input)
+    /// Assuming internally blended ones only (i.e. no space blends contained)
+    /// Can derive if a device tag is given
+    /// </summary>
+    public String DevInput {
+      get {
+        if ( string.IsNullOrEmpty( Input ) )
+          return Input; // no Input - return empty
+        else if ( string.IsNullOrEmpty( DevID ) )
+          return Input; // no devID - return input only
+        else
+          return String.Format( "{0}_{1}", DevID, Input ); // fully qualified only if both exist
+      }
+      set {
+        // decompose the deviceInput into parts
+        if ( string.IsNullOrEmpty( value ) ) {  // no Input - insert input empty
+          Input = ""; // empty one
+        }
+        else if ( value.IndexOf("_") == 3 ) { // fully qualified only if both exist
+          DevID = value.Substring( 0, 3 );
+          Input = value.Substring( 4 );
+        }
+        else {  // no device - insert input empty
+          // treat as input only
+          Input = value;
+        }
+      }
+    }
 
-
-    public String input { get; set; }               // AC2 style: input command name AC2  e.g. js1_x, mo1_button1, kb1_r, "kb1_ " to blend
 
     /// <summary>
     /// The index of the visible child node (-1 -> shown in ActionNode)
     /// </summary>
-    public int nodeIndex { get; set; }              // index of the vis treenode
+    public int NodeIndex { get; set; }              // index of the vis treenode
 
 
     // ctor
     public ActionCommandCls( )
     {
-      input = "UNDEF";
-      nodeIndex = -1;
+      // init with something to debug if needed
+      Input = "UNDEF";
+      DevID = "NA0";
+      NodeIndex = -1;
+    }
+
+    // ctor
+    public ActionCommandCls( ActionCommandCls other )
+    {
+      Input = other.Input;
+      DevID = other.DevID;
+      NodeIndex = other.NodeIndex;
+    }
+
+    // ctor
+    public ActionCommandCls( String devInp )
+    {
+      DevInput = devInp;
+      NodeIndex = -1;
+    }
+
+    // ctor
+    public ActionCommandCls( String devInp, int nodeIx )
+    {
+      DevInput = devInp;
+      NodeIndex = nodeIx;
+    }
+
+    // ctor
+    public ActionCommandCls( String dev, String inp )
+    {
+      Input = inp;
+      DevID = dev;
+      NodeIndex = -1;
+    }
+
+    // ctor
+    public ActionCommandCls( String dev, String inp, int nodeIx )
+    {
+      Input = inp;
+      DevID = dev;
+      NodeIndex = nodeIx;
     }
 
 
@@ -38,16 +116,14 @@ namespace SCJMapper_V2
     /// <returns>The action copy with reassigned input</returns>
     public ActionCommandCls ReassignJsN( JsReassingList newJsList )
     {
-      ActionCommandCls newAc = new ActionCommandCls( );
       // full copy from 'this'
-      newAc.input = this.input;
-
-      // reassign the jsX part for Joystick commands  (silly but rather fast comparison)
-      if ( this.input.Contains( "js1_" ) || this.input.Contains( "js2_" ) || this.input.Contains( "js3_" ) || this.input.Contains( "js4_" )
-        || this.input.Contains( "js5_" ) || this.input.Contains( "js6_" ) || this.input.Contains( "js7_" ) || this.input.Contains( "js8_" ) ) {
-        int oldJsN = JoystickCls.JSNum( this.input );
+      ActionCommandCls newAc = new ActionCommandCls( this );
+           
+      // reassign the jsX part for Joystick commands
+      if ( this.DevID.StartsWith( "js" ) ) {
+        int oldJsN = JoystickCls.JSNum( this.DevID );
         if ( JoystickCls.IsJSValid( oldJsN ) ) {
-          if ( newJsList.ContainsOldJs( oldJsN ) ) newAc.input = JoystickCls.ReassignJSTag( this.input, newJsList.newJsFromOldJs(oldJsN) );
+          if ( newJsList.ContainsOldJs( oldJsN ) ) newAc.DevID = JoystickCls.ReassignJSTag( this.DevID, newJsList.newJsFromOldJs( oldJsN ) );
         }
       }
 
@@ -59,15 +135,15 @@ namespace SCJMapper_V2
     /// Dump the action as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public String toXML( ActionCls.ActionDevice aDev )
+    public String toXML( )
     {
       String r = "";
-      if ( String.IsNullOrEmpty( input ) ) {
+      if ( String.IsNullOrEmpty( Input ) ) {
         r = String.Format( " />\n" );  // actually an ERROR...
       }
       else {
-        // regular - first get device dependend blending if needed then apply XML formatting to internally blended items
-        r = String.Format( "input=\"{0}\" />\n", DeviceCls.toXML( ActionCls.BlendInput( input, aDev ) ) );
+        // regular - apply XML formatting to internally blended items
+        r = String.Format( "input=\"{0}_{1}\" />\n", DevID, DeviceCls.toXML( Input ) );
       }
 
       return r;

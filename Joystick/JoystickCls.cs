@@ -23,6 +23,7 @@ namespace SCJMapper_V2
     #region Static Items
 
     public new const String DeviceClass = "joystick";  // the device name used throughout this app
+    public new const String DeviceID = "js1_";
     static public int RegisteredDevices = 0;
 
 
@@ -31,7 +32,7 @@ namespace SCJMapper_V2
 
     public const String JsUnknown = "jsx_";
 
-    public new const String BlendedInput = "js1_" + DeviceCls.BlendedInput; //AC2 ..
+    public new const String BlendedInput = DeviceID + DeviceCls.BlendedInput; //AC2 ..
     static public new Boolean IsBlendedInput( String input )
     {
       if ( input == BlendedInput ) return true;
@@ -97,15 +98,26 @@ namespace SCJMapper_V2
     /// <summary>
     /// Return this deviceClass if the input string contains something like jsN_
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="devInput"></param>
     /// <returns></returns>
-    static public new String DeviceClassFromInput( String input )
+    static public new String DeviceClassFromInput( String devInput )
     {
-      if ( JSNum( input ) != JSnum_UNKNOWN )
+      if ( JSNum( devInput ) != JSnum_UNKNOWN )
         return DeviceClass; // this
       else
         return DeviceCls.DeviceClass; // unknown
     }
+
+    /// <summary>
+    /// Returns true if the input matches this device
+    /// </summary>
+    /// <param name="devInput">A devInput string</param>
+    /// <returns>True for a match</returns>
+    static public new Boolean DevMatch( String devInput )
+    {
+      return devInput.StartsWith( DeviceID );
+    }
+
 
 
     /// <summary>
@@ -144,7 +156,7 @@ namespace SCJMapper_V2
     /// <returns>The formatted JS name for the CryEngine XML</returns>
     static public String JSTag( int jsNum )
     {
-      if ( IsJSValid( jsNum ) ) return "js" + jsNum.ToString( ) + "_";
+      if ( IsJSValid( jsNum ) ) return "js" + jsNum.ToString( );
       return JsUnknown;
     }
 
@@ -200,8 +212,7 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Returns an adjusted jsN_ tag with the new number
-    /// AC 1.1  can be something as "rctrl+js2_nn"
+    /// Returns an adjusted jsN tag with the new number
     /// </summary>
     /// <param name="input">An input directive</param>
     /// <param name="newJsN">the new JsN number</param>
@@ -209,13 +220,8 @@ namespace SCJMapper_V2
     static public String ReassignJSTag( String input, int newJsN )
     {
       // find jsN start 
-      int jsPos = input.IndexOf( "+js" );
-      String inputValidateJsN = input;
-      if ( jsPos > 0 ) {
-        inputValidateJsN = input.Substring( jsPos + 1, 5 );
-      }
-      if ( IsJsN( inputValidateJsN ) ) {
-        return input.Replace( input.Substring( jsPos + 1, 4 ), JSTag( newJsN ) ); // jsPos=-1 + 1 => 0 (case of no modifier)
+      if ( IsJsN( input ) ) {
+        return input.Replace( input.Substring( 0, 3 ), JSTag( newJsN ) ); // jsPos=-1 + 1 => 0 (case of no modifier)
       }
       else {
         return input;
