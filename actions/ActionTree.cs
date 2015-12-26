@@ -18,6 +18,7 @@ namespace SCJMapper_V2
 
 
     public ActionMapsCls ActionMaps { get; set; }   // the Action Maps and Actions
+    public ActivationModes ActivationModes { get; set; }   // the ActivationModes found in Profile
 
     private TreeView m_MasterTree = new TreeView( ); // the master TreeView (mem only)
     private TreeView m_ctrl = null; // the TreeView in the GUI - injected from GUI via Ctrl property
@@ -64,6 +65,7 @@ namespace SCJMapper_V2
       m_gamepad = gamepad;
 
       IgnoreMaps = ""; // nothing to ignore
+      ActivationModes = new ActivationModes( ); // an empty list for now
     }
 
 
@@ -112,7 +114,7 @@ namespace SCJMapper_V2
       get
       {
         if ( Ctrl.SelectedNode == null ) return false;
-        else return ( Ctrl.SelectedNode.Level == 1 );
+        else return ( Ctrl.SelectedNode.Level == 1 ) && IsMappedAction;
       }
     }
 
@@ -122,7 +124,7 @@ namespace SCJMapper_V2
       get
       {
         if ( Ctrl.SelectedNode == null ) return false;
-        else return ( Ctrl.SelectedNode.Level == 1 );
+        else return ( Ctrl.SelectedNode.Level == 1 ) && IsMappedAction;
       }
     }
 
@@ -134,6 +136,19 @@ namespace SCJMapper_V2
         else return ( Ctrl.SelectedNode.Level == 2 );
       }
     }
+
+    public Boolean IsMappedAction
+    {
+      get
+      {
+        if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return false; // not on node
+        if ( Ctrl.SelectedNode == null ) return false; // no node selected
+        if ( Ctrl.SelectedNode.Parent == null ) return false; // ERROR EXIT
+
+        return ( Ctrl.SelectedNode as ActionTreeNode ).IsMappedAction;
+      }
+    }
+
 
     #endregion
 
@@ -405,8 +420,8 @@ namespace SCJMapper_V2
       ActionCommandCls acc = null;
 
       ActionMaps = new ActionMapsCls( m_jsList );
+      ActivationModes = new ActivationModes( );
       m_MasterTree.Nodes.Clear( );
-
 
       // read the action items into the TreeView
       DProfileReader dpReader = new DProfileReader( ); // we may read a profile
@@ -415,6 +430,8 @@ namespace SCJMapper_V2
       dpReader.fromXML( SCDefaultProfile.DefaultProfile( defaultProfileName + ".xml" ) );
       if ( dpReader.ValidContent ) {
         txReader = new StringReader( dpReader.CSVMap );
+        ActivationModes.Clear( );
+        ActivationModes.AddRange( dpReader.ActivationModes ); // content copy from profile
       }
 
       // we assume no addbind items in the profile
@@ -423,18 +440,19 @@ namespace SCJMapper_V2
       using ( TextReader sr = txReader ) {
         String buf = sr.ReadLine( );
         while ( !String.IsNullOrEmpty( buf ) ) {
-          String[] elem = buf.Split( new char[] { ';', ',' } );
+          String[] elem = buf.Split( new char[] { ';', ',' }, StringSplitOptions.None );
           if ( elem.Length > 1 ) {
             if ( !IgnoreMaps.Contains( "," + elem[0] + "," ) ) {
               // must have 2 elements min
               Array.Resize( ref cnl, 0 );
               acm = new ActionMapCls( ); acm.name = elem[0]; // get actionmap name
               // process items
-              for ( int ei = 1; ei < elem.Length; ei += 2 ) { // step 2  - action;defaultBinding come in pairs
+              for ( int ei = 1; ei < elem.Length; ei += 3 ) { // step 2  - action;defaultBinding;defaultActivationMode come in as tripples
                 if ( !String.IsNullOrEmpty( elem[ei] ) ) {
                   // default assignments
                   String action = elem[ei].Substring( 1 );
-                  String defBinding = elem[ei + 1].Substring( 0 );
+                  String defBinding = elem[ei + 1];
+                  String defActivationMode = elem[ei + 2];
                   String devID = elem[ei].Substring( 0, 1 );
                   String device = ActionCls.DeviceFromID( devID );
 
@@ -444,11 +462,12 @@ namespace SCJMapper_V2
                   Array.Resize( ref cnl, cnl.Length + 1 ); cnl[cnl.Length - 1] = cn;
 
                   // derive content tree
-                  ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.actionDevice = ActionCls.ADevice( device ); ac.defBinding = defBinding;
+                  ac = new ActionCls( ); ac.key = cn.Name; ac.name = action; ac.device = device; ac.actionDevice = ActionCls.ADevice( device );
+                  ac.defBinding = defBinding; ac.defActivationMode = defActivationMode;
                   acm.Add( ac ); // add to our map
                   cn.ActionDevice = ac.actionDevice; // should be known now
                   // create just an unmapped ActionCommand item 
-                  acc = ac.AddCommand( "" ); // profile items are shown in the ActionTreeNode (not in a child)
+                  acc = ac.AddCommand( "", -1 ); // profile items are shown in the ActionTreeNode (not in a child)
 
                   // init and apply the default mappings if requested
                   if ( ac.actionDevice == ActionCls.ActionDevice.AD_Joystick ) {
@@ -457,6 +476,7 @@ namespace SCJMapper_V2
                     if ( applyDefaults ) {
                       if ( JoystickCls.IsJSValid( jNum ) ) {
                         acc.DevInput = ac.defBinding;
+                        acc.ActivationMode = ac.defActivationMode;
                         cn.Command = ac.defBinding; cn.BackColor = JoystickCls.JsNColor( jNum );
                       }
                     }
@@ -466,6 +486,7 @@ namespace SCJMapper_V2
                     if ( applyDefaults ) {
                       if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
                         acc.DevInput = ac.defBinding;
+                        acc.ActivationMode = ac.defActivationMode;
                         cn.Command = ac.defBinding; cn.BackColor = GamepadCls.XiColor( );
                       }
                     }
@@ -475,6 +496,7 @@ namespace SCJMapper_V2
                     if ( applyDefaults ) {
                       if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
                         acc.DevInput = ac.defBinding;
+                        acc.ActivationMode = ac.defActivationMode;
                         cn.Command = ac.defBinding; cn.BackColor = KeyboardCls.KbdColor( );
                       }
                     }
@@ -484,6 +506,7 @@ namespace SCJMapper_V2
                     if ( applyDefaults ) {
                       if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
                         acc.DevInput = ac.defBinding;
+                        acc.ActivationMode = ac.defActivationMode;
                         cn.Command = ac.defBinding; cn.BackColor = MouseCls.MouseColor( );
                       }
                     }
@@ -516,6 +539,70 @@ namespace SCJMapper_V2
 
       // finally apply the filter and make it visible
       FilterTree( );
+    }
+
+
+    /// <summary>
+    /// Find the ActivationMode of the selected item
+    /// </summary>
+    public ActivationModes ActivationModeSelectedItem( )
+    {
+      ActivationModes am = new ActivationModes(); am.Add( ActivationModes.Default ); // dummy answer Default is Default and selected is Default
+
+      if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return am;
+      if ( Ctrl.SelectedNode == null ) return am; // ERROR exit
+      if ( Ctrl.SelectedNode.Parent == null ) return am; // ERROR exit
+
+      // has a parent - must be level 1 or 2 
+      if ( Ctrl.SelectedNode.Level == 1 ) {
+        // this is the main node with Action Cmd
+        ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name ); if ( ac == null ) return am; // ERROR exit
+        ActionCommandCls acc = ac.FindActionInputObject( CommandFromNodeText( Ctrl.SelectedNode.Text ) ); if ( acc == null ) return am; // ERROR exit
+        am = new ActivationModes( ac.defActivationMode ); am.Add( acc.ActivationMode );
+        return am;
+      }
+      else if ( Ctrl.SelectedNode.Level == 2 ) {
+        // this is a child of an action with further commands
+        ActionTreeNode atn = ( m_ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode
+        // the related action
+        ActionCls ac = FindActionObject( atn.Parent.Name, atn.Name ); if ( ac == null ) return am; // ERROR exit
+        ActionCommandCls acc = ac.FindActionInputObject( m_ctrl.SelectedNode.Index ); if ( acc == null ) return am; // ERROR exit
+        am = new ActivationModes( ac.defActivationMode ); am.Add( acc.ActivationMode );
+        return am;
+      }
+
+      return am;
+    }
+
+
+    /// <summary>
+    /// Update the ActivationMode of the selected item
+    /// </summary>
+    public void UpdateActivationModeSelectedItem( string newActivationMode )
+    {
+      ActivationModes am = new ActivationModes(); am.Add( ActivationModes.Default ); // dummy answer Default is Default and selected is Default
+
+      if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return;
+      if ( Ctrl.SelectedNode == null ) return; // ERROR exit
+      if ( Ctrl.SelectedNode.Parent == null ) return; // ERROR exit
+
+      // has a parent - must be level 1 or 2 
+      if ( Ctrl.SelectedNode.Level == 1 ) {
+        // this is the main node with Action Cmd
+        ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name ); if ( ac == null ) return; // ERROR exit
+        ActionCommandCls acc = ac.FindActionInputObject( CommandFromNodeText( Ctrl.SelectedNode.Text ) ); if ( acc == null ) return; // ERROR exit
+        acc.ActivationMode = newActivationMode;
+        Dirty = true;
+      }
+      else if ( Ctrl.SelectedNode.Level == 2 ) {
+        // this is a child of an action with further commands
+        ActionTreeNode atn = ( m_ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode
+        // the related action
+        ActionCls ac = FindActionObject( atn.Parent.Name, atn.Name ); if ( ac == null ) return; // ERROR exit
+        ActionCommandCls acc = ac.FindActionInputObject( m_ctrl.SelectedNode.Index ); if ( acc == null ) return; // ERROR exit
+        acc.ActivationMode = newActivationMode;
+        Dirty = true;
+      }
     }
 
 

@@ -28,22 +28,28 @@ namespace SCJMapper_V2
     private EState m_state = EState.idle;
 
     // an action map and its actions
-    class Action
+    class ProfileAction
     {
       public String name { get; set; }    // the action name
       public String devID { get; set; }  // the input method K,J,X,P
       private String m_defBinding = "";   // NOTE: this is AC1 style in the Profile - need to conver later when dumping out
       public String defBinding { get { return m_defBinding; } set { m_defBinding = value; } }  // DONT! need to clean this one, found spaces...
+      private String m_defActivationMode = "";
+      public String defActivationMode { get { return m_defActivationMode; } set { m_defActivationMode = value; } }
       public String keyName
       { get { return devID + name; } } // prep for TreView usage - create a key from input+name
     }
 
-    class ActionMap : List<Action>  // carries the action list
+
+    class ActionMap : List<ProfileAction>  // carries the action list
     {
       public String name { get; set; } // the map name
     };
     Dictionary<String, ActionMap> m_aMap = null; // key would be the actionmap name
     ActionMap m_currentMap = null;
+
+    ActivationModes m_activationModes = new ActivationModes();
+    public ActivationModes ActivationModes { get { return m_activationModes; } }
 
 
     // ****************** CLASS **********************
@@ -70,8 +76,8 @@ namespace SCJMapper_V2
         String buf = "";
         foreach ( ActionMap am in m_aMap.Values ) {
           buf += am.name + ";";
-          foreach ( Action a in am ) {
-            buf += a.keyName + ";" + a.defBinding + ";"; // add default binding to the CSV
+          foreach ( ProfileAction a in am ) {
+            buf += a.keyName + ";" + a.defBinding + ";" + a.defActivationMode + ";"; // add default binding + activation mode to the CSV
           }
           buf += String.Format( "\n" );
         }
@@ -87,12 +93,19 @@ namespace SCJMapper_V2
     /// <param name="xr">An XML reader @ StartElement</param>
     private void CollectActions( Dictionary<string, string> attr )
     {
-      // we collect actions for each input ie for K,J,X and P
+      //first find an ActivationMode if there is - applies to all actions
+      String actMode = ActivationModes.Default;
+      if ( attr.ContainsKey( "ActivationMode" ) ) {
+        actMode = attr["ActivationMode"];
+      }
+
+      // we collect actions for each input ie for K,J,X and M
       if ( attr.ContainsKey( "joystick" ) ) {
-        Action ac = new Action( );
+        ProfileAction ac = new ProfileAction( );
         ac.name = attr["name"];
         ac.devID = "J";
         ac.defBinding = attr["joystick"];
+        ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
           ac.defBinding = JoystickCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
@@ -104,10 +117,11 @@ namespace SCJMapper_V2
       }
 
       if ( attr.ContainsKey( "keyboard" ) ) {
-        Action ac = new Action( );
+        ProfileAction ac = new ProfileAction( );
         ac.name = attr["name"];
         ac.devID = "K";
         ac.defBinding = attr["keyboard"];
+        ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
           ac.defBinding = KeyboardCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
@@ -119,10 +133,11 @@ namespace SCJMapper_V2
       }
 
       if ( attr.ContainsKey( "mouse" ) ) {   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
-        Action ac = new Action( );
+        ProfileAction ac = new ProfileAction( );
         ac.name = attr["name"];
         ac.devID = "M";
         ac.defBinding = attr["mouse"];
+        ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
           ac.defBinding = MouseCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
@@ -134,10 +149,11 @@ namespace SCJMapper_V2
       }
 
       if ( attr.ContainsKey( "xboxpad" ) ) {
-        Action ac = new Action( );
+        ProfileAction ac = new ProfileAction( );
         ac.name = attr["name"];
         ac.devID = "X";
         ac.defBinding = attr["xboxpad"];
+        ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
           ac.defBinding = GamepadCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
@@ -224,7 +240,7 @@ namespace SCJMapper_V2
 
         // the element name is a control
         if ( xr.NodeType == XmlNodeType.EndElement ) {
-          done = ( xr.Name == m_nodeNameStack.Peek() ); // EXIT if the end element matches the entry
+          done = ( xr.Name == m_nodeNameStack.Peek( ) ); // EXIT if the end element matches the entry
         }
         else if ( xr.IsEmptyElement ) {
           // an attribute only element
@@ -312,7 +328,6 @@ namespace SCJMapper_V2
 
       if ( ActionMapsCls.ActionMaps.Length == 0 ) ActionMapsCls.LoadSupportedActionMaps( ); // make sure we have them loaded ( refactoring to get a singleton or so...)
 
-
       try {
         do {
           if ( xr.IsStartElement( ) ) {
@@ -347,6 +362,33 @@ namespace SCJMapper_V2
       }
     }
 
+
+    private Boolean ReadActivationModes ( XmlReader xr )
+    {
+      log.Debug( "DProfileReader.ReadActivationModes - Entry" );
+
+      try {
+        xr.ReadToFollowing( "ActivationModes" );
+        xr.ReadToDescendant( "ActivationMode" );
+        do {
+          if ( xr.NodeType == XmlNodeType.EndElement ) {
+            xr.Read( );
+            break; // finished
+          }
+          String name = xr["name"];
+          if ( ! string.IsNullOrEmpty(name)) m_activationModes.Add( name );
+        } while ( xr.Read( ) );
+
+        return true;
+      }
+      catch ( Exception ex ) {
+        // get any exceptions from reading
+        log.Error( "DProfileReader.ReadXML - unexpected", ex );
+        return false;
+      }
+    }
+
+
     /// <summary>
     /// Read the defaultProfile.xml - do some sanity check
     /// </summary>
@@ -364,9 +406,14 @@ namespace SCJMapper_V2
 
       m_nodeNameStack = new Stack<String>( );
       m_aMap = new Dictionary<String, ActionMap>( );
+      m_activationModes = new ActivationModes( );
 
+      ValidContent = true; // init
       reader.Read( );
-      ValidContent = ReadXML( reader );
+      ValidContent &= ReadActivationModes( reader );
+
+      m_nodeNameStack.Push( "profile" ); // we are already in the XML now
+      ValidContent &= ReadXML( reader );
 
       return ValidContent;
     }

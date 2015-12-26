@@ -167,7 +167,8 @@ namespace SCJMapper_V2
     public ActionDevice actionDevice { get; set; }  // the enum of the device
     public String device { get; set; }              // name of the device (uses DeviceClass)
     public String defBinding { get; set; }          // the default binding
-    public List<ActionCommandCls> inputList { get; set; }
+    public String defActivationMode { get; set; }   // the default binding ActivationMode (can be "" if not used)
+    public List<ActionCommandCls> inputList { get; set; } // regular bind is the 0-element, addbinds are added to the list
 
     /// <summary>
     /// ctor
@@ -179,6 +180,7 @@ namespace SCJMapper_V2
       device = JoystickCls.DeviceClass;
       name = "";
       defBinding = "";
+      defActivationMode = "";
       inputList = new List<ActionCommandCls>( ); // empty list
     }
 
@@ -197,6 +199,7 @@ namespace SCJMapper_V2
       newAc.device = this.device;
       newAc.name = this.name;
       newAc.defBinding = this.defBinding;
+      newAc.defActivationMode = this.defActivationMode;
 
       // creates a copy of the list with reassigned jsN devs
       foreach ( ActionCommandCls acc in inputList ) {
@@ -210,19 +213,35 @@ namespace SCJMapper_V2
     /// <summary>
     /// Created and adds the inputCommand list with given input string
     /// AC2 style input is used i.e. with device tag in front
+    ///   apply given ActivationMode - can be "~" to indicate DONT APPLY 
     /// </summary>
     /// <param name="devInput"></param>
     /// <returns>Returns the ActionCommand created</returns>
-    public ActionCommandCls AddCommand( String devInput )
+    public ActionCommandCls AddCommand( String devInput, String activationMode )
     {
       ActionCommandCls acc = new ActionCommandCls( devInput, inputList.Count - 1 ); // starts from -1 ...
+      if ( activationMode == "~" ) {
+        // not assigned
+        acc.ActivationMode = "";
+      }
+      else {
+        acc.ActivationMode = activationMode;
+      }
       inputList.Add( acc );
       return acc;
     }
 
+    /// <summary>
+    /// Add an ActionCommand with Input at nodeindex
+    ///   apply default ActivationMode
+    /// </summary>
+    /// <param name="devInput"></param>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public ActionCommandCls AddCommand( String devInput, int index )
     {
       ActionCommandCls acc = new ActionCommandCls( devInput, index );
+      acc.ActivationMode = defActivationMode;
       inputList.Add( acc );
       return acc;
     }
@@ -265,6 +284,9 @@ namespace SCJMapper_V2
 
       // Apply the input to the ActionTree
       actionCmd.DevInput = BlendInput( devInput, this.actionDevice );
+      if ( string.IsNullOrEmpty( actionCmd.Input)) {
+        actionCmd.ActivationMode = defActivationMode; // reset activation mode if the input is empty
+      }
     }
 
     /// <summary>
@@ -372,9 +394,13 @@ namespace SCJMapper_V2
               else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
               else if ( GamepadCls.IsDeviceClass( device ) ) input = GamepadCls.FromAC1( input );
             }
+            // Get default ActivationMode
+            String activationMode = reader["ActivationMode"];
+            if ( string.IsNullOrEmpty(activationMode)) activationMode = ActivationModes.Default; // MARK AS NOT USED
+
             key = DevID( device ) + name; // unique id of the action
             actionDevice = ADevice( device ); // get the enum of the input device
-            AddCommand( input );
+            AddCommand( input, activationMode );
             // advances the reader to the next node
             reader.ReadStartElement( "rebind" );
           }
@@ -395,7 +421,9 @@ namespace SCJMapper_V2
               else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
               else if ( GamepadCls.IsDeviceClass( device ) ) input = GamepadCls.FromAC1( input );
             }
-            AddCommand( input );
+            String activationMode = reader["ActivationMode"];
+            if ( string.IsNullOrEmpty( activationMode ) ) activationMode = ActivationModes.Default; // MARK AS NOT USED
+            AddCommand( input, activationMode );
             // advances the reader to the next node
             reader.ReadStartElement( "addbind" );
           }

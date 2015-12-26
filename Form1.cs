@@ -29,6 +29,11 @@ namespace SCJMapper_V2
     private JoystickList m_Joystick = new JoystickList( );
 
     ///<remarks>
+    /// Holds the currently selected Joystick
+    ///</remarks>
+    private JoystickCls m_curJoystick = null;
+
+    ///<remarks>
     /// Holds the DXInput keyboard
     ///</remarks>
     private GamepadCls m_Gamepad = null;
@@ -265,6 +270,14 @@ namespace SCJMapper_V2
       cbxShowMouse.Checked = m_AppSettings.ShowMouse;
       cbxShowMappedOnly.Checked = m_AppSettings.ShowMapped;
 
+      // init current Joystick
+      int jsIndex = ( int )tc1.SelectedTab.Tag; // gets the index into the JS list
+      if ( jsIndex >= 0 ) m_curJoystick = m_Joystick[jsIndex];
+
+      // init PTU folder usage sign
+      lblPTU.Visible = m_AppSettings.UsePTU;
+      if (m_AppSettings.UsePTU) log.Debug( "Using PTU Folders" );
+
       // poll the XInput
       log.Debug( "Start XInput polling" );
       timer1.Start( ); // this one polls the joysticks to show the props
@@ -282,6 +295,18 @@ namespace SCJMapper_V2
       Close( );
     }
 
+
+    // TAB Control Events
+
+    private void tc1_Selected( object sender, TabControlEventArgs e )
+    {
+      // init current Joystick
+      int jsIndex = ( int )tc1.SelectedTab.Tag; // gets the index into the JS list
+      if ( jsIndex >= 0 )
+        m_curJoystick = m_Joystick[jsIndex];
+      else
+        m_curJoystick = null;
+    }
 
     /// <summary>
     /// Fancy tab coloring with ownerdraw to paint the callout buttons
@@ -373,6 +398,11 @@ namespace SCJMapper_V2
       inversions.Add( cbxInvThrottle );
       inversions.Add( cbxInvStrafeVert ); inversions.Add( cbxInvStrafeLat ); inversions.Add( cbxInvStrafeLon );
       m_AT.InvertCheckList = inversions;
+
+      // Activation Update
+      tdiCbxActivation.Items.Clear( );
+      tdiCbxActivation.Items.AddRange( m_AT.ActivationModes.ToArray() );
+      tdiCbxActivation.SelectedIndex = 0;
 
       // apply a default JS to Joystick mapping - can be changed and reloaded from XML mappings
       // must take care of Gamepads if there are (but we take care of one only...)
@@ -552,6 +582,35 @@ namespace SCJMapper_V2
 
       m_Joystick.ResetJsNAssignment( );
       m_AT.ActionMaps.fromXML( rtb.Text );
+      // Collect modifiers - simply overwrite existing ones as we deal with THIS file now
+      tdiAddMod1.Visible = false; tdiAddMod2.Visible = false; tdiAddMod3.Visible = false; // make context menu invisible
+      tdiAddMod1.Text = ""; tdiAddMod2.Text = ""; tdiAddMod3.Text = ""; // and clear
+      for (int i=flpExtensions.Controls.Count-1; i>=0; i-- ) {
+        if ( ( flpExtensions.Controls[i] as CheckBox ).Text.StartsWith( "js" ) ) flpExtensions.Controls.RemoveAt( i );
+      }
+      if ( m_AT.ActionMaps.Modifiers.Count > 2 ) {
+        tdiAddMod3.Text = string.Format( "MOD: {0}", m_AT.ActionMaps.Modifiers[2] ); tdiAddMod3.Visible = true;
+        // make a new one
+        CheckBox cbx = new CheckBox(); cbx.Text = m_AT.ActionMaps.Modifiers[2]; cbx.Checked = true;
+        cbx.CheckedChanged += Cbx_CheckedChanged;
+        flpExtensions.Controls.Add( cbx );
+      }
+      if ( m_AT.ActionMaps.Modifiers.Count > 1 ) {
+        tdiAddMod2.Text = string.Format( "MOD: {0}", m_AT.ActionMaps.Modifiers[1] ); tdiAddMod2.Visible = true;
+        // make a new one
+        CheckBox cbx = new CheckBox(); cbx.Text = m_AT.ActionMaps.Modifiers[1]; cbx.Checked = true;
+        cbx.CheckedChanged += Cbx_CheckedChanged;
+        flpExtensions.Controls.Add( cbx );
+      }
+      if ( m_AT.ActionMaps.Modifiers.Count > 0 ) {
+        tdiAddMod1.Text = string.Format( "MOD: {0}", m_AT.ActionMaps.Modifiers[0] ); tdiAddMod1.Visible = true;
+        // make a new one
+        CheckBox cbx = new CheckBox(); cbx.Text = m_AT.ActionMaps.Modifiers[0]; cbx.Checked = true;
+        cbx.CheckedChanged += Cbx_CheckedChanged;
+        flpExtensions.Controls.Add( cbx );
+      }
+
+
       // JS mapping for js1 .. js8 can be changed and reloaded from XML
       // note - unmapped ones remain what they were
       // This is includes similar procedures as reassigning of the jsN items
@@ -634,23 +693,24 @@ namespace SCJMapper_V2
       if ( tc1.SelectedTab.Tag == null ) return;
 
       String ctrl = "";
-      int jsIndex = ( int )tc1.SelectedTab.Tag; // gets the index into the JS list
-      if ( jsIndex < 0 ) {
-        // poll Gamepad if active
-        m_Gamepad.GetData( );
-        ctrl = m_Gamepad.GetLastChange( );
-        timer1.Interval = 750; // allow more time to release buttons
+      if ( m_curJoystick == null ) {
+        if ( m_Gamepad != null ) {
+          // poll Gamepad if active
+          m_Gamepad.GetData( );
+          ctrl = m_Gamepad.GetLastChange( );
+          timer1.Interval = 750; // allow more time to release buttons
+        }
       }
       else {
         // poll active Joystick
-        m_Joystick[jsIndex].GetData( );  // poll the device
+        m_curJoystick.GetData( );  // poll the device
         if ( m_Keyboard == null ) {
           // no keyboard = no modifier 
-          ctrl = JSStr( ) + m_Joystick[jsIndex].GetLastChange( ); // show last handled JS control
+          ctrl = JSStr( ) + m_curJoystick.GetLastChange( ); // show last handled JS control
         }
         else {
           UpdateModifiers( );           // get the last keyboard modifer to compose the command
-          ctrl = JSStr( ) + m_persistentMods + m_Joystick[jsIndex].GetLastChange( ); // show last handled JS control
+          ctrl = JSStr( ) + m_persistentMods + m_curJoystick.GetLastChange( ); // show last handled JS control
         }
         timer1.Interval = 150; // standard polling
       }
@@ -663,6 +723,9 @@ namespace SCJMapper_V2
       else {
         cbxThrottle.Checked = false; cbxThrottle.Enabled = false;
       }
+
+      btMakeMod.Enabled = JoystickCls.ValidModifier( ctrl );
+
     }
 
 
@@ -671,7 +734,10 @@ namespace SCJMapper_V2
     private void treeView1_AfterSelect( object sender, TreeViewEventArgs e )
     {
       String atx = m_AT.SelectedAction;
-      if ( !String.IsNullOrEmpty( atx ) ) lblAction.Text = atx;
+      if ( !String.IsNullOrEmpty( atx ) ) {
+        lblAction.Text = atx;
+
+      }
     }
 
 
@@ -732,6 +798,63 @@ namespace SCJMapper_V2
       else MySounds.PlayCannot( );
     }
 
+    private void btMakeMod_Click( object sender, EventArgs e )
+    {
+      if ( m_AT.ActionMaps.Modifiers.Contains( lblLastJ.Text ) ) return; // have it already
+      if ( m_AT.ActionMaps.Modifiers.Count > 2 ) return; // can max 3 ...
+
+      // make a new one
+      CheckBox cbx = new CheckBox();
+      cbx.Text = lblLastJ.Text;
+      cbx.Checked = true;
+      cbx.CheckedChanged += Cbx_CheckedChanged;
+      flpExtensions.Controls.Add( cbx );
+      m_AT.ActionMaps.Modifiers.Add( lblLastJ.Text );
+      // maintain context menu - quick and d.. version
+      if ( string.IsNullOrEmpty( tdiAddMod1.Text) ) {
+        tdiAddMod1.Text = string.Format( "MOD: {0}", lblLastJ.Text );
+        tdiAddMod1.Visible = true;
+        m_curJoystick.UpdateModifier( lblLastJ.Text, true );
+        m_AT.Dirty = true; if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+      else if ( string.IsNullOrEmpty( tdiAddMod2.Text ) ) {
+        tdiAddMod2.Text = string.Format( "MOD: {0}", lblLastJ.Text );
+        tdiAddMod2.Visible = true;
+        m_curJoystick.UpdateModifier( lblLastJ.Text, true );
+        m_AT.Dirty = true; if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+      else if ( string.IsNullOrEmpty( tdiAddMod3.Text ) ) {
+        tdiAddMod3.Text = string.Format( "MOD: {0}", lblLastJ.Text );
+        tdiAddMod3.Visible = true;
+        m_curJoystick.UpdateModifier( lblLastJ.Text, true );
+        m_AT.Dirty = true; if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+    }
+
+    private void Cbx_CheckedChanged( object sender, EventArgs e )
+    {
+      int i = flpExtensions.Controls.IndexOf( (Control)sender );
+      if ( i >= 0 ) {
+        string my = ( sender as CheckBox).Text;
+        int m =  m_AT.ActionMaps.Modifiers.IndexOf(my);
+        if ( m >= 0 ) m_AT.ActionMaps.Modifiers.RemoveAt( m );
+        // maintain context menu - quick and d.. version
+        if ( tdiAddMod1.Text.EndsWith( my ) ) {
+          tdiAddMod1.Text = ""; tdiAddMod1.Visible = false;
+        }
+        if ( tdiAddMod2.Text.EndsWith( my ) ) {
+          tdiAddMod2.Text = ""; tdiAddMod2.Visible = false;
+        }
+        if ( tdiAddMod3.Text.EndsWith( my ) ) {
+          tdiAddMod3.Text = ""; tdiAddMod3.Visible = false;
+        }
+        // remove from joystick - but this applies to one of all - may be not the current
+        foreach ( JoystickCls j in m_Joystick ) { j.UpdateModifier( my, false ); } // send it to all
+        // finally remove the checkbox
+        flpExtensions.Controls.RemoveAt( i );
+        m_AT.Dirty = true; if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+    }
 
     // General Area Items
 
@@ -891,12 +1014,16 @@ namespace SCJMapper_V2
     }
 
     // Node Menu
+    private string m_prevActivationMode ="";
+
     private void cmAddDel_Opening( object sender, CancelEventArgs e )
     {
       // note: the right click selected the node
       ContextMenuStrip cts = ( sender as ContextMenuStrip );
       Boolean any=false;    // above separator
       Boolean any2 = false; // below separator
+      m_prevActivationMode = "";  // switch Closing handling OFF in case we don't show anything
+
       if ( m_AT.CanAssignBinding ) {
         cts.Items[0].Text = "Assign: " + JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked );
       }
@@ -909,8 +1036,34 @@ namespace SCJMapper_V2
 
       cts.Items[3].Visible = any2; // separator
 
+      // handle activation modes - there is a default one and the list of choosable ones
+      // there is no further decision on can or cannot - any(2) is enough to know
+      tdiCbxActivation.Visible = false;
+      ActivationModes am = m_AT.ActivationModeSelectedItem( );
+      // have to fudge around with a descriptive text here
+      if ( am[0] == ActivationModes.Default ) 
+        tdiTxDefActivationMode.Text = string.Format( "Profile: {0}", "no ActivationMode" ); // show the default element
+      else
+        tdiTxDefActivationMode.Text = string.Format( "Profile: {0}", am[0] ); // show the default element
+
+      if ( any  && m_AT.IsMappedAction ) {
+        m_prevActivationMode = am[1]; // this is the selected one
+        tdiCbxActivation.Visible =true;
+        tdiCbxActivation.Text = m_prevActivationMode;
+      }
+
       e.Cancel = !( any || any2 );
     }
+
+    private void cmAddDel_Closed( object sender, ToolStripDropDownClosedEventArgs e )
+    {
+      if ( !string.IsNullOrEmpty(m_prevActivationMode) && ( m_prevActivationMode != tdiCbxActivation.Text )) {
+        m_AT.UpdateActivationModeSelectedItem( tdiCbxActivation.Text );
+        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor; 
+        m_prevActivationMode = "";
+      }
+    }
+
 
     private void tdiAssignBinding_Click( object sender, EventArgs e )
     { // same as btAssign_Click
@@ -948,6 +1101,11 @@ namespace SCJMapper_V2
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
 
+    // note: the right click selected the node
+    private void tdiAddMod_Click( object sender, EventArgs e )
+    {
+
+    }
 
 
     // rtb drop xml file
@@ -1054,12 +1212,13 @@ namespace SCJMapper_V2
     {
       // have to stop polling while the Settings window is open
       timer1.Enabled = false;
-      if ( m_AppSettings.ShowSettings( ) != System.Windows.Forms.DialogResult.Cancel ) {
+      if ( m_AppSettings.ShowSettings( "" ) != System.Windows.Forms.DialogResult.Cancel ) {
         m_AppSettings.Reload( ); // must reload in case of any changes in the form
         // then reload the profile and mappings
         LoadMappingDD( );
         // indicates (in)valid folders
         SCFileIndication( );
+
         // now update the contents according to new settings
         foreach ( JoystickCls j in m_Joystick ) j.ApplySettings( ); // update Seetings
         m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
@@ -1376,9 +1535,8 @@ namespace SCJMapper_V2
     }
 
 
-
-
     #endregion
+
 
   }
 }

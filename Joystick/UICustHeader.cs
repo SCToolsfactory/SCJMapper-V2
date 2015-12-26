@@ -53,14 +53,14 @@ namespace SCJMapper_V2
 
     public void ClearInstances( )
     {
-      m_devInstances.Clear();
+      m_devInstances.Clear( );
     }
     public void AddInstances( DevRec dr )
     {
       m_devInstances.Add( dr );
     }
 
-    
+
     private String[] FormatXml( string xml )
     {
       try {
@@ -86,7 +86,9 @@ namespace SCJMapper_V2
          <joystick instance="1"/>
          <joystick instance="2"/>
         </devices>
-        <categories />
+        <categories>
+         <category label="@ui_CCSpaceFlight"/>
+        </categories>
        </CustomisationUIHeader>
       */
 
@@ -103,6 +105,11 @@ namespace SCJMapper_V2
 
         r += String.Format( "\t\t</devices>\n" );
       }
+      // CIG adds them to export - so can we ...
+      r += String.Format( "\t\t<categories>\n" );
+      r += String.Format( "\t\t<category label=\"@ui_CCSpaceFlight\"/>\n" );
+      r += String.Format( "\t\t</categories>\n" );
+
       r += String.Format( "\t</CustomisationUIHeader>\n" );
 
       // and dump the plain contents if needed
@@ -124,7 +131,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public Boolean Instance_fromXML( XmlReader reader )
+    private Boolean Instance_fromXML( XmlReader reader )
     {
       reader.Read( );
 
@@ -158,9 +165,6 @@ namespace SCJMapper_V2
     /// <returns>True if an action was decoded</returns>
     public Boolean fromXML( String xml )
     {
-      // if ( !this.Contains( xml ) ) this.Add( xml );
-
-
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;
       settings.IgnoreWhitespace = true;
@@ -188,6 +192,9 @@ namespace SCJMapper_V2
 
           if ( reader.Name.ToLowerInvariant( ) == "devices" ) {
             Instance_fromXML( reader );
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "categories" ) {
+            reader.ReadInnerXml( );
           }
           else {
             //??

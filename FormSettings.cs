@@ -16,6 +16,8 @@ namespace SCJMapper_V2
 
     public Boolean Canceled { get; set; }
 
+    public String PasteString { get; set; } // used to copy, paste JS commands
+
     /// <summary>
     /// ctor - gets the owning class instance
     /// </summary>
@@ -37,6 +39,7 @@ namespace SCJMapper_V2
     }
 
 
+    // Save from app settings into actuals
     private void LoadSettings( )
     {
       // SC path
@@ -56,15 +59,20 @@ namespace SCJMapper_V2
       // Ignore actionmaps
       for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
         if ( m_owner.IgnoreActionmaps.Contains( "," + chkLbActionMaps.Items[i].ToString( ) + "," ) ) {
-          chkLbActionMaps.SetItemChecked(i, true);
+          chkLbActionMaps.SetItemChecked( i, true );
         }
       }
 
       // DetectGamepad
       cbxDetectGamepad.Checked = m_owner.DetectGamepad;
+
+      // Use PTU
+      cbxPTU.Checked = m_owner.UsePTU;
+
     }
 
 
+    // Save the current settings
     private void SaveSettings( )
     {
       // SC path
@@ -84,7 +92,7 @@ namespace SCJMapper_V2
       // Ignore actionmaps
       String ignore = ",";
       for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
-        if ( chkLbActionMaps.GetItemChecked(i) ) {
+        if ( chkLbActionMaps.GetItemChecked( i ) ) {
           ignore += chkLbActionMaps.Items[i].ToString( ) + ",";
         }
       }
@@ -95,6 +103,12 @@ namespace SCJMapper_V2
         MessageBox.Show( "Changing the Gamepad option needs a restart of the application !!", "Settings Notification", MessageBoxButtons.OK, MessageBoxIcon.Information );
       }
       m_owner.DetectGamepad = cbxDetectGamepad.Checked;
+
+      // Use PTU
+      if ( m_owner.UsePTU != cbxPTU.Checked ) {
+        MessageBox.Show( "Changing to / from PTU folders needs a restart of the application !!", "Settings Notification", MessageBoxButtons.OK, MessageBoxIcon.Information );
+      }
+      m_owner.UsePTU = cbxPTU.Checked;
 
       m_owner.Save( );
     }
@@ -164,8 +178,6 @@ namespace SCJMapper_V2
     {
 
     }
-
-
 
 
   }

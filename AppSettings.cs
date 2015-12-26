@@ -28,9 +28,10 @@ namespace SCJMapper_V2
     /// <summary>
     /// Show the Settings Dialog
     /// </summary>
-    public DialogResult ShowSettings( )
+    public DialogResult ShowSettings( String pasteString )
     {
       if ( FS == null ) FS = new FormSettings( this );
+      FS.PasteString = pasteString; // propagate joyinput
       FS.ShowDialog( );
       return ( FS.Canceled ) ? DialogResult.Cancel : DialogResult.OK;
     }
@@ -220,6 +221,14 @@ namespace SCJMapper_V2
     {
       get { return ( Boolean )this["DetectGamepad"]; }
       set { this["DetectGamepad"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "False" )]
+    public Boolean UsePTU
+    {
+      get { return ( Boolean )this["UsePTU"]; }
+      set { this["UsePTU"] = value; }
     }
 
 

@@ -175,6 +175,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns the SC Client path  
     /// AC 1.1.6: E:\G\StarCitizen\StarCitizen\Public
+    /// SC 2x: alternatively use PTU path  E:\G\StarCitizen\StarCitizen\Test
     /// </summary>
     static public String SCClientPath
     {
@@ -185,10 +186,14 @@ namespace SCJMapper_V2
         if ( String.IsNullOrEmpty( scp ) ) return ""; // no valid one can be found
         //
         scp = Path.Combine( scp, "StarCitizen" );
-        scp = Path.Combine( scp, "Public" );
+        if ( appSettings.UsePTU )
+          scp = Path.Combine( scp, "Test" );
+        else
+          scp = Path.Combine( scp, "Public" );
+
         if ( Directory.Exists( scp ) ) return scp;
 
-        log.WarnFormat( "SCClientDataPath - StarCitizen\\Public subfolder does not exist: {0}", scp );
+        log.WarnFormat( "SCClientDataPath - StarCitizen\\Public or for PTU \\Test subfolder does not exist: {0}", scp );
         return "";
       }
     }

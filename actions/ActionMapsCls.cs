@@ -39,12 +39,12 @@ namespace SCJMapper_V2
     private const String ACM_VERSION = "version=\"1\" optionsVersion=\"2\" rebindVersion=\"2\"";  //AC2  the FIXED version 
 
     private String version { get; set; }
-    private String ignoreversion { get; set; }
 
     private JoystickList m_joystickList = null;
     private UICustHeader m_uiCustHeader = null;
     private Options m_options = null;
     private Deviceoptions m_deviceOptions = null;
+    private Modifiers m_modifiers = null;
 
     private List<CheckBox> m_invertCB = null; // Options owns and handles all Inversions
 
@@ -142,7 +142,13 @@ namespace SCJMapper_V2
       }
     }
 
-
+    /// <summary>
+    /// Returns the assigned Modifiers
+    /// </summary>
+    public Modifiers Modifiers
+    {
+      get { return m_modifiers; }
+    }
 
     /// <summary>
     /// ctor
@@ -171,6 +177,7 @@ namespace SCJMapper_V2
       m_uiCustHeader = new UICustHeader( );
       m_options = new Options( m_joystickList );
       m_deviceOptions = new Deviceoptions( m_options );
+      m_modifiers = new Modifiers( );
     }
 
     /// <summary>
@@ -186,6 +193,7 @@ namespace SCJMapper_V2
       newMaps.m_uiCustHeader = this.m_uiCustHeader;
       newMaps.m_deviceOptions = this.m_deviceOptions;
       newMaps.m_options = this.m_options;
+      newMaps.m_modifiers = this.m_modifiers;
 
       for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
         newMaps.jsN[i] = this.jsN[i]; newMaps.jsNGUID[i] = this.jsNGUID[i];
@@ -276,6 +284,9 @@ namespace SCJMapper_V2
       // *** DEVICE OPTIONS
       if ( m_deviceOptions.Count > 0 ) r += m_deviceOptions.toXML( ) + String.Format( "\n" );
 
+      // *** MODIFIERS
+      if ( m_modifiers.Count > 0 ) r += m_modifiers.toXML( ) + String.Format( "\n" );
+
       // *** ACTION MAPS
 
       foreach ( ActionMapCls amc in this ) {
@@ -313,8 +324,6 @@ namespace SCJMapper_V2
           version = reader["version"];
           if ( version == "0" ) version = ACM_VERSION; // update from legacy to actual version 
 
-          ignoreversion = reader["ignoreVersion"]; // could be either / or ..
-
           // get the joystick mapping if there is one
           for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
             jsN[i] = reader[String.Format( "js{0}", i + 1 )];
@@ -332,24 +341,28 @@ namespace SCJMapper_V2
 
       while ( !reader.EOF ) { //!String.IsNullOrEmpty( x ) ) {
 
-        if ( reader.Name == "actionmap" ) {
+        if ( reader.Name.ToLowerInvariant() == "actionmap" ) {
           String x = reader.ReadOuterXml( );
           ActionMapCls acm = new ActionMapCls( );
           if ( acm.fromXML( x ) ) {
             this.Merge( acm ); // merge list
           }
         }
-        else if ( reader.Name == "CustomisationUIHeader" ) {
+        else if ( reader.Name.ToLowerInvariant( ) == "customisationuiheader" ) {
           String x = reader.ReadOuterXml( );
           m_uiCustHeader.fromXML( x );
         }
-        else if ( reader.Name == "deviceoptions" ) {
+        else if ( reader.Name.ToLowerInvariant( ) == "deviceoptions" ) {
           String x = reader.ReadOuterXml( );
           m_deviceOptions.fromXML( x );
         }
-        else if ( reader.Name == "options" ) {
+        else if ( reader.Name.ToLowerInvariant( ) == "options" ) {
           String x = reader.ReadOuterXml( );
           m_options.fromXML( x );
+        }
+        else if ( reader.Name.ToLowerInvariant( ) == "modifiers" ) {
+          String x = reader.ReadOuterXml( );
+          m_modifiers.fromXML( x );
         }
         else {
           reader.Read( );

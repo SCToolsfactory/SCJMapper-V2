@@ -126,6 +126,7 @@
     <Compile Include="Gamepad\GamepadCls.cs" />
     <Compile Include="Joystick\JsReassingList.cs" />
     <Compile Include="Keyboard\KeyboardCls.cs" />
+    <Compile Include="Joystick\Modifiers.cs" />
     <Compile Include="Mouse\MouseCls.cs" />
     <Compile Include="MySounds.cs" />
     <Compile Include="OGL\BezierSeries.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="actions\ActionMapCls.cs" />
     <Compile Include="actions\ActionMapsCls.cs" />
     <Compile Include="actions\ActionTree.cs" />
+    <Compile Include="SC\ActivationModes.cs" />
     <Compile Include="SC\DProfileReader.cs" />
     <Compile Include="Joystick\JoystickCls.cs" />
     <Compile Include="actions\MyColors.cs" />

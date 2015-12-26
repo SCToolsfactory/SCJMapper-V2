@@ -270,7 +270,23 @@ namespace SCJMapper_V2
     }
 
 
+    const string jsb_pattern = @"^js\d_button\d{1,3}$";
+    static Regex rgx_jsb = new Regex( jsb_pattern, RegexOptions.IgnoreCase );
+    /// <summary>
+    /// Returns True if devInput seems to be a valid Modifier 
+    /// (only buttons are accepted)
+    /// </summary>
+    /// <param name="devInput">A qualified devInput (jsN_buttonM)</param>
+    /// <returns>True for a valid one</returns>
+    static public Bool ValidModifier( String devInput )
+    {
+      return rgx_jsb.IsMatch( devInput );
+    }
+
+
     #endregion
+
+    // ****************** CLASS *************************
 
     private Joystick m_device;
 
@@ -285,6 +301,8 @@ namespace SCJMapper_V2
     private int m_joystickNumber = 0; // seq number of the enumerated joystick
     private bool[] m_ignoreButtons;
     private bool m_activated = false;
+
+    private bool[] m_modifierButtons;
 
     private UC_JoyPanel m_jPanel = null; // the GUI panel
     internal int  MyTabPageIndex = -1;
@@ -382,7 +400,10 @@ namespace SCJMapper_V2
       m_jPanel.JsAssignment = 0; // default is no assignment
 
       m_ignoreButtons = new bool[m_state.Buttons.Length];
-      ResetIgnoreButtons( );
+      ResetButtons( m_ignoreButtons );
+
+      m_modifierButtons = new bool[m_state.Buttons.Length];
+      ResetButtons( m_modifierButtons );
 
       log.Debug( "Get JS Objects" );
       try {
@@ -427,11 +448,6 @@ namespace SCJMapper_V2
     }
 
 
-    private void ResetIgnoreButtons( )
-    {
-      for ( int i=0; i < m_ignoreButtons.Length; i++ ) m_ignoreButtons[i] = false;
-    }
-
     /// <summary>
     /// Tells the Joystick to re-read settings
     /// </summary>
@@ -439,7 +455,7 @@ namespace SCJMapper_V2
     {
       appSettings.Reload( );
 
-      ResetIgnoreButtons( );
+      ResetButtons( m_ignoreButtons );
       // read ignore buttons
       String igs = "";
       switch ( m_joystickNumber ) {
@@ -468,6 +484,33 @@ namespace SCJMapper_V2
 
     }
 
+
+    private void ResetButtons( bool[] bt)
+    {
+      for ( int i = 0; i < bt.Length; i++ ) bt[i] = false;
+    }
+
+
+    /// <summary>
+    /// Add or Remove a modifier from this joystick
+    /// </summary>
+    /// <param name="modS">The joystick command (jsN_buttonM)</param>
+    /// <param name="add">True to add, False to remove it</param>
+    public void UpdateModifier( string modS, bool add )
+    {
+      if ( !ValidModifier( modS ) ) return; // sanity..
+
+      // check if it is applicable
+      int jsn = JSNum(modS);
+      if ( jsn == m_joystickNumber ) {
+        // format is jsN_buttonM i.e. get button number at the end
+        int bNr = 0;
+        if ( int.TryParse( modS.Substring( 10 ), out bNr ) ) {
+          // valid bNr
+          m_modifierButtons[bNr - 1] = add; // update
+        }
+      }
+    }
 
 
     /// <summary>

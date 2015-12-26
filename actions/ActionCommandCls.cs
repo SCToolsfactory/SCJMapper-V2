@@ -25,12 +25,20 @@ namespace SCJMapper_V2
     public String DevID { get; set; }     // the device ID (jsN, mo1, xi1, kb1) 
 
     /// <summary>
+    /// The applied ActivationMode for this command
+    /// </summary>
+    public String ActivationMode { get; set; }  // "" or one of the defined ActivationModes
+
+
+    /// <summary>
     /// The complete input string  (devID_input)
     /// Assuming internally blended ones only (i.e. no space blends contained)
     /// Can derive if a device tag is given
     /// </summary>
-    public String DevInput {
-      get {
+    public String DevInput
+    {
+      get
+      {
         if ( string.IsNullOrEmpty( Input ) )
           return Input; // no Input - return empty
         else if ( string.IsNullOrEmpty( DevID ) )
@@ -38,12 +46,13 @@ namespace SCJMapper_V2
         else
           return String.Format( "{0}_{1}", DevID, Input ); // fully qualified only if both exist
       }
-      set {
+      set
+      {
         // decompose the deviceInput into parts
         if ( string.IsNullOrEmpty( value ) ) {  // no Input - insert input empty
           Input = ""; // empty one
         }
-        else if ( value.IndexOf("_") == 3 ) { // fully qualified only if both exist
+        else if ( value.IndexOf( "_" ) == 3 ) { // fully qualified only if both exist
           DevID = value.Substring( 0, 3 );
           Input = value.Substring( 4 );
         }
@@ -67,6 +76,7 @@ namespace SCJMapper_V2
       // init with something to debug if needed
       Input = "UNDEF";
       DevID = "NA0";
+      ActivationMode = "";
       NodeIndex = -1;
     }
 
@@ -75,6 +85,7 @@ namespace SCJMapper_V2
     {
       Input = other.Input;
       DevID = other.DevID;
+      ActivationMode = other.ActivationMode;
       NodeIndex = other.NodeIndex;
     }
 
@@ -82,6 +93,7 @@ namespace SCJMapper_V2
     public ActionCommandCls( String devInp )
     {
       DevInput = devInp;
+      ActivationMode = "";
       NodeIndex = -1;
     }
 
@@ -89,6 +101,7 @@ namespace SCJMapper_V2
     public ActionCommandCls( String devInp, int nodeIx )
     {
       DevInput = devInp;
+      ActivationMode = "";
       NodeIndex = nodeIx;
     }
 
@@ -97,6 +110,7 @@ namespace SCJMapper_V2
     {
       Input = inp;
       DevID = dev;
+      ActivationMode = "";
       NodeIndex = -1;
     }
 
@@ -105,6 +119,7 @@ namespace SCJMapper_V2
     {
       Input = inp;
       DevID = dev;
+      ActivationMode = "";
       NodeIndex = nodeIx;
     }
 
@@ -118,7 +133,7 @@ namespace SCJMapper_V2
     {
       // full copy from 'this'
       ActionCommandCls newAc = new ActionCommandCls( this );
-           
+
       // reassign the jsX part for Joystick commands
       if ( this.DevID.StartsWith( "js" ) ) {
         int oldJsN = JoystickCls.JSNum( this.DevID );
@@ -138,13 +153,14 @@ namespace SCJMapper_V2
     public String toXML( )
     {
       String r = "";
-      if ( String.IsNullOrEmpty( Input ) ) {
-        r = String.Format( " />\n" );  // actually an ERROR...
-      }
-      else {
+      if ( !String.IsNullOrEmpty( Input ) ) {
         // regular - apply XML formatting to internally blended items
-        r = String.Format( "input=\"{0}_{1}\" />\n", DevID, DeviceCls.toXML( Input ) );
+        r += String.Format( "input=\"{0}_{1}\" ", DevID, DeviceCls.toXML( Input ) );
+        if ( ActivationMode != ActivationModes.Default ) {
+          r += String.Format( "ActivationMode=\"{0}\" ", ActivationMode );
+        }
       }
+      r += String.Format( " />\n" );  // actually an ERROR...
 
       return r;
     }

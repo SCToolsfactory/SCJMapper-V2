@@ -56,6 +56,7 @@
       this.btCancel = new System.Windows.Forms.Button();
       this.label1 = new System.Windows.Forms.Label();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.cbxPTU = new System.Windows.Forms.CheckBox();
       this.cbxDetectGamepad = new System.Windows.Forms.CheckBox();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -65,7 +66,7 @@
       // 
       // btDone
       // 
-      this.btDone.Location = new System.Drawing.Point(658, 405);
+      this.btDone.Location = new System.Drawing.Point(658, 423);
       this.btDone.Name = "btDone";
       this.btDone.Size = new System.Drawing.Size(93, 31);
       this.btDone.TabIndex = 1;
@@ -101,9 +102,9 @@
       // 
       // txJS1
       // 
-      this.txJS1.Location = new System.Drawing.Point(66, 21);
+      this.txJS1.Location = new System.Drawing.Point(66, 46);
       this.txJS1.Name = "txJS1";
-      this.txJS1.Size = new System.Drawing.Size(482, 22);
+      this.txJS1.Size = new System.Drawing.Size(440, 22);
       this.txJS1.TabIndex = 6;
       this.txJS1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txJS1_KeyDown);
       this.txJS1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txJS1_KeyPress);
@@ -111,7 +112,7 @@
       // label3
       // 
       this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(6, 24);
+      this.label3.Location = new System.Drawing.Point(6, 49);
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(57, 13);
       this.label3.TabIndex = 7;
@@ -120,7 +121,7 @@
       // label4
       // 
       this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(6, 52);
+      this.label4.Location = new System.Drawing.Point(6, 77);
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(57, 13);
       this.label4.TabIndex = 9;
@@ -128,9 +129,9 @@
       // 
       // txJS2
       // 
-      this.txJS2.Location = new System.Drawing.Point(66, 49);
+      this.txJS2.Location = new System.Drawing.Point(66, 74);
       this.txJS2.Name = "txJS2";
-      this.txJS2.Size = new System.Drawing.Size(482, 22);
+      this.txJS2.Size = new System.Drawing.Size(440, 22);
       this.txJS2.TabIndex = 8;
       this.txJS2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txJS1_KeyDown);
       this.txJS2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txJS1_KeyPress);
@@ -138,7 +139,7 @@
       // label5
       // 
       this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(6, 80);
+      this.label5.Location = new System.Drawing.Point(6, 105);
       this.label5.Name = "label5";
       this.label5.Size = new System.Drawing.Size(57, 13);
       this.label5.TabIndex = 11;
@@ -146,9 +147,9 @@
       // 
       // txJS3
       // 
-      this.txJS3.Location = new System.Drawing.Point(66, 77);
+      this.txJS3.Location = new System.Drawing.Point(66, 102);
       this.txJS3.Name = "txJS3";
-      this.txJS3.Size = new System.Drawing.Size(482, 22);
+      this.txJS3.Size = new System.Drawing.Size(440, 22);
       this.txJS3.TabIndex = 10;
       this.txJS3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txJS1_KeyDown);
       this.txJS3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txJS1_KeyPress);
@@ -156,7 +157,7 @@
       // label6
       // 
       this.label6.AutoSize = true;
-      this.label6.Location = new System.Drawing.Point(6, 108);
+      this.label6.Location = new System.Drawing.Point(6, 133);
       this.label6.Name = "label6";
       this.label6.Size = new System.Drawing.Size(57, 13);
       this.label6.TabIndex = 13;
@@ -164,9 +165,9 @@
       // 
       // txJS4
       // 
-      this.txJS4.Location = new System.Drawing.Point(66, 105);
+      this.txJS4.Location = new System.Drawing.Point(66, 130);
       this.txJS4.Name = "txJS4";
-      this.txJS4.Size = new System.Drawing.Size(482, 22);
+      this.txJS4.Size = new System.Drawing.Size(440, 22);
       this.txJS4.TabIndex = 12;
       this.txJS4.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txJS1_KeyDown);
       this.txJS4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txJS1_KeyPress);
@@ -174,7 +175,7 @@
       // label7
       // 
       this.label7.AutoSize = true;
-      this.label7.Location = new System.Drawing.Point(6, 136);
+      this.label7.Location = new System.Drawing.Point(6, 161);
       this.label7.Name = "label7";
       this.label7.Size = new System.Drawing.Size(57, 13);
       this.label7.TabIndex = 15;
@@ -182,9 +183,9 @@
       // 
       // txJS5
       // 
-      this.txJS5.Location = new System.Drawing.Point(66, 133);
+      this.txJS5.Location = new System.Drawing.Point(66, 158);
       this.txJS5.Name = "txJS5";
-      this.txJS5.Size = new System.Drawing.Size(482, 22);
+      this.txJS5.Size = new System.Drawing.Size(440, 22);
       this.txJS5.TabIndex = 14;
       this.txJS5.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txJS1_KeyDown);
       this.txJS5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txJS1_KeyPress);
@@ -192,7 +193,7 @@
       // label8
       // 
       this.label8.AutoSize = true;
-      this.label8.Location = new System.Drawing.Point(6, 164);
+      this.label8.Location = new System.Drawing.Point(6, 189);
       this.label8.Name = "label8";
       this.label8.Size = new System.Drawing.Size(57, 13);
       this.label8.TabIndex = 17;
@@ -200,9 +201,9 @@
       // 
       // txJS6
       // 
-      this.txJS6.Location = new System.Drawing.Point(66, 161);
+      this.txJS6.Location = new System.Drawing.Point(66, 186);
       this.txJS6.Name = "txJS6";
-      this.txJS6.Size = new System.Drawing.Size(482, 22);
+      this.txJS6.Size = new System.Drawing.Size(440, 22);
       this.txJS6.TabIndex = 16;
       this.txJS6.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txJS1_KeyDown);
       this.txJS6.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txJS1_KeyPress);
@@ -210,7 +211,7 @@
       // label9
       // 
       this.label9.AutoSize = true;
-      this.label9.Location = new System.Drawing.Point(6, 192);
+      this.label9.Location = new System.Drawing.Point(6, 217);
       this.label9.Name = "label9";
       this.label9.Size = new System.Drawing.Size(57, 13);
       this.label9.TabIndex = 19;
@@ -218,9 +219,9 @@
       // 
       // txJS7
       // 
-      this.txJS7.Location = new System.Drawing.Point(66, 189);
+      this.txJS7.Location = new System.Drawing.Point(66, 214);
       this.txJS7.Name = "txJS7";
-      this.txJS7.Size = new System.Drawing.Size(482, 22);
+      this.txJS7.Size = new System.Drawing.Size(440, 22);
       this.txJS7.TabIndex = 18;
       this.txJS7.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txJS1_KeyDown);
       this.txJS7.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txJS1_KeyPress);
@@ -228,7 +229,7 @@
       // label10
       // 
       this.label10.AutoSize = true;
-      this.label10.Location = new System.Drawing.Point(6, 220);
+      this.label10.Location = new System.Drawing.Point(6, 245);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(57, 13);
       this.label10.TabIndex = 21;
@@ -236,9 +237,9 @@
       // 
       // txJS8
       // 
-      this.txJS8.Location = new System.Drawing.Point(66, 217);
+      this.txJS8.Location = new System.Drawing.Point(66, 242);
       this.txJS8.Name = "txJS8";
-      this.txJS8.Size = new System.Drawing.Size(482, 22);
+      this.txJS8.Size = new System.Drawing.Size(440, 22);
       this.txJS8.TabIndex = 20;
       this.txJS8.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txJS1_KeyDown);
       this.txJS8.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txJS1_KeyPress);
@@ -269,7 +270,7 @@
       this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox1.Location = new System.Drawing.Point(12, 12);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(561, 257);
+      this.groupBox1.Size = new System.Drawing.Size(561, 276);
       this.groupBox1.TabIndex = 22;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Ignore Buttons - enter button numbers which should be ignored separated by spaces" +
@@ -281,7 +282,7 @@
       this.groupBox2.Controls.Add(this.btChooseSCDir);
       this.groupBox2.Controls.Add(this.cbxUsePath);
       this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.groupBox2.Location = new System.Drawing.Point(12, 275);
+      this.groupBox2.Location = new System.Drawing.Point(12, 294);
       this.groupBox2.Name = "groupBox2";
       this.groupBox2.Size = new System.Drawing.Size(561, 59);
       this.groupBox2.TabIndex = 23;
@@ -294,7 +295,7 @@
       this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox3.Location = new System.Drawing.Point(579, 12);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(274, 387);
+      this.groupBox3.Size = new System.Drawing.Size(274, 405);
       this.groupBox3.TabIndex = 24;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "Ignore Actionmaps - check the ones to hide";
@@ -306,13 +307,13 @@
       this.chkLbActionMaps.FormattingEnabled = true;
       this.chkLbActionMaps.Location = new System.Drawing.Point(3, 18);
       this.chkLbActionMaps.Name = "chkLbActionMaps";
-      this.chkLbActionMaps.Size = new System.Drawing.Size(268, 366);
+      this.chkLbActionMaps.Size = new System.Drawing.Size(268, 384);
       this.chkLbActionMaps.TabIndex = 0;
       // 
       // btCancel
       // 
       this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-      this.btCancel.Location = new System.Drawing.Point(757, 405);
+      this.btCancel.Location = new System.Drawing.Point(757, 423);
       this.btCancel.Name = "btCancel";
       this.btCancel.Size = new System.Drawing.Size(93, 31);
       this.btCancel.TabIndex = 25;
@@ -323,7 +324,7 @@
       // label1
       // 
       this.label1.ForeColor = System.Drawing.Color.Red;
-      this.label1.Location = new System.Drawing.Point(228, 409);
+      this.label1.Location = new System.Drawing.Point(228, 427);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(414, 28);
       this.label1.TabIndex = 26;
@@ -333,14 +334,26 @@
       // 
       // groupBox4
       // 
+      this.groupBox4.Controls.Add(this.cbxPTU);
       this.groupBox4.Controls.Add(this.cbxDetectGamepad);
       this.groupBox4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.groupBox4.Location = new System.Drawing.Point(12, 340);
+      this.groupBox4.Location = new System.Drawing.Point(12, 359);
       this.groupBox4.Name = "groupBox4";
       this.groupBox4.Size = new System.Drawing.Size(561, 59);
       this.groupBox4.TabIndex = 27;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "Advanced Options ...";
+      // 
+      // cbxPTU
+      // 
+      this.cbxPTU.AutoSize = true;
+      this.cbxPTU.BackColor = System.Drawing.Color.SandyBrown;
+      this.cbxPTU.Location = new System.Drawing.Point(145, 21);
+      this.cbxPTU.Name = "cbxPTU";
+      this.cbxPTU.Size = new System.Drawing.Size(108, 17);
+      this.cbxPTU.TabIndex = 7;
+      this.cbxPTU.Text = "Use PTU folders";
+      this.cbxPTU.UseVisualStyleBackColor = false;
       // 
       // cbxDetectGamepad
       // 
@@ -357,7 +370,7 @@
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.CancelButton = this.btCancel;
-      this.ClientSize = new System.Drawing.Size(861, 446);
+      this.ClientSize = new System.Drawing.Size(861, 467);
       this.Controls.Add(this.groupBox4);
       this.Controls.Add(this.label1);
       this.Controls.Add(this.btCancel);
@@ -415,5 +428,6 @@
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.GroupBox groupBox4;
     private System.Windows.Forms.CheckBox cbxDetectGamepad;
+    private System.Windows.Forms.CheckBox cbxPTU;
   }
 }

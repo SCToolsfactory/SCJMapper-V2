@@ -47,6 +47,7 @@
       this.btGrab = new System.Windows.Forms.Button();
       this.btDump = new System.Windows.Forms.Button();
       this.panel2 = new System.Windows.Forms.Panel();
+      this.btMakeMod = new System.Windows.Forms.Button();
       this.btJsKbd = new System.Windows.Forms.Button();
       this.IL = new System.Windows.Forms.ImageList(this.components);
       this.btBlend = new System.Windows.Forms.Button();
@@ -71,8 +72,12 @@
       this.tdiBlendBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiClearBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-      this.tsiAddBinding = new System.Windows.Forms.ToolStripMenuItem();
+      this.tdiAddBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiDelBinding = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+      this.tdiAddMod1 = new System.Windows.Forms.ToolStripMenuItem();
+      this.tdiAddMod2 = new System.Windows.Forms.ToolStripMenuItem();
+      this.tdiAddMod3 = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
       this.panel1 = new System.Windows.Forms.Panel();
@@ -94,6 +99,7 @@
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.btSettings = new System.Windows.Forms.Button();
       this.btJsReassign = new System.Windows.Forms.Button();
+      this.lblPTU = new System.Windows.Forms.Label();
       this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
       this.btSaveMyMapping = new System.Windows.Forms.Button();
       this.btLoadMyMapping = new System.Windows.Forms.Button();
@@ -108,7 +114,7 @@
       this.label2 = new System.Windows.Forms.Label();
       this.txFilter = new System.Windows.Forms.TextBox();
       this.btClearFilter = new System.Windows.Forms.Button();
-      this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+      this.flpExtensions = new System.Windows.Forms.FlowLayoutPanel();
       this.cbxInvAimPitch = new System.Windows.Forms.CheckBox();
       this.cbxInvViewPitch = new System.Windows.Forms.CheckBox();
       this.cbxInvAimYaw = new System.Windows.Forms.CheckBox();
@@ -131,6 +137,9 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+      this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+      this.tdiCbxActivation = new System.Windows.Forms.ToolStripComboBox();
+      this.tdiTxDefActivationMode = new System.Windows.Forms.ToolStripTextBox();
       this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
@@ -145,7 +154,7 @@
       this.tableLayoutPanel2.SuspendLayout();
       this.tableLayoutPanel3.SuspendLayout();
       this.flowLayoutPanel2.SuspendLayout();
-      this.flowLayoutPanel3.SuspendLayout();
+      this.flpExtensions.SuspendLayout();
       this.statusStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -257,6 +266,7 @@
       // panel2
       // 
       this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.panel2.Controls.Add(this.btMakeMod);
       this.panel2.Controls.Add(this.btJsKbd);
       this.panel2.Controls.Add(this.btBlend);
       this.panel2.Controls.Add(this.lblLastJ);
@@ -273,12 +283,23 @@
       this.panel2.Size = new System.Drawing.Size(289, 170);
       this.panel2.TabIndex = 17;
       // 
+      // btMakeMod
+      // 
+      this.btMakeMod.Location = new System.Drawing.Point(10, 140);
+      this.btMakeMod.Name = "btMakeMod";
+      this.btMakeMod.Size = new System.Drawing.Size(73, 25);
+      this.btMakeMod.TabIndex = 17;
+      this.btMakeMod.Text = "Make MOD";
+      this.btMakeMod.UseVisualStyleBackColor = true;
+      this.btMakeMod.Visible = false;
+      this.btMakeMod.Click += new System.EventHandler(this.btMakeMod_Click);
+      // 
       // btJsKbd
       // 
       this.btJsKbd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.btJsKbd.ImageKey = "J";
       this.btJsKbd.ImageList = this.IL;
-      this.btJsKbd.Location = new System.Drawing.Point(104, 125);
+      this.btJsKbd.Location = new System.Drawing.Point(104, 102);
       this.btJsKbd.Name = "btJsKbd";
       this.btJsKbd.Size = new System.Drawing.Size(79, 25);
       this.btJsKbd.TabIndex = 16;
@@ -303,7 +324,7 @@
       // 
       // btBlend
       // 
-      this.btBlend.Location = new System.Drawing.Point(10, 125);
+      this.btBlend.Location = new System.Drawing.Point(10, 102);
       this.btBlend.Name = "btBlend";
       this.btBlend.Size = new System.Drawing.Size(73, 25);
       this.btBlend.TabIndex = 16;
@@ -380,7 +401,7 @@
       // cbxThrottle
       // 
       this.cbxThrottle.AutoSize = true;
-      this.cbxThrottle.Location = new System.Drawing.Point(89, 86);
+      this.cbxThrottle.Location = new System.Drawing.Point(89, 76);
       this.cbxThrottle.Name = "cbxThrottle";
       this.cbxThrottle.Size = new System.Drawing.Size(66, 17);
       this.cbxThrottle.TabIndex = 13;
@@ -389,7 +410,7 @@
       // 
       // btFind
       // 
-      this.btFind.Location = new System.Drawing.Point(201, 81);
+      this.btFind.Location = new System.Drawing.Point(201, 71);
       this.btFind.Name = "btFind";
       this.btFind.Size = new System.Drawing.Size(73, 25);
       this.btFind.TabIndex = 12;
@@ -417,7 +438,7 @@
       // 
       // btClear
       // 
-      this.btClear.Location = new System.Drawing.Point(201, 125);
+      this.btClear.Location = new System.Drawing.Point(201, 102);
       this.btClear.Name = "btClear";
       this.btClear.Size = new System.Drawing.Size(73, 25);
       this.btClear.TabIndex = 2;
@@ -437,7 +458,7 @@
       // 
       // btAssign
       // 
-      this.btAssign.Location = new System.Drawing.Point(10, 81);
+      this.btAssign.Location = new System.Drawing.Point(10, 71);
       this.btAssign.Name = "btAssign";
       this.btAssign.Size = new System.Drawing.Size(73, 25);
       this.btAssign.TabIndex = 15;
@@ -469,51 +490,91 @@
             this.tdiBlendBinding,
             this.tdiClearBinding,
             this.toolStripSeparator2,
-            this.tsiAddBinding,
-            this.tdiDelBinding});
+            this.tdiAddBinding,
+            this.tdiDelBinding,
+            this.toolStripSeparator5,
+            this.tdiTxDefActivationMode,
+            this.tdiCbxActivation,
+            this.toolStripSeparator6,
+            this.tdiAddMod1,
+            this.tdiAddMod2,
+            this.tdiAddMod3});
       this.cmAddDel.Name = "cmAddDel";
-      this.cmAddDel.Size = new System.Drawing.Size(161, 120);
+      this.cmAddDel.Size = new System.Drawing.Size(221, 429);
+      this.cmAddDel.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.cmAddDel_Closed);
       this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
       // 
       // tdiAssignBinding
       // 
       this.tdiAssignBinding.Name = "tdiAssignBinding";
-      this.tdiAssignBinding.Size = new System.Drawing.Size(160, 22);
+      this.tdiAssignBinding.Size = new System.Drawing.Size(220, 22);
       this.tdiAssignBinding.Text = "Assign Mapping";
       this.tdiAssignBinding.Click += new System.EventHandler(this.tdiAssignBinding_Click);
       // 
       // tdiBlendBinding
       // 
       this.tdiBlendBinding.Name = "tdiBlendBinding";
-      this.tdiBlendBinding.Size = new System.Drawing.Size(160, 22);
+      this.tdiBlendBinding.Size = new System.Drawing.Size(220, 22);
       this.tdiBlendBinding.Text = "Blend Mapping";
       this.tdiBlendBinding.Click += new System.EventHandler(this.tdiBlendBinding_Click);
       // 
       // tdiClearBinding
       // 
       this.tdiClearBinding.Name = "tdiClearBinding";
-      this.tdiClearBinding.Size = new System.Drawing.Size(160, 22);
+      this.tdiClearBinding.Size = new System.Drawing.Size(220, 22);
       this.tdiClearBinding.Text = "Clear Mapping";
       this.tdiClearBinding.Click += new System.EventHandler(this.tdiClearBinding_Click);
       // 
       // toolStripSeparator2
       // 
       this.toolStripSeparator2.Name = "toolStripSeparator2";
-      this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
+      this.toolStripSeparator2.Size = new System.Drawing.Size(217, 6);
       // 
-      // tsiAddBinding
+      // tdiAddBinding
       // 
-      this.tsiAddBinding.Name = "tsiAddBinding";
-      this.tsiAddBinding.Size = new System.Drawing.Size(160, 22);
-      this.tsiAddBinding.Text = "Add Mapping";
-      this.tsiAddBinding.Click += new System.EventHandler(this.tsiAddBinding_Click);
+      this.tdiAddBinding.Name = "tdiAddBinding";
+      this.tdiAddBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiAddBinding.Text = "Add Mapping";
+      this.tdiAddBinding.Click += new System.EventHandler(this.tsiAddBinding_Click);
       // 
       // tdiDelBinding
       // 
       this.tdiDelBinding.Name = "tdiDelBinding";
-      this.tdiDelBinding.Size = new System.Drawing.Size(160, 22);
+      this.tdiDelBinding.Size = new System.Drawing.Size(220, 22);
       this.tdiDelBinding.Text = "Delete Mapping";
       this.tdiDelBinding.Click += new System.EventHandler(this.tdiDelBinding_Click);
+      // 
+      // toolStripSeparator5
+      // 
+      this.toolStripSeparator5.Name = "toolStripSeparator5";
+      this.toolStripSeparator5.Size = new System.Drawing.Size(217, 6);
+      // 
+      // tdiAddMod1
+      // 
+      this.tdiAddMod1.Name = "tdiAddMod1";
+      this.tdiAddMod1.Size = new System.Drawing.Size(220, 22);
+      this.tdiAddMod1.Tag = "0";
+      this.tdiAddMod1.Text = "Mod:";
+      this.tdiAddMod1.Visible = false;
+      this.tdiAddMod1.Click += new System.EventHandler(this.tdiAddMod_Click);
+      // 
+      // tdiAddMod2
+      // 
+      this.tdiAddMod2.Name = "tdiAddMod2";
+      this.tdiAddMod2.Size = new System.Drawing.Size(220, 22);
+      this.tdiAddMod2.Tag = "1";
+      this.tdiAddMod2.Text = "Mod:";
+      this.tdiAddMod2.Visible = false;
+      this.tdiAddMod2.Click += new System.EventHandler(this.tdiAddMod_Click);
+      // 
+      // tdiAddMod3
+      // 
+      this.tdiAddMod3.Name = "tdiAddMod3";
+      this.tdiAddMod3.Size = new System.Drawing.Size(220, 22);
+      this.tdiAddMod3.Tag = "2";
+      this.tdiAddMod3.Text = "Mod:";
+      this.tdiAddMod3.Visible = false;
+      this.tdiAddMod3.Click += new System.EventHandler(this.tdiAddMod_Click);
       // 
       // tc1
       // 
@@ -530,6 +591,7 @@
       this.tc1.Size = new System.Drawing.Size(289, 349);
       this.tc1.TabIndex = 15;
       this.tc1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tc1_DrawItem);
+      this.tc1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tc1_Selected);
       // 
       // tabJS1
       // 
@@ -656,7 +718,7 @@
       this.tlpanel.Controls.Add(this.tableLayoutPanel2, 1, 3);
       this.tlpanel.Controls.Add(this.tableLayoutPanel3, 2, 3);
       this.tlpanel.Controls.Add(this.flowLayoutPanel2, 0, 3);
-      this.tlpanel.Controls.Add(this.flowLayoutPanel3, 2, 2);
+      this.tlpanel.Controls.Add(this.flpExtensions, 2, 2);
       this.tlpanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tlpanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tlpanel.Location = new System.Drawing.Point(0, 0);
@@ -732,6 +794,7 @@
       this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 1);
       this.tableLayoutPanel2.Controls.Add(this.btSettings, 0, 1);
       this.tableLayoutPanel2.Controls.Add(this.btJsReassign, 0, 0);
+      this.tableLayoutPanel2.Controls.Add(this.lblPTU, 1, 0);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel2.Location = new System.Drawing.Point(376, 773);
@@ -761,6 +824,18 @@
       this.btJsReassign.TabIndex = 16;
       this.btJsReassign.Text = "Js Reassign...";
       this.btJsReassign.Click += new System.EventHandler(this.btJsReassign_Click);
+      // 
+      // lblPTU
+      // 
+      this.lblPTU.BackColor = System.Drawing.Color.SandyBrown;
+      this.lblPTU.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblPTU.Location = new System.Drawing.Point(150, 0);
+      this.lblPTU.Name = "lblPTU";
+      this.lblPTU.Size = new System.Drawing.Size(141, 45);
+      this.lblPTU.TabIndex = 17;
+      this.lblPTU.Text = "Using PTU folders";
+      this.lblPTU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      this.lblPTU.Visible = false;
       // 
       // tableLayoutPanel3
       // 
@@ -932,23 +1007,23 @@
       this.btClearFilter.UseVisualStyleBackColor = true;
       this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
       // 
-      // flowLayoutPanel3
+      // flpExtensions
       // 
-      this.flowLayoutPanel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvAimPitch);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvViewPitch);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvAimYaw);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvViewYaw);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvThrottle);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeVert);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeLat);
-      this.flowLayoutPanel3.Controls.Add(this.cbxInvStrafeLon);
-      this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      this.flowLayoutPanel3.Location = new System.Drawing.Point(676, 618);
-      this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-      this.flowLayoutPanel3.Size = new System.Drawing.Size(372, 149);
-      this.flowLayoutPanel3.TabIndex = 27;
+      this.flpExtensions.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+      this.flpExtensions.Controls.Add(this.cbxInvAimPitch);
+      this.flpExtensions.Controls.Add(this.cbxInvViewPitch);
+      this.flpExtensions.Controls.Add(this.cbxInvAimYaw);
+      this.flpExtensions.Controls.Add(this.cbxInvViewYaw);
+      this.flpExtensions.Controls.Add(this.cbxInvThrottle);
+      this.flpExtensions.Controls.Add(this.cbxInvStrafeVert);
+      this.flpExtensions.Controls.Add(this.cbxInvStrafeLat);
+      this.flpExtensions.Controls.Add(this.cbxInvStrafeLon);
+      this.flpExtensions.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.flpExtensions.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+      this.flpExtensions.Location = new System.Drawing.Point(676, 618);
+      this.flpExtensions.Name = "flpExtensions";
+      this.flpExtensions.Size = new System.Drawing.Size(372, 149);
+      this.flpExtensions.TabIndex = 27;
       // 
       // cbxInvAimPitch
       // 
@@ -1164,6 +1239,33 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
+      // toolStripSeparator6
+      // 
+      this.toolStripSeparator6.Name = "toolStripSeparator6";
+      this.toolStripSeparator6.Size = new System.Drawing.Size(217, 6);
+      // 
+      // tdiCbxActivation
+      // 
+      this.tdiCbxActivation.AutoSize = false;
+      this.tdiCbxActivation.DropDownHeight = 140;
+      this.tdiCbxActivation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
+      this.tdiCbxActivation.DropDownWidth = 160;
+      this.tdiCbxActivation.IntegralHeight = false;
+      this.tdiCbxActivation.Items.AddRange(new object[] {
+            "None"});
+      this.tdiCbxActivation.MaxDropDownItems = 10;
+      this.tdiCbxActivation.Name = "tdiCbxActivation";
+      this.tdiCbxActivation.Size = new System.Drawing.Size(160, 180);
+      // 
+      // tdiTxDefActivationMode
+      // 
+      this.tdiTxDefActivationMode.BackColor = System.Drawing.Color.PapayaWhip;
+      this.tdiTxDefActivationMode.Font = new System.Drawing.Font("Segoe UI", 9F);
+      this.tdiTxDefActivationMode.Name = "tdiTxDefActivationMode";
+      this.tdiTxDefActivationMode.ReadOnly = true;
+      this.tdiTxDefActivationMode.Size = new System.Drawing.Size(160, 23);
+      this.tdiTxDefActivationMode.Text = "Default ActMode";
+      // 
       // UC_JoyPanel
       // 
       this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1194,6 +1296,7 @@
       this.panel2.PerformLayout();
       this.cmMouseEntry.ResumeLayout(false);
       this.cmAddDel.ResumeLayout(false);
+      this.cmAddDel.PerformLayout();
       this.tc1.ResumeLayout(false);
       this.tabJS1.ResumeLayout(false);
       this.panel1.ResumeLayout(false);
@@ -1206,7 +1309,7 @@
       this.tableLayoutPanel3.PerformLayout();
       this.flowLayoutPanel2.ResumeLayout(false);
       this.flowLayoutPanel2.PerformLayout();
-      this.flowLayoutPanel3.ResumeLayout(false);
+      this.flpExtensions.ResumeLayout(false);
       this.statusStrip1.ResumeLayout(false);
       this.statusStrip1.PerformLayout();
       this.ResumeLayout(false);
@@ -1290,9 +1393,9 @@
     private System.Windows.Forms.CheckBox cbxShowMappedOnly;
     private System.Windows.Forms.Label label2;
     private System.Windows.Forms.ContextMenuStrip cmAddDel;
-    private System.Windows.Forms.ToolStripMenuItem tsiAddBinding;
+    private System.Windows.Forms.ToolStripMenuItem tdiAddBinding;
     private System.Windows.Forms.ToolStripMenuItem tdiDelBinding;
-    private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+    private System.Windows.Forms.FlowLayoutPanel flpExtensions;
     private System.Windows.Forms.CheckBox cbxInvAimPitch;
     private System.Windows.Forms.CheckBox cbxInvViewPitch;
     private System.Windows.Forms.CheckBox cbxInvAimYaw;
@@ -1314,6 +1417,15 @@
     private System.Windows.Forms.ToolStripMenuItem tmeWUp;
     private System.Windows.Forms.ToolStripMenuItem tmeWDown;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+    private System.Windows.Forms.ToolStripMenuItem tdiAddMod1;
+    private System.Windows.Forms.ToolStripMenuItem tdiAddMod2;
+    private System.Windows.Forms.ToolStripMenuItem tdiAddMod3;
+    private System.Windows.Forms.Button btMakeMod;
+    private System.Windows.Forms.Label lblPTU;
+    private System.Windows.Forms.ToolStripComboBox tdiCbxActivation;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+    private System.Windows.Forms.ToolStripTextBox tdiTxDefActivationMode;
   }
 }
 

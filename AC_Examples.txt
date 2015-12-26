@@ -155,7 +155,31 @@ DefaultProfile Format
 
 <profile version="1" optionsVersion="2" rebindVersion="2">
 
+
+ActivationModes:
+=================
+
+	<ActivationModes>
+		<ActivationMode name="tap" onPress="0" onHold="0" onRelease="1" multiTap="1" multiTapBlock="1" pressTriggerThreshold="-1" releaseTriggerThreshold="0.25" releaseTriggerDelay="0" />
+		<ActivationMode name="double_tap" onPress="1" onHold="0" onRelease="0" multiTap="2" multiTapBlock="1" pressTriggerThreshold="-1" releaseTriggerThreshold="-1" releaseTriggerDelay="0" />
+		<ActivationMode name="double_tap_nonblocking" onPress="1" onHold="0" onRelease="0" multiTap="2" multiTapBlock="0" pressTriggerThreshold="-1" releaseTriggerThreshold="-1" releaseTriggerDelay="0" />
+		<ActivationMode name="press" onPress="1" onHold="0" onRelease="0" multiTap="1" multiTapBlock="1" pressTriggerThreshold="-1" releaseTriggerThreshold="-1" releaseTriggerDelay="0" />
+		<ActivationMode name="delayed_press" onPress="1" onHold="0" onRelease="0" multiTap="1" multiTapBlock="1" pressTriggerThreshold="0.25" releaseTriggerThreshold="-1" releaseTriggerDelay="0" />
+		<ActivationMode name="hold" onPress="1" onHold="0" onRelease="1" multiTap="1" multiTapBlock="1" pressTriggerThreshold="-1" releaseTriggerThreshold="-1" releaseTriggerDelay="0" />
+		<ActivationMode name="delayed_hold" onPress="1" onHold="0" onRelease="1" multiTap="1" multiTapBlock="1" pressTriggerThreshold="0.25" releaseTriggerThreshold="-1" releaseTriggerDelay="0" />
+		<ActivationMode name="smart_toggle" onPress="1" onHold="0" onRelease="1" multiTap="1" multiTapBlock="1" pressTriggerThreshold="-1" releaseTriggerThreshold="-1" releaseTriggerDelay="0.25" />
+	</ActivationModes>
+
+
+
+	Example usage as dualbinding with double tap:
+	<action name="v_power_throttle_up" onPress="1" onHold="1" keyboard="np_add" xboxpad=" " joystick=" " UILabel="@ui_CIPowerThrottleUp" UIDescription="@ui_CIPowerThrottleUpDesc"/>
+	<action name="v_power_throttle_max" ActivationMode="double_tap" keyboard="np_add" xboxpad=" " joystick=" " UILabel="" UIDescription=""/>
+
+
+
 Default Option Trees:
+======================
 
 	<optiontree type="keyboard" name="root" UIShowInvert="-1" UIShowSensitivity="-1" UISensitivityMin="0.01" UISensitivityMax="6.25">
 	 .. structure
