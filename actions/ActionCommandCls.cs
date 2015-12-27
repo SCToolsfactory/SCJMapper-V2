@@ -145,6 +145,21 @@ namespace SCJMapper_V2
       return newAc;
     }
 
+    /// <summary>
+    /// Strange behavior of SC - needs a proper multitap to accept ActivationModes
+    /// </summary>
+    /// <param name="actMode"></param>
+    /// <returns></returns>
+    private String MutitapFudge( string actMode )
+    {
+      // guesswork - if the activation mode name contains double we assume a double tap thing
+      if ( actMode.ToLowerInvariant( ).Contains( "double" ) ) {
+        return "multitap = \"2\"";
+      }
+      else {
+        return "multitap = \"1\"";
+      }
+    }
 
     /// <summary>
     /// Dump the action as partial XML nicely formatted
@@ -157,10 +172,10 @@ namespace SCJMapper_V2
         // regular - apply XML formatting to internally blended items
         r += String.Format( "input=\"{0}_{1}\" ", DevID, DeviceCls.toXML( Input ) );
         if ( ActivationMode != ActivationModes.Default ) {
-          r += String.Format( "ActivationMode=\"{0}\" ", ActivationMode );
+          r += String.Format( "ActivationMode=\"{0}\" {1} ", ActivationMode, MutitapFudge(ActivationMode) );
         }
       }
-      r += String.Format( " />\n" );  // actually an ERROR...
+      r += String.Format( " />\n" );
 
       return r;
     }
