@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.16 - Build 49 BETA
-(c) Cassini, StandardToaster - 26-October-2015
+SC Joystick Mapper V 2.17 - Build 50 BETA
+(c) Cassini, StandardToaster - 28-December-2015
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.16)
-SCJMapper.exe.config         Program config (V2.16)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.17)
+SCJMapper.exe.config         Program config (V2.17)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -13,7 +13,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.10.pdf    Quick Guide
+SCJMapper_QGuide V2.17.pdf    Quick Guide
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images                       - graphics folder MUST be in the same folder as the Exe file
@@ -23,12 +23,27 @@ Read the Guide first RTFM ;-)
 Put all files into one folder and hit SCJMapper.exe to run it
 
 For Updates and information visit:
-https://github.com/bm98/SCJMapper-V2/
+https://github.com/SCToolsfactory/SCJMapper-V2
 
 Scanned for viruses before packing... 
 cassini@burri-web.org
 
 Changelog:
+V 2.17 - BETA Build 50
+- update - Updated for SC Alpha 2.0/2.1PTU using new actionmap syntax (no longer use device attribute)
+- update - Complete new QuickReference Guide
+- update - Supports actionmaps with <profile version="1" optionsVersion="2" rebindVersion="2"> 
+- add - ActivationMode - Use Context Menu in ActionTree (or read the manual)
+- add - PTU file usage in Settings
+- add - Prepared JS Modifiers (but SC cannot right now - so it is disabled)
+- add - full mouse settings
+- improvement - some GUI improvements
+- improvement - reworked blending
+- removed - global JS or GP blend options in Settings
+- removed - ignoreversion from Settings
+- NOTE: - Dump Log does not work right now as CIG does no longer list detected controllers in the log file
+- NOTE: - Right now a number of binds behave erratically e.g. addbind does not work at all
+          so be aware that your map is not necessarily wrong but the game may just have a bug there
 V 2.16 - BETA Build 49
 - update - Updated for AC Alpha 1.3 defaultProfile does no longer have js1_ or xi_ marks form commands
 - NOTE: - Dump Log does not work right now as CIG does no longer list detected controllers in the log file
