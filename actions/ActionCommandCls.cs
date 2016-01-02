@@ -27,7 +27,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// The applied ActivationMode for this command
     /// </summary>
-    public String ActivationMode { get; set; }  // "" or one of the defined ActivationModes
+    public ActivationMode ActivationMode { get; set; }  // "" or one of the defined ActivationModes
 
 
     /// <summary>
@@ -76,7 +76,7 @@ namespace SCJMapper_V2
       // init with something to debug if needed
       Input = "UNDEF";
       DevID = "NA0";
-      ActivationMode = "";
+      ActivationMode = ActivationMode.Default;
       NodeIndex = -1;
     }
 
@@ -93,7 +93,7 @@ namespace SCJMapper_V2
     public ActionCommandCls( String devInp )
     {
       DevInput = devInp;
-      ActivationMode = "";
+      ActivationMode = ActivationMode.Default;
       NodeIndex = -1;
     }
 
@@ -101,7 +101,7 @@ namespace SCJMapper_V2
     public ActionCommandCls( String devInp, int nodeIx )
     {
       DevInput = devInp;
-      ActivationMode = "";
+      ActivationMode = ActivationMode.Default;
       NodeIndex = nodeIx;
     }
 
@@ -110,7 +110,7 @@ namespace SCJMapper_V2
     {
       Input = inp;
       DevID = dev;
-      ActivationMode = "";
+      ActivationMode = ActivationMode.Default;
       NodeIndex = -1;
     }
 
@@ -119,7 +119,7 @@ namespace SCJMapper_V2
     {
       Input = inp;
       DevID = dev;
-      ActivationMode = "";
+      ActivationMode = ActivationMode.Default;
       NodeIndex = nodeIx;
     }
 
@@ -150,14 +150,13 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="actMode"></param>
     /// <returns></returns>
-    private String MutitapFudge( string actMode )
+    private String MutitapFudge(  ActivationMode actMode )
     {
-      // guesswork - if the activation mode name contains double we assume a double tap thing
-      if ( actMode.ToLowerInvariant( ).Contains( "double" ) ) {
-        return "multitap = \"2\"";
+      if ( actMode.IsDoubleTap ) {
+        return "multiTap = \"2\"";
       }
       else {
-        return "multitap = \"1\"";
+        return "multiTap = \"1\"";
       }
     }
 
@@ -170,9 +169,9 @@ namespace SCJMapper_V2
       String r = "";
       if ( !String.IsNullOrEmpty( Input ) ) {
         // regular - apply XML formatting to internally blended items
-        r += String.Format( "input=\"{0}_{1}\" ", DevID, DeviceCls.toXML( Input ) );
-        if ( ActivationMode != ActivationModes.Default ) {
-          r += String.Format( "ActivationMode=\"{0}\" {1} ", ActivationMode, MutitapFudge(ActivationMode) );
+        r += String.Format( "input=\"{0}_{1}\" {2} ", DevID, DeviceCls.toXML( Input ), DeviceCls.toXMLBlendExtension(Input) ); // add multitap override if needed
+        if ( ! ActivationMode.Equals( ActivationMode.Default ) ) {
+          r += String.Format( "ActivationMode=\"{0}\" {1} ", ActivationMode.Name, MutitapFudge(ActivationMode) );
         }
       }
       r += String.Format( " />\n" );

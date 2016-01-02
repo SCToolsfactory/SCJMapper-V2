@@ -22,6 +22,11 @@ namespace SCJMapper_V2
     private AppSettings m_AppSettings = new AppSettings( );
     private Boolean m_appLoading = true; // used to detect if we are loading (or running)
 
+    // keyboard modifier handling variables
+    private String m_persistentMods = "";
+    private const int c_modifierTime = 3500; // msec time before a modifier times out and will be removed
+    private int m_modifierTimeout = 0;
+
 
     ///<remarks>
     /// Holds the DXInput Joystick List
@@ -276,7 +281,7 @@ namespace SCJMapper_V2
 
       // init PTU folder usage sign
       lblPTU.Visible = m_AppSettings.UsePTU;
-      if (m_AppSettings.UsePTU) log.Debug( "Using PTU Folders" );
+      if ( m_AppSettings.UsePTU ) log.Debug( "Using PTU Folders" );
 
       // poll the XInput
       log.Debug( "Start XInput polling" );
@@ -401,7 +406,7 @@ namespace SCJMapper_V2
 
       // Activation Update
       tdiCbxActivation.Items.Clear( );
-      tdiCbxActivation.Items.AddRange( m_AT.ActivationModes.ToArray() );
+      tdiCbxActivation.Items.AddRange( ActivationModes.Instance.Names.ToArray( ) );
       tdiCbxActivation.SelectedIndex = 0;
 
       // apply a default JS to Joystick mapping - can be changed and reloaded from XML mappings
@@ -423,6 +428,8 @@ namespace SCJMapper_V2
           }
         }
       }
+      m_AT.FilterTree( txFilter.Text );
+
     }
 
 
@@ -585,7 +592,7 @@ namespace SCJMapper_V2
       // Collect modifiers - simply overwrite existing ones as we deal with THIS file now
       tdiAddMod1.Visible = false; tdiAddMod2.Visible = false; tdiAddMod3.Visible = false; // make context menu invisible
       tdiAddMod1.Text = ""; tdiAddMod2.Text = ""; tdiAddMod3.Text = ""; // and clear
-      for (int i=flpExtensions.Controls.Count-1; i>=0; i-- ) {
+      for ( int i = flpExtensions.Controls.Count - 1; i >= 0; i-- ) {
         if ( ( flpExtensions.Controls[i] as CheckBox ).Text.StartsWith( "js" ) ) flpExtensions.Controls.RemoveAt( i );
       }
       if ( m_AT.ActionMaps.Modifiers.Count > 2 ) {
@@ -647,6 +654,14 @@ namespace SCJMapper_V2
 
       btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
       btGrab.BackColor = btClear.BackColor; btGrab.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
+
+      // get the text into the view
+      try {
+        rtb.ScrollToCaret( );
+      }
+      catch {
+        ; // just ignore
+      }
     }
 
 
@@ -684,46 +699,51 @@ namespace SCJMapper_V2
     }
 
 
-    String m_persistentMods = "";
-
     // polls the devices to get the latest update
     private void timer1_Tick( object sender, System.EventArgs e )
     {
-      if ( m_keyIn ) return; // allow keyboard / mouse input
-      if ( tc1.SelectedTab.Tag == null ) return;
+      // Handle Kbd modifier timeout for joystick
+      m_modifierTimeout -= timer1.Interval;  // decrement timeout
+      if ( m_modifierTimeout < 0 ) m_modifierTimeout = 0; // prevent undeflow after long time not using modifiers
+
+
+      if ( m_keyIn || tc1.SelectedTab.Tag == null ) return; // don't handle those
 
       String ctrl = "";
       if ( m_curJoystick == null ) {
+        // no active joystick - may be a gamepad
         if ( m_Gamepad != null ) {
           // poll Gamepad if active
           m_Gamepad.GetData( );
           ctrl = m_Gamepad.GetLastChange( );
-          timer1.Interval = 750; // allow more time to release buttons
+          timer1.Interval = 750; // allow more time to release buttons [msec]
         }
       }
       else {
         // poll active Joystick
         m_curJoystick.GetData( );  // poll the device
+        // add keyboard modifier - if there are ..
         if ( m_Keyboard == null ) {
-          // no keyboard = no modifier 
+          // no keyboard => no modifier 
           ctrl = JSStr( ) + m_curJoystick.GetLastChange( ); // show last handled JS control
         }
         else {
-          UpdateModifiers( );           // get the last keyboard modifer to compose the command
+          UpdateModifiers( );   // get the last keyboard modifer to compose the command, also handles the modifier lifetime
           ctrl = JSStr( ) + m_persistentMods + m_curJoystick.GetLastChange( ); // show last handled JS control
         }
-        timer1.Interval = 150; // standard polling
+        timer1.Interval = 150; // standard polling [msec]
       }
 
       lblLastJ.Text = ctrl;
 
+      // Handle Throttle checkbox
       if ( JoystickCls.CanThrottle( ctrl ) ) {
         cbxThrottle.Enabled = true;
       }
       else {
         cbxThrottle.Checked = false; cbxThrottle.Enabled = false;
       }
-
+      // Update joystick modifiers - not currently used
       btMakeMod.Enabled = JoystickCls.ValidModifier( ctrl );
 
     }
@@ -791,7 +811,7 @@ namespace SCJMapper_V2
 
     private void btClear_Click( object sender, EventArgs e )
     {
-      if ( m_AT.CanClearBinding ) {
+      if ( m_AT.CanClearBinding || m_AT.CanBlendBinding ) {
         m_AT.ClearBinding( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
@@ -811,7 +831,7 @@ namespace SCJMapper_V2
       flpExtensions.Controls.Add( cbx );
       m_AT.ActionMaps.Modifiers.Add( lblLastJ.Text );
       // maintain context menu - quick and d.. version
-      if ( string.IsNullOrEmpty( tdiAddMod1.Text) ) {
+      if ( string.IsNullOrEmpty( tdiAddMod1.Text ) ) {
         tdiAddMod1.Text = string.Format( "MOD: {0}", lblLastJ.Text );
         tdiAddMod1.Visible = true;
         m_curJoystick.UpdateModifier( lblLastJ.Text, true );
@@ -1014,7 +1034,7 @@ namespace SCJMapper_V2
     }
 
     // Node Menu
-    private string m_prevActivationMode ="";
+    private ActivationMode m_prevActivationMode = new ActivationMode( ActivationMode.Default );
 
     private void cmAddDel_Opening( object sender, CancelEventArgs e )
     {
@@ -1022,7 +1042,7 @@ namespace SCJMapper_V2
       ContextMenuStrip cts = ( sender as ContextMenuStrip );
       Boolean any=false;    // above separator
       Boolean any2 = false; // below separator
-      m_prevActivationMode = "";  // switch Closing handling OFF in case we don't show anything
+      m_prevActivationMode = ActivationMode.Default; // switch Closing handling OFF in case we don't show anything
 
       if ( m_AT.CanAssignBinding ) {
         cts.Items[0].Text = "Assign: " + JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked );
@@ -1041,29 +1061,37 @@ namespace SCJMapper_V2
       tdiCbxActivation.Visible = false;
       ActivationModes am = m_AT.ActivationModeSelectedItem( );
       // have to fudge around with a descriptive text here
-      if ( am[0] == ActivationModes.Default ) 
+      if ( am[0] == ActivationMode.Default )
         tdiTxDefActivationMode.Text = string.Format( "Profile: {0}", "no ActivationMode" ); // show the default element
       else
-        tdiTxDefActivationMode.Text = string.Format( "Profile: {0}", am[0] ); // show the default element
+        tdiTxDefActivationMode.Text = string.Format( "Profile: {0}", am[0].Name ); // show the default element
 
-      if ( any  && m_AT.IsMappedAction ) {
+      if ( any && m_AT.IsMappedAction ) {
         m_prevActivationMode = am[1]; // this is the selected one
-        tdiCbxActivation.Visible =true;
-        tdiCbxActivation.Text = m_prevActivationMode;
+        tdiCbxActivation.Visible = true;
+        tdiCbxActivation.Text = m_prevActivationMode.Name;
       }
 
       e.Cancel = !( any || any2 );
     }
 
+    // after user entry of the context menu - see if one has changed the ActivationMode
     private void cmAddDel_Closed( object sender, ToolStripDropDownClosedEventArgs e )
     {
-      if ( !string.IsNullOrEmpty(m_prevActivationMode) && ( m_prevActivationMode != tdiCbxActivation.Text )) {
+      if ( !string.IsNullOrEmpty( m_prevActivationMode.Name ) && ( m_prevActivationMode.Name != ( string )tdiCbxActivation.SelectedItem ) ) {
+        tdiCbxActivation.Text = ( string )tdiCbxActivation.SelectedItem;
+        // seems to have changed - evaluate
+        // it is either one of the ActivationModes, or profile default
         m_AT.UpdateActivationModeSelectedItem( tdiCbxActivation.Text );
-        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor; 
-        m_prevActivationMode = "";
+        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+        m_prevActivationMode = ActivationMode.Default; // reset prev entry for next edit
       }
     }
 
+    private void tdiCbxActivation_Click( object sender, EventArgs e )
+    {
+      cmAddDel.Close( ToolStripDropDownCloseReason.ItemClicked );
+    }
 
     private void tdiAssignBinding_Click( object sender, EventArgs e )
     { // same as btAssign_Click
@@ -1106,6 +1134,7 @@ namespace SCJMapper_V2
     {
 
     }
+
 
 
     // rtb drop xml file
@@ -1449,22 +1478,18 @@ namespace SCJMapper_V2
     {
       if ( m_keyIn ) {
         m_Keyboard.GetData( );
-        lblLastJ.Text = m_Keyboard.GetLastChange( true );
-        m_mouseIn = false; // clear on kbd input
-        // also maintain persistent mods
-        String modS = m_Keyboard.GetLastChange( false );
-        if ( !String.IsNullOrEmpty( modS ) ) {
-          if ( modS.Contains( KeyboardCls.ClearMods ) ) {
-            // allow to cancel modifiers
-            m_persistentMods = ""; // kill persistent ones
-          }
-          else {
-            m_persistentMods = modS + "+";
-          }
+        String modS = m_Keyboard.GetLastChange( false ); // modifiers only
+        String keyModS = m_Keyboard.GetLastChange( true ); // modifiers+keyboard input
+        // don't override modifiers when we are in mouse mode and the mod is the same and there is no kbd entry.... 
+        if ( m_mouseIn && ( keyModS == modS ) && ( m_persistentMods == ( modS + "+" ) ) ) {
+          ; // nothing here - 
         }
-        else
-          m_persistentMods = ""; // kill persistent ones
-
+        else {
+          lblLastJ.Text = m_Keyboard.GetLastChange( true );
+          m_mouseIn = false; // clear on kbd input
+        }
+        // also maintain persistent mods
+        UpdateModifiers( );
       }
       // don't spill the field with regular input
       e.SuppressKeyPress = true;
@@ -1487,6 +1512,13 @@ namespace SCJMapper_V2
         }
         else {
           m_persistentMods = modS + "+";
+          m_modifierTimeout = c_modifierTime; // restart show interval
+        }
+      }
+      else {
+        if ( m_modifierTimeout <= 0 ) {
+          m_persistentMods = ""; // modifier timed out
+          m_mouseIn = false;
         }
       }
     }
@@ -1535,8 +1567,8 @@ namespace SCJMapper_V2
     }
 
 
-    #endregion
 
+    #endregion
 
   }
 }

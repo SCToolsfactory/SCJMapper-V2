@@ -128,6 +128,9 @@ namespace SCJMapper_V2
     {
       Boolean blendedInput = false;
 
+      blendedInput = DeviceCls.IsBlendedInput( input ); // generic
+      if ( blendedInput ) return blendedInput;
+
       blendedInput = JoystickCls.IsBlendedInput( input );
       if ( blendedInput ) return blendedInput;
       blendedInput = GamepadCls.IsBlendedInput( input );
@@ -167,7 +170,7 @@ namespace SCJMapper_V2
     public ActionDevice actionDevice { get; set; }  // the enum of the device
     public String device { get; set; }              // name of the device (uses DeviceClass)
     public String defBinding { get; set; }          // the default binding
-    public String defActivationMode { get; set; }   // the default binding ActivationMode (can be "" if not used)
+    public ActivationMode defActivationMode { get; set; }   // the default binding ActivationMode
     public List<ActionCommandCls> inputList { get; set; } // regular bind is the 0-element, addbinds are added to the list
 
     /// <summary>
@@ -180,7 +183,7 @@ namespace SCJMapper_V2
       device = JoystickCls.DeviceClass;
       name = "";
       defBinding = "";
-      defActivationMode = "";
+      defActivationMode = ActivationMode.Default;
       inputList = new List<ActionCommandCls>( ); // empty list
     }
 
@@ -211,22 +214,16 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Created and adds the inputCommand list with given input string
+    /// Creates and adds the inputCommand list with given input string
     /// AC2 style input is used i.e. with device tag in front
     ///   apply given ActivationMode - can be "~" to indicate DONT APPLY 
     /// </summary>
     /// <param name="devInput"></param>
     /// <returns>Returns the ActionCommand created</returns>
-    public ActionCommandCls AddCommand( String devInput, String activationMode )
+    public ActionCommandCls AddCommand( String devInput, ActivationMode activationMode )
     {
       ActionCommandCls acc = new ActionCommandCls( devInput, inputList.Count - 1 ); // starts from -1 ...
-      if ( activationMode == "~" ) {
-        // not assigned
-        acc.ActivationMode = "";
-      }
-      else {
-        acc.ActivationMode = activationMode;
-      }
+      acc.ActivationMode = activationMode;
       inputList.Add( acc );
       return acc;
     }
@@ -241,7 +238,7 @@ namespace SCJMapper_V2
     public ActionCommandCls AddCommand( String devInput, int index )
     {
       ActionCommandCls acc = new ActionCommandCls( devInput, index );
-      acc.ActivationMode = defActivationMode;
+      acc.ActivationMode = ActivationMode.Default;
       inputList.Add( acc );
       return acc;
     }
@@ -284,8 +281,8 @@ namespace SCJMapper_V2
 
       // Apply the input to the ActionTree
       actionCmd.DevInput = BlendInput( devInput, this.actionDevice );
-      if ( string.IsNullOrEmpty( actionCmd.Input)) {
-        actionCmd.ActivationMode = defActivationMode; // reset activation mode if the input is empty
+      if ( IsBlendedInput( actionCmd.DevInput ) ) {
+        actionCmd.ActivationMode = ActivationMode.Default; // reset activation mode if the input is empty
       }
     }
 
@@ -394,13 +391,27 @@ namespace SCJMapper_V2
               else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
               else if ( GamepadCls.IsDeviceClass( device ) ) input = GamepadCls.FromAC1( input );
             }
-            // Get default ActivationMode
-            String activationMode = reader["ActivationMode"];
-            if ( string.IsNullOrEmpty(activationMode)) activationMode = ActivationModes.Default; // MARK AS NOT USED
+            //first find an ActivationMode if there is - applies to all actions
+            // this can be an Activation Mode OR a multitap
+            // if there is an activationMode - copy the one from our List
+            // if no ActivationMode is given, create one with multitap 1 or may be 2...
+            string actModeName = reader["ActivationMode"];
+            ActivationMode actMode = null;
+            if ( ! string.IsNullOrEmpty( actModeName ) ) {
+              actMode = ActivationModes.Instance.ActivationModeByName( actModeName ); // should be a valid ActivationMode for this action
+            }
+            else {
+              actMode = new ActivationMode( ActivationMode.Default ); // no specific name given, use default
+              string multiTap = reader["multiTap"];
+              if ( !string.IsNullOrEmpty( multiTap ) ) {
+                actMode.MultiTap = int.Parse(multiTap); // modify with given multiTap
+              }
+            }
 
             key = DevID( device ) + name; // unique id of the action
             actionDevice = ADevice( device ); // get the enum of the input device
-            AddCommand( input, activationMode );
+
+            AddCommand( input, actMode );
             // advances the reader to the next node
             reader.ReadStartElement( "rebind" );
           }
@@ -421,9 +432,23 @@ namespace SCJMapper_V2
               else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
               else if ( GamepadCls.IsDeviceClass( device ) ) input = GamepadCls.FromAC1( input );
             }
-            String activationMode = reader["ActivationMode"];
-            if ( string.IsNullOrEmpty( activationMode ) ) activationMode = ActivationModes.Default; // MARK AS NOT USED
-            AddCommand( input, activationMode );
+            //first find an ActivationMode if there is - applies to all actions
+            // this can be an Activation Mode OR a multitap
+            // if there is an activationMode - copy the one from our List
+            // if no ActivationMode is given, create one with multitap 1 or may be 2...
+            string actModeName = reader["ActivationMode"];
+            ActivationMode actMode = null;
+            if ( !string.IsNullOrEmpty( actModeName ) ) {
+              actMode = ActivationModes.Instance.ActivationModeByName( actModeName ); // should be a valid ActivationMode for this action
+            }
+            else {
+              actMode = new ActivationMode( ActivationMode.Default ); // no specific name given, use default
+              string multiTap = reader["multiTap"];
+              if ( !string.IsNullOrEmpty( multiTap ) ) {
+                actMode.MultiTap = int.Parse( multiTap ); // modify with given multiTap
+              }
+            }
+            AddCommand( input, actMode );
             // advances the reader to the next node
             reader.ReadStartElement( "addbind" );
           }

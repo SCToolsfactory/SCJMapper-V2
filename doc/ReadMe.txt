@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.17 - Build 50 BETA
-(c) Cassini, StandardToaster - 28-December-2015
+SC Joystick Mapper V 2.18 - Build 51 BETA
+(c) Cassini, StandardToaster - 02-January-2016
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.17)
-SCJMapper.exe.config         Program config (V2.17)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.18)
+SCJMapper.exe.config         Program config (V2.18)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -13,7 +13,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.17.pdf    Quick Guide
+SCJMapper_QGuide V2.18beta.pdf    Quick Guide
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images                       - graphics folder MUST be in the same folder as the Exe file
@@ -29,6 +29,15 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.18 - BETA Build 51
+- fix - layout works now for Win10
+- fix - uses game defaultProfile 
+- improvement - timeout for kbd modifiers (Esc no longer needed)
+- improvement - ActivationMode handling
+- improvement - Blending adds multiTap=1
+- improvement - List commands; added Act.Modes
+- update - doc SCJMapper_QGuide V2.18beta.pdf
+- Known Issue: Some Ctrl-keyboard commands are not shown (Ctrl Sequences)
 V 2.17 - BETA Build 50
 - update - Updated for SC Alpha 2.0/2.1PTU using new actionmap syntax (no longer use device attribute)
 - update - Complete new QuickReference Guide

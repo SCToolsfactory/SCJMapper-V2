@@ -34,8 +34,10 @@ namespace SCJMapper_V2
       public String devID { get; set; }  // the input method K,J,X,P
       private String m_defBinding = "";   // NOTE: this is AC1 style in the Profile - need to conver later when dumping out
       public String defBinding { get { return m_defBinding; } set { m_defBinding = value; } }  // DONT! need to clean this one, found spaces...
-      private String m_defActivationMode = "";
-      public String defActivationMode { get { return m_defActivationMode; } set { m_defActivationMode = value; } }
+
+      private ActivationMode m_defActivationMode = ActivationMode.Default;
+      public ActivationMode defActivationMode { get { return m_defActivationMode; } set { m_defActivationMode = value; } }
+
       public String keyName
       { get { return devID + name; } } // prep for TreView usage - create a key from input+name
     }
@@ -47,9 +49,7 @@ namespace SCJMapper_V2
     };
     Dictionary<String, ActionMap> m_aMap = null; // key would be the actionmap name
     ActionMap m_currentMap = null;
-
-    ActivationModes m_activationModes = new ActivationModes();
-    public ActivationModes ActivationModes { get { return m_activationModes; } }
+    
 
 
     // ****************** CLASS **********************
@@ -77,7 +77,7 @@ namespace SCJMapper_V2
         foreach ( ActionMap am in m_aMap.Values ) {
           buf += am.name + ";";
           foreach ( ProfileAction a in am ) {
-            buf += a.keyName + ";" + a.defBinding + ";" + a.defActivationMode + ";"; // add default binding + activation mode to the CSV
+            buf += a.keyName + ";" + a.defBinding + ";" + a.defActivationMode.Name + ";" + a.defActivationMode.MultiTap.ToString() + ";"; // add default binding + activation mode to the CSV
           }
           buf += String.Format( "\n" );
         }
@@ -94,10 +94,24 @@ namespace SCJMapper_V2
     private void CollectActions( Dictionary<string, string> attr )
     {
       //first find an ActivationMode if there is - applies to all actions
-      String actMode = ActivationModes.Default;
+      string actModeName = ActivationMode.Default.Name;
+      string multiTap = "0";
+
+      // this can be an Activation Mode OR a multitap
+      // if there is an activationMode the multiTap remains 0
+      // if no ActivationMode is given, multitap is 1 or may be 2...
       if ( attr.ContainsKey( "ActivationMode" ) ) {
-        actMode = attr["ActivationMode"];
+        actModeName = attr["ActivationMode"];
+        multiTap = ActivationModes.Instance.MultiTapFor( actModeName ).ToString( ); // given by the already collected items
       }
+      else {
+        // name remains default - we handle multiTaps only here
+        multiTap = "1"; // default if not changed in the action to may be 2 or so..
+        if ( attr.ContainsKey( "multiTap" ) ) {
+          multiTap = attr["multiTap"];
+        }
+      }
+      ActivationMode actMode = new ActivationMode(actModeName, int.Parse(multiTap) ); // should be a valid ActivationMode for this action
 
       // we collect actions for each input ie for K,J,X and M
       if ( attr.ContainsKey( "joystick" ) ) {
@@ -376,7 +390,8 @@ namespace SCJMapper_V2
             break; // finished
           }
           String name = xr["name"];
-          if ( ! string.IsNullOrEmpty(name)) m_activationModes.Add( name );
+          String mTap = xr["multiTap"];
+          if ( ! string.IsNullOrEmpty(name)) ActivationModes.Instance.Add( new ActivationMode( name, int.Parse(mTap) ) );
         } while ( xr.Read( ) );
 
         return true;
@@ -406,7 +421,9 @@ namespace SCJMapper_V2
 
       m_nodeNameStack = new Stack<String>( );
       m_aMap = new Dictionary<String, ActionMap>( );
-      m_activationModes = new ActivationModes( );
+      // init the activation modes singleton
+      ActivationModes.Instance.Clear( );
+      ActivationModes.Instance.Add( ActivationMode.Default );
 
       ValidContent = true; // init
       reader.Read( );

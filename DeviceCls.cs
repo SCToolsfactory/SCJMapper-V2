@@ -42,6 +42,10 @@ namespace SCJMapper_V2
     {
       return blendedInput.Replace( BlendedInput, " " ); // must make spaces (tilde is for internal processing only)
     }
+    static public String toXMLBlendExtension( String blendedInput )
+    {
+      return (IsBlendedInput(blendedInput) ? string.Format( "multiTap=\"1\"") : "" ); // blending needs to overwrite potential multitaps (2+)
+    }
     static public String fromXML( String blendedInput )
     {
       return blendedInput.Replace( " ", BlendedInput ); // must make tilde (spaces is for external processing only)

@@ -75,11 +75,15 @@
       this.tdiAddBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiDelBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+      this.tdiTxDefActivationMode = new System.Windows.Forms.ToolStripTextBox();
+      this.tdiCbxActivation = new System.Windows.Forms.ToolStripComboBox();
+      this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
       this.tdiAddMod1 = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiAddMod2 = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiAddMod3 = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -137,10 +141,6 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-      this.tdiCbxActivation = new System.Windows.Forms.ToolStripComboBox();
-      this.tdiTxDefActivationMode = new System.Windows.Forms.ToolStripTextBox();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmMouseEntry.SuspendLayout();
@@ -280,12 +280,12 @@
       this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panel2.Location = new System.Drawing.Point(3, 358);
       this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(289, 170);
+      this.panel2.Size = new System.Drawing.Size(289, 168);
       this.panel2.TabIndex = 17;
       // 
       // btMakeMod
       // 
-      this.btMakeMod.Location = new System.Drawing.Point(10, 140);
+      this.btMakeMod.Location = new System.Drawing.Point(10, 137);
       this.btMakeMod.Name = "btMakeMod";
       this.btMakeMod.Size = new System.Drawing.Size(73, 25);
       this.btMakeMod.TabIndex = 17;
@@ -549,6 +549,33 @@
       this.toolStripSeparator5.Name = "toolStripSeparator5";
       this.toolStripSeparator5.Size = new System.Drawing.Size(217, 6);
       // 
+      // tdiTxDefActivationMode
+      // 
+      this.tdiTxDefActivationMode.BackColor = System.Drawing.Color.PapayaWhip;
+      this.tdiTxDefActivationMode.Name = "tdiTxDefActivationMode";
+      this.tdiTxDefActivationMode.ReadOnly = true;
+      this.tdiTxDefActivationMode.Size = new System.Drawing.Size(160, 23);
+      this.tdiTxDefActivationMode.Text = "Default ActMode";
+      // 
+      // tdiCbxActivation
+      // 
+      this.tdiCbxActivation.AutoSize = false;
+      this.tdiCbxActivation.DropDownHeight = 140;
+      this.tdiCbxActivation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
+      this.tdiCbxActivation.DropDownWidth = 160;
+      this.tdiCbxActivation.IntegralHeight = false;
+      this.tdiCbxActivation.Items.AddRange(new object[] {
+            "None"});
+      this.tdiCbxActivation.MaxDropDownItems = 10;
+      this.tdiCbxActivation.Name = "tdiCbxActivation";
+      this.tdiCbxActivation.Size = new System.Drawing.Size(160, 180);
+      this.tdiCbxActivation.Click += new System.EventHandler(this.tdiCbxActivation_Click);
+      // 
+      // toolStripSeparator6
+      // 
+      this.toolStripSeparator6.Name = "toolStripSeparator6";
+      this.toolStripSeparator6.Size = new System.Drawing.Size(217, 6);
+      // 
       // tdiAddMod1
       // 
       this.tdiAddMod1.Name = "tdiAddMod1";
@@ -602,6 +629,15 @@
       this.tabJS1.Size = new System.Drawing.Size(281, 321);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
+      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -1238,42 +1274,6 @@
       this.statusStrip1.Size = new System.Drawing.Size(1054, 30);
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
-      // 
-      // toolStripSeparator6
-      // 
-      this.toolStripSeparator6.Name = "toolStripSeparator6";
-      this.toolStripSeparator6.Size = new System.Drawing.Size(217, 6);
-      // 
-      // tdiCbxActivation
-      // 
-      this.tdiCbxActivation.AutoSize = false;
-      this.tdiCbxActivation.DropDownHeight = 140;
-      this.tdiCbxActivation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
-      this.tdiCbxActivation.DropDownWidth = 160;
-      this.tdiCbxActivation.IntegralHeight = false;
-      this.tdiCbxActivation.Items.AddRange(new object[] {
-            "None"});
-      this.tdiCbxActivation.MaxDropDownItems = 10;
-      this.tdiCbxActivation.Name = "tdiCbxActivation";
-      this.tdiCbxActivation.Size = new System.Drawing.Size(160, 180);
-      // 
-      // tdiTxDefActivationMode
-      // 
-      this.tdiTxDefActivationMode.BackColor = System.Drawing.Color.PapayaWhip;
-      this.tdiTxDefActivationMode.Font = new System.Drawing.Font("Segoe UI", 9F);
-      this.tdiTxDefActivationMode.Name = "tdiTxDefActivationMode";
-      this.tdiTxDefActivationMode.ReadOnly = true;
-      this.tdiTxDefActivationMode.Size = new System.Drawing.Size(160, 23);
-      this.tdiTxDefActivationMode.Text = "Default ActMode";
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm
       // 

@@ -29,7 +29,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns the sought default profile as string from GameData.pak
     /// </summary>
-    /// <param name="defaultProfileName">The filename of the profile to be extracted</param>
+    /// <param name="defaultProfileName">The filename of the profile to be extracted </param>
     /// <returns>A string containing the file contents</returns>
     static public String DefaultProfile( String defaultProfileName )
     {
@@ -38,8 +38,8 @@ namespace SCJMapper_V2
       String retVal = "";
 
       // first choice a defaultProfile.xml in the app dir distributed with the application ??? to be deleted ???
-      if ( File.Exists( SCPath.DefaultProfileName + ".xml" ) ) {
-        using ( StreamReader sr = new StreamReader( SCPath.DefaultProfileName + ".xml" ) ) {
+      if ( File.Exists( SCPath.DefaultProfileName ) ) {
+        using ( StreamReader sr = new StreamReader( SCPath.DefaultProfileName ) ) {
           retVal = sr.ReadToEnd( );
           log.Info( "- Use AppDirectory defaultProfile" );
         }

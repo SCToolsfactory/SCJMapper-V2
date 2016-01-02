@@ -16,9 +16,7 @@ namespace SCJMapper_V2
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-
     public ActionMapsCls ActionMaps { get; set; }   // the Action Maps and Actions
-    public ActivationModes ActivationModes { get; set; }   // the ActivationModes found in Profile
 
     private TreeView m_MasterTree = new TreeView( ); // the master TreeView (mem only)
     private TreeView m_ctrl = null; // the TreeView in the GUI - injected from GUI via Ctrl property
@@ -65,7 +63,6 @@ namespace SCJMapper_V2
       m_gamepad = gamepad;
 
       IgnoreMaps = ""; // nothing to ignore
-      ActivationModes = new ActivationModes( ); // an empty list for now
     }
 
 
@@ -146,6 +143,19 @@ namespace SCJMapper_V2
         if ( Ctrl.SelectedNode.Parent == null ) return false; // ERROR EXIT
 
         return ( Ctrl.SelectedNode as ActionTreeNode ).IsMappedAction;
+      }
+    }
+
+
+    public Boolean ShowAction( ActionCls.ActionDevice actDev, string input )
+    {
+      if ( ActionCls.IsBlendedInput( input ) && m_showMappedOnly ) return false;
+      switch ( actDev ) {
+        case ActionCls.ActionDevice.AD_Gamepad: return m_showGameP;
+        case ActionCls.ActionDevice.AD_Joystick: return m_showJoy;
+        case ActionCls.ActionDevice.AD_Keyboard: return m_showKbd;
+        case ActionCls.ActionDevice.AD_Mouse: return m_showMouse;
+        default: return false;
       }
     }
 
@@ -404,7 +414,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Load Mappings into the ActionList and create the Master TreeView 
     /// </summary>
-    /// <param name="defaultProfileName">The name of the profile to load (w/o extension)</param>
+    /// <param name="defaultProfileName">The name of the profile to load (w extension)</param>
     /// <param name="applyDefaults">True if default mappings should be carried on</param>
     public void LoadProfileTree( String defaultProfileName, Boolean applyDefaults )
     {
@@ -420,18 +430,15 @@ namespace SCJMapper_V2
       ActionCommandCls acc = null;
 
       ActionMaps = new ActionMapsCls( m_jsList );
-      ActivationModes = new ActivationModes( );
       m_MasterTree.Nodes.Clear( );
 
       // read the action items into the TreeView
       DProfileReader dpReader = new DProfileReader( ); // we may read a profile
       TextReader txReader = null;
 
-      dpReader.fromXML( SCDefaultProfile.DefaultProfile( defaultProfileName + ".xml" ) );
+      dpReader.fromXML( SCDefaultProfile.DefaultProfile( defaultProfileName ) );
       if ( dpReader.ValidContent ) {
         txReader = new StringReader( dpReader.CSVMap );
-        ActivationModes.Clear( );
-        ActivationModes.AddRange( dpReader.ActivationModes ); // content copy from profile
       }
 
       // we assume no addbind items in the profile
@@ -447,12 +454,16 @@ namespace SCJMapper_V2
               Array.Resize( ref cnl, 0 );
               acm = new ActionMapCls( ); acm.name = elem[0]; // get actionmap name
               // process items
-              for ( int ei = 1; ei < elem.Length; ei += 3 ) { // step 2  - action;defaultBinding;defaultActivationMode come in as tripples
+              for ( int ei = 1; ei < elem.Length; ei += 4 ) { // step 2  - action;defaultBinding;defaultActivationMode;defMultiTap come in as quadrupples
                 if ( !String.IsNullOrEmpty( elem[ei] ) ) {
                   // default assignments
                   String action = elem[ei].Substring( 1 );
                   String defBinding = elem[ei + 1];
-                  String defActivationMode = elem[ei + 2];
+                  string defActivationModeName = elem[ei + 2];
+                  int defMultiTap = int.Parse( elem[ei + 3] );
+                  // need to create a ActivationMode here
+                  ActivationMode defActivationMode = new ActivationMode( defActivationModeName, defMultiTap );
+
                   String devID = elem[ei].Substring( 0, 1 );
                   String device = ActionCls.DeviceFromID( devID );
 
@@ -476,7 +487,6 @@ namespace SCJMapper_V2
                     if ( applyDefaults ) {
                       if ( JoystickCls.IsJSValid( jNum ) ) {
                         acc.DevInput = ac.defBinding;
-                        acc.ActivationMode = ac.defActivationMode;
                         cn.Command = ac.defBinding; cn.BackColor = JoystickCls.JsNColor( jNum );
                       }
                     }
@@ -486,7 +496,6 @@ namespace SCJMapper_V2
                     if ( applyDefaults ) {
                       if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
                         acc.DevInput = ac.defBinding;
-                        acc.ActivationMode = ac.defActivationMode;
                         cn.Command = ac.defBinding; cn.BackColor = GamepadCls.XiColor( );
                       }
                     }
@@ -496,7 +505,6 @@ namespace SCJMapper_V2
                     if ( applyDefaults ) {
                       if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
                         acc.DevInput = ac.defBinding;
-                        acc.ActivationMode = ac.defActivationMode;
                         cn.Command = ac.defBinding; cn.BackColor = KeyboardCls.KbdColor( );
                       }
                     }
@@ -506,7 +514,6 @@ namespace SCJMapper_V2
                     if ( applyDefaults ) {
                       if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
                         acc.DevInput = ac.defBinding;
-                        acc.ActivationMode = ac.defActivationMode;
                         cn.Command = ac.defBinding; cn.BackColor = MouseCls.MouseColor( );
                       }
                     }
@@ -543,11 +550,12 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Find the ActivationMode of the selected item
+    /// Find the ActivationModes of the selected item
     /// </summary>
+    /// <returns>A ActivationModes list - first element is the default, second the selected Mode</returns>
     public ActivationModes ActivationModeSelectedItem( )
     {
-      ActivationModes am = new ActivationModes(); am.Add( ActivationModes.Default ); // dummy answer Default is Default and selected is Default
+      ActivationModes am = new ActivationModes( ActivationMode.Default ); am.Add( ActivationMode.Default );// dummy answer Default is Default and selected is Default
 
       if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return am;
       if ( Ctrl.SelectedNode == null ) return am; // ERROR exit
@@ -578,10 +586,8 @@ namespace SCJMapper_V2
     /// <summary>
     /// Update the ActivationMode of the selected item
     /// </summary>
-    public void UpdateActivationModeSelectedItem( string newActivationMode )
+    public void UpdateActivationModeSelectedItem( string newActivationModeName )
     {
-      ActivationModes am = new ActivationModes(); am.Add( ActivationModes.Default ); // dummy answer Default is Default and selected is Default
-
       if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return;
       if ( Ctrl.SelectedNode == null ) return; // ERROR exit
       if ( Ctrl.SelectedNode.Parent == null ) return; // ERROR exit
@@ -591,7 +597,14 @@ namespace SCJMapper_V2
         // this is the main node with Action Cmd
         ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name ); if ( ac == null ) return; // ERROR exit
         ActionCommandCls acc = ac.FindActionInputObject( CommandFromNodeText( Ctrl.SelectedNode.Text ) ); if ( acc == null ) return; // ERROR exit
-        acc.ActivationMode = newActivationMode;
+        // new am is either a named one or the Default from Profile (which is the default from the Action due to multiTaps..)
+        if ( ActivationMode.IsDefault( newActivationModeName ) ) {
+          acc.ActivationMode = ActivationMode.Default;
+        }
+        else {
+          acc.ActivationMode = ActivationModes.Instance.ActivationModeByName( newActivationModeName );
+        }
+
         Dirty = true;
       }
       else if ( Ctrl.SelectedNode.Level == 2 ) {
@@ -600,7 +613,13 @@ namespace SCJMapper_V2
         // the related action
         ActionCls ac = FindActionObject( atn.Parent.Name, atn.Name ); if ( ac == null ) return; // ERROR exit
         ActionCommandCls acc = ac.FindActionInputObject( m_ctrl.SelectedNode.Index ); if ( acc == null ) return; // ERROR exit
-        acc.ActivationMode = newActivationMode;
+        // new am is either a named one or the Default from Profile (which is the default from the Action due to multiTaps..)
+        if ( ActivationMode.IsDefault( newActivationModeName ) ) {
+          acc.ActivationMode = ActivationMode.Default;
+        }
+        else {
+          acc.ActivationMode = ActivationModes.Instance.ActivationModeByName( newActivationModeName );
+        }
         Dirty = true;
       }
     }
@@ -1085,19 +1104,38 @@ namespace SCJMapper_V2
         if ( !String.IsNullOrEmpty( ActionMaps.jsN[i] ) ) repList += String.Format( "** js{0} = {1}\n", i + 1, ActionMaps.jsN[i] );
       }
       // now the mapped actions
+      const int padAction = 42;
+      const int padInput = 25;
+
       repList += String.Format( "\n" );
+      repList += String.Format( " {0}+= {1} _ {2}+=[{4}] {3}\n\n", "Action".PadRight( padAction ), "Dev", "Binding".PadRight( padInput ), "Activation", "T" ); // col description line
+
       foreach ( ActionMapCls acm in ActionMaps ) {
         String rep = String.Format( "*** {0}\n", acm.name );
         repList += rep;
         foreach ( ActionCls ac in acm ) {
           foreach ( ActionCommandCls acc in ac.inputList ) {
-            if ( !String.IsNullOrEmpty( acc.Input ) && !( acc.Input == DeviceCls.BlendedInput ) ) {
-              rep = String.Format( " {0} - {1} - {2}\n", ac.name.PadRight( 42 ), acc.DevID, acc.Input.PadRight( 30 ) );
-              repList += rep;
+            if ( ShowAction( ac.actionDevice, acc.Input ) ) {
+              if ( !String.IsNullOrEmpty( acc.Input ) /* && !( acc.Input == DeviceCls.BlendedInput )*/ ) {
+                if ( acc.DevInput == ac.defBinding ) {
+                  rep = String.Format( " {0} = {1} _ {2}", ac.name.PadRight( padAction ), acc.DevID, acc.Input.PadRight( padInput ) );
+                }
+                else {
+                  rep = String.Format( " {0} + {1} _ {2}", ac.name.PadRight( padAction ), acc.DevID, acc.Input.PadRight( padInput ) ); // my binding
+                }
+                if ( acc.ActivationMode == ActivationMode.Default ) {
+                  rep += String.Format( " = [{1}] {0}\n", ac.defActivationMode.Name, ac.defActivationMode.MultiTap );
+                }
+                else {
+                  rep += String.Format( " + [{1}] {0}\n", acc.ActivationMode.Name, acc.ActivationMode.MultiTap );
+                }
+
+                repList += rep;
+              }
             }
           }
         }
-        repList += String.Format( "\n" );
+        repList += String.Format( "\n" ); // actionmap spacer
       }
       return repList;
     }

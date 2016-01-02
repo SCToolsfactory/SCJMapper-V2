@@ -126,6 +126,7 @@ namespace SCJMapper_V2
         if ( appSettings.UserSCPathUsed ) {
           // User has priority
           scp = appSettings.UserSCPath;
+          log.InfoFormat( "SCBasePath - user defined folder given: {0}", scp );
           if ( !Directory.Exists( scp ) ) {
             log.WarnFormat( "SCBasePath - user defined folder does not exist: {0}", scp );
             return ""; // sorry path does not exist

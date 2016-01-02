@@ -75,6 +75,9 @@ namespace SCJMapper_V2
         m_scMappings.Clear( );
         m_scMappings = ( List<String> )Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
       }
+      else {
+        log.Warn( "UpdateMappingNames - cannot find SC Mapping directory" );
+      }
     }
 
 
@@ -88,13 +91,7 @@ namespace SCJMapper_V2
       {
         log.Debug( "MappingNames - Entry" );
         if ( m_scMappings.Count == 0 ) {
-          if ( Directory.Exists( SCPath.SCClientMappingPath ) ) {
-            m_scMappings.Clear( );
-            m_scMappings = ( List<String> )Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
-          }
-        }
-        else {
-          log.Warn( "MappingNames - cannot find SC Mapping directory" );
+          UpdateMappingNames( );
         }
         return m_scMappings;
       }
