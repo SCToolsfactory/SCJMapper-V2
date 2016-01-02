@@ -294,7 +294,7 @@ namespace SCJMapper_V2
       // could return more than one if the action is the same in different actionmaps
       foreach ( ActionTreeNode mtn in masterNode ) {
         if ( mtn.Parent.Name == node.Parent.Name ) {
-          mtn.Command = node.Command; mtn.BackColor = node.BackColor;
+          mtn.Update( node ); // update from node
         }
       }
     }
@@ -307,7 +307,7 @@ namespace SCJMapper_V2
       // could return more than one if the action is the same in different actionmaps
       foreach ( ActionTreeInputNode mtn in masterNode ) {
         if ( mtn.Parent.Name == node.Parent.Name ) {
-          mtn.Command = node.Command; mtn.BackColor = node.BackColor;
+          mtn.Update( node ); // update from node
         }
       }
     }
@@ -465,7 +465,7 @@ namespace SCJMapper_V2
                   ActivationMode defActivationMode = new ActivationMode( defActivationModeName, defMultiTap );
 
                   String devID = elem[ei].Substring( 0, 1 );
-                  String device = ActionCls.DeviceFromID( devID );
+                  String device = ActionCls.DeviceClassFromTag( devID );
 
                   // visual item for the action
                   cn = new ActionTreeNode( "UNDEF" ); cn.Name = elem[ei]; cn.Action = action; cn.BackColor = Color.White; // name with the key it to find it..                
@@ -521,7 +521,7 @@ namespace SCJMapper_V2
                 }
               }//for
 
-              tn = new ActionTreeNode( acm.name, cnl ); tn.Name = acm.name;  // name it to find it..
+              tn = new ActionTreeNode( acm.name, cnl ); tn.Name = acm.name;  tn.Action = acm.name; // name it to find it..
               tn.ImageIndex = 0; tn.NodeFont = new Font( m_MasterTree.Font, FontStyle.Bold );
               m_MasterTree.BackColor = Color.White; // fix for defect TreeView (cut off bold text)
               m_MasterTree.Nodes.Add( tn ); // add to control
@@ -565,7 +565,7 @@ namespace SCJMapper_V2
       if ( Ctrl.SelectedNode.Level == 1 ) {
         // this is the main node with Action Cmd
         ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name ); if ( ac == null ) return am; // ERROR exit
-        ActionCommandCls acc = ac.FindActionInputObject( CommandFromNodeText( Ctrl.SelectedNode.Text ) ); if ( acc == null ) return am; // ERROR exit
+        ActionCommandCls acc = ac.FindActionInputObject( ActionTreeNode.CommandFromNodeText( Ctrl.SelectedNode.Text ) ); if ( acc == null ) return am; // ERROR exit
         am = new ActivationModes( ac.defActivationMode ); am.Add( acc.ActivationMode );
         return am;
       }
@@ -596,15 +596,15 @@ namespace SCJMapper_V2
       if ( Ctrl.SelectedNode.Level == 1 ) {
         // this is the main node with Action Cmd
         ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name ); if ( ac == null ) return; // ERROR exit
-        ActionCommandCls acc = ac.FindActionInputObject( CommandFromNodeText( Ctrl.SelectedNode.Text ) ); if ( acc == null ) return; // ERROR exit
+        ActionCommandCls acc = ac.FindActionInputObject( ActionTreeNode.CommandFromNodeText( Ctrl.SelectedNode.Text ) ); if ( acc == null ) return; // ERROR exit
         // new am is either a named one or the Default from Profile (which is the default from the Action due to multiTaps..)
         if ( ActivationMode.IsDefault( newActivationModeName ) ) {
-          acc.ActivationMode = ActivationMode.Default;
+          acc.ActivationMode = new ActivationMode( ActivationMode.Default );
         }
         else {
           acc.ActivationMode = ActivationModes.Instance.ActivationModeByName( newActivationModeName );
         }
-
+        UpdateNodeFromAction( ( ActionTreeNode )Ctrl.SelectedNode, acc );
         Dirty = true;
       }
       else if ( Ctrl.SelectedNode.Level == 2 ) {
@@ -615,11 +615,12 @@ namespace SCJMapper_V2
         ActionCommandCls acc = ac.FindActionInputObject( m_ctrl.SelectedNode.Index ); if ( acc == null ) return; // ERROR exit
         // new am is either a named one or the Default from Profile (which is the default from the Action due to multiTaps..)
         if ( ActivationMode.IsDefault( newActivationModeName ) ) {
-          acc.ActivationMode = ActivationMode.Default;
+          acc.ActivationMode = new ActivationMode( ActivationMode.Default );
         }
         else {
           acc.ActivationMode = ActivationModes.Instance.ActivationModeByName( newActivationModeName );
         }
+        UpdateInputNodeFromAction( ( ActionTreeInputNode )Ctrl.SelectedNode, acc );
         Dirty = true;
       }
     }
@@ -643,10 +644,10 @@ namespace SCJMapper_V2
         ActionCls ac = FindActionObject( Ctrl.SelectedNode.Parent.Name, Ctrl.SelectedNode.Name );
         if ( ac == null ) return false; // ERROR exit
         if ( checkKind && ( ac.actionDevice != inKind ) ) return false; // ERROR exit
-
-        ActionCommandCls acc = ac.FindActionInputObject( CommandFromNodeText( Ctrl.SelectedNode.Text ) );
+        ActionCommandCls acc = ac.FindActionInputObject( ActionTreeNode.CommandFromNodeText( Ctrl.SelectedNode.Text ) );
         if ( acc == null ) return false; // ERROR exit
-        ac.UpdateCommandFromInput( input, acc );
+        // have it - continue
+        ac.UpdateCommandFromInput( ActionCls.DevInput( input, inKind ), acc.NodeIndex + 1 );
         UpdateNodeFromAction( ( ActionTreeNode )Ctrl.SelectedNode, acc );
         Dirty = true;
       }
@@ -656,11 +657,11 @@ namespace SCJMapper_V2
         ActionCls ac = FindActionObject( atn.Parent.Name, atn.Name );   // the related action
         if ( ac == null ) return false; // ERROR exit
         if ( checkKind && ( ac.actionDevice != inKind ) ) return false; // ERROR exit
-
         ActionCommandCls acc = ac.FindActionInputObject( m_ctrl.SelectedNode.Index );
         if ( acc == null ) return false; // ERROR exit
-        ac.UpdateCommandFromInput( input, acc );
-        UpdateInputNodeFromAction( ( ActionTreeInputNode )Ctrl.SelectedNode, acc, inKind );
+        // have it - continue
+        ac.UpdateCommandFromInput( ActionCls.DevInput( input, inKind ), acc.NodeIndex + 1 );
+        UpdateInputNodeFromAction( ( ActionTreeInputNode )Ctrl.SelectedNode, acc );
         Dirty = true;
       }
       return true;
@@ -761,26 +762,11 @@ namespace SCJMapper_V2
         else {
           // mapped ( regular ones )
           node.Command = actionCmd.DevInput;
-
           // background is along the input 
-          if ( node.ActionDevice == ActionCls.ActionDevice.AD_Joystick ) {
-            int jNum = JoystickCls.JSNum( actionCmd.DevID );
-            node.BackColor = JoystickCls.JsNColor( jNum );
-          }
-          else if ( node.ActionDevice == ActionCls.ActionDevice.AD_Gamepad ) {
-            node.BackColor = GamepadCls.XiColor( );
-          }
-          else if ( node.ActionDevice == ActionCls.ActionDevice.AD_Keyboard ) {
-            node.BackColor = KeyboardCls.KbdColor( );
-          }
-          else if ( node.ActionDevice == ActionCls.ActionDevice.AD_Mouse ) {   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
-            node.BackColor = MouseCls.MouseColor( );
-          }
-          else {
-            // ?? what else
-            node.BackColor = MyColors.UnassignedColor;
-          }
+          node.BackColor = ActionCls.DeviceColor( actionCmd.DevInput );
         }
+        node.Modified = !actionCmd.DefaultActivationMode; // apply modifier visual
+
         UpdateMasterNode( node );
 
       }
@@ -794,8 +780,7 @@ namespace SCJMapper_V2
     /// <param name="input">The input command</param>
     /// <param name="node">The TreeNode to update</param>
     /// <param name="actionCmd">The actionCommand that carries the update</param>
-    /// <param name="inKind">The input device</param>
-    private void UpdateInputNodeFromAction( ActionTreeInputNode node, ActionCommandCls actionCmd, ActionCls.ActionDevice inKind )
+    private void UpdateInputNodeFromAction( ActionTreeInputNode node, ActionCommandCls actionCmd )
     {
       log.Debug( "UpdateInputNodeFromAction - Entry" );
       if ( actionCmd == null ) return;
@@ -814,29 +799,14 @@ namespace SCJMapper_V2
       else {
         // mapped ( regular ones )
         node.Command = actionCmd.DevInput;
-
         // background is along the input 
-        if ( inKind == ActionCls.ActionDevice.AD_Joystick ) {
-          int jNum = JoystickCls.JSNum( actionCmd.DevID );
-          node.BackColor = JoystickCls.JsNColor( jNum );
-        }
-        else if ( inKind == ActionCls.ActionDevice.AD_Gamepad ) {
-          node.BackColor = GamepadCls.XiColor( );
-        }
-        else if ( inKind == ActionCls.ActionDevice.AD_Keyboard ) {
-          node.BackColor = KeyboardCls.KbdColor( );
-        }
-        else if ( inKind == ActionCls.ActionDevice.AD_Mouse ) {   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
-          node.BackColor = MouseCls.MouseColor( );
-        }
-        else {
-          // ?? what else
-          node.BackColor = MyColors.UnassignedColor;
-        }
+        node.BackColor = ActionCls.DeviceColor(actionCmd.DevInput );
       }
-      UpdateMasterNode( node );
+      node.Modified = !actionCmd.DefaultActivationMode; // apply modifier visual
 
+      UpdateMasterNode( node );
     }
+
 
     /// <summary>
     /// Defines what to show in the tree
@@ -874,7 +844,7 @@ namespace SCJMapper_V2
             // refresh commands
             foreach ( ActionCommandCls acc in ac.inputList ) {
               try {
-                ac.UpdateCommandFromInput( acc.DevInput, acc ); // this may apply (un)Blending if needed
+                ac.UpdateCommandFromInput( acc.DevInput, acc.NodeIndex + 1 ); // this may apply (un)Blending if needed
                 // the first one goes into the node, further must be created if not existing
                 if ( first ) {
                   UpdateNodeFromAction( matn, acc );
@@ -886,7 +856,7 @@ namespace SCJMapper_V2
                   ActionTreeInputNode matin = new ActionTreeInputNode( "UNDEF" ); matin.ImageKey = "Add";
                   acc.NodeIndex = matin.Index; // assign visual reference
                   matn.Nodes.Add( matin ); // add to master tree
-                  UpdateInputNodeFromAction( matin, acc, ac.actionDevice );
+                  UpdateInputNodeFromAction( matin, acc );
                 }
               }
               catch {
@@ -998,14 +968,6 @@ namespace SCJMapper_V2
     }
 
 
-
-    static public String CommandFromNodeText( String actionCommand )
-    {
-      String[] e = actionCommand.Split( new char[] { '-' } );
-      if ( e.Length > 1 ) return e[1].Substring( 1 );
-      return "";
-    }
-
     /// <summary>
     /// Find a control that contains the Command
     /// </summary>
@@ -1108,7 +1070,7 @@ namespace SCJMapper_V2
       const int padInput = 25;
 
       repList += String.Format( "\n" );
-      repList += String.Format( " {0}+= {1} _ {2}+=[{4}] {3}\n\n", "Action".PadRight( padAction ), "Dev", "Binding".PadRight( padInput ), "Activation", "T" ); // col description line
+      repList += String.Format( " {0}+- {1} _ {2}#-[{4}] {3}\n\n", "Action".PadRight( padAction ), "Dev", "Binding".PadRight( padInput ), "Activation", "T" ); // col description line
 
       foreach ( ActionMapCls acm in ActionMaps ) {
         String rep = String.Format( "*** {0}\n", acm.name );
@@ -1118,16 +1080,16 @@ namespace SCJMapper_V2
             if ( ShowAction( ac.actionDevice, acc.Input ) ) {
               if ( !String.IsNullOrEmpty( acc.Input ) /* && !( acc.Input == DeviceCls.BlendedInput )*/ ) {
                 if ( acc.DevInput == ac.defBinding ) {
-                  rep = String.Format( " {0} = {1} _ {2}", ac.name.PadRight( padAction ), acc.DevID, acc.Input.PadRight( padInput ) );
+                  rep = String.Format( " {0} . {1} _ {2}", ac.name.PadRight( padAction ), acc.DevID, acc.Input.PadRight( padInput ) );
                 }
                 else {
                   rep = String.Format( " {0} + {1} _ {2}", ac.name.PadRight( padAction ), acc.DevID, acc.Input.PadRight( padInput ) ); // my binding
                 }
                 if ( acc.ActivationMode == ActivationMode.Default ) {
-                  rep += String.Format( " = [{1}] {0}\n", ac.defActivationMode.Name, ac.defActivationMode.MultiTap );
+                  rep += String.Format( " . [{1}] {0}\n", ac.defActivationMode.Name, ac.defActivationMode.MultiTap );
                 }
                 else {
-                  rep += String.Format( " + [{1}] {0}\n", acc.ActivationMode.Name, acc.ActivationMode.MultiTap );
+                  rep += String.Format( " # [{1}] {0}\n", acc.ActivationMode.Name, acc.ActivationMode.MultiTap );
                 }
 
                 repList += rep;

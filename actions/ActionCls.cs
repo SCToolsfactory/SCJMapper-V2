@@ -36,7 +36,9 @@ namespace SCJMapper_V2
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-
+    /// <summary>
+    /// Device Enums
+    /// </summary>
     public enum ActionDevice
     {
       AD_Unknown = -1,
@@ -48,9 +50,14 @@ namespace SCJMapper_V2
 
     #region Static Items
 
-    static public ActionDevice ADevice( String device )
+    /// <summary>
+    /// Return the Device Enum from a DeviceClass string
+    /// </summary>
+    /// <param name="deviceClass">Device Class string</param>
+    /// <returns>Device Enum</returns>
+    static public ActionDevice ADevice( String deviceClass )
     {
-      switch ( device.ToLower( ) ) {
+      switch ( deviceClass.ToLower( ) ) {
         case KeyboardCls.DeviceClass: return ActionDevice.AD_Keyboard;
         case JoystickCls.DeviceClass: return ActionDevice.AD_Joystick;
         case GamepadCls.DeviceClass: return ActionDevice.AD_Gamepad;
@@ -63,11 +70,11 @@ namespace SCJMapper_V2
     // Static items to have this mapping in only one place
 
     /// <summary>
-    /// Returns the Device ID i.e. the single letter to tag a device
+    /// Returns the Device Tag i.e. the single letter to mark a device in Actions
     /// </summary>
-    /// <param name="device">The device name from the CryFile</param>
-    /// <returns>The single UCase device ID letter</returns>
-    static public String DevID( String device )
+    /// <param name="device">The device name from the defaultProfile</param>
+    /// <returns>The single UCase device Tag letter</returns>
+    static public String DevTag( String device )
     {
       switch ( device.ToLower( ) ) {
         case KeyboardCls.DeviceClass: return "K";
@@ -80,13 +87,13 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
-    /// Returns the Device name from the ID
+    /// Returns the Device name from the Device Tag
     /// </summary>
-    /// <param name="device">The single UCase device ID letter</param>
-    /// <returns>The device name from the CryFile</returns>
-    static public String DeviceFromID( String devID )
+    /// <param name="device">The single UCase device Tag letter</param>
+    /// <returns>The device name from the defaultProfile</returns>
+    static public String DeviceClassFromTag( String devTag )
     {
-      switch ( devID ) {
+      switch ( devTag ) {
         case "K": return KeyboardCls.DeviceClass;
         case "J": return JoystickCls.DeviceClass;
         case "X": return GamepadCls.DeviceClass;
@@ -100,24 +107,33 @@ namespace SCJMapper_V2
     /// <summary>
     /// Try to derive the device class from the input string
     /// </summary>
-    /// <param name="input">The input command string</param>
+    /// <param name="devInput">The input command string dev_input format</param>
     /// <returns>A proper DeviceClass string</returns>
-    static public String DeviceClassFromInput( String input )
+    static public String DeviceClassFromInput( String devInput )
     {
       String deviceClass = DeviceCls.DeviceClass;
 
-      deviceClass = JoystickCls.DeviceClassFromInput( input );
+      deviceClass = JoystickCls.DeviceClassFromInput( devInput );
       if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
-      deviceClass = GamepadCls.DeviceClassFromInput( input );
+      deviceClass = GamepadCls.DeviceClassFromInput( devInput );
       if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
-      deviceClass = KeyboardCls.DeviceClassFromInput( input );
+      deviceClass = KeyboardCls.DeviceClassFromInput( devInput );
       if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
-      deviceClass = MouseCls.DeviceClassFromInput( input );
+      deviceClass = MouseCls.DeviceClassFromInput( devInput );
       if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
       // others..
       return deviceClass;
     }
-
+    
+    /// <summary>
+    /// Returns the ActionDevice from a deviceID or devInput string (mo1_, kb1_, xi1_, jsN_)
+    /// </summary>
+    /// <param name="devID">DeviceID or devInput string</param>
+    /// <returns>The ActionDevice</returns>
+    static public ActionDevice ADeviceFromDevID( string devID )
+    {
+      return ADevice( DeviceClassFromInput( devID ) );
+    }
 
     /// <summary>
     /// Query the devices if the input is blended
@@ -143,10 +159,16 @@ namespace SCJMapper_V2
       return blendedInput;
     }
 
-
+    /// <summary>
+    /// Blend the input using the device specific format of the input is generic Blind
+    /// </summary>
+    /// <param name="input">An input (generic blend or a valid command)</param>
+    /// <param name="aDevice">A valid device</param>
+    /// <returns>A device blend or the original input if it was not a blend</returns>
     static public String BlendInput( String input, ActionDevice aDevice )
     {
       if ( DeviceCls.IsBlendedInput( input ) ) {
+        // was generic blind
         switch ( aDevice ) {
           case ActionDevice.AD_Gamepad: return GamepadCls.BlendedInput;
           case ActionDevice.AD_Joystick: return JoystickCls.BlendedInput;
@@ -159,6 +181,46 @@ namespace SCJMapper_V2
         return input; // just return
       }
     }
+
+    /// <summary>
+    /// Extends the input to a device input if not already done
+    /// </summary>
+    /// <param name="input">An input</param>
+    /// <param name="aDevice">The ActionDevice</param>
+    /// <returns>A valid devInput (dev_input) format</returns>
+    static public String DevInput( string input, ActionDevice aDevice )
+    {
+      switch ( aDevice ) {
+        case ActionDevice.AD_Gamepad: return GamepadCls.DevInput( input );
+        case ActionDevice.AD_Joystick: return JoystickCls.DevInput( input );
+        case ActionDevice.AD_Keyboard: return KeyboardCls.DevInput( input );
+        case ActionDevice.AD_Mouse: return MouseCls.DevInput( input );
+        default: return input;
+      }
+    }
+
+    /// <summary>
+    /// Return the color of a device
+    /// </summary>
+    /// <param name="devInput">The devinput (determine JS colors)</param>
+    /// <param name="aDevice">The ActionDevice</param>
+    /// <returns>The device color</returns>
+    static public System.Drawing.Color DeviceColor( string devInput )
+    {
+      // background is along the input 
+      ActionDevice aDevice = ADeviceFromDevID( devInput);
+      switch ( aDevice ) {
+        case ActionDevice.AD_Gamepad: return GamepadCls.XiColor( );
+        case ActionDevice.AD_Joystick: {
+            int jNum = JoystickCls.JSNum( devInput ); // need to know which JS 
+            return JoystickCls.JsNColor( jNum );
+          }
+        case ActionDevice.AD_Keyboard: return KeyboardCls.KbdColor( );
+        case ActionDevice.AD_Mouse: return MouseCls.MouseColor( );
+        default: return MyColors.UnassignedColor;
+      }
+    }
+
 
     #endregion
 
@@ -223,7 +285,7 @@ namespace SCJMapper_V2
     public ActionCommandCls AddCommand( String devInput, ActivationMode activationMode )
     {
       ActionCommandCls acc = new ActionCommandCls( devInput, inputList.Count - 1 ); // starts from -1 ...
-      acc.ActivationMode = activationMode;
+      acc.ActivationMode = new ActivationMode( activationMode );
       inputList.Add( acc );
       return acc;
     }
@@ -238,7 +300,7 @@ namespace SCJMapper_V2
     public ActionCommandCls AddCommand( String devInput, int index )
     {
       ActionCommandCls acc = new ActionCommandCls( devInput, index );
-      acc.ActivationMode = ActivationMode.Default;
+      acc.ActivationMode = new ActivationMode( ActivationMode.Default );
       inputList.Add( acc );
       return acc;
     }
@@ -274,15 +336,14 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="devInput">The input command</param>
     /// <param name="actionCmd">The actionCommand to update</param>
-    public void UpdateCommandFromInput( String devInput, ActionCommandCls actionCmd )
+    public void UpdateCommandFromInput( String devInput, int accIndex ) // ActionCommandCls actionCmd )
     {
       //log.Debug( "UpdateCommandFromInput - Entry" );
-      if ( actionCmd == null ) return;
-
+      if ( accIndex < 0 ) return;
       // Apply the input to the ActionTree
-      actionCmd.DevInput = BlendInput( devInput, this.actionDevice );
-      if ( IsBlendedInput( actionCmd.DevInput ) ) {
-        actionCmd.ActivationMode = ActivationMode.Default; // reset activation mode if the input is empty
+      this.inputList[accIndex].DevInput = BlendInput( devInput, this.actionDevice );
+      if ( IsBlendedInput( this.inputList[accIndex].DevInput ) || string.IsNullOrEmpty(devInput) ) {
+        this.inputList[accIndex].ActivationMode = new ActivationMode( ActivationMode.Default ); // reset activation mode if the input is empty
       }
     }
 
@@ -408,7 +469,7 @@ namespace SCJMapper_V2
               }
             }
 
-            key = DevID( device ) + name; // unique id of the action
+            key = DevTag( device ) + name; // unique id of the action
             actionDevice = ADevice( device ); // get the enum of the input device
 
             AddCommand( input, actMode );

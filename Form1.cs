@@ -1078,6 +1078,11 @@ namespace SCJMapper_V2
     // after user entry of the context menu - see if one has changed the ActivationMode
     private void cmAddDel_Closed( object sender, ToolStripDropDownClosedEventArgs e )
     {
+    }
+
+    private void tdiCbxActivation_Click( object sender, EventArgs e )
+    {
+      cmAddDel.Close( ToolStripDropDownCloseReason.ItemClicked );
       if ( !string.IsNullOrEmpty( m_prevActivationMode.Name ) && ( m_prevActivationMode.Name != ( string )tdiCbxActivation.SelectedItem ) ) {
         tdiCbxActivation.Text = ( string )tdiCbxActivation.SelectedItem;
         // seems to have changed - evaluate
@@ -1088,32 +1093,21 @@ namespace SCJMapper_V2
       }
     }
 
-    private void tdiCbxActivation_Click( object sender, EventArgs e )
-    {
-      cmAddDel.Close( ToolStripDropDownCloseReason.ItemClicked );
-    }
-
     private void tdiAssignBinding_Click( object sender, EventArgs e )
-    { // same as btAssign_Click
-      if ( m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), InputMode, true ) ) {
-        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-      }
-      else MySounds.PlayNotfound( );
+    {
+      btAssign_Click( sender, e );
     }
 
     private void tdiBlendBinding_Click( object sender, EventArgs e )
     {
-      // note: the right click selected the node
-      m_AT.BlendBinding( );
-      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      btBlend_Click( sender, e );
     }
 
     private void tdiClearBinding_Click( object sender, EventArgs e )
     {
-      // note: the right click selected the node
-      m_AT.ClearBinding( );
-      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      btClear_Click( sender, e );
     }
+
 
     private void tsiAddBinding_Click( object sender, EventArgs e )
     {

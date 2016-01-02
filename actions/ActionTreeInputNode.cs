@@ -19,20 +19,27 @@ namespace SCJMapper_V2
 
     // Handle all text label composition and extraction here
 
-    public static String ComposeNodeText( String cmd )
+    public static String ComposeNodeText( String cmd, Boolean modified = false )
     {
       if ( String.IsNullOrEmpty( cmd ) ) {
         return "";
       }
       else {
-        return cmd;
+        if ( modified )
+          return string.Format( "{0} {1}", cmd, ActionTreeNode.ModDiv ); // js1_button1 #
+        else
+          return string.Format( "{0}", cmd );                            // js1_button1
       }
     }
 
 
     public static void DecompNodeText( String nodeText, out String cmd )
     {
-      cmd = nodeText;
+      String[] e = nodeText.Split( new char[] { RegDiv, ModDiv }, StringSplitOptions.RemoveEmptyEntries );
+      if ( e.Length > 0 ) 
+        cmd = e[0].TrimEnd( );
+      else
+        cmd = nodeText;
     }
 
 
@@ -99,7 +106,7 @@ namespace SCJMapper_V2
       set
       {
         ActionTreeInputNode.DecompNodeText( value, out m_command );
-        base.Text = ActionTreeInputNode.ComposeNodeText( "$" + m_command ); // tag for the node processing
+        base.Text = ActionTreeInputNode.ComposeNodeText( "$" + m_command, m_modified ); // tag for the node processing
       }
     }
 
@@ -110,19 +117,9 @@ namespace SCJMapper_V2
       set
       {
         m_command = value;
-        Text = ActionTreeInputNode.ComposeNodeText( m_command ); // compose - later it will be decomposed again
+        Text = ActionTreeInputNode.ComposeNodeText( m_command, m_modified ); // compose - later it will be decomposed again
       }
     }
-    /*
-    public Boolean IsMappedAction
-    {
-      get
-      {
-        return !( String.IsNullOrEmpty( m_command )
-          || ( m_command == JoystickCls.BlendedInput )
-          || ( m_command == GamepadCls.BlendedInput ) );
-      }
-    }
-    */
+
   }
 }

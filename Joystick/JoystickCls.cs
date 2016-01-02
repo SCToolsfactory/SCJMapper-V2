@@ -109,15 +109,27 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
+    /// Create a DevInput string if the input does look like not having a device ID
+    /// </summary>
+    /// <param name="input">A keyboard input</param>
+    /// <returns>DevInput</returns>
+    static public new String DevInput( String input )
+    {
+      if ( DevMatch( input ) )
+        return input; // already
+      else
+        return DeviceID + input; // this will mostly not be as expected as it returns js1_ only .. 
+    }
+
+    /// <summary>
     /// Returns true if the input matches this device
     /// </summary>
     /// <param name="devInput">A devInput string</param>
     /// <returns>True for a match</returns>
     static public new Boolean DevMatch( String devInput )
     {
-      return devInput.StartsWith( DeviceID );
+      return IsJsN( devInput );
     }
-
 
 
     /// <summary>

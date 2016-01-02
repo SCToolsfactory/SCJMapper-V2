@@ -31,13 +31,15 @@ cassini@burri-web.org
 Changelog:
 V 2.18 - BETA Build 51
 - fix - layout works now for Win10
-- fix - uses game defaultProfile 
-- improvement - timeout for kbd modifiers (Esc no longer needed)
-- improvement - ActivationMode handling
-- improvement - Blending adds multiTap=1
-- improvement - List commands; added Act.Modes
+- fix - uses game defaultProfile again
+- fix - keyboard command for all Ctrl keys fixed
+- fix - keyboard command formatting
+- improvement - timeout ~4 sec for kbd modifiers in Joystick Mode (Esc no longer needed)
+- improvement - ActivationMode handling finished
+- improvement - user ActivationMode change indication in mapping tree
+- improvement - Blending adds multiTap=1 to overwrite double taps
+- improvement - Dump List: added ActivationModes; device checkBox applied to list
 - update - doc SCJMapper_QGuide V2.18beta.pdf
-- Known Issue: Some Ctrl-keyboard commands are not shown (Ctrl Sequences)
 V 2.17 - BETA Build 50
 - update - Updated for SC Alpha 2.0/2.1PTU using new actionmap syntax (no longer use device attribute)
 - update - Complete new QuickReference Guide

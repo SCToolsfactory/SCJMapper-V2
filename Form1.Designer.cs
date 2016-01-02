@@ -334,10 +334,10 @@
       // 
       // lblLastJ
       // 
+      this.lblLastJ.CausesValidation = false;
       this.lblLastJ.ContextMenuStrip = this.cmMouseEntry;
       this.lblLastJ.Location = new System.Drawing.Point(52, 42);
       this.lblLastJ.Name = "lblLastJ";
-      this.lblLastJ.ShortcutsEnabled = false;
       this.lblLastJ.Size = new System.Drawing.Size(222, 22);
       this.lblLastJ.TabIndex = 14;
       this.lblLastJ.Text = "...";

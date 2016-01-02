@@ -29,8 +29,12 @@ namespace SCJMapper_V2
     /// </summary>
     public ActivationMode ActivationMode { get; set; }  // "" or one of the defined ActivationModes
 
-
     /// <summary>
+    /// Returns true if default ActivationMode is set
+    /// </summary>
+    public Boolean DefaultActivationMode { get { return ActivationMode == ActivationMode.Default;  } }
+
+      /// <summary>
     /// The complete input string  (devID_input)
     /// Assuming internally blended ones only (i.e. no space blends contained)
     /// Can derive if a device tag is given
@@ -76,7 +80,7 @@ namespace SCJMapper_V2
       // init with something to debug if needed
       Input = "UNDEF";
       DevID = "NA0";
-      ActivationMode = ActivationMode.Default;
+      ActivationMode = new ActivationMode( ActivationMode.Default );
       NodeIndex = -1;
     }
 
@@ -85,7 +89,7 @@ namespace SCJMapper_V2
     {
       Input = other.Input;
       DevID = other.DevID;
-      ActivationMode = other.ActivationMode;
+      ActivationMode = new ActivationMode( other.ActivationMode );
       NodeIndex = other.NodeIndex;
     }
 
@@ -93,7 +97,7 @@ namespace SCJMapper_V2
     public ActionCommandCls( String devInp )
     {
       DevInput = devInp;
-      ActivationMode = ActivationMode.Default;
+      ActivationMode = new ActivationMode( ActivationMode.Default );
       NodeIndex = -1;
     }
 
@@ -101,7 +105,7 @@ namespace SCJMapper_V2
     public ActionCommandCls( String devInp, int nodeIx )
     {
       DevInput = devInp;
-      ActivationMode = ActivationMode.Default;
+      ActivationMode = new ActivationMode( ActivationMode.Default );
       NodeIndex = nodeIx;
     }
 
@@ -110,7 +114,7 @@ namespace SCJMapper_V2
     {
       Input = inp;
       DevID = dev;
-      ActivationMode = ActivationMode.Default;
+      ActivationMode = new ActivationMode( ActivationMode.Default );
       NodeIndex = -1;
     }
 
@@ -119,7 +123,7 @@ namespace SCJMapper_V2
     {
       Input = inp;
       DevID = dev;
-      ActivationMode = ActivationMode.Default;
+      ActivationMode = new ActivationMode( ActivationMode.Default );
       NodeIndex = nodeIx;
     }
 

@@ -170,7 +170,7 @@ namespace SCJMapper_V2
     {
       // populate from input
       // something like "v_pitch - js1_x" OR "v_pitch - xi_thumbl" OR "v_pitch - ximod+xi_thumbl+xi_mod"
-      String cmd = ActionTree.CommandFromNodeText( Action );
+      String cmd = ActionTreeNode.CommandFromNodeText( Action );
       String action = ActionTreeNode.ActionFromNodeText( Action );
       m_cmdCtrl = "";
       if ( !String.IsNullOrWhiteSpace( cmd ) ) {

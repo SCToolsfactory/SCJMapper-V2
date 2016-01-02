@@ -14,18 +14,24 @@ namespace SCJMapper_V2
 
     #region Static items
 
+    public const char RegDiv = '-';
+    public const char ModDiv = '#';
+
     // Handle all text label composition and extraction here
 
-    public static String ComposeNodeText( String action, String cmd )
+    public static String ComposeNodeText( String action, String cmd, Boolean modified = false )
     {
       if ( String.IsNullOrEmpty( cmd ) ) {
-        return action;
+        return action;                                                            // v_eject
       }
       else if ( String.IsNullOrEmpty( action ) ) {
-        return cmd;
+        return cmd;                                                               // js1_button1
       }
       else {
-        return action + " - " + cmd;
+        if ( modified )
+          return string.Format( "{0} {2} {1} {3}", action, cmd, RegDiv, ModDiv ); // v_eject - js1_button1 #
+        else
+          return string.Format( "{0} {2} {1}", action, cmd, RegDiv );             // v_eject - js1_button1
       }
     }
 
@@ -33,10 +39,10 @@ namespace SCJMapper_V2
     public static void DecompNodeText( String nodeText, out String action, out String cmd )
     {
       action = ""; cmd = "";
-      String[] e = nodeText.Split( new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries );
+      String[] e = nodeText.Split( new char[] { RegDiv, ModDiv }, StringSplitOptions.RemoveEmptyEntries );
       if ( e.Length > 1 ) {
         action = e[0].TrimEnd( );
-        if ( e[1] == " " + DeviceCls.BlendedInput ) {
+        if ( e[1].Trim() == DeviceCls.BlendedInput ) {
           cmd = e[1];
         }
         else {
@@ -99,15 +105,18 @@ namespace SCJMapper_V2
       : base( )
     {
       if ( srcNode == null ) return;
+      // properties set once for a node
       this.Name = srcNode.Name;
       this.Text = srcNode.Text;
-      this.BackColor = srcNode.BackColor;
       this.ForeColor = srcNode.ForeColor;
       this.NodeFont = srcNode.NodeFont;
       this.ImageKey = srcNode.ImageKey;
       this.Tag = srcNode.Tag;
       this.m_action = srcNode.m_action;
       this.m_actionDevice = srcNode.m_actionDevice;
+
+      // these are changing while using it
+      this.Update( srcNode );
     }
 
     // ctor
@@ -122,10 +131,26 @@ namespace SCJMapper_V2
     {
     }
 
-
+    // our own properties
     private String m_action = "";
     protected String m_command ="";
+    protected bool m_modified = false; // any modifier applied? (ActivationMode)
     private ActionCls.ActionDevice m_actionDevice = ActionCls.ActionDevice.AD_Unknown;
+
+
+    /// <summary>
+    /// Update this node from the other node
+    ///  applies dynamic props only 
+    /// </summary>
+    /// <param name="other">The node to update from</param>
+    public void Update( ActionTreeNode other )
+    {
+      this.BackColor = other.BackColor;
+      this.Command = other.Command;
+      this.Modified = other.Modified;
+    }
+
+
 
     public new String Text
     {
@@ -133,7 +158,7 @@ namespace SCJMapper_V2
       set
       {
         ActionTreeNode.DecompNodeText( value, out m_action, out m_command );
-        base.Text = ActionTreeNode.ComposeNodeText( m_action, m_command );
+        base.Text = ActionTreeNode.ComposeNodeText( m_action, m_command, m_modified );
       }
     }
 
@@ -144,7 +169,7 @@ namespace SCJMapper_V2
       set
       {
         m_action = value;
-        base.Text = ActionTreeNode.ComposeNodeText( m_action, m_command );
+        base.Text = ActionTreeNode.ComposeNodeText( m_action, m_command, m_modified );
       }
     }
 
@@ -154,7 +179,7 @@ namespace SCJMapper_V2
       set
       {
         m_command = value;
-        base.Text = ActionTreeNode.ComposeNodeText( m_action, m_command );
+        base.Text = ActionTreeNode.ComposeNodeText( m_action, m_command, m_modified );
       }
     }
 
@@ -166,6 +191,17 @@ namespace SCJMapper_V2
         m_actionDevice = value;
       }
     }
+
+    public Boolean Modified
+    {
+      get { return m_modified; }
+      set
+      {
+        m_modified = value;
+        base.Text = ActionTreeNode.ComposeNodeText( m_action, m_command, m_modified );
+      }
+    }
+
 
     public Boolean IsJoystickAction
     {

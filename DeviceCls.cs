@@ -24,6 +24,7 @@ namespace SCJMapper_V2
     
     static public Boolean IsDeviceClass( String deviceClass ) { return false; }
     static public String DeviceClassFromInput( String input ) { return DeviceClass; }
+    static public String DevInput( String input ) { return input; }
     static public Boolean DevMatch( String devInput ) { return false; }
 
     public abstract String DevClass { get; }

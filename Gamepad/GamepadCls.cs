@@ -67,6 +67,18 @@ namespace SCJMapper_V2
         return DeviceCls.DeviceClass; // unknown
     }
 
+    /// <summary>
+    /// Create a DevInput string if the input does look like not having a device ID
+    /// </summary>
+    /// <param name="input">A gamepad input</param>
+    /// <returns>DevInput</returns>
+    static public new String DevInput( String input )
+    {
+      if ( DevMatch( input ) )
+        return input; // already
+      else
+        return DeviceID + input;
+    }
 
     /// <summary>
     /// Returns true if the input matches this device
