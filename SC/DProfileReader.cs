@@ -46,6 +46,35 @@ namespace SCJMapper_V2
     class ActionMap : List<ProfileAction>  // carries the action list
     {
       public String name { get; set; } // the map name
+
+      static int ContainsLoop( List<ProfileAction> list, string value )
+      {
+        for ( int i = 0; i < list.Count; i++ ) {
+          if ( list[i].keyName == value ) {
+            return i;
+          }
+        }
+        return -1;
+      }
+
+      public new int IndexOf( ProfileAction pact )
+      {
+        return ContainsLoop( this, pact.keyName );
+      }
+
+      public new bool Contains( ProfileAction pact )
+      {
+        return ( ContainsLoop( this, pact.keyName ) >= 0 );
+      }
+
+      public new void Add( ProfileAction pact )
+      {
+        // only get the latest ..
+        if ( this.Contains( pact ) ) 
+          this.RemoveAt( IndexOf( pact ) );
+
+        base.Add( pact );
+      }
     };
     Dictionary<String, ActionMap> m_aMap = null; // key would be the actionmap name
     ActionMap m_currentMap = null;
@@ -227,23 +256,45 @@ namespace SCJMapper_V2
     /// Reads an action sub element
     /// </summary>
     /// <param name="xr">An XML reader @ StartElement</param>
-    private void ReadActionSub( XmlReader xr, String actionName )
+    private void ReadActionSub( XmlReader xr, String actionName, String device )
     {
-      //<action name="v_brake" onPress="1" onHold="1" onRelease="1" keyboard="space" xboxpad="xi_shoulderl+xi_shoulderr">
-      //	<joystick input="js2_button7" />        
-      //	<joystick input="js2_button8" />
-      //</action>
-      //or
-      //<action name="v_hud_confirm" onPress="1" onRelease="1" xboxpad="xi_triggerL_btn+xi_a" joystick="js1_button19">
-      //	<keyboard>
-      //		<inputdata input="enter"/>
-      //	</keyboard>
-      //</action>
+
+      /*
+          <action name = "v_throttle_100" onPress = "1" xboxpad = " " joystick = " " UILabel = "@ui_CIThrottleMax" UIDescription = "@ui_CIThrottleMaxDesc" >
+            <keyboard multiTap = "2" input = "w" />
+          </action >
+        or
+          <action name="v_brake" onPress="1" onHold="1" onRelease="1" keyboard="space" xboxpad="xi_shoulderl+xi_shoulderr">
+            <joystick input="js2_button7" />        
+            <joystick input="js2_button8" />
+          </action>
+        or
+          <action name="v_hud_confirm" onPress="1" onRelease="1" xboxpad="xi_triggerL_btn+xi_a" joystick="js1_button19">
+            <keyboard>
+              <inputdata input="enter"/>
+            </keyboard>
+          </action>
+        or
+          <action name="ui_up" onPress="1" onHold="1" holdTriggerDelay="0.15" holdRepeatDelay="0.15" >
+            <keyboard>
+              <inputdata input="up" />
+            </keyboard>
+            <xboxpad>
+              <inputdata input="dpad_up" />
+              <inputdata input="thumbly" useAnalogCompare="1" analogCompareVal="0.5" analogCompareOp="GREATERTHAN" />
+              <inputdata input="thumbry" useAnalogCompare="1" analogCompareVal="0.5" analogCompareOp="GREATERTHAN" />
+            </xboxpad>
+          </action>
+
+      */
       Boolean done = false;
       do {
         xr.Read( ); // get next element
         Dictionary<String, String> attr = new Dictionary<string, string>( );
-        String eName = xr.Name;
+        // add what is not contained in the structure we are about to parse
+        attr.Add( "name", actionName );  // actionName is in the outer element
+
+        String eName = xr.Name; // this is either the device or inputdata if there are multiple entries
 
         // read attributes if any
         while ( xr.MoveToNextAttribute( ) ) {
@@ -251,6 +302,14 @@ namespace SCJMapper_V2
           //Console.Write( " {0}='{1}'", xr.Name, xr.Value );
         }
         xr.MoveToElement( ); // backup
+
+        // Have to add the device, otherwise the following does not work..
+        if ( attr.ContainsKey( "input" ) ) {
+          if ( !string.IsNullOrEmpty( device ) )
+            attr.Add( device, attr["input"] ); // if the device is given, use it
+          else
+            attr.Add( eName, attr["input"] ); // else it should be the eName element
+        }
 
         // the element name is a control
         if ( xr.NodeType == XmlNodeType.EndElement ) {
@@ -262,8 +321,8 @@ namespace SCJMapper_V2
         }
         else {
           // one with subelements again
-          m_nodeNameStack.Push( xr.Name ); // recursive .. push element name to terminate later
-          ReadActionSub( xr, actionName );
+          m_nodeNameStack.Push( xr.Name ); // recursive .. push element name to terminate later (this is i.e. keyboard) 
+          ReadActionSub( xr, actionName, xr.Name );
         }
       } while ( !done );
 
@@ -313,7 +372,7 @@ namespace SCJMapper_V2
             if ( eName.ToLower( ) == "action" ) {
               // this is an action.. - collect it
               CollectActions( attr );
-              ReadActionSub( xr, attr["name"] ); // a non empty action element may have a sub element
+              ReadActionSub( xr, attr["name"], "" ); // a non empty action element may have a sub element (but no device yet)
             }
           }
           //Console.Write( ">\n" );

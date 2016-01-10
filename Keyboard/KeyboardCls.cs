@@ -186,7 +186,7 @@ namespace SCJMapper_V2
           // non letters
           case ( int )Key.Escape: key += "escape+"; break;
           case ( int )Key.Minus: key += "minus+"; break;
-          case ( int )Key.Equals: key += "equal+"; break;
+          case ( int )Key.Equals: key += "equals+"; break;
           case ( int )Key.Grave: key += ""; break; // "grave+"; break; // reserved for Console 
           case ( int )Key.Underline: key += "underline+"; break;
           case ( int )Key.Back: key += "backspace+"; break;

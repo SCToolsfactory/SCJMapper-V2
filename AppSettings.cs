@@ -207,7 +207,7 @@ namespace SCJMapper_V2
     }
 
     [UserScopedSettingAttribute( )]
-    [DefaultSettingValueAttribute( ",multiplayer,player,flycam,vehicle_driver,singleplayer," )] // empty  Note: comma separated list, must have a comma at the begining and the end (to find 'player' on its own...)
+    [DefaultSettingValueAttribute( ",default,multiplayer,singleplayer,player,flycam,vehicle_driver," )] // empty  Note: comma separated list, must have a comma at the begining and the end (to find 'player' on its own...)
     public String IgnoreActionmaps
     {
       get { return ( String )this["IgnoreActionmaps"]; }
