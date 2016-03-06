@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "Cassini (SC handle)" )]
 [assembly: AssemblyProduct( "SCJMapper" )]
-[assembly: AssemblyCopyright( "Copyright (c) 2015 M.Burri" )]
+[assembly: AssemblyCopyright( "Copyright (c) 2016 M.Burri" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( "2.19.0.52" )]
-[assembly: AssemblyFileVersion( "2.19.0.52" )]
+[assembly: AssemblyVersion( "2.21.0.55" )]
+[assembly: AssemblyFileVersion( "2.21.0.55" )]

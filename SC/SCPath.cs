@@ -307,6 +307,27 @@ namespace SCJMapper_V2
 
 
     /// <summary>
+    /// Returns the SC DataXML.pak file path
+    /// SC Alpha 2.2: E:\G\StarCitizen\StarCitizen\Public\Data\DataXML.pak (contains the binary XML now)
+    /// </summary>
+    static public String SCDataXML_pak
+    {
+      get
+      {
+        log.Debug( "SCDataXML_pak - Entry" );
+        String scp = SCClientDataPath;
+        if ( String.IsNullOrEmpty( scp ) ) return "";
+        //
+        scp = Path.Combine( scp, "DataXML.pak" );
+        if ( File.Exists( scp ) ) return scp;
+
+        log.WarnFormat( "SCDataXML_pak - StarCitizen\\Public\\Data\\DataXML.pak file does not exist: {0}", scp );
+        return "";
+      }
+    }
+
+
+    /// <summary>
     /// Returns the SC log file path to the latest logfile
     /// AC 1.1.6: E:\G\StarCitizen\StarCitizen\Public\Game.log  NOTE: 1.1.6 does not longer contain the needed entries .-((
     /// </summary>
@@ -343,6 +364,7 @@ namespace SCJMapper_V2
 
     /// <summary>
     /// Returns the relative path of DefaultProfile.xml
+    /// SC Alpha 2.2: still true .. but contains the binary XML now
     /// </summary>
     static public String DefaultProfilePath_rel
     {
@@ -355,6 +377,7 @@ namespace SCJMapper_V2
 
     /// <summary>
     /// Returns the name part of the DefaultProfile w/o extension...
+    /// SC Alpha 2.2: still true .. but contains the binary XML now
     /// </summary>
     static public String DefaultProfileName
     {

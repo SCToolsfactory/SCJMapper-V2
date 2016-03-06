@@ -26,8 +26,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>52</ApplicationRevision>
-    <ApplicationVersion>2.19.0.%2a</ApplicationVersion>
+    <ApplicationRevision>55</ApplicationRevision>
+    <ApplicationVersion>2.21.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -165,6 +165,14 @@
     <Compile Include="actions\ActionMapsCls.cs" />
     <Compile Include="actions\ActionTree.cs" />
     <Compile Include="SC\ActivationModes.cs" />
+    <Compile Include="SC\CryXMLlib\Conversions.cs" />
+    <Compile Include="SC\CryXMLlib\CryIXml.cs" />
+    <Compile Include="SC\CryXMLlib\CryXmlBinContext.cs" />
+    <Compile Include="SC\CryXMLlib\CryXmlBinHeader.cs" />
+    <Compile Include="SC\CryXMLlib\CryXmlBinNode.cs" />
+    <Compile Include="SC\CryXMLlib\CryXmlBinReader.cs" />
+    <Compile Include="SC\CryXMLlib\CryXmlNodeRef.cs" />
+    <Compile Include="SC\CryXMLlib\XmlTree.cs" />
     <Compile Include="SC\DProfileReader.cs" />
     <Compile Include="Joystick\JoystickCls.cs" />
     <Compile Include="actions\MyColors.cs" />

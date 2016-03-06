@@ -56,9 +56,13 @@ namespace SCJMapper_V2
         if ( string.IsNullOrEmpty( value ) ) {  // no Input - insert input empty
           Input = ""; // empty one
         }
-        else if ( value.IndexOf( "_" ) == 3 ) { // fully qualified only if both exist
+        else if ( value.IndexOf( "_" ) == 3 ) { // fully qualified only if both exist single digit number
           DevID = value.Substring( 0, 3 );
           Input = value.Substring( 4 );
+        }
+        else if ( value.IndexOf( "_" ) == 4 ) { // fully qualified only if both exist 2 digit number
+          DevID = value.Substring( 0, 4 );
+          Input = value.Substring( 5 );
         }
         else {  // no device - insert input empty
           // treat as input only

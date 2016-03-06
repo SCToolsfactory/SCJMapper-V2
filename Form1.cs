@@ -396,6 +396,8 @@ namespace SCJMapper_V2
       m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
       // Init with default profile filepath
       m_AT.LoadProfileTree( SCDefaultProfile.DefaultProfileName, addDefaultBinding );
+      lblProfileUsed.Text = SCDefaultProfile.UsedDefProfile; // SCA 2.2 show used profile
+
       // provide an array of checkboxes to Options (all is handled there)
       List<CheckBox> inversions = new List<CheckBox>( );
       inversions.Add( cbxInvAimPitch ); inversions.Add( cbxInvViewPitch );
@@ -650,6 +652,7 @@ namespace SCJMapper_V2
       }
       JoystickCls.ReassignJsColor( newL );
 
+      m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
       m_AT.ReloadTreeView( ); // finally reload things into the tree
 
       btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
@@ -1446,6 +1449,7 @@ namespace SCJMapper_V2
     {
       m_keyIn = ( !m_keyIn );
       if ( m_keyIn ) {
+        cbxThrottle.Checked = false; cbxThrottle.Enabled = false; // must be disabled..
         if ( m_Keyboard == null ) {
           m_keyIn = false;
           btJsKbd.ImageKey = "J";
@@ -1525,13 +1529,15 @@ namespace SCJMapper_V2
     }
 
 
-    // processes all mouse context menue item clicks
+    // processes all mouse context menu and some unreachable KBD  item clicks
     private void tmeItem_Click( object sender, EventArgs e )
     {
       ToolStripMenuItem ts = (ToolStripMenuItem)sender;
       if ( String.IsNullOrEmpty( ( string )ts.Tag ) ) return;
 
       String item = "";
+      String device = MouseCls.DeviceClass;
+
       int btNum = 0;
       if ( int.TryParse( ( string )ts.Tag, out btNum ) ) {
         // got a button (most likely..)
@@ -1545,18 +1551,29 @@ namespace SCJMapper_V2
         item = "mwheel_up";
       else if ( ( string )ts.Tag == "D" )
         item = "mwheel_down";
+      else if ( ( string )ts.Tag == "K_Tab" ) {
+        item = "tab";
+        device = KeyboardCls.DeviceClass;
+      }
 
       String ctrl = "";
-      if ( m_Keyboard == null ) {
-        // no keyboard = no modifier 
-        ctrl = MouseCls.MakeCtrl( item, "" ); // show last handled JS control
+      // have to handle the two devices
+      if ( MouseCls.IsDeviceClass( device ) ) {
+        if ( m_Keyboard == null ) {
+          // no keyboard = no modifier 
+          ctrl = MouseCls.MakeCtrl( item, "" ); // show last handled JS control
+        }
+        else {
+          UpdateModifiers( );
+          ctrl = MouseCls.MakeCtrl( item, m_persistentMods ); // show last handled JS control
+        }
+        m_mouseIn = true; // for this one only
       }
-      else {
+      else if ( KeyboardCls.IsDeviceClass( device ) ) {
         UpdateModifiers( );
-        ctrl = MouseCls.MakeCtrl( item, m_persistentMods ); // show last handled JS control
+        ctrl = KeyboardCls.MakeCtrl( item, m_persistentMods ); // show last handled JS control
       }
 
-      m_mouseIn = true; // for this one
       lblLastJ.Text = ctrl;
     }
 

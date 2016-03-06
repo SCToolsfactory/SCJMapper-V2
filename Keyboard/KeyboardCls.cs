@@ -229,6 +229,19 @@ namespace SCJMapper_V2
       return key.TrimEnd( new char[] { '+' } );  // return killing the last +
     }
 
+
+    /// <summary>
+    /// Format the various parts to a valid ctrl entry
+    /// </summary>
+    /// <param name="input">The input by the user</param>
+    /// <param name="modifiers">Modifiers to be applied</param>
+    /// <returns></returns>
+    static public String MakeCtrl( String input, String modifiers )
+    {
+      return DeviceID + modifiers + input;
+    }
+
+
     #endregion
 
     private Keyboard m_device;

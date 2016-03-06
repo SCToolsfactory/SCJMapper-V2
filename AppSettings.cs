@@ -192,6 +192,38 @@ namespace SCJMapper_V2
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
+    public String IgnoreJS9
+    {
+      get { return ( String )this["IgnoreJS9"]; }
+      set { this["IgnoreJS9"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "" )]
+    public String IgnoreJS10
+    {
+      get { return ( String )this["IgnoreJS10"]; }
+      set { this["IgnoreJS10"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "" )]
+    public String IgnoreJS11
+    {
+      get { return ( String )this["IgnoreJS11"]; }
+      set { this["IgnoreJS11"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "" )]
+    public String IgnoreJS12
+    {
+      get { return ( String )this["IgnoreJS12"]; }
+      set { this["IgnoreJS12"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "" )]
     public String UserSCPath
     {
       get { return ( String )this["UserSCPath"]; }

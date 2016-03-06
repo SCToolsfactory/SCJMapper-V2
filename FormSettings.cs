@@ -55,6 +55,10 @@ namespace SCJMapper_V2
       txJS6.Text = m_owner.IgnoreJS6;
       txJS7.Text = m_owner.IgnoreJS7;
       txJS8.Text = m_owner.IgnoreJS8;
+      txJS9.Text = m_owner.IgnoreJS9;
+      txJS10.Text = m_owner.IgnoreJS10;
+      txJS11.Text = m_owner.IgnoreJS11;
+      txJS12.Text = m_owner.IgnoreJS12;
 
       // Ignore actionmaps
       for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
@@ -88,6 +92,10 @@ namespace SCJMapper_V2
       m_owner.IgnoreJS6 = txJS6.Text;
       m_owner.IgnoreJS7 = txJS7.Text;
       m_owner.IgnoreJS8 = txJS8.Text;
+      m_owner.IgnoreJS9 = txJS9.Text;
+      m_owner.IgnoreJS10 = txJS10.Text;
+      m_owner.IgnoreJS11 = txJS11.Text;
+      m_owner.IgnoreJS12 = txJS12.Text;
 
       // Ignore actionmaps
       String ignore = ",";

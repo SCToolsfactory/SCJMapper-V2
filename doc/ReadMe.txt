@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.18 - Build 51 BETA
-(c) Cassini, StandardToaster - 02-January-2016
+SC Joystick Mapper V 2.21 - Build 55 BETA
+(c) Cassini, StandardToaster - 06-March-2016
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.18)
-SCJMapper.exe.config         Program config (V2.18)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.21)
+SCJMapper.exe.config         Program config (V2.21)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -13,7 +13,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.18beta.pdf    Quick Guide
+SCJMapper_QGuide V2.21beta.pdf    Quick Guide
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images                       - graphics folder MUST be in the same folder as the Exe file
@@ -29,6 +29,19 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.21 - BETA Build 55
+- fix #40 added Tab entry in Ctrl. context menu
+- fix - try to fix Win10 scaling issues (hidden assignment area)
+- fix - profile tree color indication also applied when re-reading defaultProfile
+- improvement - enumerates up to 12 devices now (though not tested as I don't have 12 ..)
+- add - use of SCA 2.2 provided defaultProfile (new location and format)
+- add - indication of the used defaultProfile
+- add - built in defaultProfile updated to SCA 2.2 
+V 2.19 - BETA Build 52
+- fix #37 improved defaultProfile Parsing
+- fix #38 locale issue - changed App number formatting to US
+- fix #39 changed equal to equals string for kbd entry
+- add - default actionmap to choose from (it is on the ignore list)
 V 2.18 - BETA Build 51
 - fix - layout works now for Win10
 - fix - uses game defaultProfile again

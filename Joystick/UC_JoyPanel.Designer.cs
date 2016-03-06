@@ -62,8 +62,8 @@
       this.label3 = new System.Windows.Forms.Label();
       this.label2 = new System.Windows.Forms.Label();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.label1 = new System.Windows.Forms.Label();
       this.lblJsAssignment = new System.Windows.Forms.Label();
+      this.label1 = new System.Windows.Forms.Label();
       this.gBox.SuspendLayout();
       this.gBoxCap.SuspendLayout();
       this.groupBox1.SuspendLayout();
@@ -99,14 +99,14 @@
       this.gBox.Controls.Add(this.lX);
       this.gBox.Location = new System.Drawing.Point(3, 69);
       this.gBox.Name = "gBox";
-      this.gBox.Size = new System.Drawing.Size(232, 161);
+      this.gBox.Size = new System.Drawing.Size(232, 151);
       this.gBox.TabIndex = 3;
       this.gBox.TabStop = false;
       this.gBox.Text = "Joystick State";
       // 
       // lbl1Buttons
       // 
-      this.lbl1Buttons.Location = new System.Drawing.Point(65, 141);
+      this.lbl1Buttons.Location = new System.Drawing.Point(65, 132);
       this.lbl1Buttons.Name = "lbl1Buttons";
       this.lbl1Buttons.Size = new System.Drawing.Size(154, 13);
       this.lbl1Buttons.TabIndex = 25;
@@ -114,7 +114,7 @@
       // lB
       // 
       this.lB.AutoSize = true;
-      this.lB.Location = new System.Drawing.Point(9, 141);
+      this.lB.Location = new System.Drawing.Point(9, 132);
       this.lB.Name = "lB";
       this.lB.Size = new System.Drawing.Size(46, 13);
       this.lB.TabIndex = 24;
@@ -433,21 +433,12 @@
       // 
       this.groupBox1.Controls.Add(this.lblJsAssignment);
       this.groupBox1.Controls.Add(this.label1);
-      this.groupBox1.Location = new System.Drawing.Point(3, 236);
+      this.groupBox1.Location = new System.Drawing.Point(3, 226);
       this.groupBox1.Name = "groupBox1";
       this.groupBox1.Size = new System.Drawing.Size(232, 46);
       this.groupBox1.TabIndex = 5;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "jsN - Assignment";
-      // 
-      // label1
-      // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(9, 21);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(119, 13);
-      this.label1.TabIndex = 0;
-      this.label1.Text = "This device is listed as: ";
       // 
       // lblJsAssignment
       // 
@@ -459,6 +450,15 @@
       this.lblJsAssignment.TabIndex = 1;
       this.lblJsAssignment.Text = "jsx";
       // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(9, 21);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(119, 13);
+      this.label1.TabIndex = 0;
+      this.label1.Text = "This device is listed as: ";
+      // 
       // UC_JoyPanel
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -467,7 +467,7 @@
       this.Controls.Add(this.gBoxCap);
       this.Controls.Add(this.gBox);
       this.Name = "UC_JoyPanel";
-      this.Size = new System.Drawing.Size(239, 295);
+      this.Size = new System.Drawing.Size(239, 278);
       this.gBox.ResumeLayout(false);
       this.gBox.PerformLayout();
       this.gBoxCap.ResumeLayout(false);

@@ -28,7 +28,7 @@ namespace SCJMapper_V2
 
 
     static public int JSnum_UNKNOWN = 0;
-    static public int JSnum_MAX = 8;
+    static public int JSnum_MAX = 12; // Get to 12 for 'freaks' ..
 
     public const String JsUnknown = "jsx_";
 
@@ -186,18 +186,26 @@ namespace SCJMapper_V2
         // find jsN start 
         int jsPos = jsTag.IndexOf( "+js" );
         if ( jsPos > 0 ) {
-          if ( !int.TryParse( jsTag.Substring( jsPos+3, 1 ), out retNum ) ) {
-            retNum = JSnum_UNKNOWN;
+          if ( !int.TryParse( ( jsTag + "XX" ).Substring( jsPos + 3, 2 ), out retNum ) ) { // cheap .. test for double digits
+            if ( !int.TryParse( jsTag.Substring( jsPos + 3, 1 ), out retNum ) ) { // now for only single ones
+              retNum = JSnum_UNKNOWN; // neither double nor single digit found
+            }
+          }
+        }
+        else if ( jsTag.StartsWith( "js" ) ) {
+          if ( !int.TryParse( (jsTag+"XX").Substring( 2, 2 ), out retNum ) ) {  // cheap .. test for double digits ( have to extend the string to parse)
+            if ( !int.TryParse( jsTag.Substring( 2, 1 ), out retNum ) ) { // now for only single ones
+              retNum = JSnum_UNKNOWN;  // neither double nor single digit found
+            }
           }
         }
         else {
-          if ( ! ( jsTag.StartsWith("js") && int.TryParse( jsTag.Substring( 2, 1 ), out retNum ) ) ) {
-            retNum = JSnum_UNKNOWN;
-          }
+          retNum = JSnum_UNKNOWN;  // neither double nor single digit found
         }
       }
       return retNum;
     }
+
 
     /// <summary>
     /// Returns the validity of a JSnumber
@@ -210,7 +218,7 @@ namespace SCJMapper_V2
       return ( jsNum > JSnum_UNKNOWN ) && ( jsNum <= JSnum_MAX );
     }
 
-    const string js_pattern = @"^js\d_*";
+    const string js_pattern = @"^js\d{1,2}_*";
     static Regex rgx_js = new Regex( js_pattern, RegexOptions.IgnoreCase );
     /// <summary>
     /// Returns true if the input starts with a valid jsN_ formatting
@@ -233,7 +241,14 @@ namespace SCJMapper_V2
     {
       // find jsN start 
       if ( IsJsN( input ) ) {
-        return input.Replace( input.Substring( 0, 3 ), JSTag( newJsN ) ); // jsPos=-1 + 1 => 0 (case of no modifier)
+        int inJsN = JSNum( input );
+        if ( inJsN < 10 ) {
+          return input.Replace( input.Substring( 0, 3 ), JSTag( newJsN ) );
+        }
+        else {
+          // 2 digit input JsN
+          return input.Replace( input.Substring( 0, 4 ), JSTag( newJsN ) );
+        }
       }
       else {
         return input;
@@ -242,9 +257,9 @@ namespace SCJMapper_V2
 
 
 
-    const string jsl_pattern = @"^js\d_[xyz]$";
+    const string jsl_pattern = @"^js\d{1,2}_[xyz]$";
     static Regex rgx_jsl = new Regex( jsl_pattern, RegexOptions.IgnoreCase );
-    const string jsr_pattern = @"^js\d_rot[xyz]$";
+    const string jsr_pattern = @"^js\d{1,2}_rot[xyz]$";
     static Regex rgx_jsr = new Regex( jsr_pattern, RegexOptions.IgnoreCase );
     /// <summary>
     /// Makes a throttle from the given ctrl
@@ -260,7 +275,14 @@ namespace SCJMapper_V2
 
       String retVal = control;
       if ( rgx_jsl.IsMatch( control ) ) {
-        retVal = retVal.Insert( 4, "throttle" );
+        int inJsN = JSNum( control );
+        if ( inJsN < 10 ) {
+          retVal = retVal.Insert( 4, "throttle" );
+        }
+        else {
+          // 2 digit input JsN
+          retVal = retVal.Insert( 5, "throttle" );
+        }
       }
       /* THIS IS WRONG.... don't know if rot can get a throttle...
       else if ( rgx_jsr.IsMatch( control ) ) {
@@ -282,7 +304,7 @@ namespace SCJMapper_V2
     }
 
 
-    const string jsb_pattern = @"^js\d_button\d{1,3}$";
+    const string jsb_pattern = @"^js\d{1,2}_button\d{1,3}$";
     static Regex rgx_jsb = new Regex( jsb_pattern, RegexOptions.IgnoreCase );
     /// <summary>
     /// Returns True if devInput seems to be a valid Modifier 
@@ -374,12 +396,14 @@ namespace SCJMapper_V2
     public int ButtonCount { get { return m_device.Capabilities.ButtonCount; } }
     public int POVCount { get { return m_device.Capabilities.PovCount; } }
 
-    public override Boolean Activated 
-    { 
-      get { return m_activated;} 
-      set { m_activated = value;
-      if ( m_activated == false ) m_device.Unacquire( ); // explicitely if not longer active
-      } 
+    public override Boolean Activated
+    {
+      get { return m_activated; }
+      set
+      {
+        m_activated = value;
+        if ( m_activated == false ) m_device.Unacquire( ); // explicitely if not longer active
+      }
     }
 
 
@@ -442,7 +466,7 @@ namespace SCJMapper_V2
       ApplySettings( ); // get whatever is needed here from Settings
       JoystickCls.RegisteredDevices++;
 
-      Activated = true; 
+      Activated = true;
     }
 
 
@@ -497,7 +521,7 @@ namespace SCJMapper_V2
     }
 
 
-    private void ResetButtons( bool[] bt)
+    private void ResetButtons( bool[] bt )
     {
       for ( int i = 0; i < bt.Length; i++ ) bt[i] = false;
     }
@@ -605,7 +629,7 @@ namespace SCJMapper_V2
         {
           {"X","x"},
           {"Y","y"},
-          {"Z","z"}, 
+          {"Z","z"},
           {"RotationX","rotx"},
           {"RotationY","roty"},
           {"RotationZ","rotz"}
@@ -780,7 +804,7 @@ namespace SCJMapper_V2
         {
           {"x","X"},
           {"y","Y"},
-          {"z","Z"}, 
+          {"z","Z"},
           {"rotx","RotationX"},
           {"roty","RotationY"},
           {"rotz","RotationZ"}

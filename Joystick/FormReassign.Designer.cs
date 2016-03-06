@@ -31,6 +31,18 @@
       this.btCancel = new System.Windows.Forms.Button();
       this.btDone = new System.Windows.Forms.Button();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.cbxStick12 = new System.Windows.Forms.ComboBox();
+      this.cbxStick11 = new System.Windows.Forms.ComboBox();
+      this.cbxStick10 = new System.Windows.Forms.ComboBox();
+      this.cbxStick9 = new System.Windows.Forms.ComboBox();
+      this.txJS11 = new System.Windows.Forms.TextBox();
+      this.label1 = new System.Windows.Forms.Label();
+      this.txJS12 = new System.Windows.Forms.TextBox();
+      this.label2 = new System.Windows.Forms.Label();
+      this.label11 = new System.Windows.Forms.Label();
+      this.txJS10 = new System.Windows.Forms.TextBox();
+      this.label12 = new System.Windows.Forms.Label();
+      this.txJS9 = new System.Windows.Forms.TextBox();
       this.cbxStick8 = new System.Windows.Forms.ComboBox();
       this.cbxStick7 = new System.Windows.Forms.ComboBox();
       this.cbxStick6 = new System.Windows.Forms.ComboBox();
@@ -61,7 +73,7 @@
       // btCancel
       // 
       this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-      this.btCancel.Location = new System.Drawing.Point(565, 284);
+      this.btCancel.Location = new System.Drawing.Point(562, 379);
       this.btCancel.Name = "btCancel";
       this.btCancel.Size = new System.Drawing.Size(108, 31);
       this.btCancel.TabIndex = 27;
@@ -71,7 +83,7 @@
       // 
       // btDone
       // 
-      this.btDone.Location = new System.Drawing.Point(449, 284);
+      this.btDone.Location = new System.Drawing.Point(446, 379);
       this.btDone.Name = "btDone";
       this.btDone.Size = new System.Drawing.Size(108, 31);
       this.btDone.TabIndex = 26;
@@ -81,6 +93,18 @@
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.cbxStick12);
+      this.groupBox1.Controls.Add(this.cbxStick11);
+      this.groupBox1.Controls.Add(this.cbxStick10);
+      this.groupBox1.Controls.Add(this.cbxStick9);
+      this.groupBox1.Controls.Add(this.txJS11);
+      this.groupBox1.Controls.Add(this.label1);
+      this.groupBox1.Controls.Add(this.txJS12);
+      this.groupBox1.Controls.Add(this.label2);
+      this.groupBox1.Controls.Add(this.label11);
+      this.groupBox1.Controls.Add(this.txJS10);
+      this.groupBox1.Controls.Add(this.label12);
+      this.groupBox1.Controls.Add(this.txJS9);
       this.groupBox1.Controls.Add(this.cbxStick8);
       this.groupBox1.Controls.Add(this.cbxStick7);
       this.groupBox1.Controls.Add(this.cbxStick6);
@@ -108,10 +132,162 @@
       this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox1.Location = new System.Drawing.Point(14, 12);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(654, 257);
+      this.groupBox1.Size = new System.Drawing.Size(654, 361);
       this.groupBox1.TabIndex = 28;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "jsN - Assginment";
+      // 
+      // cbxStick12
+      // 
+      this.cbxStick12.FormattingEnabled = true;
+      this.cbxStick12.Items.AddRange(new object[] {
+            "n.a.",
+            "js1",
+            "js2",
+            "js3",
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
+      this.cbxStick12.Location = new System.Drawing.Point(562, 329);
+      this.cbxStick12.Name = "cbxStick12";
+      this.cbxStick12.Size = new System.Drawing.Size(84, 21);
+      this.cbxStick12.TabIndex = 41;
+      // 
+      // cbxStick11
+      // 
+      this.cbxStick11.FormattingEnabled = true;
+      this.cbxStick11.Items.AddRange(new object[] {
+            "n.a.",
+            "js1",
+            "js2",
+            "js3",
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
+      this.cbxStick11.Location = new System.Drawing.Point(562, 301);
+      this.cbxStick11.Name = "cbxStick11";
+      this.cbxStick11.Size = new System.Drawing.Size(84, 21);
+      this.cbxStick11.TabIndex = 40;
+      // 
+      // cbxStick10
+      // 
+      this.cbxStick10.FormattingEnabled = true;
+      this.cbxStick10.Items.AddRange(new object[] {
+            "n.a.",
+            "js1",
+            "js2",
+            "js3",
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
+      this.cbxStick10.Location = new System.Drawing.Point(562, 273);
+      this.cbxStick10.Name = "cbxStick10";
+      this.cbxStick10.Size = new System.Drawing.Size(84, 21);
+      this.cbxStick10.TabIndex = 39;
+      // 
+      // cbxStick9
+      // 
+      this.cbxStick9.FormattingEnabled = true;
+      this.cbxStick9.Items.AddRange(new object[] {
+            "n.a.",
+            "js1",
+            "js2",
+            "js3",
+            "js4",
+            "js5",
+            "js6",
+            "js7",
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
+      this.cbxStick9.Location = new System.Drawing.Point(562, 245);
+      this.cbxStick9.Name = "cbxStick9";
+      this.cbxStick9.Size = new System.Drawing.Size(84, 21);
+      this.cbxStick9.TabIndex = 38;
+      // 
+      // txJS11
+      // 
+      this.txJS11.Location = new System.Drawing.Point(77, 301);
+      this.txJS11.Name = "txJS11";
+      this.txJS11.Size = new System.Drawing.Size(466, 22);
+      this.txJS11.TabIndex = 34;
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(7, 332);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(63, 13);
+      this.label1.TabIndex = 37;
+      this.label1.Text = "Joystick 12";
+      // 
+      // txJS12
+      // 
+      this.txJS12.Location = new System.Drawing.Point(77, 329);
+      this.txJS12.Name = "txJS12";
+      this.txJS12.Size = new System.Drawing.Size(466, 22);
+      this.txJS12.TabIndex = 36;
+      // 
+      // label2
+      // 
+      this.label2.AutoSize = true;
+      this.label2.Location = new System.Drawing.Point(7, 304);
+      this.label2.Name = "label2";
+      this.label2.Size = new System.Drawing.Size(63, 13);
+      this.label2.TabIndex = 35;
+      this.label2.Text = "Joystick 11";
+      // 
+      // label11
+      // 
+      this.label11.AutoSize = true;
+      this.label11.Location = new System.Drawing.Point(7, 276);
+      this.label11.Name = "label11";
+      this.label11.Size = new System.Drawing.Size(63, 13);
+      this.label11.TabIndex = 33;
+      this.label11.Text = "Joystick 10";
+      // 
+      // txJS10
+      // 
+      this.txJS10.Location = new System.Drawing.Point(77, 273);
+      this.txJS10.Name = "txJS10";
+      this.txJS10.Size = new System.Drawing.Size(466, 22);
+      this.txJS10.TabIndex = 32;
+      // 
+      // label12
+      // 
+      this.label12.AutoSize = true;
+      this.label12.Location = new System.Drawing.Point(7, 248);
+      this.label12.Name = "label12";
+      this.label12.Size = new System.Drawing.Size(57, 13);
+      this.label12.TabIndex = 31;
+      this.label12.Text = "Joystick 9";
+      // 
+      // txJS9
+      // 
+      this.txJS9.Location = new System.Drawing.Point(77, 245);
+      this.txJS9.Name = "txJS9";
+      this.txJS9.Size = new System.Drawing.Size(466, 22);
+      this.txJS9.TabIndex = 30;
       // 
       // cbxStick8
       // 
@@ -125,7 +301,11 @@
             "js5",
             "js6",
             "js7",
-            "js8"});
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
       this.cbxStick8.Location = new System.Drawing.Point(562, 217);
       this.cbxStick8.Name = "cbxStick8";
       this.cbxStick8.Size = new System.Drawing.Size(84, 21);
@@ -143,7 +323,11 @@
             "js5",
             "js6",
             "js7",
-            "js8"});
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
       this.cbxStick7.Location = new System.Drawing.Point(562, 189);
       this.cbxStick7.Name = "cbxStick7";
       this.cbxStick7.Size = new System.Drawing.Size(84, 21);
@@ -161,7 +345,11 @@
             "js5",
             "js6",
             "js7",
-            "js8"});
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
       this.cbxStick6.Location = new System.Drawing.Point(562, 161);
       this.cbxStick6.Name = "cbxStick6";
       this.cbxStick6.Size = new System.Drawing.Size(84, 21);
@@ -179,7 +367,11 @@
             "js5",
             "js6",
             "js7",
-            "js8"});
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
       this.cbxStick5.Location = new System.Drawing.Point(562, 133);
       this.cbxStick5.Name = "cbxStick5";
       this.cbxStick5.Size = new System.Drawing.Size(84, 21);
@@ -197,7 +389,11 @@
             "js5",
             "js6",
             "js7",
-            "js8"});
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
       this.cbxStick4.Location = new System.Drawing.Point(562, 105);
       this.cbxStick4.Name = "cbxStick4";
       this.cbxStick4.Size = new System.Drawing.Size(84, 21);
@@ -215,7 +411,11 @@
             "js5",
             "js6",
             "js7",
-            "js8"});
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
       this.cbxStick3.Location = new System.Drawing.Point(562, 77);
       this.cbxStick3.Name = "cbxStick3";
       this.cbxStick3.Size = new System.Drawing.Size(84, 21);
@@ -233,7 +433,11 @@
             "js5",
             "js6",
             "js7",
-            "js8"});
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
       this.cbxStick2.Location = new System.Drawing.Point(562, 49);
       this.cbxStick2.Name = "cbxStick2";
       this.cbxStick2.Size = new System.Drawing.Size(84, 21);
@@ -251,7 +455,11 @@
             "js5",
             "js6",
             "js7",
-            "js8"});
+            "js8",
+            "js9",
+            "js10",
+            "js11",
+            "js12"});
       this.cbxStick1.Location = new System.Drawing.Point(562, 21);
       this.cbxStick1.Name = "cbxStick1";
       this.cbxStick1.Size = new System.Drawing.Size(84, 21);
@@ -389,7 +597,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(682, 326);
+      this.ClientSize = new System.Drawing.Size(682, 419);
       this.Controls.Add(this.groupBox1);
       this.Controls.Add(this.btCancel);
       this.Controls.Add(this.btDone);
@@ -435,5 +643,17 @@
     private System.Windows.Forms.ComboBox cbxStick5;
     private System.Windows.Forms.ComboBox cbxStick4;
     private System.Windows.Forms.ComboBox cbxStick3;
+    private System.Windows.Forms.ComboBox cbxStick12;
+    private System.Windows.Forms.ComboBox cbxStick11;
+    private System.Windows.Forms.ComboBox cbxStick10;
+    private System.Windows.Forms.ComboBox cbxStick9;
+    private System.Windows.Forms.TextBox txJS11;
+    private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.TextBox txJS12;
+    private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.Label label11;
+    private System.Windows.Forms.TextBox txJS10;
+    private System.Windows.Forms.Label label12;
+    private System.Windows.Forms.TextBox txJS9;
   }
 }

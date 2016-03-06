@@ -545,7 +545,7 @@ namespace SCJMapper_V2
       Dirty = false;
 
       // finally apply the filter and make it visible
-      FilterTree( );
+      ReloadTreeView( ); // performs the complete job..
     }
 
 
@@ -557,8 +557,8 @@ namespace SCJMapper_V2
     {
       ActivationModes am = new ActivationModes( ActivationMode.Default ); am.Add( ActivationMode.Default );// dummy answer Default is Default and selected is Default
 
-      if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return am;
       if ( Ctrl.SelectedNode == null ) return am; // ERROR exit
+      if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return am;
       if ( Ctrl.SelectedNode.Parent == null ) return am; // ERROR exit
 
       // has a parent - must be level 1 or 2 
@@ -588,8 +588,8 @@ namespace SCJMapper_V2
     /// </summary>
     public void UpdateActivationModeSelectedItem( string newActivationModeName )
     {
-      if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return;
       if ( Ctrl.SelectedNode == null ) return; // ERROR exit
+      if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return;
       if ( Ctrl.SelectedNode.Parent == null ) return; // ERROR exit
 
       // has a parent - must be level 1 or 2 
@@ -634,8 +634,8 @@ namespace SCJMapper_V2
     /// <param name="input">The new Text property</param>
     public Boolean UpdateSelectedItem( String input, ActionCls.ActionDevice inKind, Boolean checkKind )
     {
-      if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return false; // ERROR exit
       if ( Ctrl.SelectedNode == null ) return false; // ERROR exit
+      if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return false; // ERROR exit
       if ( Ctrl.SelectedNode.Parent == null ) return false; // ERROR exit
 
       // has a parent - must be level 1 or 2 
@@ -1067,10 +1067,11 @@ namespace SCJMapper_V2
       }
       // now the mapped actions
       const int padAction = 42;
+      const int padDevice = 4;
       const int padInput = 25;
 
       repList += String.Format( "\n" );
-      repList += String.Format( " {0}+- {1} _ {2}#-[{4}] {3}\n\n", "Action".PadRight( padAction ), "Dev", "Binding".PadRight( padInput ), "Activation", "T" ); // col description line
+      repList += String.Format( " {0}+- {1} _ {2}#-[{4}] {3}\n\n", "Action".PadRight( padAction ), "Dev".PadRight( padDevice ), "Binding".PadRight( padInput ), "Activation", "T" ); // col description line
 
       foreach ( ActionMapCls acm in ActionMaps ) {
         String rep = String.Format( "*** {0}\n", acm.name );
@@ -1080,10 +1081,10 @@ namespace SCJMapper_V2
             if ( ShowAction( ac.actionDevice, acc.Input ) ) {
               if ( !String.IsNullOrEmpty( acc.Input ) /* && !( acc.Input == DeviceCls.BlendedInput )*/ ) {
                 if ( acc.DevInput == ac.defBinding ) {
-                  rep = String.Format( " {0} . {1} _ {2}", ac.name.PadRight( padAction ), acc.DevID, acc.Input.PadRight( padInput ) );
+                  rep = String.Format( " {0} . {1} _ {2}", ac.name.PadRight( padAction ), acc.DevID.PadRight( padDevice ), acc.Input.PadRight( padInput ) );
                 }
                 else {
-                  rep = String.Format( " {0} + {1} _ {2}", ac.name.PadRight( padAction ), acc.DevID, acc.Input.PadRight( padInput ) ); // my binding
+                  rep = String.Format( " {0} + {1} _ {2}", ac.name.PadRight( padAction ), acc.DevID.PadRight( padDevice ), acc.Input.PadRight( padInput ) ); // my binding
                 }
                 if ( acc.ActivationMode == ActivationMode.Default ) {
                   rep += String.Format( " . [{1}] {0}\n", ac.defActivationMode.Name, ac.defActivationMode.MultiTap );

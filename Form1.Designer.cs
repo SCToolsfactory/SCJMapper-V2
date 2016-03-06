@@ -83,7 +83,6 @@
       this.tdiAddMod3 = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -118,6 +117,8 @@
       this.label2 = new System.Windows.Forms.Label();
       this.txFilter = new System.Windows.Forms.TextBox();
       this.btClearFilter = new System.Windows.Forms.Button();
+      this.label3 = new System.Windows.Forms.Label();
+      this.lblProfileUsed = new System.Windows.Forms.Label();
       this.flpExtensions = new System.Windows.Forms.FlowLayoutPanel();
       this.cbxInvAimPitch = new System.Windows.Forms.CheckBox();
       this.cbxInvViewPitch = new System.Windows.Forms.CheckBox();
@@ -141,6 +142,9 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+      this.tmeK_Tab = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmMouseEntry.SuspendLayout();
@@ -177,7 +181,7 @@
       this.rtb.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.rtb.Location = new System.Drawing.Point(676, 81);
       this.rtb.Name = "rtb";
-      this.rtb.Size = new System.Drawing.Size(372, 531);
+      this.rtb.Size = new System.Drawing.Size(372, 561);
       this.rtb.TabIndex = 21;
       this.rtb.Text = "";
       this.rtb.WordWrap = false;
@@ -265,6 +269,7 @@
       // 
       // panel2
       // 
+      this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
       this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.panel2.Controls.Add(this.btMakeMod);
       this.panel2.Controls.Add(this.btJsKbd);
@@ -278,7 +283,7 @@
       this.panel2.Controls.Add(this.lblAction);
       this.panel2.Controls.Add(this.btAssign);
       this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panel2.Location = new System.Drawing.Point(3, 358);
+      this.panel2.Location = new System.Drawing.Point(3, 379);
       this.panel2.Name = "panel2";
       this.panel2.Size = new System.Drawing.Size(289, 168);
       this.panel2.TabIndex = 17;
@@ -346,6 +351,8 @@
       // cmMouseEntry
       // 
       this.cmMouseEntry.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tmeK_Tab,
+            this.toolStripSeparator7,
             this.tmeXAxis,
             this.tmeYAxis,
             this.toolStripSeparator3,
@@ -353,7 +360,7 @@
             this.tmeWDown,
             this.toolStripSeparator4});
       this.cmMouseEntry.Name = "cmMouseEntry";
-      this.cmMouseEntry.Size = new System.Drawing.Size(172, 104);
+      this.cmMouseEntry.Size = new System.Drawing.Size(172, 154);
       this.cmMouseEntry.Opening += new System.ComponentModel.CancelEventHandler(this.cmMouseEntry_Opening);
       // 
       // tmeXAxis
@@ -500,7 +507,7 @@
             this.tdiAddMod2,
             this.tdiAddMod3});
       this.cmAddDel.Name = "cmAddDel";
-      this.cmAddDel.Size = new System.Drawing.Size(221, 429);
+      this.cmAddDel.Size = new System.Drawing.Size(221, 407);
       this.cmAddDel.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.cmAddDel_Closed);
       this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
       // 
@@ -615,7 +622,7 @@
       this.tc1.Name = "tc1";
       this.tc1.SelectedIndex = 0;
       this.tc1.ShowToolTips = true;
-      this.tc1.Size = new System.Drawing.Size(289, 349);
+      this.tc1.Size = new System.Drawing.Size(289, 370);
       this.tc1.TabIndex = 15;
       this.tc1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tc1_DrawItem);
       this.tc1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tc1_Selected);
@@ -626,18 +633,9 @@
       this.tabJS1.Location = new System.Drawing.Point(4, 24);
       this.tabJS1.Name = "tabJS1";
       this.tabJS1.Padding = new System.Windows.Forms.Padding(3);
-      this.tabJS1.Size = new System.Drawing.Size(281, 321);
+      this.tabJS1.Size = new System.Drawing.Size(281, 342);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 315);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -763,7 +761,7 @@
       this.tlpanel.RowCount = 5;
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 155F));
+      this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 125F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 84F));
       this.tlpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
       this.tlpanel.Size = new System.Drawing.Size(1054, 892);
@@ -771,13 +769,14 @@
       // 
       // flowLayoutPanel1
       // 
+      this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
       this.flowLayoutPanel1.Controls.Add(this.tc1);
       this.flowLayoutPanel1.Controls.Add(this.panel2);
       this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
       this.flowLayoutPanel1.Location = new System.Drawing.Point(376, 81);
       this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-      this.flowLayoutPanel1.Size = new System.Drawing.Size(294, 531);
+      this.flowLayoutPanel1.Size = new System.Drawing.Size(294, 561);
       this.flowLayoutPanel1.TabIndex = 22;
       // 
       // tableLayoutPanel1
@@ -785,22 +784,22 @@
       this.tableLayoutPanel1.ColumnCount = 2;
       this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel1.Controls.Add(this.btDump, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.btGrab, 1, 0);
+      this.tableLayoutPanel1.Controls.Add(this.btDump, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.btDumpList, 0, 1);
       this.tableLayoutPanel1.Controls.Add(this.btDumpLog, 0, 2);
-      this.tableLayoutPanel1.Controls.Add(this.btJSTuning, 0, 4);
+      this.tableLayoutPanel1.Controls.Add(this.btJSTuning, 0, 3);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel1.Location = new System.Drawing.Point(376, 618);
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(376, 648);
       this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-      this.tableLayoutPanel1.RowCount = 5;
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.tableLayoutPanel1.RowCount = 4;
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 149);
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(294, 119);
       this.tableLayoutPanel1.TabIndex = 23;
       // 
       // btDumpLog
@@ -815,7 +814,7 @@
       // 
       // btJSTuning
       // 
-      this.btJSTuning.Location = new System.Drawing.Point(3, 123);
+      this.btJSTuning.Location = new System.Drawing.Point(3, 93);
       this.btJSTuning.Name = "btJSTuning";
       this.btJSTuning.Size = new System.Drawing.Size(120, 23);
       this.btJSTuning.TabIndex = 17;
@@ -946,6 +945,8 @@
       this.flowLayoutPanel2.Controls.Add(this.label2);
       this.flowLayoutPanel2.Controls.Add(this.txFilter);
       this.flowLayoutPanel2.Controls.Add(this.btClearFilter);
+      this.flowLayoutPanel2.Controls.Add(this.label3);
+      this.flowLayoutPanel2.Controls.Add(this.lblProfileUsed);
       this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 773);
       this.flowLayoutPanel2.Name = "flowLayoutPanel2";
@@ -1021,7 +1022,7 @@
       this.label2.Size = new System.Drawing.Size(83, 24);
       this.label2.TabIndex = 27;
       this.label2.Text = "Action Filter:";
-      this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // txFilter
       // 
@@ -1043,6 +1044,28 @@
       this.btClearFilter.UseVisualStyleBackColor = true;
       this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
       // 
+      // label3
+      // 
+      this.label3.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label3.Location = new System.Drawing.Point(3, 56);
+      this.label3.Margin = new System.Windows.Forms.Padding(3);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(39, 19);
+      this.label3.TabIndex = 30;
+      this.label3.Text = "Profile:";
+      this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      // 
+      // lblProfileUsed
+      // 
+      this.lblProfileUsed.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblProfileUsed.Location = new System.Drawing.Point(48, 56);
+      this.lblProfileUsed.Margin = new System.Windows.Forms.Padding(3);
+      this.lblProfileUsed.Name = "lblProfileUsed";
+      this.lblProfileUsed.Size = new System.Drawing.Size(302, 19);
+      this.lblProfileUsed.TabIndex = 29;
+      this.lblProfileUsed.Text = "...";
+      this.lblProfileUsed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      // 
       // flpExtensions
       // 
       this.flpExtensions.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -1056,9 +1079,9 @@
       this.flpExtensions.Controls.Add(this.cbxInvStrafeLon);
       this.flpExtensions.Dock = System.Windows.Forms.DockStyle.Fill;
       this.flpExtensions.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      this.flpExtensions.Location = new System.Drawing.Point(676, 618);
+      this.flpExtensions.Location = new System.Drawing.Point(676, 648);
       this.flpExtensions.Name = "flpExtensions";
-      this.flpExtensions.Size = new System.Drawing.Size(372, 149);
+      this.flpExtensions.Size = new System.Drawing.Size(372, 119);
       this.flpExtensions.TabIndex = 27;
       // 
       // cbxInvAimPitch
@@ -1103,7 +1126,7 @@
       // 
       // cbxInvThrottle
       // 
-      this.cbxInvThrottle.Location = new System.Drawing.Point(3, 99);
+      this.cbxInvThrottle.Location = new System.Drawing.Point(177, 3);
       this.cbxInvThrottle.Name = "cbxInvThrottle";
       this.cbxInvThrottle.Size = new System.Drawing.Size(168, 18);
       this.cbxInvThrottle.TabIndex = 0;
@@ -1113,7 +1136,7 @@
       // 
       // cbxInvStrafeVert
       // 
-      this.cbxInvStrafeVert.Location = new System.Drawing.Point(3, 123);
+      this.cbxInvStrafeVert.Location = new System.Drawing.Point(177, 27);
       this.cbxInvStrafeVert.Name = "cbxInvStrafeVert";
       this.cbxInvStrafeVert.Size = new System.Drawing.Size(168, 18);
       this.cbxInvStrafeVert.TabIndex = 0;
@@ -1123,7 +1146,7 @@
       // 
       // cbxInvStrafeLat
       // 
-      this.cbxInvStrafeLat.Location = new System.Drawing.Point(177, 3);
+      this.cbxInvStrafeLat.Location = new System.Drawing.Point(177, 51);
       this.cbxInvStrafeLat.Name = "cbxInvStrafeLat";
       this.cbxInvStrafeLat.Size = new System.Drawing.Size(168, 18);
       this.cbxInvStrafeLat.TabIndex = 0;
@@ -1133,7 +1156,7 @@
       // 
       // cbxInvStrafeLon
       // 
-      this.cbxInvStrafeLon.Location = new System.Drawing.Point(177, 27);
+      this.cbxInvStrafeLon.Location = new System.Drawing.Point(177, 75);
       this.cbxInvStrafeLon.Name = "cbxInvStrafeLon";
       this.cbxInvStrafeLon.Size = new System.Drawing.Size(168, 18);
       this.cbxInvStrafeLon.TabIndex = 0;
@@ -1274,6 +1297,28 @@
       this.statusStrip1.Size = new System.Drawing.Size(1054, 30);
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
+      // 
+      // tmeK_Tab
+      // 
+      this.tmeK_Tab.Name = "tmeK_Tab";
+      this.tmeK_Tab.Size = new System.Drawing.Size(171, 22);
+      this.tmeK_Tab.Tag = "K_Tab";
+      this.tmeK_Tab.Text = "Kbd - TAB";
+      this.tmeK_Tab.Click += new System.EventHandler(this.tmeItem_Click);
+      // 
+      // toolStripSeparator7
+      // 
+      this.toolStripSeparator7.Name = "toolStripSeparator7";
+      this.toolStripSeparator7.Size = new System.Drawing.Size(168, 6);
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 336);
+      this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm
       // 
@@ -1426,6 +1471,10 @@
     private System.Windows.Forms.ToolStripComboBox tdiCbxActivation;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
     private System.Windows.Forms.ToolStripTextBox tdiTxDefActivationMode;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Label lblProfileUsed;
+    private System.Windows.Forms.ToolStripMenuItem tmeK_Tab;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
   }
 }
 

@@ -265,7 +265,7 @@ namespace SCJMapper_V2
       set
       {
         m_jsAssignment = value;
-        if ( ( m_jsAssignment >= 1 ) && ( m_jsAssignment <= 8 ) ) {
+        if ( ( m_jsAssignment >= 1 ) && ( m_jsAssignment <= JoystickCls.JSnum_MAX ) ) {
           lblJsAssignment.Text = String.Format( "js{0}", m_jsAssignment );
         }
         else {

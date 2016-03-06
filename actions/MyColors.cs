@@ -10,8 +10,10 @@ namespace SCJMapper_V2
   /// </summary>
   class MyColors
   {
-    static public Color[] TabColor = { Color.LightGreen, Color.LightBlue, Color.Khaki, Color.LightSalmon, Color.Beige, Color.Yellow, Color.Plum, Color.MintCream };
-    static public Color GamepadColorDefault = Color.Pink; // will be changed on init (else we see pink..)
+    static public Color[] TabColor = { Color.LightGreen, Color.LightBlue, Color.Khaki, Color.LightSalmon,
+                                       Color.Beige, Color.Yellow, Color.Plum, Color.MintCream,
+                                       Color.LightCyan, Color.MistyRose, Color.Wheat, Color.Pink };
+    static public Color GamepadColorDefault = Color.Fuchsia; // will be changed on init (else we see pink..)
 
     static public Color[] MapColor = ( System.Drawing.Color[] )TabColor.Clone( );
     static public Color GamepadColor = GamepadColorDefault;
