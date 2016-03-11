@@ -199,6 +199,19 @@ namespace SCJMapper_V2
 
 
     /// <summary>
+    /// cTor: create one with a default and an attached one
+    /// </summary>
+    /// <param name="defaultMode">The default ActivationMode</param>
+    /// <param name="attachedMode">The attached ActivationMode</param>
+    public ActivationModes( ActivationMode defaultMode, ActivationMode attachedMode )
+    {
+      this.Clear( );
+      this.Add( defaultMode );
+      this.Add( attachedMode );
+    }
+
+
+    /// <summary>
     /// Returns the multitap number for an item
     /// </summary>
     /// <param name="actModeName"></param>

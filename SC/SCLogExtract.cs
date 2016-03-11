@@ -15,9 +15,19 @@ namespace SCJMapper_V2
       String retVal = "";
 
       // detect what we would like to find..
-      if ( inLine.Contains( "Log Started" ) ) return String.Format("\t{0}\n", inLine);
-      if ( inLine.Contains( "ProductVersion" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.StartsWith( "Log Started" ) ) return String.Format("\t{0}\n", inLine);
+      if ( inLine.StartsWith( "Executable:" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.StartsWith( "ProductVersion" ) ) return String.Format( "\t{0}\n", inLine );
+
+      if ( inLine.StartsWith( "Windows:" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.StartsWith( "Current display mode" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.Contains( "physical memory" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.StartsWith( "--- Dedicated video memory" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.StartsWith( "- Final rating" ) ) return String.Format( "\t{0}\n", inLine );
+
       if ( inLine.Contains( "> Creating" ) ) return String.Format( "\t{0}\n", inLine );
+
+
       return retVal;
     }
 

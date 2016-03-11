@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.21 - Build 55 BETA
-(c) Cassini, StandardToaster - 06-March-2016
+SC Joystick Mapper V 2.22 - Build 56 BETA
+(c) Cassini, StandardToaster - 11-March-2016
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.21)
-SCJMapper.exe.config         Program config (V2.21)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.22)
+SCJMapper.exe.config         Program config (V2.22)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -29,6 +29,11 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.22 - BETA Build 56
+- fix - try again to fix Win10 scaling issues for some PCs (hidden assignment area)
+- improvement - actions with a profile modifier attached will show underlined in the action tree
+- improvement - less offensive gamepad color mark ...
+- some internal stuff
 V 2.21 - BETA Build 55
 - fix #40 added Tab entry in Ctrl. context menu
 - fix - try to fix Win10 scaling issues (hidden assignment area)

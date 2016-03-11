@@ -150,6 +150,34 @@ namespace SCJMapper_V2
       this.Modified = other.Modified;
     }
 
+    /// <summary>
+    /// Apply an update from the action to the treenode
+    /// First apply to the GUI tree where the selection happend then copy it over to master tree
+    /// </summary>
+    /// <param name="action">The action that carries the update</param>
+    public void UpdateAction( ActionCommandCls actionCmd )
+    {
+      //log.Debug( "UpdateNodeFromAction - Entry" );
+      if ( actionCmd == null ) return;
+
+      // input is either "" or a valid mapping or a blended mapping
+      if ( String.IsNullOrEmpty( actionCmd.Input ) ) {
+        // new unmapped
+        this.Command = ""; this.BackColor = MyColors.UnassignedColor;
+      }
+      // blended mapped ones - can only get a Blend Background
+      else if ( actionCmd.Input == DeviceCls.BlendedInput ) {
+        this.Command = actionCmd.DevInput; this.BackColor = MyColors.BlendedColor;
+      }
+      else {
+        // mapped ( regular ones )
+        this.Command = actionCmd.DevInput;
+        // background is along the input 
+        this.BackColor = ActionCls.DeviceColor( actionCmd.DevInput );
+      }
+      this.Modified = !actionCmd.DefaultActivationMode; // apply modifier visual
+    }
+
 
 
     public new String Text
