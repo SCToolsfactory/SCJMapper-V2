@@ -53,6 +53,8 @@
       this.btBlend = new System.Windows.Forms.Button();
       this.lblLastJ = new System.Windows.Forms.TextBox();
       this.cmMouseEntry = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.tmeK_Tab = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
       this.tmeXAxis = new System.Windows.Forms.ToolStripMenuItem();
       this.tmeYAxis = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -83,6 +85,7 @@
       this.tdiAddMod3 = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
+      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -95,7 +98,6 @@
       this.timer1 = new System.Windows.Forms.Timer(this.components);
       this.SFD = new System.Windows.Forms.SaveFileDialog();
       this.tlpanel = new System.Windows.Forms.TableLayoutPanel();
-      this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.btDumpLog = new System.Windows.Forms.Button();
       this.btJSTuning = new System.Windows.Forms.Button();
@@ -128,6 +130,7 @@
       this.cbxInvStrafeVert = new System.Windows.Forms.CheckBox();
       this.cbxInvStrafeLat = new System.Windows.Forms.CheckBox();
       this.cbxInvStrafeLon = new System.Windows.Forms.CheckBox();
+      this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
       this.tsBtReset = new System.Windows.Forms.ToolStripDropDownButton();
       this.resetDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -142,9 +145,7 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.tmeK_Tab = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
+      this.btDumpProfile = new System.Windows.Forms.Button();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmMouseEntry.SuspendLayout();
@@ -153,12 +154,12 @@
       this.tabJS1.SuspendLayout();
       this.panel1.SuspendLayout();
       this.tlpanel.SuspendLayout();
-      this.flowLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel2.SuspendLayout();
       this.tableLayoutPanel3.SuspendLayout();
       this.flowLayoutPanel2.SuspendLayout();
       this.flpExtensions.SuspendLayout();
+      this.tableLayoutPanel4.SuspendLayout();
       this.statusStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -282,10 +283,10 @@
       this.panel2.Controls.Add(this.btClear);
       this.panel2.Controls.Add(this.lblAction);
       this.panel2.Controls.Add(this.btAssign);
-      this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
       this.panel2.Location = new System.Drawing.Point(3, 379);
       this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(289, 168);
+      this.panel2.Size = new System.Drawing.Size(288, 167);
       this.panel2.TabIndex = 17;
       // 
       // btMakeMod
@@ -360,8 +361,21 @@
             this.tmeWDown,
             this.toolStripSeparator4});
       this.cmMouseEntry.Name = "cmMouseEntry";
-      this.cmMouseEntry.Size = new System.Drawing.Size(172, 154);
+      this.cmMouseEntry.Size = new System.Drawing.Size(172, 132);
       this.cmMouseEntry.Opening += new System.ComponentModel.CancelEventHandler(this.cmMouseEntry_Opening);
+      // 
+      // tmeK_Tab
+      // 
+      this.tmeK_Tab.Name = "tmeK_Tab";
+      this.tmeK_Tab.Size = new System.Drawing.Size(171, 22);
+      this.tmeK_Tab.Tag = "K_Tab";
+      this.tmeK_Tab.Text = "Kbd - TAB";
+      this.tmeK_Tab.Click += new System.EventHandler(this.tmeItem_Click);
+      // 
+      // toolStripSeparator7
+      // 
+      this.toolStripSeparator7.Name = "toolStripSeparator7";
+      this.toolStripSeparator7.Size = new System.Drawing.Size(168, 6);
       // 
       // tmeXAxis
       // 
@@ -622,7 +636,7 @@
       this.tc1.Name = "tc1";
       this.tc1.SelectedIndex = 0;
       this.tc1.ShowToolTips = true;
-      this.tc1.Size = new System.Drawing.Size(289, 370);
+      this.tc1.Size = new System.Drawing.Size(288, 370);
       this.tc1.TabIndex = 15;
       this.tc1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tc1_DrawItem);
       this.tc1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tc1_Selected);
@@ -633,9 +647,18 @@
       this.tabJS1.Location = new System.Drawing.Point(4, 24);
       this.tabJS1.Name = "tabJS1";
       this.tabJS1.Padding = new System.Windows.Forms.Padding(3);
-      this.tabJS1.Size = new System.Drawing.Size(281, 342);
+      this.tabJS1.Size = new System.Drawing.Size(280, 342);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(274, 336);
+      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -747,12 +770,12 @@
       this.tlpanel.Controls.Add(this.rtb, 2, 1);
       this.tlpanel.Controls.Add(this.panel1, 0, 0);
       this.tlpanel.Controls.Add(this.treeView1, 0, 1);
-      this.tlpanel.Controls.Add(this.flowLayoutPanel1, 1, 1);
       this.tlpanel.Controls.Add(this.tableLayoutPanel1, 1, 2);
       this.tlpanel.Controls.Add(this.tableLayoutPanel2, 1, 3);
       this.tlpanel.Controls.Add(this.tableLayoutPanel3, 2, 3);
       this.tlpanel.Controls.Add(this.flowLayoutPanel2, 0, 3);
       this.tlpanel.Controls.Add(this.flpExtensions, 2, 2);
+      this.tlpanel.Controls.Add(this.tableLayoutPanel4, 1, 1);
       this.tlpanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tlpanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tlpanel.Location = new System.Drawing.Point(0, 0);
@@ -767,18 +790,6 @@
       this.tlpanel.Size = new System.Drawing.Size(1054, 892);
       this.tlpanel.TabIndex = 25;
       // 
-      // flowLayoutPanel1
-      // 
-      this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-      this.flowLayoutPanel1.Controls.Add(this.tc1);
-      this.flowLayoutPanel1.Controls.Add(this.panel2);
-      this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      this.flowLayoutPanel1.Location = new System.Drawing.Point(376, 81);
-      this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-      this.flowLayoutPanel1.Size = new System.Drawing.Size(294, 561);
-      this.flowLayoutPanel1.TabIndex = 22;
-      // 
       // tableLayoutPanel1
       // 
       this.tableLayoutPanel1.ColumnCount = 2;
@@ -788,7 +799,8 @@
       this.tableLayoutPanel1.Controls.Add(this.btDump, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.btDumpList, 0, 1);
       this.tableLayoutPanel1.Controls.Add(this.btDumpLog, 0, 2);
-      this.tableLayoutPanel1.Controls.Add(this.btJSTuning, 0, 3);
+      this.tableLayoutPanel1.Controls.Add(this.btJSTuning, 1, 3);
+      this.tableLayoutPanel1.Controls.Add(this.btDumpProfile, 0, 3);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel1.Location = new System.Drawing.Point(376, 648);
@@ -814,7 +826,8 @@
       // 
       // btJSTuning
       // 
-      this.btJSTuning.Location = new System.Drawing.Point(3, 93);
+      this.btJSTuning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btJSTuning.Location = new System.Drawing.Point(171, 93);
       this.btJSTuning.Name = "btJSTuning";
       this.btJSTuning.Size = new System.Drawing.Size(120, 23);
       this.btJSTuning.TabIndex = 17;
@@ -1164,6 +1177,21 @@
       this.cbxInvStrafeLon.UseVisualStyleBackColor = true;
       this.cbxInvStrafeLon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
+      // tableLayoutPanel4
+      // 
+      this.tableLayoutPanel4.ColumnCount = 1;
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel4.Controls.Add(this.panel2, 0, 1);
+      this.tableLayoutPanel4.Controls.Add(this.tc1, 0, 0);
+      this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
+      this.tableLayoutPanel4.Location = new System.Drawing.Point(376, 81);
+      this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+      this.tableLayoutPanel4.RowCount = 2;
+      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel4.Size = new System.Drawing.Size(294, 549);
+      this.tableLayoutPanel4.TabIndex = 28;
+      // 
       // toolStripStatusLabel2
       // 
       this.toolStripStatusLabel2.BackColor = System.Drawing.Color.DarkKhaki;
@@ -1298,27 +1326,15 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
-      // tmeK_Tab
+      // btDumpProfile
       // 
-      this.tmeK_Tab.Name = "tmeK_Tab";
-      this.tmeK_Tab.Size = new System.Drawing.Size(171, 22);
-      this.tmeK_Tab.Tag = "K_Tab";
-      this.tmeK_Tab.Text = "Kbd - TAB";
-      this.tmeK_Tab.Click += new System.EventHandler(this.tmeItem_Click);
-      // 
-      // toolStripSeparator7
-      // 
-      this.toolStripSeparator7.Name = "toolStripSeparator7";
-      this.toolStripSeparator7.Size = new System.Drawing.Size(168, 6);
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(275, 336);
-      this.UC_JoyPanel.TabIndex = 0;
+      this.btDumpProfile.Location = new System.Drawing.Point(3, 93);
+      this.btDumpProfile.Name = "btDumpProfile";
+      this.btDumpProfile.Size = new System.Drawing.Size(120, 23);
+      this.btDumpProfile.TabIndex = 26;
+      this.btDumpProfile.Text = "Dump Profile -->";
+      this.btDumpProfile.UseVisualStyleBackColor = true;
+      this.btDumpProfile.Click += new System.EventHandler(this.btDumpProfile_Click);
       // 
       // MainForm
       // 
@@ -1347,7 +1363,6 @@
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
       this.tlpanel.ResumeLayout(false);
-      this.flowLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel2.ResumeLayout(false);
       this.tableLayoutPanel3.ResumeLayout(false);
@@ -1355,6 +1370,7 @@
       this.flowLayoutPanel2.ResumeLayout(false);
       this.flowLayoutPanel2.PerformLayout();
       this.flpExtensions.ResumeLayout(false);
+      this.tableLayoutPanel4.ResumeLayout(false);
       this.statusStrip1.ResumeLayout(false);
       this.statusStrip1.PerformLayout();
       this.ResumeLayout(false);
@@ -1397,7 +1413,6 @@
     private System.Windows.Forms.ImageList IL;
     private UC_JoyPanel UC_JoyPanel;
     private System.Windows.Forms.TableLayoutPanel tlpanel;
-    private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
     private System.Windows.Forms.ToolStripDropDownButton tsDDbtMappings;
@@ -1475,6 +1490,8 @@
     private System.Windows.Forms.Label lblProfileUsed;
     private System.Windows.Forms.ToolStripMenuItem tmeK_Tab;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+    private System.Windows.Forms.Button btDumpProfile;
   }
 }
 

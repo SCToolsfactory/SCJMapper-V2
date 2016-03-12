@@ -34,7 +34,7 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
-    /// Returns the sought default profile as string from GameData.pak
+    /// Returns the sought default profile as string from various locations
     /// SC Alpha 2.2: Have to find the new one in E:\G\StarCitizen\StarCitizen\Public\Data\DataXML.pak (contains the binary XML now)
     /// </summary>
     /// <param name="defaultProfileName">The filename of the profile to be extracted </param>

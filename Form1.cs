@@ -897,6 +897,11 @@ namespace SCJMapper_V2
 
     }
 
+    private void btDumpProfile_Click( object sender, EventArgs e )
+    {
+      rtb.Text = SCDefaultProfile.DefaultProfile( SCDefaultProfile.DefaultProfileName );
+    }
+
     private void btGrab_Click( object sender, EventArgs e )
     {
       Grab( );
@@ -1580,6 +1585,7 @@ namespace SCJMapper_V2
 
 
     #endregion
+
 
   }
 }

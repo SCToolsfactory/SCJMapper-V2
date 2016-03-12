@@ -13,7 +13,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.21beta.pdf    Quick Guide
+SCJMapper_QGuide V2.22beta.pdf    Quick Guide
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images                       - graphics folder MUST be in the same folder as the Exe file
@@ -33,7 +33,9 @@ V 2.22 - BETA Build 56
 - fix - try again to fix Win10 scaling issues for some PCs (hidden assignment area)
 - improvement - actions with a profile modifier attached will show underlined in the action tree
 - improvement - less offensive gamepad color mark ...
+- add - a button to dump the used defaultProfile in the right area
 - some internal stuff
+- update - doc SCJMapper_QGuide V2.22beta.pdf
 V 2.21 - BETA Build 55
 - fix #40 added Tab entry in Ctrl. context menu
 - fix - try to fix Win10 scaling issues (hidden assignment area)

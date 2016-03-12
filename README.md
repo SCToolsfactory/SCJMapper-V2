@@ -2,7 +2,7 @@ SCJMapper-V2<br>
 ============<br>
 <br>
 SC Joystick Mapper  (.Net 4; using sharpDX/OpenTK wrapper)<br>
-this should work with Win8.x out of the box<br>
+this should work with Win8.x Win 10 out of the box<br>
 <br>
 <br>
 using sharpDX 2.6.3 .net wrapper  (http://sharpdx.org/)<br>
