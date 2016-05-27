@@ -2,7 +2,7 @@
 using OpenTK;
 using System.Collections.Generic;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.OGL
 {
   public abstract class CalcCurve
   {

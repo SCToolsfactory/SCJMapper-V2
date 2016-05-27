@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Collections.Specialized;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Gamepad
 {
   /// <summary>
   /// Handles one JS device as DXInput device

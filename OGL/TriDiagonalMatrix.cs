@@ -28,7 +28,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.OGL
 {
 	/// <summary>
 	/// A tri-diagonal matrix has non-zero entries only on the main diagonal, the diagonal above the main (super), and the

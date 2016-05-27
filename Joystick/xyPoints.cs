@@ -5,7 +5,7 @@ using System.Text;
 
 using OpenTK;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Joystick
 {
   /// <summary>
   /// contains the x(in) and y(out) points of the nonlin curve for joysticks (MAX 3 interpolation pts)
@@ -18,7 +18,7 @@ namespace SCJMapper_V2
     private Vector2[] m_points = null;
     private double[] m_outCurve = null;
     private int m_Npoints = 0;
-    private CalcCurve m_curve;
+    private OGL.CalcCurve m_curve;
 
     public xyPoints( int maxPoints )
     {
@@ -86,7 +86,7 @@ namespace SCJMapper_V2
       Setup( 1 );
       float[] cout = new float[m_maxpts * 2];
       int resolution = m_maxpts; // The number of points in the bezier curve
-      m_curve = new BezierInterpolation( m_points, resolution );
+      m_curve = new OGL.BezierInterpolation( m_points, resolution );
       Vector2 pos = Vector2.One;
       for ( int p = 0; p <= resolution; p++ ) {
         pos = m_curve.CalculatePoint( ( float )p / ( float )resolution );
@@ -104,7 +104,7 @@ namespace SCJMapper_V2
 
       float[] cout = new float[m_maxpts * 2];
       int resolution = m_maxpts; // The number of points in the bezier curve
-      m_curve = new BezierInterpolation( m_points, resolution );
+      m_curve = new OGL.BezierInterpolation( m_points, resolution );
       Vector2 pos = Vector2.One;
       for ( int p = 0; p <= resolution; p++ ) {
         pos = m_curve.CalculatePoint( ( float )p / ( float )resolution );
@@ -123,7 +123,7 @@ namespace SCJMapper_V2
 
       float[] cout = new float[m_maxpts * 2];
       int resolution = m_maxpts; // The number of points in the bezier curve
-      m_curve = new BezierInterpolation( m_points, resolution );
+      m_curve = new OGL.BezierInterpolation( m_points, resolution );
       Vector2 pos = Vector2.One;
       for ( int p = 0; p <= resolution; p++ ) {
         pos = m_curve.CalculatePoint( ( float )p / ( float )resolution );
@@ -143,7 +143,7 @@ namespace SCJMapper_V2
 
       float[] cout = new float[m_maxpts * 2];
       int resolution = m_maxpts-1; // The number of points in the bezier curve
-      m_curve = new BezierInterpolation( m_points, resolution );
+      m_curve = new OGL.BezierInterpolation( m_points, resolution );
       Vector2 pos = Vector2.One;
       for ( int p = 0; p <= resolution; p++ ) {
         pos = m_curve.CalculatePoint( ( float )p / ( float )resolution );

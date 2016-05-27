@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using Microsoft.Win32;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.SC
 {
   /// <summary>
   /// Find the SC pathes and folders
@@ -14,6 +14,8 @@ namespace SCJMapper_V2
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
     private static readonly AppSettings  appSettings = new AppSettings( );
+
+    private static bool hasInformed = false; // prevent msgbox chains..
 
     /// <summary>
     /// Try to locate the launcher under "App Paths"
@@ -123,12 +125,18 @@ namespace SCJMapper_V2
         log.Debug( "SCBasePath - Entry" );
         appSettings.Reload( ); // local instance - reload as it might be changed outside
         String scp = "";
+
         if ( appSettings.UserSCPathUsed ) {
           // User has priority
           scp = appSettings.UserSCPath;
           log.InfoFormat( "SCBasePath - user defined folder given: {0}", scp );
           if ( !Directory.Exists( scp ) ) {
             log.WarnFormat( "SCBasePath - user defined folder does not exist: {0}", scp );
+            string issue = string.Format( "Cannot find the user defined SC Installation Path !!\n\n" +
+                    "Enter the folder where CIGLauncher.exe is located");
+
+            if ( !hasInformed ) System.Windows.Forms.MessageBox.Show( issue, "Cannot find the user defined SC Installation Path !!", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
+            hasInformed = true;
             return ""; // sorry path does not exist
           }
         }
@@ -143,6 +151,14 @@ namespace SCJMapper_V2
                 scp = SCLauncherFile1;
                 if ( String.IsNullOrEmpty( scp ) ) {
                   log.Warn( "SCBasePath - cannot find any valid SC path" );
+                  // Issue a warning here to let the user know
+                  string issue = string.Format( "Cannot find the SC Installation Path !!\n\n" +
+                    "Use Settings to provide the path manually (don't forget to Check the Box left of the path to use it)\n\n" +
+                    "Enter the folder where CIGLauncher.exe is located");
+
+                  if ( !hasInformed ) System.Windows.Forms.MessageBox.Show( issue, "Cannot find SC Installation Path !!", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
+                  hasInformed = true;
+
                   return "";  // sorry did not found a thing..
                 }
               }
@@ -177,6 +193,7 @@ namespace SCJMapper_V2
     /// Returns the SC Client path  
     /// AC 1.1.6: E:\G\StarCitizen\StarCitizen\Public
     /// SC 2x: alternatively use PTU path  E:\G\StarCitizen\StarCitizen\Test
+    /// SC 2.2.2: alternatively search path in  E:\G\StarCitizen\StarCitizen\Live (don't know but this was mentioned in CIGs relnotes lately)
     /// </summary>
     static public String SCClientPath
     {
@@ -187,14 +204,33 @@ namespace SCJMapper_V2
         if ( String.IsNullOrEmpty( scp ) ) return ""; // no valid one can be found
         //
         scp = Path.Combine( scp, "StarCitizen" );
-        if ( appSettings.UsePTU )
-          scp = Path.Combine( scp, "Test" );
-        else
-          scp = Path.Combine( scp, "Public" );
+        string scpX = "";
+        if ( appSettings.UsePTU ) {
+          scpX = Path.Combine( scp, "Test" );
+          if ( Directory.Exists( scp ) ) return scpX;
+        } else {
+          scpX = Path.Combine( scp, "Public" );
+          if ( Directory.Exists( scp ) ) return scpX;
+          // SC 2.2.2+ did not found it so try Live now
+          scpX = Path.Combine( scp, "Live" );
+          if ( Directory.Exists( scp ) ) return scpX;
+        }
 
-        if ( Directory.Exists( scp ) ) return scp;
 
-        log.WarnFormat( "SCClientDataPath - StarCitizen\\Public or for PTU \\Test subfolder does not exist: {0}", scp );
+        log.WarnFormat( "SCClientDataPath - StarCitizen\\Public, StarCitizen\\Live or for PTU \\Test subfolder does not exist: {0}", scp );
+
+        // Issue a warning here to let the user know
+        string issue = string.Format( "Cannot find the SC Client Path !!\n\n" +
+          "Tried to look for:\n" +
+          "{0}\\Public or \n" +
+          "{0}\\Live or \n" +
+          "{0}\\Test (if PTU was enabled)\n\n" +
+          "The program cannot load or save in GameFolders\n\n" +
+          "Please submit a bug report, adding your complete SC game folder structure");
+
+        if (!hasInformed) System.Windows.Forms.MessageBox.Show( issue, "Cannot find SC Client Path !!", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
+        hasInformed = true;
+
         return "";
       }
     }

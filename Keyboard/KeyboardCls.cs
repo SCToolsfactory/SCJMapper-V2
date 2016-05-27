@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using SharpDX;
 using System.Text.RegularExpressions;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Keyboard
 {
   /// <summary>
   /// Handles one Keyboard device as DXInput device
@@ -244,7 +244,7 @@ namespace SCJMapper_V2
 
     #endregion
 
-    private Keyboard m_device;
+    private SharpDX.DirectInput.Keyboard m_device;
     private KeyboardState m_state = new KeyboardState( );
 
     private Control m_hwnd;
@@ -288,7 +288,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="device">A DXInput device</param>
     /// <param name="hwnd">The WinHandle of the main window</param>
-    public KeyboardCls( Keyboard device, Control hwnd )
+    public KeyboardCls( SharpDX.DirectInput.Keyboard device, Control hwnd )
     {
       log.DebugFormat( "KeyboardCls ctor - Entry with {0}", device.Information.ProductName );
 

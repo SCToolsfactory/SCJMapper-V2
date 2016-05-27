@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.SC
 {
   /// <summary>
   /// should read the default profile - may be replacing the MappingVars once
@@ -150,7 +150,7 @@ namespace SCJMapper_V2
         ac.defBinding = attr["joystick"];
         ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
-          ac.defBinding = JoystickCls.BlendedInput;
+          ac.defBinding = Joystick.JoystickCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
         else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
@@ -166,7 +166,7 @@ namespace SCJMapper_V2
         ac.defBinding = attr["keyboard"];
         ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
-          ac.defBinding = KeyboardCls.BlendedInput;
+          ac.defBinding = Keyboard.KeyboardCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
         else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
@@ -182,7 +182,7 @@ namespace SCJMapper_V2
         ac.defBinding = attr["mouse"];
         ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
-          ac.defBinding = MouseCls.BlendedInput;
+          ac.defBinding = Mouse.MouseCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
         else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
@@ -198,7 +198,7 @@ namespace SCJMapper_V2
         ac.defBinding = attr["xboxpad"];
         ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
-          ac.defBinding = GamepadCls.BlendedInput;
+          ac.defBinding = Gamepad.GamepadCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
         else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {

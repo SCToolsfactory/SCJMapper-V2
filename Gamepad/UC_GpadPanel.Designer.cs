@@ -1,4 +1,4 @@
-﻿namespace SCJMapper_V2
+﻿namespace SCJMapper_V2.Gamepad
 {
   partial class UC_GpadPanel
   {

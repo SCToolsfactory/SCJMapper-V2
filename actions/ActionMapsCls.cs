@@ -1,9 +1,23 @@
-﻿using System;
+﻿
+
+#define USE_DS_ACTIONMAPS
+
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Windows.Forms;
 using System.IO;
+using System.Data;
+
+using SCJMapper_V2.SC;
+using SCJMapper_V2.Table;
+using SCJMapper_V2.Keyboard;
+using SCJMapper_V2.Mouse;
+using SCJMapper_V2.Gamepad;
+using SCJMapper_V2.Joystick;
+
 
 namespace SCJMapper_V2
 {
@@ -71,7 +85,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Clears a read but not longer known entry
     /// </summary>
-    public void Clear_jsEntry(int index)
+    public void Clear_jsEntry( int index )
     {
       m_js[index] = "";
       m_GUIDs[index] = "";
@@ -136,7 +150,7 @@ namespace SCJMapper_V2
     /// </summary>
     public List<CheckBox> InvertCheckList
     {
-      set { 
+      set {
         m_invertCB = value;
         m_options.InvertCheckList = m_invertCB;
       }
@@ -161,7 +175,7 @@ namespace SCJMapper_V2
       // create the Joystick assignments
       Array.Resize( ref m_js, JoystickCls.JSnum_MAX + 1 );
       Array.Resize( ref m_GUIDs, JoystickCls.JSnum_MAX + 1 );
-      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+      for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
         m_js[i] = ""; m_GUIDs[i] = "";
       }
 
@@ -195,7 +209,7 @@ namespace SCJMapper_V2
       newMaps.m_options = this.m_options;
       newMaps.m_modifiers = this.m_modifiers;
 
-      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+      for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
         newMaps.jsN[i] = this.jsN[i]; newMaps.jsNGUID[i] = this.jsNGUID[i];
       }
 
@@ -223,11 +237,79 @@ namespace SCJMapper_V2
       } );
       if ( ACM == null ) {
         ; // this.Add( newAcm ); // no, add new
-      }
-      else {
+      } else {
         ACM.Merge( newAcm ); // yes, merge it
       }
     }
+
+
+#if USE_DS_ACTIONMAPS  // see and (un)define on top of file to allow for editing the DataSet entities
+
+    public void toDataSet( DS_ActionMaps dsa )
+    {
+      dsa.Clear( );
+      if ( dsa.HasChanges( ) ) dsa.T_ActionMap.AcceptChanges( );
+
+      int AMcount = 1;
+      foreach ( ActionMapCls am in this ) {
+        DS_ActionMaps.T_ActionMapRow amr =  dsa.T_ActionMap.NewT_ActionMapRow();
+        string amShown = DS_ActionMap.ActionMapShown(am.name, AMcount++);
+
+        amr.ID_ActionMap = amShown;
+        dsa.T_ActionMap.AddT_ActionMapRow( amr );
+
+        foreach ( ActionCls ac in am ) {
+          int ilIndex = 0;
+          while ( ac.inputList.Count > ilIndex ) {
+            DS_ActionMaps.T_ActionRow ar =  dsa.T_Action.NewT_ActionRow();
+            ar.ID_Action = DS_ActionMap.ActionID( am.name, ac.key, ac.inputList[ilIndex].NodeIndex ); // make a unique key
+            ar.AddBind = ( ilIndex > 0 ); // all but the first are addbinds
+            ar.REF_ActionMap = amShown;
+            ar.ActionName = ac.name;
+            ar.Device = ac.device;
+            ar.Def_Binding = ac.defBinding;
+            ar.Def_Modifier = ac.defActivationMode.Name;
+            ar.Usr_Binding = ac.inputList[ilIndex].DevInput;
+            ar.Usr_Modifier = ac.inputList[ilIndex].ActivationMode.Name;
+            ar.Blended = DeviceCls.IsBlendedInput( ac.inputList[ilIndex].Input );
+            dsa.T_Action.AddT_ActionRow( ar );
+
+            ilIndex++;
+          }
+
+        }// each Action
+      }// each ActionMap
+
+      // finally
+      if ( dsa.HasChanges( ) )
+        dsa.AcceptChanges( );
+    }
+
+    public void updateDataSet( DS_ActionMaps dsa, string actionID )
+    {
+      foreach ( ActionMapCls am in this ) {
+        DS_ActionMaps.T_ActionMapRow amr =  dsa.T_ActionMap.NewT_ActionMapRow();
+
+        foreach ( ActionCls ac in am ) {
+          int ilIndex = 0;
+          while ( ac.inputList.Count > ilIndex ) {
+            if ( actionID == DS_ActionMap.ActionID( am.name, ac.key, ac.inputList[ilIndex].NodeIndex ) ) {
+              DS_ActionMaps.T_ActionRow ar =dsa.T_Action.FindByID_Action(actionID);
+              ar.Usr_Binding = ac.inputList[ilIndex].DevInput;
+              ar.Usr_Modifier = ac.inputList[ilIndex].ActivationMode.Name;
+              ar.Blended = DeviceCls.IsBlendedInput( ac.inputList[ilIndex].Input );
+              ar.AcceptChanges( );
+              return;
+            }
+            ilIndex++;
+          }
+        }// each Action
+      }// each ActionMap
+
+    }
+
+#endif
+
 
 
     /// <summary>
@@ -248,7 +330,7 @@ namespace SCJMapper_V2
       r += String.Format( " profileName=\"{0}\" \n", fileName.Replace( SCMappings.c_MapStartsWith, "" ) ); //AC2 add profilename
 
       // now the devices (our addition)
-      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+      for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
         if ( !String.IsNullOrEmpty( jsN[i] ) ) r += String.Format( "\tjs{0}=\"{1}\" ", i + 1, jsN[i] );
         if ( !String.IsNullOrEmpty( jsNGUID[i] ) ) r += String.Format( "js{0}G=\"{1}\" \n", i + 1, jsNGUID[i] );
       }
@@ -265,12 +347,12 @@ namespace SCJMapper_V2
       dr.devType = KeyboardCls.DeviceClass; dr.instNo = 1; m_uiCustHeader.AddInstances( dr );
       dr.devType = MouseCls.DeviceClass; dr.instNo = 1; m_uiCustHeader.AddInstances( dr );
       // do we use Gamepad ??
-      if ( GamepadCls.RegisteredDevices>0 ) {
+      if ( GamepadCls.RegisteredDevices > 0 ) {
         dr.devType = GamepadCls.DeviceClass; dr.instNo = 1; m_uiCustHeader.AddInstances( dr );
       }
 
       // all Joysticks
-      for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+      for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
         if ( !String.IsNullOrEmpty( jsN[i] ) ) {
           dr.devType = JoystickCls.DeviceClass; dr.instNo = i + 1; m_uiCustHeader.AddInstances( dr );
         }
@@ -325,12 +407,11 @@ namespace SCJMapper_V2
           if ( version == "0" ) version = ACM_VERSION; // update from legacy to actual version 
 
           // get the joystick mapping if there is one
-          for ( int i=0; i < JoystickCls.JSnum_MAX; i++ ) {
+          for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
             jsN[i] = reader[String.Format( "js{0}", i + 1 )];
             jsNGUID[i] = reader[String.Format( "js{0}G", i + 1 )];
           }
-        }
-        else {
+        } else {
           return false;
         }
       }
@@ -341,30 +422,25 @@ namespace SCJMapper_V2
 
       while ( !reader.EOF ) { //!String.IsNullOrEmpty( x ) ) {
 
-        if ( reader.Name.ToLowerInvariant() == "actionmap" ) {
+        if ( reader.Name.ToLowerInvariant( ) == "actionmap" ) {
           String x = reader.ReadOuterXml( );
           ActionMapCls acm = new ActionMapCls( );
           if ( acm.fromXML( x ) ) {
             this.Merge( acm ); // merge list
           }
-        }
-        else if ( reader.Name.ToLowerInvariant( ) == "customisationuiheader" ) {
+        } else if ( reader.Name.ToLowerInvariant( ) == "customisationuiheader" ) {
           String x = reader.ReadOuterXml( );
           m_uiCustHeader.fromXML( x );
-        }
-        else if ( reader.Name.ToLowerInvariant( ) == "deviceoptions" ) {
+        } else if ( reader.Name.ToLowerInvariant( ) == "deviceoptions" ) {
           String x = reader.ReadOuterXml( );
           m_deviceOptions.fromXML( x );
-        }
-        else if ( reader.Name.ToLowerInvariant( ) == "options" ) {
+        } else if ( reader.Name.ToLowerInvariant( ) == "options" ) {
           String x = reader.ReadOuterXml( );
           m_options.fromXML( x );
-        }
-        else if ( reader.Name.ToLowerInvariant( ) == "modifiers" ) {
+        } else if ( reader.Name.ToLowerInvariant( ) == "modifiers" ) {
           String x = reader.ReadOuterXml( );
           m_modifiers.fromXML( x );
-        }
-        else {
+        } else {
           reader.Read( );
         }
 

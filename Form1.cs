@@ -10,6 +10,12 @@ using System.Windows.Forms;
 using SharpDX.DirectInput;
 using System.IO;
 
+using SCJMapper_V2.SC;
+using SCJMapper_V2.Table;
+using SCJMapper_V2.Keyboard;
+using SCJMapper_V2.Mouse;
+using SCJMapper_V2.Gamepad;
+using SCJMapper_V2.Joystick;
 
 namespace SCJMapper_V2
 {
@@ -60,8 +66,9 @@ namespace SCJMapper_V2
     ///</remarks>
     private ActionTree m_AT = null;
 
-    private FormJSCalCurve JSCAL = null;
+    private OGL.FormJSCalCurve JSCAL = null;
 
+    private FormTable FTAB = null;
 
     #region Tools section
 
@@ -431,7 +438,6 @@ namespace SCJMapper_V2
         }
       }
       m_AT.FilterTree( txFilter.Text );
-
     }
 
 
@@ -453,10 +459,10 @@ namespace SCJMapper_V2
 
       try {
         log.Debug( "Get Keyboard device" );
-        m_Keyboard = new KeyboardCls( new Keyboard( directInput ), this );
+        m_Keyboard = new KeyboardCls( new SharpDX.DirectInput.Keyboard( directInput ), this );
 
         log.Debug( "Get Mouse device" );
-        m_Mouse = new MouseCls( new Mouse( directInput ), this );
+        m_Mouse = new MouseCls( new SharpDX.DirectInput.Mouse( directInput ), this );
 
       }
       catch ( Exception ex ) {
@@ -488,7 +494,7 @@ namespace SCJMapper_V2
             }
           }
           else {
-            jsDevice = new Joystick( directInput, instance.InstanceGuid );
+            jsDevice = new SharpDX.DirectInput.Joystick( directInput, instance.InstanceGuid );
             log.DebugFormat( "Create the device interface for: {0}", jsDevice.Information.ProductName );
           }
 
@@ -665,6 +671,7 @@ namespace SCJMapper_V2
       catch {
         ; // just ignore
       }
+      UpdateTable( );
     }
 
 
@@ -698,6 +705,16 @@ namespace SCJMapper_V2
 
       m_AppSettings.FormSize = this.Size;
       m_AppSettings.FormLocation = this.Location;
+
+      if ( FTAB != null ) {
+        m_AppSettings.FormTableLocation = FTAB.LastLocation;
+        m_AppSettings.FormTableSize = FTAB.LastSize;
+        m_AppSettings.FormTableColumnWidth = FTAB.LastColSize;
+
+        FTAB.Close( );
+        FTAB = null;
+      }
+
       m_AppSettings.Save( );
     }
 
@@ -799,6 +816,7 @@ namespace SCJMapper_V2
     {
       if ( m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), InputMode, true ) ) {
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+        UpdateTableSelectedItem( );
       }
       else MySounds.PlayNotfound( );
     }
@@ -807,6 +825,7 @@ namespace SCJMapper_V2
     {
       if ( m_AT.CanBlendBinding ) {
         m_AT.BlendBinding( );
+        UpdateTableSelectedItem( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
       else MySounds.PlayCannot( );
@@ -816,6 +835,7 @@ namespace SCJMapper_V2
     {
       if ( m_AT.CanClearBinding || m_AT.CanBlendBinding ) {
         m_AT.ClearBinding( );
+        UpdateTableSelectedItem( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
       else MySounds.PlayCannot( );
@@ -929,6 +949,7 @@ namespace SCJMapper_V2
       // start over 
       InitActionTree( false );
       rtb.Text = "";
+      UpdateTable( );
     }
 
     private void resetDefaultsToolStripMenuItem_Click( object sender, EventArgs e )
@@ -936,6 +957,7 @@ namespace SCJMapper_V2
       // start over and if chosen, load defaults from SC game
       InitActionTree( true );
       rtb.Text = "";
+      UpdateTable( );
     }
 
     private void tsDDbtMappings_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
@@ -1255,6 +1277,7 @@ namespace SCJMapper_V2
         m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
         // and start over with an empty tree
         InitActionTree( false );
+        UpdateTable( );
       }
 
       timer1.Enabled = true;
@@ -1304,7 +1327,7 @@ namespace SCJMapper_V2
     {
       timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
 
-      JSCAL = new FormJSCalCurve( );
+      JSCAL = new OGL.FormJSCalCurve( );
       // get current mapping from ActionMaps
       String nodeText = "";
 
@@ -1582,9 +1605,76 @@ namespace SCJMapper_V2
       lblLastJ.Text = ctrl;
     }
 
-
-
     #endregion
+
+
+    // Called when the table must be rebuild
+    private void UpdateTable( )
+    {
+      // only if needed
+      if ( ( FTAB != null ) && FTAB.Visible ) {
+        m_AT.ActionMaps.toDataSet( FTAB.DS_AMaps);
+        FTAB.Populate( );
+      }
+    }
+
+    // Called when an entry has been modified
+    private void UpdateTableSelectedItem( )
+    {
+      // only if needed
+      if ( ( FTAB != null ) && FTAB.Visible ) {
+        string actionID = m_AT.SelectedActionID;
+        m_AT.ActionMaps.updateDataSet( FTAB.DS_AMaps, actionID );
+        FTAB.UpdateRow( actionID );
+      }
+    }
+
+    // Show the Table Window
+    private void btTable_Click( object sender, EventArgs e )
+    {
+      if (FTAB == null ) {
+        FTAB = new FormTable( );
+        FTAB.EditActionEvent += FTAB_EditActionEvent;
+        FTAB.UpdateEditEvent += FTAB_UpdateEditEvent;
+      }
+
+      if ( FTAB.Visible ) {
+        m_AppSettings.FormTableSize = FTAB.LastSize;
+        m_AppSettings.FormTableLocation = FTAB.LastLocation;
+        m_AppSettings.FormTableColumnWidth = FTAB.LastColSize;
+        FTAB.Hide( );
+
+      } else {
+        FTAB.Show( );
+        FTAB.Size = m_AppSettings.FormTableSize;
+        FTAB.Location = m_AppSettings.FormTableLocation;
+        FTAB.LastColSize = m_AppSettings.FormTableColumnWidth;
+        UpdateTable( );
+      }
+
+    }
+
+    // called when the user clicks Update from the Table Window
+    private void FTAB_UpdateEditEvent( object sender, UpdateEditEventArgs e )
+    {
+      ActionTree newTree = m_AT.UpdateFromDataSet( FTAB.DS_AMaps );
+
+      // returns a null if no changes have been found
+      if ( newTree != null ) {
+        m_AT = newTree; // make it the valid one
+        m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
+        m_AT.ReloadTreeView( );
+        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+
+    }
+
+    
+    // called when the user if the TAB form wants to edit a row
+    private void FTAB_EditActionEvent( object sender, EditRowEventArgs e )
+    {
+      m_AT.FindAndSelectActionKey( e.Actionmap, e.Actionkey, e.Nodeindex );
+    }
 
 
   }

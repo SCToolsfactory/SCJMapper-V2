@@ -6,7 +6,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms;
 using OpenTK;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.OGL
 {
   public class BezierPointCollection : List<DataPoint>
   {

@@ -4,6 +4,8 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
+using SCJMapper_V2.Joystick;
+
 namespace SCJMapper_V2
 {
   /// <summary>

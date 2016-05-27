@@ -264,6 +264,35 @@ namespace SCJMapper_V2
     }
 
 
+    //**** Form Table
+
+    // Control bound settings
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "1000, 900" )]
+    public Size FormTableSize
+    {
+      get { return ( Size )this["FormTableSize"]; }
+      set { this["FormTableSize"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "760, 320" )]
+    public Point FormTableLocation
+    {
+      get { return ( Point )this["FormTableLocation"]; }
+      set { this["FormTableLocation"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "" )]
+    public string FormTableColumnWidth
+    {
+      get { return ( string )this["FormTableColumnWidth"]; }
+      set { this["FormTableColumnWidth"] = value; }
+    }
+
+
+
     #endregion
 
 

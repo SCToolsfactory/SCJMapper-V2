@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using OpenTK;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.OGL
 {
   /// <summary>
   /// 4th order Runge-Kutta integrator

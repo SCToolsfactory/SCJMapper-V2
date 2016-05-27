@@ -8,7 +8,7 @@ using SharpDX;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Mouse
 {
   /// <summary>
   /// Handles one Mouse device as DXInput device
@@ -120,7 +120,7 @@ namespace SCJMapper_V2
 
     #endregion
 
-    private Mouse m_device;
+    private SharpDX.DirectInput.Mouse m_device;
     private MouseState m_state = new MouseState( );
     private MouseState m_prevState = new MouseState( );
 
@@ -167,7 +167,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="device">A DXInput device</param>
     /// <param name="hwnd">The WinHandle of the main window</param>
-    public MouseCls( Mouse device, Control hwnd )
+    public MouseCls( SharpDX.DirectInput.Mouse device, Control hwnd )
     {
       log.DebugFormat( "MouseCls cTor - Entry with {0}", device.Information.ProductName );
 

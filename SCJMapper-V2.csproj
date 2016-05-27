@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SCJMapper_V2</RootNamespace>
     <AssemblyName>SCJMapper</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -40,6 +40,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -49,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Cassini_Logo_Icon.ico</ApplicationIcon>
@@ -65,6 +67,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -76,6 +79,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip.Reduced">
@@ -122,6 +126,22 @@
     <Compile Include="appConfiguration.cs" />
     <Compile Include="AppSettings.cs" />
     <Compile Include="DeviceCls.cs" />
+    <Compile Include="Table\DS_ActionMap.cs" />
+    <Compile Include="Table\DS_ActionMaps.cs">
+      <DependentUpon>DS_ActionMaps.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Table\DS_ActionMaps.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_ActionMaps.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Table\FormTabEvents.cs" />
+    <Compile Include="Table\FormTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Table\FormTable.Designer.cs">
+      <DependentUpon>FormTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Joystick\DeviceDeadzoneParameter.cs" />
     <Compile Include="Gamepad\GamepadCls.cs" />
     <Compile Include="Joystick\JsReassingList.cs" />
@@ -206,6 +226,9 @@
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Table\FormTable.resx">
+      <DependentUpon>FormTable.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OGL\FormJSCalCurve.resx">
       <DependentUpon>FormJSCalCurve.cs</DependentUpon>
     </EmbeddedResource>
@@ -232,6 +255,17 @@
       <DependentUpon>UC_GpadPanel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="Table\DS_ActionMaps.xsc">
+      <DependentUpon>DS_ActionMaps.xsd</DependentUpon>
+    </None>
+    <None Include="Table\DS_ActionMaps.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_ActionMaps.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Table\DS_ActionMaps.xss">
+      <DependentUpon>DS_ActionMaps.xsd</DependentUpon>
+    </None>
     <None Include="graphics\SB_BigSight.dds">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

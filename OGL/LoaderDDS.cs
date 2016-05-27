@@ -19,7 +19,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
-namespace SCJMapper_V2.TextureLoaders
+namespace SCJMapper_V2.OGL.TextureLoaders
 {
     /// <summary> 
     /// Expects the presence of a valid OpenGL Context and Texture Compression Extensions (GL 1.5) and Cube Maps (GL 1.3).

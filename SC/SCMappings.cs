@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.SC
 {
   /// <summary>
   /// Finds and returns the Mappings from SC Bundle

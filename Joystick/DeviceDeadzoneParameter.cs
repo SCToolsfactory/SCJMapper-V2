@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Joystick
 {
   public class DeviceDeadzoneParameter
   {

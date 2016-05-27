@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.22 - Build 56 BETA
-(c) Cassini, StandardToaster - 11-March-2016
+SC Joystick Mapper V 2.23 - Build 57 BETA
+(c) Cassini, StandardToaster - 27-May-2016
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.22)
-SCJMapper.exe.config         Program config (V2.22)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.23)
+SCJMapper.exe.config         Program config (V2.23)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -13,7 +13,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.22beta.pdf    Quick Guide
+SCJMapper_QGuide V2.23beta.pdf    Quick Guide
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images                       - graphics folder MUST be in the same folder as the Exe file
@@ -29,6 +29,15 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.23 - BETA Build 57
+- update - Using .Net 4.5.2 Now (seems to handle some scaling issues WinForm apps)
+- update - Try to find the SC path also as StarCitizen\Live (instead of Public) was mentioned for SC2.2.2 onwards ???
+- fix - addbind UNDEF removed when assigned
+- improvement - Issue a infobox if the Client folder cannot be found 
+               (please submit the complete folder structure of your installation as bug report ...)
+- add - a table display for mappings
+- some internal stuff (namespaces etc)
+- update - doc SCJMapper_QGuide V2.23beta.pdf
 V 2.22 - BETA Build 56
 - fix - try again to fix Win10 scaling issues for some PCs (hidden assignment area)
 - improvement - actions with a profile modifier attached will show underlined in the action tree

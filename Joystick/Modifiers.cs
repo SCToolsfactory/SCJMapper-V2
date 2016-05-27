@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Joystick
 {
   /// <summary>
   /// Maintain actionmap Modifiers

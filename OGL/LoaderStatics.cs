@@ -10,7 +10,7 @@ using System;
 
 using OpenTK.Graphics.OpenGL;
 
-namespace SCJMapper_V2.TextureLoaders
+namespace SCJMapper_V2.OGL.TextureLoaders
 {
 
     /// <summary>The parameters in this class have only effect on the following Texture loads.</summary>

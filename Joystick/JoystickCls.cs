@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Text.RegularExpressions;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Joystick
 {
   /// <summary>
   /// Handles one JS device as DXInput device
@@ -322,7 +322,7 @@ namespace SCJMapper_V2
 
     // ****************** CLASS *************************
 
-    private Joystick m_device;
+    private SharpDX.DirectInput.Joystick m_device;
 
     private JoystickState m_state = new JoystickState( );
     private JoystickState m_prevState = new JoystickState( );
@@ -413,7 +413,7 @@ namespace SCJMapper_V2
     /// <param name="device">A DXInput device</param>
     /// <param name="hwnd">The WinHandle of the main window</param>
     /// <param name="panel">The respective JS panel to show the properties</param>
-    public JoystickCls( Joystick device, Control hwnd, int joystickNum, UC_JoyPanel panel, int tabIndex )
+    public JoystickCls( SharpDX.DirectInput.Joystick device, Control hwnd, int joystickNum, UC_JoyPanel panel, int tabIndex )
     {
       log.DebugFormat( "JoystickCls ctor - Entry with {0}", device.Information.ProductName );
 

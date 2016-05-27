@@ -24,8 +24,8 @@ namespace SCJMapper_V2.CryXMLlib
     public string XML_string
     {
       get {
-        string xml = "";
-        foreach ( string s in m_doc ) xml += string.Format( "{0}\n", s );
+        string xml = ""; string CR = string.Format("\n");
+        foreach ( string s in m_doc ) xml += ( s + CR );
         return xml;
       }
     }

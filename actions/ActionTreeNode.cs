@@ -164,6 +164,7 @@ namespace SCJMapper_V2
       if ( String.IsNullOrEmpty( actionCmd.Input ) ) {
         // new unmapped
         this.Command = ""; this.BackColor = MyColors.UnassignedColor;
+        if ( this.Level == 2 ) this.Action = "UNDEF"; // apply UNDEF - 20160525 fix addbind not showing UNDEF if assigned
       }
       // blended mapped ones - can only get a Blend Background
       else if ( actionCmd.Input == DeviceCls.BlendedInput ) {
@@ -172,6 +173,7 @@ namespace SCJMapper_V2
       else {
         // mapped ( regular ones )
         this.Command = actionCmd.DevInput;
+        if ( this.Level == 2 ) this.Action = ""; // remove UNDEF - 20160525 fix addbind not showing UNDEF if assigned
         // background is along the input 
         this.BackColor = ActionCls.DeviceColor( actionCmd.DevInput );
       }

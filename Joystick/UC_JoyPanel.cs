@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Joystick
 {
   public partial class UC_JoyPanel : UserControl
   {

@@ -6,7 +6,7 @@ using System.Xml;
 using System.IO;
 using System.Xml.Linq;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Joystick
 {
   /// <summary>
   ///   Maintains an CustomisationUIHeader - something like:

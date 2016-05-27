@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using SCJMapper_V2.SC;
+using SCJMapper_V2.Joystick;
+
 namespace SCJMapper_V2
 {
   /// <summary>
@@ -152,6 +155,22 @@ namespace SCJMapper_V2
 
       return newAc;
     }
+
+
+    /// <summary>
+    /// Updates an actionCommand with a new input (command)
+    /// </summary>
+    /// <param name="devInput">The input command</param>
+    public void UpdateCommandFromInput( String devInput, ActionCls.ActionDevice actionDevice) // ActionCommandCls actionCmd )
+    {
+      // Apply the input to the ActionTree
+      this.DevInput = ActionCls.BlendInput( devInput, actionDevice );
+      if ( ActionCls.IsBlendedInput( this.DevInput ) || string.IsNullOrEmpty( devInput ) ) {
+        this.ActivationMode = new ActivationMode( ActivationMode.Default ); // reset activation mode if the input is empty
+      }
+    }
+
+
 
     /// <summary>
     /// Strange behavior of SC - needs a proper multitap to accept ActivationModes

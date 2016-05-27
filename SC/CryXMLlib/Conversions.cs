@@ -22,9 +22,12 @@ namespace SCJMapper_V2.CryXMLlib
 
       // Return new array.
       T[] res = new T[len];
+      /*
       for ( int i = 0; i < len; i++ ) {
-        res[i] = source[i + start];
+        resOLD[i] = source[i + start];
       }
+      */
+      Array.ConstrainedCopy( source, ( int )start, res, 0, ( int )len );
       return res;
     }
 
@@ -43,9 +46,12 @@ namespace SCJMapper_V2.CryXMLlib
 
       // Return new array.
       T[] res = new T[len];
+      /*
       for ( int i = 0; i < len; i++ ) {
         res[i] = source[i + offset];
       }
+      */
+      Array.ConstrainedCopy( source, ( int )offset, res, 0, ( int )len );
       return res;
     }
   }

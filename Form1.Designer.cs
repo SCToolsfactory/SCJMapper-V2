@@ -15,7 +15,7 @@
     {
       timer1.Stop( );
       // Unacquire all DirectInput objects.
-      foreach ( JoystickCls js in m_Joystick ) js.FinishDX( );
+      foreach ( Joystick.JoystickCls js in m_Joystick ) js.FinishDX( );
       m_Joystick.Clear( );
 
       if ( disposing && ( components != null ) ) {
@@ -85,7 +85,7 @@
       this.tdiAddMod3 = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
-      this.UC_JoyPanel = new SCJMapper_V2.UC_JoyPanel();
+      this.UC_JoyPanel = new SCJMapper_V2.Joystick.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -101,6 +101,8 @@
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.btDumpLog = new System.Windows.Forms.Button();
       this.btJSTuning = new System.Windows.Forms.Button();
+      this.btDumpProfile = new System.Windows.Forms.Button();
+      this.btTable = new System.Windows.Forms.Button();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.btSettings = new System.Windows.Forms.Button();
       this.btJsReassign = new System.Windows.Forms.Button();
@@ -145,7 +147,6 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.btDumpProfile = new System.Windows.Forms.Button();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmMouseEntry.SuspendLayout();
@@ -801,6 +802,7 @@
       this.tableLayoutPanel1.Controls.Add(this.btDumpLog, 0, 2);
       this.tableLayoutPanel1.Controls.Add(this.btJSTuning, 1, 3);
       this.tableLayoutPanel1.Controls.Add(this.btDumpProfile, 0, 3);
+      this.tableLayoutPanel1.Controls.Add(this.btTable, 1, 2);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel1.Location = new System.Drawing.Point(376, 648);
@@ -831,8 +833,29 @@
       this.btJSTuning.Name = "btJSTuning";
       this.btJSTuning.Size = new System.Drawing.Size(120, 23);
       this.btJSTuning.TabIndex = 17;
-      this.btJSTuning.Text = "Device Tuning";
+      this.btJSTuning.Text = "Device Tuning...";
       this.btJSTuning.Click += new System.EventHandler(this.btJSTuning_Click);
+      // 
+      // btDumpProfile
+      // 
+      this.btDumpProfile.Location = new System.Drawing.Point(3, 93);
+      this.btDumpProfile.Name = "btDumpProfile";
+      this.btDumpProfile.Size = new System.Drawing.Size(120, 23);
+      this.btDumpProfile.TabIndex = 26;
+      this.btDumpProfile.Text = "Dump Profile -->";
+      this.btDumpProfile.UseVisualStyleBackColor = true;
+      this.btDumpProfile.Click += new System.EventHandler(this.btDumpProfile_Click);
+      // 
+      // btTable
+      // 
+      this.btTable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btTable.Location = new System.Drawing.Point(171, 63);
+      this.btTable.Name = "btTable";
+      this.btTable.Size = new System.Drawing.Size(120, 24);
+      this.btTable.TabIndex = 27;
+      this.btTable.Text = "Toggle Table...";
+      this.btTable.UseVisualStyleBackColor = true;
+      this.btTable.Click += new System.EventHandler(this.btTable_Click);
       // 
       // tableLayoutPanel2
       // 
@@ -1326,16 +1349,6 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
-      // btDumpProfile
-      // 
-      this.btDumpProfile.Location = new System.Drawing.Point(3, 93);
-      this.btDumpProfile.Name = "btDumpProfile";
-      this.btDumpProfile.Size = new System.Drawing.Size(120, 23);
-      this.btDumpProfile.TabIndex = 26;
-      this.btDumpProfile.Text = "Dump Profile -->";
-      this.btDumpProfile.UseVisualStyleBackColor = true;
-      this.btDumpProfile.Click += new System.EventHandler(this.btDumpProfile_Click);
-      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1411,7 +1424,7 @@
     private System.Windows.Forms.ToolStripMenuItem tsiSaveAs;
     private System.Windows.Forms.SaveFileDialog SFD;
     private System.Windows.Forms.ImageList IL;
-    private UC_JoyPanel UC_JoyPanel;
+    private Joystick.UC_JoyPanel UC_JoyPanel;
     private System.Windows.Forms.TableLayoutPanel tlpanel;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
@@ -1492,6 +1505,7 @@
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
     private System.Windows.Forms.Button btDumpProfile;
+    private System.Windows.Forms.Button btTable;
   }
 }
 

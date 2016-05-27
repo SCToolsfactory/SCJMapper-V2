@@ -7,7 +7,7 @@ using System.IO;
 
 using SCJMapper_V2.CryXMLlib;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.SC
 {
 
   /// <summary>

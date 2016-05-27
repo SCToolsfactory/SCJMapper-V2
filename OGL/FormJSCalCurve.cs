@@ -12,12 +12,15 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
-using SCJMapper_V2.TextureLoaders;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace SCJMapper_V2
+using SCJMapper_V2.OGL.TextureLoaders;
+using SCJMapper_V2.Joystick;
+
+
+namespace SCJMapper_V2.OGL
 {
   public partial class FormJSCalCurve : Form
   {

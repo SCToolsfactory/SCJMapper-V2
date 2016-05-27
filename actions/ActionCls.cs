@@ -4,6 +4,12 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
+using SCJMapper_V2.SC;
+using SCJMapper_V2.Keyboard;
+using SCJMapper_V2.Mouse;
+using SCJMapper_V2.Gamepad;
+using SCJMapper_V2.Joystick;
+
 namespace SCJMapper_V2
 {
   /// <summary>
@@ -335,7 +341,6 @@ namespace SCJMapper_V2
     /// Updates an actionCommand with a new input (command)
     /// </summary>
     /// <param name="devInput">The input command</param>
-    /// <param name="actionCmd">The actionCommand to update</param>
     public void UpdateCommandFromInput( String devInput, int accIndex ) // ActionCommandCls actionCmd )
     {
       //log.Debug( "UpdateCommandFromInput - Entry" );

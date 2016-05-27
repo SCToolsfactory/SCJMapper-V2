@@ -7,7 +7,7 @@ using System.IO;
 using System.Xml.Linq;
 using System.Windows.Forms;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Joystick
 {
   /// <summary>
   ///   Maintains an Options - something like:
