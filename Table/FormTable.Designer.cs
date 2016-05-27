@@ -76,9 +76,11 @@
       this.DGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
       this.DGV.Size = new System.Drawing.Size(438, 230);
       this.DGV.TabIndex = 0;
+      this.DGV.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseClick);
       this.DGV.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseDoubleClick);
       this.DGV.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_CellValueChanged);
       this.DGV.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.DGV_ColumnWidthChanged);
+      this.DGV.CurrentCellDirtyStateChanged += new System.EventHandler(this.DGV_CurrentCellDirtyStateChanged);
       this.DGV.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_RowHeaderMouseClick);
       // 
       // dS_ActionMaps
@@ -330,7 +332,7 @@
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MinimumSize = new System.Drawing.Size(760, 320);
       this.Name = "FormTable";
-      this.Text = "FormTable";
+      this.Text = "Actiontree as Table";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTable_FormClosing);
       this.LocationChanged += new System.EventHandler(this.FormTable_LocationChanged);
       this.SizeChanged += new System.EventHandler(this.FormTable_SizeChanged);

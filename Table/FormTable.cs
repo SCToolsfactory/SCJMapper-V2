@@ -16,19 +16,17 @@ namespace SCJMapper_V2.Table
     {
       InitializeComponent( );
 
-      DS_AMaps = new DS_ActionMaps( ); // init once
+      DS_AMaps = new DS_ActionMaps( ); // init once for the lifetime of the App
       m_bSrc.DataSource = DS_AMaps;
       m_bSrc.DataMember = "T_Action";
-      m_bSrc.Filter = "ActionName LIKE '*view*'";
 
       DGV.AutoGenerateColumns = true;
       DGV.DataSource = m_bSrc;
       DGV.MultiSelect = false;
       DGV.Columns["ID_Action"].Visible = false;
-      DGV.AutoResizeColumns( DataGridViewAutoSizeColumnsMode.AllCells );
+      DGV.AutoResizeColumns( DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader );
 
-
-
+      // handle Edits (Blended Col is only allowed to be edited by the user)
       btUpdateFromEdit.Enabled = chkEditBlend.Checked;
       DGV.Columns["Usr_Binding"].ReadOnly = true;
       DGV.Columns["Usr_Modifier"].ReadOnly = true;
@@ -66,23 +64,35 @@ namespace SCJMapper_V2.Table
     public DS_ActionMaps DS_AMaps { get; private set; }
 
 
+    
+    public void SuspendDGV( )
+    {
+      // add things to improve speed while re-loading the DataSet outside - nothing found so far
+    }
+
+    public void ResumeDGV()
+    {
+      // finish things to improve speed while re-loading the DataSet outside - nothing found so far
+    }
+
+
     /// <summary>
     /// Populate the view from the dataset
     /// </summary>
     public void Populate( )
     {
-      DGV.SuspendLayout( );
-      // m_bSrc.ResetBindings( false );
+//      DGV.SuspendLayout( );
 
       if ( !string.IsNullOrEmpty( LastColSize ) ) {
         string[] e = LastColSize.Split( new char [] {';'}, StringSplitOptions.RemoveEmptyEntries );
         for ( int i = 0; i < e.Length; i++ ) {
-          DGV.Columns[i].Width = int.Parse( e[i] );
+          if ( i < DGV.Columns.Count )
+            DGV.Columns[i].Width = int.Parse( e[i] );
         }
       }
       DGV.AllowUserToResizeColumns = true;
       ComposeFilter( );
-      DGV.ResumeLayout( );
+  //    DGV.ResumeLayout( );
     }
 
     /// <summary>
@@ -93,7 +103,6 @@ namespace SCJMapper_V2.Table
     public void UpdateRow( string actionID )
     {
       if ( string.IsNullOrEmpty( actionID ) ) return; // nothing to do
-                                                      //    Populate( ); // cheap
     }
 
 
@@ -119,13 +128,23 @@ namespace SCJMapper_V2.Table
 
     private void ComposeFilter( )
     {
-      string actFilter = string.Format( "(ActionName LIKE '*{0}*')", txFilterAction.Text );
-      string defBindFilter = string.Format( "(Def_Binding LIKE '*{0}*')", txFilterDefBinding.Text );
-      string usrBindFilter = string.Format( "(Usr_Binding LIKE '*{0}*')", txFilterUsrBinding.Text );
+      // make sure we only add parts that are really used - else it is using too much time to resolve '*'
+      string filter = "";
+      if ( ! string.IsNullOrEmpty( txFilterAction.Text)) {
+        filter += string.Format( "(ActionName LIKE '*{0}*')", txFilterAction.Text );
+      }
+      if ( !string.IsNullOrEmpty( txFilterDefBinding.Text ) ) {
+        if ( !string.IsNullOrEmpty( filter ) ) filter += " AND ";
+        filter += string.Format( "(Def_Binding LIKE '*{0}*')", txFilterDefBinding.Text );
+      }
+      if ( !string.IsNullOrEmpty( txFilterUsrBinding.Text ) ) {
+        if ( !string.IsNullOrEmpty( filter ) ) filter += " AND ";
+        filter += string.Format( "(Usr_Binding LIKE '*{0}*')", txFilterUsrBinding.Text );
+      }
+
       string deviceFilter = "";
       if ( ( chkJoystick.Checked == false ) && ( chkGamepad.Checked == false ) && ( chkMouse.Checked == false ) && ( chkKbd.Checked == false ) ) {
         // none checked means all
-        deviceFilter = "( Device LIKE '*' )";
       } else {
         deviceFilter = "( Device='X'"
         + ( ( chkJoystick.Checked ) ? string.Format( " OR Device = 'joystick'" ) : "" )
@@ -135,9 +154,15 @@ namespace SCJMapper_V2.Table
         + " )";
       }
 
-      m_bSrc.Filter =
-        actFilter + " AND " + defBindFilter + " AND " + usrBindFilter + " AND " + deviceFilter;
+      if ( !string.IsNullOrEmpty( deviceFilter ) ) {
+        if ( !string.IsNullOrEmpty( filter ) ) filter += " AND ";
+        filter += deviceFilter;
+      }
+
+      m_bSrc.Filter = filter;
     }
+
+
 
     private void txFilterAction_TextChanged( object sender, EventArgs e )
     {
@@ -194,6 +219,7 @@ namespace SCJMapper_V2.Table
     private void FormTable_FormClosing( object sender, FormClosingEventArgs e )
     {
       if ( e.CloseReason == CloseReason.UserClosing ) {
+
         this.Hide( );
         e.Cancel = true;
       }
@@ -226,8 +252,17 @@ namespace SCJMapper_V2.Table
       EditRow( e.RowIndex );
     }
 
+
+    private void DGV_CellMouseClick( object sender, DataGridViewCellMouseEventArgs e )
+    {
+      if ( e.ColumnIndex < 0 && e.RowIndex < 0 ) m_bSrc.Sort = ""; // revert any sorting
+    }
+
+
     private void DGV_CellMouseDoubleClick( object sender, DataGridViewCellMouseEventArgs e )
     {
+      if ( e.RowIndex < 0 ) return; // would be the header row
+
       EditRow( e.RowIndex );
     }
 
@@ -239,31 +274,47 @@ namespace SCJMapper_V2.Table
 
     private void chkEditBlend_CheckedChanged( object sender, EventArgs e )
     {
+      // toggle the Edit mode of the Blend Column
       btUpdateFromEdit.Enabled = chkEditBlend.Checked;
       DGV.ReadOnly = !chkEditBlend.Checked;
     }
 
     private void btCancelEdit_Click( object sender, EventArgs e )
     {
-      bool test = DS_AMaps.HasChanges( );
+      // Undo Edits so far
       DS_AMaps.RejectChanges( );
-      //m_bSrc.ResetBindings( false );
+    }
+
+
+    private void DGV_CurrentCellDirtyStateChanged( object sender, EventArgs e )
+    {
+      // Immediately handle changes of the Blended Checkbox - workaround the regular DGV behavior
+      if ( !DGV.IsCurrentCellDirty ) return;
+      if ( DGV.CurrentCell.ColumnIndex != DGV.Columns["Blended"].Index ) return;
+
+      // only if dirty and the Blended column ..
+      // it still has it's previous value i.e. inverse the logic here - commit the value imediately
+      if ( ( bool )DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Blended"].Index].Value == false ) {
+        DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Blended"].Index].Value = true; // toggle value - triggers the ValueChanged Event below
+      } else {
+        DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Blended"].Index].Value = false;
+      }
+      DGV.NotifyCurrentCellDirty( false ); // have set the value - so set not dirty anymore
     }
 
     private void DGV_CellValueChanged( object sender, DataGridViewCellEventArgs e )
     {
-      if ( e.ColumnIndex == DGV.Columns["Blended"].Index ) {
-        if ( ( bool )DGV.Rows[e.RowIndex].Cells[DGV.Columns["Blended"].Index].Value == true )
-          DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = DeviceCls.BlendedInput;
-        else
-          DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = ""; // don't know anything else...
-      }
+      // set the Usr_Binding only if Blended column items Changes
+      if ( e.ColumnIndex != DGV.Columns["Blended"].Index ) return;
+
+      if ( ( bool )DGV.Rows[e.RowIndex].Cells[DGV.Columns["Blended"].Index].Value == true )
+        DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = DeviceCls.BlendedInput;
+      else
+        DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = ""; // don't know anything else...
+
     }
 
-
-
-  }
-
+  }//class
 
 
 }

@@ -1613,7 +1613,9 @@ namespace SCJMapper_V2
     {
       // only if needed
       if ( ( FTAB != null ) && FTAB.Visible ) {
+        FTAB.SuspendDGV( );
         m_AT.ActionMaps.toDataSet( FTAB.DS_AMaps);
+        FTAB.ResumeDGV( );
         FTAB.Populate( );
       }
     }
@@ -1625,17 +1627,19 @@ namespace SCJMapper_V2
       if ( ( FTAB != null ) && FTAB.Visible ) {
         string actionID = m_AT.SelectedActionID;
         m_AT.ActionMaps.updateDataSet( FTAB.DS_AMaps, actionID );
-        FTAB.UpdateRow( actionID );
+        // FTAB.UpdateRow( actionID );  seems not needed...
       }
     }
 
     // Show the Table Window
     private void btTable_Click( object sender, EventArgs e )
     {
+      bool created = false;
       if (FTAB == null ) {
         FTAB = new FormTable( );
         FTAB.EditActionEvent += FTAB_EditActionEvent;
         FTAB.UpdateEditEvent += FTAB_UpdateEditEvent;
+        created = true;
       }
 
       if ( FTAB.Visible ) {
@@ -1646,9 +1650,13 @@ namespace SCJMapper_V2
 
       } else {
         FTAB.Show( );
-        FTAB.Size = m_AppSettings.FormTableSize;
-        FTAB.Location = m_AppSettings.FormTableLocation;
-        FTAB.LastColSize = m_AppSettings.FormTableColumnWidth;
+
+        if (created) {
+          FTAB.Size = m_AppSettings.FormTableSize;
+          FTAB.Location = m_AppSettings.FormTableLocation;
+          FTAB.LastColSize = m_AppSettings.FormTableColumnWidth;
+        }
+        // reload the data to display
         UpdateTable( );
       }
 
