@@ -22,16 +22,14 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static private String SCLauncherFile1
     {
-      get
-      {
+      get {
         log.Debug( "SCLauncherFile1 - Entry" );
         String scLauncher = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\StarCitizen Launcher.exe", "", null );
         if ( scLauncher != null ) {
           log.Info( "SCLauncherFile1 - Found HKLM - AppPath - Launcher.exe" );
           if ( File.Exists( scLauncher ) ) {
             return scLauncher;
-          }
-          else {
+          } else {
             log.WarnFormat( "SCLauncherFile1 - file does not exist: {0}", scLauncher );
             return "";
           }
@@ -46,16 +44,14 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static private String SCLauncherFile2
     {
-      get
-      {
+      get {
         log.Debug( "SCLauncherFile2 - Entry" );
         String scLauncher = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\StarCitizen", "DisplayIcon", null );
         if ( scLauncher != null ) {
           log.Info( "SCLauncherFile2 - Found HKLM - Uninstall - StarCitizen" );
           if ( File.Exists( scLauncher ) ) {
             return scLauncher;
-          }
-          else {
+          } else {
             log.WarnFormat( "SCLauncherFile2 - file does not exist: {0}", scLauncher );
             return "";
           }
@@ -71,16 +67,14 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static private String SCLauncherFile3
     {
-      get
-      {
+      get {
         log.Debug( "SCLauncherFile3 - Entry" );
         String scLauncher = ( String )Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Cloud Imperium Games\StarCitizen Launcher.exe", "", null );
         if ( scLauncher != null ) {
           log.Info( "SCLauncherFile3 - Found HKLM - CIG - Launcher.exe" );
           if ( File.Exists( scLauncher ) ) {
             return scLauncher;
-          }
-          else {
+          } else {
             log.WarnFormat( "SCLauncherFile3 - file does not exist: {0}", scLauncher );
             return "";
           }
@@ -96,16 +90,14 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static private String SCLauncherFile4
     {
-      get
-      {
+      get {
         log.Debug( "SCLauncherFile4 - Entry" );
         String scLauncher = ( String )Registry.GetValue( @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\App Paths\CIGLauncher.exe", "", null );
         if ( scLauncher != null ) {
           log.Info( "SCLauncherFile4 - Found HKCU - CIGLauncher.exe" );
           if ( File.Exists( scLauncher ) ) {
             return scLauncher;
-          }
-          else {
+          } else {
             log.WarnFormat( "SCLauncherFile4 - file does not exist: {0}", scLauncher );
             return "";
           }
@@ -115,13 +107,17 @@ namespace SCJMapper_V2.SC
       }
     }
 
+    // one more would be here
+    // HKEY_CURRENT_USER\Software\Cloud Imperium Games\StarCitizen UninstallString  e.g. E:\G\StarCitizen\uninst.exe
+
+
+
     /// <summary>
     /// Returns the base SC install path from something like "E:\G\StarCitizen\Launcher\StarCitizenLauncher.exe"
     /// </summary>
     static private String SCBasePath
     {
-      get
-      {
+      get {
         log.Debug( "SCBasePath - Entry" );
         appSettings.Reload( ); // local instance - reload as it might be changed outside
         String scp = "";
@@ -130,48 +126,96 @@ namespace SCJMapper_V2.SC
           // User has priority
           scp = appSettings.UserSCPath;
           log.InfoFormat( "SCBasePath - user defined folder given: {0}", scp );
-          if ( !Directory.Exists( scp ) ) {
-            log.WarnFormat( "SCBasePath - user defined folder does not exist: {0}", scp );
-            string issue = string.Format( "Cannot find the user defined SC Installation Path !!\n\n" +
-                    "Enter the folder where CIGLauncher.exe is located");
-
-            if ( !hasInformed ) System.Windows.Forms.MessageBox.Show( issue, "Cannot find the user defined SC Installation Path !!", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
-            hasInformed = true;
-            return ""; // sorry path does not exist
+#if DEBUG
+          //***************************************
+          //scp = ""; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+          //***************************************
+#endif
+          if ( Directory.Exists( scp ) ) {
+            return scp;
           }
-        }
-        else {
-          // start the registry search - turn sequence to 4..1 to get the newest method first
+
+          // not found
+          log.WarnFormat( "SCBasePath - user defined folder does not exist: {0}", scp );
+
+          string issue = string.Format( "Cannot find the user defined SC Installation Path ({0})!!\n\n" +
+                                        "Enter the folder where CIGLauncher.exe is located", scp);
+
+          if ( !hasInformed )
+            System.Windows.Forms.MessageBox.Show( issue, "Cannot find the user defined SC Installation Path !!", 
+                           System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
+          hasInformed = true;
+          return ""; // sorry path does not exist
+
+        } else {
+          // start the registry search - sequence  4..1 to get the newest method first
+
           scp = SCLauncherFile4;
-          if ( String.IsNullOrEmpty( scp ) ) {
-            scp = SCLauncherFile3;
-            if ( String.IsNullOrEmpty( scp ) ) {
-              scp = SCLauncherFile2;
-              if ( String.IsNullOrEmpty( scp ) ) {
-                scp = SCLauncherFile1;
-                if ( String.IsNullOrEmpty( scp ) ) {
-                  log.Warn( "SCBasePath - cannot find any valid SC path" );
-                  // Issue a warning here to let the user know
-                  string issue = string.Format( "Cannot find the SC Installation Path !!\n\n" +
+#if DEBUG
+          //***************************************
+          //scp = ""; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+          //***************************************
+#endif
+          if ( !string.IsNullOrEmpty( scp ) ) {
+            // AC 1.1.6 path OK - this one needs no adjustments anymore but removing the filename
+            scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen"
+            return scp;
+          }
+
+          scp = SCLauncherFile3;
+#if DEBUG
+          //***************************************
+          //scp = ""; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+          //***************************************
+#endif
+          if ( !string.IsNullOrEmpty( scp ) ) {
+            // found the launcher.exe file - path adjust for the old subdir (may be remove path find 1..3 later)
+            scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen\Launcher"
+            scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen"
+            return scp;
+          }
+
+          scp = SCLauncherFile2;
+#if DEBUG
+          //***************************************
+          //scp = ""; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+          //***************************************
+#endif
+          if ( !string.IsNullOrEmpty( scp ) ) {
+            // found the launcher.exe file - path adjust for the old subdir (may be remove path find 1..3 later)
+            scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen\Launcher"
+            scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen"
+            return scp;
+          }
+
+          scp = SCLauncherFile1;
+#if DEBUG
+          //***************************************
+          //scp = ""; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+          //***************************************
+#endif
+          if ( !string.IsNullOrEmpty( scp ) ) {
+            // found the launcher.exe file - path adjust for the old subdir (may be remove path find 1..3 later)
+            scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen\Launcher"
+            scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen"
+            return scp;
+          }
+
+          // nothing found
+          log.Warn( "SCBasePath - cannot find any valid SC path" );
+          // Issue a warning here to let the user know
+          string issue = string.Format( "Cannot find the SC Installation Path !!\n\n" +
                     "Use Settings to provide the path manually (don't forget to Check the Box left of the path to use it)\n\n" +
                     "Enter the folder where CIGLauncher.exe is located");
 
-                  if ( !hasInformed ) System.Windows.Forms.MessageBox.Show( issue, "Cannot find SC Installation Path !!", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
-                  hasInformed = true;
-
-                  return "";  // sorry did not found a thing..
-                }
-              }
-            }
-            // found the launcher.exe file - path adjust for the old subdir (may be remove path find 1..3 later)
-            scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen\Launcher"
-          }
-          // AC 1.1.6 path OK - this one needs no adjustments anymore but removing the filename
-          scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen"
+          if ( !hasInformed )
+            System.Windows.Forms.MessageBox.Show( issue, "Cannot find SC Installation Path !!",
+                     System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
+          hasInformed = true;
         }
+        return "";  // sorry did not found a thing..
+      }// get
 
-        return scp;
-      }
     }
 
 
@@ -181,12 +225,12 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String SCInstallPath
     {
-      get
-      {
+      get {
         log.Debug( "SCInstallPath - Entry" );
         return SCBasePath;
       }
     }
+
 
 
     /// <summary>
@@ -197,38 +241,55 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String SCClientPath
     {
-      get
-      {
+      get {
         log.Debug( "SCClientPath - Entry" );
         String scp = SCBasePath;
+#if DEBUG
+        //***************************************
+        // scp += "X"; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+        //***************************************
+#endif
+        string issue = "";
+
         if ( String.IsNullOrEmpty( scp ) ) return ""; // no valid one can be found
-        //
+                                                      //
         scp = Path.Combine( scp, "StarCitizen" );
         string scpX = "";
         if ( appSettings.UsePTU ) {
           scpX = Path.Combine( scp, "Test" );
-          if ( Directory.Exists( scp ) ) return scpX;
+          if ( Directory.Exists( scpX ) ) return scpX;
+          // else not found PTU
+          // Issue a warning here to let the user know
+          issue = string.Format( "Cannot find the SC Client Path !!\n\n" +
+          "Tried to look for:\n" +
+          "{0}\\Test (PTU was enabled)\n\n" +
+          "The program cannot load or save in GameFolders\n\n" +
+          "Please submit a bug report, adding your complete SC game folder structure", scp );
+
         } else {
+          // regular game folder
           scpX = Path.Combine( scp, "Public" );
-          if ( Directory.Exists( scp ) ) return scpX;
+          if ( Directory.Exists( scpX ) ) return scpX;
+
           // SC 2.2.2+ did not found it so try Live now
           scpX = Path.Combine( scp, "Live" );
-          if ( Directory.Exists( scp ) ) return scpX;
+          if ( Directory.Exists( scpX ) ) return scpX;
+
+          // else not found regular one
+          // Issue a warning here to let the user know
+          issue = string.Format( "Cannot find the SC Client Path !!\n\n" +
+          "Tried to look for:\n" +
+          "{0}\\Public or \n" +
+          "{0}\\Live \n" +
+          "The program cannot load or save in GameFolders\n\n" +
+          "Please submit a bug report, adding your complete SC game folder structure", scp );
         }
 
 
-        log.WarnFormat( "SCClientDataPath - StarCitizen\\Public, StarCitizen\\Live or for PTU \\Test subfolder does not exist: {0}", scp );
+        log.WarnFormat( "SCClientPath - StarCitizen\\Public, StarCitizen\\Live or for PTU \\Test subfolder does not exist: {0}", scp );
 
         // Issue a warning here to let the user know
-        string issue = string.Format( "Cannot find the SC Client Path !!\n\n" +
-          "Tried to look for:\n" +
-          "{0}\\Public or \n" +
-          "{0}\\Live or \n" +
-          "{0}\\Test (if PTU was enabled)\n\n" +
-          "The program cannot load or save in GameFolders\n\n" +
-          "Please submit a bug report, adding your complete SC game folder structure");
-
-        if (!hasInformed) System.Windows.Forms.MessageBox.Show( issue, "Cannot find SC Client Path !!", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
+        if ( !hasInformed ) System.Windows.Forms.MessageBox.Show( issue, "Cannot find SC Client Path !!", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
         hasInformed = true;
 
         return "";
@@ -242,13 +303,17 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String SCClientDataPath
     {
-      get
-      {
+      get {
         log.Debug( "SCClientDataPath - Entry" );
         String scp = SCClientPath;
         if ( String.IsNullOrEmpty( scp ) ) return ""; // no valid one can be found
-        //
+
         scp = Path.Combine( scp, "Data" );
+#if DEBUG
+        //***************************************
+        // scp += "X"; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+        //***************************************
+#endif
         if ( Directory.Exists( scp ) ) return scp;
 
         log.WarnFormat( "SCClientDataPath - StarCitizen\\Public\\Data subfolder does not exist: {0}", scp );
@@ -263,13 +328,17 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String SCClientUSERPath
     {
-      get
-      {
+      get {
         log.Debug( "SCClientUSERPath - Entry" );
         String scp = SCClientPath;
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
         scp = Path.Combine( scp, "USER" );
+#if DEBUG
+        //***************************************
+        // scp += "X"; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+        //***************************************
+#endif
         if ( Directory.Exists( scp ) ) return scp;
 
         log.WarnFormat( "SCClientUSERPath - StarCitizen\\Public\\USER subfolder does not exist: {0}", scp );
@@ -284,13 +353,15 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String SCClientLogsPath
     {
-      get
-      {
+      get {
         log.Debug( "SCClientLogsPath - Entry" );
         String scp = SCClientPath;
         if ( String.IsNullOrEmpty( scp ) ) return "";
-        //
-        //scp = Path.Combine( scp, "logs" );
+#if DEBUG
+        //***************************************
+        // scp += "X"; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+        //***************************************
+#endif
         if ( Directory.Exists( scp ) ) return scp;
 
         log.WarnFormat( "SCClientLogsPath - StarCitizen\\Public subfolder does not exist: {0}", scp );
@@ -305,14 +376,18 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String SCClientMappingPath
     {
-      get
-      {
+      get {
         log.Debug( "SCClientMappingPath - Entry" );
         String scp = SCClientUSERPath; // AC1.03 new here
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
         scp = Path.Combine( scp, "Controls" );
         scp = Path.Combine( scp, "Mappings" );
+#if DEBUG
+        //***************************************
+        // scp += "X"; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+        //***************************************
+#endif
         if ( Directory.Exists( scp ) ) return scp;
 
         log.WarnFormat( "SCClientMappingPath - StarCitizen\\Public\\USER\\Controls\\Mappings subfolder does not exist: {0}", scp );
@@ -327,13 +402,17 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String SCGameData_pak
     {
-      get
-      {
+      get {
         log.Debug( "SCGameData_pak - Entry" );
         String scp = SCClientDataPath;
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
         scp = Path.Combine( scp, "GameData.pak" );
+#if DEBUG
+        //***************************************
+        // scp += "X"; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+        //***************************************
+#endif
         if ( File.Exists( scp ) ) return scp;
 
         log.WarnFormat( "SCGameData_pak - StarCitizen\\Public\\Data\\GameData.pak file does not exist: {0}", scp );
@@ -348,13 +427,17 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String SCDataXML_pak
     {
-      get
-      {
+      get {
         log.Debug( "SCDataXML_pak - Entry" );
         String scp = SCClientDataPath;
         if ( String.IsNullOrEmpty( scp ) ) return "";
         //
         scp = Path.Combine( scp, "DataXML.pak" );
+#if DEBUG
+        //***************************************
+        // scp += "X"; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+        //***************************************
+#endif
         if ( File.Exists( scp ) ) return scp;
 
         log.WarnFormat( "SCDataXML_pak - StarCitizen\\Public\\Data\\DataXML.pak file does not exist: {0}", scp );
@@ -369,8 +452,7 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String SCLastLog
     {
-      get
-      {
+      get {
         log.Debug( "SCLastLog - Entry" );
         String scp = SCClientLogsPath;
         if ( String.IsNullOrEmpty( scp ) ) return "";
@@ -385,13 +467,11 @@ namespace SCJMapper_V2.SC
               if ( finfo.LastWriteTime > newestT ) {
                 newestF = f; newestT = finfo.LastWriteTime;
               }
-            }
-            catch {
+            } catch {
             }
           }
           return newestF;
-        }
-        catch {
+        } catch {
         }
         return "";
       }
@@ -404,8 +484,7 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String DefaultProfilePath_rel
     {
-      get
-      {
+      get {
         log.Debug( "DefaultProfilePath_rel - Entry" );
         return @"Libs\Config";
       }
@@ -417,8 +496,7 @@ namespace SCJMapper_V2.SC
     /// </summary>
     static public String DefaultProfileName
     {
-      get
-      {
+      get {
         log.Debug( "DefaultProfileName - Entry" );
         return @"defaultProfile";
       }

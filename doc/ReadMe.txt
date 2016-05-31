@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.23 - Build 57 BETA
-(c) Cassini, StandardToaster - 27-May-2016
+SC Joystick Mapper V 2.24 - Build 58 BETA
+(c) Cassini, StandardToaster - 31-May-2016
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.23)
-SCJMapper.exe.config         Program config (V2.23)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.24)
+SCJMapper.exe.config         Program config (V2.24)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -29,6 +29,8 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.24 - BETA Build 58
+- fix - some trouble in SC path finding
 V 2.23 - BETA Build 57
 - update - Using .Net 4.5.2 Now (seems to handle some scaling issues WinForm apps)
 - update - Try to find the SC path also as StarCitizen\Live (instead of Public) was mentioned for SC2.2.2 onwards ???

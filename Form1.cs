@@ -160,15 +160,15 @@ namespace SCJMapper_V2
     private void MainForm_Deactivate( object sender, EventArgs e )
     {
       timer1.Enabled = false;
-      m_Joystick.Deactivate( );
-      m_Keyboard.Deactivate( );
+      if ( m_Joystick!=null) m_Joystick.Deactivate( );
+      if ( m_Keyboard != null ) m_Keyboard.Deactivate( );
     }
 
     private void MainForm_Activated( object sender, EventArgs e )
     {
       timer1.Enabled = true;
-      m_Joystick.Activate( );
-      m_Keyboard.Activate( );
+      if ( m_Joystick != null ) m_Joystick.Activate( );
+      if ( m_Keyboard != null ) m_Keyboard.Activate( );
     }
 
 

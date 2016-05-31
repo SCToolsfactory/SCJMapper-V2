@@ -56,7 +56,7 @@ namespace SCJMapper_V2.SC
         }
       }
 
-      // second try to get the SC defaultProfile from the GameData.pak
+      // second try to get the SC defaultProfile from the DataXML.pak
       retVal = ExtractDefaultBinProfile( defaultProfileName );
       if ( !String.IsNullOrEmpty( retVal ) ) {
         UsedDefProfile = "DataXML defaultProfile";
