@@ -53,6 +53,7 @@
       this.chkGamepad = new System.Windows.Forms.CheckBox();
       this.chkJoystick = new System.Windows.Forms.CheckBox();
       this.label1 = new System.Windows.Forms.Label();
+      this.btBlendAll = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.DGV)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dS_ActionMaps)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dSActionMapsBindingSource)).BeginInit();
@@ -143,6 +144,7 @@
       // 
       // panel1
       // 
+      this.panel1.Controls.Add(this.btBlendAll);
       this.panel1.Controls.Add(this.btCancelEdit);
       this.panel1.Controls.Add(this.chkEditBlend);
       this.panel1.Controls.Add(this.btUpdateFromEdit);
@@ -182,7 +184,7 @@
       this.chkEditBlend.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.chkEditBlend.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.chkEditBlend.ForeColor = System.Drawing.Color.Firebrick;
-      this.chkEditBlend.Location = new System.Drawing.Point(184, 145);
+      this.chkEditBlend.Location = new System.Drawing.Point(76, 126);
       this.chkEditBlend.Name = "chkEditBlend";
       this.chkEditBlend.Size = new System.Drawing.Size(96, 17);
       this.chkEditBlend.TabIndex = 12;
@@ -270,7 +272,7 @@
       // chkKbd
       // 
       this.chkKbd.AutoSize = true;
-      this.chkKbd.Location = new System.Drawing.Point(222, 105);
+      this.chkKbd.Location = new System.Drawing.Point(222, 93);
       this.chkKbd.Name = "chkKbd";
       this.chkKbd.Size = new System.Drawing.Size(46, 17);
       this.chkKbd.TabIndex = 4;
@@ -281,7 +283,7 @@
       // chkMouse
       // 
       this.chkMouse.AutoSize = true;
-      this.chkMouse.Location = new System.Drawing.Point(158, 105);
+      this.chkMouse.Location = new System.Drawing.Point(158, 93);
       this.chkMouse.Name = "chkMouse";
       this.chkMouse.Size = new System.Drawing.Size(61, 17);
       this.chkMouse.TabIndex = 4;
@@ -292,7 +294,7 @@
       // chkGamepad
       // 
       this.chkGamepad.AutoSize = true;
-      this.chkGamepad.Location = new System.Drawing.Point(80, 105);
+      this.chkGamepad.Location = new System.Drawing.Point(80, 93);
       this.chkGamepad.Name = "chkGamepad";
       this.chkGamepad.Size = new System.Drawing.Size(75, 17);
       this.chkGamepad.TabIndex = 4;
@@ -303,7 +305,7 @@
       // chkJoystick
       // 
       this.chkJoystick.AutoSize = true;
-      this.chkJoystick.Location = new System.Drawing.Point(10, 105);
+      this.chkJoystick.Location = new System.Drawing.Point(10, 93);
       this.chkJoystick.Name = "chkJoystick";
       this.chkJoystick.Size = new System.Drawing.Size(65, 17);
       this.chkJoystick.TabIndex = 3;
@@ -319,6 +321,17 @@
       this.label1.Size = new System.Drawing.Size(69, 13);
       this.label1.TabIndex = 2;
       this.label1.Text = "Action Filter";
+      // 
+      // btBlendAll
+      // 
+      this.btBlendAll.Enabled = false;
+      this.btBlendAll.Location = new System.Drawing.Point(183, 122);
+      this.btBlendAll.Name = "btBlendAll";
+      this.btBlendAll.Size = new System.Drawing.Size(97, 23);
+      this.btBlendAll.TabIndex = 14;
+      this.btBlendAll.Text = "Blend All";
+      this.btBlendAll.UseVisualStyleBackColor = true;
+      this.btBlendAll.Click += new System.EventHandler(this.btBlendAll_Click);
       // 
       // FormTable
       // 
@@ -372,5 +385,6 @@
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
     private System.Windows.Forms.CheckBox chkEditBlend;
     private System.Windows.Forms.Button btCancelEdit;
+    private System.Windows.Forms.Button btBlendAll;
   }
 }

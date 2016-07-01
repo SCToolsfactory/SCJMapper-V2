@@ -1105,7 +1105,7 @@ namespace SCJMapper_V2
 
       int countChanges = 0;
       foreach ( DS_ActionMaps.T_ActionRow ar in dsa.T_Action ) {
-        if ( ar.RowState== System.Data.DataRowState.Modified ) {
+        if ( ar.RowState == System.Data.DataRowState.Modified ) {
           countChanges++;
           ActionCommandCls acc = FindActionInputObject(nTree, DS_ActionMap.ActionMap(ar), DS_ActionMap.ActionKey(ar), DS_ActionMap.ActionCommandIndex(ar));
           if ( acc != null ) {
@@ -1123,8 +1123,7 @@ namespace SCJMapper_V2
 
         nTree.Dirty = true;
         return nTree;
-      }
-      else {
+      } else {
         return null;
       }
 
@@ -1181,6 +1180,114 @@ namespace SCJMapper_V2
       return repList;
     }
 
+
+    /// <summary>
+    /// Reports a summary list of the mapped items
+    /// </summary>
+    /// <returns></returns>
+    public String ReportActionsCSV( bool listModifiers )
+    {
+      log.Debug( "FindCtrl - ReportActions2" );
+
+      String repList = "";
+      // JS assignments
+      for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
+        if ( !String.IsNullOrEmpty( ActionMaps.jsN[i] ) ) repList += String.Format( "** js{0} = {1}\n", i + 1, ActionMaps.jsN[i] );
+      }
+      // now the mapped actions
+
+      repList += string.Format( "\n" );
+
+      repList += "actionmap;action"; // col description line
+      if (listModifiers ) {
+        repList += ";kbd-tag;kbd-input;kbd-mod-tag;kbd-mod-mode;kbd-mod-multi"; // col description line
+        repList += ";mouse-tag;mouse-input;mouse-mod-tag;mouse-mod-mode;mouse-mod-multi";
+        repList += ";xpad-tag;xpad-input;xpad-mod-tag;xpad-mod-mode;xpad-mod-multi";
+        repList += ";js1-tag;js1-input;js1-mod-tag;js1-mod-mode;js1-mod-multi";
+        repList += ";js2-tag;js2-input;js2-mod-tag;js2-mod-mode;js2-mod-multi";
+        repList += ";js3-tag;js3-input;js3-mod-tag;js3-mod-mode;js3-mod-multi";
+        repList += ";js4-tag;js4-input;js4-mod-tag;js4-mod-mode;js4-mod-multi";
+      } else {
+        repList += ";kbd-tag;kbd-input"; // col description line
+        repList += ";mouse-tag;mouse-input";
+        repList += ";xpad-tag;xpad-input";
+        repList += ";js1-tag;js1-input";
+        repList += ";js2-tag;js2-input";
+        repList += ";js3-tag;js3-input";
+        repList += ";js4-tag;js4-input";
+      }
+      repList += string.Format( "\n" );
+
+      string action = "";
+      string rep = ""; string kbA = ""; string moA = ""; string xbA = ""; string[] jsA = new string[] { "", "", "", "" };
+      foreach ( ActionMapCls acm in ActionMaps ) {
+
+        foreach ( ActionCls ac in acm ) {
+          // we get an action for each device class here - sort it out
+          if ( ac.name != action ) {
+            // dump if not empty
+            if ( !string.IsNullOrEmpty( action ) ) {
+              // compose one action
+              rep += string.Format( "{0};{1};{2};{3};{4};{5};{6}\n", kbA, moA, xbA, jsA[0], jsA[1], jsA[2], jsA[3] ); // should be one line now
+              repList += String.Format( "{0}", rep );  // add to list
+            }
+            // action changed - restart collection
+            action = ac.name;
+            rep = string.Format( "{0};{1};", acm.name, ac.name ); // actionmap; action
+                                                                  // note: don't add trailing semicolons as the are applied in the output formatting
+            if ( listModifiers ) {
+              kbA = "n.a.;;;;"; // defaults tag;input;mod-tag;mod-name;mod-mult
+            }
+            else {
+              kbA = "n.a.;"; // defaults tag;input
+            }
+            moA = kbA; xbA = kbA;
+            jsA = new string[] { kbA, kbA, kbA, kbA };
+          }
+
+          foreach ( ActionCommandCls acc in ac.inputList ) {
+            // this is for add binds
+            if ( ShowAction( ac.actionDevice, acc.Input ) ) {
+              if ( !String.IsNullOrEmpty( acc.Input ) ) {
+                // set modified  - note: don't add trailing semicolons as the are applied in the output formatting
+                string aTag = "modified"; //default or modified
+                string aMode = string.Format( "modified;{0};{1}", ac.defActivationMode.Name, ac.defActivationMode.MultiTap );
+                // change if they are default mappings
+                if ( acc.DevInput == ac.defBinding ) aTag = "default";
+                if ( acc.ActivationMode == ActivationMode.Default ) aMode = string.Format( "default;{0};{1}", ac.defActivationMode.Name, ac.defActivationMode.MultiTap );
+                if ( listModifiers ) {
+                  switch ( ActionCls.ADeviceFromDevID( acc.DevID ) ) {
+                    case ActionCls.ActionDevice.AD_Keyboard: kbA = string.Format( "{0};{1};{2}", aTag, acc.Input, aMode ); break;
+                    case ActionCls.ActionDevice.AD_Mouse: moA = string.Format( "{0};{1};{2}", aTag, acc.Input, aMode ); break;
+                    case ActionCls.ActionDevice.AD_Joystick:
+                      int jsNum = JoystickCls.JSNum(acc.DevInput) - 1;
+                      if ( jsNum >= 0 ) jsA[jsNum] = string.Format( "{0};{1};{2}", aTag, acc.Input, aMode ); break;
+                    case ActionCls.ActionDevice.AD_Gamepad: xbA = string.Format( "{0};{1};{2}", aTag, acc.Input, aMode ); break;
+                    default: break;
+                  }//switch
+                } else {
+                  switch ( ActionCls.ADeviceFromDevID( acc.DevID ) ) {
+                    case ActionCls.ActionDevice.AD_Keyboard: kbA = string.Format( "{0};{1}", aTag, acc.Input ); break;
+                    case ActionCls.ActionDevice.AD_Mouse: moA = string.Format( "{0};{1}", aTag, acc.Input ); break;
+                    case ActionCls.ActionDevice.AD_Joystick:
+                      int jsNum = JoystickCls.JSNum(acc.DevInput) - 1;
+                      if ( jsNum >= 0 ) jsA[jsNum] = string.Format( "{0};{1}", aTag, acc.Input ); break;
+                    case ActionCls.ActionDevice.AD_Gamepad: xbA = string.Format( "{0};{1}", aTag, acc.Input ); break;
+                    default: break;
+                  }//switch
+                }
+              }
+            }// show
+          }// for aCmd
+        }// for action
+      }
+      // add the last one
+      // compose one action
+      rep += string.Format( "{0};{1};{2};{3};{4};{5};{6}\n", kbA, moA, xbA, jsA[0], jsA[1], jsA[2], jsA[3] ); // should be one line now
+      repList += String.Format( "{0}", rep );  // add to list
+
+      return repList;
+    }
 
   }
 }

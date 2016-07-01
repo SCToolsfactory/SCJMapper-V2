@@ -263,6 +263,22 @@ namespace SCJMapper_V2
       set { this["UsePTU"] = value; }
     }
 
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "False" )]
+    public Boolean UseCSVListing
+    {
+      get { return ( Boolean )this["UseCSVListing"]; }
+      set { this["UseCSVListing"] = value; }
+    }
+
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "False" )]
+    public Boolean ListModifiers
+    {
+      get { return ( Boolean )this["ListModifiers"]; }
+      set { this["ListModifiers"] = value; }
+    }
+
 
     //**** Form Table
 

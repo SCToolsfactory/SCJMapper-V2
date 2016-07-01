@@ -56,7 +56,7 @@ namespace SCJMapper_V2
 
     private JoystickList m_joystickList = null;
     private UICustHeader m_uiCustHeader = null;
-    private Options m_options = null;
+    private Options m_options = null; // options are given per deviceClass and instance - it seems
     private Deviceoptions m_deviceOptions = null;
     private Modifiers m_modifiers = null;
 

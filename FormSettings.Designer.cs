@@ -64,6 +64,8 @@
       this.btCancel = new System.Windows.Forms.Button();
       this.label1 = new System.Windows.Forms.Label();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.cbxListModifiers = new System.Windows.Forms.CheckBox();
+      this.cbxCSVListing = new System.Windows.Forms.CheckBox();
       this.cbxPTU = new System.Windows.Forms.CheckBox();
       this.cbxDetectGamepad = new System.Windows.Forms.CheckBox();
       this.groupBox1.SuspendLayout();
@@ -418,10 +420,11 @@
       this.label1.TabIndex = 26;
       this.label1.Text = "Note: Accepting changes will clear the action tree to apply the new settings; Can" +
     "cel now if you want to save your work first.";
-      this.label1.Click += new System.EventHandler(this.label1_Click);
       // 
       // groupBox4
       // 
+      this.groupBox4.Controls.Add(this.cbxListModifiers);
+      this.groupBox4.Controls.Add(this.cbxCSVListing);
       this.groupBox4.Controls.Add(this.cbxPTU);
       this.groupBox4.Controls.Add(this.cbxDetectGamepad);
       this.groupBox4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -431,6 +434,26 @@
       this.groupBox4.TabIndex = 27;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "Advanced Options ...";
+      // 
+      // cbxListModifiers
+      // 
+      this.cbxListModifiers.AutoSize = true;
+      this.cbxListModifiers.Location = new System.Drawing.Point(420, 44);
+      this.cbxListModifiers.Name = "cbxListModifiers";
+      this.cbxListModifiers.Size = new System.Drawing.Size(97, 17);
+      this.cbxListModifiers.TabIndex = 9;
+      this.cbxListModifiers.Text = "List Modifiers";
+      this.cbxListModifiers.UseVisualStyleBackColor = true;
+      // 
+      // cbxCSVListing
+      // 
+      this.cbxCSVListing.AutoSize = true;
+      this.cbxCSVListing.Location = new System.Drawing.Point(400, 21);
+      this.cbxCSVListing.Name = "cbxCSVListing";
+      this.cbxCSVListing.Size = new System.Drawing.Size(106, 17);
+      this.cbxCSVListing.TabIndex = 8;
+      this.cbxCSVListing.Text = "Use CSV Listing";
+      this.cbxCSVListing.UseVisualStyleBackColor = true;
       // 
       // cbxPTU
       // 
@@ -525,5 +548,7 @@
     private System.Windows.Forms.TextBox txJS10;
     private System.Windows.Forms.Label label13;
     private System.Windows.Forms.TextBox txJS9;
+    private System.Windows.Forms.CheckBox cbxCSVListing;
+    private System.Windows.Forms.CheckBox cbxListModifiers;
   }
 }

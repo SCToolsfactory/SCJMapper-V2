@@ -111,7 +111,7 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Try to derive the device class from the input string
+    /// Try to derive the device class from the devInput string (mo1_, kb1_, xi1_, jsN_)
     /// </summary>
     /// <param name="devInput">The input command string dev_input format</param>
     /// <returns>A proper DeviceClass string</returns>
@@ -130,15 +130,27 @@ namespace SCJMapper_V2
       // others..
       return deviceClass;
     }
-    
+
     /// <summary>
-    /// Returns the ActionDevice from a deviceID or devInput string (mo1_, kb1_, xi1_, jsN_)
+    /// Returns the ActionDevice from a deviceID (a trailing _ is added if not there)
     /// </summary>
-    /// <param name="devID">DeviceID or devInput string</param>
+    /// <param name="devID">DeviceID</param>
     /// <returns>The ActionDevice</returns>
     static public ActionDevice ADeviceFromDevID( string devID )
     {
-      return ADevice( DeviceClassFromInput( devID ) );
+      string val = devID;
+      if ( !devID.EndsWith( "_" ) ) val += "_";
+      return ADevice( DeviceClassFromInput( val ) );
+    }
+
+    /// <summary>
+    /// Returns the ActionDevice from the devInput string (mo1_, kb1_, xi1_, jsN_)
+    /// </summary>
+    /// <param name="devInput">The input command string dev_input format</param>
+    /// <returns>The ActionDevice</returns>
+    static public ActionDevice ADeviceFromInput( string devInput )
+    {
+      return ADevice( DeviceClassFromInput( devInput ) );
     }
 
     /// <summary>
@@ -214,7 +226,7 @@ namespace SCJMapper_V2
     static public System.Drawing.Color DeviceColor( string devInput )
     {
       // background is along the input 
-      ActionDevice aDevice = ADeviceFromDevID( devInput);
+      ActionDevice aDevice = ADeviceFromInput( devInput);
       switch ( aDevice ) {
         case ActionDevice.AD_Gamepad: return GamepadCls.XiColor( );
         case ActionDevice.AD_Joystick: {

@@ -23,17 +23,22 @@ namespace SCJMapper_V2.Joystick
   /// [option] : instance, sensitivity, exponent, nonlinearity *instance is a bug that will be fixed to 'invert' in the future
   /// [value] : for invert use 0/1; for others use 0.0 to 2.0
   /// 
+  /// options are given per deviceClass and instance - it seems
   /// 	</summary>
   public class Options
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
+    // Support only one set of independent options (string storage)
     List<String> m_stringOptions = new List<String>( );
+    // Support only one set of TuningParameters (there is only ONE Joystick Pitch, Yaw, Roll control possible, they can be on different instances however)
     DeviceTuningParameter m_tuningP = null; // pitch
     DeviceTuningParameter m_tuningY = null; // yaw
     DeviceTuningParameter m_tuningR = null; // roll
 
-    List<OptionsInvert> m_inverter = new List<OptionsInvert>( ); // all invertes
+    // Have to support Inverters for all possible JS Instances here - right now 4 are supported - provide them for all 12 we support..
+
+    public List<OptionsInvert> m_inverter = new List<OptionsInvert>( ); // all inverters
 
     private List<CheckBox> m_invertCB = null; // Options owns and handles all Inversions
 
@@ -45,9 +50,9 @@ namespace SCJMapper_V2.Joystick
       m_tuningR = new DeviceTuningParameter( );
 
       // create inverters (
-      for (int i=0; i<(int)OptionsInvert.Inversions.I_LAST; i++) {
+      for ( int i = 0; i < ( int )OptionsInvert.Inversions.I_LAST; i++ ) {
         OptionsInvert inv = new OptionsInvert((OptionsInvert.Inversions)i);
-        m_inverter.Add(inv);
+        m_inverter.Add( inv );
       }
     }
 
@@ -89,6 +94,7 @@ namespace SCJMapper_V2.Joystick
     /// <returns>An Inverter object</returns>
     public OptionsInvert Inverter( OptionsInvert.Inversions item )
     {
+      // instance is 1.. - array is 0...
       return m_inverter[( int )item];
     }
 
@@ -97,8 +103,8 @@ namespace SCJMapper_V2.Joystick
     /// </summary>
     public List<CheckBox> InvertCheckList
     {
-      set { 
-        m_invertCB = value; 
+      set {
+        m_invertCB = value;
         // assuming the ENUM sequence of Checkboxes here...
         // Note: the flight Flight ones above are not handled twice i.e. are assigned below but not used
         int i = 0;
@@ -114,7 +120,7 @@ namespace SCJMapper_V2.Joystick
     public void ResetInverter( )
     {
       foreach ( OptionsInvert inv in m_inverter ) {
-        inv.Reset();
+        inv.Reset( );
       }
     }
 
@@ -125,8 +131,7 @@ namespace SCJMapper_V2.Joystick
       try {
         XDocument doc = XDocument.Parse( xml );
         return doc.ToString( ).Split( new String[] { String.Format( "\n" ) }, StringSplitOptions.RemoveEmptyEntries );
-      }
-      catch ( Exception ) {
+      } catch ( Exception ) {
         return new String[] { xml };
       }
     }
@@ -215,17 +220,18 @@ namespace SCJMapper_V2.Joystick
       reader.Read( );
 
       String type = "";
-      String instance = "";
+      String instance = ""; int nInstance = 0;
 
       if ( reader.HasAttributes ) {
         type = reader["type"];
-        if ( !(( type.ToLowerInvariant( ) == "joystick") || (type.ToLowerInvariant( ) == "xboxpad") ) ) {
+        if ( !( ( type.ToLowerInvariant( ) == "joystick" ) || ( type.ToLowerInvariant( ) == "xboxpad" ) ) ) {
           // save as plain text
           if ( !m_stringOptions.Contains( xml ) ) m_stringOptions.Add( xml );
           return true;
         }
         // further on..
         instance = reader["instance"];
+        if ( !int.TryParse( instance, out nInstance ) ) nInstance = 0;
 
         reader.Read( );
         // try to disassemble the items
@@ -259,46 +265,33 @@ namespace SCJMapper_V2.Joystick
          */
         while ( !reader.EOF ) {
 
-          if ( reader.Name.ToLowerInvariant() == "flight_move_pitch" ) {
+          if ( reader.Name.ToLowerInvariant( ) == "flight_move_pitch" ) {
             m_tuningP.Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_yaw" ) {
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_yaw" ) {
             m_tuningY.Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_roll" ) {
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_roll" ) {
             m_tuningR.Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_vertical" ) {
+              m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_lateral" ) {
+              m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_longitudinal" ) {
+              m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_pitch" ) {
+              m_inverter[( int )OptionsInvert.Inversions.flight_aim_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_yaw" ) {
+              m_inverter[( int )OptionsInvert.Inversions.flight_aim_yaw].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_view_pitch" ) {
+              m_inverter[( int )OptionsInvert.Inversions.flight_view_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_view_yaw" ) {
+              m_inverter[( int )OptionsInvert.Inversions.flight_view_yaw].Options_fromXML( reader, type, int.Parse( instance ) );
           }
 
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_vertical" ) {
-            m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_lateral" ) {
-            m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_longitudinal" ) {
-            m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
+            // Throttle abs/rel are treated the same and use the throttle group only 
+            else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle" ) {
+              m_inverter[( int )OptionsInvert.Inversions.flight_throttle].Options_fromXML( reader, type, int.Parse( instance ) );
 
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_pitch" ) {
-            m_inverter[( int )OptionsInvert.Inversions.flight_aim_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_yaw" ) {
-            m_inverter[( int )OptionsInvert.Inversions.flight_aim_yaw].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_view_pitch" ) {
-            m_inverter[( int )OptionsInvert.Inversions.flight_view_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_view_yaw" ) {
-            m_inverter[( int )OptionsInvert.Inversions.flight_view_yaw].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-
-          // Throttle abs/rel are treated the same and use the throttle group only 
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle" ) {
-            m_inverter[( int )OptionsInvert.Inversions.flight_throttle].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-
-          else {
+          } else if ( reader.NodeType != XmlNodeType.EndElement ) {
             //??
             log.InfoFormat( "Options.fromXML: unknown node - {0} - stored as is", reader.Name );
             if ( !m_stringOptions.Contains( xml ) ) m_stringOptions.Add( xml );

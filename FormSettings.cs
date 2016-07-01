@@ -73,6 +73,10 @@ namespace SCJMapper_V2
       // Use PTU
       cbxPTU.Checked = m_owner.UsePTU;
 
+      // Use CSV Listing
+      cbxCSVListing.Checked = m_owner.UseCSVListing;
+      cbxListModifiers.Checked = m_owner.ListModifiers;
+
     }
 
 
@@ -117,6 +121,10 @@ namespace SCJMapper_V2
         MessageBox.Show( "Changing to / from PTU folders needs a restart of the application !!", "Settings Notification", MessageBoxButtons.OK, MessageBoxIcon.Information );
       }
       m_owner.UsePTU = cbxPTU.Checked;
+
+      // Use CSV Listing
+      m_owner.UseCSVListing = cbxCSVListing.Checked;
+      m_owner.ListModifiers = cbxListModifiers.Checked;
 
       m_owner.Save( );
     }
@@ -182,11 +190,6 @@ namespace SCJMapper_V2
       }
     }
 
-    private void label1_Click( object sender, EventArgs e )
-    {
-
-    }
-
-
+ 
   }
 }

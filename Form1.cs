@@ -908,7 +908,11 @@ namespace SCJMapper_V2
 
     private void btDumpList_Click( object sender, EventArgs e )
     {
-      rtb.Text = String.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActions( ) );
+      if ( m_AppSettings.UseCSVListing )
+        rtb.Text = String.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActionsCSV( m_AppSettings.ListModifiers ) );
+      else
+        rtb.Text = String.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActions( ) );
+
     }
 
     private void btDumpLog_Click( object sender, EventArgs e )

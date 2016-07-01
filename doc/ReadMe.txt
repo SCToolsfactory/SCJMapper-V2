@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.24 - Build 58 BETA
-(c) Cassini, StandardToaster - 31-May-2016
+SC Joystick Mapper V 2.25 - Build 59 BETA
+(c) Cassini, StandardToaster - 01-Jul-2016
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.24)
-SCJMapper.exe.config         Program config (V2.24)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.25)
+SCJMapper.exe.config         Program config (V2.25)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -13,7 +13,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.23beta.pdf    Quick Guide
+SCJMapper_QGuide V2.25beta.pdf    Quick Guide
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images                       - graphics folder MUST be in the same folder as the Exe file
@@ -29,6 +29,10 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.25 - BETA Build 59
+- fix - an issue in parsing options from imported maps
+- add - an option to show the actiontree as CSV list with more/less details (change in Settings)
+- improvement - In table view add possibility to Blend All visible unmapped entries
 V 2.24 - BETA Build 58
 - fix - some trouble in SC path finding
 V 2.23 - BETA Build 57

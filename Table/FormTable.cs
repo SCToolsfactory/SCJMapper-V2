@@ -276,6 +276,8 @@ namespace SCJMapper_V2.Table
     {
       // toggle the Edit mode of the Blend Column
       btUpdateFromEdit.Enabled = chkEditBlend.Checked;
+      btBlendAll.Enabled = chkEditBlend.Checked;
+
       DGV.ReadOnly = !chkEditBlend.Checked;
     }
 
@@ -283,6 +285,17 @@ namespace SCJMapper_V2.Table
     {
       // Undo Edits so far
       DS_AMaps.RejectChanges( );
+    }
+
+
+    private void btBlendAll_Click( object sender, EventArgs e )
+    {
+      if ( !chkEditBlend.Checked ) return; // only if Edit is allowed
+
+      foreach ( DataGridViewRow row in DGV.Rows ) {
+        if (string.IsNullOrEmpty((string) row.Cells[DGV.Columns["Usr_Binding"].Index].Value )) 
+          row.Cells[DGV.Columns["Blended"].Index].Value = true;
+      }
     }
 
 

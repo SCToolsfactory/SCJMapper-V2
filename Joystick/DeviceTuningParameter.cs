@@ -302,34 +302,36 @@ namespace SCJMapper_V2.Joystick
         }
       }
       // we may have a nonlin curve...
-      reader.Read( );
-      if ( !reader.EOF ) {
-        if ( reader.Name.ToLowerInvariant( ) == "nonlinearity_curve" ) {
-          m_PtsIn.Clear( ); m_PtsOut.Clear( ); // reset pts
+      if ( ! reader.IsEmptyElement ) {
+        reader.Read( );
+        if ( !reader.EOF ) {
+          if ( reader.Name.ToLowerInvariant( ) == "nonlinearity_curve" ) {
+            m_PtsIn.Clear( ); m_PtsOut.Clear( ); // reset pts
 
-          reader.Read( );
-          while ( !reader.EOF ) {
-            String ptIn = "";
-            String ptOut = "";
-            if ( reader.Name.ToLowerInvariant( ) == "point" ) {
-              if ( reader.HasAttributes ) {
-                ptIn = reader["in"];
-                ptOut = reader["out"];
-                m_PtsIn.Add( ptIn ); m_PtsOut.Add( ptOut ); m_ptsEnabled = true;
-              }
-            }
             reader.Read( );
-          }//while
-          // sanity check - we've have to have 3 pts  here - else we subst
-          // add 2nd
-          if ( m_PtsIn.Count < 2 ) {
-            m_PtsIn.Add( "0.5" ); m_PtsOut.Add( "0.5" );
-            log.Info( "Options_fromXML: got only one nonlin point, added (0.5|0.5)" );
-          }
-          // add 3rd
-          if ( m_PtsIn.Count < 3 ) {
-            m_PtsIn.Add( "0.75" ); m_PtsOut.Add( "0.75" );
-            log.Info( "Options_fromXML: got only two nonlin points, added (0.75|0.75)" );
+            while ( !reader.EOF ) {
+              String ptIn = "";
+              String ptOut = "";
+              if ( reader.Name.ToLowerInvariant( ) == "point" ) {
+                if ( reader.HasAttributes ) {
+                  ptIn = reader["in"];
+                  ptOut = reader["out"];
+                  m_PtsIn.Add( ptIn ); m_PtsOut.Add( ptOut ); m_ptsEnabled = true;
+                }
+              }
+              reader.Read( );
+            }//while
+             // sanity check - we've have to have 3 pts  here - else we subst
+             // add 2nd
+            if ( m_PtsIn.Count < 2 ) {
+              m_PtsIn.Add( "0.5" ); m_PtsOut.Add( "0.5" );
+              log.Info( "Options_fromXML: got only one nonlin point, added (0.5|0.5)" );
+            }
+            // add 3rd
+            if ( m_PtsIn.Count < 3 ) {
+              m_PtsIn.Add( "0.75" ); m_PtsOut.Add( "0.75" );
+              log.Info( "Options_fromXML: got only two nonlin points, added (0.75|0.75)" );
+            }
           }
         }
       }
