@@ -26,7 +26,7 @@ namespace SCJMapper_V2
       new ConfigurationProperty( "msSenseLimit", typeof( int ), ( int )150, ConfigurationPropertyOptions.None );
 
     // The scActionmaps property.
-    private static String _defaultActionmaps = "default,multiplayer,singleplayer,invite,player,flycam,vehicle_general,vehicle_driver,vehicle_gunner"
+    private static String _defaultActionmaps = "default,multiplayer,singleplayer,invite,player,player_choice,prone,flycam,vehicle_general,vehicle_driver,vehicle_gunner"
                 + ",spaceship_general,spaceship_view,spaceship_movement,spaceship_targeting,spaceship_turret,spaceship_weapons,spaceship_missiles"
                 + ",spaceship_defensive,spaceship_auto_weapons,spaceship_power,spaceship_radar,spaceship_hud,zero_gravity_general,zero_gravity_eva,IFCS_controls";
     private static readonly ConfigurationProperty _scActionmaps = 

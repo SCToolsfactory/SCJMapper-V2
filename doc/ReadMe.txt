@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.25 - Build 59 BETA
-(c) Cassini, StandardToaster - 01-Jul-2016
+SC Joystick Mapper V 2.26 - Build 60 BETA
+(c) Cassini, StandardToaster - 27-Aug-2016
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.25)
-SCJMapper.exe.config         Program config (V2.25)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.26)
+SCJMapper.exe.config         Program config (V2.26)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -29,6 +29,9 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.26 - BETA Build 60
+- add - new actionmaps from SC 2.5.0 alpha to choose from in Settings
+- update - fallback default profile from SC 2.5.0 alpha
 V 2.25 - BETA Build 59
 - fix - an issue in parsing options from imported maps
 - add - an option to show the actiontree as CSV list with more/less details (change in Settings)
