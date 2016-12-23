@@ -399,8 +399,6 @@ namespace SCJMapper_V2.SC
 
       Boolean retVal = true;
 
-      if ( ActionMapsCls.ActionMaps.Length == 0 ) ActionMapsCls.LoadSupportedActionMaps( ); // make sure we have them loaded ( refactoring to get a singleton or so...)
-
       try {
         do {
           if ( xr.IsStartElement( ) ) {
@@ -472,11 +470,14 @@ namespace SCJMapper_V2.SC
     {
       log.Debug( "DProfileReader.fromXML - Entry" );
 
+      if ( ActionMapsCls.ActionMaps.Length == 0 ) ActionMapsCls.LoadSupportedActionMaps( ActionMapList( xml ) ); // make sure we have them loaded ( refactoring to get a singleton or so...)
+
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;
       settings.IgnoreWhitespace = true;
       settings.IgnoreComments = true;
       XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
+
 
       m_nodeNameStack = new Stack<String>( );
       m_aMap = new Dictionary<String, ActionMap>( );
@@ -489,13 +490,39 @@ namespace SCJMapper_V2.SC
       ValidContent &= ReadActivationModes( reader );
 
       m_nodeNameStack.Push( "profile" ); // we are already in the XML now
+
       ValidContent &= ReadXML( reader );
 
       return ValidContent;
     }
 
+    /// <summary>
+    /// Returns the acionmals contained in the profile xml string
+    /// </summary>
+    /// <param name="xml">A default profile XML string</param>
+    /// <returns>A filled SCActionMapList object</returns>
+    public SCActionMapList ActionMapList(string xml )
+    {
+      SCActionMapList aml = new SCActionMapList();
 
+      log.Debug( "DProfileReader.ActionMapList - Entry" );
 
+      XmlReaderSettings settings = new XmlReaderSettings( );
+      settings.ConformanceLevel = ConformanceLevel.Fragment;
+      settings.IgnoreWhitespace = true;
+      settings.IgnoreComments = true;
+      XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
+
+      reader.Read( );
+      if ( !reader.ReadToFollowing( "actionmap" ) ) return aml; // ERROR empty one..
+      do {
+        string attr = reader["name"];
+        if ( !string.IsNullOrEmpty( attr ) )
+          aml.AddActionMap( attr );
+      } while ( reader.ReadToFollowing( "actionmap" ) );
+
+      return aml;
+    }
 
   }
 }

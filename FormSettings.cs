@@ -64,6 +64,8 @@ namespace SCJMapper_V2
       for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
         if ( m_owner.IgnoreActionmaps.Contains( "," + chkLbActionMaps.Items[i].ToString( ) + "," ) ) {
           chkLbActionMaps.SetItemChecked( i, true );
+        } else {
+          chkLbActionMaps.SetItemChecked( i, false ); // 20161223: fix checked items and Canceled
         }
       }
 
@@ -104,7 +106,7 @@ namespace SCJMapper_V2
       // Ignore actionmaps
       String ignore = ",";
       for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
-        if ( chkLbActionMaps.GetItemChecked( i ) ) {
+        if ( chkLbActionMaps.GetItemCheckState( i ) == CheckState.Checked ) {
           ignore += chkLbActionMaps.Items[i].ToString( ) + ",";
         }
       }
@@ -190,6 +192,6 @@ namespace SCJMapper_V2
       }
     }
 
- 
+
   }
 }

@@ -25,13 +25,6 @@ namespace SCJMapper_V2
     private static readonly ConfigurationProperty _msSenseLimit =
       new ConfigurationProperty( "msSenseLimit", typeof( int ), ( int )150, ConfigurationPropertyOptions.None );
 
-    // The scActionmaps property.
-    private static String _defaultActionmaps = "default,multiplayer,singleplayer,invite,player,player_choice,prone,flycam,vehicle_general,vehicle_driver,vehicle_gunner"
-                + ",spaceship_general,spaceship_view,spaceship_movement,spaceship_targeting,spaceship_turret,spaceship_weapons,spaceship_missiles"
-                + ",spaceship_defensive,spaceship_auto_weapons,spaceship_power,spaceship_radar,spaceship_hud,zero_gravity_general,zero_gravity_eva,IFCS_controls";
-    private static readonly ConfigurationProperty _scActionmaps = 
-      new ConfigurationProperty( "scActionmaps", typeof( String ), (String)_defaultActionmaps, ConfigurationPropertyOptions.None );
-
     // ctor
     public AppConfiguration( )
     {
@@ -40,7 +33,6 @@ namespace SCJMapper_V2
       _Properties.Add( _jsSenseLimit );
       _Properties.Add( _gpSenseLimit );
       _Properties.Add( _msSenseLimit );
-      _Properties.Add( _scActionmaps );
     }
 
 
@@ -168,22 +160,6 @@ namespace SCJMapper_V2
         }
       }
 
-      /// <summary>
-      /// The actionmaps supported
-      /// </summary>
-      static public String scActionmaps
-      {
-        get
-        {
-          AppConfiguration s = GetAppSection( );
-          if ( s != null ) {
-            // get rid of blanks and CR,LFs from the config file
-            String t = s.scActionmaps.Replace( " ", "" ).Replace( String.Format( "\n" ), "" ).Replace( String.Format( "\r" ), "" );
-            return t;
-          }
-          else return _defaultActionmaps; // default if things go wrong...
-        }
-      }
     }
 
 

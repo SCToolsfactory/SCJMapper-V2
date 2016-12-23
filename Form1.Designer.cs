@@ -70,22 +70,24 @@
       this.btAssign = new System.Windows.Forms.Button();
       this.treeView1 = new System.Windows.Forms.TreeView();
       this.cmAddDel = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.tdiCollapseAll = new System.Windows.Forms.ToolStripMenuItem();
+      this.tdiExpandAll = new System.Windows.Forms.ToolStripMenuItem();
+      this.tdiSGroup1 = new System.Windows.Forms.ToolStripSeparator();
       this.tdiAssignBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiBlendBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiClearBinding = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+      this.tdiSGroup2 = new System.Windows.Forms.ToolStripSeparator();
       this.tdiAddBinding = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiDelBinding = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+      this.tdiSGroup3 = new System.Windows.Forms.ToolStripSeparator();
       this.tdiTxDefActivationMode = new System.Windows.Forms.ToolStripTextBox();
       this.tdiCbxActivation = new System.Windows.Forms.ToolStripComboBox();
-      this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+      this.tdiSGroup4 = new System.Windows.Forms.ToolStripSeparator();
       this.tdiAddMod1 = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiAddMod2 = new System.Windows.Forms.ToolStripMenuItem();
       this.tdiAddMod3 = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
-      this.UC_JoyPanel = new SCJMapper_V2.Joystick.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -147,6 +149,7 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+      this.UC_JoyPanel = new SCJMapper_V2.Joystick.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmMouseEntry.SuspendLayout();
@@ -508,23 +511,47 @@
       // cmAddDel
       // 
       this.cmAddDel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tdiCollapseAll,
+            this.tdiExpandAll,
+            this.tdiSGroup1,
             this.tdiAssignBinding,
             this.tdiBlendBinding,
             this.tdiClearBinding,
-            this.toolStripSeparator2,
+            this.tdiSGroup2,
             this.tdiAddBinding,
             this.tdiDelBinding,
-            this.toolStripSeparator5,
+            this.tdiSGroup3,
             this.tdiTxDefActivationMode,
             this.tdiCbxActivation,
-            this.toolStripSeparator6,
+            this.tdiSGroup4,
             this.tdiAddMod1,
             this.tdiAddMod2,
             this.tdiAddMod3});
       this.cmAddDel.Name = "cmAddDel";
-      this.cmAddDel.Size = new System.Drawing.Size(221, 407);
+      this.cmAddDel.Size = new System.Drawing.Size(221, 479);
       this.cmAddDel.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.cmAddDel_Closed);
       this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
+      // 
+      // tdiCollapseAll
+      // 
+      this.tdiCollapseAll.ForeColor = System.Drawing.Color.MediumBlue;
+      this.tdiCollapseAll.Name = "tdiCollapseAll";
+      this.tdiCollapseAll.Size = new System.Drawing.Size(220, 22);
+      this.tdiCollapseAll.Text = "Collapse to selected";
+      this.tdiCollapseAll.Click += new System.EventHandler(this.tdiCollapseAll_Click);
+      // 
+      // tdiExpandAll
+      // 
+      this.tdiExpandAll.ForeColor = System.Drawing.Color.MediumBlue;
+      this.tdiExpandAll.Name = "tdiExpandAll";
+      this.tdiExpandAll.Size = new System.Drawing.Size(220, 22);
+      this.tdiExpandAll.Text = "Expand all Mappings";
+      this.tdiExpandAll.Click += new System.EventHandler(this.tdiExpandAll_Click);
+      // 
+      // tdiSGroup1
+      // 
+      this.tdiSGroup1.Name = "tdiSGroup1";
+      this.tdiSGroup1.Size = new System.Drawing.Size(217, 6);
       // 
       // tdiAssignBinding
       // 
@@ -547,10 +574,10 @@
       this.tdiClearBinding.Text = "Clear Mapping";
       this.tdiClearBinding.Click += new System.EventHandler(this.tdiClearBinding_Click);
       // 
-      // toolStripSeparator2
+      // tdiSGroup2
       // 
-      this.toolStripSeparator2.Name = "toolStripSeparator2";
-      this.toolStripSeparator2.Size = new System.Drawing.Size(217, 6);
+      this.tdiSGroup2.Name = "tdiSGroup2";
+      this.tdiSGroup2.Size = new System.Drawing.Size(217, 6);
       // 
       // tdiAddBinding
       // 
@@ -566,10 +593,10 @@
       this.tdiDelBinding.Text = "Delete Mapping";
       this.tdiDelBinding.Click += new System.EventHandler(this.tdiDelBinding_Click);
       // 
-      // toolStripSeparator5
+      // tdiSGroup3
       // 
-      this.toolStripSeparator5.Name = "toolStripSeparator5";
-      this.toolStripSeparator5.Size = new System.Drawing.Size(217, 6);
+      this.tdiSGroup3.Name = "tdiSGroup3";
+      this.tdiSGroup3.Size = new System.Drawing.Size(217, 6);
       // 
       // tdiTxDefActivationMode
       // 
@@ -593,10 +620,10 @@
       this.tdiCbxActivation.Size = new System.Drawing.Size(160, 180);
       this.tdiCbxActivation.Click += new System.EventHandler(this.tdiCbxActivation_Click);
       // 
-      // toolStripSeparator6
+      // tdiSGroup4
       // 
-      this.toolStripSeparator6.Name = "toolStripSeparator6";
-      this.toolStripSeparator6.Size = new System.Drawing.Size(217, 6);
+      this.tdiSGroup4.Name = "tdiSGroup4";
+      this.tdiSGroup4.Size = new System.Drawing.Size(217, 6);
       // 
       // tdiAddMod1
       // 
@@ -651,15 +678,6 @@
       this.tabJS1.Size = new System.Drawing.Size(280, 342);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(274, 336);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -1349,6 +1367,15 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(274, 336);
+      this.UC_JoyPanel.TabIndex = 0;
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1478,7 +1505,7 @@
     private System.Windows.Forms.CheckBox cbxInvStrafeLon;
     private System.Windows.Forms.CheckBox cbxInvThrottle;
     private System.Windows.Forms.Button btDumpLog;
-    private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+    private System.Windows.Forms.ToolStripSeparator tdiSGroup2;
     private System.Windows.Forms.ToolStripMenuItem tdiBlendBinding;
     private System.Windows.Forms.ToolStripMenuItem tdiClearBinding;
     private System.Windows.Forms.ToolStripMenuItem tdiAssignBinding;
@@ -1490,14 +1517,14 @@
     private System.Windows.Forms.ToolStripMenuItem tmeWUp;
     private System.Windows.Forms.ToolStripMenuItem tmeWDown;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-    private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+    private System.Windows.Forms.ToolStripSeparator tdiSGroup3;
     private System.Windows.Forms.ToolStripMenuItem tdiAddMod1;
     private System.Windows.Forms.ToolStripMenuItem tdiAddMod2;
     private System.Windows.Forms.ToolStripMenuItem tdiAddMod3;
     private System.Windows.Forms.Button btMakeMod;
     private System.Windows.Forms.Label lblPTU;
     private System.Windows.Forms.ToolStripComboBox tdiCbxActivation;
-    private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+    private System.Windows.Forms.ToolStripSeparator tdiSGroup4;
     private System.Windows.Forms.ToolStripTextBox tdiTxDefActivationMode;
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Label lblProfileUsed;
@@ -1506,6 +1533,9 @@
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
     private System.Windows.Forms.Button btDumpProfile;
     private System.Windows.Forms.Button btTable;
+    private System.Windows.Forms.ToolStripMenuItem tdiCollapseAll;
+    private System.Windows.Forms.ToolStripMenuItem tdiExpandAll;
+    private System.Windows.Forms.ToolStripSeparator tdiSGroup1;
   }
 }
 

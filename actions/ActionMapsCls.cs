@@ -41,11 +41,11 @@ namespace SCJMapper_V2
 
     // actionmap names to gather (do we need them to be cofigurable ??)
     public static String[] ActionMaps = { };
-    public static void LoadSupportedActionMaps( )
+
+    public static void LoadSupportedActionMaps( SCActionMapList aml )
     {
       // load actionmaps
-      String acm = AppConfiguration.AppConfig.scActionmaps;
-      ActionMaps = acm.Split( new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries );
+      ActionMaps = aml.ActionMaps;
     }
 
     #endregion Static Part of ActionMaps
@@ -181,7 +181,7 @@ namespace SCJMapper_V2
 
       CreateNewOptions( );
 
-      LoadSupportedActionMaps( ); // get them from config
+      //LoadSupportedActionMaps( ); // get them from config @@@@@@@@@
     }
 
 
