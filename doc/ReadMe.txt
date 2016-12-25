@@ -32,6 +32,7 @@ Changelog:
 V 2.27 - BETA Build 61
 - add - Collapse/Expand in context menu in Mapping tree
 - improvement - actionmaps are taken from the defaultProfile and will no longer need a program update
+- improvement - rename Blend to Disable
 - fix - an issue in Seetings for actionmap ignore handling
 - update - fallback default profile from SC 2.6.0 alpha
 - update - doc SCJMapper_QGuide V2.27beta.pdf
