@@ -12,14 +12,14 @@
   <xs:element name="DS_ActionMaps" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DS_ActionMaps" msprop:Generator_UserDSName="DS_ActionMaps">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="T_ActionMap" msprop:Generator_TableClassName="T_ActionMapDataTable" msprop:Generator_TableVarName="tableT_ActionMap" msprop:Generator_RowChangedName="T_ActionMapRowChanged" msprop:Generator_TablePropName="T_ActionMap" msprop:Generator_RowDeletingName="T_ActionMapRowDeleting" msprop:Generator_RowChangingName="T_ActionMapRowChanging" msprop:Generator_RowEvHandlerName="T_ActionMapRowChangeEventHandler" msprop:Generator_RowDeletedName="T_ActionMapRowDeleted" msprop:Generator_RowClassName="T_ActionMapRow" msprop:Generator_UserTableName="T_ActionMap" msprop:Generator_RowEvArgName="T_ActionMapRowChangeEvent">
+        <xs:element name="T_ActionMap" msprop:Generator_TableClassName="T_ActionMapDataTable" msprop:Generator_TableVarName="tableT_ActionMap" msprop:Generator_TablePropName="T_ActionMap" msprop:Generator_RowDeletingName="T_ActionMapRowDeleting" msprop:Generator_RowChangingName="T_ActionMapRowChanging" msprop:Generator_RowEvHandlerName="T_ActionMapRowChangeEventHandler" msprop:Generator_RowDeletedName="T_ActionMapRowDeleted" msprop:Generator_UserTableName="T_ActionMap" msprop:Generator_RowChangedName="T_ActionMapRowChanged" msprop:Generator_RowEvArgName="T_ActionMapRowChangeEvent" msprop:Generator_RowClassName="T_ActionMapRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID_ActionMap" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnID_ActionMap" msprop:Generator_ColumnPropNameInRow="ID_ActionMap" msprop:Generator_ColumnPropNameInTable="ID_ActionMapColumn" msprop:Generator_UserColumnName="ID_ActionMap" type="xs:string" default="&quot;&quot;" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="T_Action" msprop:Generator_TableClassName="T_ActionDataTable" msprop:Generator_TableVarName="tableT_Action" msprop:Generator_RowChangedName="T_ActionRowChanged" msprop:Generator_TablePropName="T_Action" msprop:Generator_RowDeletingName="T_ActionRowDeleting" msprop:Generator_RowChangingName="T_ActionRowChanging" msprop:Generator_RowEvHandlerName="T_ActionRowChangeEventHandler" msprop:Generator_RowDeletedName="T_ActionRowDeleted" msprop:Generator_RowClassName="T_ActionRow" msprop:Generator_UserTableName="T_Action" msprop:Generator_RowEvArgName="T_ActionRowChangeEvent">
+        <xs:element name="T_Action" msprop:Generator_TableClassName="T_ActionDataTable" msprop:Generator_TableVarName="tableT_Action" msprop:Generator_TablePropName="T_Action" msprop:Generator_RowDeletingName="T_ActionRowDeleting" msprop:Generator_RowChangingName="T_ActionRowChanging" msprop:Generator_RowEvHandlerName="T_ActionRowChangeEventHandler" msprop:Generator_RowDeletedName="T_ActionRowDeleted" msprop:Generator_UserTableName="T_Action" msprop:Generator_RowChangedName="T_ActionRowChanged" msprop:Generator_RowEvArgName="T_ActionRowChangeEvent" msprop:Generator_RowClassName="T_ActionRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID_Action" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnID_Action" msprop:Generator_ColumnPropNameInRow="ID_Action" msprop:Generator_ColumnPropNameInTable="ID_ActionColumn" msprop:Generator_UserColumnName="ID_Action" type="xs:string" default="&quot;&quot;" />
@@ -31,7 +31,7 @@
               <xs:element name="AddBind" msdata:ReadOnly="true" msdata:Caption="addbind Cmd" msprop:Generator_ColumnVarNameInTable="columnAddBind" msprop:Generator_ColumnPropNameInRow="AddBind" msprop:Generator_ColumnPropNameInTable="AddBindColumn" msprop:Generator_UserColumnName="AddBind" type="xs:boolean" default="false" minOccurs="0" />
               <xs:element name="Usr_Binding" msdata:Caption="User Binding" msprop:Generator_ColumnVarNameInTable="columnUsr_Binding" msprop:Generator_ColumnPropNameInRow="Usr_Binding" msprop:Generator_ColumnPropNameInTable="Usr_BindingColumn" msprop:Generator_UserColumnName="Usr_Binding" type="xs:string" minOccurs="0" />
               <xs:element name="Usr_Modifier" msdata:Caption="User Act.Mode" msprop:Generator_ColumnVarNameInTable="columnUsr_Modifier" msprop:Generator_ColumnPropNameInRow="Usr_Modifier" msprop:Generator_ColumnPropNameInTable="Usr_ModifierColumn" msprop:Generator_UserColumnName="Usr_Modifier" type="xs:string" minOccurs="0" />
-              <xs:element name="Blended" msprop:Generator_ColumnVarNameInTable="columnBlended" msprop:Generator_ColumnPropNameInRow="Blended" msprop:Generator_ColumnPropNameInTable="BlendedColumn" msprop:Generator_UserColumnName="Blended" type="xs:boolean" default="false" />
+              <xs:element name="Disabled" msprop:Generator_ColumnVarNameInTable="columnDisabled" msprop:Generator_ColumnPropNameInRow="Disabled" msprop:Generator_ColumnPropNameInTable="DisabledColumn" msprop:Generator_UserColumnName="Disabled" type="xs:boolean" default="false" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -48,7 +48,7 @@
   </xs:element>
   <xs:annotation>
     <xs:appinfo>
-      <msdata:Relationship name="T_ActionMap_T_Action" msdata:parent="T_ActionMap" msdata:child="T_Action" msdata:parentkey="ID_ActionMap" msdata:childkey="REF_ActionMap" msprop:Generator_UserChildTable="T_Action" msprop:Generator_ChildPropName="GetT_ActionRows" msprop:Generator_UserRelationName="T_ActionMap_T_Action" msprop:Generator_RelationVarName="relationT_ActionMap_T_Action" msprop:Generator_UserParentTable="T_ActionMap" msprop:Generator_ParentPropName="T_ActionMapRow" />
+      <msdata:Relationship name="T_ActionMap_T_Action" msdata:parent="T_ActionMap" msdata:child="T_Action" msdata:parentkey="ID_ActionMap" msdata:childkey="REF_ActionMap" msprop:Generator_UserChildTable="T_Action" msprop:Generator_ChildPropName="GetT_ActionRows" msprop:Generator_UserRelationName="T_ActionMap_T_Action" msprop:Generator_ParentPropName="T_ActionMapRow" msprop:Generator_RelationVarName="relationT_ActionMap_T_Action" msprop:Generator_UserParentTable="T_ActionMap" />
     </xs:appinfo>
   </xs:annotation>
 </xs:schema>

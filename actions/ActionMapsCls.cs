@@ -271,7 +271,7 @@ namespace SCJMapper_V2
             ar.Def_Modifier = ac.defActivationMode.Name;
             ar.Usr_Binding = ac.inputList[ilIndex].DevInput;
             ar.Usr_Modifier = ac.inputList[ilIndex].ActivationMode.Name;
-            ar.Blended = DeviceCls.IsBlendedInput( ac.inputList[ilIndex].Input );
+            ar.Disabled = DeviceCls.IsBlendedInput( ac.inputList[ilIndex].Input );
             dsa.T_Action.AddT_ActionRow( ar );
 
             ilIndex++;
@@ -297,7 +297,7 @@ namespace SCJMapper_V2
               DS_ActionMaps.T_ActionRow ar =dsa.T_Action.FindByID_Action(actionID);
               ar.Usr_Binding = ac.inputList[ilIndex].DevInput;
               ar.Usr_Modifier = ac.inputList[ilIndex].ActivationMode.Name;
-              ar.Blended = DeviceCls.IsBlendedInput( ac.inputList[ilIndex].Input );
+              ar.Disabled = DeviceCls.IsBlendedInput( ac.inputList[ilIndex].Input );
               ar.AcceptChanges( );
               return;
             }

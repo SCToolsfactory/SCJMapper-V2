@@ -99,7 +99,7 @@ namespace SCJMapper_V2.Table
 
     static public string DevInput ( DS_ActionMaps.T_ActionRow acr )
     {
-      if ( acr.Blended )
+      if ( acr.Disabled )
         return DeviceCls.BlendedInput;
       else
         return acr.Usr_Binding;

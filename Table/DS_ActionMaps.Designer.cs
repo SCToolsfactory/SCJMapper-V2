@@ -599,7 +599,7 @@ namespace SCJMapper_V2.Table {
             
             private global::System.Data.DataColumn columnUsr_Modifier;
             
-            private global::System.Data.DataColumn columnBlended;
+            private global::System.Data.DataColumn columnDisabled;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -708,9 +708,9 @@ namespace SCJMapper_V2.Table {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn BlendedColumn {
+            public global::System.Data.DataColumn DisabledColumn {
                 get {
-                    return this.columnBlended;
+                    return this.columnDisabled;
                 }
             }
             
@@ -751,7 +751,7 @@ namespace SCJMapper_V2.Table {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public T_ActionRow AddT_ActionRow(string ID_Action, T_ActionMapRow parentT_ActionMapRowByT_ActionMap_T_Action, string ActionName, string Device, string Def_Binding, string Def_Modifier, bool AddBind, string Usr_Binding, string Usr_Modifier, bool Blended) {
+            public T_ActionRow AddT_ActionRow(string ID_Action, T_ActionMapRow parentT_ActionMapRowByT_ActionMap_T_Action, string ActionName, string Device, string Def_Binding, string Def_Modifier, bool AddBind, string Usr_Binding, string Usr_Modifier, bool Disabled) {
                 T_ActionRow rowT_ActionRow = ((T_ActionRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ID_Action,
@@ -763,7 +763,7 @@ namespace SCJMapper_V2.Table {
                         AddBind,
                         Usr_Binding,
                         Usr_Modifier,
-                        Blended};
+                        Disabled};
                 if ((parentT_ActionMapRowByT_ActionMap_T_Action != null)) {
                     columnValuesArray[1] = parentT_ActionMapRowByT_ActionMap_T_Action[0];
                 }
@@ -805,7 +805,7 @@ namespace SCJMapper_V2.Table {
                 this.columnAddBind = base.Columns["AddBind"];
                 this.columnUsr_Binding = base.Columns["Usr_Binding"];
                 this.columnUsr_Modifier = base.Columns["Usr_Modifier"];
-                this.columnBlended = base.Columns["Blended"];
+                this.columnDisabled = base.Columns["Disabled"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -829,8 +829,8 @@ namespace SCJMapper_V2.Table {
                 base.Columns.Add(this.columnUsr_Binding);
                 this.columnUsr_Modifier = new global::System.Data.DataColumn("Usr_Modifier", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnUsr_Modifier);
-                this.columnBlended = new global::System.Data.DataColumn("Blended", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnBlended);
+                this.columnDisabled = new global::System.Data.DataColumn("Disabled", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDisabled);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnID_Action}, true));
                 this.columnID_Action.AllowDBNull = false;
@@ -854,8 +854,8 @@ namespace SCJMapper_V2.Table {
                 this.columnAddBind.DefaultValue = ((bool)(false));
                 this.columnUsr_Binding.Caption = "User Binding";
                 this.columnUsr_Modifier.Caption = "User Act.Mode";
-                this.columnBlended.AllowDBNull = false;
-                this.columnBlended.DefaultValue = ((bool)(false));
+                this.columnDisabled.AllowDBNull = false;
+                this.columnDisabled.DefaultValue = ((bool)(false));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1164,12 +1164,12 @@ namespace SCJMapper_V2.Table {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Blended {
+            public bool Disabled {
                 get {
-                    return ((bool)(this[this.tableT_Action.BlendedColumn]));
+                    return ((bool)(this[this.tableT_Action.DisabledColumn]));
                 }
                 set {
-                    this[this.tableT_Action.BlendedColumn] = value;
+                    this[this.tableT_Action.DisabledColumn] = value;
                 }
             }
             

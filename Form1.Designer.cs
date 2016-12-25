@@ -88,6 +88,7 @@
       this.tdiAddMod3 = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
+      this.UC_JoyPanel = new SCJMapper_V2.Joystick.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -149,7 +150,6 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.UC_JoyPanel = new SCJMapper_V2.Joystick.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmMouseEntry.SuspendLayout();
@@ -338,7 +338,7 @@
       this.btBlend.Name = "btBlend";
       this.btBlend.Size = new System.Drawing.Size(73, 25);
       this.btBlend.TabIndex = 16;
-      this.btBlend.Text = "Blend";
+      this.btBlend.Text = "Disable";
       this.btBlend.UseVisualStyleBackColor = true;
       this.btBlend.Click += new System.EventHandler(this.btBlend_Click);
       // 
@@ -564,7 +564,7 @@
       // 
       this.tdiBlendBinding.Name = "tdiBlendBinding";
       this.tdiBlendBinding.Size = new System.Drawing.Size(220, 22);
-      this.tdiBlendBinding.Text = "Blend Mapping";
+      this.tdiBlendBinding.Text = "Disable Mapping";
       this.tdiBlendBinding.Click += new System.EventHandler(this.tdiBlendBinding_Click);
       // 
       // tdiClearBinding
@@ -678,6 +678,15 @@
       this.tabJS1.Size = new System.Drawing.Size(280, 342);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(274, 336);
+      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -1366,15 +1375,6 @@
       this.statusStrip1.Size = new System.Drawing.Size(1054, 30);
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(274, 336);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm
       // 

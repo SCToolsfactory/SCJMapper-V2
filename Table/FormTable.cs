@@ -294,7 +294,7 @@ namespace SCJMapper_V2.Table
 
       foreach ( DataGridViewRow row in DGV.Rows ) {
         if (string.IsNullOrEmpty((string) row.Cells[DGV.Columns["Usr_Binding"].Index].Value )) 
-          row.Cells[DGV.Columns["Blended"].Index].Value = true;
+          row.Cells[DGV.Columns["Disabled"].Index].Value = true;
       }
     }
 
@@ -303,14 +303,14 @@ namespace SCJMapper_V2.Table
     {
       // Immediately handle changes of the Blended Checkbox - workaround the regular DGV behavior
       if ( !DGV.IsCurrentCellDirty ) return;
-      if ( DGV.CurrentCell.ColumnIndex != DGV.Columns["Blended"].Index ) return;
+      if ( DGV.CurrentCell.ColumnIndex != DGV.Columns["Disabled"].Index ) return;
 
       // only if dirty and the Blended column ..
       // it still has it's previous value i.e. inverse the logic here - commit the value imediately
-      if ( ( bool )DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Blended"].Index].Value == false ) {
-        DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Blended"].Index].Value = true; // toggle value - triggers the ValueChanged Event below
+      if ( ( bool )DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value == false ) {
+        DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value = true; // toggle value - triggers the ValueChanged Event below
       } else {
-        DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Blended"].Index].Value = false;
+        DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value = false;
       }
       DGV.NotifyCurrentCellDirty( false ); // have set the value - so set not dirty anymore
     }
@@ -318,9 +318,9 @@ namespace SCJMapper_V2.Table
     private void DGV_CellValueChanged( object sender, DataGridViewCellEventArgs e )
     {
       // set the Usr_Binding only if Blended column items Changes
-      if ( e.ColumnIndex != DGV.Columns["Blended"].Index ) return;
+      if ( e.ColumnIndex != DGV.Columns["Disabled"].Index ) return;
 
-      if ( ( bool )DGV.Rows[e.RowIndex].Cells[DGV.Columns["Blended"].Index].Value == true )
+      if ( ( bool )DGV.Rows[e.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value == true )
         DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = DeviceCls.BlendedInput;
       else
         DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = ""; // don't know anything else...

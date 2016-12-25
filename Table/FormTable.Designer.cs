@@ -31,13 +31,12 @@
       System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTable));
       this.DGV = new System.Windows.Forms.DataGridView();
-      this.dS_ActionMaps = new SCJMapper_V2.Table.DS_ActionMaps();
-      this.dSActionMapsBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.txFilterAction = new System.Windows.Forms.TextBox();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.panel2 = new System.Windows.Forms.Panel();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.panel1 = new System.Windows.Forms.Panel();
+      this.btBlendAll = new System.Windows.Forms.Button();
       this.btCancelEdit = new System.Windows.Forms.Button();
       this.chkEditBlend = new System.Windows.Forms.CheckBox();
       this.btUpdateFromEdit = new System.Windows.Forms.Button();
@@ -53,13 +52,14 @@
       this.chkGamepad = new System.Windows.Forms.CheckBox();
       this.chkJoystick = new System.Windows.Forms.CheckBox();
       this.label1 = new System.Windows.Forms.Label();
-      this.btBlendAll = new System.Windows.Forms.Button();
+      this.dS_ActionMaps = new SCJMapper_V2.Table.DS_ActionMaps();
+      this.dSActionMapsBindingSource = new System.Windows.Forms.BindingSource(this.components);
       ((System.ComponentModel.ISupportInitialize)(this.DGV)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.dS_ActionMaps)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.dSActionMapsBindingSource)).BeginInit();
       this.tableLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel2.SuspendLayout();
       this.panel1.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.dS_ActionMaps)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dSActionMapsBindingSource)).BeginInit();
       this.SuspendLayout();
       // 
       // DGV
@@ -83,16 +83,6 @@
       this.DGV.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.DGV_ColumnWidthChanged);
       this.DGV.CurrentCellDirtyStateChanged += new System.EventHandler(this.DGV_CurrentCellDirtyStateChanged);
       this.DGV.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_RowHeaderMouseClick);
-      // 
-      // dS_ActionMaps
-      // 
-      this.dS_ActionMaps.DataSetName = "Table.DS_ActionMaps";
-      this.dS_ActionMaps.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-      // 
-      // dSActionMapsBindingSource
-      // 
-      this.dSActionMapsBindingSource.DataSource = this.dS_ActionMaps;
-      this.dSActionMapsBindingSource.Position = 0;
       // 
       // txFilterAction
       // 
@@ -166,6 +156,17 @@
       this.panel1.Size = new System.Drawing.Size(288, 202);
       this.panel1.TabIndex = 1;
       // 
+      // btBlendAll
+      // 
+      this.btBlendAll.Enabled = false;
+      this.btBlendAll.Location = new System.Drawing.Point(183, 122);
+      this.btBlendAll.Name = "btBlendAll";
+      this.btBlendAll.Size = new System.Drawing.Size(97, 42);
+      this.btBlendAll.TabIndex = 14;
+      this.btBlendAll.Text = "Disable all Unmapped";
+      this.btBlendAll.UseVisualStyleBackColor = true;
+      this.btBlendAll.Click += new System.EventHandler(this.btBlendAll_Click);
+      // 
       // btCancelEdit
       // 
       this.btCancelEdit.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -184,11 +185,11 @@
       this.chkEditBlend.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.chkEditBlend.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.chkEditBlend.ForeColor = System.Drawing.Color.Firebrick;
-      this.chkEditBlend.Location = new System.Drawing.Point(76, 126);
+      this.chkEditBlend.Location = new System.Drawing.Point(76, 135);
       this.chkEditBlend.Name = "chkEditBlend";
-      this.chkEditBlend.Size = new System.Drawing.Size(96, 17);
+      this.chkEditBlend.Size = new System.Drawing.Size(87, 17);
       this.chkEditBlend.TabIndex = 12;
-      this.chkEditBlend.Text = "Edit Blending";
+      this.chkEditBlend.Text = "Edit Disable";
       this.chkEditBlend.UseVisualStyleBackColor = true;
       this.chkEditBlend.CheckedChanged += new System.EventHandler(this.chkEditBlend_CheckedChanged);
       // 
@@ -322,16 +323,15 @@
       this.label1.TabIndex = 2;
       this.label1.Text = "Action Filter";
       // 
-      // btBlendAll
+      // dS_ActionMaps
       // 
-      this.btBlendAll.Enabled = false;
-      this.btBlendAll.Location = new System.Drawing.Point(183, 122);
-      this.btBlendAll.Name = "btBlendAll";
-      this.btBlendAll.Size = new System.Drawing.Size(97, 23);
-      this.btBlendAll.TabIndex = 14;
-      this.btBlendAll.Text = "Blend All";
-      this.btBlendAll.UseVisualStyleBackColor = true;
-      this.btBlendAll.Click += new System.EventHandler(this.btBlendAll_Click);
+      this.dS_ActionMaps.DataSetName = "Table.DS_ActionMaps";
+      this.dS_ActionMaps.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+      // 
+      // dSActionMapsBindingSource
+      // 
+      this.dSActionMapsBindingSource.DataSource = this.dS_ActionMaps;
+      this.dSActionMapsBindingSource.Position = 0;
       // 
       // FormTable
       // 
@@ -350,12 +350,12 @@
       this.LocationChanged += new System.EventHandler(this.FormTable_LocationChanged);
       this.SizeChanged += new System.EventHandler(this.FormTable_SizeChanged);
       ((System.ComponentModel.ISupportInitialize)(this.DGV)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.dS_ActionMaps)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.dSActionMapsBindingSource)).EndInit();
       this.tableLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel2.ResumeLayout(false);
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.dS_ActionMaps)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dSActionMapsBindingSource)).EndInit();
       this.ResumeLayout(false);
 
     }
