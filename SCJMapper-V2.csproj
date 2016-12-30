@@ -26,8 +26,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>61</ApplicationRevision>
-    <ApplicationVersion>2.27.0.%2a</ApplicationVersion>
+    <ApplicationRevision>62</ApplicationRevision>
+    <ApplicationVersion>2.28.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -143,7 +143,7 @@
     <Compile Include="Table\FormTable.Designer.cs">
       <DependentUpon>FormTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="Joystick\DeviceDeadzoneParameter.cs" />
+    <Compile Include="Joystick\DeviceOptionParameter.cs" />
     <Compile Include="Gamepad\GamepadCls.cs" />
     <Compile Include="Joystick\JsReassingList.cs" />
     <Compile Include="Keyboard\KeyboardCls.cs" />
@@ -256,6 +256,15 @@
       <DependentUpon>UC_GpadPanel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="graphics\SB_LA_Helipad.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="graphics\SB_OutThere3.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="graphics\SB_Sunset.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Table\DS_ActionMaps.xsc">
       <DependentUpon>DS_ActionMaps.xsd</DependentUpon>
     </None>

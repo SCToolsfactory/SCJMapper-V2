@@ -1010,7 +1010,7 @@ namespace SCJMapper_V2
     {
       log.Debug( "FindText - Entry" );
 
-      foreach ( ActionTreeNode tn in Ctrl.Nodes ) {
+      foreach ( ActionTreeNode tn in m_MasterTree.Nodes ) {
         if ( String.IsNullOrEmpty( actionmap ) || ( tn.Text == actionmap ) ) {
           // have to search nodes of nodes
           foreach ( ActionTreeNode stn in tn.Nodes ) {

@@ -32,13 +32,14 @@
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormJSCalCurve));
       this.glControl1 = new OpenTK.GLControl();
       this.tlp = new System.Windows.Forms.TableLayoutPanel();
-      this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+      this.tlpData = new System.Windows.Forms.TableLayoutPanel();
       this.panel2 = new System.Windows.Forms.Panel();
-      this.panel3 = new System.Windows.Forms.Panel();
+      this.pnlYaw = new System.Windows.Forms.Panel();
+      this.lblYnt = new System.Windows.Forms.Label();
       this.cbxYinvert = new System.Windows.Forms.CheckBox();
       this.cbxYpts = new System.Windows.Forms.CheckBox();
       this.cbxYexpo = new System.Windows.Forms.CheckBox();
-      this.cbxYsense = new System.Windows.Forms.CheckBox();
+      this.cbxYsat = new System.Windows.Forms.CheckBox();
       this.cbxYdeadzone = new System.Windows.Forms.CheckBox();
       this.label25 = new System.Windows.Forms.Label();
       this.label24 = new System.Windows.Forms.Label();
@@ -49,16 +50,17 @@
       this.lblYin2 = new System.Windows.Forms.Label();
       this.lblYout1 = new System.Windows.Forms.Label();
       this.lblYin1 = new System.Windows.Forms.Label();
-      this.lblYsense = new System.Windows.Forms.Label();
+      this.lblYsat = new System.Windows.Forms.Label();
       this.lblYexponent = new System.Windows.Forms.Label();
       this.lblYdeadzone = new System.Windows.Forms.Label();
       this.lblYCmd = new System.Windows.Forms.Label();
-      this.label1 = new System.Windows.Forms.Label();
-      this.panel4 = new System.Windows.Forms.Panel();
+      this.lblYaw = new System.Windows.Forms.Label();
+      this.pnlPitch = new System.Windows.Forms.Panel();
+      this.lblPnt = new System.Windows.Forms.Label();
       this.cbxPinvert = new System.Windows.Forms.CheckBox();
       this.cbxPpts = new System.Windows.Forms.CheckBox();
       this.cbxPexpo = new System.Windows.Forms.CheckBox();
-      this.cbxPsense = new System.Windows.Forms.CheckBox();
+      this.cbxPsat = new System.Windows.Forms.CheckBox();
       this.cbxPdeadzone = new System.Windows.Forms.CheckBox();
       this.label26 = new System.Windows.Forms.Label();
       this.label27 = new System.Windows.Forms.Label();
@@ -69,16 +71,17 @@
       this.lblPin2 = new System.Windows.Forms.Label();
       this.lblPout1 = new System.Windows.Forms.Label();
       this.lblPin1 = new System.Windows.Forms.Label();
-      this.lblPsense = new System.Windows.Forms.Label();
+      this.lblPsat = new System.Windows.Forms.Label();
       this.lblPexponent = new System.Windows.Forms.Label();
       this.lblPdeadzone = new System.Windows.Forms.Label();
       this.lblPCmd = new System.Windows.Forms.Label();
-      this.label2 = new System.Windows.Forms.Label();
-      this.panel5 = new System.Windows.Forms.Panel();
+      this.lblPitch = new System.Windows.Forms.Label();
+      this.pnlRoll = new System.Windows.Forms.Panel();
+      this.lblRnt = new System.Windows.Forms.Label();
       this.cbxRinvert = new System.Windows.Forms.CheckBox();
       this.cbxRpts = new System.Windows.Forms.CheckBox();
       this.cbxRexpo = new System.Windows.Forms.CheckBox();
-      this.cbxRsense = new System.Windows.Forms.CheckBox();
+      this.cbxRsat = new System.Windows.Forms.CheckBox();
       this.cbxRdeadzone = new System.Windows.Forms.CheckBox();
       this.label35 = new System.Windows.Forms.Label();
       this.label36 = new System.Windows.Forms.Label();
@@ -89,11 +92,11 @@
       this.lblRin2 = new System.Windows.Forms.Label();
       this.lblRout1 = new System.Windows.Forms.Label();
       this.lblRin1 = new System.Windows.Forms.Label();
-      this.lblRsense = new System.Windows.Forms.Label();
+      this.lblRsat = new System.Windows.Forms.Label();
       this.lblRexponent = new System.Windows.Forms.Label();
       this.lblRdeadzone = new System.Windows.Forms.Label();
       this.lblRCmd = new System.Windows.Forms.Label();
-      this.label3 = new System.Windows.Forms.Label();
+      this.lblRoll = new System.Windows.Forms.Label();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.panel9 = new System.Windows.Forms.Panel();
       this.label6 = new System.Windows.Forms.Label();
@@ -104,6 +107,7 @@
       this.lblTurnspeed = new System.Windows.Forms.Label();
       this.slTurnSpeed = new System.Windows.Forms.TrackBar();
       this.panel6 = new System.Windows.Forms.Panel();
+      this.lblNodetext = new System.Windows.Forms.Label();
       this.label12 = new System.Windows.Forms.Label();
       this.cbRuse = new System.Windows.Forms.CheckBox();
       this.cbPuse = new System.Windows.Forms.CheckBox();
@@ -114,15 +118,15 @@
       this.lblRInput = new System.Windows.Forms.Label();
       this.lblPOutput = new System.Windows.Forms.Label();
       this.lblPInput = new System.Windows.Forms.Label();
-      this.label9 = new System.Windows.Forms.Label();
-      this.label7 = new System.Windows.Forms.Label();
+      this.lblLiveRoll = new System.Windows.Forms.Label();
+      this.lblLivePitch = new System.Windows.Forms.Label();
       this.btCopyToAllAxis = new System.Windows.Forms.Button();
-      this.label5 = new System.Windows.Forms.Label();
+      this.lblLiveYaw = new System.Windows.Forms.Label();
       this.label4 = new System.Windows.Forms.Label();
       this.lblYOutput = new System.Windows.Forms.Label();
       this.lblYInput = new System.Windows.Forms.Label();
       this.rbPtExponent = new System.Windows.Forms.RadioButton();
-      this.rbPtSense = new System.Windows.Forms.RadioButton();
+      this.rbPtSaturation = new System.Windows.Forms.RadioButton();
       this.rbPt3 = new System.Windows.Forms.RadioButton();
       this.rbPt2 = new System.Windows.Forms.RadioButton();
       this.rbPt1 = new System.Windows.Forms.RadioButton();
@@ -135,11 +139,9 @@
       this.lblOut1 = new System.Windows.Forms.Label();
       this.lblIn1 = new System.Windows.Forms.Label();
       this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-      this.lblOutSense = new System.Windows.Forms.Label();
-      this.label8 = new System.Windows.Forms.Label();
+      this.lblOutSlider = new System.Windows.Forms.Label();
       this.lblOutExponent = new System.Windows.Forms.Label();
-      this.lblDeadzone = new System.Windows.Forms.Label();
-      this.tbDeadzone = new System.Windows.Forms.TrackBar();
+      this.tbSlider = new System.Windows.Forms.TrackBar();
       this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
       this.rb300 = new System.Windows.Forms.RadioButton();
       this.rbHornet = new System.Windows.Forms.RadioButton();
@@ -147,22 +149,31 @@
       this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
       this.btDone = new System.Windows.Forms.Button();
       this.panel8 = new System.Windows.Forms.Panel();
+      this.rbSunset = new System.Windows.Forms.RadioButton();
+      this.rbOutThere3 = new System.Windows.Forms.RadioButton();
       this.rbSkybox = new System.Windows.Forms.RadioButton();
       this.rbOutThere1 = new System.Windows.Forms.RadioButton();
       this.rbBigSight = new System.Windows.Forms.RadioButton();
       this.rbHighway = new System.Windows.Forms.RadioButton();
+      this.rbHelipad = new System.Windows.Forms.RadioButton();
       this.rbShiodome = new System.Windows.Forms.RadioButton();
       this.rbCanyon = new System.Windows.Forms.RadioButton();
       this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-      this.panel7 = new System.Windows.Forms.Panel();
+      this.pnlAxisSelector = new System.Windows.Forms.Panel();
       this.rbP = new System.Windows.Forms.RadioButton();
       this.rbY = new System.Windows.Forms.RadioButton();
       this.rbR = new System.Windows.Forms.RadioButton();
+      this.panel10 = new System.Windows.Forms.Panel();
+      this.rbTuneStrafe = new System.Windows.Forms.RadioButton();
+      this.rbTuneYPR = new System.Windows.Forms.RadioButton();
+      this.lblGraphDeadzone = new System.Windows.Forms.Label();
+      this.lblGraphSaturation = new System.Windows.Forms.Label();
+      this.rbPtDeadzone = new System.Windows.Forms.RadioButton();
       this.tlp.SuspendLayout();
-      this.tableLayoutPanel2.SuspendLayout();
-      this.panel3.SuspendLayout();
-      this.panel4.SuspendLayout();
-      this.panel5.SuspendLayout();
+      this.tlpData.SuspendLayout();
+      this.pnlYaw.SuspendLayout();
+      this.pnlPitch.SuspendLayout();
+      this.pnlRoll.SuspendLayout();
       this.tableLayoutPanel1.SuspendLayout();
       this.panel9.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.slDamping)).BeginInit();
@@ -170,12 +181,13 @@
       ((System.ComponentModel.ISupportInitialize)(this.slTurnSpeed)).BeginInit();
       this.panel6.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.tbDeadzone)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.tbSlider)).BeginInit();
       this.flowLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel3.SuspendLayout();
       this.panel8.SuspendLayout();
       this.flowLayoutPanel2.SuspendLayout();
-      this.panel7.SuspendLayout();
+      this.pnlAxisSelector.SuspendLayout();
+      this.panel10.SuspendLayout();
       this.SuspendLayout();
       // 
       // glControl1
@@ -196,7 +208,7 @@
       this.tlp.ColumnCount = 2;
       this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
       this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tlp.Controls.Add(this.tableLayoutPanel2, 0, 0);
+      this.tlp.Controls.Add(this.tlpData, 0, 0);
       this.tlp.Controls.Add(this.tableLayoutPanel1, 1, 1);
       this.tlp.Controls.Add(this.glControl1, 1, 0);
       this.tlp.Controls.Add(this.flowLayoutPanel2, 0, 1);
@@ -210,29 +222,30 @@
       this.tlp.Size = new System.Drawing.Size(1184, 916);
       this.tlp.TabIndex = 1;
       // 
-      // tableLayoutPanel2
+      // tlpData
       // 
-      this.tableLayoutPanel2.ColumnCount = 1;
-      this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel2.Controls.Add(this.panel2, 0, 0);
-      this.tableLayoutPanel2.Controls.Add(this.panel3, 0, 1);
-      this.tableLayoutPanel2.Controls.Add(this.panel4, 0, 3);
-      this.tableLayoutPanel2.Controls.Add(this.panel5, 0, 5);
-      this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
-      this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-      this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
-      this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-      this.tableLayoutPanel2.RowCount = 8;
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 155F));
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 155F));
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 155F));
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.tableLayoutPanel2.Size = new System.Drawing.Size(144, 610);
-      this.tableLayoutPanel2.TabIndex = 2;
+      this.tlpData.BackColor = System.Drawing.Color.Gold;
+      this.tlpData.ColumnCount = 1;
+      this.tlpData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tlpData.Controls.Add(this.panel2, 0, 0);
+      this.tlpData.Controls.Add(this.pnlYaw, 0, 1);
+      this.tlpData.Controls.Add(this.pnlPitch, 0, 3);
+      this.tlpData.Controls.Add(this.pnlRoll, 0, 5);
+      this.tlpData.Dock = System.Windows.Forms.DockStyle.Top;
+      this.tlpData.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+      this.tlpData.Location = new System.Drawing.Point(3, 3);
+      this.tlpData.Name = "tlpData";
+      this.tlpData.RowCount = 8;
+      this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+      this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 155F));
+      this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
+      this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 155F));
+      this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
+      this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 155F));
+      this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
+      this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tlpData.Size = new System.Drawing.Size(144, 610);
+      this.tlpData.TabIndex = 2;
       // 
       // panel2
       // 
@@ -244,34 +257,45 @@
       this.panel2.Size = new System.Drawing.Size(138, 114);
       this.panel2.TabIndex = 0;
       // 
-      // panel3
+      // pnlYaw
       // 
-      this.panel3.BackColor = System.Drawing.Color.PowderBlue;
-      this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-      this.panel3.Controls.Add(this.cbxYinvert);
-      this.panel3.Controls.Add(this.cbxYpts);
-      this.panel3.Controls.Add(this.cbxYexpo);
-      this.panel3.Controls.Add(this.cbxYsense);
-      this.panel3.Controls.Add(this.cbxYdeadzone);
-      this.panel3.Controls.Add(this.label25);
-      this.panel3.Controls.Add(this.label24);
-      this.panel3.Controls.Add(this.label23);
-      this.panel3.Controls.Add(this.lblYout3);
-      this.panel3.Controls.Add(this.lblYin3);
-      this.panel3.Controls.Add(this.lblYout2);
-      this.panel3.Controls.Add(this.lblYin2);
-      this.panel3.Controls.Add(this.lblYout1);
-      this.panel3.Controls.Add(this.lblYin1);
-      this.panel3.Controls.Add(this.lblYsense);
-      this.panel3.Controls.Add(this.lblYexponent);
-      this.panel3.Controls.Add(this.lblYdeadzone);
-      this.panel3.Controls.Add(this.lblYCmd);
-      this.panel3.Controls.Add(this.label1);
-      this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panel3.Location = new System.Drawing.Point(3, 123);
-      this.panel3.Name = "panel3";
-      this.panel3.Size = new System.Drawing.Size(138, 149);
-      this.panel3.TabIndex = 2;
+      this.pnlYaw.BackColor = System.Drawing.Color.PowderBlue;
+      this.pnlYaw.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+      this.pnlYaw.Controls.Add(this.lblYnt);
+      this.pnlYaw.Controls.Add(this.cbxYinvert);
+      this.pnlYaw.Controls.Add(this.cbxYpts);
+      this.pnlYaw.Controls.Add(this.cbxYexpo);
+      this.pnlYaw.Controls.Add(this.cbxYsat);
+      this.pnlYaw.Controls.Add(this.cbxYdeadzone);
+      this.pnlYaw.Controls.Add(this.label25);
+      this.pnlYaw.Controls.Add(this.label24);
+      this.pnlYaw.Controls.Add(this.label23);
+      this.pnlYaw.Controls.Add(this.lblYout3);
+      this.pnlYaw.Controls.Add(this.lblYin3);
+      this.pnlYaw.Controls.Add(this.lblYout2);
+      this.pnlYaw.Controls.Add(this.lblYin2);
+      this.pnlYaw.Controls.Add(this.lblYout1);
+      this.pnlYaw.Controls.Add(this.lblYin1);
+      this.pnlYaw.Controls.Add(this.lblYsat);
+      this.pnlYaw.Controls.Add(this.lblYexponent);
+      this.pnlYaw.Controls.Add(this.lblYdeadzone);
+      this.pnlYaw.Controls.Add(this.lblYCmd);
+      this.pnlYaw.Controls.Add(this.lblYaw);
+      this.pnlYaw.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.pnlYaw.Location = new System.Drawing.Point(3, 123);
+      this.pnlYaw.Name = "pnlYaw";
+      this.pnlYaw.Size = new System.Drawing.Size(138, 149);
+      this.pnlYaw.TabIndex = 2;
+      // 
+      // lblYnt
+      // 
+      this.lblYnt.AutoSize = true;
+      this.lblYnt.Location = new System.Drawing.Point(107, 17);
+      this.lblYnt.Name = "lblYnt";
+      this.lblYnt.Size = new System.Drawing.Size(20, 13);
+      this.lblYnt.TabIndex = 23;
+      this.lblYnt.Text = "NT";
+      this.lblYnt.Visible = false;
       // 
       // cbxYinvert
       // 
@@ -305,16 +329,16 @@
       this.cbxYexpo.UseVisualStyleBackColor = true;
       this.cbxYexpo.CheckedChanged += new System.EventHandler(this.cbxYexpo_CheckedChanged);
       // 
-      // cbxYsense
+      // cbxYsat
       // 
-      this.cbxYsense.AutoSize = true;
-      this.cbxYsense.Location = new System.Drawing.Point(6, 53);
-      this.cbxYsense.Name = "cbxYsense";
-      this.cbxYsense.Size = new System.Drawing.Size(77, 17);
-      this.cbxYsense.TabIndex = 19;
-      this.cbxYsense.Text = "Sensitivity";
-      this.cbxYsense.UseVisualStyleBackColor = true;
-      this.cbxYsense.CheckedChanged += new System.EventHandler(this.cbxYsense_CheckedChanged);
+      this.cbxYsat.AutoSize = true;
+      this.cbxYsat.Location = new System.Drawing.Point(6, 53);
+      this.cbxYsat.Name = "cbxYsat";
+      this.cbxYsat.Size = new System.Drawing.Size(80, 17);
+      this.cbxYsat.TabIndex = 19;
+      this.cbxYsat.Text = "Saturation";
+      this.cbxYsat.UseVisualStyleBackColor = true;
+      this.cbxYsat.CheckedChanged += new System.EventHandler(this.cbxYsense_CheckedChanged);
       // 
       // cbxYdeadzone
       // 
@@ -408,14 +432,14 @@
       this.lblYin1.TabIndex = 9;
       this.lblYin1.Text = "0.25";
       // 
-      // lblYsense
+      // lblYsat
       // 
-      this.lblYsense.AutoSize = true;
-      this.lblYsense.Location = new System.Drawing.Point(99, 54);
-      this.lblYsense.Name = "lblYsense";
-      this.lblYsense.Size = new System.Drawing.Size(34, 13);
-      this.lblYsense.TabIndex = 8;
-      this.lblYsense.Text = "1.000";
+      this.lblYsat.AutoSize = true;
+      this.lblYsat.Location = new System.Drawing.Point(99, 54);
+      this.lblYsat.Name = "lblYsat";
+      this.lblYsat.Size = new System.Drawing.Size(34, 13);
+      this.lblYsat.TabIndex = 8;
+      this.lblYsat.Text = "1.000";
       // 
       // lblYexponent
       // 
@@ -439,50 +463,61 @@
       // 
       this.lblYCmd.AutoSize = true;
       this.lblYCmd.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblYCmd.Location = new System.Drawing.Point(37, 0);
+      this.lblYCmd.Location = new System.Drawing.Point(37, 1);
       this.lblYCmd.Name = "lblYCmd";
       this.lblYCmd.Size = new System.Drawing.Size(47, 12);
       this.lblYCmd.TabIndex = 2;
       this.lblYCmd.Text = "Command";
       // 
-      // label1
+      // lblYaw
       // 
-      this.label1.AutoSize = true;
-      this.label1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label1.Location = new System.Drawing.Point(2, 0);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(29, 13);
-      this.label1.TabIndex = 1;
-      this.label1.Text = "Yaw";
+      this.lblYaw.AutoSize = true;
+      this.lblYaw.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblYaw.Location = new System.Drawing.Point(2, 0);
+      this.lblYaw.Name = "lblYaw";
+      this.lblYaw.Size = new System.Drawing.Size(29, 13);
+      this.lblYaw.TabIndex = 1;
+      this.lblYaw.Text = "Yaw";
       // 
-      // panel4
+      // pnlPitch
       // 
-      this.panel4.BackColor = System.Drawing.Color.Salmon;
-      this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-      this.panel4.Controls.Add(this.cbxPinvert);
-      this.panel4.Controls.Add(this.cbxPpts);
-      this.panel4.Controls.Add(this.cbxPexpo);
-      this.panel4.Controls.Add(this.cbxPsense);
-      this.panel4.Controls.Add(this.cbxPdeadzone);
-      this.panel4.Controls.Add(this.label26);
-      this.panel4.Controls.Add(this.label27);
-      this.panel4.Controls.Add(this.label28);
-      this.panel4.Controls.Add(this.lblPout3);
-      this.panel4.Controls.Add(this.lblPin3);
-      this.panel4.Controls.Add(this.lblPout2);
-      this.panel4.Controls.Add(this.lblPin2);
-      this.panel4.Controls.Add(this.lblPout1);
-      this.panel4.Controls.Add(this.lblPin1);
-      this.panel4.Controls.Add(this.lblPsense);
-      this.panel4.Controls.Add(this.lblPexponent);
-      this.panel4.Controls.Add(this.lblPdeadzone);
-      this.panel4.Controls.Add(this.lblPCmd);
-      this.panel4.Controls.Add(this.label2);
-      this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panel4.Location = new System.Drawing.Point(3, 284);
-      this.panel4.Name = "panel4";
-      this.panel4.Size = new System.Drawing.Size(138, 149);
-      this.panel4.TabIndex = 3;
+      this.pnlPitch.BackColor = System.Drawing.Color.Salmon;
+      this.pnlPitch.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+      this.pnlPitch.Controls.Add(this.lblPnt);
+      this.pnlPitch.Controls.Add(this.cbxPinvert);
+      this.pnlPitch.Controls.Add(this.cbxPpts);
+      this.pnlPitch.Controls.Add(this.cbxPexpo);
+      this.pnlPitch.Controls.Add(this.cbxPsat);
+      this.pnlPitch.Controls.Add(this.cbxPdeadzone);
+      this.pnlPitch.Controls.Add(this.label26);
+      this.pnlPitch.Controls.Add(this.label27);
+      this.pnlPitch.Controls.Add(this.label28);
+      this.pnlPitch.Controls.Add(this.lblPout3);
+      this.pnlPitch.Controls.Add(this.lblPin3);
+      this.pnlPitch.Controls.Add(this.lblPout2);
+      this.pnlPitch.Controls.Add(this.lblPin2);
+      this.pnlPitch.Controls.Add(this.lblPout1);
+      this.pnlPitch.Controls.Add(this.lblPin1);
+      this.pnlPitch.Controls.Add(this.lblPsat);
+      this.pnlPitch.Controls.Add(this.lblPexponent);
+      this.pnlPitch.Controls.Add(this.lblPdeadzone);
+      this.pnlPitch.Controls.Add(this.lblPCmd);
+      this.pnlPitch.Controls.Add(this.lblPitch);
+      this.pnlPitch.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.pnlPitch.Location = new System.Drawing.Point(3, 284);
+      this.pnlPitch.Name = "pnlPitch";
+      this.pnlPitch.Size = new System.Drawing.Size(138, 149);
+      this.pnlPitch.TabIndex = 3;
+      // 
+      // lblPnt
+      // 
+      this.lblPnt.AutoSize = true;
+      this.lblPnt.Location = new System.Drawing.Point(107, 17);
+      this.lblPnt.Name = "lblPnt";
+      this.lblPnt.Size = new System.Drawing.Size(20, 13);
+      this.lblPnt.TabIndex = 34;
+      this.lblPnt.Text = "NT";
+      this.lblPnt.Visible = false;
       // 
       // cbxPinvert
       // 
@@ -516,16 +551,16 @@
       this.cbxPexpo.UseVisualStyleBackColor = true;
       this.cbxPexpo.CheckedChanged += new System.EventHandler(this.cbxPexpo_CheckedChanged);
       // 
-      // cbxPsense
+      // cbxPsat
       // 
-      this.cbxPsense.AutoSize = true;
-      this.cbxPsense.Location = new System.Drawing.Point(6, 53);
-      this.cbxPsense.Name = "cbxPsense";
-      this.cbxPsense.Size = new System.Drawing.Size(77, 17);
-      this.cbxPsense.TabIndex = 30;
-      this.cbxPsense.Text = "Sensitivity";
-      this.cbxPsense.UseVisualStyleBackColor = true;
-      this.cbxPsense.CheckedChanged += new System.EventHandler(this.cbxPsense_CheckedChanged);
+      this.cbxPsat.AutoSize = true;
+      this.cbxPsat.Location = new System.Drawing.Point(6, 53);
+      this.cbxPsat.Name = "cbxPsat";
+      this.cbxPsat.Size = new System.Drawing.Size(80, 17);
+      this.cbxPsat.TabIndex = 30;
+      this.cbxPsat.Text = "Saturation";
+      this.cbxPsat.UseVisualStyleBackColor = true;
+      this.cbxPsat.CheckedChanged += new System.EventHandler(this.cbxPsense_CheckedChanged);
       // 
       // cbxPdeadzone
       // 
@@ -619,14 +654,14 @@
       this.lblPin1.TabIndex = 20;
       this.lblPin1.Text = "0.25";
       // 
-      // lblPsense
+      // lblPsat
       // 
-      this.lblPsense.AutoSize = true;
-      this.lblPsense.Location = new System.Drawing.Point(99, 54);
-      this.lblPsense.Name = "lblPsense";
-      this.lblPsense.Size = new System.Drawing.Size(34, 13);
-      this.lblPsense.TabIndex = 10;
-      this.lblPsense.Text = "1.000";
+      this.lblPsat.AutoSize = true;
+      this.lblPsat.Location = new System.Drawing.Point(99, 54);
+      this.lblPsat.Name = "lblPsat";
+      this.lblPsat.Size = new System.Drawing.Size(34, 13);
+      this.lblPsat.TabIndex = 10;
+      this.lblPsat.Text = "1.000";
       // 
       // lblPexponent
       // 
@@ -650,50 +685,61 @@
       // 
       this.lblPCmd.AutoSize = true;
       this.lblPCmd.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblPCmd.Location = new System.Drawing.Point(37, 0);
+      this.lblPCmd.Location = new System.Drawing.Point(37, 1);
       this.lblPCmd.Name = "lblPCmd";
       this.lblPCmd.Size = new System.Drawing.Size(47, 12);
       this.lblPCmd.TabIndex = 3;
       this.lblPCmd.Text = "Command";
       // 
-      // label2
+      // lblPitch
       // 
-      this.label2.AutoSize = true;
-      this.label2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label2.Location = new System.Drawing.Point(2, 0);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(33, 13);
-      this.label2.TabIndex = 2;
-      this.label2.Text = "Pitch";
+      this.lblPitch.AutoSize = true;
+      this.lblPitch.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblPitch.Location = new System.Drawing.Point(2, 0);
+      this.lblPitch.Name = "lblPitch";
+      this.lblPitch.Size = new System.Drawing.Size(33, 13);
+      this.lblPitch.TabIndex = 2;
+      this.lblPitch.Text = "Pitch";
       // 
-      // panel5
+      // pnlRoll
       // 
-      this.panel5.BackColor = System.Drawing.Color.LightGreen;
-      this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-      this.panel5.Controls.Add(this.cbxRinvert);
-      this.panel5.Controls.Add(this.cbxRpts);
-      this.panel5.Controls.Add(this.cbxRexpo);
-      this.panel5.Controls.Add(this.cbxRsense);
-      this.panel5.Controls.Add(this.cbxRdeadzone);
-      this.panel5.Controls.Add(this.label35);
-      this.panel5.Controls.Add(this.label36);
-      this.panel5.Controls.Add(this.label37);
-      this.panel5.Controls.Add(this.lblRout3);
-      this.panel5.Controls.Add(this.lblRin3);
-      this.panel5.Controls.Add(this.lblRout2);
-      this.panel5.Controls.Add(this.lblRin2);
-      this.panel5.Controls.Add(this.lblRout1);
-      this.panel5.Controls.Add(this.lblRin1);
-      this.panel5.Controls.Add(this.lblRsense);
-      this.panel5.Controls.Add(this.lblRexponent);
-      this.panel5.Controls.Add(this.lblRdeadzone);
-      this.panel5.Controls.Add(this.lblRCmd);
-      this.panel5.Controls.Add(this.label3);
-      this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panel5.Location = new System.Drawing.Point(3, 445);
-      this.panel5.Name = "panel5";
-      this.panel5.Size = new System.Drawing.Size(138, 149);
-      this.panel5.TabIndex = 4;
+      this.pnlRoll.BackColor = System.Drawing.Color.LightGreen;
+      this.pnlRoll.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+      this.pnlRoll.Controls.Add(this.lblRnt);
+      this.pnlRoll.Controls.Add(this.cbxRinvert);
+      this.pnlRoll.Controls.Add(this.cbxRpts);
+      this.pnlRoll.Controls.Add(this.cbxRexpo);
+      this.pnlRoll.Controls.Add(this.cbxRsat);
+      this.pnlRoll.Controls.Add(this.cbxRdeadzone);
+      this.pnlRoll.Controls.Add(this.label35);
+      this.pnlRoll.Controls.Add(this.label36);
+      this.pnlRoll.Controls.Add(this.label37);
+      this.pnlRoll.Controls.Add(this.lblRout3);
+      this.pnlRoll.Controls.Add(this.lblRin3);
+      this.pnlRoll.Controls.Add(this.lblRout2);
+      this.pnlRoll.Controls.Add(this.lblRin2);
+      this.pnlRoll.Controls.Add(this.lblRout1);
+      this.pnlRoll.Controls.Add(this.lblRin1);
+      this.pnlRoll.Controls.Add(this.lblRsat);
+      this.pnlRoll.Controls.Add(this.lblRexponent);
+      this.pnlRoll.Controls.Add(this.lblRdeadzone);
+      this.pnlRoll.Controls.Add(this.lblRCmd);
+      this.pnlRoll.Controls.Add(this.lblRoll);
+      this.pnlRoll.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.pnlRoll.Location = new System.Drawing.Point(3, 445);
+      this.pnlRoll.Name = "pnlRoll";
+      this.pnlRoll.Size = new System.Drawing.Size(138, 149);
+      this.pnlRoll.TabIndex = 4;
+      // 
+      // lblRnt
+      // 
+      this.lblRnt.AutoSize = true;
+      this.lblRnt.Location = new System.Drawing.Point(107, 17);
+      this.lblRnt.Name = "lblRnt";
+      this.lblRnt.Size = new System.Drawing.Size(20, 13);
+      this.lblRnt.TabIndex = 38;
+      this.lblRnt.Text = "NT";
+      this.lblRnt.Visible = false;
       // 
       // cbxRinvert
       // 
@@ -727,16 +773,16 @@
       this.cbxRexpo.UseVisualStyleBackColor = true;
       this.cbxRexpo.CheckedChanged += new System.EventHandler(this.cbxRexpo_CheckedChanged);
       // 
-      // cbxRsense
+      // cbxRsat
       // 
-      this.cbxRsense.AutoSize = true;
-      this.cbxRsense.Location = new System.Drawing.Point(6, 53);
-      this.cbxRsense.Name = "cbxRsense";
-      this.cbxRsense.Size = new System.Drawing.Size(77, 17);
-      this.cbxRsense.TabIndex = 34;
-      this.cbxRsense.Text = "Sensitivity";
-      this.cbxRsense.UseVisualStyleBackColor = true;
-      this.cbxRsense.CheckedChanged += new System.EventHandler(this.cbxRsense_CheckedChanged);
+      this.cbxRsat.AutoSize = true;
+      this.cbxRsat.Location = new System.Drawing.Point(6, 53);
+      this.cbxRsat.Name = "cbxRsat";
+      this.cbxRsat.Size = new System.Drawing.Size(80, 17);
+      this.cbxRsat.TabIndex = 34;
+      this.cbxRsat.Text = "Saturation";
+      this.cbxRsat.UseVisualStyleBackColor = true;
+      this.cbxRsat.CheckedChanged += new System.EventHandler(this.cbxRsense_CheckedChanged);
       // 
       // cbxRdeadzone
       // 
@@ -830,14 +876,14 @@
       this.lblRin1.TabIndex = 20;
       this.lblRin1.Text = "0.25";
       // 
-      // lblRsense
+      // lblRsat
       // 
-      this.lblRsense.AutoSize = true;
-      this.lblRsense.Location = new System.Drawing.Point(99, 54);
-      this.lblRsense.Name = "lblRsense";
-      this.lblRsense.Size = new System.Drawing.Size(34, 13);
-      this.lblRsense.TabIndex = 10;
-      this.lblRsense.Text = "1.000";
+      this.lblRsat.AutoSize = true;
+      this.lblRsat.Location = new System.Drawing.Point(99, 54);
+      this.lblRsat.Name = "lblRsat";
+      this.lblRsat.Size = new System.Drawing.Size(34, 13);
+      this.lblRsat.TabIndex = 10;
+      this.lblRsat.Text = "1.000";
       // 
       // lblRexponent
       // 
@@ -861,21 +907,21 @@
       // 
       this.lblRCmd.AutoSize = true;
       this.lblRCmd.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblRCmd.Location = new System.Drawing.Point(37, 0);
+      this.lblRCmd.Location = new System.Drawing.Point(37, 1);
       this.lblRCmd.Name = "lblRCmd";
       this.lblRCmd.Size = new System.Drawing.Size(47, 12);
       this.lblRCmd.TabIndex = 4;
       this.lblRCmd.Text = "Command";
       // 
-      // label3
+      // lblRoll
       // 
-      this.label3.AutoSize = true;
-      this.label3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label3.Location = new System.Drawing.Point(2, 0);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(27, 13);
-      this.label3.TabIndex = 2;
-      this.label3.Text = "Roll";
+      this.lblRoll.AutoSize = true;
+      this.lblRoll.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblRoll.Location = new System.Drawing.Point(2, 0);
+      this.lblRoll.Name = "lblRoll";
+      this.lblRoll.Size = new System.Drawing.Size(27, 13);
+      this.lblRoll.TabIndex = 2;
+      this.lblRoll.Text = "Roll";
       // 
       // tableLayoutPanel1
       // 
@@ -895,7 +941,7 @@
       this.tableLayoutPanel1.RowCount = 4;
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 97F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel1.Size = new System.Drawing.Size(1028, 294);
       this.tableLayoutPanel1.TabIndex = 1;
@@ -991,6 +1037,11 @@
       // 
       this.panel6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+      this.panel6.BackColor = System.Drawing.Color.WhiteSmoke;
+      this.panel6.Controls.Add(this.rbPtDeadzone);
+      this.panel6.Controls.Add(this.lblGraphSaturation);
+      this.panel6.Controls.Add(this.lblGraphDeadzone);
+      this.panel6.Controls.Add(this.lblNodetext);
       this.panel6.Controls.Add(this.label12);
       this.panel6.Controls.Add(this.cbRuse);
       this.panel6.Controls.Add(this.cbPuse);
@@ -1001,15 +1052,15 @@
       this.panel6.Controls.Add(this.lblRInput);
       this.panel6.Controls.Add(this.lblPOutput);
       this.panel6.Controls.Add(this.lblPInput);
-      this.panel6.Controls.Add(this.label9);
-      this.panel6.Controls.Add(this.label7);
+      this.panel6.Controls.Add(this.lblLiveRoll);
+      this.panel6.Controls.Add(this.lblLivePitch);
       this.panel6.Controls.Add(this.btCopyToAllAxis);
-      this.panel6.Controls.Add(this.label5);
+      this.panel6.Controls.Add(this.lblLiveYaw);
       this.panel6.Controls.Add(this.label4);
       this.panel6.Controls.Add(this.lblYOutput);
       this.panel6.Controls.Add(this.lblYInput);
       this.panel6.Controls.Add(this.rbPtExponent);
-      this.panel6.Controls.Add(this.rbPtSense);
+      this.panel6.Controls.Add(this.rbPtSaturation);
       this.panel6.Controls.Add(this.rbPt3);
       this.panel6.Controls.Add(this.rbPt2);
       this.panel6.Controls.Add(this.rbPt1);
@@ -1022,16 +1073,24 @@
       this.panel6.Controls.Add(this.lblOut1);
       this.panel6.Controls.Add(this.lblIn1);
       this.panel6.Controls.Add(this.chart1);
-      this.panel6.Controls.Add(this.lblOutSense);
-      this.panel6.Controls.Add(this.label8);
+      this.panel6.Controls.Add(this.lblOutSlider);
       this.panel6.Controls.Add(this.lblOutExponent);
-      this.panel6.Controls.Add(this.lblDeadzone);
-      this.panel6.Controls.Add(this.tbDeadzone);
+      this.panel6.Controls.Add(this.tbSlider);
       this.panel6.Location = new System.Drawing.Point(3, 3);
       this.panel6.Name = "panel6";
       this.tableLayoutPanel1.SetRowSpan(this.panel6, 4);
       this.panel6.Size = new System.Drawing.Size(579, 288);
       this.panel6.TabIndex = 5;
+      // 
+      // lblNodetext
+      // 
+      this.lblNodetext.AutoSize = true;
+      this.lblNodetext.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblNodetext.Location = new System.Drawing.Point(11, 3);
+      this.lblNodetext.Name = "lblNodetext";
+      this.lblNodetext.Size = new System.Drawing.Size(16, 13);
+      this.lblNodetext.TabIndex = 51;
+      this.lblNodetext.Text = "...";
       // 
       // label12
       // 
@@ -1129,27 +1188,27 @@
       this.lblPInput.TabIndex = 41;
       this.lblPInput.Text = "0.000";
       // 
-      // label9
+      // lblLiveRoll
       // 
-      this.label9.AutoSize = true;
-      this.label9.BackColor = System.Drawing.Color.LightGreen;
-      this.label9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label9.Location = new System.Drawing.Point(32, 266);
-      this.label9.Name = "label9";
-      this.label9.Size = new System.Drawing.Size(46, 15);
-      this.label9.TabIndex = 40;
-      this.label9.Text = "R-Axis:";
+      this.lblLiveRoll.AutoSize = true;
+      this.lblLiveRoll.BackColor = System.Drawing.Color.LightGreen;
+      this.lblLiveRoll.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblLiveRoll.Location = new System.Drawing.Point(32, 266);
+      this.lblLiveRoll.Name = "lblLiveRoll";
+      this.lblLiveRoll.Size = new System.Drawing.Size(46, 15);
+      this.lblLiveRoll.TabIndex = 40;
+      this.lblLiveRoll.Text = "R-Axis:";
       // 
-      // label7
+      // lblLivePitch
       // 
-      this.label7.AutoSize = true;
-      this.label7.BackColor = System.Drawing.Color.Salmon;
-      this.label7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label7.Location = new System.Drawing.Point(32, 247);
-      this.label7.Name = "label7";
-      this.label7.Size = new System.Drawing.Size(45, 15);
-      this.label7.TabIndex = 39;
-      this.label7.Text = "P-Axis:";
+      this.lblLivePitch.AutoSize = true;
+      this.lblLivePitch.BackColor = System.Drawing.Color.Salmon;
+      this.lblLivePitch.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblLivePitch.Location = new System.Drawing.Point(32, 247);
+      this.lblLivePitch.Name = "lblLivePitch";
+      this.lblLivePitch.Size = new System.Drawing.Size(45, 15);
+      this.lblLivePitch.TabIndex = 39;
+      this.lblLivePitch.Text = "P-Axis:";
       // 
       // btCopyToAllAxis
       // 
@@ -1161,16 +1220,16 @@
       this.btCopyToAllAxis.UseVisualStyleBackColor = true;
       this.btCopyToAllAxis.Click += new System.EventHandler(this.btCopyToAllAxis_Click);
       // 
-      // label5
+      // lblLiveYaw
       // 
-      this.label5.AutoSize = true;
-      this.label5.BackColor = System.Drawing.Color.PowderBlue;
-      this.label5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label5.Location = new System.Drawing.Point(32, 228);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(45, 15);
-      this.label5.TabIndex = 37;
-      this.label5.Text = "Y-Axis:";
+      this.lblLiveYaw.AutoSize = true;
+      this.lblLiveYaw.BackColor = System.Drawing.Color.PowderBlue;
+      this.lblLiveYaw.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblLiveYaw.Location = new System.Drawing.Point(32, 228);
+      this.lblLiveYaw.Name = "lblLiveYaw";
+      this.lblLiveYaw.Size = new System.Drawing.Size(45, 15);
+      this.lblLiveYaw.TabIndex = 37;
+      this.lblLiveYaw.Text = "Y-Axis:";
       // 
       // label4
       // 
@@ -1205,7 +1264,7 @@
       // 
       this.rbPtExponent.AutoSize = true;
       this.rbPtExponent.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rbPtExponent.Location = new System.Drawing.Point(14, 98);
+      this.rbPtExponent.Location = new System.Drawing.Point(14, 108);
       this.rbPtExponent.Name = "rbPtExponent";
       this.rbPtExponent.Size = new System.Drawing.Size(81, 19);
       this.rbPtExponent.TabIndex = 33;
@@ -1213,19 +1272,18 @@
       this.rbPtExponent.UseVisualStyleBackColor = true;
       this.rbPtExponent.CheckedChanged += new System.EventHandler(this.rbPtAny_CheckedChanged);
       // 
-      // rbPtSense
+      // rbPtSaturation
       // 
-      this.rbPtSense.AutoSize = true;
-      this.rbPtSense.Checked = true;
-      this.rbPtSense.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rbPtSense.Location = new System.Drawing.Point(14, 78);
-      this.rbPtSense.Name = "rbPtSense";
-      this.rbPtSense.Size = new System.Drawing.Size(86, 19);
-      this.rbPtSense.TabIndex = 32;
-      this.rbPtSense.TabStop = true;
-      this.rbPtSense.Text = "Sensitivity:";
-      this.rbPtSense.UseVisualStyleBackColor = true;
-      this.rbPtSense.CheckedChanged += new System.EventHandler(this.rbPtAny_CheckedChanged);
+      this.rbPtSaturation.AutoSize = true;
+      this.rbPtSaturation.Checked = true;
+      this.rbPtSaturation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.rbPtSaturation.Location = new System.Drawing.Point(101, 72);
+      this.rbPtSaturation.Name = "rbPtSaturation";
+      this.rbPtSaturation.Size = new System.Drawing.Size(83, 19);
+      this.rbPtSaturation.TabIndex = 32;
+      this.rbPtSaturation.Text = "Saturation";
+      this.rbPtSaturation.UseVisualStyleBackColor = true;
+      this.rbPtSaturation.CheckedChanged += new System.EventHandler(this.rbPtAny_CheckedChanged);
       // 
       // rbPt3
       // 
@@ -1385,56 +1443,36 @@
       this.chart1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chartPoint_MouseMove);
       this.chart1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.chartPoint_MouseUp);
       // 
-      // lblOutSense
+      // lblOutSlider
       // 
-      this.lblOutSense.AutoSize = true;
-      this.lblOutSense.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblOutSense.Location = new System.Drawing.Point(112, 80);
-      this.lblOutSense.Name = "lblOutSense";
-      this.lblOutSense.Size = new System.Drawing.Size(34, 15);
-      this.lblOutSense.TabIndex = 13;
-      this.lblOutSense.Text = "0.000";
-      // 
-      // label8
-      // 
-      this.label8.AutoSize = true;
-      this.label8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label8.Location = new System.Drawing.Point(32, 52);
-      this.label8.Name = "label8";
-      this.label8.Size = new System.Drawing.Size(63, 15);
-      this.label8.TabIndex = 10;
-      this.label8.Text = "Deadzone";
+      this.lblOutSlider.AutoSize = true;
+      this.lblOutSlider.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblOutSlider.Location = new System.Drawing.Point(174, 34);
+      this.lblOutSlider.Name = "lblOutSlider";
+      this.lblOutSlider.Size = new System.Drawing.Size(34, 15);
+      this.lblOutSlider.TabIndex = 13;
+      this.lblOutSlider.Text = "0.000";
       // 
       // lblOutExponent
       // 
       this.lblOutExponent.AutoSize = true;
       this.lblOutExponent.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblOutExponent.Location = new System.Drawing.Point(112, 100);
+      this.lblOutExponent.Location = new System.Drawing.Point(112, 110);
       this.lblOutExponent.Name = "lblOutExponent";
       this.lblOutExponent.Size = new System.Drawing.Size(34, 15);
       this.lblOutExponent.TabIndex = 9;
       this.lblOutExponent.Text = "0.000";
       // 
-      // lblDeadzone
+      // tbSlider
       // 
-      this.lblDeadzone.AutoSize = true;
-      this.lblDeadzone.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblDeadzone.Location = new System.Drawing.Point(112, 52);
-      this.lblDeadzone.Name = "lblDeadzone";
-      this.lblDeadzone.Size = new System.Drawing.Size(34, 15);
-      this.lblDeadzone.TabIndex = 4;
-      this.lblDeadzone.Text = "0.000";
-      // 
-      // tbDeadzone
-      // 
-      this.tbDeadzone.Location = new System.Drawing.Point(3, 4);
-      this.tbDeadzone.Maximum = 30;
-      this.tbDeadzone.Name = "tbDeadzone";
-      this.tbDeadzone.Size = new System.Drawing.Size(165, 45);
-      this.tbDeadzone.TabIndex = 0;
-      this.tbDeadzone.TickFrequency = 5;
-      this.tbDeadzone.TickStyle = System.Windows.Forms.TickStyle.Both;
-      this.tbDeadzone.ValueChanged += new System.EventHandler(this.tbDeadzone_ValueChanged);
+      this.tbSlider.Location = new System.Drawing.Point(3, 21);
+      this.tbSlider.Maximum = 40;
+      this.tbSlider.Name = "tbSlider";
+      this.tbSlider.Size = new System.Drawing.Size(165, 45);
+      this.tbSlider.TabIndex = 0;
+      this.tbSlider.TickFrequency = 5;
+      this.tbSlider.TickStyle = System.Windows.Forms.TickStyle.Both;
+      this.tbSlider.ValueChanged += new System.EventHandler(this.tbSlider_ValueChanged);
       // 
       // flowLayoutPanel1
       // 
@@ -1445,7 +1483,7 @@
       this.flowLayoutPanel1.Controls.Add(this.rbAurora);
       this.flowLayoutPanel1.Location = new System.Drawing.Point(624, 123);
       this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-      this.flowLayoutPanel1.Size = new System.Drawing.Size(401, 114);
+      this.flowLayoutPanel1.Size = new System.Drawing.Size(401, 91);
       this.flowLayoutPanel1.TabIndex = 3;
       // 
       // rb300
@@ -1491,11 +1529,11 @@
       this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 31.33971F));
       this.tableLayoutPanel3.Controls.Add(this.btDone, 1, 0);
       this.tableLayoutPanel3.Controls.Add(this.panel8, 0, 0);
-      this.tableLayoutPanel3.Location = new System.Drawing.Point(607, 247);
+      this.tableLayoutPanel3.Location = new System.Drawing.Point(607, 220);
       this.tableLayoutPanel3.Name = "tableLayoutPanel3";
       this.tableLayoutPanel3.RowCount = 1;
       this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel3.Size = new System.Drawing.Size(418, 44);
+      this.tableLayoutPanel3.Size = new System.Drawing.Size(418, 71);
       this.tableLayoutPanel3.TabIndex = 6;
       // 
       // btDone
@@ -1506,7 +1544,7 @@
       this.btDone.DialogResult = System.Windows.Forms.DialogResult.OK;
       this.btDone.Location = new System.Drawing.Point(290, 3);
       this.btDone.Name = "btDone";
-      this.btDone.Size = new System.Drawing.Size(125, 38);
+      this.btDone.Size = new System.Drawing.Size(125, 65);
       this.btDone.TabIndex = 28;
       this.btDone.Text = "Done";
       this.btDone.UseVisualStyleBackColor = true;
@@ -1514,28 +1552,53 @@
       // 
       // panel8
       // 
+      this.panel8.Controls.Add(this.rbSunset);
+      this.panel8.Controls.Add(this.rbOutThere3);
       this.panel8.Controls.Add(this.rbSkybox);
       this.panel8.Controls.Add(this.rbOutThere1);
       this.panel8.Controls.Add(this.rbBigSight);
       this.panel8.Controls.Add(this.rbHighway);
+      this.panel8.Controls.Add(this.rbHelipad);
       this.panel8.Controls.Add(this.rbShiodome);
       this.panel8.Controls.Add(this.rbCanyon);
       this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panel8.Location = new System.Drawing.Point(3, 3);
       this.panel8.Name = "panel8";
-      this.panel8.Size = new System.Drawing.Size(281, 38);
+      this.panel8.Size = new System.Drawing.Size(281, 65);
       this.panel8.TabIndex = 4;
+      // 
+      // rbSunset
+      // 
+      this.rbSunset.AutoSize = true;
+      this.rbSunset.Location = new System.Drawing.Point(205, 35);
+      this.rbSunset.Name = "rbSunset";
+      this.rbSunset.Size = new System.Drawing.Size(60, 17);
+      this.rbSunset.TabIndex = 7;
+      this.rbSunset.Text = "Sunset";
+      this.rbSunset.UseVisualStyleBackColor = true;
+      this.rbSunset.CheckedChanged += new System.EventHandler(this.rbSunset_CheckedChanged);
+      // 
+      // rbOutThere3
+      // 
+      this.rbOutThere3.AutoSize = true;
+      this.rbOutThere3.Location = new System.Drawing.Point(32, 18);
+      this.rbOutThere3.Name = "rbOutThere3";
+      this.rbOutThere3.Size = new System.Drawing.Size(84, 17);
+      this.rbOutThere3.TabIndex = 6;
+      this.rbOutThere3.Text = "Out there 3";
+      this.rbOutThere3.UseVisualStyleBackColor = true;
+      this.rbOutThere3.CheckedChanged += new System.EventHandler(this.rbOutThere3_CheckedChanged);
       // 
       // rbSkybox
       // 
       this.rbSkybox.AutoSize = true;
-      this.rbSkybox.Location = new System.Drawing.Point(32, 18);
+      this.rbSkybox.Location = new System.Drawing.Point(32, 35);
       this.rbSkybox.Name = "rbSkybox";
       this.rbSkybox.Size = new System.Drawing.Size(83, 17);
       this.rbSkybox.TabIndex = 5;
       this.rbSkybox.Text = "Skybox.dds";
       this.rbSkybox.UseVisualStyleBackColor = true;
-      this.rbSkybox.CheckedChanged += new System.EventHandler(this.rbOutThere2_CheckedChanged);
+      this.rbSkybox.CheckedChanged += new System.EventHandler(this.rbSkybox_CheckedChanged);
       // 
       // rbOutThere1
       // 
@@ -1572,6 +1635,17 @@
       this.rbHighway.UseVisualStyleBackColor = true;
       this.rbHighway.CheckedChanged += new System.EventHandler(this.rbHighway_CheckedChanged);
       // 
+      // rbHelipad
+      // 
+      this.rbHelipad.AutoSize = true;
+      this.rbHelipad.Location = new System.Drawing.Point(122, 35);
+      this.rbHelipad.Name = "rbHelipad";
+      this.rbHelipad.Size = new System.Drawing.Size(80, 17);
+      this.rbHelipad.TabIndex = 1;
+      this.rbHelipad.Text = "LA Helipad";
+      this.rbHelipad.UseVisualStyleBackColor = true;
+      this.rbHelipad.CheckedChanged += new System.EventHandler(this.rbHelipad_CheckedChanged);
+      // 
       // rbShiodome
       // 
       this.rbShiodome.AutoSize = true;
@@ -1596,7 +1670,8 @@
       // 
       // flowLayoutPanel2
       // 
-      this.flowLayoutPanel2.Controls.Add(this.panel7);
+      this.flowLayoutPanel2.Controls.Add(this.pnlAxisSelector);
+      this.flowLayoutPanel2.Controls.Add(this.panel10);
       this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
       this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 619);
@@ -1604,21 +1679,23 @@
       this.flowLayoutPanel2.Size = new System.Drawing.Size(144, 294);
       this.flowLayoutPanel2.TabIndex = 3;
       // 
-      // panel7
+      // pnlAxisSelector
       // 
-      this.panel7.Controls.Add(this.rbP);
-      this.panel7.Controls.Add(this.rbY);
-      this.panel7.Controls.Add(this.rbR);
-      this.panel7.Location = new System.Drawing.Point(3, 3);
-      this.panel7.Name = "panel7";
-      this.panel7.Size = new System.Drawing.Size(135, 153);
-      this.panel7.TabIndex = 3;
+      this.pnlAxisSelector.BackColor = System.Drawing.Color.Gold;
+      this.pnlAxisSelector.Controls.Add(this.rbP);
+      this.pnlAxisSelector.Controls.Add(this.rbY);
+      this.pnlAxisSelector.Controls.Add(this.rbR);
+      this.pnlAxisSelector.Location = new System.Drawing.Point(0, 0);
+      this.pnlAxisSelector.Margin = new System.Windows.Forms.Padding(0);
+      this.pnlAxisSelector.Name = "pnlAxisSelector";
+      this.pnlAxisSelector.Size = new System.Drawing.Size(144, 157);
+      this.pnlAxisSelector.TabIndex = 3;
       // 
       // rbP
       // 
       this.rbP.BackColor = System.Drawing.Color.Salmon;
       this.rbP.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rbP.Location = new System.Drawing.Point(14, 55);
+      this.rbP.Location = new System.Drawing.Point(14, 58);
       this.rbP.Name = "rbP";
       this.rbP.Size = new System.Drawing.Size(111, 42);
       this.rbP.TabIndex = 6;
@@ -1632,7 +1709,7 @@
       this.rbY.BackColor = System.Drawing.Color.PowderBlue;
       this.rbY.Checked = true;
       this.rbY.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rbY.Location = new System.Drawing.Point(15, 7);
+      this.rbY.Location = new System.Drawing.Point(15, 10);
       this.rbY.Name = "rbY";
       this.rbY.Size = new System.Drawing.Size(111, 42);
       this.rbY.TabIndex = 5;
@@ -1646,7 +1723,7 @@
       // 
       this.rbR.BackColor = System.Drawing.Color.LightGreen;
       this.rbR.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rbR.Location = new System.Drawing.Point(15, 103);
+      this.rbR.Location = new System.Drawing.Point(15, 106);
       this.rbR.Name = "rbR";
       this.rbR.Size = new System.Drawing.Size(111, 42);
       this.rbR.TabIndex = 7;
@@ -1654,6 +1731,73 @@
       this.rbR.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       this.rbR.UseVisualStyleBackColor = false;
       this.rbR.CheckedChanged += new System.EventHandler(this.rbR_CheckedChanged);
+      // 
+      // panel10
+      // 
+      this.panel10.Controls.Add(this.rbTuneStrafe);
+      this.panel10.Controls.Add(this.rbTuneYPR);
+      this.panel10.Location = new System.Drawing.Point(3, 160);
+      this.panel10.Name = "panel10";
+      this.panel10.Size = new System.Drawing.Size(138, 128);
+      this.panel10.TabIndex = 4;
+      // 
+      // rbTuneStrafe
+      // 
+      this.rbTuneStrafe.BackColor = System.Drawing.Color.SandyBrown;
+      this.rbTuneStrafe.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.rbTuneStrafe.Location = new System.Drawing.Point(12, 68);
+      this.rbTuneStrafe.Name = "rbTuneStrafe";
+      this.rbTuneStrafe.Size = new System.Drawing.Size(111, 42);
+      this.rbTuneStrafe.TabIndex = 0;
+      this.rbTuneStrafe.Text = "Tune Strafe";
+      this.rbTuneStrafe.UseVisualStyleBackColor = false;
+      this.rbTuneStrafe.CheckedChanged += new System.EventHandler(this.rbTuneStrafe_CheckedChanged);
+      // 
+      // rbTuneYPR
+      // 
+      this.rbTuneYPR.BackColor = System.Drawing.Color.Gold;
+      this.rbTuneYPR.Checked = true;
+      this.rbTuneYPR.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.rbTuneYPR.Location = new System.Drawing.Point(12, 20);
+      this.rbTuneYPR.Name = "rbTuneYPR";
+      this.rbTuneYPR.Size = new System.Drawing.Size(111, 42);
+      this.rbTuneYPR.TabIndex = 0;
+      this.rbTuneYPR.TabStop = true;
+      this.rbTuneYPR.Text = "Tune YPR";
+      this.rbTuneYPR.UseVisualStyleBackColor = false;
+      this.rbTuneYPR.CheckedChanged += new System.EventHandler(this.rbTuneYPR_CheckedChanged);
+      // 
+      // lblGraphDeadzone
+      // 
+      this.lblGraphDeadzone.AutoSize = true;
+      this.lblGraphDeadzone.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblGraphDeadzone.Location = new System.Drawing.Point(252, 266);
+      this.lblGraphDeadzone.Name = "lblGraphDeadzone";
+      this.lblGraphDeadzone.Size = new System.Drawing.Size(34, 15);
+      this.lblGraphDeadzone.TabIndex = 52;
+      this.lblGraphDeadzone.Text = "0.000";
+      // 
+      // lblGraphSaturation
+      // 
+      this.lblGraphSaturation.AutoSize = true;
+      this.lblGraphSaturation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblGraphSaturation.Location = new System.Drawing.Point(531, 266);
+      this.lblGraphSaturation.Name = "lblGraphSaturation";
+      this.lblGraphSaturation.Size = new System.Drawing.Size(34, 15);
+      this.lblGraphSaturation.TabIndex = 53;
+      this.lblGraphSaturation.Text = "0.000";
+      // 
+      // rbPtDeadzone
+      // 
+      this.rbPtDeadzone.AutoSize = true;
+      this.rbPtDeadzone.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.rbPtDeadzone.Location = new System.Drawing.Point(14, 72);
+      this.rbPtDeadzone.Name = "rbPtDeadzone";
+      this.rbPtDeadzone.Size = new System.Drawing.Size(81, 19);
+      this.rbPtDeadzone.TabIndex = 54;
+      this.rbPtDeadzone.Text = "Deadzone";
+      this.rbPtDeadzone.UseVisualStyleBackColor = true;
+      this.rbPtDeadzone.CheckedChanged += new System.EventHandler(this.rbPtAny_CheckedChanged);
       // 
       // FormJSCalCurve
       // 
@@ -1671,13 +1815,13 @@
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormJSCalCurve_FormClosing);
       this.Load += new System.EventHandler(this.FormJSCalCurve_Load);
       this.tlp.ResumeLayout(false);
-      this.tableLayoutPanel2.ResumeLayout(false);
-      this.panel3.ResumeLayout(false);
-      this.panel3.PerformLayout();
-      this.panel4.ResumeLayout(false);
-      this.panel4.PerformLayout();
-      this.panel5.ResumeLayout(false);
-      this.panel5.PerformLayout();
+      this.tlpData.ResumeLayout(false);
+      this.pnlYaw.ResumeLayout(false);
+      this.pnlYaw.PerformLayout();
+      this.pnlPitch.ResumeLayout(false);
+      this.pnlPitch.PerformLayout();
+      this.pnlRoll.ResumeLayout(false);
+      this.pnlRoll.PerformLayout();
       this.tableLayoutPanel1.ResumeLayout(false);
       this.panel9.ResumeLayout(false);
       this.panel9.PerformLayout();
@@ -1688,14 +1832,15 @@
       this.panel6.ResumeLayout(false);
       this.panel6.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.tbDeadzone)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.tbSlider)).EndInit();
       this.flowLayoutPanel1.ResumeLayout(false);
       this.flowLayoutPanel1.PerformLayout();
       this.tableLayoutPanel3.ResumeLayout(false);
       this.panel8.ResumeLayout(false);
       this.panel8.PerformLayout();
       this.flowLayoutPanel2.ResumeLayout(false);
-      this.panel7.ResumeLayout(false);
+      this.pnlAxisSelector.ResumeLayout(false);
+      this.panel10.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -1712,20 +1857,19 @@
     private System.Windows.Forms.RadioButton rb300;
     private System.Windows.Forms.Panel panel1;
     private System.Windows.Forms.Label lblTurnspeed;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+    private System.Windows.Forms.TableLayoutPanel tlpData;
     private System.Windows.Forms.Panel panel2;
-    private System.Windows.Forms.Panel panel3;
-    private System.Windows.Forms.Label label1;
-    private System.Windows.Forms.Panel panel4;
-    private System.Windows.Forms.Label label2;
-    private System.Windows.Forms.Panel panel5;
-    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Panel pnlYaw;
+    private System.Windows.Forms.Label lblYaw;
+    private System.Windows.Forms.Panel pnlPitch;
+    private System.Windows.Forms.Label lblPitch;
+    private System.Windows.Forms.Panel pnlRoll;
+    private System.Windows.Forms.Label lblRoll;
     private System.Windows.Forms.Label lblYCmd;
     private System.Windows.Forms.Label lblPCmd;
     private System.Windows.Forms.Label lblRCmd;
     private System.Windows.Forms.Panel panel6;
-    private System.Windows.Forms.Label lblDeadzone;
-    private System.Windows.Forms.TrackBar tbDeadzone;
+    private System.Windows.Forms.TrackBar tbSlider;
     private System.Windows.Forms.RadioButton rbR;
     private System.Windows.Forms.RadioButton rbP;
     private System.Windows.Forms.RadioButton rbY;
@@ -1736,11 +1880,10 @@
     private System.Windows.Forms.Label lblYexponent;
     private System.Windows.Forms.Label lblPexponent;
     private System.Windows.Forms.Label lblRexponent;
-    private System.Windows.Forms.Label lblYsense;
-    private System.Windows.Forms.Label lblPsense;
-    private System.Windows.Forms.Label lblRsense;
-    private System.Windows.Forms.Label lblOutSense;
-    private System.Windows.Forms.Label label8;
+    private System.Windows.Forms.Label lblYsat;
+    private System.Windows.Forms.Label lblPsat;
+    private System.Windows.Forms.Label lblRsat;
+    private System.Windows.Forms.Label lblOutSlider;
     private System.Windows.Forms.Label label16;
     private System.Windows.Forms.Label label25;
     private System.Windows.Forms.Label label24;
@@ -1769,7 +1912,7 @@
     private System.Windows.Forms.Label lblRin2;
     private System.Windows.Forms.Label lblRout1;
     private System.Windows.Forms.Label lblRin1;
-    private System.Windows.Forms.Panel panel7;
+    private System.Windows.Forms.Panel pnlAxisSelector;
     private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     private System.Windows.Forms.RadioButton rbPt3;
     private System.Windows.Forms.RadioButton rbPt2;
@@ -1783,18 +1926,18 @@
     private System.Windows.Forms.Label lblOut1;
     private System.Windows.Forms.Label lblIn1;
     private System.Windows.Forms.RadioButton rbPtExponent;
-    private System.Windows.Forms.RadioButton rbPtSense;
+    private System.Windows.Forms.RadioButton rbPtSaturation;
     private System.Windows.Forms.CheckBox cbxYpts;
     private System.Windows.Forms.CheckBox cbxYexpo;
-    private System.Windows.Forms.CheckBox cbxYsense;
+    private System.Windows.Forms.CheckBox cbxYsat;
     private System.Windows.Forms.CheckBox cbxYdeadzone;
     private System.Windows.Forms.CheckBox cbxPpts;
     private System.Windows.Forms.CheckBox cbxPexpo;
-    private System.Windows.Forms.CheckBox cbxPsense;
+    private System.Windows.Forms.CheckBox cbxPsat;
     private System.Windows.Forms.CheckBox cbxPdeadzone;
     private System.Windows.Forms.CheckBox cbxRpts;
     private System.Windows.Forms.CheckBox cbxRexpo;
-    private System.Windows.Forms.CheckBox cbxRsense;
+    private System.Windows.Forms.CheckBox cbxRsat;
     private System.Windows.Forms.CheckBox cbxRdeadzone;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
     private System.Windows.Forms.Button btDone;
@@ -1808,7 +1951,7 @@
     private System.Windows.Forms.RadioButton rbHighway;
     private System.Windows.Forms.RadioButton rbShiodome;
     private System.Windows.Forms.RadioButton rbCanyon;
-    private System.Windows.Forms.Label label5;
+    private System.Windows.Forms.Label lblLiveYaw;
     private System.Windows.Forms.Label label4;
     private System.Windows.Forms.RadioButton rbBigSight;
     private System.Windows.Forms.Panel panel9;
@@ -1820,8 +1963,8 @@
     private System.Windows.Forms.Label lblRInput;
     private System.Windows.Forms.Label lblPOutput;
     private System.Windows.Forms.Label lblPInput;
-    private System.Windows.Forms.Label label9;
-    private System.Windows.Forms.Label label7;
+    private System.Windows.Forms.Label lblLiveRoll;
+    private System.Windows.Forms.Label lblLivePitch;
     private System.Windows.Forms.Label label10;
     private System.Windows.Forms.Label label11;
     private System.Windows.Forms.CheckBox cbRuse;
@@ -1830,5 +1973,18 @@
     private System.Windows.Forms.Label label12;
     private System.Windows.Forms.RadioButton rbSkybox;
     private System.Windows.Forms.RadioButton rbOutThere1;
+    private System.Windows.Forms.Panel panel10;
+    private System.Windows.Forms.RadioButton rbTuneStrafe;
+    private System.Windows.Forms.RadioButton rbTuneYPR;
+    private System.Windows.Forms.Label lblNodetext;
+    private System.Windows.Forms.Label lblYnt;
+    private System.Windows.Forms.Label lblPnt;
+    private System.Windows.Forms.Label lblRnt;
+    private System.Windows.Forms.RadioButton rbOutThere3;
+    private System.Windows.Forms.RadioButton rbHelipad;
+    private System.Windows.Forms.RadioButton rbSunset;
+    private System.Windows.Forms.Label lblGraphSaturation;
+    private System.Windows.Forms.Label lblGraphDeadzone;
+    private System.Windows.Forms.RadioButton rbPtDeadzone;
   }
 }

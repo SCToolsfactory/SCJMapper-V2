@@ -116,25 +116,34 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
-    /// Returns the X-Sensitivity item
+    /// Returns the StrafeLateral-Tuning item
     /// </summary>
-    public DeviceDeadzoneParameter DeadzoneX
+    public DeviceTuningParameter TuningStrafeLateral
     {
-      get { return m_deviceOptions.DeadzoneX; }
+      get { return m_options.TuneLat; }
     }
     /// <summary>
-    /// Returns the Y-Sensitivity item
+    /// Returns the StrafeVertical-Tuning item
     /// </summary>
-    public DeviceDeadzoneParameter DeadzoneY
+    public DeviceTuningParameter TuningStrafeVertical
     {
-      get { return m_deviceOptions.DeadzoneY; }
+      get { return m_options.TuneVert; }
     }
     /// <summary>
-    /// Returns the Z-Sensitivity item
+    /// Returns the StrafeLongitudinal-Tuning item
     /// </summary>
-    public DeviceDeadzoneParameter DeadzoneZ
+    public DeviceTuningParameter TuningStrafeLongitudinal
     {
-      get { return m_deviceOptions.DeadzoneZ; }
+      get { return m_options.TuneLon; }
+    }
+
+
+    /// <summary>
+    /// Returns the DeviceOptions containing the deadzones
+    /// </summary>
+    public Deviceoptions Deadzones
+    {
+      get { return m_deviceOptions; }
     }
 
     /// <summary>

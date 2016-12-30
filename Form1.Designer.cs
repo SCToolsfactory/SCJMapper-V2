@@ -528,7 +528,7 @@
             this.tdiAddMod2,
             this.tdiAddMod3});
       this.cmAddDel.Name = "cmAddDel";
-      this.cmAddDel.Size = new System.Drawing.Size(221, 479);
+      this.cmAddDel.Size = new System.Drawing.Size(221, 457);
       this.cmAddDel.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.cmAddDel_Closed);
       this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
       // 
@@ -1205,6 +1205,7 @@
       this.cbxInvStrafeVert.TabIndex = 0;
       this.cbxInvStrafeVert.Text = "Inv. Strafe vertical";
       this.cbxInvStrafeVert.UseVisualStyleBackColor = true;
+      this.cbxInvStrafeVert.Visible = false;
       this.cbxInvStrafeVert.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // cbxInvStrafeLat
@@ -1215,6 +1216,7 @@
       this.cbxInvStrafeLat.TabIndex = 0;
       this.cbxInvStrafeLat.Text = "Inv. Strafe lateral";
       this.cbxInvStrafeLat.UseVisualStyleBackColor = true;
+      this.cbxInvStrafeLat.Visible = false;
       this.cbxInvStrafeLat.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // cbxInvStrafeLon
@@ -1225,6 +1227,7 @@
       this.cbxInvStrafeLon.TabIndex = 0;
       this.cbxInvStrafeLon.Text = "Inv. Strafe longitudinal";
       this.cbxInvStrafeLon.UseVisualStyleBackColor = true;
+      this.cbxInvStrafeLon.Visible = false;
       this.cbxInvStrafeLon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cbxInv_XY_MouseClick);
       // 
       // tableLayoutPanel4

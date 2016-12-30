@@ -19,9 +19,15 @@ namespace SCJMapper_V2
 
     // Handle all text label composition and extraction here
 
-    public static String ComposeNodeText( String cmd, Boolean modified = false )
+    /// <summary>
+    /// Returns a the cmd with standard modifier if modified == true
+    /// </summary>
+    /// <param name="cmd">Any string</param>
+    /// <param name="modified">Bool true if a modifier shall be added</param>
+    /// <returns>The string with added Modifier if requested</returns>
+    public static string ComposeNodeText( string cmd, bool modified = false )
     {
-      if ( String.IsNullOrEmpty( cmd ) ) {
+      if ( string.IsNullOrEmpty( cmd ) ) {
         return "";
       }
       else {
@@ -32,10 +38,14 @@ namespace SCJMapper_V2
       }
     }
 
-
-    public static void DecompNodeText( String nodeText, out String cmd )
+    /// <summary>
+    /// Returns the cmd part of a string like "cmd - anything #" 
+    /// </summary>
+    /// <param name="nodeText">A nodetext string like "cmd - anything #"</param>
+    /// <param name="cmd">contains the cmd part if delimiters are present - else returns the input</param>
+    public static void DecompNodeText( string nodeText, out string cmd )
     {
-      String[] e = nodeText.Split( new char[] { RegDiv, ModDiv }, StringSplitOptions.RemoveEmptyEntries );
+      string[] e = nodeText.Split( new char[] { RegDiv, ModDiv }, StringSplitOptions.RemoveEmptyEntries );
       if ( e.Length > 0 ) 
         cmd = e[0].TrimEnd( );
       else
@@ -45,13 +55,13 @@ namespace SCJMapper_V2
 
     /// <summary>
     /// Returns the command part from a node text
-    /// i.e.  v_pitch - js1_x returns js1_x
+    /// i.e.  "v_pitch - js1_x" returns v_pitch
     /// </summary>
     /// <param name="nodeText">The node text in 'action - command' notation</param>
     /// <returns>the command part or an empty string</returns>
-    public new static String CommandFromNodeText( String nodeText )
+    public new static string CommandFromNodeText( string nodeText )
     {
-      String cmd;
+      string cmd;
       ActionTreeInputNode.DecompNodeText( nodeText, out cmd );
       return cmd;
     }
@@ -98,9 +108,9 @@ namespace SCJMapper_V2
     }
 
 
-    //private String m_command ="";
+    //private string m_command ="";
 
-    public new String Text
+    public new string Text
     {
       get { return base.Text; }
       set
@@ -111,7 +121,7 @@ namespace SCJMapper_V2
     }
 
 
-    public new String Command
+    public new string Command
     {
       get { return m_command; }
       set

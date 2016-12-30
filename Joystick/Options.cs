@@ -17,6 +17,10 @@ namespace SCJMapper_V2.Joystick
   ///		<pilot exponent="1" />
   ///	</options>  
   /// 	
+  /// <options  type="joystick"  instance="2"  >
+  ///	  <flight_move_strafe_longitudinal  invert="1"  />
+  /// </options>
+  ///	
   /// [type] : set to shared, keyboard, xboxpad, or joystick
   /// [instance] : set to the device number; js1=1, js2=2, etc
   /// [optiongroup] : set to what group the option should affect (for available groups see default actionmap)
@@ -30,11 +34,15 @@ namespace SCJMapper_V2.Joystick
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     // Support only one set of independent options (string storage)
-    List<String> m_stringOptions = new List<String>( );
+    List<string> m_stringOptions = new List<string>( );
     // Support only one set of TuningParameters (there is only ONE Joystick Pitch, Yaw, Roll control possible, they can be on different instances however)
     DeviceTuningParameter m_tuningP = null; // pitch
     DeviceTuningParameter m_tuningY = null; // yaw
     DeviceTuningParameter m_tuningR = null; // roll
+
+    DeviceTuningParameter m_tuningVert = null; // strafe vertical
+    DeviceTuningParameter m_tuningLat = null;  // strafe lateral
+    DeviceTuningParameter m_tuningLon = null;  // strafe longitudinal
 
     // Have to support Inverters for all possible JS Instances here - right now 4 are supported - provide them for all 12 we support..
 
@@ -48,6 +56,10 @@ namespace SCJMapper_V2.Joystick
       m_tuningP = new DeviceTuningParameter( );
       m_tuningY = new DeviceTuningParameter( );
       m_tuningR = new DeviceTuningParameter( );
+
+      m_tuningVert = new DeviceTuningParameter( );
+      m_tuningLat = new DeviceTuningParameter( );
+      m_tuningLon = new DeviceTuningParameter( );
 
       // create inverters (
       for ( int i = 0; i < ( int )OptionsInvert.Inversions.I_LAST; i++ ) {
@@ -85,6 +97,28 @@ namespace SCJMapper_V2.Joystick
     public DeviceTuningParameter TuneR
     {
       get { return m_tuningR; }
+    }
+
+    /// <summary>
+    /// Returns the Strafe Vertical-Tuning item
+    /// </summary>
+    public DeviceTuningParameter TuneVert
+    {
+      get { return m_tuningVert; }
+    }
+    /// <summary>
+    /// Returns the Strafe Lateral-Tuning item
+    /// </summary>
+    public DeviceTuningParameter TuneLat
+    {
+      get { return m_tuningLat; }
+    }
+    /// <summary>
+    /// Returns the Strafe Longitudinal-Tuning item
+    /// </summary>
+    public DeviceTuningParameter TuneLon
+    {
+      get { return m_tuningLon; }
     }
 
     /// <summary>
@@ -126,13 +160,13 @@ namespace SCJMapper_V2.Joystick
 
 
 
-    private String[] FormatXml( string xml )
+    private string[] FormatXml( string xml )
     {
       try {
         XDocument doc = XDocument.Parse( xml );
-        return doc.ToString( ).Split( new String[] { String.Format( "\n" ) }, StringSplitOptions.RemoveEmptyEntries );
+        return doc.ToString( ).Split( new string[] { string.Format( "\n" ) }, StringSplitOptions.RemoveEmptyEntries );
       } catch ( Exception ) {
-        return new String[] { xml };
+        return new string[] { xml };
       }
     }
 
@@ -140,26 +174,30 @@ namespace SCJMapper_V2.Joystick
     /// Dump the Options as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public String toXML( )
+    public string toXML( )
     {
-      String r = "";
+      string r = "";
 
       // and dump the contents of plain string options
-      foreach ( String x in m_stringOptions ) {
+      foreach ( string x in m_stringOptions ) {
 
-        if ( !String.IsNullOrWhiteSpace( x ) ) {
-          foreach ( String line in FormatXml( x ) ) {
-            r += String.Format( "\t{0}", line );
+        if ( !string.IsNullOrWhiteSpace( x ) ) {
+          foreach ( string line in FormatXml( x ) ) {
+            r += string.Format( "\t{0}", line );
           }
         }
 
-        r += String.Format( "\n" );
+        r += string.Format( "\n" );
       }
 
       // dump Tuning 
-      r += m_tuningP.Options_toXML( );
       r += m_tuningY.Options_toXML( );
+      r += m_tuningP.Options_toXML( );
       r += m_tuningR.Options_toXML( );
+
+      r += m_tuningLat.Options_toXML( );
+      r += m_tuningVert.Options_toXML( );
+      r += m_tuningLon.Options_toXML( );
 
       r += m_inverter[( int )OptionsInvert.Inversions.flight_aim_pitch].Options_toXML( );
       r += m_inverter[( int )OptionsInvert.Inversions.flight_aim_yaw].Options_toXML( );
@@ -167,9 +205,9 @@ namespace SCJMapper_V2.Joystick
       r += m_inverter[( int )OptionsInvert.Inversions.flight_view_pitch].Options_toXML( );
       r += m_inverter[( int )OptionsInvert.Inversions.flight_view_yaw].Options_toXML( );
 
-      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_toXML( );
-      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_toXML( );
-      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_toXML( );
+//      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_toXML( );
+//      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_toXML( );
+//      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_toXML( );
 
       r += m_inverter[( int )OptionsInvert.Inversions.flight_throttle].Options_toXML( );
 
@@ -183,7 +221,7 @@ namespace SCJMapper_V2.Joystick
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public Boolean fromXML( String xml )
+    public Boolean fromXML( string xml )
     {
       /* 
        * This can be a lot of the following options
@@ -219,8 +257,8 @@ namespace SCJMapper_V2.Joystick
 
       reader.Read( );
 
-      String type = "";
-      String instance = ""; int nInstance = 0;
+      string type = "";
+      string instance = ""; int nInstance = 0;
 
       if ( reader.HasAttributes ) {
         type = reader["type"];
@@ -272,11 +310,14 @@ namespace SCJMapper_V2.Joystick
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_roll" ) {
             m_tuningR.Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_vertical" ) {
-              m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuningVert.Options_fromXML( reader, type, int.Parse( instance ) );
+            //m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_lateral" ) {
-              m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuningLat.Options_fromXML( reader, type, int.Parse( instance ) );
+            //m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_longitudinal" ) {
-              m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuningLon.Options_fromXML( reader, type, int.Parse( instance ) );
+            //m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_pitch" ) {
               m_inverter[( int )OptionsInvert.Inversions.flight_aim_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_yaw" ) {

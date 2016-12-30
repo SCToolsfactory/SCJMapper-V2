@@ -26,7 +26,7 @@ namespace SCJMapper_V2.OGL
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    public System.Boolean Canceled { get; set; }
+    public bool Canceled { get; set; }
 
     private bool loaded = false;
 
@@ -38,18 +38,22 @@ namespace SCJMapper_V2.OGL
     // Textures
     const TextureUnit TMU0_Unit = TextureUnit.Texture0;
     const int TMU0_UnitInteger = 0;
-    String TMU0_Filename = "";
+    string TMU0_Filename = "";
     uint TMU0_Handle;
     TextureTarget TMU0_Target;
 
-    private String[] SBFiles = { "graphics/SB_OutThere1.dds", "graphics/Skybox.dds", "graphics/SB_Canyon.dds", "graphics/SB_Shiodome.dds", "graphics/SB_Highway.dds", "graphics/SB_BigSight.dds" };
+    private string[] SBFiles = { "graphics/SB_OutThere1.dds", "graphics/SB_OutThere3.dds", "graphics/Skybox.dds", "graphics/SB_Canyon.dds",
+                                "graphics/SB_Shiodome.dds", "graphics/SB_Highway.dds", "graphics/SB_BigSight.dds", "graphics/SB_LA_Helipad.dds", "graphics/SB_Sunset.dds" };
     // index into SBFiles
     const int  SB_OutThere1 = 0;
-    const int  SB_Skybox = 1;
-    const int  SB_Canyon = 2;
-    const int  SB_Shiodome = 3;
-    const int  SB_Highway = 4;
-    const int  SB_BigSight = 5;
+    const int  SB_OutThere3 = 1;
+    const int  SB_Skybox = 2;
+    const int  SB_Canyon = 3;
+    const int  SB_Shiodome = 4;
+    const int  SB_Highway = 5;
+    const int  SB_BigSight = 6;
+    const int  SB_LA_Helipad= 7;
+    const int  SB_Sunset= 8;
 
 
     #endregion internal Fields
@@ -70,6 +74,8 @@ namespace SCJMapper_V2.OGL
 
     BezierSeries m_bSeries = new BezierSeries( );
 
+    bool m_isStrafe = false;  // Strafe or YPR
+
     #endregion
 
 
@@ -83,11 +89,10 @@ namespace SCJMapper_V2.OGL
 
       // helpers
       lblIn = new Label[] { null, lblIn1, lblIn2, lblIn3, null, null };     // goes with PtNo 1..
-      lblOut = new Label[] { null, lblOut1, lblOut2, lblOut3, lblOutSense, lblOutExponent }; // goes with PtNo 1..
-
+      lblOut = new Label[] { null, lblOut1, lblOut2, lblOut3, lblOutExponent }; // goes with PtNo 1..
 
       // add 5 points to the chart data series ( Zero, user1..3, max)
-      for ( int i=0; i < 5; i++ ) {
+      for ( int i = 0; i < 5; i++ ) {
         m_bSeries.BezierPoints.Add( new DataPoint( 0, 0 ) );
       }
       m_bSeries.ChartType = SeriesChartType.Line;
@@ -112,13 +117,18 @@ namespace SCJMapper_V2.OGL
     private void FormJSCalCurve_Load( object sender, EventArgs e )
     {
       rbHornet.Checked = true;
+
+      rbTuneYPR.Checked = false;
+      rbTuneYPR.Checked = true;
       // chain of triggers to maintain and format entries with default events...
       rbY.Checked = false;
       //back to default
       rbY.Checked = true;
 
-      rbPtSense.Checked = false; // trigger value change..
-      rbPtSense.Checked = true; // default
+      rbPtSaturation.Checked = false; // trigger value change..
+      rbPtSaturation.Checked = true; // default
+
+      rbTuneYPR.Checked = true;
     }
 
     private void FormJSCalCurve_FormClosing( object sender, FormClosingEventArgs e )
@@ -129,6 +139,10 @@ namespace SCJMapper_V2.OGL
         PitchUpdateTuning( );
         RollUpdateTuning( );
 
+        StrafeLatUpdateTuning( );
+        StrafeVertUpdateTuning( );
+        StrafeLonUpdateTuning( );
+
         Application.Idle -= Application_Idle;
         GL.DeleteProgram( ProgramObject );
         GL.DeleteTexture( TMU0_Handle );
@@ -138,15 +152,178 @@ namespace SCJMapper_V2.OGL
     #endregion
 
 
+    #region class LiveValues (internal class)
+
+    private class LiveValues
+    {
+      // load live from TuningParameters
+      public void Load( DeviceTuningParameter dp )
+      {
+        if ( dp != null ) {
+          used = true;
+          nodetext = dp.Action;
+          string[] e = nodetext.Split( new char[] { ActionTreeInputNode.RegDiv, ActionTreeInputNode.ModDiv }, StringSplitOptions.RemoveEmptyEntries );
+          if ( e.Length > 0 )
+            control = e[1].TrimEnd( );
+          else
+            control = dp.Action;
+          command = dp.CommandCtrl;
+          // the option data
+          invertUsed = dp.InvertUsed;
+          deadzoneUsed = dp.Deviceoption.DeadzoneUsed;
+          deadzoneS = dp.Deviceoption.Deadzone;
+          saturationUsed = dp.Deviceoption.SaturationUsed;
+          saturationS = dp.Deviceoption.Saturation;
+          exponentUsed = dp.ExponentUsed;
+          exponentS = dp.Exponent;
+          nonLinCurveUsed = dp.NonLinCurveUsed;
+          if ( dp.NonLinCurveUsed ) {
+            nonLinCurve.Curve( float.Parse( dp.NonLinCurvePtsIn[0] ), float.Parse( dp.NonLinCurvePtsOut[0] ),
+                                   float.Parse( dp.NonLinCurvePtsIn[1] ), float.Parse( dp.NonLinCurvePtsOut[1] ),
+                                   float.Parse( dp.NonLinCurvePtsIn[2] ), float.Parse( dp.NonLinCurvePtsOut[2] ) );
+          } else {
+            // dummy curve
+            nonLinCurve.Curve( 0.25f, 0.25f, 0.5f, 0.5f, 0.75f, 0.75f );
+          }
+        }
+      }
+
+      // update the TuningParameters
+      public void Update( ref DeviceTuningParameter dp )
+      {
+        if ( !used ) return;
+        // don't return strings to control the device
+        dp.InvertUsed = invertUsed;
+        dp.Deviceoption.DeadzoneUsed = deadzoneUsed;
+        dp.Deviceoption.Deadzone = deadzoneS;
+        dp.Deviceoption.SaturationUsed = saturationUsed;
+        dp.Deviceoption.Saturation = saturationS;
+        dp.ExponentUsed = exponentUsed;
+        dp.Exponent = exponentS;
+        dp.NonLinCurveUsed = nonLinCurveUsed;
+        List<string> pts = new List<string>( );
+        pts.Add( nonLinCurve.Pt( 0 ).X.ToString( "0.000" ) ); pts.Add( nonLinCurve.Pt( 1 ).X.ToString( "0.000" ) ); pts.Add( nonLinCurve.Pt( 2 ).X.ToString( "0.000" ) );
+        dp.NonLinCurvePtsIn = pts;
+        pts = new List<string>( );
+        pts.Add( nonLinCurve.Pt( 0 ).Y.ToString( "0.000" ) ); pts.Add( nonLinCurve.Pt( 1 ).Y.ToString( "0.000" ) ); pts.Add( nonLinCurve.Pt( 2 ).Y.ToString( "0.000" ) );
+        dp.NonLinCurvePtsOut = pts;
+      }
+
+      // Context
+      public bool used = false;
+      public string nodetext = "";  // the node text
+      public string control = ""; // the device control item e.g.  js2_x
+      public string command = ""; // the control item used to get the XDevice Input
+
+      // calc values
+      private double MAX_DZ = 160.0; // avoid range issues and silly values..
+      private double MIN_SAT = 200.0; // avoid range issues and silly values..
+      private double m_range = 1000.0;
+      private double m_sign = 1.0;
+
+      /// <summary>
+      /// Scales the input according to Deadzone and Saturation
+      /// </summary>
+      /// <param name="devIn">Int device input -1000 .. 0..1000</param>
+      /// <returns>A double in the range -1.0 .. 0.0 .. 1.0</returns>
+      public double ScaledOut( int devIn )
+      {
+        int di = Math.Abs(devIn);
+        if ( di <= m_deadzone ) return 0.0;
+        if ( di >= m_saturation ) return 1.0 * Math.Sign( devIn );
+
+        double fout = ( di - m_deadzone ) / m_range; // 0 .. 1.0
+        if ( exponentUsed ) {
+          fout = Math.Pow( fout, exponent ) * Math.Sign( devIn );
+        } else if ( nonLinCurveUsed ) {
+          fout = nonLinCurve.EvalX( ( int )( fout * 1000.0 * Math.Sign( devIn ) ) ); // gets a scaled signed value (-1 .. +1)
+        } else {
+          fout = fout * Math.Sign( devIn );
+        }
+
+        fout = ( fout > 1.0 ) ? 1.0 : fout;   // safeguard against any overshoots
+        fout = ( fout < -1.0 ) ? -1.0 : fout; // safeguard against any overshoots
+        return fout;
+      }
+      /// <summary>
+      /// Applies the inversion if needed
+      /// </summary>
+      /// <param name="devOut">The new DevOut float 0.0 .. 1000.0</param>
+      /// <returns>Applied inverted DevOut</returns>
+      public double InvertedSign
+      {
+        get { return m_sign; }
+      }
+
+      // set values
+      public bool m_invertUsed = false;
+      public bool invertUsed { get { return m_invertUsed; } set { m_invertUsed = value; m_sign = m_invertUsed ? -1.0 : 1.0; } }
+
+      public bool deadzoneUsed = false;
+      private double m_deadzone = 0.0; // stores 1000 * set value
+      public double deadzone { get { return m_deadzone; } set { m_deadzone = ( value > MAX_DZ ) ? MAX_DZ : value; m_range = m_saturation - m_deadzone; } }
+      public string deadzoneS // get/set game value 0..1.000
+      {
+        get { return ( deadzone / 1000.0 ).ToString( "0.000" ); }
+        set {
+          double f;
+          if ( double.TryParse( value, out f ) ) {
+            deadzone = f * 1000.0;
+          } else {
+            deadzone = 0.0;
+          }
+        }
+      }
+
+      public bool saturationUsed = false;
+      private double m_saturation = 1000.0;// stores 1000 * set value
+      public double saturation { get { return m_saturation; } set { m_saturation = ( value < MIN_SAT ) ? MIN_SAT : value; m_range = m_saturation - m_deadzone; } }
+      public string saturationS // get/set game value 0..1.000
+      {
+        get { return ( m_saturation / 1000.0 ).ToString( "0.000" ); }
+        set {
+          double f;
+          if ( double.TryParse( value, out f ) ) {
+            saturation = f * 1000.0;
+          } else {
+            saturation = 1000.0;
+          }
+        }
+      }
+
+      public bool exponentUsed = false;
+      public double exponent = 1.0F;
+      public string exponentS
+      {
+        get { return exponent.ToString( "0.000" ); }
+        set {
+          double f;
+          if ( double.TryParse( value, out f ) ) {
+            exponent = f;
+          } else {
+            exponent = 1.0;
+          }
+        }
+      }
+
+      public bool nonLinCurveUsed = false;
+      public xyPoints nonLinCurve = new xyPoints( 1000 );  // max val of Joystick Input
+    } // class LiveValues
+
+    #endregion
+
+    // Generic Interaction Pattern
+    // 
+    // Assign TuningParameter (load Live data from Parameter)
+    // Switch YPR - Strafe   (load live values into GUI)
+    // Switch Axis           (load live values into working area)
+    // Change Parameters     (live values are changed, GUI is updated)
+    // Retrieve TuningParameter (update Parameter from Live data
+    //
     #region YAW - Interaction
 
-    private DeviceTuningParameter m_Ytuning = new DeviceTuningParameter( );
-    // live values
-    private String m_liveYawCommand ="";
-    private float m_liveYdeadzone = 0.0f;
-    private float m_liveYsense = 1.0f;
-    private float m_liveYexponent = 1.0f;
-    private xyPoints m_liveYnonLinCurve = new xyPoints( 1000 );  // max val of Joystick Input
+    private DeviceTuningParameter m_YawTuning = new DeviceTuningParameter( );
+    private LiveValues m_liveYaw = new LiveValues(); // live values
 
     /// <summary>
     /// Submit the tuning parameters
@@ -154,59 +331,53 @@ namespace SCJMapper_V2.OGL
     /// 
     public DeviceTuningParameter YawTuning
     {
-      get
-      {
+      get {
         YawUpdateTuning( );
-        return m_Ytuning;
+        return m_YawTuning;
       }
-      set
-      {
-        m_Ytuning = value;
-        // populate from input
-        lblYCmd.Text = m_Ytuning.Action;
-        m_liveYawCommand = m_Ytuning.CommandCtrl;
+      set {
         log.Info( "FormJSCalCurve : Yaw Command is: " + value );
-
-        cbxYinvert.Checked = m_Ytuning.InvertUsed;
-        cbxYdeadzone.Checked = m_Ytuning.Deadzone.DeadzoneUsed;
-        lblYdeadzone.Text = m_Ytuning.Deadzone.Deadzone;
-        cbxYsense.Checked = m_Ytuning.SensitivityUsed;
-        lblYsense.Text = m_Ytuning.Sensitivity;
-        cbxYexpo.Checked = m_Ytuning.ExponentUsed;
-        lblYexponent.Text = m_Ytuning.Exponent;
-        cbxYpts.Checked = m_Ytuning.NonLinCurveUsed;
-        if ( m_Ytuning.NonLinCurveUsed ) {
-          lblYin1.Text = m_Ytuning.NonLinCurvePtsIn[0]; lblYin2.Text = m_Ytuning.NonLinCurvePtsIn[1]; lblYin3.Text = m_Ytuning.NonLinCurvePtsIn[2];
-          lblYout1.Text = m_Ytuning.NonLinCurvePtsOut[0]; lblYout2.Text = m_Ytuning.NonLinCurvePtsOut[1]; lblYout3.Text = m_Ytuning.NonLinCurvePtsOut[2];
-        }
-        else {
-          lblYin1.Text = "0.250"; lblYin2.Text = "0.500"; lblYin3.Text = "0.750";
-          lblYout1.Text = "0.250"; lblYout2.Text = "0.500"; lblYout3.Text = "0.750";
-        }
-        // update live values
-        m_liveYdeadzone = 1000.0f * float.Parse( lblYdeadzone.Text ); // scale for JS axis
-        m_liveYsense = float.Parse( lblYsense.Text );
-        m_liveYexponent = float.Parse( lblYexponent.Text );
-        if ( m_liveYnonLinCurve != null ) {
-          m_liveYnonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
-                                float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
-                                float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
-        }
+        m_YawTuning = value;
+        // update live values from input
+        m_liveYaw.Load( m_YawTuning );
+        // populate from input
+        //YawUpdateGUIFromLiveValues( );
       }
     }
 
+    // update the GUI from Live
+    private void YawUpdateGUIFromLiveValues( )
+    {
+      // updated the working area with Tuning parameters (obey live values)
+      LiveValues lv = m_liveYaw;
+
+      if ( !lv.used ) {
+        pnlYaw.Visible = false; rbY.Visible = false;
+        return;
+      }
+      pnlYaw.Visible = true; rbY.Visible = true;
+
+      lblYCmd.Text = lv.control;
+      lblYnt.Text = lv.nodetext;
+      cbxYinvert.Checked = lv.invertUsed;
+      lblYdeadzone.Text = lv.deadzoneS;
+      cbxYdeadzone.Checked = lv.deadzoneUsed;
+      lblYsat.Text = lv.saturationS;
+      cbxYsat.Checked = lv.saturationUsed;
+      lblYexponent.Text = lv.exponentS;
+      cbxYexpo.Checked = lv.exponentUsed;
+      lblYin1.Text = lv.nonLinCurve.Pt( 0 ).X.ToString( "0.000" ); lblYout1.Text = lv.nonLinCurve.Pt( 0 ).Y.ToString( "0.000" );
+      lblYin2.Text = lv.nonLinCurve.Pt( 1 ).X.ToString( "0.000" ); lblYout2.Text = lv.nonLinCurve.Pt( 1 ).Y.ToString( "0.000" );
+      lblYin3.Text = lv.nonLinCurve.Pt( 2 ).X.ToString( "0.000" ); lblYout3.Text = lv.nonLinCurve.Pt( 2 ).Y.ToString( "0.000" );
+      cbxYpts.Checked = lv.nonLinCurveUsed;
+
+      rbY.Checked = false; rbY.Checked = true;
+    }
+
+    // update Tuning from Live values
     private void YawUpdateTuning( )
     {
-      // update from left area labels (xyUsed items are updated on change - so they are actual allready)
-      if ( m_Ytuning.Deadzone != null ) m_Ytuning.Deadzone.Deadzone = lblYdeadzone.Text;
-      m_Ytuning.Sensitivity = lblYsense.Text;
-      m_Ytuning.Exponent = lblYexponent.Text;
-      List<String> pts = new List<String>( );
-      pts.Add( lblYin1.Text ); pts.Add( lblYin2.Text ); pts.Add( lblYin3.Text );
-      m_Ytuning.NonLinCurvePtsIn = pts;
-      pts = new List<String>( );
-      pts.Add( lblYout1.Text ); pts.Add( lblYout2.Text ); pts.Add( lblYout3.Text );
-      m_Ytuning.NonLinCurvePtsOut = pts;
+      m_liveYaw.Update( ref m_YawTuning ); // update from live values
     }
 
     #endregion
@@ -214,13 +385,8 @@ namespace SCJMapper_V2.OGL
 
     #region PITCH - Interaction
 
-    private DeviceTuningParameter m_Ptuning = new DeviceTuningParameter( );
-    // live values
-    private String m_livePitchCommand ="";
-    private float m_livePdeadzone = 0.0f;
-    private float m_livePsense = 1.0f;
-    private float m_livePexponent = 1.0f;
-    private xyPoints m_livePnonLinCurve = new xyPoints( 1000 );  // max val of Joystick Input
+    private DeviceTuningParameter m_PitchTuning = new DeviceTuningParameter( );
+    private LiveValues m_livePitch = new LiveValues(); // live values
 
     /// <summary>
     /// Submit the tuning parameters
@@ -228,60 +394,53 @@ namespace SCJMapper_V2.OGL
     /// 
     public DeviceTuningParameter PitchTuning
     {
-      get
-      {
+      get {
         // update 
         PitchUpdateTuning( );
-        return m_Ptuning;
+        return m_PitchTuning;
       }
-      set
-      {
-        m_Ptuning = value;
-        // populate from input
-        lblPCmd.Text = m_Ptuning.Action;  // 
-        m_livePitchCommand = m_Ptuning.CommandCtrl;
+      set {
         log.Info( "FormJSCalCurve : Pitch Command is: " + value );
-
-        cbxPinvert.Checked = m_Ptuning.InvertUsed;
-        cbxPdeadzone.Checked = m_Ptuning.Deadzone.DeadzoneUsed;
-        lblPdeadzone.Text = m_Ptuning.Deadzone.Deadzone;
-        cbxPsense.Checked = m_Ptuning.SensitivityUsed;
-        lblPsense.Text = m_Ptuning.Sensitivity;
-        cbxPexpo.Checked = m_Ptuning.ExponentUsed;
-        lblPexponent.Text = m_Ptuning.Exponent;
-        cbxPpts.Checked = m_Ptuning.NonLinCurveUsed;
-        if ( m_Ptuning.NonLinCurveUsed ) {
-          lblPin1.Text = m_Ptuning.NonLinCurvePtsIn[0]; lblPin2.Text = m_Ptuning.NonLinCurvePtsIn[1]; lblPin3.Text = m_Ptuning.NonLinCurvePtsIn[2];
-          lblPout1.Text = m_Ptuning.NonLinCurvePtsOut[0]; lblPout2.Text = m_Ptuning.NonLinCurvePtsOut[1]; lblPout3.Text = m_Ptuning.NonLinCurvePtsOut[2];
-        }
-        else {
-          lblPin1.Text = "0.250"; lblPin2.Text = "0.500"; lblPin3.Text = "0.750";
-          lblPout1.Text = "0.250"; lblPout2.Text = "0.500"; lblPout3.Text = "0.750";
-        }
-        // update live values
-        m_livePdeadzone = 1000.0f * float.Parse( lblPdeadzone.Text );
-        m_livePsense = float.Parse( lblPsense.Text );
-        m_livePexponent = float.Parse( lblPexponent.Text );
-        if ( m_livePnonLinCurve != null ) {
-          m_livePnonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
-                                float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
-                                float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
-        }
+        m_PitchTuning = value;
+        // update live values from input
+        m_livePitch.Load( m_PitchTuning );
+        // populate from input
+        //PitchUpdateGUIFromLiveValues( );
       }
+    }
+
+    // update the GUI from Live
+    private void PitchUpdateGUIFromLiveValues( )
+    {
+      // updated the working area with Tuning parameters (obey live values)
+      LiveValues lv = m_livePitch;
+
+      if ( !lv.used ) {
+        pnlPitch.Visible = false; rbP.Visible = false;
+        return;
+      }
+      pnlPitch.Visible = true; rbP.Visible = true;
+
+      lblPCmd.Text = lv.control;
+      lblPnt.Text = lv.nodetext;
+      cbxPinvert.Checked = lv.invertUsed;
+      lblPdeadzone.Text = lv.deadzoneS;
+      cbxPdeadzone.Checked = lv.deadzoneUsed;
+      lblPsat.Text = lv.saturationS;
+      cbxPsat.Checked = lv.saturationUsed;
+      lblPexponent.Text = lv.exponentS;
+      cbxPexpo.Checked = lv.exponentUsed;
+      lblPin1.Text = lv.nonLinCurve.Pt( 0 ).X.ToString( "0.000" ); lblPout1.Text = lv.nonLinCurve.Pt( 0 ).Y.ToString( "0.000" );
+      lblPin2.Text = lv.nonLinCurve.Pt( 1 ).X.ToString( "0.000" ); lblPout2.Text = lv.nonLinCurve.Pt( 1 ).Y.ToString( "0.000" );
+      lblPin3.Text = lv.nonLinCurve.Pt( 2 ).X.ToString( "0.000" ); lblPout3.Text = lv.nonLinCurve.Pt( 2 ).Y.ToString( "0.000" );
+      cbxPpts.Checked = lv.nonLinCurveUsed;
+
+      rbP.Checked = false; rbP.Checked = true;
     }
 
     private void PitchUpdateTuning( )
     {
-      // update from left area labels (xyUsed items are updated on change - so they are actual allready)
-      if ( m_Ptuning.Deadzone != null ) m_Ptuning.Deadzone.Deadzone = lblPdeadzone.Text;
-      m_Ptuning.Sensitivity = lblPsense.Text;
-      m_Ptuning.Exponent = lblPexponent.Text;
-      List<String> pts = new List<String>( );
-      pts.Add( lblPin1.Text ); pts.Add( lblPin2.Text ); pts.Add( lblPin3.Text );
-      m_Ptuning.NonLinCurvePtsIn = pts;
-      pts = new List<String>( );
-      pts.Add( lblPout1.Text ); pts.Add( lblPout2.Text ); pts.Add( lblPout3.Text );
-      m_Ptuning.NonLinCurvePtsOut = pts;
+      m_livePitch.Update( ref m_PitchTuning ); // update from live values
     }
 
     #endregion
@@ -289,13 +448,8 @@ namespace SCJMapper_V2.OGL
 
     #region ROLL - Interaction
 
-    private DeviceTuningParameter m_Rtuning = new DeviceTuningParameter( );
-    // live values
-    private String m_liveRollCommand;
-    private float m_liveRdeadzone = 0.0f;
-    private float m_liveRsense = 1.0f;
-    private float m_liveRexponent = 1.0f;
-    private xyPoints m_liveRnonLinCurve = new xyPoints( 1000 );  // max val of Joystick Input
+    private DeviceTuningParameter m_RollTuning = new DeviceTuningParameter( );
+    private LiveValues m_liveRoll = new LiveValues(); // live values
 
     /// <summary>
     /// Submit the tuning parameters
@@ -303,60 +457,247 @@ namespace SCJMapper_V2.OGL
     /// 
     public DeviceTuningParameter RollTuning
     {
-      get
-      {
+      get {
         // update 
         RollUpdateTuning( );
-        return m_Rtuning;
+        return m_RollTuning;
       }
-      set
-      {
-        m_Rtuning = value;
-        // populate from input
-        lblRCmd.Text = m_Rtuning.Action;  // 
-        m_liveRollCommand = m_Rtuning.CommandCtrl;
+      set {
         log.Info( "FormJSCalCurve : Roll Command is: " + value );
-
-        cbxRinvert.Checked = m_Rtuning.InvertUsed;
-        cbxRdeadzone.Checked = m_Rtuning.Deadzone.DeadzoneUsed;
-        lblRdeadzone.Text = m_Rtuning.Deadzone.Deadzone;
-        cbxRsense.Checked = m_Rtuning.SensitivityUsed;
-        lblRsense.Text = m_Rtuning.Sensitivity;
-        cbxRexpo.Checked = m_Rtuning.ExponentUsed;
-        lblRexponent.Text = m_Rtuning.Exponent;
-        cbxRpts.Checked = m_Rtuning.NonLinCurveUsed;
-        if ( m_Rtuning.NonLinCurveUsed ) {
-          lblRin1.Text = m_Rtuning.NonLinCurvePtsIn[0]; lblRin2.Text = m_Rtuning.NonLinCurvePtsIn[1]; lblRin3.Text = m_Rtuning.NonLinCurvePtsIn[2];
-          lblRout1.Text = m_Rtuning.NonLinCurvePtsOut[0]; lblRout2.Text = m_Rtuning.NonLinCurvePtsOut[1]; lblRout3.Text = m_Rtuning.NonLinCurvePtsOut[2];
-        }
-        else {
-          lblRin1.Text = "0.250"; lblRin2.Text = "0.500"; lblRin3.Text = "0.750";
-          lblRout1.Text = "0.250"; lblRout2.Text = "0.500"; lblRout3.Text = "0.750";
-        }
-        // update live values
-        m_liveRdeadzone = 1000.0f * float.Parse( lblRdeadzone.Text );
-        m_liveRsense = float.Parse( lblRsense.Text );
-        m_liveRexponent = float.Parse( lblRexponent.Text );
-        if ( m_liveRnonLinCurve != null ) {
-          m_liveRnonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
-                                float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
-                                float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
-        }
+        m_RollTuning = value;
+        // update live values from input
+        m_liveRoll.Load( m_RollTuning );
+        // populate from input
+        //RollUpdateGUIFromLiveValues( );
       }
+    }
+
+    // update the GUI from Live
+    private void RollUpdateGUIFromLiveValues( )
+    {
+      // updated the working area with Tuning parameters (obey live values)
+      LiveValues lv = m_liveRoll;
+
+      if ( !lv.used ) {
+        pnlRoll.Visible = false; rbR.Visible = false;
+
+        return;
+      }
+      pnlRoll.Visible = true; rbR.Visible = true;
+
+      lblRCmd.Text = lv.control;
+      lblRnt.Text = lv.nodetext;
+      cbxRinvert.Checked = lv.invertUsed;
+      lblRdeadzone.Text = lv.deadzoneS;
+      cbxRdeadzone.Checked = lv.deadzoneUsed;
+      lblRsat.Text = lv.saturationS;
+      cbxRsat.Checked = lv.saturationUsed;
+      lblRexponent.Text = lv.exponentS;
+      cbxRexpo.Checked = lv.exponentUsed;
+      lblRin1.Text = lv.nonLinCurve.Pt( 0 ).X.ToString( "0.000" ); lblRout1.Text = lv.nonLinCurve.Pt( 0 ).Y.ToString( "0.000" );
+      lblRin2.Text = lv.nonLinCurve.Pt( 1 ).X.ToString( "0.000" ); lblRout2.Text = lv.nonLinCurve.Pt( 1 ).Y.ToString( "0.000" );
+      lblRin3.Text = lv.nonLinCurve.Pt( 2 ).X.ToString( "0.000" ); lblRout3.Text = lv.nonLinCurve.Pt( 2 ).Y.ToString( "0.000" );
+      cbxRpts.Checked = lv.nonLinCurveUsed;
+
+      rbR.Checked = false; rbR.Checked = true;
     }
 
     private void RollUpdateTuning( )
     {
-      // update from left area labels (xyUsed items are updated on change - so they are actual allready)
-      if ( m_Rtuning.Deadzone != null ) m_Rtuning.Deadzone.Deadzone = lblRdeadzone.Text;
-      m_Rtuning.Sensitivity = lblRsense.Text;
-      m_Rtuning.Exponent = lblRexponent.Text;
-      List<String> pts = new List<String>( );
-      pts.Add( lblRin1.Text ); pts.Add( lblRin2.Text ); pts.Add( lblRin3.Text );
-      m_Rtuning.NonLinCurvePtsIn = pts;
-      pts = new List<String>( );
-      pts.Add( lblRout1.Text ); pts.Add( lblRout2.Text ); pts.Add( lblRout3.Text );
-      m_Rtuning.NonLinCurvePtsOut = pts;
+      m_liveRoll.Update( ref m_RollTuning ); // update from live values
+    }
+
+
+    #endregion
+
+
+    #region Strafe Lateral - Interaction (yaw GUI values)
+
+    private DeviceTuningParameter m_StrafeLatTuning = new DeviceTuningParameter( );
+    private LiveValues m_liveStrafeLat = new LiveValues(); // live values
+
+    /// <summary>
+    /// Submit the tuning parameters
+    /// </summary>
+    /// 
+    public DeviceTuningParameter StrafeLatTuning
+    {
+      get {
+        // update 
+        StrafeLatUpdateTuning( );
+        return m_StrafeLatTuning;
+      }
+      set {
+        log.Info( "FormJSCalCurve : Strafe Lateral Command is: " + value );
+        m_StrafeLatTuning = value;
+        // update live values from input
+        m_liveStrafeLat.Load( m_StrafeLatTuning );
+        // populate from input
+        //StrafeLatUpdateGUIFromLiveValues( );
+      }
+    }
+
+    // update the GUI from Live
+    private void StrafeLatUpdateGUIFromLiveValues( )
+    {
+      // updated the working area with Tuning parameters (obey live values)
+      LiveValues lv = m_liveStrafeLat;
+
+      if ( !lv.used ) {
+        pnlYaw.Visible = false; rbY.Visible = false;
+
+        return;
+      }
+      pnlYaw.Visible = true; rbY.Visible = true;
+
+      lblYCmd.Text = lv.control;
+      lblYnt.Text = lv.nodetext;
+      cbxYinvert.Checked = lv.invertUsed;
+      lblYdeadzone.Text = lv.deadzoneS;
+      cbxYdeadzone.Checked = lv.deadzoneUsed;
+      lblYsat.Text = lv.saturationS;
+      cbxYsat.Checked = lv.saturationUsed;
+      lblYexponent.Text = lv.exponentS;
+      cbxYexpo.Checked = lv.exponentUsed;
+      lblYin1.Text = lv.nonLinCurve.Pt( 0 ).X.ToString( "0.000" ); lblYout1.Text = lv.nonLinCurve.Pt( 0 ).Y.ToString( "0.000" );
+      lblYin2.Text = lv.nonLinCurve.Pt( 1 ).X.ToString( "0.000" ); lblYout2.Text = lv.nonLinCurve.Pt( 1 ).Y.ToString( "0.000" );
+      lblYin3.Text = lv.nonLinCurve.Pt( 2 ).X.ToString( "0.000" ); lblYout3.Text = lv.nonLinCurve.Pt( 2 ).Y.ToString( "0.000" );
+      cbxYpts.Checked = lv.nonLinCurveUsed;
+
+      rbY.Checked = false; rbY.Checked = true;
+    }
+
+    private void StrafeLatUpdateTuning( )
+    {
+      m_liveStrafeLat.Update( ref m_StrafeLatTuning ); // update from live values
+    }
+
+    #endregion
+
+
+    #region Strafe Vertical - Interaction (pitch GUI values)
+
+    private DeviceTuningParameter m_StrafeVertTuning = new DeviceTuningParameter( );
+    private LiveValues m_liveStrafeVert = new LiveValues(); // live values
+
+    /// <summary>
+    /// Submit the tuning parameters
+    /// </summary>
+    /// 
+    public DeviceTuningParameter StrafeVertTuning
+    {
+      get {
+        // update 
+        StrafeVertUpdateTuning( );
+        return m_StrafeVertTuning;
+      }
+      set {
+        log.Info( "FormJSCalCurve : Strafe Vertical Command is: " + value );
+        m_StrafeVertTuning = value;
+        // update live values from input
+        m_liveStrafeVert.Load( m_StrafeVertTuning );
+        // populate from input
+        //StrafeVertUpdateGUIFromLiveValues( );
+      }
+    }
+
+    // update the GUI from Live
+    private void StrafeVertUpdateGUIFromLiveValues( )
+    {
+      // updated the working area with Tuning parameters (obey live values)
+      LiveValues lv = m_liveStrafeVert;
+
+      if ( !lv.used ) {
+        pnlPitch.Visible = false; rbP.Visible = false;
+
+        return;
+      }
+      pnlPitch.Visible = true; rbP.Visible = true;
+
+      lblPCmd.Text = lv.control;
+      lblPnt.Text = lv.nodetext;
+      cbxPinvert.Checked = lv.invertUsed;
+      lblPdeadzone.Text = lv.deadzoneS;
+      cbxPdeadzone.Checked = lv.deadzoneUsed;
+      lblPsat.Text = lv.saturationS;
+      cbxPsat.Checked = lv.saturationUsed;
+      lblPexponent.Text = lv.exponentS;
+      cbxPexpo.Checked = lv.exponentUsed;
+      lblPin1.Text = lv.nonLinCurve.Pt( 0 ).X.ToString( "0.000" ); lblPout1.Text = lv.nonLinCurve.Pt( 0 ).Y.ToString( "0.000" );
+      lblPin2.Text = lv.nonLinCurve.Pt( 1 ).X.ToString( "0.000" ); lblPout2.Text = lv.nonLinCurve.Pt( 1 ).Y.ToString( "0.000" );
+      lblPin3.Text = lv.nonLinCurve.Pt( 2 ).X.ToString( "0.000" ); lblPout3.Text = lv.nonLinCurve.Pt( 2 ).Y.ToString( "0.000" );
+      cbxPpts.Checked = lv.nonLinCurveUsed;
+
+      rbP.Checked = false; rbP.Checked = true;
+    }
+
+    private void StrafeVertUpdateTuning( )
+    {
+      m_liveStrafeVert.Update( ref m_StrafeVertTuning ); // update from live values
+    }
+
+    #endregion
+
+
+    #region Strafe Longitudinal - Interaction (Roll GUI values)
+
+    private DeviceTuningParameter m_StrafeLonTuning = new DeviceTuningParameter( );
+    private LiveValues m_liveStrafeLon = new LiveValues(); // live values
+
+    /// <summary>
+    /// Submit the tuning parameters
+    /// </summary>
+    /// 
+    public DeviceTuningParameter StrafeLonTuning
+    {
+      get {
+        // update 
+        StrafeLonUpdateTuning( );
+        return m_StrafeLonTuning;
+      }
+      set {
+        log.Info( "FormJSCalCurve : Strafe Longitudinal Command is: " + value );
+        m_StrafeLonTuning = value;
+        // update live values from input
+        m_liveStrafeLon.Load( m_StrafeLonTuning );
+        // populate from input
+        //StrafeLonUpdateGUIFromLiveValues( );
+      }
+    }
+
+    // update the GUI from Live
+    private void StrafeLonUpdateGUIFromLiveValues( )
+    {
+      // updated the working area with Tuning parameters (obey live values)
+      LiveValues lv = m_liveStrafeLon;
+
+      if ( !lv.used ) {
+        pnlRoll.Visible = false; rbR.Visible = false;
+
+        return;
+      }
+      pnlRoll.Visible = true; rbR.Visible = true;
+
+      lblRCmd.Text = lv.control;
+      lblRnt.Text = lv.nodetext;
+      cbxRinvert.Checked = lv.invertUsed;
+      lblRdeadzone.Text = lv.deadzoneS;
+      cbxRdeadzone.Checked = lv.deadzoneUsed;
+      lblRsat.Text = lv.saturationS;
+      cbxRsat.Checked = lv.saturationUsed;
+      lblRexponent.Text = lv.exponentS;
+      cbxRexpo.Checked = lv.exponentUsed;
+      lblRin1.Text = lv.nonLinCurve.Pt( 0 ).X.ToString( "0.000" ); lblRout1.Text = lv.nonLinCurve.Pt( 0 ).Y.ToString( "0.000" );
+      lblRin2.Text = lv.nonLinCurve.Pt( 1 ).X.ToString( "0.000" ); lblRout2.Text = lv.nonLinCurve.Pt( 1 ).Y.ToString( "0.000" );
+      lblRin3.Text = lv.nonLinCurve.Pt( 2 ).X.ToString( "0.000" ); lblRout3.Text = lv.nonLinCurve.Pt( 2 ).Y.ToString( "0.000" );
+      cbxRpts.Checked = lv.nonLinCurveUsed;
+
+      rbR.Checked = false; rbR.Checked = true;
+    }
+
+    private void StrafeLonUpdateTuning( )
+    {
+      m_liveStrafeLon.Update( ref m_StrafeLonTuning ); // update from live values
     }
 
     #endregion
@@ -376,8 +717,7 @@ namespace SCJMapper_V2.OGL
       try {
         ImageDDS.LoadFromDisk( TMU0_Filename, out TMU0_Handle, out TMU0_Target );
         log.Info( "Loaded " + TMU0_Filename + " with handle " + TMU0_Handle + " as " + TMU0_Target );
-      }
-      catch ( Exception ex ) {
+      } catch ( Exception ex ) {
         log.Error( "Error loading DDS file:", ex );
       }
 
@@ -407,7 +747,7 @@ namespace SCJMapper_V2.OGL
       if ( !GL.GetString( StringName.Extensions ).Contains( "GL_ARB_shading_language" ) ) {
         log.ErrorFormat( "glControl1_Load - This program requires OpenGL 2.0. Found {0}. Aborting.", GL.GetString( StringName.Version ).Substring( 0, 3 ) );
 
-        throw new NotSupportedException( String.Format( "This program requires OpenGL 2.0. Found {0}. Aborting.",
+        throw new NotSupportedException( string.Format( "This program requires OpenGL 2.0. Found {0}. Aborting.",
             GL.GetString( StringName.Version ).Substring( 0, 3 ) ) );
       }
 
@@ -439,7 +779,7 @@ namespace SCJMapper_V2.OGL
 
       // GLSL for vertex shader.
       VertexShaderObject = GL.CreateShader( ShaderType.VertexShader );
-      String vertSource = @"
+      string vertSource = @"
               #extension GL_ARB_gpu_shader5 : enable
               void main()
               {
@@ -460,7 +800,7 @@ namespace SCJMapper_V2.OGL
 
       // GLSL for fragment shader.
       FragmentShaderObject = GL.CreateShader( ShaderType.FragmentShader );
-      String fragSource = @"
+      string fragSource = @"
               uniform samplerCube Skybox;
 
               void main()
@@ -660,6 +1000,97 @@ namespace SCJMapper_V2.OGL
     }
 
 
+
+    /// <summary>
+    /// Sub Handler for Strafe
+    /// </summary>
+    Vector3d Idle_Strafe( )
+    {
+      Vector3d m = Vector3d.Zero; ;
+
+      int i_x = 0, i_y = 0, i_z = 0; // Joystick Input
+      int x = 0; int y = 0; int z = 0; // retain real input as i_xyz
+
+      if ( m_StrafeLatTuning.GameDevice != null ) m_StrafeLatTuning.GameDevice.GetCmdData( m_liveStrafeLat.command, out i_x ); // + = right
+      if ( m_StrafeVertTuning.GameDevice != null ) m_StrafeVertTuning.GameDevice.GetCmdData( m_liveStrafeVert.command, out i_y ); // + = up
+      if ( m_StrafeLonTuning.GameDevice != null ) m_StrafeLonTuning.GameDevice.GetCmdData( m_liveStrafeLon.command, out i_z ); // += twist right
+      // apply the modifications of the control (deadzone, shape, sensitivity)
+      x = i_x; y = i_y; z = i_z; // retain real input as i_xyz
+      m_flightModel.Velocity = Vector3d.Zero;
+
+      // Lateral
+      if ( m_StrafeLatTuning.GameDevice != null ) {
+        double fout = m_liveStrafeLat.ScaledOut( x ); // 0 .. 1000.0
+        lblYInput.Text = ( i_x / 1000.0 ).ToString( "0.00" ); lblYOutput.Text = ( fout ).ToString( "0.00" );
+        // calculate new direction vector
+        m.X = m_liveStrafeLat.InvertedSign * ( ( !cbYuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
+      }
+
+      // Vertical
+      if ( m_StrafeVertTuning.GameDevice != null ) {
+        double fout = m_liveStrafeVert.ScaledOut( y ); // 0 .. 1000.0
+        lblPInput.Text = ( i_y / 1000.0 ).ToString( "0.00" ); lblPOutput.Text = ( fout ).ToString( "0.00" );
+        // calculate new direction vector
+        m.Y = m_liveStrafeVert.InvertedSign * ( ( !cbPuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
+      }
+
+      // Longitudinal
+      if ( m_StrafeLonTuning.GameDevice != null ) {
+        double fout = m_liveStrafeLon.ScaledOut( z ); // 0 .. 1000.0
+        lblRInput.Text = ( i_z / 1000.0 ).ToString( "0.00" ); lblROutput.Text = ( fout ).ToString( "0.00" );
+        // calculate new direction vector
+        m.Z = m_liveStrafeLon.InvertedSign * ( ( !cbRuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
+      }
+      return m;
+    }
+
+
+    /// <summary>
+    /// Sub Handler for YPR (Yaw, Pitch, Roll)
+    /// </summary>
+    Vector3d Idle_YPR( )
+    {
+      Vector3d m = Vector3d.Zero; ;
+
+      int i_x = 0, i_y = 0, i_z = 0; // Joystick Input
+      int x = 0; int y = 0; int z = 0; // retain real input as i_xyz
+
+      if ( m_YawTuning.GameDevice != null ) m_YawTuning.GameDevice.GetCmdData( m_liveYaw.command, out i_x ); // + = right
+      if ( m_PitchTuning.GameDevice != null ) m_PitchTuning.GameDevice.GetCmdData( m_livePitch.command, out i_y ); // + = up
+      if ( m_RollTuning.GameDevice != null ) m_RollTuning.GameDevice.GetCmdData( m_liveRoll.command, out i_z ); // += twist right
+
+      // apply the modifications of the control (deadzone, shape, sensitivity)
+      x = i_x; y = i_y; z = i_z; // retain real input as i_xyz
+      m_flightModel.Velocity = Vector3d.Zero;
+
+      // Yaw
+      if ( m_YawTuning.GameDevice != null ) {
+        double fout = m_liveYaw.ScaledOut( x ); // 0 .. 1000.0
+        lblYInput.Text = ( i_x / 1000.0 ).ToString( "0.00" ); lblYOutput.Text = ( fout ).ToString( "0.00" );
+        // calculate new direction vector
+        m.X = m_liveYaw.InvertedSign * ( ( !cbYuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
+      }
+
+      // Pitch
+      if ( m_PitchTuning.GameDevice != null ) {
+        double fout = m_livePitch.ScaledOut( y ); // 0 .. 1000.0
+        lblPInput.Text = ( i_y / 1000.0 ).ToString( "0.00" ); lblPOutput.Text = ( fout ).ToString( "0.00" );
+        // calculate new direction vector
+        m.Y = m_livePitch.InvertedSign * ( ( !cbPuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
+      }
+
+      // Roll
+      if ( m_RollTuning.GameDevice != null ) {
+        double fout = m_liveRoll.ScaledOut( z ); // 0 .. 1000.0
+        lblRInput.Text = ( i_z / 1000.0 ).ToString( "0.00" ); lblROutput.Text = ( fout ).ToString( "0.00" );
+        // calculate new direction vector
+        m.Z = m_liveRoll.InvertedSign * ( ( !cbRuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
+      }
+
+      return m;
+    }
+
+
     /// <summary>
     /// Handle user input while Idle
     /// </summary>
@@ -676,7 +1107,11 @@ namespace SCJMapper_V2.OGL
         // calculate the aim change while the user is handling the control (integrating the amount of control)
         Int64 newTick = DateTime.Now.Ticks;
         m_msElapsed = ( newTick - m_ticks ) / TimeSpan.TicksPerMillisecond;
-        if ( m_msElapsed < m_frameTime ) continue; //pace updates the max frametime allowed
+        if ( m_msElapsed < m_frameTime ) {
+          // lblDebug.Text = "F";
+          continue; //pace updates the max frametime allowed
+        }
+        //lblDebug.Text = "R";
 
         // safeguard against locking (moving the window) so the integrator does not get crazy..
         // if deltatime gets too big we fake a regular cycle for this round
@@ -684,91 +1119,16 @@ namespace SCJMapper_V2.OGL
 
         m_ticks = newTick; // prep next run
 
-        int i_x = 0, i_y = 0, i_z = 0; // Joystick Input
-        int x = 0; int y = 0; int z = 0; // retain real input as i_xyz
-        // query the Josticks for the 3 controls
-        if ( m_Ytuning.GameDevice != null ) m_Ytuning.GameDevice.GetCmdData( m_liveYawCommand, out i_x ); // + = right
-        if ( m_Ptuning.GameDevice != null ) m_Ptuning.GameDevice.GetCmdData( m_livePitchCommand, out i_y ); // + = up
-        if ( m_Rtuning.GameDevice != null ) m_Rtuning.GameDevice.GetCmdData( m_liveRollCommand, out i_z ); // += twist right
-
-        // apply the modifications of the control (deadzone, shape, sensitivity)
-        x = i_x; y = i_y; z = i_z; // retain real input as i_xyz
-        m_flightModel.Velocity = Vector3d.Zero;
-
-        // Yaw
-        if ( m_Ytuning.GameDevice != null ) {
-          if ( ( m_Ytuning.Deadzone != null ) && m_Ytuning.Deadzone.DeadzoneUsed ) {
-            int sx = Math.Sign( x );
-            x = ( int )( Math.Abs( x ) - m_liveYdeadzone ); x = ( x < 0 ) ? 0 : x * sx; // DZ is subtracted from the input
-          }
-          {
-            double fout = 0.0;
-            if ( m_Ytuning.ExponentUsed ) {
-              fout = Math.Pow( Math.Abs( x / 1000.0 ), m_liveYexponent ) * ( ( m_Ytuning.SensitivityUsed ) ? m_liveYsense : 1.0 ) * Math.Sign( x );
-            }
-            else if ( m_Ytuning.NonLinCurveUsed ) {
-              fout = m_liveYnonLinCurve.EvalX( x ) * ( ( m_Ytuning.SensitivityUsed ) ? m_liveYsense : 1.0 );
-            }
-            else {
-              fout = Math.Abs( x / 1000.0 ) * ( ( m_Ytuning.SensitivityUsed ) ? m_liveYsense : 1.0 ) * Math.Sign( x );
-            }
-            fout = ( fout > 1.0 ) ? 1.0 : fout; // safeguard against any overshoots
-            // update in/out labels if active axis
-            lblYInput.Text = ( i_x / 1000.0 ).ToString( "0.00" ); lblYOutput.Text = ( fout ).ToString( "0.00" );
-            // calculate new direction vector
-            m.X = ( ( m_Ytuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbYuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
-          }
-        }
-
-        // Pitch
-        if ( m_Ptuning.GameDevice != null ) {
-          if ( ( m_Ptuning.Deadzone != null ) && m_Ptuning.Deadzone.DeadzoneUsed ) {
-            int sy = Math.Sign( y );
-            y = ( int )( Math.Abs( y ) - m_livePdeadzone ); y = ( y < 0 ) ? 0 : y * sy;
-          }
-          {
-            double fout = 0.0;
-            if ( m_Ptuning.ExponentUsed ) {
-              fout = Math.Pow( Math.Abs( y / 1000.0 ), m_livePexponent ) * ( ( m_Ptuning.SensitivityUsed ) ? m_livePsense : 1.0 ) * Math.Sign( y );
-            }
-            else if ( m_Ptuning.NonLinCurveUsed ) {
-              fout = m_livePnonLinCurve.EvalX( y ) * ( ( m_Ptuning.SensitivityUsed ) ? m_livePsense : 1.0 );
-            }
-            else {
-              fout = Math.Abs( y / 1000.0 ) * ( ( m_Ptuning.SensitivityUsed ) ? m_livePsense : 1.0 ) * Math.Sign( y );
-            }
-            fout = ( fout > 1.0 ) ? 1.0 : fout;
-            lblPInput.Text = ( i_y / 1000.0 ).ToString( "0.00" ); lblPOutput.Text = ( fout ).ToString( "0.00" );
-            m.Y = ( ( m_Ptuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbPuse.Checked ) ? -fout : 0 ) * m_msElapsed * DegPerMS;
-          }
-        }
-
-        // Roll
-        if ( m_Rtuning.GameDevice != null ) {
-          if ( ( m_Rtuning.Deadzone != null ) && m_Rtuning.Deadzone.DeadzoneUsed ) {
-            int sz = Math.Sign( z );
-            z = ( int )( Math.Abs( z ) - m_liveRdeadzone ); z = ( z < 0 ) ? 0 : z * sz;
-          }
-          {
-            double fout = 0.0;
-            if ( m_Rtuning.ExponentUsed ) {
-              fout = Math.Pow( Math.Abs( z / 1000.0 ), m_liveRexponent ) * ( ( m_Rtuning.SensitivityUsed ) ? m_liveRsense : 1.0 ) * Math.Sign( z );
-            }
-            else if ( m_Rtuning.NonLinCurveUsed ) {
-              fout = m_liveRnonLinCurve.EvalX( z ) * ( ( m_Rtuning.SensitivityUsed ) ? m_liveRsense : 1.0 );
-            }
-            else {
-              fout = Math.Abs( z / 1000.0 ) * ( ( m_Rtuning.SensitivityUsed ) ? m_liveRsense : 1.0 ) * Math.Sign( z );
-            }
-            fout = ( fout > 1.0 ) ? 1.0 : fout;
-            lblRInput.Text = ( i_z / 1000.0 ).ToString( "0.00" ); lblROutput.Text = ( fout ).ToString( "0.00" );
-            m.Z = ( ( m_Rtuning.InvertUsed ) ? -1 : 1 ) * ( ( !cbRuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
-          }
+        // query the Joysticks for the 3 controls and fill the flight model vector
+        if ( m_isStrafe ) {
+          m = Idle_Strafe( );
+        } else {
+          m = Idle_YPR( );
         }
 
         // finalize
         m_flightModel.Velocity -= m; // new direction change vector
-        Vector3d deltaAngleV = m_flightModel.Integrate( ( double )m_msElapsed / 1000.0, m_damping, 100.0 ); // heuristic K and B ..
+        Vector3d deltaAngleV = m_flightModel.Integrate( ( double )m_msElapsed / 1000.0, m_damping, 85.0 ); // heuristic K and B ..
 
         // rotate the view along the input 
         // rotDeg( m );
@@ -796,19 +1156,19 @@ namespace SCJMapper_V2.OGL
     private void rb300i_CheckedChanged( object sender, EventArgs e )
     {
       slDamping.Value = 6;
-      slTurnSpeed.Value = 6; // turns in 3 seconds 360deg
+      slTurnSpeed.Value = 8; // turns in 4 seconds 360deg
     }
 
     private void rbHornet_CheckedChanged( object sender, EventArgs e )
     {
       slDamping.Value = 6;
-      slTurnSpeed.Value = 8;
+      slTurnSpeed.Value = 12;
     }
 
     private void slTurnSpeed_ValueChanged( object sender, EventArgs e )
     {
       // recalc the turning scale based on one full 360 deg sweep in the given time (sec)
-      DegPerMS = 360.0 / ( slTurnSpeed.Value * 500.0 );
+      DegPerMS = 360.0 / ( slTurnSpeed.Value * 500.0 ); // slider is 0.5 sec steps
       lblTurnspeed.Text = ( slTurnSpeed.Value / 2.0 ).ToString( );
     }
 
@@ -820,84 +1180,99 @@ namespace SCJMapper_V2.OGL
 
     #endregion
 
-    // Deadzone slider 00 .. 30 -> 0 .. 0.15
+    #region Tune Kind Changed
 
-    private void tbDeadzone_ValueChanged( object sender, EventArgs e )
+    private void rbTuneYPR_CheckedChanged( object sender, EventArgs e )
     {
-      lblDeadzone.Text = ( tbDeadzone.Value / 200.0f ).ToString( "0.000" );
-      float curDeadzone = 1000.0f * ( tbDeadzone.Value / 200.0f );  // % scaled to maxAxis
-
-      if ( rbY.Checked == true ) {
-        m_liveYdeadzone = curDeadzone;
-        lblYdeadzone.Text = lblDeadzone.Text;
-      }
-      else if ( rbP.Checked == true ) {
-        m_livePdeadzone = curDeadzone;
-        lblPdeadzone.Text = lblDeadzone.Text;
-      }
-      else if ( rbR.Checked == true ) {
-        m_liveRdeadzone = curDeadzone;
-        lblRdeadzone.Text = lblDeadzone.Text;
+      if ( rbTuneYPR.Checked ) {
+        m_isStrafe = false;
+        lblYaw.Text = "Yaw"; lblLiveYaw.Text = "Yaw"; rbY.Text = "Yaw -->";
+        lblPitch.Text = "Pitch"; lblLivePitch.Text = "Pitch"; rbP.Text = "Pitch -->";
+        lblRoll.Text = "Roll"; lblLiveRoll.Text = "Roll"; rbR.Text = "Roll -->";
+        tlpData.BackColor = rbTuneYPR.BackColor;
+        pnlAxisSelector.BackColor = rbTuneYPR.BackColor;
+        RollUpdateGUIFromLiveValues( );
+        PitchUpdateGUIFromLiveValues( );
+        YawUpdateGUIFromLiveValues( );
       }
     }
 
+    private void rbTuneStrafe_CheckedChanged( object sender, EventArgs e )
+    {
+      if ( rbTuneStrafe.Checked ) {
+        m_isStrafe = true;
+        lblYaw.Text = "Lat"; lblLiveYaw.Text = "Lateral"; rbY.Text = "Lateral -->";
+        lblPitch.Text = "Vert"; lblLivePitch.Text = "Vertical"; rbP.Text = "Vertical -->";
+        lblRoll.Text = "Lon"; lblLiveRoll.Text = "Long."; rbR.Text = "Longitudinal -->";
+        tlpData.BackColor = rbTuneStrafe.BackColor;
+        pnlAxisSelector.BackColor = rbTuneStrafe.BackColor;
+        StrafeLonUpdateGUIFromLiveValues( );
+        StrafeVertUpdateGUIFromLiveValues( );
+        StrafeLatUpdateGUIFromLiveValues( );
+      }
+    }
 
-    #region Active Axis Changed
+    #endregion
+
+    #region Active Axis Changed -  - copy data from left labels into the working area
 
     /// <summary>
-    /// Make Yaw Active
+    /// Make Yaw Active - copy data from left labels into the working area
     /// </summary>
     private void rbY_CheckedChanged( object sender, EventArgs e )
     {
       if ( rbY.Checked == true ) {
         // get Labels from left area (current)
-        tbDeadzone.Value = ( int )( float.Parse( lblYdeadzone.Text ) * 200f ); // updates Text and live field too
         lblIn[1].Text = lblYin1.Text; lblIn[2].Text = lblYin2.Text; lblIn[3].Text = lblYin3.Text;
         lblOut[1].Text = lblYout1.Text; lblOut[2].Text = lblYout2.Text; lblOut[3].Text = lblYout3.Text;
-        lblOut[4].Text = lblYsense.Text;
-        lblOut[5].Text = lblYexponent.Text;
-
+        lblOut[4].Text = lblYexponent.Text;
+        lblNodetext.Text = lblYnt.Text;
         // setup chart along the choosen parameter
-        rbPtSense.Checked = true; // force back to sense (available for both..)
+        rbPtSaturation.Checked = true; // force back to sense (available for both..)
+        if ( rbPtSaturation.Enabled ) {
+          tbSlider.Value = ( int )( ( float.Parse( lblYsat.Text ) - 0.2f ) * 50f );
+        }
         UpdateChartItems( );
       }
     }
 
 
     /// <summary>
-    /// Make Pitch Active
+    /// Make Pitch Active - copy data from left labels into the working area
     /// </summary>
     private void rbP_CheckedChanged( object sender, EventArgs e )
     {
       if ( rbP.Checked == true ) {
         // get Labels from left area (current)
-        tbDeadzone.Value = ( int )( float.Parse( lblPdeadzone.Text ) * 200f ); // updates Text and live field too
         lblIn[1].Text = lblPin1.Text; lblIn[2].Text = lblPin2.Text; lblIn[3].Text = lblPin3.Text;
         lblOut[1].Text = lblPout1.Text; lblOut[2].Text = lblPout2.Text; lblOut[3].Text = lblPout3.Text;
-        lblOut[4].Text = lblPsense.Text;
-        lblOut[5].Text = lblPexponent.Text;
-
+        lblOut[4].Text = lblPexponent.Text;
+        lblNodetext.Text = lblPnt.Text;
         // setup chart along the choosen parameter
-        rbPtSense.Checked = true; // force back to sense (available for both..)
+        rbPtSaturation.Checked = true; // force back to sense (available for both..)
+        if ( rbPtSaturation.Enabled ) {
+          tbSlider.Value = ( int )( ( float.Parse( lblYsat.Text ) - 0.2f ) * 50f );
+        }
         UpdateChartItems( );
       }
     }
 
     /// <summary>
-    /// Make Roll Active
+    /// Make Roll Active - copy data from left labels into the working area
     /// </summary>
     private void rbR_CheckedChanged( object sender, EventArgs e )
     {
       if ( rbR.Checked == true ) {
         // get Labels from left area (current)
-        tbDeadzone.Value = ( int )( float.Parse( lblRdeadzone.Text ) * 200f ); // updates Text and live field too
         lblIn[1].Text = lblRin1.Text; lblIn[2].Text = lblRin2.Text; lblIn[3].Text = lblRin3.Text;
         lblOut[1].Text = lblRout1.Text; lblOut[2].Text = lblRout2.Text; lblOut[3].Text = lblRout3.Text;
-        lblOut[4].Text = lblRsense.Text;
-        lblOut[5].Text = lblRexponent.Text;
-
+        lblOut[4].Text = lblRexponent.Text;
+        lblNodetext.Text = lblRnt.Text;
         // setup chart along the choosen parameter
-        rbPtSense.Checked = true; // force back to sense (available for both..)
+        rbPtSaturation.Checked = true; // force back to sense (available for both..)
+        if ( rbPtSaturation.Enabled ) {
+          tbSlider.Value = ( int )( ( float.Parse( lblYsat.Text ) - 0.2f ) * 50f );
+        }
         UpdateChartItems( );
       }
     }
@@ -914,11 +1289,36 @@ namespace SCJMapper_V2.OGL
     private void EvalChartInput( )
     {
       m_hitPt = 0;
-      if ( ( rbPt1.Enabled ) && ( rbPt1.Checked == true ) ) m_hitPt = 1;
-      if ( ( rbPt2.Enabled ) && ( rbPt2.Checked == true ) ) m_hitPt = 2;
-      if ( ( rbPt3.Enabled ) && ( rbPt3.Checked == true ) ) m_hitPt = 3;
-      if ( ( rbPtSense.Enabled ) && ( rbPtSense.Checked == true ) ) m_hitPt = 4;
-      if ( ( rbPtExponent.Enabled ) && ( rbPtExponent.Checked == true ) ) m_hitPt = 5;
+      if ( rbPt1.Enabled && rbPt1.Checked ) m_hitPt = 1;
+      if ( rbPt2.Enabled && rbPt2.Checked ) m_hitPt = 2;
+      if ( rbPt3.Enabled && rbPt3.Checked ) m_hitPt = 3;
+      if ( rbPtExponent.Enabled && rbPtExponent.Checked ) m_hitPt = 4;
+
+      if ( m_hitPt > 0 ) return;
+
+      // slider fudge
+      tbSlider.Enabled = false;
+      if ( rbPtDeadzone.Enabled && rbPtDeadzone.Checked ) {
+        tbSlider.Enabled = true;
+        if ( rbY.Checked ) {
+          tbSlider.Value = ( int )( float.Parse( lblYdeadzone.Text ) * 250f );
+        } else if ( rbP.Checked ) {
+          tbSlider.Value = ( int )( float.Parse( lblPdeadzone.Text ) * 250f );
+        } else if ( rbR.Checked ) {
+          tbSlider.Value = ( int )( float.Parse( lblRdeadzone.Text ) * 250f );
+        }
+      }
+      if ( rbPtSaturation.Enabled && rbPtSaturation.Checked ) {
+        tbSlider.Enabled = true;
+        if ( rbY.Checked ) {
+          tbSlider.Value = ( int )( ( float.Parse( lblYsat.Text ) - 0.2f ) * 50f );
+        } else if ( rbP.Checked ) {
+          tbSlider.Value = ( int )( ( float.Parse( lblPsat.Text ) - 0.2f ) * 50f );
+        } else if ( rbR.Checked ) {
+          tbSlider.Value = ( int )( ( float.Parse( lblRsat.Text ) - 0.2f ) * 50f );
+        }
+      }
+      EvalSlider( );
     }
 
 
@@ -942,65 +1342,108 @@ namespace SCJMapper_V2.OGL
     /// </summary>
     private void UpdateChartItems( )
     {
-      bool senseUsed = true;
+      bool deadzoneUsed = true;
+      bool satUsed = true;
       bool expUsed = true;
       bool ptsUsed = true;
-      double sense;
       // see what is on display..
       if ( rbY.Checked == true ) {
         // Yaw
-        senseUsed = ( m_Ytuning.SensitivityUsed == true );
-        expUsed = ( m_Ytuning.ExponentUsed == true );
-        ptsUsed = ( m_Ytuning.NonLinCurveUsed == true );
+        if ( m_isStrafe ) {
+          deadzoneUsed = ( m_liveStrafeLat.deadzoneUsed == true );
+          satUsed = ( m_liveStrafeLat.saturationUsed == true );
+          expUsed = ( m_liveStrafeLat.exponentUsed == true );
+          ptsUsed = ( m_liveStrafeLat.nonLinCurveUsed == true );
+          lblGraphDeadzone.Text = m_liveStrafeLat.deadzoneS;
+          lblGraphSaturation.Text = m_liveStrafeLat.saturationS;
+
+        } else {
+          deadzoneUsed = ( m_liveYaw.deadzoneUsed == true );
+          satUsed = ( m_liveYaw.saturationUsed == true );
+          expUsed = ( m_liveYaw.exponentUsed == true );
+          ptsUsed = ( m_liveYaw.nonLinCurveUsed == true );
+          lblGraphDeadzone.Text = m_liveYaw.deadzoneS;
+          lblGraphSaturation.Text = m_liveYaw.saturationS;
+        }
         chart1.BackColor = rbY.BackColor;
-      }
-      else if ( rbP.Checked == true ) {
+
+      } else if ( rbP.Checked == true ) {
         // Pitch
-        senseUsed = ( m_Ptuning.SensitivityUsed == true );
-        expUsed = ( m_Ptuning.ExponentUsed == true );
-        ptsUsed = ( m_Ptuning.NonLinCurveUsed == true );
+        if ( m_isStrafe ) {
+          deadzoneUsed = ( m_liveStrafeVert.deadzoneUsed == true );
+          satUsed = ( m_liveStrafeVert.saturationUsed == true );
+          expUsed = ( m_liveStrafeVert.exponentUsed == true );
+          ptsUsed = ( m_liveStrafeVert.nonLinCurveUsed == true );
+          lblGraphDeadzone.Text = m_liveStrafeVert.deadzoneS;
+          lblGraphSaturation.Text = m_liveStrafeVert.saturationS;
+        } else {
+          deadzoneUsed = ( m_livePitch.deadzoneUsed == true );
+          satUsed = ( m_livePitch.saturationUsed == true );
+          expUsed = ( m_livePitch.exponentUsed == true );
+          ptsUsed = ( m_livePitch.nonLinCurveUsed == true );
+          lblGraphDeadzone.Text = m_livePitch.deadzoneS;
+          lblGraphSaturation.Text = m_livePitch.saturationS;
+        }
         chart1.BackColor = rbP.BackColor;
-      }
-      else {
+
+      } else {
         // Roll
-        senseUsed = ( m_Rtuning.SensitivityUsed == true );
-        expUsed = ( m_Rtuning.ExponentUsed == true );
-        ptsUsed = ( m_Rtuning.NonLinCurveUsed == true );
+        if ( m_isStrafe ) {
+          deadzoneUsed = ( m_liveStrafeLon.deadzoneUsed == true );
+          satUsed = ( m_liveStrafeLon.saturationUsed == true );
+          expUsed = ( m_liveStrafeLon.exponentUsed == true );
+          ptsUsed = ( m_liveStrafeLon.nonLinCurveUsed == true );
+          lblGraphDeadzone.Text = m_liveStrafeLon.deadzoneS;
+          lblGraphSaturation.Text = m_liveStrafeLon.saturationS;
+        } else {
+          deadzoneUsed = ( m_liveRoll.deadzoneUsed == true );
+          satUsed = ( m_liveRoll.saturationUsed == true );
+          expUsed = ( m_liveRoll.exponentUsed == true );
+          ptsUsed = ( m_liveRoll.nonLinCurveUsed == true );
+          lblGraphDeadzone.Text = m_liveRoll.deadzoneS;
+          lblGraphSaturation.Text = m_liveRoll.saturationS;
+        }
         chart1.BackColor = rbR.BackColor;
       }
 
       // generic part
-      rbPtSense.Enabled = senseUsed;
+      rbPtDeadzone.Enabled = deadzoneUsed;
+      lblGraphDeadzone.Visible = deadzoneUsed;
+
+      rbPtSaturation.Enabled = satUsed;
+      lblGraphSaturation.Visible = satUsed;
+
+
       rbPtExponent.Enabled = expUsed;
       rbPt1.Enabled = ptsUsed; rbPt2.Enabled = ptsUsed; rbPt3.Enabled = ptsUsed;
       EvalChartInput( );  // review active chart input
 
-      sense = ( senseUsed ) ? double.Parse( lblOut[4].Text ) : 1.0; // use current or 1.0 if disabled 
+      if ( !tbSlider.Enabled ) lblOutSlider.Text = "---";
 
       if ( expUsed ) {
         // Exp mode
-        double expo = double.Parse( lblOut[5].Text );
+        double expo = double.Parse( lblOut[4].Text );
         // dont touch zero Point
-        m_bSeries.BezierPoints[1].SetValueXY( 0.25, sense * Math.Pow( 0.25, expo ) );
-        m_bSeries.BezierPoints[2].SetValueXY( 0.5, sense * Math.Pow( 0.5, expo ) );
-        m_bSeries.BezierPoints[3].SetValueXY( 0.75, sense * Math.Pow( 0.75, expo ) );
-        m_bSeries.BezierPoints[4].SetValueXY( 1.0, sense * 1.0 );
-      }
-      else if ( ptsUsed ) {
+        m_bSeries.BezierPoints[1].SetValueXY( 0.25, Math.Pow( 0.25, expo ) );
+        m_bSeries.BezierPoints[2].SetValueXY( 0.5, Math.Pow( 0.5, expo ) );
+        m_bSeries.BezierPoints[3].SetValueXY( 0.75, Math.Pow( 0.75, expo ) );
+        m_bSeries.BezierPoints[4].SetValueXY( 1.0, 1.0 );
+
+      } else if ( ptsUsed ) {
         // Pts mode
         // dont touch zero Point
-        for ( int i=1; i <= 3; i++ ) {
-          m_bSeries.BezierPoints[i].SetValueXY( float.Parse( lblIn[i].Text ), sense * float.Parse( lblOut[i].Text ) );
+        for ( int i = 1; i <= 3; i++ ) {
+          m_bSeries.BezierPoints[i].SetValueXY( float.Parse( lblIn[i].Text ), float.Parse( lblOut[i].Text ) );
         }
-        m_bSeries.BezierPoints[4].SetValueXY( 1.0, sense * 1.0 );
-      }
-      else {
+        m_bSeries.BezierPoints[4].SetValueXY( 1.0, 1.0 );
+
+      } else {
         // linear
         // dont touch zero Point
-        m_bSeries.BezierPoints[1].SetValueXY( 0.25, sense * 0.25 );
-        m_bSeries.BezierPoints[2].SetValueXY( 0.5, sense * 0.5 );
-        m_bSeries.BezierPoints[3].SetValueXY( 0.75, sense * 0.75 );
-        m_bSeries.BezierPoints[4].SetValueXY( 1.0, sense * 1.0 );
+        m_bSeries.BezierPoints[1].SetValueXY( 0.25, 0.25 );
+        m_bSeries.BezierPoints[2].SetValueXY( 0.5, 0.5 );
+        m_bSeries.BezierPoints[3].SetValueXY( 0.75, 0.75 );
+        m_bSeries.BezierPoints[4].SetValueXY( 1.0, 1.0 );
       }
       // update markers from curve points
       chart1.Series[1].Points[1] = m_bSeries.BezierPoints[1];
@@ -1024,8 +1467,7 @@ namespace SCJMapper_V2.OGL
       if ( m_hitActive ) {
         if ( m_hitPt < 1 ) {
           // nothing selected ...
-        }
-        else if ( m_hitPt <= 3 ) {
+        } else if ( m_hitPt <= 3 ) {
           // Pt1..3
           double newX = double.Parse( lblIn[m_hitPt].Text ) + ( e.X - mX ) * 0.001f; mX = e.X;
           newX = ( newX > 1.0f ) ? 1.0f : newX;
@@ -1038,57 +1480,21 @@ namespace SCJMapper_V2.OGL
           lblOut[m_hitPt].Text = newY.ToString( "0.000" );
 
           // update chart (Points[0] is zero)
-          double sense = double.Parse( lblOut[4].Text );
-          m_bSeries.BezierPoints[m_hitPt].SetValueXY( newX, sense * newY );
+          m_bSeries.BezierPoints[m_hitPt].SetValueXY( newX, newY );
           // update markers from curve points
           chart1.Series[1].Points[m_hitPt] = m_bSeries.BezierPoints[m_hitPt];
-        }
 
-        else if ( m_hitPt == 4 ) {
-          // sense 
-          double newY = double.Parse( lblOut[m_hitPt].Text ) + ( e.Y - mY ) * -0.01f; mY = e.Y;
-          newY = ( newY > 1.0f ) ? 1.0f : newY;
-          newY = ( newY < 0.2f ) ? 0.2f : newY;
-          lblOut[m_hitPt].Text = newY.ToString( "0.00" );
-
-          // update chart (Points[0] is zero)
-          // depends on Exp or Pt mode...
-          if ( rbPtExponent.Enabled == true ) {
-            // Exp mode
-            double expo = double.Parse( lblOut[5].Text );
-            m_bSeries.BezierPoints[1].SetValueXY( 0.25, newY * Math.Pow( 0.25, expo ) );
-            m_bSeries.BezierPoints[2].SetValueXY( 0.5, newY * Math.Pow( 0.5, expo ) );
-            m_bSeries.BezierPoints[3].SetValueXY( 0.75, newY * Math.Pow( 0.75, expo ) );
-            m_bSeries.BezierPoints[4].SetValueXY( 1.0, newY * 1.0 );
-          }
-          else if ( rbPt1.Enabled && rbPt2.Enabled && rbPt3.Enabled ) { // TODO - this might be slow to check all rbs each time
-            // Pts mode
-            for ( int i=1; i <= 3; i++ ) {
-              m_bSeries.BezierPoints[i].SetValueXY( float.Parse( lblIn[i].Text ), newY * float.Parse( lblOut[i].Text ) );
-            }
-            m_bSeries.BezierPoints[4].SetValueXY( 1.0, newY * 1.0 );
-          }
-          else {
-            // neither expo nor pts -> linear only
-            m_bSeries.BezierPoints[1].SetValueXY( 0.25, newY * 0.25 );
-            m_bSeries.BezierPoints[2].SetValueXY( 0.5, newY * 0.5 );
-            m_bSeries.BezierPoints[3].SetValueXY( 0.75, newY * 0.75 );
-            m_bSeries.BezierPoints[4].SetValueXY( 1.0, newY * 1.0 );
-          }
-        }
-
-        else if ( m_hitPt == 5 ) {
-          // exponent
+        } else if ( m_hitPt == 4 ) {
+          // Exponent
           double newY = double.Parse( lblOut[m_hitPt].Text ) + ( e.Y - mY ) * 0.01f; mY = e.Y;
           newY = ( newY > 3.0f ) ? 3.0f : newY;
           newY = ( newY < 0.5f ) ? 0.5f : newY;
           lblOut[m_hitPt].Text = newY.ToString( "0.00" );
 
           // update chart (Points[0] is zero)
-          double sense = double.Parse( lblOut[4].Text );
-          m_bSeries.BezierPoints[1].SetValueXY( 0.25, sense * Math.Pow( 0.25, newY ) );
-          m_bSeries.BezierPoints[2].SetValueXY( 0.5, sense * Math.Pow( 0.5, newY ) );
-          m_bSeries.BezierPoints[3].SetValueXY( 0.75, sense * Math.Pow( 0.75, newY ) );
+          m_bSeries.BezierPoints[1].SetValueXY( 0.25, Math.Pow( 0.25, newY ) );
+          m_bSeries.BezierPoints[2].SetValueXY( 0.5, Math.Pow( 0.5, newY ) );
+          m_bSeries.BezierPoints[3].SetValueXY( 0.75, Math.Pow( 0.75, newY ) );
         }
 
         // update markers from curve points
@@ -1112,46 +1518,68 @@ namespace SCJMapper_V2.OGL
         // left area labels
         lblYin1.Text = lblIn[1].Text; lblYin2.Text = lblIn[2].Text; lblYin3.Text = lblIn[3].Text;
         lblYout1.Text = lblOut[1].Text; lblYout2.Text = lblOut[2].Text; lblYout3.Text = lblOut[3].Text;
-        lblYsense.Text = lblOut[4].Text;
-        lblYexponent.Text = lblOut[5].Text;
+        lblYexponent.Text = lblOut[4].Text;
         // update live values
-        m_liveYsense = float.Parse( lblYsense.Text );
-        m_liveYexponent = float.Parse( lblYexponent.Text );
-        if ( m_liveYnonLinCurve != null ) {
-          m_liveYnonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
-                                float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
-                                float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
+        if ( m_isStrafe ) {
+          m_liveStrafeLat.exponentS = lblYexponent.Text;
+          if ( m_liveStrafeLat.nonLinCurve != null ) {
+            m_liveStrafeLat.nonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
+                                  float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
+                                  float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
+          }
+        } else {
+          m_liveYaw.exponentS = lblYexponent.Text;
+          if ( m_liveYaw.nonLinCurve != null ) {
+            m_liveYaw.nonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
+                                  float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
+                                  float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
+          }
         }
-      }
-      else if ( rbP.Checked == true ) {
+
+      } else if ( rbP.Checked == true ) {
         // left area labels
         lblPin1.Text = lblIn[1].Text; lblPin2.Text = lblIn[2].Text; lblPin3.Text = lblIn[3].Text;
         lblPout1.Text = lblOut[1].Text; lblPout2.Text = lblOut[2].Text; lblPout3.Text = lblOut[3].Text;
-        lblPsense.Text = lblOut[4].Text;
-        lblPexponent.Text = lblOut[5].Text;
+        lblPexponent.Text = lblOut[4].Text;
         // update live values
-        m_livePsense = float.Parse( lblPsense.Text );
-        m_livePexponent = float.Parse( lblPexponent.Text );
-        if ( m_livePnonLinCurve != null ) {
-          m_livePnonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
-                                float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
-                                float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
+        if ( m_isStrafe ) {
+          m_liveStrafeVert.exponentS = lblPexponent.Text;
+          if ( m_liveStrafeVert.nonLinCurve != null ) {
+            m_liveStrafeVert.nonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
+                                  float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
+                                  float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
+          }
+        } else {
+          m_livePitch.exponentS = lblPexponent.Text;
+          if ( m_livePitch.nonLinCurve != null ) {
+            m_livePitch.nonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
+                                  float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
+                                  float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
+          }
         }
-      }
-      else if ( rbR.Checked == true ) {
+
+      } else if ( rbR.Checked == true ) {
         // left area labels
         lblRin1.Text = lblIn[1].Text; lblRin2.Text = lblIn[2].Text; lblRin3.Text = lblIn[3].Text;
         lblRout1.Text = lblOut[1].Text; lblRout2.Text = lblOut[2].Text; lblRout3.Text = lblOut[3].Text;
-        lblRsense.Text = lblOut[4].Text;
-        lblRexponent.Text = lblOut[5].Text;
+        lblRexponent.Text = lblOut[4].Text;
         // update live values
-        m_liveRsense = float.Parse( lblRsense.Text );
-        m_liveRexponent = float.Parse( lblRexponent.Text );
-        if ( m_liveRnonLinCurve != null ) {
-          m_liveRnonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
-                                float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
-                                float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
+        if ( m_isStrafe ) {
+          m_liveStrafeLon.exponentS = lblRexponent.Text;
+          if ( m_liveStrafeLon.nonLinCurve != null ) {
+            m_liveStrafeLon.nonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
+                                  float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
+                                  float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
+          }
+        } else {
+          m_liveRoll.exponentS = lblRexponent.Text;
+          if ( m_liveRoll.nonLinCurve != null ) {
+            m_liveRoll.nonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
+                                  float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
+                                  float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
+          }
         }
+
       }
     }
     #endregion
@@ -1160,29 +1588,100 @@ namespace SCJMapper_V2.OGL
 
     private void cbxYinvert_CheckedChanged( object sender, EventArgs e )
     {
-      m_Ytuning.InvertUsed = false;
-      if ( cbxYinvert.Checked == true ) {
-        m_Ytuning.InvertUsed = true; // update storage
-        rbY.Checked = true; // auto switch
+      if ( m_isStrafe ) {
+        m_liveStrafeLat.invertUsed = false;
+        if ( cbxYinvert.Checked == true ) {
+          m_liveStrafeLat.invertUsed = true;
+          rbY.Checked = false; rbY.Checked = true; // auto switch workarea
+        }
+      } else {
+        m_liveYaw.invertUsed = false;
+        if ( cbxYinvert.Checked == true ) {
+          m_liveYaw.invertUsed = true;
+          rbY.Checked = false; rbY.Checked = true; // auto switch workarea
+        }
       }
     }
 
     private void cbxPinvert_CheckedChanged( object sender, EventArgs e )
     {
-      m_Ptuning.InvertUsed = false;
-      if ( cbxPinvert.Checked == true ) {
-        m_Ptuning.InvertUsed = true; // update storage
-        rbP.Checked = true; // auto switch
+      if ( m_isStrafe ) {
+        m_liveStrafeVert.invertUsed = false;
+        if ( cbxPinvert.Checked == true ) {
+          m_liveStrafeVert.invertUsed = true;
+          rbP.Checked = false; rbP.Checked = true; // auto switch
+        }
+      } else {
+        m_livePitch.invertUsed = false;
+        if ( cbxPinvert.Checked == true ) {
+          m_livePitch.invertUsed = true;
+          rbP.Checked = false; rbP.Checked = true; // auto switch
+        }
       }
     }
 
     private void cbxRinvert_CheckedChanged( object sender, EventArgs e )
     {
-      m_Rtuning.InvertUsed = false;
-      if ( cbxRinvert.Checked == true ) {
-        m_Rtuning.InvertUsed = true; // update storage
-        rbR.Checked = true; // auto switch
+      if ( m_isStrafe ) {
+        m_liveStrafeLon.invertUsed = false;
+        if ( cbxRinvert.Checked == true ) {
+          m_liveStrafeLon.invertUsed = true;
+          rbR.Checked = false; rbR.Checked = true; // auto switch
+        }
+      } else {
+        m_liveRoll.invertUsed = false;
+        if ( cbxRinvert.Checked == true ) {
+          m_liveRoll.invertUsed = true;
+          rbR.Checked = false; rbR.Checked = true; // auto switch
+        }
       }
+    }
+
+    #endregion
+
+    #region Slider Value Changed (Deadzone / Saturation)
+
+    // Deadzone slider   00 .. 40 -> 0 .. 0.160 ( 4 pt scale)
+    // Saturation slider 00 .. 40 -> 0.2 .. 1.0 ( 20 pt scale)
+
+    private void EvalSlider( )
+    {
+      if ( rbPtDeadzone.Enabled && rbPtDeadzone.Checked ) {
+        lblOutSlider.Text = ( tbSlider.Value / 250.0f ).ToString( "0.000" );
+        float curDeadzone = 1000.0f * ( tbSlider.Value / 250.0f );  // % scaled to maxAxis
+
+        if ( rbY.Checked == true ) {
+          if ( m_isStrafe ) m_liveStrafeLat.deadzone = curDeadzone; else m_liveYaw.deadzone = curDeadzone;
+          lblYdeadzone.Text = lblOutSlider.Text;
+        } else if ( rbP.Checked == true ) {
+          if ( m_isStrafe ) m_liveStrafeVert.deadzone = curDeadzone; else m_livePitch.deadzone = curDeadzone;
+          lblPdeadzone.Text = lblOutSlider.Text;
+        } else if ( rbR.Checked == true ) {
+          if ( m_isStrafe ) m_liveStrafeLon.deadzone = curDeadzone; else m_liveRoll.deadzone = curDeadzone;
+          lblRdeadzone.Text = lblOutSlider.Text;
+        }
+        lblGraphDeadzone.Text = lblOutSlider.Text;
+      } else if ( rbPtSaturation.Enabled && rbPtSaturation.Checked ) {
+        lblOutSlider.Text = ( tbSlider.Value / 50.0f + 0.200f ).ToString( "0.000" );
+        float curSaturation = 1000.0f * ( tbSlider.Value / 50.0f + 0.2f);  // % scaled to maxAxis
+
+        if ( rbY.Checked == true ) {
+          if ( m_isStrafe ) m_liveStrafeLat.saturation = curSaturation; else m_liveYaw.saturation = curSaturation;
+          lblYsat.Text = lblOutSlider.Text;
+        } else if ( rbP.Checked == true ) {
+          if ( m_isStrafe ) m_liveStrafeVert.saturation = curSaturation; else m_livePitch.saturation = curSaturation;
+          lblPsat.Text = lblOutSlider.Text;
+        } else if ( rbR.Checked == true ) {
+          if ( m_isStrafe ) m_liveStrafeLon.saturation = curSaturation; else m_liveRoll.saturation = curSaturation;
+          lblRsat.Text = lblOutSlider.Text;
+        }
+        lblGraphSaturation.Text = lblOutSlider.Text;
+      }
+    }
+
+    private void tbSlider_ValueChanged( object sender, EventArgs e )
+    {
+      EvalSlider( );
     }
 
     #endregion
@@ -1191,38 +1690,56 @@ namespace SCJMapper_V2.OGL
 
     private void cbxYdeadzone_CheckedChanged( object sender, EventArgs e )
     {
-      if ( m_Ytuning.Deadzone == null ) return; // just not...
-
-      m_Ytuning.Deadzone.DeadzoneUsed = false;
-      if ( cbxYdeadzone.Checked == true ) {
-        m_Ytuning.Deadzone.DeadzoneUsed = true; // update storage
-        rbY.Checked = true; // auto switch
-        if ( rbY.Checked == true ) tbDeadzone.Value = ( int )( float.Parse( lblYdeadzone.Text ) * 0.2f ); // go live
+      if ( m_isStrafe ) {
+        m_liveStrafeLat.deadzoneUsed = false;
+        if ( cbxYdeadzone.Checked == true ) {
+          m_liveStrafeLat.deadzoneUsed = true;
+          rbY.Checked = false; rbY.Checked = true; // auto switch workarea
+        }
+      } else {
+        m_liveYaw.deadzoneUsed = false;
+        if ( cbxYdeadzone.Checked == true ) {
+          m_liveYaw.deadzoneUsed = true;
+          rbY.Checked = false; rbY.Checked = true; // auto switch workarea
+        }
       }
+      UpdateChartItems( );
     }
 
     private void cbxPdeadzone_CheckedChanged( object sender, EventArgs e )
     {
-      if ( m_Ptuning.Deadzone == null ) return; // just not...
-
-      m_Ptuning.Deadzone.DeadzoneUsed = false;
-      if ( cbxPdeadzone.Checked == true ) {
-        m_Ptuning.Deadzone.DeadzoneUsed = true; // update storage
-        rbP.Checked = true; // auto switch
-        if ( rbP.Checked == true ) tbDeadzone.Value = ( int )( float.Parse( lblPdeadzone.Text ) * 0.2f ); // go live
+      if ( m_isStrafe ) {
+        m_liveStrafeVert.deadzoneUsed = false;
+        if ( cbxPdeadzone.Checked == true ) {
+          m_liveStrafeVert.deadzoneUsed = true;
+          rbP.Checked = false; rbP.Checked = true; // auto switch
+        }
+      } else {
+        m_livePitch.deadzoneUsed = false;
+        if ( cbxPdeadzone.Checked == true ) {
+          m_livePitch.deadzoneUsed = true;
+          rbP.Checked = false; rbP.Checked = true; // auto switch
+        }
       }
+      UpdateChartItems( );
     }
 
     private void cbxRdeadzone_CheckedChanged( object sender, EventArgs e )
     {
-      if ( m_Rtuning.Deadzone == null ) return; // just not...
-
-      m_Rtuning.Deadzone.DeadzoneUsed = false;
-      if ( cbxRdeadzone.Checked == true ) {
-        m_Rtuning.Deadzone.DeadzoneUsed = true; // update storage
-        rbR.Checked = true; // auto switch
-        if ( rbR.Checked == true ) tbDeadzone.Value = ( int )( float.Parse( lblRdeadzone.Text ) * 0.2f ); // go live
+      if ( m_isStrafe ) {
+        m_liveStrafeLon.deadzoneUsed = false;
+        if ( cbxRdeadzone.Checked == true ) {
+          m_liveStrafeLon.deadzoneUsed = true; // update storage
+          rbR.Checked = false; rbR.Checked = true; // auto switch
+        }
+      } else {
+        m_liveRoll.deadzoneUsed = false;
+        if ( cbxRdeadzone.Checked == true ) {
+          m_liveRoll.deadzoneUsed = true; // update storage
+          rbR.Checked = false; rbR.Checked = true; // auto switch
+        }
       }
+      UpdateChartItems( );
     }
 
     #endregion
@@ -1231,39 +1748,54 @@ namespace SCJMapper_V2.OGL
 
     private void cbxYsense_CheckedChanged( object sender, EventArgs e )
     {
-      m_Ytuning.SensitivityUsed = false;
-      if ( cbxYsense.Checked == true ) {
-        m_Ytuning.SensitivityUsed = true; // update storage
-        rbY.Checked = true; // auto switch
-        if ( rbY.Checked == true ) {
-          lblOut[4].Text = lblYsense.Text; m_liveYsense = float.Parse( lblYsense.Text );  // go live
-        }// go live
+      if ( m_isStrafe ) {
+        m_liveStrafeLat.saturationUsed = false;
+        if ( cbxYsat.Checked == true ) {
+          m_liveStrafeLat.saturationUsed = true;
+          rbY.Checked = false; rbY.Checked = true; // auto switch
+        }
+      } else {
+        m_liveYaw.saturationUsed = false;
+        if ( cbxYsat.Checked == true ) {
+          m_liveYaw.saturationUsed = true;
+          rbY.Checked = false; rbY.Checked = true; // auto switch
+        }
       }
       UpdateChartItems( );
     }
 
     private void cbxPsense_CheckedChanged( object sender, EventArgs e )
     {
-      m_Ptuning.SensitivityUsed = false;
-      if ( cbxPsense.Checked == true ) {
-        m_Ptuning.SensitivityUsed = true; // update storage
-        rbP.Checked = true; // auto switch
-        if ( rbP.Checked == true ) {
-          lblOut[4].Text = lblPsense.Text; m_livePsense = float.Parse( lblPsense.Text );  // go live
-        }// go live
+      if ( m_isStrafe ) {
+        m_liveStrafeVert.saturationUsed = false;
+        if ( cbxPsat.Checked == true ) {
+          m_liveStrafeVert.saturationUsed = true;
+          rbP.Checked = false; rbP.Checked = true; // auto switch
+        }
+      } else {
+        m_livePitch.saturationUsed = false;
+        if ( cbxPsat.Checked == true ) {
+          m_livePitch.saturationUsed = true;
+          rbP.Checked = false; rbP.Checked = true; // auto switch
+        }
       }
       UpdateChartItems( );
     }
 
     private void cbxRsense_CheckedChanged( object sender, EventArgs e )
     {
-      m_Rtuning.SensitivityUsed = false;
-      if ( cbxRsense.Checked == true ) {
-        m_Rtuning.SensitivityUsed = true; // update storage
-        rbR.Checked = true; // auto switch
-        if ( rbR.Checked == true ) {
-          lblOut[4].Text = lblRsense.Text; m_liveRsense = float.Parse( lblRsense.Text );  // go live
-        }// go live
+      if ( m_isStrafe ) {
+        m_liveStrafeLon.saturationUsed = false;
+        if ( cbxRsat.Checked == true ) {
+          m_liveStrafeLon.saturationUsed = true;
+          rbR.Checked = false; rbR.Checked = true; // auto switch
+        }
+      } else {
+        m_liveRoll.saturationUsed = false;
+        if ( cbxRsat.Checked == true ) {
+          m_liveRoll.saturationUsed = true;
+          rbR.Checked = false; rbR.Checked = true; // auto switch
+        }
       }
       UpdateChartItems( );
     }
@@ -1274,42 +1806,60 @@ namespace SCJMapper_V2.OGL
 
     private void cbxYexpo_CheckedChanged( object sender, EventArgs e )
     {
-      m_Ytuning.ExponentUsed = false;
-      if ( cbxYexpo.Checked == true ) {
-        m_Ytuning.ExponentUsed = true; // update storage
-        cbxYpts.Checked = false;       // forced: either expo OR points
-        rbY.Checked = true; // auto switch
-        if ( rbY.Checked == true ) {
-          lblOut[5].Text = lblYexponent.Text; m_liveYexponent = float.Parse( lblYexponent.Text );  // go live from left area fields
-        }// go live
+      if ( m_isStrafe ) {
+        m_liveStrafeLat.exponentUsed = false;
+        if ( cbxYexpo.Checked == true ) {
+          m_liveStrafeLat.exponentUsed = true;
+          cbxYpts.Checked = false;       // forced: either expo OR points
+          rbY.Checked = false; rbY.Checked = true; // auto switch
+        }
+      } else {
+        m_liveYaw.exponentUsed = false;
+        if ( cbxYexpo.Checked == true ) {
+          m_liveYaw.exponentUsed = true;
+          cbxYpts.Checked = false;       // forced: either expo OR points
+          rbY.Checked = false; rbY.Checked = true; // auto switch
+        }
       }
       UpdateChartItems( );
     }
 
     private void cbxPexpo_CheckedChanged( object sender, EventArgs e )
     {
-      m_Ptuning.ExponentUsed = false;
-      if ( cbxPexpo.Checked == true ) {
-        m_Ptuning.ExponentUsed = true; // update storage
-        cbxPpts.Checked = false;       // forced: either expo OR points
-        rbP.Checked = true; // auto switch
-        if ( rbP.Checked == true ) {
-          lblOut[5].Text = lblPexponent.Text; m_livePexponent = float.Parse( lblPexponent.Text ); // go live from left area fields
-        }// go live
+      if ( m_isStrafe ) {
+        m_liveStrafeVert.exponentUsed = false;
+        if ( cbxPexpo.Checked == true ) {
+          m_liveStrafeVert.exponentUsed = true;
+          cbxPpts.Checked = false;       // forced: either expo OR points
+          rbP.Checked = false; rbP.Checked = true; // auto switch
+        }
+      } else {
+        m_livePitch.exponentUsed = false;
+        if ( cbxPexpo.Checked == true ) {
+          m_livePitch.exponentUsed = true;
+          cbxPpts.Checked = false;       // forced: either expo OR points
+          rbP.Checked = false; rbP.Checked = true; // auto switch
+        }
       }
       UpdateChartItems( );
     }
 
     private void cbxRexpo_CheckedChanged( object sender, EventArgs e )
     {
-      m_Rtuning.ExponentUsed = false;
-      if ( cbxRexpo.Checked == true ) {
-        m_Rtuning.ExponentUsed = true; // update storage
-        cbxRpts.Checked = false;       // forced: either expo OR points
-        rbR.Checked = true; // auto switch
-        if ( rbR.Checked == true ) {
-          lblOut[5].Text = lblRexponent.Text; m_liveRexponent = float.Parse( lblRexponent.Text ); // go live from left area fields
-        }// go live
+      if ( m_isStrafe ) {
+        m_liveStrafeLon.exponentUsed = false;
+        if ( cbxRexpo.Checked == true ) {
+          m_liveStrafeLon.exponentUsed = true;
+          cbxRpts.Checked = false;       // forced: either expo OR points
+          rbR.Checked = false; rbR.Checked = true; // auto switch
+        }
+      } else {
+        m_liveRoll.exponentUsed = false;
+        if ( cbxRexpo.Checked == true ) {
+          m_liveRoll.exponentUsed = true;
+          cbxRpts.Checked = false;       // forced: either expo OR points
+          rbR.Checked = false; rbR.Checked = true; // auto switch
+        }
       }
       UpdateChartItems( );
     }
@@ -1320,63 +1870,60 @@ namespace SCJMapper_V2.OGL
 
     private void cbxYpts_CheckedChanged( object sender, EventArgs e )
     {
-      m_Ytuning.NonLinCurveUsed = false;
-      if ( cbxYpts.Checked == true ) {
-        m_Ytuning.NonLinCurveUsed = true; // update storage
-        cbxYexpo.Checked = false;       // forced: either expo OR points
-        rbY.Checked = true; // auto switch
-        if ( rbY.Checked == true ) {
-          // go live from left area fields
-          lblIn[1].Text = lblYin1.Text; lblIn[2].Text = lblYin2.Text; lblIn[3].Text = lblYin3.Text;
-          lblOut[1].Text = lblYout1.Text; lblOut[2].Text = lblYout2.Text; lblOut[3].Text = lblYout3.Text;
-          if ( m_liveYnonLinCurve != null ) {
-            m_liveYnonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
-                                  float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
-                                  float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
-          }
-        }// go live
+      if ( m_isStrafe ) {
+        m_liveStrafeLat.nonLinCurveUsed = false;
+        if ( cbxYpts.Checked == true ) {
+          m_liveStrafeLat.nonLinCurveUsed = true;
+          cbxYexpo.Checked = false;       // forced: either expo OR points
+          rbY.Checked = false; rbY.Checked = true; // auto switch
+        }
+      } else {
+        m_liveYaw.nonLinCurveUsed = false;
+        if ( cbxYpts.Checked == true ) {
+          m_liveYaw.nonLinCurveUsed = true;
+          cbxYexpo.Checked = false;       // forced: either expo OR points
+          rbY.Checked = false; rbY.Checked = true; // auto switch
+        }
       }
       UpdateChartItems( );
     }
 
     private void cbxPpts_CheckedChanged( object sender, EventArgs e )
     {
-      m_Ptuning.NonLinCurveUsed = false;
-      if ( cbxPpts.Checked == true ) {
-        m_Ptuning.NonLinCurveUsed = true; // update storage
-        cbxPexpo.Checked = false;       // forced: either expo OR points
-        rbP.Checked = true; // auto switch
-        if ( rbP.Checked == true ) {
-          // go live from left area fields
-          lblIn[1].Text = lblPin1.Text; lblIn[2].Text = lblPin2.Text; lblIn[3].Text = lblPin3.Text;
-          lblOut[1].Text = lblPout1.Text; lblOut[2].Text = lblPout2.Text; lblOut[3].Text = lblPout3.Text;
-          if ( m_livePnonLinCurve != null ) {
-            m_livePnonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
-                                  float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
-                                  float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
-          }
-        }// go live
+      if ( m_isStrafe ) {
+        m_liveStrafeVert.nonLinCurveUsed = false;
+        if ( cbxPpts.Checked == true ) {
+          m_liveStrafeVert.nonLinCurveUsed = true;
+          cbxPexpo.Checked = false;       // forced: either expo OR points
+          rbP.Checked = false; rbP.Checked = true; // auto switch
+        }
+      } else {
+        m_livePitch.nonLinCurveUsed = false;
+        if ( cbxPpts.Checked == true ) {
+          m_livePitch.nonLinCurveUsed = true;
+          cbxPexpo.Checked = false;       // forced: either expo OR points
+          rbP.Checked = false; rbP.Checked = true; // auto switch
+        }
       }
       UpdateChartItems( );
     }
 
     private void cbxRpts_CheckedChanged( object sender, EventArgs e )
     {
-      m_Rtuning.NonLinCurveUsed = false;
-      if ( cbxRpts.Checked == true ) {
-        m_Rtuning.NonLinCurveUsed = true; // update storage
-        cbxRexpo.Checked = false;       // forced: either expo OR points
-        rbR.Checked = true; // auto switch
-        if ( rbR.Checked == true ) {
-          // go live from left area fields
-          lblIn[1].Text = lblRin1.Text; lblIn[2].Text = lblRin2.Text; lblIn[3].Text = lblRin3.Text;
-          lblOut[1].Text = lblRout1.Text; lblOut[2].Text = lblRout2.Text; lblOut[3].Text = lblRout3.Text;
-          if ( m_liveRnonLinCurve != null ) {
-            m_liveRnonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
-                                  float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
-                                  float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
-          }
-        }// go live
+      if ( m_isStrafe ) {
+        m_liveStrafeLon.nonLinCurveUsed = false;
+        if ( cbxRpts.Checked == true ) {
+          m_liveStrafeLon.nonLinCurveUsed = true;
+          cbxRexpo.Checked = false;       // forced: either expo OR points
+          rbR.Checked = false; rbR.Checked = true; // auto switch
+        }
+      } else {
+        m_liveRoll.nonLinCurveUsed = false;
+        if ( cbxRpts.Checked == true ) {
+          m_liveRoll.nonLinCurveUsed = true;
+          cbxRexpo.Checked = false;       // forced: either expo OR points
+          rbR.Checked = false; rbR.Checked = true; // auto switch
+        }
       }
       UpdateChartItems( );
     }
@@ -1391,9 +1938,9 @@ namespace SCJMapper_V2.OGL
       LoadSkybox( );
     }
 
-    private void rbOutThere2_CheckedChanged( object sender, EventArgs e )
+    private void rbOutThere3_CheckedChanged( object sender, EventArgs e )
     {
-      TMU0_Filename = SBFiles[SB_Skybox];
+      TMU0_Filename = SBFiles[SB_OutThere3];
       LoadSkybox( );
     }
 
@@ -1419,10 +1966,28 @@ namespace SCJMapper_V2.OGL
     {
       TMU0_Filename = SBFiles[SB_BigSight];
       LoadSkybox( );
+    }
 
+    private void rbHelipad_CheckedChanged( object sender, EventArgs e )
+    {
+      TMU0_Filename = SBFiles[SB_LA_Helipad];
+      LoadSkybox( );
+    }
+
+    private void rbSkybox_CheckedChanged( object sender, EventArgs e )
+    {
+      TMU0_Filename = SBFiles[SB_Skybox];
+      LoadSkybox( );
+    }
+
+    private void rbSunset_CheckedChanged( object sender, EventArgs e )
+    {
+      TMU0_Filename = SBFiles[SB_Sunset];
+      LoadSkybox( );
     }
 
     #endregion
+
 
 
     private void btCopyToAllAxis_Click( object sender, EventArgs e )
@@ -1430,28 +1995,52 @@ namespace SCJMapper_V2.OGL
       lblYin1.Text = lblIn1.Text; lblYout1.Text = lblOut1.Text;
       lblYin2.Text = lblIn2.Text; lblYout2.Text = lblOut2.Text;
       lblYin3.Text = lblIn3.Text; lblYout3.Text = lblOut3.Text;
-      if ( m_liveYnonLinCurve != null ) {
-        m_liveYnonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
-                              float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
-                              float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
+      if ( m_isStrafe ) {
+        if ( m_liveStrafeLat.nonLinCurve != null ) {
+          m_liveStrafeLat.nonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
+                                float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
+                                float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
+        }
+      } else {
+        if ( m_liveYaw.nonLinCurve != null ) {
+          m_liveYaw.nonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
+                                float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
+                                float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
+        }
       }
 
       lblPin1.Text = lblIn1.Text; lblPout1.Text = lblOut1.Text;
       lblPin2.Text = lblIn2.Text; lblPout2.Text = lblOut2.Text;
       lblPin3.Text = lblIn3.Text; lblPout3.Text = lblOut3.Text;
-      if ( m_livePnonLinCurve != null ) {
-        m_livePnonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
-                              float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
-                              float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
+      if ( m_isStrafe ) {
+        if ( m_liveStrafeVert.nonLinCurve != null ) {
+          m_liveStrafeVert.nonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
+                                float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
+                                float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
+        }
+      } else {
+        if ( m_livePitch.nonLinCurve != null ) {
+          m_livePitch.nonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
+                                float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
+                                float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
+        }
       }
 
       lblRin1.Text = lblIn1.Text; lblRout1.Text = lblOut1.Text;
       lblRin2.Text = lblIn2.Text; lblRout2.Text = lblOut2.Text;
       lblRin3.Text = lblIn3.Text; lblRout3.Text = lblOut3.Text;
-      if ( m_liveRnonLinCurve != null ) {
-        m_liveRnonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
-                              float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
-                              float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
+      if ( m_isStrafe ) {
+        if ( m_liveStrafeLon.nonLinCurve != null ) {
+          m_liveStrafeLon.nonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
+                                float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
+                                float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
+        }
+      } else {
+        if ( m_liveRoll.nonLinCurve != null ) {
+          m_liveRoll.nonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
+                                float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
+                                float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
+        }
       }
     }
 

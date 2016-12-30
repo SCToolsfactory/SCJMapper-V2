@@ -17,9 +17,9 @@ namespace SCJMapper_V2.Joystick
       flight_aim_yaw,
       flight_view_yaw,
       flight_throttle,
-      flight_move_strafe_vertical,
-      flight_move_strafe_lateral,
-      flight_move_strafe_longitudinal,
+//      flight_move_strafe_vertical,
+//      flight_move_strafe_lateral,
+//      flight_move_strafe_longitudinal,
 
       I_LAST // designates the last item for loop handling
     }
@@ -39,9 +39,9 @@ namespace SCJMapper_V2.Joystick
         new MappedActionRec("spaceship_targeting", "v_aim_yaw"),
         new MappedActionRec("spaceship_view", "v_view_yaw"),
         new MappedActionRec("spaceship_movement", "v_throttle_abs"),
-        new MappedActionRec("spaceship_movement", "v_strafe_vertical"),
-        new MappedActionRec("spaceship_movement", "v_strafe_lateral"),
-        new MappedActionRec("spaceship_movement", "v_strafe_longitudinal"),
+//        new MappedActionRec("spaceship_movement", "v_strafe_vertical"),
+//        new MappedActionRec("spaceship_movement", "v_strafe_lateral"),
+//        new MappedActionRec("spaceship_movement", "v_strafe_longitudinal"),
                                              };
 
     private CheckBox m_cbInvert = null;

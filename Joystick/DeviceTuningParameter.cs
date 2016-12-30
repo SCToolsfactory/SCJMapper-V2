@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
-using System.Windows.Forms;
 
 namespace SCJMapper_V2.Joystick
 {
@@ -14,30 +11,31 @@ namespace SCJMapper_V2.Joystick
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    private String m_action = "";       // v_pitch
-    private String m_cmdCtrl = "";      // js1_x, js1_y, js1_rotz ...
-    private String m_type = "";         // joystick OR xboxpad
+    private string m_action = "";       // v_pitch
+    private string m_cmdCtrl = "";      // js1_x, js1_y, js1_rotz ...
+    private string m_type = "";         // joystick OR xboxpad
     private int m_devInstanceNo = -1;   // jsN - instance in XML
 
-    String m_option = ""; // the option name (level where it applies)
+    string m_option = ""; // the option name (level where it applies)
 
-    private String m_deviceName = "";
+    private string m_deviceName = "";
+    private bool   m_isStrafe = false;  // default
 
-    private bool   m_senseEnabled = false;  // default
-    private String m_sense = "1.00";
+//    private bool   m_senseEnabled = false;  // default
+//    private string m_sense = "1.00";
 
     private bool   m_expEnabled = false;  // default
-    private String m_exponent = "1.000";
+    private string m_exponent = "1.000";
 
     private bool   m_ptsEnabled = false;  // default
-    private List<String> m_PtsIn = new List<String>( );
-    private List<String> m_PtsOut = new List<String>( );
+    private List<string> m_PtsIn = new List<string>( );
+    private List<string> m_PtsOut = new List<string>( );
 
     private bool   m_invertEnabled = false; // default
 
     private DeviceCls m_device = null;
 
-    private DeviceDeadzoneParameter m_deadzone = null;
+    private DeviceOptionParameter m_deviceoption = null;
 
     public DeviceTuningParameter( )
     {
@@ -48,8 +46,7 @@ namespace SCJMapper_V2.Joystick
     public DeviceCls GameDevice
     {
       get { return m_device; }
-      set
-      {
+      set {
         m_device = value;
         m_type = "";
         m_devInstanceNo = -1;
@@ -58,8 +55,7 @@ namespace SCJMapper_V2.Joystick
         if ( JoystickCls.IsDeviceClass( m_device.DevClass ) ) {
           m_type = m_device.DevClass;
           m_devInstanceNo = ( m_device as JoystickCls ).JSAssignment;
-        }
-        else if ( Gamepad.GamepadCls.IsDeviceClass( m_device.DevClass ) ) {
+        } else if ( Gamepad.GamepadCls.IsDeviceClass( m_device.DevClass ) ) {
           m_type = m_device.DevClass;
           m_devInstanceNo = 1; // supports ONE gamepad
         }
@@ -72,50 +68,55 @@ namespace SCJMapper_V2.Joystick
       get { return m_devInstanceNo; }
     }
 
-    public String DeviceName
+    public string DeviceName
     {
       get { return m_deviceName; }
       set { m_deviceName = value; }
     }
 
-    public String Action
+    public string Action
     {
       get { return m_action; }
       set { m_action = value; DecomposeCommand( ); }
     }
 
-    public String CommandCtrl
+    public string CommandCtrl
     {
       get { return m_cmdCtrl; }
       set { m_cmdCtrl = value; }
     }
 
-
-    public DeviceDeadzoneParameter Deadzone
+    public bool IsStrafeCommand
     {
-      get { return m_deadzone; }
-      set
-      {
-        m_deadzone = value;
-        if ( m_deadzone != null ) {
-          m_deadzone.DeviceName = DeviceName;     // must know too
-          m_deadzone.CommandCtrl = CommandCtrl;   // must know too
+      get { return m_isStrafe; }
+      set { m_isStrafe = value; }
+    }
+
+    public DeviceOptionParameter Deviceoption
+    {
+      get { return m_deviceoption; }
+      set {
+        m_deviceoption = value;
+        if ( m_deviceoption != null ) {
+          m_deviceoption.DeviceName = DeviceName;     // must know too
+          m_deviceoption.CommandCtrl = CommandCtrl;   // must know too
         }
       }
     }
 
+    /*
     public bool SensitivityUsed
     {
       get { return m_senseEnabled; }
       set { m_senseEnabled = value; }
     }
 
-    public String Sensitivity
+    public string Sensitivity
     {
       get { return m_sense; }
       set { m_sense = value; }
     }
-
+    */
     public bool InvertUsed
     {
       get { return m_invertEnabled; }
@@ -128,7 +129,7 @@ namespace SCJMapper_V2.Joystick
       set { m_expEnabled = value; }
     }
 
-    public String Exponent
+    public string Exponent
     {
       get { return m_exponent; }
       set { m_exponent = value; }
@@ -141,12 +142,12 @@ namespace SCJMapper_V2.Joystick
       set { m_ptsEnabled = value; }
     }
 
-    public List<String> NonLinCurvePtsIn
+    public List<string> NonLinCurvePtsIn
     {
       get { return m_PtsIn; }
       set { m_PtsIn = value; }
     }
-    public List<String> NonLinCurvePtsOut
+    public List<string> NonLinCurvePtsOut
     {
       get { return m_PtsOut; }
       set { m_PtsOut = value; }
@@ -158,7 +159,7 @@ namespace SCJMapper_V2.Joystick
     public void Reset( )
     {
       GameDevice = null;
-      Deadzone = null;
+      Deviceoption = null;
       Action = "";
     }
 
@@ -170,47 +171,56 @@ namespace SCJMapper_V2.Joystick
     {
       // populate from input
       // something like "v_pitch - js1_x" OR "v_pitch - xi_thumbl" OR "v_pitch - ximod+xi_thumbl+xi_mod"
-      String cmd = ActionTreeNode.CommandFromNodeText( Action );
-      String action = ActionTreeNode.ActionFromNodeText( Action );
+      string cmd = ActionTreeNode.CommandFromNodeText( Action );
+      string action = ActionTreeNode.ActionFromNodeText( Action );
       m_cmdCtrl = "";
-      if ( !String.IsNullOrWhiteSpace( cmd ) ) {
+      if ( !string.IsNullOrWhiteSpace( cmd ) ) {
         // decomp gamepad entries - could have modifiers so check for contains...
         if ( cmd.Contains( "xi_thumblx" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumblx";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = String.Format( "flight_move_pitch" );
-          else m_option = String.Format( "flight_move_yaw" );
-        }
-        else if ( cmd.Contains( "xi_thumbly" ) ) {
+          if ( action.Contains( "pitch" ) ) m_option = string.Format( "flight_move_pitch" );
+          else m_option = string.Format( "flight_move_yaw" );
+        } else if ( cmd.Contains( "xi_thumbly" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbly";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = String.Format( "flight_move_pitch" );
-          else m_option = String.Format( "flight_move_yaw" );
-        }
-        else if ( cmd.Contains( "xi_thumbrx" ) ) {
+          if ( action.Contains( "pitch" ) ) m_option = string.Format( "flight_move_pitch" );
+          else m_option = string.Format( "flight_move_yaw" );
+        } else if ( cmd.Contains( "xi_thumbrx" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbrx";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = String.Format( "flight_move_pitch" );
-          else m_option = String.Format( "flight_move_yaw" );
-        }
-        else if ( cmd.Contains( "xi_thumbry" ) ) {
+          if ( action.Contains( "pitch" ) ) m_option = string.Format( "flight_move_pitch" );
+          else m_option = string.Format( "flight_move_yaw" );
+        } else if ( cmd.Contains( "xi_thumbry" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbry";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = String.Format( "flight_move_pitch" );
-          else m_option = String.Format( "flight_move_yaw" );
+          if ( action.Contains( "pitch" ) ) m_option = string.Format( "flight_move_pitch" );
+          else m_option = string.Format( "flight_move_yaw" );
         }
-        // assume joystick
-        else {
+          // assume joystick
+          else {
           // get parts
           m_cmdCtrl = JoystickCls.ActionFromJsCommand( cmd ); //js1_x -> x; js2_rotz -> rotz
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = String.Format( "flight_move_pitch" );
-          else if ( action.Contains( "yaw" ) ) m_option = String.Format( "flight_move_yaw" );
-          else m_option = String.Format( "flight_move_roll" );
+          if ( action.Contains( "pitch" ) ) {
+            m_option = string.Format( "flight_move_pitch" ); m_isStrafe = false;
+          } else if ( action.Contains( "yaw" ) ) {
+            m_option = string.Format( "flight_move_yaw" ); m_isStrafe = false;
+          } else if ( action.Contains( "roll" ) ) {
+            m_option = string.Format( "flight_move_roll" ); m_isStrafe = false;
+          }
+            // strafes
+            else if ( action.Contains( "vertical" ) ) {
+            m_option = string.Format( "flight_move_strafe_vertical" ); m_isStrafe = true;
+          } else if ( action.Contains( "lateral" ) ) {
+            m_option = string.Format( "flight_move_strafe_lateral" ); m_isStrafe = true;
+          } else if ( action.Contains( "longitudinal" ) ) {
+            m_option = string.Format( "flight_move_strafe_longitudinal" ); m_isStrafe = true;
+          } else m_option = string.Format( "????" ); // don't know what it is ...
         }
       }
     }
@@ -220,40 +230,40 @@ namespace SCJMapper_V2.Joystick
     /// Format an XML -options- node from the tuning contents
     /// </summary>
     /// <returns>The XML string or an empty string</returns>
-    public String Options_toXML( )
+    public string Options_toXML( )
     {
-      if ( ( SensitivityUsed || ExponentUsed || InvertUsed || NonLinCurveUsed ) == false ) return ""; // not used
+      if ( ( /*SensitivityUsed ||*/ ExponentUsed || InvertUsed || NonLinCurveUsed ) == false ) return ""; // not used
 
-      String tmp = "";
-      tmp += String.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", m_type, m_devInstanceNo.ToString( ) );
-      tmp += String.Format( "\t\t<{0} ", m_option );
+      string tmp = "";
+      tmp += string.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", m_type, m_devInstanceNo.ToString( ) );
+      tmp += string.Format( "\t\t<{0} ", m_option );
 
       if ( InvertUsed ) {
-        tmp += String.Format( "invert=\"1\" " );
+        tmp += string.Format( "invert=\"1\" " );
       }
+      /*
       if ( SensitivityUsed ) {
-        tmp += String.Format( "sensitivity=\"{0}\" ", Sensitivity );
+        tmp += string.Format( "sensitivity=\"{0}\" ", Sensitivity );
       }
+      */
       if ( NonLinCurveUsed ) {
         // add exp to avoid merge of things...
-        tmp += String.Format( "exponent=\"1.00\" > \n" ); // CIG get to default expo 2.something if not set to 1 here
-        tmp += String.Format( "\t\t\t<nonlinearity_curve>\n" );
-        tmp += String.Format( "\t\t\t\t<point in=\"{0}\"  out=\"{1}\"/>\n", m_PtsIn[0], m_PtsOut[0] );
-        tmp += String.Format( "\t\t\t\t<point in=\"{0}\"  out=\"{1}\"/>\n", m_PtsIn[1], m_PtsOut[1] );
-        tmp += String.Format( "\t\t\t\t<point in=\"{0}\"  out=\"{1}\"/>\n", m_PtsIn[2], m_PtsOut[2] );
-        tmp += String.Format( "\t\t\t</nonlinearity_curve>\n" );
-        tmp += String.Format( "\t\t</{0}> \n", m_option );
-      }
-      else if ( ExponentUsed ) {
+        tmp += string.Format( "exponent=\"1.00\" > \n" ); // CIG get to default expo 2.something if not set to 1 here
+        tmp += string.Format( "\t\t\t<nonlinearity_curve>\n" );
+        tmp += string.Format( "\t\t\t\t<point in=\"{0}\"  out=\"{1}\"/>\n", m_PtsIn[0], m_PtsOut[0] );
+        tmp += string.Format( "\t\t\t\t<point in=\"{0}\"  out=\"{1}\"/>\n", m_PtsIn[1], m_PtsOut[1] );
+        tmp += string.Format( "\t\t\t\t<point in=\"{0}\"  out=\"{1}\"/>\n", m_PtsIn[2], m_PtsOut[2] );
+        tmp += string.Format( "\t\t\t</nonlinearity_curve>\n" );
+        tmp += string.Format( "\t\t</{0}> \n", m_option );
+      } else if ( ExponentUsed ) {
         // only exp used
-        tmp += String.Format( "exponent=\"{0}\" /> \n", Exponent );
-      }
-      else {
+        tmp += string.Format( "exponent=\"{0}\" /> \n", Exponent );
+      } else {
         // neither exp or curve
-        tmp += String.Format( " /> \n" );// nothing...
+        tmp += string.Format( " /> \n" );// nothing...
       }
 
-      tmp += String.Format( "\t</options>\n \n" );
+      tmp += string.Format( "\t</options>\n \n" );
 
       return tmp;
     }
@@ -266,52 +276,54 @@ namespace SCJMapper_V2.Joystick
     /// <param name="reader">A prepared XML reader</param>
     /// <param name="instance">the Joystick instance number</param>
     /// <returns></returns>
-    public Boolean Options_fromXML( XmlReader reader, String type, int instance )
+    public Boolean Options_fromXML( XmlReader reader, string type, int instance )
     {
       m_type = type;
 
-      String invert = "";
-      String sensitivity = "";
-      String exponent = "";
+      string invert = "";
+      string sensitivity = "";
+      string exponent = "";
 
       m_option = reader.Name;
       m_devInstanceNo = instance;
 
       // derive from flight_move_pitch || flight_move_yaw || flight_move_roll (nothing bad should arrive here)
-      String[] e = m_option.ToLowerInvariant( ).Split( new char[] { '_' } );
+      string[] e = m_option.ToLowerInvariant( ).Split( new char[] { '_' } );
       if ( e.Length > 2 ) m_cmdCtrl = e[2]; // TODO - see if m_cmdCtrl is needed to be derived here
 
 
       if ( reader.HasAttributes ) {
         invert = reader["invert"];
-        if ( !String.IsNullOrWhiteSpace( invert ) ) {
+        if ( !string.IsNullOrWhiteSpace( invert ) ) {
           InvertUsed = false;
           if ( invert == "1" ) InvertUsed = true;
         }
 
+        /*
         sensitivity = reader["sensitivity"];
-        if ( !String.IsNullOrWhiteSpace( sensitivity ) ) {
+        if ( !string.IsNullOrWhiteSpace( sensitivity ) ) {
           Sensitivity = sensitivity;
           SensitivityUsed = true;
         }
-
+        */
         exponent = reader["exponent"];
-        if ( !String.IsNullOrWhiteSpace( exponent ) ) {
+        if ( !string.IsNullOrWhiteSpace( exponent ) ) {
           Exponent = exponent;
           ExponentUsed = true;
         }
       }
       // we may have a nonlin curve...
-      if ( ! reader.IsEmptyElement ) {
+      if ( !reader.IsEmptyElement ) {
         reader.Read( );
         if ( !reader.EOF ) {
           if ( reader.Name.ToLowerInvariant( ) == "nonlinearity_curve" ) {
             m_PtsIn.Clear( ); m_PtsOut.Clear( ); // reset pts
+            ExponentUsed = false; // NonLin Curve takes prio
 
             reader.Read( );
             while ( !reader.EOF ) {
-              String ptIn = "";
-              String ptOut = "";
+              string ptIn = "";
+              string ptOut = "";
               if ( reader.Name.ToLowerInvariant( ) == "point" ) {
                 if ( reader.HasAttributes ) {
                   ptIn = reader["in"];

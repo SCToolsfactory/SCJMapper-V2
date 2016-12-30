@@ -81,6 +81,15 @@ namespace SCJMapper_V2.Joystick
       m_outCurve[m_maxpts - 1] = 1.0; // force MAX
     }
 
+
+    public Vector2 Pt (int index )
+    {
+      // we return only the input points - i.e. not pt0 and ptMax
+      if ( index >= (m_points.Length-2) ) return new Vector2( 0, 0 );
+      return m_points[index+1];
+    }
+
+
     public void Curve( )
     {
       Setup( 1 );
@@ -152,7 +161,12 @@ namespace SCJMapper_V2.Joystick
       GetOutput( cout );
     }
 
-
+    /// <summary>
+    /// Returns the f(x) value of the curve
+    ///  assumes a symmetric curve and handles the sign appropriately
+    /// </summary>
+    /// <param name="atX">Device Input (-1000 .. 0 .. 1000)</param>
+    /// <returns>The unity curve value (-1.0 .. 1.0) </returns>
     public double EvalX( int atX )
     {
       int sng = Math.Sign( atX );

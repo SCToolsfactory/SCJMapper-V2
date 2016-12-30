@@ -1349,27 +1349,27 @@ namespace SCJMapper_V2
       m_AT.ActionMaps.TuningY.Reset( );  // set defaults
       if ( dev != null ) {
         // JS commands that are supported
-        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
+        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) 
+          || nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) 
+          || nodeText.ToLowerInvariant( ).EndsWith( "_Z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Action = nodeText;
-          m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneX;
+          string doID =  Deviceoptions.DevOptionID( dev.DevName, nodeText );
+          if ( ! m_AT.ActionMaps.Deadzones.ContainsKey(doID) ){
+            m_AT.ActionMaps.Deadzones.Add( doID, new DeviceOptionParameter( ) );
+          }
+          m_AT.ActionMaps.TuningY.Deviceoption = m_AT.ActionMaps.Deadzones[doID];
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
-        } else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
-          m_AT.ActionMaps.TuningY.GameDevice = dev;
-          m_AT.ActionMaps.TuningY.Action = nodeText;
-          m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneY;
-          JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
-        } else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
-          m_AT.ActionMaps.TuningY.GameDevice = dev;
-          m_AT.ActionMaps.TuningY.Action = nodeText;
-          m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneZ;
-          JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
-        }
+        } 
           // GP commands that are supported - X
           else if ( nodeText.ToLowerInvariant( ).Contains( "_thumblx" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbrx" ) ) {
           m_AT.ActionMaps.TuningY.GameDevice = dev;
           m_AT.ActionMaps.TuningY.Action = nodeText;
-          m_AT.ActionMaps.TuningY.Deadzone = m_AT.ActionMaps.DeadzoneX;
+          string doID =  Deviceoptions.DevOptionID( dev.DevName, "x" );
+          if ( !m_AT.ActionMaps.Deadzones.ContainsKey( doID ) ) {
+            m_AT.ActionMaps.Deadzones.Add( doID, new DeviceOptionParameter( ) );
+          }
+          m_AT.ActionMaps.TuningY.Deviceoption = m_AT.ActionMaps.Deadzones[doID];
           JSCAL.YawTuning = m_AT.ActionMaps.TuningY;
         }
       }
@@ -1391,27 +1391,27 @@ namespace SCJMapper_V2
       m_AT.ActionMaps.TuningP.Reset( );  // set defaults
       if ( dev != null ) {
         // JS commands that are supported
-        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
+        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" )
+          || nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" )
+          || nodeText.ToLowerInvariant( ).EndsWith( "_Z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
           m_AT.ActionMaps.TuningP.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Action = nodeText;
-          m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneX;
-          JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
-        } else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
-          m_AT.ActionMaps.TuningP.GameDevice = dev;
-          m_AT.ActionMaps.TuningP.Action = nodeText;
-          m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneY;
-          JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
-        } else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
-          m_AT.ActionMaps.TuningP.GameDevice = dev;
-          m_AT.ActionMaps.TuningP.Action = nodeText;
-          m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneZ;
+          string doID =  Deviceoptions.DevOptionID( dev.DevName, nodeText );
+          if ( !m_AT.ActionMaps.Deadzones.ContainsKey( doID ) ) {
+            m_AT.ActionMaps.Deadzones.Add( doID, new DeviceOptionParameter( ) );
+          }
+          m_AT.ActionMaps.TuningP.Deviceoption = m_AT.ActionMaps.Deadzones[doID];
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
         // GP commands that are supported - either Y
         else if ( nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
           m_AT.ActionMaps.TuningP.GameDevice = dev;
           m_AT.ActionMaps.TuningP.Action = nodeText;
-          m_AT.ActionMaps.TuningP.Deadzone = m_AT.ActionMaps.DeadzoneY;
+          string doID =  Deviceoptions.DevOptionID( dev.DevName, "y" );
+          if ( !m_AT.ActionMaps.Deadzones.ContainsKey( doID ) ) {
+            m_AT.ActionMaps.Deadzones.Add( doID, new DeviceOptionParameter( ) );
+          }
+          m_AT.ActionMaps.TuningP.Deviceoption = m_AT.ActionMaps.Deadzones[doID];
           JSCAL.PitchTuning = m_AT.ActionMaps.TuningP;
         }
       }
@@ -1427,23 +1427,95 @@ namespace SCJMapper_V2
       m_AT.ActionMaps.TuningR.Reset( );  // set defaults
       if ( dev != null ) {
         // JS commands that are supported
-        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) ) {
+        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" )
+          || nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" )
+          || nodeText.ToLowerInvariant( ).EndsWith( "_Z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
           m_AT.ActionMaps.TuningR.GameDevice = dev;
           m_AT.ActionMaps.TuningR.Action = nodeText;
-          m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneX;
-          JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
-        } else if ( nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) ) {
-          m_AT.ActionMaps.TuningR.GameDevice = dev;
-          m_AT.ActionMaps.TuningR.Action = nodeText;
-          m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneY;
-          JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
-        } else if ( nodeText.ToLowerInvariant( ).EndsWith( "_z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
-          m_AT.ActionMaps.TuningR.GameDevice = dev;
-          m_AT.ActionMaps.TuningR.Action = nodeText;
-          m_AT.ActionMaps.TuningR.Deadzone = m_AT.ActionMaps.DeadzoneZ;
+          string doID =  Deviceoptions.DevOptionID( dev.DevName, nodeText );
+          if ( !m_AT.ActionMaps.Deadzones.ContainsKey( doID ) ) {
+            m_AT.ActionMaps.Deadzones.Add( doID, new DeviceOptionParameter( ) );
+          }
+          m_AT.ActionMaps.TuningR.Deviceoption = m_AT.ActionMaps.Deadzones[doID];
           JSCAL.RollTuning = m_AT.ActionMaps.TuningR;
         }
       }
+
+
+      // find action item for Strafe Lateral - cannot use gamepad here
+      find = ActionTreeNode.ComposeNodeText( "v_strafe_lateral", "js" );
+      nodeText = m_AT.FindText( "spaceship_movement", find ); // returns "" or a complete text ("action - command")
+      if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
+        dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
+      }
+
+      m_AT.ActionMaps.TuningStrafeLateral.Reset( );  // set defaults
+      if ( dev != null ) {
+        // JS commands that are supported
+        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" )
+          || nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" )
+          || nodeText.ToLowerInvariant( ).EndsWith( "_Z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
+          m_AT.ActionMaps.TuningStrafeLateral.GameDevice = dev;
+          m_AT.ActionMaps.TuningStrafeLateral.Action = nodeText;
+          string doID =  Deviceoptions.DevOptionID( dev.DevName, nodeText );
+          if ( !m_AT.ActionMaps.Deadzones.ContainsKey( doID ) ) {
+            m_AT.ActionMaps.Deadzones.Add( doID, new DeviceOptionParameter( ) );
+          }
+          m_AT.ActionMaps.TuningStrafeLateral.Deviceoption = m_AT.ActionMaps.Deadzones[doID];
+          JSCAL.StrafeLatTuning = m_AT.ActionMaps.TuningStrafeLateral;
+        }
+      }
+
+      // attach Strafe Vertical command - cannot use gamepad here
+      dev = null;
+      find = ActionTreeNode.ComposeNodeText( "v_strafe_vertical", "js" );
+      nodeText = m_AT.FindText( "spaceship_movement", find ); // returns "" or a complete text ("action - command")
+      if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
+        dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
+      }
+
+      m_AT.ActionMaps.TuningStrafeVertical.Reset( );  // set defaults
+      if ( dev != null ) {
+        // JS commands that are supported
+        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" )
+          || nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" )
+          || nodeText.ToLowerInvariant( ).EndsWith( "_Z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
+          m_AT.ActionMaps.TuningStrafeVertical.GameDevice = dev;
+          m_AT.ActionMaps.TuningStrafeVertical.Action = nodeText;
+          string doID =  Deviceoptions.DevOptionID( dev.DevName, nodeText );
+          if ( !m_AT.ActionMaps.Deadzones.ContainsKey( doID ) ) {
+            m_AT.ActionMaps.Deadzones.Add( doID, new DeviceOptionParameter( ) );
+          }
+          m_AT.ActionMaps.TuningStrafeVertical.Deviceoption = m_AT.ActionMaps.Deadzones[doID];
+          JSCAL.StrafeVertTuning = m_AT.ActionMaps.TuningStrafeVertical;
+        }
+      }
+
+      // attach Strafe Longitudinal command - cannot use gamepad here
+      dev = null;
+      find = ActionTreeNode.ComposeNodeText( "v_strafe_longitudinal", "js" );
+      nodeText = m_AT.FindText( "spaceship_movement", find ); // returns "" or a complete text ("action - command")
+      if ( !String.IsNullOrWhiteSpace( nodeText ) ) {
+        dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
+      }
+
+      m_AT.ActionMaps.TuningStrafeLongitudinal.Reset( );  // set defaults
+      if ( dev != null ) {
+        // JS commands that are supported
+        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" )
+          || nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" )
+          || nodeText.ToLowerInvariant( ).EndsWith( "_Z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) ) {
+          m_AT.ActionMaps.TuningStrafeLongitudinal.GameDevice = dev;
+          m_AT.ActionMaps.TuningStrafeLongitudinal.Action = nodeText;
+          string doID =  Deviceoptions.DevOptionID( dev.DevName, nodeText );
+          if ( !m_AT.ActionMaps.Deadzones.ContainsKey( doID ) ) {
+            m_AT.ActionMaps.Deadzones.Add( doID, new DeviceOptionParameter( ) );
+          }
+          m_AT.ActionMaps.TuningStrafeLongitudinal.Deviceoption = m_AT.ActionMaps.Deadzones[doID];
+          JSCAL.StrafeLonTuning = m_AT.ActionMaps.TuningStrafeLongitudinal;
+        }
+      }
+
 
       // run
       JSCAL.ShowDialog( );
