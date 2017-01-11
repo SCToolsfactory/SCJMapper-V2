@@ -121,11 +121,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="actions\ActionCommandCls.cs" />
+    <Compile Include="actions\ActionTreeEventArgs.cs" />
     <Compile Include="actions\ActionTreeInputNode.cs" />
     <Compile Include="actions\ActionTreeNode.cs" />
     <Compile Include="appConfiguration.cs" />
     <Compile Include="AppSettings.cs" />
     <Compile Include="DeviceCls.cs" />
+    <Compile Include="DeviceList.cs" />
+    <Compile Include="Options\FormOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Options\FormOptions.Designer.cs">
+      <DependentUpon>FormOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="SC\SCActionMapList.cs" />
     <Compile Include="Table\DS_ActionMap.cs" />
     <Compile Include="Table\DS_ActionMaps.cs">
@@ -143,7 +151,7 @@
     <Compile Include="Table\FormTable.Designer.cs">
       <DependentUpon>FormTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="Joystick\DeviceOptionParameter.cs" />
+    <Compile Include="Options\DeviceOptionParameter.cs" />
     <Compile Include="Gamepad\GamepadCls.cs" />
     <Compile Include="Joystick\JsReassingList.cs" />
     <Compile Include="Keyboard\KeyboardCls.cs" />
@@ -152,7 +160,7 @@
     <Compile Include="MySounds.cs" />
     <Compile Include="OGL\BezierSeries.cs" />
     <Compile Include="OGL\CalcBezierCurve.cs" />
-    <Compile Include="Joystick\DeviceTuningParameter.cs" />
+    <Compile Include="Options\DeviceTuningParameter.cs" />
     <Compile Include="OGL\CubicSpline.cs" />
     <Compile Include="OGL\LoaderStatics.cs" />
     <Compile Include="OGL\FormJSCalCurve.cs">
@@ -161,12 +169,12 @@
     <Compile Include="OGL\FormJSCalCurve.Designer.cs">
       <DependentUpon>FormJSCalCurve.cs</DependentUpon>
     </Compile>
-    <Compile Include="Joystick\Deviceoptions.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Options\Deviceoptions.cs" />
+    <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Joystick\FormReassign.cs">
       <SubType>Form</SubType>
@@ -203,9 +211,9 @@
     <Compile Include="Joystick\UC_JoyPanel.Designer.cs">
       <DependentUpon>UC_JoyPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Joystick\Options.cs" />
+    <Compile Include="Options\OptionTree.cs" />
     <Compile Include="OGL\LoaderDDS.cs" />
-    <Compile Include="Joystick\OptionsInvert.cs" />
+    <Compile Include="Options\OptionsInvert.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OGL\RK4Integrator.cs" />
@@ -223,9 +231,12 @@
     <Compile Include="Gamepad\UC_GpadPanel.Designer.cs">
       <DependentUpon>UC_GpadPanel.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Options\FormOptions.resx">
+      <DependentUpon>FormOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Table\FormTable.resx">
       <DependentUpon>FormTable.cs</DependentUpon>

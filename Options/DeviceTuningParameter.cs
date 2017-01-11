@@ -1,8 +1,10 @@
-﻿using System;
+﻿using SCJMapper_V2.Gamepad;
+using SCJMapper_V2.Joystick;
+using System;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace SCJMapper_V2.Joystick
+namespace SCJMapper_V2.Options
 {
   /// <summary>
   /// set of parameters to tune the Joystick
@@ -11,9 +13,10 @@ namespace SCJMapper_V2.Joystick
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
+    private string m_nodetext = "";     // v_pitch - js1_x
     private string m_action = "";       // v_pitch
     private string m_cmdCtrl = "";      // js1_x, js1_y, js1_rotz ...
-    private string m_type = "";         // joystick OR xboxpad
+    private string m_class = "";         // joystick OR xboxpad
     private int m_devInstanceNo = -1;   // jsN - instance in XML
 
     string m_option = ""; // the option name (level where it applies)
@@ -21,8 +24,8 @@ namespace SCJMapper_V2.Joystick
     private string m_deviceName = "";
     private bool   m_isStrafe = false;  // default
 
-//    private bool   m_senseEnabled = false;  // default
-//    private string m_sense = "1.00";
+    //    private bool   m_senseEnabled = false;  // default
+    //    private string m_sense = "1.00";
 
     private bool   m_expEnabled = false;  // default
     private string m_exponent = "1.000";
@@ -37,8 +40,9 @@ namespace SCJMapper_V2.Joystick
 
     private DeviceOptionParameter m_deviceoption = null;
 
-    public DeviceTuningParameter( )
+    public DeviceTuningParameter( string optName )
     {
+      m_option = optName;
     }
 
     #region Properties
@@ -48,15 +52,15 @@ namespace SCJMapper_V2.Joystick
       get { return m_device; }
       set {
         m_device = value;
-        m_type = "";
+        m_class = "";
         m_devInstanceNo = -1;
         if ( m_device == null ) return; // got a null device
 
         if ( JoystickCls.IsDeviceClass( m_device.DevClass ) ) {
-          m_type = m_device.DevClass;
+          m_class = m_device.DevClass;
           m_devInstanceNo = ( m_device as JoystickCls ).JSAssignment;
-        } else if ( Gamepad.GamepadCls.IsDeviceClass( m_device.DevClass ) ) {
-          m_type = m_device.DevClass;
+        } else if ( GamepadCls.IsDeviceClass( m_device.DevClass ) ) {
+          m_class = m_device.DevClass;
           m_devInstanceNo = 1; // supports ONE gamepad
         }
       }
@@ -74,10 +78,21 @@ namespace SCJMapper_V2.Joystick
       set { m_deviceName = value; }
     }
 
-    public string Action
+    public string DeviceClass
     {
-      get { return m_action; }
-      set { m_action = value; DecomposeCommand( ); }
+      get { return m_class; }
+    }
+
+
+    public string OptionName
+    {
+      get { return m_option; }
+    }
+
+    public string NodeText
+    {
+      get { return m_nodetext; }
+      set { m_nodetext = value; DecomposeCommand( ); }
     }
 
     public string CommandCtrl
@@ -97,26 +112,11 @@ namespace SCJMapper_V2.Joystick
       get { return m_deviceoption; }
       set {
         m_deviceoption = value;
-        if ( m_deviceoption != null ) {
-          m_deviceoption.DeviceName = DeviceName;     // must know too
-          m_deviceoption.CommandCtrl = CommandCtrl;   // must know too
-        }
+        if ( m_deviceoption != null )
+          m_deviceoption.Action = m_action;
       }
     }
 
-    /*
-    public bool SensitivityUsed
-    {
-      get { return m_senseEnabled; }
-      set { m_senseEnabled = value; }
-    }
-
-    public string Sensitivity
-    {
-      get { return m_sense; }
-      set { m_sense = value; }
-    }
-    */
     public bool InvertUsed
     {
       get { return m_invertEnabled; }
@@ -158,9 +158,9 @@ namespace SCJMapper_V2.Joystick
     // reset some defaults
     public void Reset( )
     {
-      GameDevice = null;
+      //GameDevice = null;
       Deviceoption = null;
-      Action = "";
+      NodeText = "";
     }
 
 
@@ -171,8 +171,8 @@ namespace SCJMapper_V2.Joystick
     {
       // populate from input
       // something like "v_pitch - js1_x" OR "v_pitch - xi_thumbl" OR "v_pitch - ximod+xi_thumbl+xi_mod"
-      string cmd = ActionTreeNode.CommandFromNodeText( Action );
-      string action = ActionTreeNode.ActionFromNodeText( Action );
+      string cmd = ActionTreeNode.CommandFromNodeText( NodeText );
+      m_action = ActionTreeNode.ActionFromNodeText( NodeText );
       m_cmdCtrl = "";
       if ( !string.IsNullOrWhiteSpace( cmd ) ) {
         // decomp gamepad entries - could have modifiers so check for contains...
@@ -180,47 +180,24 @@ namespace SCJMapper_V2.Joystick
           // gamepad
           m_cmdCtrl = "xi_thumblx";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = string.Format( "flight_move_pitch" );
-          else m_option = string.Format( "flight_move_yaw" );
         } else if ( cmd.Contains( "xi_thumbly" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbly";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = string.Format( "flight_move_pitch" );
-          else m_option = string.Format( "flight_move_yaw" );
         } else if ( cmd.Contains( "xi_thumbrx" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbrx";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = string.Format( "flight_move_pitch" );
-          else m_option = string.Format( "flight_move_yaw" );
         } else if ( cmd.Contains( "xi_thumbry" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbry";
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) m_option = string.Format( "flight_move_pitch" );
-          else m_option = string.Format( "flight_move_yaw" );
         }
           // assume joystick
           else {
           // get parts
           m_cmdCtrl = JoystickCls.ActionFromJsCommand( cmd ); //js1_x -> x; js2_rotz -> rotz
           m_deviceName = m_device.DevName;
-          if ( action.Contains( "pitch" ) ) {
-            m_option = string.Format( "flight_move_pitch" ); m_isStrafe = false;
-          } else if ( action.Contains( "yaw" ) ) {
-            m_option = string.Format( "flight_move_yaw" ); m_isStrafe = false;
-          } else if ( action.Contains( "roll" ) ) {
-            m_option = string.Format( "flight_move_roll" ); m_isStrafe = false;
-          }
-            // strafes
-            else if ( action.Contains( "vertical" ) ) {
-            m_option = string.Format( "flight_move_strafe_vertical" ); m_isStrafe = true;
-          } else if ( action.Contains( "lateral" ) ) {
-            m_option = string.Format( "flight_move_strafe_lateral" ); m_isStrafe = true;
-          } else if ( action.Contains( "longitudinal" ) ) {
-            m_option = string.Format( "flight_move_strafe_longitudinal" ); m_isStrafe = true;
-          } else m_option = string.Format( "????" ); // don't know what it is ...
         }
       }
     }
@@ -233,9 +210,10 @@ namespace SCJMapper_V2.Joystick
     public string Options_toXML( )
     {
       if ( ( /*SensitivityUsed ||*/ ExponentUsed || InvertUsed || NonLinCurveUsed ) == false ) return ""; // not used
+      if ( DevInstanceNo < 1 ) return ""; // no device to assign it to..
 
       string tmp = "";
-      tmp += string.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", m_type, m_devInstanceNo.ToString( ) );
+      tmp += string.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", m_class, m_devInstanceNo.ToString( ) );
       tmp += string.Format( "\t\t<{0} ", m_option );
 
       if ( InvertUsed ) {
@@ -278,10 +256,9 @@ namespace SCJMapper_V2.Joystick
     /// <returns></returns>
     public Boolean Options_fromXML( XmlReader reader, string type, int instance )
     {
-      m_type = type;
+      m_class = type;
 
       string invert = "";
-      string sensitivity = "";
       string exponent = "";
 
       m_option = reader.Name;

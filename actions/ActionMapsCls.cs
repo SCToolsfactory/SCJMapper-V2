@@ -17,7 +17,7 @@ using SCJMapper_V2.Keyboard;
 using SCJMapper_V2.Mouse;
 using SCJMapper_V2.Gamepad;
 using SCJMapper_V2.Joystick;
-
+using SCJMapper_V2.Options;
 
 namespace SCJMapper_V2
 {
@@ -56,7 +56,7 @@ namespace SCJMapper_V2
 
     private JoystickList m_joystickList = null;
     private UICustHeader m_uiCustHeader = null;
-    private Options m_options = null; // options are given per deviceClass and instance - it seems
+    private OptionTree m_optionTree = null; // options are given per deviceClass and instance - it seems
     private Deviceoptions m_deviceOptions = null;
     private Modifiers m_modifiers = null;
 
@@ -94,76 +94,19 @@ namespace SCJMapper_V2
     // provide access to Tuning items of the Options obj to the owner
 
     /// <summary>
-    /// Returns the X-Tuning item
+    /// Returns the device tuning items - the OptionTree
     /// </summary>
-    public DeviceTuningParameter TuningP
-    {
-      get { return m_options.TuneP; }
-    }
-    /// <summary>
-    /// Returns the Y-Tuning item
-    /// </summary>
-    public DeviceTuningParameter TuningY
-    {
-      get { return m_options.TuneY; }
-    }
-    /// <summary>
-    /// Returns the Z-Tuning item
-    /// </summary>
-    public DeviceTuningParameter TuningR
-    {
-      get { return m_options.TuneR; }
-    }
-
-    /// <summary>
-    /// Returns the StrafeLateral-Tuning item
-    /// </summary>
-    public DeviceTuningParameter TuningStrafeLateral
-    {
-      get { return m_options.TuneLat; }
-    }
-    /// <summary>
-    /// Returns the StrafeVertical-Tuning item
-    /// </summary>
-    public DeviceTuningParameter TuningStrafeVertical
-    {
-      get { return m_options.TuneVert; }
-    }
-    /// <summary>
-    /// Returns the StrafeLongitudinal-Tuning item
-    /// </summary>
-    public DeviceTuningParameter TuningStrafeLongitudinal
-    {
-      get { return m_options.TuneLon; }
-    }
+    public OptionTree OptionTree { get { return m_optionTree; } }
 
 
     /// <summary>
     /// Returns the DeviceOptions containing the deadzones
     /// </summary>
-    public Deviceoptions Deadzones
+    public Deviceoptions DeviceOptions
     {
       get { return m_deviceOptions; }
     }
 
-    /// <summary>
-    /// Returns the Options item
-    /// </summary>
-    public Options Options
-    {
-      get { return m_options; }
-    }
-
-    /// <summary>
-    /// Assign the GUI Invert Checkboxes for further handling
-    /// </summary>
-    public List<CheckBox> InvertCheckList
-    {
-      set {
-        m_invertCB = value;
-        m_options.InvertCheckList = m_invertCB;
-      }
-    }
 
     /// <summary>
     /// Returns the assigned Modifiers
@@ -198,8 +141,8 @@ namespace SCJMapper_V2
     {
       // create options objs
       m_uiCustHeader = new UICustHeader( );
-      m_options = new Options( m_joystickList );
-      m_deviceOptions = new Deviceoptions( m_options );
+      m_optionTree = new OptionTree( );
+      m_deviceOptions = new Deviceoptions( m_joystickList );
       m_modifiers = new Modifiers( );
     }
 
@@ -215,7 +158,7 @@ namespace SCJMapper_V2
 
       newMaps.m_uiCustHeader = this.m_uiCustHeader;
       newMaps.m_deviceOptions = this.m_deviceOptions;
-      newMaps.m_options = this.m_options;
+      newMaps.m_optionTree = this.m_optionTree;
       newMaps.m_modifiers = this.m_modifiers;
 
       for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
@@ -370,7 +313,7 @@ namespace SCJMapper_V2
       r += m_uiCustHeader.toXML( ) + String.Format( "\n" );
 
       // *** OPTIONS 
-      if ( m_options.Count > 0 ) r += m_options.toXML( ) + String.Format( "\n" );
+      if ( m_optionTree.Count > 0 ) r += m_optionTree.toXML( ) + String.Format( "\n" );
 
       // *** DEVICE OPTIONS
       if ( m_deviceOptions.Count > 0 ) r += m_deviceOptions.toXML( ) + String.Format( "\n" );
@@ -398,8 +341,6 @@ namespace SCJMapper_V2
       log.Debug( "ActionMapsCls.fromXML - Entry" );
 
       CreateNewOptions( ); // Reset those options...
-      m_options.InvertCheckList = m_invertCB;
-      m_options.ResetInverter( ); // have to reset when reading a new mapping
 
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;
@@ -445,7 +386,7 @@ namespace SCJMapper_V2
           m_deviceOptions.fromXML( x );
         } else if ( reader.Name.ToLowerInvariant( ) == "options" ) {
           String x = reader.ReadOuterXml( );
-          m_options.fromXML( x );
+          m_optionTree.fromXML( x );
         } else if ( reader.Name.ToLowerInvariant( ) == "modifiers" ) {
           String x = reader.ReadOuterXml( );
           m_modifiers.fromXML( x );

@@ -107,6 +107,9 @@
       this.lblTurnspeed = new System.Windows.Forms.Label();
       this.slTurnSpeed = new System.Windows.Forms.TrackBar();
       this.panel6 = new System.Windows.Forms.Panel();
+      this.rbPtDeadzone = new System.Windows.Forms.RadioButton();
+      this.lblGraphSaturation = new System.Windows.Forms.Label();
+      this.lblGraphDeadzone = new System.Windows.Forms.Label();
       this.lblNodetext = new System.Windows.Forms.Label();
       this.label12 = new System.Windows.Forms.Label();
       this.cbRuse = new System.Windows.Forms.CheckBox();
@@ -166,9 +169,6 @@
       this.panel10 = new System.Windows.Forms.Panel();
       this.rbTuneStrafe = new System.Windows.Forms.RadioButton();
       this.rbTuneYPR = new System.Windows.Forms.RadioButton();
-      this.lblGraphDeadzone = new System.Windows.Forms.Label();
-      this.lblGraphSaturation = new System.Windows.Forms.Label();
-      this.rbPtDeadzone = new System.Windows.Forms.RadioButton();
       this.tlp.SuspendLayout();
       this.tlpData.SuspendLayout();
       this.pnlYaw.SuspendLayout();
@@ -1082,6 +1082,38 @@
       this.panel6.Size = new System.Drawing.Size(579, 288);
       this.panel6.TabIndex = 5;
       // 
+      // rbPtDeadzone
+      // 
+      this.rbPtDeadzone.AutoSize = true;
+      this.rbPtDeadzone.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.rbPtDeadzone.Location = new System.Drawing.Point(14, 72);
+      this.rbPtDeadzone.Name = "rbPtDeadzone";
+      this.rbPtDeadzone.Size = new System.Drawing.Size(81, 19);
+      this.rbPtDeadzone.TabIndex = 54;
+      this.rbPtDeadzone.Text = "Deadzone";
+      this.rbPtDeadzone.UseVisualStyleBackColor = true;
+      this.rbPtDeadzone.CheckedChanged += new System.EventHandler(this.rbPtAny_CheckedChanged);
+      // 
+      // lblGraphSaturation
+      // 
+      this.lblGraphSaturation.AutoSize = true;
+      this.lblGraphSaturation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblGraphSaturation.Location = new System.Drawing.Point(531, 266);
+      this.lblGraphSaturation.Name = "lblGraphSaturation";
+      this.lblGraphSaturation.Size = new System.Drawing.Size(34, 15);
+      this.lblGraphSaturation.TabIndex = 53;
+      this.lblGraphSaturation.Text = "0.000";
+      // 
+      // lblGraphDeadzone
+      // 
+      this.lblGraphDeadzone.AutoSize = true;
+      this.lblGraphDeadzone.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblGraphDeadzone.Location = new System.Drawing.Point(252, 266);
+      this.lblGraphDeadzone.Name = "lblGraphDeadzone";
+      this.lblGraphDeadzone.Size = new System.Drawing.Size(34, 15);
+      this.lblGraphDeadzone.TabIndex = 52;
+      this.lblGraphDeadzone.Text = "0.000";
+      // 
       // lblNodetext
       // 
       this.lblNodetext.AutoSize = true;
@@ -1281,6 +1313,7 @@
       this.rbPtSaturation.Name = "rbPtSaturation";
       this.rbPtSaturation.Size = new System.Drawing.Size(83, 19);
       this.rbPtSaturation.TabIndex = 32;
+      this.rbPtSaturation.TabStop = true;
       this.rbPtSaturation.Text = "Saturation";
       this.rbPtSaturation.UseVisualStyleBackColor = true;
       this.rbPtSaturation.CheckedChanged += new System.EventHandler(this.rbPtAny_CheckedChanged);
@@ -1542,6 +1575,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.btDone.DialogResult = System.Windows.Forms.DialogResult.OK;
+      this.btDone.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.btDone.Location = new System.Drawing.Point(290, 3);
       this.btDone.Name = "btDone";
       this.btDone.Size = new System.Drawing.Size(125, 65);
@@ -1766,38 +1800,6 @@
       this.rbTuneYPR.Text = "Tune YPR";
       this.rbTuneYPR.UseVisualStyleBackColor = false;
       this.rbTuneYPR.CheckedChanged += new System.EventHandler(this.rbTuneYPR_CheckedChanged);
-      // 
-      // lblGraphDeadzone
-      // 
-      this.lblGraphDeadzone.AutoSize = true;
-      this.lblGraphDeadzone.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblGraphDeadzone.Location = new System.Drawing.Point(252, 266);
-      this.lblGraphDeadzone.Name = "lblGraphDeadzone";
-      this.lblGraphDeadzone.Size = new System.Drawing.Size(34, 15);
-      this.lblGraphDeadzone.TabIndex = 52;
-      this.lblGraphDeadzone.Text = "0.000";
-      // 
-      // lblGraphSaturation
-      // 
-      this.lblGraphSaturation.AutoSize = true;
-      this.lblGraphSaturation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblGraphSaturation.Location = new System.Drawing.Point(531, 266);
-      this.lblGraphSaturation.Name = "lblGraphSaturation";
-      this.lblGraphSaturation.Size = new System.Drawing.Size(34, 15);
-      this.lblGraphSaturation.TabIndex = 53;
-      this.lblGraphSaturation.Text = "0.000";
-      // 
-      // rbPtDeadzone
-      // 
-      this.rbPtDeadzone.AutoSize = true;
-      this.rbPtDeadzone.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rbPtDeadzone.Location = new System.Drawing.Point(14, 72);
-      this.rbPtDeadzone.Name = "rbPtDeadzone";
-      this.rbPtDeadzone.Size = new System.Drawing.Size(81, 19);
-      this.rbPtDeadzone.TabIndex = 54;
-      this.rbPtDeadzone.Text = "Deadzone";
-      this.rbPtDeadzone.UseVisualStyleBackColor = true;
-      this.rbPtDeadzone.CheckedChanged += new System.EventHandler(this.rbPtAny_CheckedChanged);
       // 
       // FormJSCalCurve
       // 

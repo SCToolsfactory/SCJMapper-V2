@@ -18,7 +18,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 using SCJMapper_V2.OGL.TextureLoaders;
 using SCJMapper_V2.Joystick;
-
+using SCJMapper_V2.Options;
 
 namespace SCJMapper_V2.OGL
 {
@@ -160,13 +160,15 @@ namespace SCJMapper_V2.OGL
       public void Load( DeviceTuningParameter dp )
       {
         if ( dp != null ) {
-          used = true;
-          nodetext = dp.Action;
+          used = ( !string.IsNullOrEmpty( dp.NodeText ) );
+          if ( !used ) return;
+
+          nodetext = dp.NodeText;
           string[] e = nodetext.Split( new char[] { ActionTreeInputNode.RegDiv, ActionTreeInputNode.ModDiv }, StringSplitOptions.RemoveEmptyEntries );
           if ( e.Length > 0 )
             control = e[1].TrimEnd( );
           else
-            control = dp.Action;
+            control = dp.NodeText;
           command = dp.CommandCtrl;
           // the option data
           invertUsed = dp.InvertUsed;
@@ -312,6 +314,31 @@ namespace SCJMapper_V2.OGL
 
     #endregion
 
+
+
+    private OptionTree m_tuningRef = null; // will get the current optiontree on call
+    public OptionTree OptionTree
+    {
+      get {
+        return m_tuningRef;
+      }
+      set {
+        m_tuningRef = value;
+        if ( m_tuningRef == null ) {
+          log.Error( "- OptionTree: m_tuningRef not assigned" );
+          return;
+        }
+
+        YawTuning = m_tuningRef.TuningItem( "flight_move_yaw" );
+        PitchTuning = m_tuningRef.TuningItem( "flight_move_pitch" );
+        RollTuning = m_tuningRef.TuningItem( "flight_move_roll" );
+
+        StrafeLatTuning = m_tuningRef.TuningItem( "flight_move_strafe_lateral" );
+        StrafeVertTuning = m_tuningRef.TuningItem( "flight_move_strafe_vertical" );
+        StrafeLonTuning = m_tuningRef.TuningItem( "flight_move_strafe_longitudinal" );
+      }
+    }
+
     // Generic Interaction Pattern
     // 
     // Assign TuningParameter (load Live data from Parameter)
@@ -322,14 +349,14 @@ namespace SCJMapper_V2.OGL
     //
     #region YAW - Interaction
 
-    private DeviceTuningParameter m_YawTuning = new DeviceTuningParameter( );
+    private DeviceTuningParameter m_YawTuning = new DeviceTuningParameter( "flight_move_yaw" );
     private LiveValues m_liveYaw = new LiveValues(); // live values
 
     /// <summary>
     /// Submit the tuning parameters
     /// </summary>
     /// 
-    public DeviceTuningParameter YawTuning
+    private DeviceTuningParameter YawTuning
     {
       get {
         YawUpdateTuning( );
@@ -385,14 +412,14 @@ namespace SCJMapper_V2.OGL
 
     #region PITCH - Interaction
 
-    private DeviceTuningParameter m_PitchTuning = new DeviceTuningParameter( );
+    private DeviceTuningParameter m_PitchTuning = new DeviceTuningParameter( "flight_move_pitch" );
     private LiveValues m_livePitch = new LiveValues(); // live values
 
     /// <summary>
     /// Submit the tuning parameters
     /// </summary>
     /// 
-    public DeviceTuningParameter PitchTuning
+    private DeviceTuningParameter PitchTuning
     {
       get {
         // update 
@@ -448,14 +475,14 @@ namespace SCJMapper_V2.OGL
 
     #region ROLL - Interaction
 
-    private DeviceTuningParameter m_RollTuning = new DeviceTuningParameter( );
+    private DeviceTuningParameter m_RollTuning = new DeviceTuningParameter( "flight_move_roll" );
     private LiveValues m_liveRoll = new LiveValues(); // live values
 
     /// <summary>
     /// Submit the tuning parameters
     /// </summary>
     /// 
-    public DeviceTuningParameter RollTuning
+    private DeviceTuningParameter RollTuning
     {
       get {
         // update 
@@ -513,14 +540,14 @@ namespace SCJMapper_V2.OGL
 
     #region Strafe Lateral - Interaction (yaw GUI values)
 
-    private DeviceTuningParameter m_StrafeLatTuning = new DeviceTuningParameter( );
+    private DeviceTuningParameter m_StrafeLatTuning = new DeviceTuningParameter( "flight_move_strafe_lateral" );
     private LiveValues m_liveStrafeLat = new LiveValues(); // live values
 
     /// <summary>
     /// Submit the tuning parameters
     /// </summary>
     /// 
-    public DeviceTuningParameter StrafeLatTuning
+    private DeviceTuningParameter StrafeLatTuning
     {
       get {
         // update 
@@ -577,14 +604,14 @@ namespace SCJMapper_V2.OGL
 
     #region Strafe Vertical - Interaction (pitch GUI values)
 
-    private DeviceTuningParameter m_StrafeVertTuning = new DeviceTuningParameter( );
+    private DeviceTuningParameter m_StrafeVertTuning = new DeviceTuningParameter( "flight_move_strafe_vertical" );
     private LiveValues m_liveStrafeVert = new LiveValues(); // live values
 
     /// <summary>
     /// Submit the tuning parameters
     /// </summary>
     /// 
-    public DeviceTuningParameter StrafeVertTuning
+    private DeviceTuningParameter StrafeVertTuning
     {
       get {
         // update 
@@ -641,14 +668,14 @@ namespace SCJMapper_V2.OGL
 
     #region Strafe Longitudinal - Interaction (Roll GUI values)
 
-    private DeviceTuningParameter m_StrafeLonTuning = new DeviceTuningParameter( );
+    private DeviceTuningParameter m_StrafeLonTuning = new DeviceTuningParameter( "flight_move_strafe_longitudinal" );
     private LiveValues m_liveStrafeLon = new LiveValues(); // live values
 
     /// <summary>
     /// Submit the tuning parameters
     /// </summary>
     /// 
-    public DeviceTuningParameter StrafeLonTuning
+    private DeviceTuningParameter StrafeLonTuning
     {
       get {
         // update 

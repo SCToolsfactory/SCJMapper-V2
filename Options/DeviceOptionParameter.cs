@@ -1,4 +1,7 @@
-﻿namespace SCJMapper_V2.Joystick
+﻿
+
+
+namespace SCJMapper_V2.Options
 {
   public class DeviceOptionParameter
   {
@@ -7,6 +10,9 @@
 
     private string m_deviceName = "";
     private string m_cmdCtrl = "";        // x, y, rotz ...
+    private string m_doID = "";
+
+    private string m_action ="";  // v_pitch ..  assigned if known only
 
     private bool   m_deadzoneEnabled = false;  // default
     private string m_deadzone = "0.000";
@@ -29,16 +35,17 @@
     public DeviceOptionParameter(string deviceName, string cmdCtrl, string dz, string sa )
     {
       m_deviceName = deviceName;
+      m_doID = Deviceoptions.DevOptionID( deviceName, cmdCtrl );
       m_cmdCtrl = cmdCtrl;
       if ( string.IsNullOrEmpty( dz ) ) {
-        m_deadzone = "0.00";
+        m_deadzone = "0.000";
         m_deadzoneEnabled = false;
       } else {
         m_deadzone = dz;
         m_deadzoneEnabled = true;
       }
       if ( string.IsNullOrEmpty(sa)) {
-        m_saturation = "1.00";
+        m_saturation = "1.000";
         m_saturationEnabled = false;
       } else {
         m_saturation = sa;
@@ -55,17 +62,29 @@
       set { m_deviceName = value; }
     }
 
+    public string DoID
+    {
+      get { return m_doID; }
+      set { m_doID = value; }
+    }
+
     public string CommandCtrl
     {
       get { return m_cmdCtrl; }
       set { m_cmdCtrl = value; }
     }
 
+    public string Action
+    {
+      get { return m_action; }
+      set { m_action = value; }
+    }
+
 
     public bool DeadzoneUsed
     {
       get {
-        return ( m_deadzoneEnabled && ( m_deadzone != "0.00" ) );
+        return ( m_deadzoneEnabled && ( m_deadzone != "0.0000" ) );
       }
       set { m_deadzoneEnabled = value; }
     }
@@ -79,7 +98,7 @@
     public bool SaturationUsed
     {
       get {
-        return ( m_saturationEnabled && ( m_saturation != "1.00" ) );
+        return ( m_saturationEnabled && ( m_saturation != "1.000" ) );
       }
       set { m_saturationEnabled = value; }
     }

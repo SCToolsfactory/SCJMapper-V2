@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Windows.Forms;
+using SCJMapper_V2.Joystick;
+using SCJMapper_V2.Gamepad;
 
-namespace SCJMapper_V2.Joystick
+namespace SCJMapper_V2.Options
 {
   public class OptionsInvert
   {
@@ -74,7 +76,7 @@ namespace SCJMapper_V2.Joystick
           m_type = m_device.DevClass;
           m_devInstanceNo = ( m_device as JoystickCls ).JSAssignment;
         }
-        else if ( Gamepad.GamepadCls.IsDeviceClass( m_device.DevClass ) ) {
+        else if ( GamepadCls.IsDeviceClass( m_device.DevClass ) ) {
           m_type = m_device.DevClass;
           m_devInstanceNo = 1; // supports ONE gamepad
         }

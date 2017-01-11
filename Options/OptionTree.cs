@@ -6,8 +6,9 @@ using System.Xml;
 using System.IO;
 using System.Xml.Linq;
 using System.Windows.Forms;
+using SCJMapper_V2.Joystick;
 
-namespace SCJMapper_V2.Joystick
+namespace SCJMapper_V2.Options
 {
   /// <summary>
   ///   Maintains an Options - something like:
@@ -29,136 +30,72 @@ namespace SCJMapper_V2.Joystick
   /// 
   /// options are given per deviceClass and instance - it seems
   /// 	</summary>
-  public class Options
+  public class OptionTree
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     // Support only one set of independent options (string storage)
     List<string> m_stringOptions = new List<string>( );
-    // Support only one set of TuningParameters (there is only ONE Joystick Pitch, Yaw, Roll control possible, they can be on different instances however)
-    DeviceTuningParameter m_tuningP = null; // pitch
-    DeviceTuningParameter m_tuningY = null; // yaw
-    DeviceTuningParameter m_tuningR = null; // roll
 
-    DeviceTuningParameter m_tuningVert = null; // strafe vertical
-    DeviceTuningParameter m_tuningLat = null;  // strafe lateral
-    DeviceTuningParameter m_tuningLon = null;  // strafe longitudinal
-
-    // Have to support Inverters for all possible JS Instances here - right now 4 are supported - provide them for all 12 we support..
-
-    public List<OptionsInvert> m_inverter = new List<OptionsInvert>( ); // all inverters
-
-    private List<CheckBox> m_invertCB = null; // Options owns and handles all Inversions
+    // bag for all tuning items - key is the option name
+    Dictionary<string,DeviceTuningParameter> m_tuning = new Dictionary<string, DeviceTuningParameter>();
 
     // ctor
-    public Options( JoystickList jsList )
+    public OptionTree( )
     {
-      m_tuningP = new DeviceTuningParameter( );
-      m_tuningY = new DeviceTuningParameter( );
-      m_tuningR = new DeviceTuningParameter( );
+      m_tuning.Add( "flight_move_pitch", new DeviceTuningParameter( "flight_move_pitch" ) );
+      m_tuning.Add( "flight_move_yaw", new DeviceTuningParameter( "flight_move_yaw" ) );
+      m_tuning.Add( "flight_move_roll", new DeviceTuningParameter( "flight_move_roll" ) );
+      m_tuning.Add( "flight_move_strafe_vertical", new DeviceTuningParameter( "flight_move_strafe_vertical" ) );
+      m_tuning.Add( "flight_move_strafe_lateral", new DeviceTuningParameter( "flight_move_strafe_lateral" ) );
+      m_tuning.Add( "flight_move_strafe_longitudinal", new DeviceTuningParameter( "flight_move_strafe_longitudinal" ) );
 
-      m_tuningVert = new DeviceTuningParameter( );
-      m_tuningLat = new DeviceTuningParameter( );
-      m_tuningLon = new DeviceTuningParameter( );
+      m_tuning.Add( "flight_throttle_abs", new DeviceTuningParameter( "flight_throttle_abs" ) );
+      m_tuning.Add( "flight_throttle_rel", new DeviceTuningParameter( "flight_throttle_rel" ) );
 
-      // create inverters (
-      for ( int i = 0; i < ( int )OptionsInvert.Inversions.I_LAST; i++ ) {
-        OptionsInvert inv = new OptionsInvert((OptionsInvert.Inversions)i);
-        m_inverter.Add( inv );
-      }
+      m_tuning.Add( "flight_aim_pitch", new DeviceTuningParameter( "flight_aim_pitch" ) );
+      m_tuning.Add( "flight_aim_yaw", new DeviceTuningParameter( "flight_aim_yaw" ) );
+
+      m_tuning.Add( "flight_view_pitch", new DeviceTuningParameter( "flight_view_pitch" ) );
+      m_tuning.Add( "flight_view_yaw", new DeviceTuningParameter( "flight_view_yaw" ) );
+
+      m_tuning.Add( "turret_aim_pitch", new DeviceTuningParameter( "turret_aim_pitch" ) );
+      m_tuning.Add( "turret_aim_yaw", new DeviceTuningParameter( "turret_aim_yaw" ) );
+
+      // Gamepad specific
+      /* Cannot find out to what actions they relate to -  left alone for now
+      m_tuning.Add( "fps_view_pitch", new DeviceTuningParameter( "fps_view_pitch" ) );
+      m_tuning.Add( "fps_view_yaw", new DeviceTuningParameter( "fps_view_yaw" ) );
+
+      m_tuning.Add( "fps_move_lateral", new DeviceTuningParameter( "fps_move_lateral" ) );
+      m_tuning.Add( "fps_move_longitudinal", new DeviceTuningParameter( "fps_move_longitudinal" ) );
+
+      m_tuning.Add( "mgv_view_pitch", new DeviceTuningParameter( "mgv_view_pitch" ) );
+      m_tuning.Add( "mgv_view_yaw", new DeviceTuningParameter( "mgv_view_yaw" ) );
+      */
     }
 
 
     public int Count
     {
-      get { return ( m_stringOptions.Count + ( ( m_tuningP != null ) ? 1 : 0 ) + ( ( m_tuningY != null ) ? 1 : 0 ) + ( ( m_tuningR != null ) ? 1 : 0 ) ); }
+      get { return ( m_stringOptions.Count + 1 ); }
     }
 
 
     // provide access to Tuning items
 
     /// <summary>
-    /// Returns the Pitch-Tuning item
+    /// Returns a tuning item for the asked option
     /// </summary>
-    public DeviceTuningParameter TuneP
+    /// <param name="optionName">The option to get</param>
+    /// <returns>A DeviceTuning item or null if it does not exist</returns>
+    public DeviceTuningParameter TuningItem( string optionName )
     {
-      get { return m_tuningP; }
+      if ( m_tuning.ContainsKey( optionName ) )
+        return m_tuning[optionName];
+      else
+        return null;
     }
-    /// <summary>
-    /// Returns the Yaw-Tuning item
-    /// </summary>
-    public DeviceTuningParameter TuneY
-    {
-      get { return m_tuningY; }
-    }
-    /// <summary>
-    /// Returns the Roll-Tuning item
-    /// </summary>
-    public DeviceTuningParameter TuneR
-    {
-      get { return m_tuningR; }
-    }
-
-    /// <summary>
-    /// Returns the Strafe Vertical-Tuning item
-    /// </summary>
-    public DeviceTuningParameter TuneVert
-    {
-      get { return m_tuningVert; }
-    }
-    /// <summary>
-    /// Returns the Strafe Lateral-Tuning item
-    /// </summary>
-    public DeviceTuningParameter TuneLat
-    {
-      get { return m_tuningLat; }
-    }
-    /// <summary>
-    /// Returns the Strafe Longitudinal-Tuning item
-    /// </summary>
-    public DeviceTuningParameter TuneLon
-    {
-      get { return m_tuningLon; }
-    }
-
-    /// <summary>
-    /// Returns the inverter based on the enum given
-    /// </summary>
-    /// <param name="item">The inverter enum</param>
-    /// <returns>An Inverter object</returns>
-    public OptionsInvert Inverter( OptionsInvert.Inversions item )
-    {
-      // instance is 1.. - array is 0...
-      return m_inverter[( int )item];
-    }
-
-    /// <summary>
-    /// Assign the GUI Invert Checkboxes for further handling
-    /// </summary>
-    public List<CheckBox> InvertCheckList
-    {
-      set {
-        m_invertCB = value;
-        // assuming the ENUM sequence of Checkboxes here...
-        // Note: the flight Flight ones above are not handled twice i.e. are assigned below but not used
-        int i = 0;
-        foreach ( OptionsInvert inv in m_inverter ) {
-          inv.CBInvert = m_invertCB[i++];
-        }
-      }
-    }
-
-    /// <summary>
-    /// Clears all Inverters
-    /// </summary>
-    public void ResetInverter( )
-    {
-      foreach ( OptionsInvert inv in m_inverter ) {
-        inv.Reset( );
-      }
-    }
-
-
 
     private string[] FormatXml( string xml )
     {
@@ -191,25 +128,9 @@ namespace SCJMapper_V2.Joystick
       }
 
       // dump Tuning 
-      r += m_tuningY.Options_toXML( );
-      r += m_tuningP.Options_toXML( );
-      r += m_tuningR.Options_toXML( );
-
-      r += m_tuningLat.Options_toXML( );
-      r += m_tuningVert.Options_toXML( );
-      r += m_tuningLon.Options_toXML( );
-
-      r += m_inverter[( int )OptionsInvert.Inversions.flight_aim_pitch].Options_toXML( );
-      r += m_inverter[( int )OptionsInvert.Inversions.flight_aim_yaw].Options_toXML( );
-
-      r += m_inverter[( int )OptionsInvert.Inversions.flight_view_pitch].Options_toXML( );
-      r += m_inverter[( int )OptionsInvert.Inversions.flight_view_yaw].Options_toXML( );
-
-//      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_toXML( );
-//      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_toXML( );
-//      r += m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_toXML( );
-
-      r += m_inverter[( int )OptionsInvert.Inversions.flight_throttle].Options_toXML( );
+      foreach ( KeyValuePair<string, DeviceTuningParameter> kv in m_tuning ) {
+        r += kv.Value.Options_toXML( );
+      }
 
       return r;
     }
@@ -304,34 +225,33 @@ namespace SCJMapper_V2.Joystick
         while ( !reader.EOF ) {
 
           if ( reader.Name.ToLowerInvariant( ) == "flight_move_pitch" ) {
-            m_tuningP.Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuning["flight_move_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_yaw" ) {
-            m_tuningY.Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuning["flight_move_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_roll" ) {
-            m_tuningR.Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuning["flight_move_roll"].Options_fromXML( reader, type, int.Parse( instance ) );
+
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_vertical" ) {
-            m_tuningVert.Options_fromXML( reader, type, int.Parse( instance ) );
-            //m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_vertical].Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuning["flight_move_strafe_vertical"].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_lateral" ) {
-            m_tuningLat.Options_fromXML( reader, type, int.Parse( instance ) );
-            //m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_lateral].Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuning["flight_move_strafe_lateral"].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_longitudinal" ) {
-            m_tuningLon.Options_fromXML( reader, type, int.Parse( instance ) );
-            //m_inverter[( int )OptionsInvert.Inversions.flight_move_strafe_longitudinal].Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuning["flight_move_strafe_longitudinal"].Options_fromXML( reader, type, int.Parse( instance ) );
+
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle_abs" ) {
+            m_tuning["flight_throttle_abs"].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle_rel" ) {
+            m_tuning["flight_throttle_rel"].Options_fromXML( reader, type, int.Parse( instance ) );
+
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_pitch" ) {
-              m_inverter[( int )OptionsInvert.Inversions.flight_aim_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuning["flight_aim_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_yaw" ) {
-              m_inverter[( int )OptionsInvert.Inversions.flight_aim_yaw].Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuning["flight_aim_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
+
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_view_pitch" ) {
-              m_inverter[( int )OptionsInvert.Inversions.flight_view_pitch].Options_fromXML( reader, type, int.Parse( instance ) );
+            m_tuning["flight_view_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_view_yaw" ) {
-              m_inverter[( int )OptionsInvert.Inversions.flight_view_yaw].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-
-            // Throttle abs/rel are treated the same and use the throttle group only 
-            else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle" ) {
-              m_inverter[( int )OptionsInvert.Inversions.flight_throttle].Options_fromXML( reader, type, int.Parse( instance ) );
-
+            m_tuning["flight_view_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.NodeType != XmlNodeType.EndElement ) {
             //??
             log.InfoFormat( "Options.fromXML: unknown node - {0} - stored as is", reader.Name );

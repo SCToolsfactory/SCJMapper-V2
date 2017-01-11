@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using System.Xml.Linq;
+using SCJMapper_V2.Joystick;
 
-namespace SCJMapper_V2.Joystick
+namespace SCJMapper_V2.Options
 {
   /// <summary>
   ///   Maintains an Deviceoptions - something like:
@@ -26,22 +27,54 @@ namespace SCJMapper_V2.Joystick
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     private static char ID_Delimiter = '⁞';
+    /// <summary>
+    /// Create a DeviceOption ID from dev Name and the command
+    /// </summary>
+    /// <param name="devName">The game device name as retrieved from XInput</param>
+    /// <param name="cmdCtrl">A device control that supports devOptions (all ananlog controls)</param>
+    /// <returns></returns>
     public static string DevOptionID( string devName, string cmdCtrl )
     {
+      // cmdCtrl can be anything 
+      //    v_flight_throttle_abs - js1_throttlez
+      //    v_strafe_longitudinal - js1_y
+      //    v_strafe_longitudinal - js1_roty
+      //    v_strafe_longitudinal - xi1_shoulderl+thumbly
+      //    v_strafe_longitudinal - xi1_thumbly
       string cmd = cmdCtrl.Trim();
+      // messy...
+      if ( cmd.Contains( "throttle" ) ) cmd = cmd.Replace( "throttle", "" ); // this is not suitable for the devOption
+      if ( cmd.Contains( "throttle" ) ) cmd = cmd.Replace( "thumbl", "" ); // this is not suitable for the devOption
+      if ( cmd.Contains( "throttle" ) ) cmd = cmd.Replace( "thumbr", "" ); // this is not suitable for the devOption
       if ( cmd.Contains( "_" ) ) {
         int l = cmd.LastIndexOf("_");
+        cmd = cmd.Substring( l + 1 ); // assuming it is never the last one..
+      }
+      if ( cmd.Contains( "+" ) ) {
+        int l = cmd.LastIndexOf("+");
         cmd = cmd.Substring( l + 1 ); // assuming it is never the last one..
       }
       return string.Format( "{0}{1}{2}", devName, ID_Delimiter, cmd );
     }
 
-    List<string> m_stringOptions = new List<string>( );
+
+    private List<string> m_stringOptions = new List<string>( ); // collected options from XML that are not parsed
 
 
     // ctor
-    public Deviceoptions( Options options )
+    public Deviceoptions( JoystickList jsList )
     {
+      // create all devOptions for all devices found (they may or may no be used)
+      foreach ( JoystickCls js in jsList ) {
+        foreach ( string input in js.AnalogCommands ) {
+          string doid = DevOptionID(js.DevName, input);
+          if ( ! this.ContainsKey(doid)) {
+            this.Add( doid, new DeviceOptionParameter( js.DevName, input, "", "" ) ); // init with disabled defaults
+          } else {
+            log.WarnFormat( "cTor - DO_ID {0} exists (likely a duplicate device name e,g, vJoy ??)", doid );
+          }
+        }
+      }
     }
 
 
@@ -50,7 +83,16 @@ namespace SCJMapper_V2.Joystick
       get { return ( m_stringOptions.Count + base.Count ); }
     }
 
-    // provide access to Sense items
+    /// <summary>
+    /// Reset all Action strings in the dictionary
+    /// </summary>
+    public void ResetActions( )
+    {
+      foreach (KeyValuePair<string, DeviceOptionParameter> kv in this ) {
+        kv.Value.Action = "";
+      }
+    }
+
 
     private string[] FormatXml( string xml )
     {
@@ -137,24 +179,26 @@ namespace SCJMapper_V2.Joystick
                 if ( !string.IsNullOrWhiteSpace( deadzone ) ) {
                   float testF;
                   if ( !float.TryParse( deadzone, out testF ) ) { // check for valid number in string
-                    deadzone = "0.00";
+                    deadzone = "0.000";
                   }
                   if ( !this.ContainsKey( doID ) ) {
                     this.Add( doID, new DeviceOptionParameter( name, input, deadzone, saturation ) );
-                  }else {
+                  } else {
                     // add deadzone value tp existing
+                    this[doID].DeadzoneUsed = true;
                     this[doID].Deadzone = deadzone;
                   }
                 }
                 if ( !string.IsNullOrWhiteSpace( saturation ) ) {
                   float testF;
                   if ( !float.TryParse( saturation, out testF ) ) { // check for valid number in string
-                    saturation = "1.00";
+                    saturation = "1.000";
                   }
                   if ( !this.ContainsKey( doID ) ) {
                     this.Add( doID, new DeviceOptionParameter( name, input, deadzone, saturation ) );
                   } else {
                     // add saturation value tp existing
+                    this[doID].SaturationUsed = true;
                     this[doID].Saturation = saturation;
                   }
                 }
