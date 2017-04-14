@@ -15,7 +15,7 @@ namespace SCJMapper_V2.Joystick
   public class JsReassingList : List<JsReassingR>
   {
 
-    public Boolean ContainsOldJs( int oldJs )
+    public bool ContainsOldJs( int oldJs )
     {
       foreach ( JsReassingR jr in this ) {
         if ( jr.oldJs == oldJs ) return true;

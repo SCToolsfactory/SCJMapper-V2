@@ -4,6 +4,8 @@ using System.Xml;
 using System.IO;
 using System.Xml.Linq;
 using SCJMapper_V2.Joystick;
+using SCJMapper_V2.Gamepad;
+using System.Linq;
 
 namespace SCJMapper_V2.Options
 {
@@ -22,9 +24,12 @@ namespace SCJMapper_V2.Options
   ///	Saitek X52 Pro Flight Controller
   ///	
   ///	</summary>
-  public class Deviceoptions : Dictionary<string, DeviceOptionParameter>
+  public class Deviceoptions : CloneableDictionary<string, DeviceOptionParameter>
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+
+
+    #region Static parts
 
     private static char ID_Delimiter = '⁞';
     /// <summary>
@@ -33,7 +38,7 @@ namespace SCJMapper_V2.Options
     /// <param name="devName">The game device name as retrieved from XInput</param>
     /// <param name="cmdCtrl">A device control that supports devOptions (all ananlog controls)</param>
     /// <returns></returns>
-    public static string DevOptionID( string devName, string cmdCtrl )
+    public static string DevOptionID( string deviceClass, string devName, string cmdCtrl )
     {
       // cmdCtrl can be anything 
       //    v_flight_throttle_abs - js1_throttlez
@@ -41,11 +46,10 @@ namespace SCJMapper_V2.Options
       //    v_strafe_longitudinal - js1_roty
       //    v_strafe_longitudinal - xi1_shoulderl+thumbly
       //    v_strafe_longitudinal - xi1_thumbly
+
       string cmd = cmdCtrl.Trim();
       // messy...
       if ( cmd.Contains( "throttle" ) ) cmd = cmd.Replace( "throttle", "" ); // this is not suitable for the devOption
-      if ( cmd.Contains( "throttle" ) ) cmd = cmd.Replace( "thumbl", "" ); // this is not suitable for the devOption
-      if ( cmd.Contains( "throttle" ) ) cmd = cmd.Replace( "thumbr", "" ); // this is not suitable for the devOption
       if ( cmd.Contains( "_" ) ) {
         int l = cmd.LastIndexOf("_");
         cmd = cmd.Substring( l + 1 ); // assuming it is never the last one..
@@ -54,24 +58,91 @@ namespace SCJMapper_V2.Options
         int l = cmd.LastIndexOf("+");
         cmd = cmd.Substring( l + 1 ); // assuming it is never the last one..
       }
-      return string.Format( "{0}{1}{2}", devName, ID_Delimiter, cmd );
+      //   we have to trick the gamepad name here to CIG generic
+      return string.Format( "{0}{1}{2}", ( GamepadCls.IsDeviceClass( deviceClass ) ) ? GamepadCls.DevNameCIG : devName, ID_Delimiter, cmd );
     }
+
+    #endregion
 
 
     private List<string> m_stringOptions = new List<string>( ); // collected options from XML that are not parsed
 
 
+
+    /// <summary>
+    /// Clone this object
+    /// </summary>
+    /// <returns>A deep Clone of this object</returns>
+    public new object Clone( )
+    {
+      var dop = new Deviceoptions((CloneableDictionary<string, DeviceOptionParameter>)base.Clone());
+      // more objects to deep copy
+      dop.m_stringOptions = new List<string>( m_stringOptions );
+
+#if DEBUG
+      // check cloned item
+      System.Diagnostics.Debug.Assert( CheckClone( dop ) );
+#endif
+      return dop;
+    }
+
+    /// <summary>
+    /// Check clone against This
+    /// </summary>
+    /// <param name="clone"></param>
+    /// <returns>True if the clone is identical but not a shallow copy</returns>
+    private bool CheckClone( Deviceoptions clone )
+    {
+      bool ret = true;
+      // object vars first
+      ret &= ( !object.ReferenceEquals( this.m_stringOptions, clone.m_stringOptions ) );  // shall not be the same object !!
+
+      // check THIS Dictionary
+      ret &= ( this.Count == clone.Count );
+      if ( ret ) {
+        for ( int i = 0; i < this.Count; i++ ) {
+          ret &= ( this.ElementAt( i ).Key == clone.ElementAt( i ).Key );
+
+          ret &= ( !object.ReferenceEquals( this.ElementAt( i ).Value, clone.ElementAt( i ).Value ) );  // shall not be the same object !!
+          ret &= ( this.ElementAt( i ).Value.CheckClone( clone.ElementAt( i ).Value ) ); // sub check
+        }
+      }
+      return ret;
+    }
+
+
+
+    private Deviceoptions( CloneableDictionary<string, DeviceOptionParameter> init )
+    {
+      foreach ( KeyValuePair<string, DeviceOptionParameter> kvp in init ) {
+        this.Add( kvp.Key, kvp.Value );
+      }
+    }
+
+
     // ctor
-    public Deviceoptions( JoystickList jsList )
+    public Deviceoptions( )
     {
       // create all devOptions for all devices found (they may or may no be used)
-      foreach ( JoystickCls js in jsList ) {
+      foreach ( JoystickCls js in DeviceInst.JoystickListRef ) {
         foreach ( string input in js.AnalogCommands ) {
-          string doid = DevOptionID(js.DevName, input);
-          if ( ! this.ContainsKey(doid)) {
-            this.Add( doid, new DeviceOptionParameter( js.DevName, input, "", "" ) ); // init with disabled defaults
+          string doid = DevOptionID(JoystickCls.DeviceClass, js.DevName, input);
+          if ( !this.ContainsKey( doid ) ) {
+            this.Add( doid, new DeviceOptionParameter( js, input, "", "" ) ); // init with disabled defaults
           } else {
-            log.WarnFormat( "cTor - DO_ID {0} exists (likely a duplicate device name e,g, vJoy ??)", doid );
+            log.WarnFormat( "cTor - Joystick DO_ID {0} exists (likely a duplicate device name e,g, vJoy ??)", doid );
+          }
+        }
+      }
+
+      // add gamepad if there is any
+      if ( DeviceInst.GamepadRef != null ) {
+        foreach ( string input in DeviceInst.GamepadRef.AnalogCommands ) {
+          string doid = DevOptionID(GamepadCls.DeviceClass, DeviceInst.GamepadRef.DevName, input);
+          if ( !this.ContainsKey( doid ) ) {
+            this.Add( doid, new DeviceOptionParameter( DeviceInst.GamepadRef, input, "", "" ) ); // init with disabled defaults
+          } else {
+            log.WarnFormat( "cTor - Gamepad DO_ID {0} exists", doid );
           }
         }
       }
@@ -88,8 +159,24 @@ namespace SCJMapper_V2.Options
     /// </summary>
     public void ResetActions( )
     {
-      foreach (KeyValuePair<string, DeviceOptionParameter> kv in this ) {
+      foreach ( KeyValuePair<string, DeviceOptionParameter> kv in this ) {
         kv.Value.Action = "";
+      }
+    }
+
+
+    /// <summary>
+    /// Rounds a string to 3 decimals (if it is a number..)
+    /// </summary>
+    /// <param name="valString">A value string</param>
+    /// <returns>A rounded value string - or the string if not a number</returns>
+    private string RoundString( string valString )
+    {
+      double d = 0;
+      if ( ( !string.IsNullOrEmpty( valString ) ) && double.TryParse( valString, out d ) ) {
+        return d.ToString( "0.000" );
+      } else {
+        return valString;
       }
     }
 
@@ -165,6 +252,7 @@ namespace SCJMapper_V2.Options
 
       if ( reader.HasAttributes ) {
         name = reader["name"];
+        string devClass= (name == GamepadCls.DevNameCIG ) ? GamepadCls.DeviceClass : JoystickCls.DeviceClass;// have to trick this one...
 
         reader.Read( );
         // try to disassemble the items
@@ -172,17 +260,19 @@ namespace SCJMapper_V2.Options
           if ( reader.Name.ToLowerInvariant( ) == "option" ) {
             if ( reader.HasAttributes ) {
               string input = reader["input"];
-              string deadzone = reader["deadzone"];
-              string saturation = reader["saturation"];
+              string deadzone = RoundString( reader["deadzone"] );
+              string saturation = RoundString( reader["saturation"] );
               if ( !string.IsNullOrWhiteSpace( input ) ) {
-                string doID = DevOptionID(name, input);
+                string doID = "";
+                doID = DevOptionID( devClass, name, input );
                 if ( !string.IsNullOrWhiteSpace( deadzone ) ) {
                   float testF;
                   if ( !float.TryParse( deadzone, out testF ) ) { // check for valid number in string
                     deadzone = "0.000";
                   }
                   if ( !this.ContainsKey( doID ) ) {
-                    this.Add( doID, new DeviceOptionParameter( name, input, deadzone, saturation ) );
+                    log.InfoFormat( "Cannot caputre Device Options for device <{0}> - unknown device!", name );
+                    //this.Add( doID, new DeviceOptionParameter( devClass, name, input, deadzone, saturation ) );
                   } else {
                     // add deadzone value tp existing
                     this[doID].DeadzoneUsed = true;
@@ -195,7 +285,8 @@ namespace SCJMapper_V2.Options
                     saturation = "1.000";
                   }
                   if ( !this.ContainsKey( doID ) ) {
-                    this.Add( doID, new DeviceOptionParameter( name, input, deadzone, saturation ) );
+                    log.InfoFormat( "Cannot caputre Device Options for device <{0}> - unknown device!", name );
+                    //this.Add( doID, new DeviceOptionParameter( devClass, name, input, deadzone, saturation ) ); // actually not supported..
                   } else {
                     // add saturation value tp existing
                     this[doID].SaturationUsed = true;

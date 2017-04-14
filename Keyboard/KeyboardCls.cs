@@ -19,14 +19,14 @@ namespace SCJMapper_V2.Keyboard
 
     #region Static Items
 
-    public new const String DeviceClass = "keyboard";  // the device name used throughout this app
-    public new const String DeviceID = "kb1_";
+    public new const string DeviceClass = "keyboard";  // the device name used throughout this app
+    public new const string DeviceID = "kb1_";
     static public int RegisteredDevices = 0;  // devices add here once they are created (though will not decrement as they are not deleted)
 
-    public const String ClearMods = "escape";
+    public const string ClearMods = "escape";
 
-    public new const String BlendedInput = DeviceID + DeviceCls.BlendedInput;
-    static public new Boolean IsBlendedInput ( String input )
+    public new const string BlendedInput = DeviceID + DeviceCls.BlendedInput;
+    static public new bool IsBlendedInput ( string input )
     {
       if ( input == BlendedInput ) return true;
       return false;
@@ -47,7 +47,7 @@ namespace SCJMapper_V2.Keyboard
     /// </summary>
     /// <param name="deviceClass"></param>
     /// <returns></returns>
-    static public new Boolean IsDeviceClass( String deviceClass )
+    static public new bool IsDeviceClass( string deviceClass )
     {
       return ( deviceClass == DeviceClass );
     }
@@ -57,7 +57,7 @@ namespace SCJMapper_V2.Keyboard
     /// </summary>
     /// <param name="devInput"></param>
     /// <returns></returns>
-    static public new String DeviceClassFromInput( String devInput )
+    static public new string DeviceClassFromInput( string devInput )
     {
       if ( DevMatch( devInput ) )
         return DeviceClass; // this
@@ -70,7 +70,7 @@ namespace SCJMapper_V2.Keyboard
     /// </summary>
     /// <param name="input">A keyboard input</param>
     /// <returns>DevInput</returns>
-    static public new String DevInput( String input )
+    static public new string DevInput( string input )
     {
       if ( DevMatch( input ) )
         return input; // already
@@ -83,7 +83,7 @@ namespace SCJMapper_V2.Keyboard
     /// </summary>
     /// <param name="devInput">A devInput string</param>
     /// <returns>True for a match</returns>
-    static public new Boolean DevMatch( String devInput )
+    static public new bool DevMatch( string devInput )
     {
       return devInput.StartsWith( DeviceID );
     }
@@ -94,11 +94,11 @@ namespace SCJMapper_V2.Keyboard
     /// </summary>
     /// <param name="input">The AC1 input string</param>
     /// <returns>An AC2 style input string</returns>
-    static public String FromAC1( String input )
+    static public string FromAC1( string input )
     {
       // input is something like a letter or a composition like lctrl+c 
       // try easy: add kb1_ at the beginning and before any +; first remove spaces
-      String retVal = input.Replace(" ","");
+      string retVal = input.Replace(" ","");
       if ( IsBlendedInput( input ) ) return input;
 
       int plPos = retVal.IndexOf("+");
@@ -121,12 +121,12 @@ namespace SCJMapper_V2.Keyboard
     /// </summary>
     /// <param name="pressedKeys">The list of pressed DX keys</param>
     /// <returns>The SC keycode string</returns>
-    public static String DXKeyboardCmd( List<Key> pressedKeys, Boolean modAndKey )
+    public static string DXKeyboardCmd( List<Key> pressedKeys, bool modAndKey )
     {
-      String altMod = "";
-      String shiftMod = "";
-      String ctrlMod = "";
-      String key = "";
+      string altMod = "";
+      string shiftMod = "";
+      string ctrlMod = "";
+      string key = "";
 
       foreach ( Key k in pressedKeys ) {
         switch ( ( int )k ) {
@@ -236,7 +236,7 @@ namespace SCJMapper_V2.Keyboard
     /// <param name="input">The input by the user</param>
     /// <param name="modifiers">Modifiers to be applied</param>
     /// <returns></returns>
-    static public String MakeCtrl( String input, String modifiers )
+    static public string MakeCtrl( string input, string modifiers )
     {
       return DeviceID + modifiers + input;
     }
@@ -252,17 +252,25 @@ namespace SCJMapper_V2.Keyboard
 
 
     /// <summary>
+    /// Return the device instance number (which is always 1)
+    /// </summary>
+    public override int XmlInstance { get { return 1; } } // const for keyboard
+    /// <summary>
+    /// Return the DX device instance number (which is always 0)
+    /// </summary>
+    public override int DevInstance { get { return 0; } }
+    /// <summary>
     /// The DeviceClass of this instance
     /// </summary>
-    public override String DevClass { get { return KeyboardCls.DeviceClass; } }
+    public override string DevClass { get { return KeyboardCls.DeviceClass; } }
     /// <summary>
     /// The JS ProductName property
     /// </summary>
-    public override String DevName { get { return m_device.Properties.ProductName; } }
+    public override string DevName { get { return m_device.Properties.ProductName; } }
     /// <summary>
     /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
     /// </summary>
-    public String DevInstanceGUID { get { return m_device.Information.InstanceGuid.ToString( ); } }
+    public override string DevInstanceGUID { get { return m_device.Information.InstanceGuid.ToString( ); } }
 
     /// <summary>
     /// Returns the mapping color for this device
@@ -273,7 +281,7 @@ namespace SCJMapper_V2.Keyboard
     }
 
 
-    public override Boolean Activated
+    public override bool Activated
     {
       get { return m_activated; }
       set
@@ -331,7 +339,7 @@ namespace SCJMapper_V2.Keyboard
     /// Find the last change the user did on that device
     /// </summary>
     /// <returns>The last action as CryEngine compatible string</returns>
-    public override String GetLastChange( )
+    public override string GetLastChange( )
     {
       return DXKeyboardCmd( m_state.PressedKeys, true );
     }
@@ -341,7 +349,7 @@ namespace SCJMapper_V2.Keyboard
     /// Find the last change the user did on that device
     /// </summary>
     /// <returns>The last action as CryEngine compatible string</returns>
-    public String GetLastChange( Boolean modAndKey )
+    public string GetLastChange( bool modAndKey )
     {
       return DXKeyboardCmd( m_state.PressedKeys, modAndKey );
     }
@@ -350,7 +358,7 @@ namespace SCJMapper_V2.Keyboard
     /// <summary>
     /// Collect the current data from the device (DUMMY for Kbd)
     /// </summary>
-    public override void GetCmdData( String cmd, out int data )
+    public override void GetCmdData( string cmd, out int data )
     {
       // Make sure there is a valid device.
       data = 0;

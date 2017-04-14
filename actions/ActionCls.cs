@@ -9,6 +9,7 @@ using SCJMapper_V2.Keyboard;
 using SCJMapper_V2.Mouse;
 using SCJMapper_V2.Gamepad;
 using SCJMapper_V2.Joystick;
+using System.Linq;
 
 namespace SCJMapper_V2
 {
@@ -61,7 +62,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="deviceClass">Device Class string</param>
     /// <returns>Device Enum</returns>
-    static public ActionDevice ADevice( String deviceClass )
+    static public ActionDevice ADevice( string deviceClass )
     {
       switch ( deviceClass.ToLower( ) ) {
         case KeyboardCls.DeviceClass: return ActionDevice.AD_Keyboard;
@@ -80,7 +81,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="device">The device name from the defaultProfile</param>
     /// <returns>The single UCase device Tag letter</returns>
-    static public String DevTag( String device )
+    static public string DevTag( string device )
     {
       switch ( device.ToLower( ) ) {
         case KeyboardCls.DeviceClass: return "K";
@@ -97,7 +98,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="device">The single UCase device Tag letter</param>
     /// <returns>The device name from the defaultProfile</returns>
-    static public String DeviceClassFromTag( String devTag )
+    static public string DeviceClassFromTag( string devTag )
     {
       switch ( devTag ) {
         case "K": return KeyboardCls.DeviceClass;
@@ -115,9 +116,9 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="devInput">The input command string dev_input format</param>
     /// <returns>A proper DeviceClass string</returns>
-    static public String DeviceClassFromInput( String devInput )
+    static public string DeviceClassFromInput( string devInput )
     {
-      String deviceClass = DeviceCls.DeviceClass;
+      string deviceClass = DeviceCls.DeviceClass;
 
       deviceClass = JoystickCls.DeviceClassFromInput( devInput );
       if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
@@ -158,7 +159,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="input">The input command</param>
     /// <returns>True if blended input</returns>
-    static public Boolean IsBlendedInput( String input )
+    static public Boolean IsBlendedInput( string input )
     {
       Boolean blendedInput = false;
 
@@ -183,7 +184,7 @@ namespace SCJMapper_V2
     /// <param name="input">An input (generic blend or a valid command)</param>
     /// <param name="aDevice">A valid device</param>
     /// <returns>A device blend or the original input if it was not a blend</returns>
-    static public String BlendInput( String input, ActionDevice aDevice )
+    static public string BlendInput( string input, ActionDevice aDevice )
     {
       if ( DeviceCls.IsBlendedInput( input ) ) {
         // was generic blind
@@ -206,7 +207,7 @@ namespace SCJMapper_V2
     /// <param name="input">An input</param>
     /// <param name="aDevice">The ActionDevice</param>
     /// <returns>A valid devInput (dev_input) format</returns>
-    static public String DevInput( string input, ActionDevice aDevice )
+    static public string DevInput( string input, ActionDevice aDevice )
     {
       switch ( aDevice ) {
         case ActionDevice.AD_Gamepad: return GamepadCls.DevInput( input );
@@ -245,13 +246,49 @@ namespace SCJMapper_V2
 
     // ****************  Class items **********************
 
-    public String key { get; set; }                 // the key is the "Daction" formatted item (as we can have the same name multiple times)
-    public String name { get; set; }                // the plain action name e.g. v_yaw
+    public string key { get; set; }                 // the key is the "Daction" formatted item (as we can have the same name multiple times)
+    public string name { get; set; }                // the plain action name e.g. v_yaw
     public ActionDevice actionDevice { get; set; }  // the enum of the device
-    public String device { get; set; }              // name of the device (uses DeviceClass)
-    public String defBinding { get; set; }          // the default binding
+    public string device { get; set; }              // name of the device (uses DeviceClass)
+    public string defBinding { get; set; }          // the default binding
     public ActivationMode defActivationMode { get; set; }   // the default binding ActivationMode
     public List<ActionCommandCls> inputList { get; set; } // regular bind is the 0-element, addbinds are added to the list
+
+
+
+    /// <summary>
+    /// Clone this object
+    /// </summary>
+    /// <returns>A deep Clone of this object</returns>
+    private ActionCls MyClone( )
+    {
+      ActionCls newAc = (ActionCls)this.MemberwiseClone();
+      // more objects to deep copy
+      newAc.defActivationMode = ( ActivationMode )this.defActivationMode.Clone();
+      newAc.inputList = this.inputList.Select( x => ( ActionCommandCls )x.Clone( ) ).ToList( );
+
+      return newAc;
+    }
+
+
+    /// <summary>
+    /// Copy return the action while reassigning the JsN Tag
+    /// </summary>
+    /// <param name="newJsList">The JsN reassign list</param>
+    /// <returns>The action copy with reassigned input</returns>
+    public ActionCls ReassignJsN( JsReassingList newJsList )
+    {
+      ActionCls newAc = this.MyClone();
+
+      // creates a copy of the list with reassigned jsN devs
+      newAc.inputList.Clear( ); // get rid of cloned list
+      foreach ( ActionCommandCls acc in inputList ) {
+        newAc.inputList.Add( acc.ReassignJsN( newJsList ) ); // creates the deep copy of the list
+      }
+
+      return newAc;
+    }
+
 
     /// <summary>
     /// ctor
@@ -269,38 +306,13 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Copy return the action while reassigning the JsN Tag
-    /// </summary>
-    /// <param name="newJsList">The JsN reassign list</param>
-    /// <returns>The action copy with reassigned input</returns>
-    public ActionCls ReassignJsN( JsReassingList newJsList )
-    {
-      ActionCls newAc = new ActionCls( );
-      // full copy from 'this'
-      newAc.key = this.key;
-      newAc.actionDevice = this.actionDevice;
-      newAc.device = this.device;
-      newAc.name = this.name;
-      newAc.defBinding = this.defBinding;
-      newAc.defActivationMode = this.defActivationMode;
-
-      // creates a copy of the list with reassigned jsN devs
-      foreach ( ActionCommandCls acc in inputList ) {
-        newAc.inputList.Add( acc.ReassignJsN( newJsList ) );
-      }
-
-      return newAc;
-    }
-
-
-    /// <summary>
     /// Creates and adds the inputCommand list with given input string
     /// AC2 style input is used i.e. with device tag in front
     ///   apply given ActivationMode - can be "~" to indicate DONT APPLY 
     /// </summary>
     /// <param name="devInput"></param>
     /// <returns>Returns the ActionCommand created</returns>
-    public ActionCommandCls AddCommand( String devInput, ActivationMode activationMode )
+    public ActionCommandCls AddCommand( string devInput, ActivationMode activationMode )
     {
       ActionCommandCls acc = new ActionCommandCls( devInput, inputList.Count - 1 ); // starts from -1 ...
       acc.ActivationMode = new ActivationMode( activationMode );
@@ -315,7 +327,7 @@ namespace SCJMapper_V2
     /// <param name="devInput"></param>
     /// <param name="index"></param>
     /// <returns></returns>
-    public ActionCommandCls AddCommand( String devInput, int index )
+    public ActionCommandCls AddCommand( string devInput, int index )
     {
       ActionCommandCls acc = new ActionCommandCls( devInput, index );
       acc.ActivationMode = new ActivationMode( ActivationMode.Default );
@@ -353,7 +365,7 @@ namespace SCJMapper_V2
     /// Updates an actionCommand with a new input (command)
     /// </summary>
     /// <param name="devInput">The input command</param>
-    public void UpdateCommandFromInput( String devInput, int accIndex ) // ActionCommandCls actionCmd )
+    public void UpdateCommandFromInput( string devInput, int accIndex ) // ActionCommandCls actionCmd )
     {
       //log.Debug( "UpdateCommandFromInput - Entry" );
       if ( accIndex < 0 ) return;
@@ -369,7 +381,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="input">The input</param>
     /// <returns>An actionCommand or null if not found</returns>
-    public ActionCommandCls FindActionInputObject( String devInput )
+    public ActionCommandCls FindActionInputObject( string devInput )
     {
       log.Debug( "FindActionInputObject - Entry" );
       // Apply the input to the ActionTree
@@ -406,21 +418,21 @@ namespace SCJMapper_V2
     /// Dump the action as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public String toXML( )
+    public string toXML( )
     {
-      String r = ""; String
+      string r = ""; string
       bindCmd = "rebind";
       if ( inputList.Count > 0 ) {
-        if ( !String.IsNullOrEmpty( inputList[0].Input ) ) {
-          r = String.Format( "\t<action name=\"{0}\">\n", name );
+        if ( !string.IsNullOrEmpty( inputList[0].Input ) ) {
+          r = string.Format( "\t<action name=\"{0}\">\n", name );
           foreach ( ActionCommandCls acc in inputList ) {
-            if ( !String.IsNullOrEmpty( acc.Input ) ) {
-              // r += String.Format( "\t\t\t<{0} device=\"{1}\" {2}", bindCmd, device, acc.toXML( ) ); // OLD style
-              r += String.Format( "\t\t\t<{0} {1}", bindCmd, acc.toXML( ) ); // 20151220BM: format for AC2 style 
+            if ( !string.IsNullOrEmpty( acc.Input ) ) {
+              // r += string.Format( "\t\t\t<{0} device=\"{1}\" {2}", bindCmd, device, acc.toXML( ) ); // OLD style
+              r += string.Format( "\t\t\t<{0} {1}", bindCmd, acc.toXML( ) ); // 20151220BM: format for AC2 style 
               bindCmd = "addbind"; // switch to addbind
             }
           }
-          r += String.Format( "\t\t</action>\n" );
+          r += string.Format( "\t\t</action>\n" );
         }
       }
 
@@ -432,7 +444,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public Boolean fromXML( String xml )
+    public Boolean fromXML( string xml )
     {
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;
@@ -456,10 +468,10 @@ namespace SCJMapper_V2
         if ( reader.Name.ToLowerInvariant( ) == "rebind" ) {
           if ( reader.HasAttributes ) {
             device = reader["device"];
-            String input = reader["input"];
-            if ( String.IsNullOrEmpty( input ) ) return false; // ERROR exit
+            string input = reader["input"];
+            if ( string.IsNullOrEmpty( input ) ) return false; // ERROR exit
             input = DeviceCls.fromXML( input ); // move from external to internal blend
-            if ( String.IsNullOrEmpty( device ) ) {
+            if ( string.IsNullOrEmpty( device ) ) {
               // AC2 style - derive the device (Device.DeviceClass)
               device = DeviceClassFromInput( input );
             }
@@ -497,10 +509,10 @@ namespace SCJMapper_V2
         else if ( reader.Name.ToLowerInvariant( ) == "addbind" ) {
           if ( reader.HasAttributes ) {
             device = reader["device"];
-            String input = reader["input"];
-            if ( String.IsNullOrEmpty( input ) ) return false; // ERROR exit
+            string input = reader["input"];
+            if ( string.IsNullOrEmpty( input ) ) return false; // ERROR exit
             input = DeviceCls.fromXML( input ); // move from external to internal blend
-            if ( String.IsNullOrEmpty( device ) ) {
+            if ( string.IsNullOrEmpty( device ) ) {
               // AC2 style - derive the device (Device.DeviceClass)
               device = DeviceClassFromInput( input );
             }
@@ -537,7 +549,6 @@ namespace SCJMapper_V2
       } while ( reader.Name == "addbind" );
       return true;
     }
-
 
   }
 }

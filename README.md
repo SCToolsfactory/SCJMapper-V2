@@ -18,6 +18,7 @@ NET40\OpenTK.GLControl.dll<br>
 NET20\Ionic.Zip.Reduced.dll<br>
 net40-full\log4net.dll<br>
 <br>
+Built with VisualStudio 2017 Community free version<br>
 <br>
 DDS Skydome Images:<br>
 <br>

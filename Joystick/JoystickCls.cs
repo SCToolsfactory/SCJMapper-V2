@@ -17,7 +17,7 @@ namespace SCJMapper_V2.Joystick
   /// </summary>
   public class JoystickCls : DeviceCls
   {
-    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( MethodBase.GetCurrentMethod( ).DeclaringType );
     private static readonly AppSettings  appSettings = new AppSettings( );
 
     #region Static Items
@@ -41,26 +41,6 @@ namespace SCJMapper_V2.Joystick
 
 
     /// <summary>
-    /// Reassigns the mapping color based on the jsAssignment list given
-    /// i.e. prepare the mapping colors for a given jsN assignment
-    /// </summary>
-    /// <param name="newJsList">List of 0.. tabs where the value is the jsN number </param>
-    static public void ReassignJsColor( List<int> newJsList )
-    {
-      // the default colors are aligned with the tabs - the tabs color is never changed but the jsN may
-      // i.e. if the first Tab is assigned as js2 then the second MapColor must get the color of the first Tab
-      int idx = 0;
-      foreach ( int i in newJsList ) {
-        // walk through the tabs
-        if ( i > 0 ) {
-          // this is the jsN for the tab indexed (make it 0 based)
-          MyColors.MapColor[i - 1] = MyColors.TabColor[idx];
-        }
-        idx++;
-      }
-    }
-
-    /// <summary>
     /// Returns the currently valid color for a jsN assignment
     /// </summary>
     /// <param name="jsN">The jsN number of the command</param>
@@ -71,7 +51,7 @@ namespace SCJMapper_V2.Joystick
       if ( jsN < 1 ) return MyColors.ErrorColor;
       if ( jsN > JoystickCls.JSnum_MAX ) return MyColors.ErrorColor;
 
-      return MyColors.MapColor[jsN - 1]; // jsN is 1  based, color array is 0 based
+      return MyColors.JsMapColor[jsN - 1]; // jsN is 1  based, color array is 0 based
     }
 
 
@@ -327,14 +307,15 @@ namespace SCJMapper_V2.Joystick
     private int m_sliderCount = 0;  // static counter for UpdateControls
     private string m_lastItem = "";
     private int m_senseLimit = 150; // axis jitter avoidance...
-    private int m_joystickNumber = 0; // seq number of the enumerated joystick
+    private int m_joystickNumber = 0; // 0..n-1 seq number of the enumerated joystick - assigned in Ctor - remains fixed
+    private int m_xmlInstance = 0; // The CIG instance number (may change through property JSAssignment)
     private bool[] m_ignoreButtons;
     private bool m_activated = false;
 
     private bool[] m_modifierButtons;
 
     private UC_JoyPanel m_jPanel = null; // the GUI panel
-    internal int  MyTabPageIndex = -1;
+    internal int  MyTabPageIndex = -1; 
 
     /// <summary>
     /// Returns a CryEngine compatible hat direction
@@ -351,7 +332,14 @@ namespace SCJMapper_V2.Joystick
       return "";
     }
 
-
+    /// <summary>
+    /// Return the CIG instance number (which is the jsN number)
+    /// </summary>
+    public override int XmlInstance { get { return m_xmlInstance; } }
+    /// <summary>
+    /// Return the DX device instance number (0..n-1)
+    /// </summary>
+    public override int DevInstance { get { return m_joystickNumber; } }
     /// <summary>
     /// The DeviceClass of this instance
     /// </summary>
@@ -363,18 +351,17 @@ namespace SCJMapper_V2.Joystick
     /// <summary>
     /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
     /// </summary>
-    public string DevInstanceGUID { get { return m_device.Information.InstanceGuid.ToString( ); } }
+    public override string DevInstanceGUID { get { return m_device.Information.InstanceGuid.ToString( ); } }
     /// <summary>
-    /// The sequence number of the enumerated devices
-    /// </summary>
-    public int DevNumber { get { return m_joystickNumber; } }
-    /// <summary>
-    /// The assigned jsN number for this device
+    /// The assigned jsN number for this device (1..n)
     /// </summary>
     public int JSAssignment
     {
-      get { return m_jPanel.JsAssignment; }
-      set { m_jPanel.JsAssignment = value; }
+      get { return m_xmlInstance; }
+      set {
+        m_xmlInstance = value;
+        m_jPanel.JsAssignment = m_xmlInstance;
+      }
     }
 
     /// <summary>
@@ -441,14 +428,17 @@ namespace SCJMapper_V2.Joystick
     /// </summary>
     /// <param name="device">A DXInput device</param>
     /// <param name="hwnd">The WinHandle of the main window</param>
+    /// <param name="joystickNum">The 0.. n-1 Joystick from DX enum</param>
     /// <param name="panel">The respective JS panel to show the properties</param>
+    /// <param name="tabIndex">The Tab index in the GUI</param>
     public JoystickCls( SharpDX.DirectInput.Joystick device, Control hwnd, int joystickNum, UC_JoyPanel panel, int tabIndex )
     {
       log.DebugFormat( "JoystickCls ctor - Entry with {0}", device.Information.ProductName );
 
       m_device = device;
       m_hwnd = hwnd;
-      m_joystickNumber = joystickNum;
+      m_joystickNumber = joystickNum; // this remains fixed
+      m_xmlInstance = joystickNum+1; // initial assignment (is 1 based..)
       m_jPanel = panel;
       MyTabPageIndex = tabIndex;
       Activated = false;

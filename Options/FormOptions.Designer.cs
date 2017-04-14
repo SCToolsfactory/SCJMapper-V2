@@ -35,7 +35,6 @@
       this.tabOptions = new System.Windows.Forms.TabPage();
       this.lvOptionTree = new System.Windows.Forms.ListView();
       this.tabDevOption = new System.Windows.Forms.TabPage();
-      this.lvDevOptions = new System.Windows.Forms.ListView();
       this.pnlOptionInput = new System.Windows.Forms.Panel();
       this.rbUsePts = new System.Windows.Forms.RadioButton();
       this.rbUseExpo = new System.Windows.Forms.RadioButton();
@@ -72,12 +71,9 @@
       this.btDebugStop = new System.Windows.Forms.Button();
       this.panel4 = new System.Windows.Forms.Panel();
       this.btExit = new System.Windows.Forms.Button();
-      this.cobDevices = new System.Windows.Forms.ComboBox();
-      this.label1 = new System.Windows.Forms.Label();
       this.tableLayoutPanel1.SuspendLayout();
       this.tabC.SuspendLayout();
       this.tabOptions.SuspendLayout();
-      this.tabDevOption.SuspendLayout();
       this.pnlOptionInput.SuspendLayout();
       this.panel2.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
@@ -148,31 +144,18 @@
       // 
       // tabDevOption
       // 
-      this.tabDevOption.Controls.Add(this.lvDevOptions);
       this.tabDevOption.Location = new System.Drawing.Point(4, 22);
       this.tabDevOption.Name = "tabDevOption";
       this.tabDevOption.Padding = new System.Windows.Forms.Padding(3);
-      this.tabDevOption.Size = new System.Drawing.Size(656, 607);
+      this.tabDevOption.Size = new System.Drawing.Size(656, 635);
       this.tabDevOption.TabIndex = 1;
       this.tabDevOption.Text = "Device Options";
       this.tabDevOption.UseVisualStyleBackColor = true;
       // 
-      // lvDevOptions
-      // 
-      this.lvDevOptions.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.lvDevOptions.Location = new System.Drawing.Point(3, 3);
-      this.lvDevOptions.Name = "lvDevOptions";
-      this.lvDevOptions.Size = new System.Drawing.Size(650, 601);
-      this.lvDevOptions.TabIndex = 0;
-      this.lvDevOptions.UseCompatibleStateImageBehavior = false;
-      this.lvDevOptions.SelectedIndexChanged += new System.EventHandler(this.lvDevOptions_SelectedIndexChanged);
-      // 
       // pnlOptionInput
       // 
       this.pnlOptionInput.BackColor = System.Drawing.Color.WhiteSmoke;
-      this.pnlOptionInput.Controls.Add(this.label1);
       this.pnlOptionInput.Controls.Add(this.rbUsePts);
-      this.pnlOptionInput.Controls.Add(this.cobDevices);
       this.pnlOptionInput.Controls.Add(this.rbUseExpo);
       this.pnlOptionInput.Controls.Add(this.rbUseNone);
       this.pnlOptionInput.Controls.Add(this.panel2);
@@ -216,7 +199,7 @@
       this.rbUseNone.AutoSize = true;
       this.rbUseNone.Checked = true;
       this.rbUseNone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rbUseNone.Location = new System.Drawing.Point(13, 455);
+      this.rbUseNone.Location = new System.Drawing.Point(13, 482);
       this.rbUseNone.Name = "rbUseNone";
       this.rbUseNone.Size = new System.Drawing.Size(55, 17);
       this.rbUseNone.TabIndex = 56;
@@ -612,25 +595,6 @@
       this.btExit.UseVisualStyleBackColor = true;
       this.btExit.Click += new System.EventHandler(this.btExit_Click);
       // 
-      // cobDevices
-      // 
-      this.cobDevices.DropDownWidth = 220;
-      this.cobDevices.FormattingEnabled = true;
-      this.cobDevices.Location = new System.Drawing.Point(103, 482);
-      this.cobDevices.Name = "cobDevices";
-      this.cobDevices.Size = new System.Drawing.Size(220, 21);
-      this.cobDevices.TabIndex = 55;
-      this.cobDevices.SelectedIndexChanged += new System.EventHandler(this.cobDevices_SelectedIndexChanged);
-      // 
-      // label1
-      // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(10, 485);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(44, 13);
-      this.label1.TabIndex = 56;
-      this.label1.Text = "Device:";
-      // 
       // FormOptions
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -648,7 +612,6 @@
       this.tableLayoutPanel1.PerformLayout();
       this.tabC.ResumeLayout(false);
       this.tabOptions.ResumeLayout(false);
-      this.tabDevOption.ResumeLayout(false);
       this.pnlOptionInput.ResumeLayout(false);
       this.pnlOptionInput.PerformLayout();
       this.panel2.ResumeLayout(false);
@@ -674,7 +637,7 @@
     private System.Windows.Forms.TabControl tabC;
     private System.Windows.Forms.TabPage tabOptions;
     private System.Windows.Forms.TabPage tabDevOption;
-    private System.Windows.Forms.ListView lvDevOptions;
+    private System.Windows.Forms.ListView lviewlvDevOptions;
     private System.Windows.Forms.Panel pnlOptionInput;
     private System.Windows.Forms.RadioButton rbUsePts;
     private System.Windows.Forms.RadioButton rbUseExpo;
@@ -710,7 +673,5 @@
     private System.Windows.Forms.Panel pnlPreview;
     private System.Windows.Forms.Panel panel4;
     private System.Windows.Forms.Button btExit;
-    private System.Windows.Forms.Label label1;
-    private System.Windows.Forms.ComboBox cobDevices;
   }
 }

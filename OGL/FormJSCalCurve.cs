@@ -172,10 +172,10 @@ namespace SCJMapper_V2.OGL
           command = dp.CommandCtrl;
           // the option data
           invertUsed = dp.InvertUsed;
-          deadzoneUsed = dp.Deviceoption.DeadzoneUsed;
-          deadzoneS = dp.Deviceoption.Deadzone;
-          saturationUsed = dp.Deviceoption.SaturationUsed;
-          saturationS = dp.Deviceoption.Saturation;
+          deadzoneUsed = dp.DeviceoptionRef.DeadzoneUsed;
+          deadzoneS = dp.DeviceoptionRef.Deadzone;
+          saturationUsed = dp.DeviceoptionRef.SaturationUsed;
+          saturationS = dp.DeviceoptionRef.Saturation;
           exponentUsed = dp.ExponentUsed;
           exponentS = dp.Exponent;
           nonLinCurveUsed = dp.NonLinCurveUsed;
@@ -196,10 +196,10 @@ namespace SCJMapper_V2.OGL
         if ( !used ) return;
         // don't return strings to control the device
         dp.InvertUsed = invertUsed;
-        dp.Deviceoption.DeadzoneUsed = deadzoneUsed;
-        dp.Deviceoption.Deadzone = deadzoneS;
-        dp.Deviceoption.SaturationUsed = saturationUsed;
-        dp.Deviceoption.Saturation = saturationS;
+        dp.DeviceoptionRef.DeadzoneUsed = deadzoneUsed;
+        dp.DeviceoptionRef.Deadzone = deadzoneS;
+        dp.DeviceoptionRef.SaturationUsed = saturationUsed;
+        dp.DeviceoptionRef.Saturation = saturationS;
         dp.ExponentUsed = exponentUsed;
         dp.Exponent = exponentS;
         dp.NonLinCurveUsed = nonLinCurveUsed;
@@ -316,26 +316,25 @@ namespace SCJMapper_V2.OGL
 
 
 
-    private OptionTree m_tuningRef = null; // will get the current optiontree on call
-    public OptionTree OptionTree
+    private Tuningoptions m_tuningOptions = null; // will get the current optiontree on call
+    public Tuningoptions TuningOptions
     {
       get {
-        return m_tuningRef;
+        return m_tuningOptions;
       }
       set {
-        m_tuningRef = value;
-        if ( m_tuningRef == null ) {
-          log.Error( "- OptionTree: m_tuningRef not assigned" );
+        m_tuningOptions = value;
+        if ( m_tuningOptions == null ) {
+          log.Error( "- TuningOptions: m_tuningRef not assigned" );
           return;
         }
+        YawTuning = m_tuningOptions.FirstTuningItem( "flight_move_yaw" );
+        PitchTuning = m_tuningOptions.FirstTuningItem( "flight_move_pitch" );
+        RollTuning = m_tuningOptions.FirstTuningItem( "flight_move_roll" );
 
-        YawTuning = m_tuningRef.TuningItem( "flight_move_yaw" );
-        PitchTuning = m_tuningRef.TuningItem( "flight_move_pitch" );
-        RollTuning = m_tuningRef.TuningItem( "flight_move_roll" );
-
-        StrafeLatTuning = m_tuningRef.TuningItem( "flight_move_strafe_lateral" );
-        StrafeVertTuning = m_tuningRef.TuningItem( "flight_move_strafe_vertical" );
-        StrafeLonTuning = m_tuningRef.TuningItem( "flight_move_strafe_longitudinal" );
+        StrafeLatTuning = m_tuningOptions.FirstTuningItem( "flight_move_strafe_lateral" );
+        StrafeVertTuning = m_tuningOptions.FirstTuningItem( "flight_move_strafe_vertical" );
+        StrafeLonTuning = m_tuningOptions.FirstTuningItem( "flight_move_strafe_longitudinal" );
       }
     }
 
@@ -1035,18 +1034,22 @@ namespace SCJMapper_V2.OGL
     {
       Vector3d m = Vector3d.Zero; ;
 
+      bool lat = (m_StrafeLatTuning != null) && ( m_StrafeLatTuning.GameDevice != null );
+      bool vert = (m_StrafeVertTuning != null) && ( m_StrafeVertTuning.GameDevice != null );
+      bool lon = (m_StrafeLonTuning != null) && ( m_StrafeLonTuning.GameDevice != null );
+
       int i_x = 0, i_y = 0, i_z = 0; // Joystick Input
       int x = 0; int y = 0; int z = 0; // retain real input as i_xyz
 
-      if ( m_StrafeLatTuning.GameDevice != null ) m_StrafeLatTuning.GameDevice.GetCmdData( m_liveStrafeLat.command, out i_x ); // + = right
-      if ( m_StrafeVertTuning.GameDevice != null ) m_StrafeVertTuning.GameDevice.GetCmdData( m_liveStrafeVert.command, out i_y ); // + = up
-      if ( m_StrafeLonTuning.GameDevice != null ) m_StrafeLonTuning.GameDevice.GetCmdData( m_liveStrafeLon.command, out i_z ); // += twist right
+      if ( lat ) m_StrafeLatTuning.GameDevice.GetCmdData( m_liveStrafeLat.command, out i_x ); // + = right
+      if ( vert ) m_StrafeVertTuning.GameDevice.GetCmdData( m_liveStrafeVert.command, out i_y ); // + = up
+      if ( lon ) m_StrafeLonTuning.GameDevice.GetCmdData( m_liveStrafeLon.command, out i_z ); // += twist right
       // apply the modifications of the control (deadzone, shape, sensitivity)
       x = i_x; y = i_y; z = i_z; // retain real input as i_xyz
       m_flightModel.Velocity = Vector3d.Zero;
 
       // Lateral
-      if ( m_StrafeLatTuning.GameDevice != null ) {
+      if ( lat ) {
         double fout = m_liveStrafeLat.ScaledOut( x ); // 0 .. 1000.0
         lblYInput.Text = ( i_x / 1000.0 ).ToString( "0.00" ); lblYOutput.Text = ( fout ).ToString( "0.00" );
         // calculate new direction vector
@@ -1054,7 +1057,7 @@ namespace SCJMapper_V2.OGL
       }
 
       // Vertical
-      if ( m_StrafeVertTuning.GameDevice != null ) {
+      if ( vert ) {
         double fout = m_liveStrafeVert.ScaledOut( y ); // 0 .. 1000.0
         lblPInput.Text = ( i_y / 1000.0 ).ToString( "0.00" ); lblPOutput.Text = ( fout ).ToString( "0.00" );
         // calculate new direction vector
@@ -1062,7 +1065,7 @@ namespace SCJMapper_V2.OGL
       }
 
       // Longitudinal
-      if ( m_StrafeLonTuning.GameDevice != null ) {
+      if ( lon ) {
         double fout = m_liveStrafeLon.ScaledOut( z ); // 0 .. 1000.0
         lblRInput.Text = ( i_z / 1000.0 ).ToString( "0.00" ); lblROutput.Text = ( fout ).ToString( "0.00" );
         // calculate new direction vector
@@ -1079,19 +1082,23 @@ namespace SCJMapper_V2.OGL
     {
       Vector3d m = Vector3d.Zero; ;
 
+      bool yaw = (m_YawTuning != null) && ( m_YawTuning.GameDevice != null );
+      bool pitch = (m_PitchTuning != null) && ( m_PitchTuning.GameDevice != null );
+      bool roll = (m_RollTuning != null) && ( m_RollTuning.GameDevice != null );
+
       int i_x = 0, i_y = 0, i_z = 0; // Joystick Input
       int x = 0; int y = 0; int z = 0; // retain real input as i_xyz
 
-      if ( m_YawTuning.GameDevice != null ) m_YawTuning.GameDevice.GetCmdData( m_liveYaw.command, out i_x ); // + = right
-      if ( m_PitchTuning.GameDevice != null ) m_PitchTuning.GameDevice.GetCmdData( m_livePitch.command, out i_y ); // + = up
-      if ( m_RollTuning.GameDevice != null ) m_RollTuning.GameDevice.GetCmdData( m_liveRoll.command, out i_z ); // += twist right
+      if ( yaw ) m_YawTuning.GameDevice.GetCmdData( m_liveYaw.command, out i_x ); // + = right
+      if ( pitch ) m_PitchTuning.GameDevice.GetCmdData( m_livePitch.command, out i_y ); // + = up
+      if ( roll ) m_RollTuning.GameDevice.GetCmdData( m_liveRoll.command, out i_z ); // += twist right
 
       // apply the modifications of the control (deadzone, shape, sensitivity)
       x = i_x; y = i_y; z = i_z; // retain real input as i_xyz
       m_flightModel.Velocity = Vector3d.Zero;
 
       // Yaw
-      if ( m_YawTuning.GameDevice != null ) {
+      if ( yaw ) {
         double fout = m_liveYaw.ScaledOut( x ); // 0 .. 1000.0
         lblYInput.Text = ( i_x / 1000.0 ).ToString( "0.00" ); lblYOutput.Text = ( fout ).ToString( "0.00" );
         // calculate new direction vector
@@ -1099,7 +1106,7 @@ namespace SCJMapper_V2.OGL
       }
 
       // Pitch
-      if ( m_PitchTuning.GameDevice != null ) {
+      if ( pitch ) {
         double fout = m_livePitch.ScaledOut( y ); // 0 .. 1000.0
         lblPInput.Text = ( i_y / 1000.0 ).ToString( "0.00" ); lblPOutput.Text = ( fout ).ToString( "0.00" );
         // calculate new direction vector
@@ -1107,7 +1114,7 @@ namespace SCJMapper_V2.OGL
       }
 
       // Roll
-      if ( m_RollTuning.GameDevice != null ) {
+      if ( roll ) {
         double fout = m_liveRoll.ScaledOut( z ); // 0 .. 1000.0
         lblRInput.Text = ( i_z / 1000.0 ).ToString( "0.00" ); lblROutput.Text = ( fout ).ToString( "0.00" );
         // calculate new direction vector

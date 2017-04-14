@@ -46,8 +46,8 @@ namespace SCJMapper_V2.SC
       String retVal = "";
 
         // first choice a defaultProfile.xml in the app dir distributed with the application ??? to be deleted ???
-      if ( File.Exists( SCPath.DefaultProfileName ) ) {
-        using ( StreamReader sr = new StreamReader( SCPath.DefaultProfileName ) ) {
+      if ( File.Exists( defaultProfileName ) ) { // 20170404 - use the given name, not the one from SCPATH...
+        using ( StreamReader sr = new StreamReader( defaultProfileName ) ) {
           retVal = sr.ReadToEnd( );
           UsedDefProfile = "AppDirectory defaultProfile";
           log.InfoFormat( "- Use {0}", UsedDefProfile );

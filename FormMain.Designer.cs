@@ -15,8 +15,8 @@
     {
       timer1.Stop( );
       // Unacquire all DirectInput objects.
-      foreach ( Joystick.JoystickCls js in m_Joystick ) js.FinishDX( );
-      m_Joystick.Clear( );
+      foreach ( Joystick.JoystickCls js in DeviceInst.JoystickListRef ) js.FinishDX( );
+      DeviceInst.JoystickListRef.Clear( );
 
       if ( disposing && ( components != null ) ) {
         components.Dispose( );

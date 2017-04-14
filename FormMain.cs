@@ -27,40 +27,12 @@ namespace SCJMapper_V2
     private const string c_GithubLink = @"https://github.com/SCToolsfactory/SCJMapper-V2/releases";
 
     private AppSettings m_AppSettings = new AppSettings( );
-    private Boolean m_appLoading = true; // used to detect if we are loading (or running)
+    private bool m_appLoading = true; // used to detect if we are loading (or running)
 
     // keyboard modifier handling variables
     private string m_persistentMods = "";
     private const int c_modifierTime = 3500; // msec time before a modifier times out and will be removed
     private int m_modifierTimeout = 0;
-
-
-    ///<remarks>
-    /// Holds the DXInput Joystick List
-    ///</remarks>
-    private JoystickList m_Joystick = new JoystickList( );
-
-    ///<remarks>
-    /// Holds the currently selected Joystick
-    ///</remarks>
-    private JoystickCls m_curJoystick = null;
-
-    ///<remarks>
-    /// Holds the DXInput keyboard
-    ///</remarks>
-    private GamepadCls m_Gamepad = null;
-
-    ///<remarks>
-    /// Holds the DXInput keyboard
-    ///</remarks>
-    private KeyboardCls m_Keyboard = null;
-
-
-    ///<remarks>
-    /// Holds the DXInput mouse
-    ///</remarks>
-    private MouseCls m_Mouse = null;
-
 
     ///<remarks>
     /// Holds the ActionTree that manages the TreeView and the action lists
@@ -68,8 +40,14 @@ namespace SCJMapper_V2
     private ActionTree m_AT = null;
 
 
+    ///<remarks>
+    /// Holds the Tuning Form
+    ///</remarks>
     private OGL.FormJSCalCurve JSCAL = null;
 
+    ///<remarks>
+    /// Holds the Table Form
+    ///</remarks>
     private FormTable FTAB = null;
 
     #region Tools section
@@ -90,11 +68,11 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="page">The tab page</param>
     /// <returns>True if it is the Gamepad Tab</returns>
-    private Boolean IsGamepadTab( TabPage page )
+    private bool IsGamepadTab( TabPage page )
     {
       // catch if the Tag is not an int...
       try {
-        return ( ( int )page.Tag == ID_GAMEPAD_TAB );
+        return ( (int)page.Tag == ID_GAMEPAD_TAB );
       } catch {
         return false;
       }
@@ -126,9 +104,9 @@ namespace SCJMapper_V2
     /// Get the current JsN string for the active device tab
     /// </summary>
     /// <returns>The jsN string - can be jsx, js1..jsN</returns>
-    private string JSStr( )
+    private string JSStr()
     {
-      UC_JoyPanel jp = ( UC_JoyPanel )( tc1.SelectedTab.Controls["UC_JoyPanel"] );
+      UC_JoyPanel jp = (UC_JoyPanel)( tc1.SelectedTab.Controls["UC_JoyPanel"] );
       return jp.JsName;
     }
 
@@ -138,13 +116,13 @@ namespace SCJMapper_V2
     #region Main Form Handling
 
 
-    public MainForm( )
+    public MainForm()
     {
 
       try {
         // Load the icon from our resources
         System.Resources.ResourceManager resources = new System.Resources.ResourceManager( this.GetType( ) );
-        this.Icon = ( ( System.Drawing.Icon )( resources.GetObject( "$this.Icon" ) ) );
+        this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "$this.Icon" ) ) );
       } catch {
         ; // well...
       }
@@ -156,19 +134,19 @@ namespace SCJMapper_V2
     private void MainForm_Deactivate( object sender, EventArgs e )
     {
       timer1.Enabled = false;
-      if ( m_Joystick != null ) m_Joystick.Deactivate( );
-      if ( m_Keyboard != null ) m_Keyboard.Deactivate( );
+      if ( DeviceInst.JoystickListRef != null ) DeviceInst.JoystickListRef.Deactivate( );
+      if ( DeviceInst.KeyboardRef != null ) DeviceInst.KeyboardRef.Deactivate( );
     }
 
     private void MainForm_Activated( object sender, EventArgs e )
     {
       timer1.Enabled = true;
-      if ( m_Joystick != null ) m_Joystick.Activate( );
-      if ( m_Keyboard != null ) m_Keyboard.Activate( );
+      if ( DeviceInst.JoystickListRef != null ) DeviceInst.JoystickListRef.Activate( );
+      if ( DeviceInst.KeyboardRef != null ) DeviceInst.KeyboardRef.Activate( );
     }
 
 
-    private void LoadMappingDD( )
+    private void LoadMappingDD()
     {
       SCMappings.UpdateMappingNames( );
       tsDDbtMappings.DropDownItems.Clear( );
@@ -180,7 +158,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Indicates if the SC directory is a valid one
     /// </summary>
-    private void SCFileIndication( )
+    private void SCFileIndication()
     {
       if ( string.IsNullOrEmpty( SCPath.SCClientMappingPath ) ) tsDDbtMappings.BackColor = MyColors.InvalidColor;
       else tsDDbtMappings.BackColor = MyColors.MappingColor;
@@ -258,9 +236,9 @@ namespace SCJMapper_V2
       }
 
       // load Mouse menu strip
-      if ( m_Mouse != null ) {
-        for ( int i = 0; i < m_Mouse.NumberOfButtons; i++ ) {
-          ToolStripMenuItem ts = new ToolStripMenuItem("Button " + ( i + 1 ).ToString( ), null, new EventHandler( tmeItem_Click ));
+      if ( DeviceInst.MouseRef != null ) {
+        for ( int i = 0; i < DeviceInst.MouseRef.NumberOfButtons; i++ ) {
+          ToolStripMenuItem ts = new ToolStripMenuItem( "Button " + ( i + 1 ).ToString( ), null, new EventHandler( tmeItem_Click ) );
           ts.Tag = ( i + 1 ).ToString( );
           cmMouseEntry.Items.Add( ts );
         }
@@ -275,8 +253,8 @@ namespace SCJMapper_V2
       cbxShowMappedOnly.Checked = m_AppSettings.ShowMapped;
 
       // init current Joystick
-      int jsIndex = ( int )tc1.SelectedTab.Tag; // gets the index into the JS list
-      if ( jsIndex >= 0 ) m_curJoystick = m_Joystick[jsIndex];
+      int jsIndex = (int)tc1.SelectedTab.Tag; // gets the index into the JS list
+      if ( jsIndex >= 0 ) DeviceInst.JoystickInst = DeviceInst.JoystickListRef[jsIndex];
 
       // init PTU folder usage sign
       lblPTU.Visible = m_AppSettings.UsePTU;
@@ -293,7 +271,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Handles the Exit button
     /// </summary>
-    private void buttonExit_Click( object sender, System.EventArgs e )
+    private void buttonExit_Click( object sender, EventArgs e )
     {
       log.Debug( "Shutting down now..." );
       Close( );
@@ -305,25 +283,25 @@ namespace SCJMapper_V2
     private void tc1_Selected( object sender, TabControlEventArgs e )
     {
       // init current Joystick
-      int jsIndex = ( int )tc1.SelectedTab.Tag; // gets the index into the JS list
+      int jsIndex = (int)tc1.SelectedTab.Tag; // gets the index into the JS list
       if ( jsIndex >= 0 )
-        m_curJoystick = m_Joystick[jsIndex];
+        DeviceInst.JoystickInst = DeviceInst.JoystickListRef[jsIndex];
       else
-        m_curJoystick = null;
+        DeviceInst.JoystickInst = null;
     }
 
     /// <summary>
     /// Fancy tab coloring with ownerdraw to paint the callout buttons
     /// </summary>
-    private void tc1_DrawItem( object sender, System.Windows.Forms.DrawItemEventArgs e )
+    private void tc1_DrawItem( object sender, DrawItemEventArgs e )
     {
       try {
         //This line of code will help you to change the apperance like size,name,style.
         Font f;
         //For background color
-        Brush backBrush = new System.Drawing.SolidBrush( MyColors.TabColor[e.Index] );
+        Brush backBrush = new SolidBrush( MyColors.TabColor[e.Index] );
         //For forground color
-        Brush foreBrush = new SolidBrush( System.Drawing.Color.Black );
+        Brush foreBrush = new SolidBrush( Color.Black );
 
 
         //This construct will hell you to deside which tab page have current focus
@@ -380,13 +358,13 @@ namespace SCJMapper_V2
     /// <summary>
     /// Resets the Action Tree
     /// </summary>
-    private void InitActionTree( Boolean addDefaultBinding )
+    private void InitActionTree( bool addDefaultBinding )
     {
       log.Debug( "InitActionTree - Entry" );
 
       // build TreeView and the ActionMaps
       if ( m_AT != null ) m_AT.NodeSelectedEvent -= M_AT_NodeSelectedEvent; // disconnect the Event
-      m_AT = new ActionTree( m_Joystick, m_Gamepad );
+      m_AT = new ActionTree( );
       m_AT.NodeSelectedEvent += M_AT_NodeSelectedEvent; // connect the Event
 
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
@@ -404,18 +382,18 @@ namespace SCJMapper_V2
 
       // apply a default JS to Joystick mapping - can be changed and reloaded from XML mappings
       // must take care of Gamepads if there are (but we take care of one only...)
-
+      //@@@@@@@
       int joyStickIndex = 0; // Joystick List Index
       for ( int deviceTabIndex = 0; deviceTabIndex < JoystickCls.JSnum_MAX; deviceTabIndex++ ) {
         if ( tc1.TabPages.Count > deviceTabIndex ) {
           // valid Device Tab
           if ( IsGamepadTab( tc1.TabPages[deviceTabIndex] ) ) {
             ; // ignore gamepads
-          } else if ( m_Joystick.Count > joyStickIndex ) {
+          } else if ( DeviceInst.JoystickListRef.Count > joyStickIndex ) {
             // there is a joystick device left..
-            m_Joystick[joyStickIndex].JSAssignment = joyStickIndex + 1; // assign number 1..
-            m_AT.ActionMaps.jsN[deviceTabIndex] = m_Joystick[joyStickIndex].DevName;
-            m_AT.ActionMaps.jsNGUID[deviceTabIndex] = m_Joystick[joyStickIndex].DevInstanceGUID;
+            DeviceInst.JoystickListRef[joyStickIndex].JSAssignment = joyStickIndex + 1; // assign number 1..
+            m_AT.ActionMaps.jsN[deviceTabIndex] = DeviceInst.JoystickListRef[joyStickIndex].DevName;
+            m_AT.ActionMaps.jsNGUID[deviceTabIndex] = DeviceInst.JoystickListRef[joyStickIndex].DevInstanceGUID;
             joyStickIndex++;
           }
         }
@@ -425,16 +403,22 @@ namespace SCJMapper_V2
 
 
 
+    // Helper: collect the joysticks here
+    struct myDxJoystick
+    {
+      public SharpDX.DirectInput.Joystick js;
+      public string prodName;
+    }
+
     /// <summary>
     /// Aquire the DInput joystick devices
     /// </summary>
     /// <returns></returns>
-    public bool InitDirectInput( )
+    public bool InitDirectInput()
     {
       log.Debug( "Entry" );
 
-      // Enumerate joysticks in the system.
-      int tabs = 0;
+      // Enumerate gamepads in the system.
       SharpDX.XInput.UserIndex gpDeviceIndex = SharpDX.XInput.UserIndex.Any;
 
       // Initialize DirectInput
@@ -443,108 +427,105 @@ namespace SCJMapper_V2
 
       try {
         log.Debug( "Get Keyboard device" );
-        m_Keyboard = new KeyboardCls( new SharpDX.DirectInput.Keyboard( directInput ), this );
+        DeviceInst.KeyboardInst = new KeyboardCls( new SharpDX.DirectInput.Keyboard( directInput ), this );
 
         log.Debug( "Get Mouse device" );
-        m_Mouse = new MouseCls( new SharpDX.DirectInput.Mouse( directInput ), this );
+        DeviceInst.MouseInst = new MouseCls( new SharpDX.DirectInput.Mouse( directInput ), this );
 
       } catch ( Exception ex ) {
         log.Debug( "InitDirectInput phase 1 failed unexpectedly", ex );
         return false;
       }
 
+
+      List<myDxJoystick> dxJoysticks = new List<myDxJoystick>( );
+      SharpDX.XInput.Controller dxGamepad = null;
+
       try {
         // scan the Input for attached devices
         log.Debug( "Scan GameControl devices" );
-        int nJs = 1; // number the Joystick Tabs
         foreach ( DeviceInstance instance in directInput.GetDevices( DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly ) ) {
-
-          log.InfoFormat( "GameControl: #{0} Type:{1} Device:{2}", tabs, instance.Type.ToString( ), instance.ProductName );
+          log.InfoFormat( "GameControl: Type:{0} Device:{1}", instance.Type.ToString( ), instance.ProductName );
           // Create the device interface
           log.Debug( "Create the device interface" );
-          SharpDX.DirectInput.Joystick jsDevice = null;
-          SharpDX.XInput.Controller gpDevice = null;
-          JoystickCls js = null; GamepadCls gs = null;
           if ( m_AppSettings.DetectGamepad && ( instance.Usage == SharpDX.Multimedia.UsageId.GenericGamepad ) ) {
             // detect Gamepad only if the user wishes to do so
             for ( SharpDX.XInput.UserIndex i = SharpDX.XInput.UserIndex.One; i < SharpDX.XInput.UserIndex.Four; i++ ) {
-              gpDevice = new SharpDX.XInput.Controller( i );
-              if ( gpDevice.IsConnected ) {
-                log.InfoFormat( "Scan Input {0} for gamepad - {1}", i, gpDevice.GetCapabilities( SharpDX.XInput.DeviceQueryType.Gamepad ).ToString( ) );
+              dxGamepad = new SharpDX.XInput.Controller( i );
+              if ( dxGamepad.IsConnected ) {
+                log.InfoFormat( "Scan Input {0} for gamepad - {1}", i, dxGamepad.GetCapabilities( SharpDX.XInput.DeviceQueryType.Gamepad ).ToString( ) );
                 gpDeviceIndex = i;
-                break;
+                break; // get only the first one
               }
             }
           } else {
-            jsDevice = new SharpDX.DirectInput.Joystick( directInput, instance.InstanceGuid );
-            log.DebugFormat( "Create the device interface for: {0}", jsDevice.Information.ProductName );
+            myDxJoystick myJs = new myDxJoystick( );
+            myJs.js = new SharpDX.DirectInput.Joystick( directInput, instance.InstanceGuid );
+            myJs.prodName = instance.ProductName;
+            dxJoysticks.Add( myJs );
+            log.DebugFormat( "Create the device interface for: {0}", myJs.prodName );
           }
-
-          // we have the first tab made as reference so TabPage[0] already exists
-          if ( tabs == 0 ) {
-            // first panel - The Tab content exists already 
-            if ( gpDevice != null ) {
-              log.Debug( "Add first Gamepad panel" );
-              tc1.TabPages[tabs].Text = "Gamepad ";
-              UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
-              uUC_GpadPanelNew.Size = UC_JoyPanel.Size; uUC_GpadPanelNew.Location = UC_JoyPanel.Location;
-              UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
-              log.Debug( "Create Gamepad instance" );
-              gs = new GamepadCls( gpDevice, uUC_GpadPanelNew, tabs ); // does all device related activities for that particular item
-              gs.SetDeviceName( instance.ProductName );
-              tc1.TabPages[tabs].ToolTipText = string.Format( "{0}\n{1}", gs.DevName, " " );
-              toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
-            } else {
-              log.Debug( "Add first Joystick panel" );
-              log.Debug( "Create Joystick instance" );
-              tc1.TabPages[tabs].Text = string.Format( "Joystick {0}", nJs++ );
-              js = new JoystickCls( jsDevice, this, tabs + 1, UC_JoyPanel, tabs ); // does all device related activities for that particular item
-              tc1.TabPages[tabs].ToolTipText = string.Format( "{0}\n{1}", js.DevName, js.DevInstanceGUID );
-              toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
-            }
-          } else {
-            if ( gpDevice != null ) {
-              log.Debug( "Add next Gamepad panel" );
-              tc1.TabPages.Add( "Gamepad " );
-              UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
-              uUC_GpadPanelNew.Size = UC_JoyPanel.Size; uUC_GpadPanelNew.Location = UC_JoyPanel.Location;
-              log.Debug( "Create Gamepad instance" );
-              gs = new GamepadCls( gpDevice, uUC_GpadPanelNew, tabs ); // does all device related activities for that particular item
-              gs.SetDeviceName( instance.ProductName );
-              tc1.TabPages[tabs].ToolTipText = string.Format( "{0}\n{1}", gs.DevName, " " );
-              toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
-            } else {
-              log.Debug( "Add next Joystick panel" );
-              // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
-              tc1.TabPages.Add( string.Format( "Joystick {0}", nJs++ ) );
-              UC_JoyPanel uUC_JoyPanelNew = new UC_JoyPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
-              uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
-              log.Debug( "Create Joystick instance" );
-              js = new JoystickCls( jsDevice, this, tabs + 1, uUC_JoyPanelNew, tabs ); // does all device related activities for that particular item
-              tc1.TabPages[tabs].ToolTipText = string.Format( "{0}\n{1}", js.DevName, js.DevInstanceGUID );
-              toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
-            }
-          }
-
-          if ( gpDevice != null ) {
-            m_Gamepad = gs;
-            SetGamepadTab( tc1.TabPages[tabs] );  // indicates the gamepad tab (murks..)
-            MyColors.GamepadColor = MyColors.TabColor[tabs]; // save it for future use
-          } else if ( js != null ) {
-            m_Joystick.Add( js ); // add to joystick list
-            tc1.TabPages[tabs].Tag = ( m_Joystick.Count - 1 );  // used to find the tab for polling
-          }
-          tc1.TabPages[tabs].BackColor = MyColors.TabColor[tabs]; // each tab has its own color
-
-          // next tab
-          tabs++;
-          if ( tabs >= JoystickCls.JSnum_MAX ) break; // cannot load more JSticks than predefined Tabs
         }
-        log.DebugFormat( "Added {0} GameControl devices", tabs );
       } catch ( Exception ex ) {
         log.Debug( "InitDirectInput phase 2 failed unexpectedly", ex );
         return false;
       }
+
+
+      int tabs = 0;
+      // make the GP the first device if there is one.
+      if ( dxGamepad != null ) {
+        log.Debug( "Add first Gamepad panel" );
+        tc1.TabPages[tabs].Text = "Gamepad ";
+        UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
+        uUC_GpadPanelNew.Size = UC_JoyPanel.Size; uUC_GpadPanelNew.Location = UC_JoyPanel.Location;
+        UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
+        log.Debug( "Create Gamepad instance" );
+        DeviceInst.GamepadInst = new GamepadCls( dxGamepad, uUC_GpadPanelNew, tabs ); // does all device related activities for that particular item
+        DeviceInst.GamepadRef.SetDeviceName( GamepadCls.DevNameCIG ); // this is fixed ...
+        tc1.TabPages[tabs].ToolTipText = string.Format( "{0}\n{1}", DeviceInst.GamepadRef.DevName, " " );
+        toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
+
+        SetGamepadTab( tc1.TabPages[tabs] );  // indicates the gamepad tab (murks..)
+        MyColors.TabColor[tabs] = MyColors.GamepadColor; // save it for future use of tab coloring (drawing)
+        tc1.TabPages[tabs].BackColor = MyColors.TabColor[tabs];
+
+        tabs++; // next tab
+      }
+
+      // do all joysticks
+      int nJs = 0; // number the Joystick Tabs
+      foreach ( myDxJoystick myJs in dxJoysticks ) {
+        // we have the first tab made as reference so TabPage[0] already exists
+        JoystickCls js = null; UC_JoyPanel uUC_JoyPanelNew = null;
+        if ( tabs == 0 ) {
+          // first panel - The Tab content exists already 
+          log.Debug( "Add first Joystick panel" );
+          uUC_JoyPanelNew = UC_JoyPanel;
+        } else {
+          log.Debug( "Add next Joystick panel" );
+          // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
+          tc1.TabPages.Add( "" );  // numbering is 1 based for the user
+          uUC_JoyPanelNew = new UC_JoyPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
+          uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
+        }
+        // common part
+        tc1.TabPages[tabs].Text = string.Format( "Joystick {0}", nJs + 1 ); // numbering is 1 based for the user
+        log.Debug( "Create Joystick instance " + nJs.ToString( ) );
+        js = new JoystickCls( myJs.js, this, nJs, uUC_JoyPanelNew, tabs ); // does all device related activities for that particular item
+        DeviceInst.JoystickListRef.Add( js ); // add to joystick list
+        tc1.TabPages[tabs].ToolTipText = string.Format( "{0}\n{1}", js.DevName, js.DevInstanceGUID );
+        toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
+        tc1.TabPages[tabs].BackColor = MyColors.TabColor[tabs];
+        tc1.TabPages[tabs].Tag = js.DevInstance;  //  used to find the tab for polling
+
+        nJs++; // next joystick
+        // next Joystick tab
+        tabs++;
+        if ( tabs >= JoystickCls.JSnum_MAX ) break; // cannot load more JSticks than predefined Tabs
+      }
+
+      log.DebugFormat( "Added {0} GameControl devices", tabs );
 
       if ( tabs == 0 ) {
         log.Warn( "Unable to find and/or create any joystick devices." );
@@ -555,7 +536,6 @@ namespace SCJMapper_V2
       // load the profile items from the XML
       log.Debug( "Init ActionTree" );
       InitActionTree( true );
-
 
       return true;
     }
@@ -568,12 +548,12 @@ namespace SCJMapper_V2
     /// <summary>
     ///  Grab the rtb data and load them into config
     /// </summary>
-    private void Grab( )
+    private void Grab()
     {
       log.Debug( "Grab - Entry" );
 
-      m_Joystick.ResetJsNAssignment( );
       m_AT.ActionMaps.fromXML( rtb.Text );
+
       // Collect modifiers - simply overwrite existing ones as we deal with THIS file now
       tdiAddMod1.Visible = false; tdiAddMod2.Visible = false; tdiAddMod3.Visible = false; // make context menu invisible
       tdiAddMod1.Text = ""; tdiAddMod2.Text = ""; tdiAddMod3.Text = ""; // and clear
@@ -601,37 +581,6 @@ namespace SCJMapper_V2
       }
       */
 
-      // JS mapping for js1 .. js8 can be changed and reloaded from XML
-      // note - unmapped ones remain what they were
-      // This is includes similar procedures as reassigning of the jsN items
-      JoystickCls j = null;
-
-      m_Joystick.ClearJsNAssignment( );
-      // for all supported jsN
-      for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-        j = null;
-        if ( !string.IsNullOrEmpty( m_AT.ActionMaps.jsNGUID[i] ) ) j = m_Joystick.Find_jsInstance( m_AT.ActionMaps.jsNGUID[i] );
-        else if ( !string.IsNullOrEmpty( m_AT.ActionMaps.jsN[i] ) ) j = m_Joystick.Find_jsDev( m_AT.ActionMaps.jsN[i] );
-
-        if ( j != null ) {
-          m_AT.ActionMaps.jsNGUID[i] = j.DevInstanceGUID; // subst for missing one (version up etc.)
-          j.JSAssignment = i + 1; // i is 0 based ; jsN is 1 based
-        } else {
-          // a valid but unknown GUID
-
-          m_AT.ActionMaps.Clear_jsEntry( i );
-        }
-      }
-
-
-      // maintain the new JsN assignment and update the colorlist
-      List<int> newL = new List<int>( );
-      foreach ( TabPage tp in tc1.TabPages ) {
-        if ( IsGamepadTab( tp ) ) newL.Add( 0 );
-        else newL.Add( m_Joystick[( int )tp.Tag].JSAssignment );
-      }
-      JoystickCls.ReassignJsColor( newL );
-
       m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
       m_AT.ReloadTreeView( ); // finally reload things into the tree
 
@@ -651,7 +600,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Dump Config into rtb
     /// </summary>
-    private void Dump( )
+    private void Dump()
     {
       log.Debug( "Dump - Entry" );
 
@@ -703,24 +652,24 @@ namespace SCJMapper_V2
       if ( m_keyIn || tc1.SelectedTab.Tag == null ) return; // don't handle those
 
       string ctrl = "";
-      if ( m_curJoystick == null ) {
+      if ( DeviceInst.JoystickRef == null ) {
         // no active joystick - may be a gamepad
-        if ( m_Gamepad != null ) {
+        if ( DeviceInst.GamepadRef != null ) {
           // poll Gamepad if active
-          m_Gamepad.GetData( );
-          ctrl = m_Gamepad.GetLastChange( );
+          DeviceInst.GamepadRef.GetData( );
+          ctrl = DeviceInst.GamepadRef.GetLastChange( );
           timer1.Interval = 750; // allow more time to release buttons [msec]
         }
       } else {
         // poll active Joystick
-        m_curJoystick.GetData( );  // poll the device
+        DeviceInst.JoystickRef.GetData( );  // poll the device
         // add keyboard modifier - if there are ..
-        if ( m_Keyboard == null ) {
+        if ( DeviceInst.KeyboardRef == null ) {
           // no keyboard => no modifier 
-          ctrl = JSStr( ) + m_curJoystick.GetLastChange( ); // show last handled JS control
+          ctrl = JSStr( ) + DeviceInst.JoystickRef.GetLastChange( ); // show last handled JS control
         } else {
           UpdateModifiers( );   // get the last keyboard modifer to compose the command, also handles the modifier lifetime
-          ctrl = JSStr( ) + m_persistentMods + m_curJoystick.GetLastChange( ); // show last handled JS control
+          ctrl = JSStr( ) + m_persistentMods + DeviceInst.JoystickRef.GetLastChange( ); // show last handled JS control
         }
         timer1.Interval = 150; // standard polling [msec]
       }
@@ -809,65 +758,12 @@ namespace SCJMapper_V2
     // possibly obsolete - we dont support to make own modifiers - button is invisible
     private void btMakeMod_Click( object sender, EventArgs e )
     {
-      if ( m_AT.ActionMaps.Modifiers.Contains( lblLastJ.Text ) ) return; // have it already
-      if ( m_AT.ActionMaps.Modifiers.Count > 2 ) return; // can max 3 ...
-
-      // make a new one
-      CheckBox cbx = new CheckBox();
-      cbx.Text = lblLastJ.Text;
-      cbx.Checked = true;
-      cbx.CheckedChanged += Cbx_CheckedChanged;
-      //flpExtensions.Controls.Add( cbx );
-      m_AT.ActionMaps.Modifiers.Add( lblLastJ.Text );
-      // maintain context menu - quick and d.. version
-      if ( string.IsNullOrEmpty( tdiAddMod1.Text ) ) {
-        tdiAddMod1.Text = string.Format( "MOD: {0}", lblLastJ.Text );
-        tdiAddMod1.Visible = true;
-        m_curJoystick.UpdateModifier( lblLastJ.Text, true );
-        m_AT.Dirty = true; if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-      } else if ( string.IsNullOrEmpty( tdiAddMod2.Text ) ) {
-        tdiAddMod2.Text = string.Format( "MOD: {0}", lblLastJ.Text );
-        tdiAddMod2.Visible = true;
-        m_curJoystick.UpdateModifier( lblLastJ.Text, true );
-        m_AT.Dirty = true; if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-      } else if ( string.IsNullOrEmpty( tdiAddMod3.Text ) ) {
-        tdiAddMod3.Text = string.Format( "MOD: {0}", lblLastJ.Text );
-        tdiAddMod3.Visible = true;
-        m_curJoystick.UpdateModifier( lblLastJ.Text, true );
-        m_AT.Dirty = true; if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-      }
     }
-
-
-
-    //TODO
     // possibly obsolete - we dont support to make own modifiers
     private void Cbx_CheckedChanged( object sender, EventArgs e )
     {
-      /*
-       * int i = flpExtensions.Controls.IndexOf( (Control)sender );
-      if ( i >= 0 ) {
-        string my = ( sender as CheckBox).Text;
-        int m =  m_AT.ActionMaps.Modifiers.IndexOf(my);
-        if ( m >= 0 ) m_AT.ActionMaps.Modifiers.RemoveAt( m );
-        // maintain context menu - quick and d.. version
-        if ( tdiAddMod1.Text.EndsWith( my ) ) {
-          tdiAddMod1.Text = ""; tdiAddMod1.Visible = false;
-        }
-        if ( tdiAddMod2.Text.EndsWith( my ) ) {
-          tdiAddMod2.Text = ""; tdiAddMod2.Visible = false;
-        }
-        if ( tdiAddMod3.Text.EndsWith( my ) ) {
-          tdiAddMod3.Text = ""; tdiAddMod3.Visible = false;
-        }
-        // remove from joystick - but this applies to one of all - may be not the current
-        foreach ( JoystickCls j in m_Joystick ) { j.UpdateModifier( my, false ); } // send it to all
-        // finally remove the checkbox
-        //flpExtensions.Controls.RemoveAt( i );
-        m_AT.Dirty = true; if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-      }
-      */
     }
+
 
     // General Area Items
 
@@ -1045,9 +941,9 @@ namespace SCJMapper_V2
     {
       // note: the right click selected the node
       ContextMenuStrip cts = ( sender as ContextMenuStrip );
-      Boolean any2 = false;    // Group 2
-      Boolean any3 = false;    // Group 3
-      Boolean any4 = false;    // Group 4
+      bool any2 = false;    // Group 2
+      bool any3 = false;    // Group 3
+      bool any4 = false;    // Group 4
 
       m_prevActivationMode = ActivationMode.Default; // switch Closing handling OFF in case we don't show anything
 
@@ -1096,7 +992,7 @@ namespace SCJMapper_V2
     private void tdiCollapseAll_Click( object sender, EventArgs e )
     {
       TreeNode selNodeActionMap = treeView1.SelectedNode;
-      TreeNode selNodeParent =  selNodeActionMap;
+      TreeNode selNodeParent = selNodeActionMap;
       // see if we have a parent..
       if ( selNodeActionMap.Level > 1 )
         selNodeParent = selNodeActionMap.Parent;
@@ -1117,8 +1013,8 @@ namespace SCJMapper_V2
     private void tdiCbxActivation_Click( object sender, EventArgs e )
     {
       cmAddDel.Close( ToolStripDropDownCloseReason.ItemClicked );
-      if ( !string.IsNullOrEmpty( m_prevActivationMode.Name ) && ( m_prevActivationMode.Name != ( string )tdiCbxActivation.SelectedItem ) ) {
-        tdiCbxActivation.Text = ( string )tdiCbxActivation.SelectedItem;
+      if ( !string.IsNullOrEmpty( m_prevActivationMode.Name ) && ( m_prevActivationMode.Name != (string)tdiCbxActivation.SelectedItem ) ) {
+        tdiCbxActivation.Text = (string)tdiCbxActivation.SelectedItem;
         // seems to have changed - evaluate
         // it is either one of the ActivationModes, or profile default
         m_AT.UpdateActivationModeSelectedItem( tdiCbxActivation.Text );
@@ -1200,7 +1096,7 @@ namespace SCJMapper_V2
     // XML load and save
     private void btSaveMyMapping_Click( object sender, EventArgs e )
     {
-      Boolean cancel = false;
+      bool cancel = false;
       if ( SCMappings.IsValidMappingName( txMappingName.Text ) ) {
         Dump( );
         if ( SCMappings.MappingFileExists( txMappingName.Text ) ) {
@@ -1259,7 +1155,7 @@ namespace SCJMapper_V2
         SCFileIndication( );
 
         // now update the contents according to new settings
-        foreach ( JoystickCls j in m_Joystick ) j.ApplySettings( ); // update Seetings
+        foreach ( JoystickCls j in DeviceInst.JoystickListRef ) j.ApplySettings( ); // update Seetings
         m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
         // and start over with an empty tree
         InitActionTree( false );
@@ -1273,15 +1169,15 @@ namespace SCJMapper_V2
     {
       // have to stop polling while the Reassign window is open
       timer1.Enabled = false;
-      if ( m_Joystick.ShowReassign( ) != System.Windows.Forms.DialogResult.Cancel ) {
+      if ( DeviceInst.JoystickListRef.ShowReassign( ) != DialogResult.Cancel ) {
         // copy the action tree while reassigning the jsN mappings from OLD to NEW
-        ActionTree newTree = m_AT.ReassignJsN( m_Joystick.JsReassingList );
+        ActionTree newTree = m_AT.ReassignJsN( DeviceInst.JoystickListRef.JsReassingList );
 
         // we have still the old assignment in the ActionMap - change it here (map does not know about the devices)
         JoystickCls j = null;
         // for all supported jsN devices
         for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-          j = m_Joystick.Find_jsN( i + 1 );
+          j = DeviceInst.JoystickListRef.Find_jsN( i + 1 );
           if ( j != null ) {
             newTree.ActionMaps.jsN[i] = j.DevName; newTree.ActionMaps.jsNGUID[i] = j.DevInstanceGUID;
           } else {
@@ -1324,25 +1220,43 @@ namespace SCJMapper_V2
 
       // attach Yaw command
       DeviceTuningParameter tuning = null;
-      DeviceCls dev =  null;
+      DeviceCls dev = null;
       string find = "";
 
       // find action item for yaw
-      tuning = m_AT.ActionMaps.OptionTree.TuningItem( optionName );  // set defaults
       find = ActionTreeNode.ComposeNodeText( action, "js" );
       nodeText = m_AT.FindText( actionmap, find ); // returns "" or a complete text ("action - command")
       if ( !string.IsNullOrWhiteSpace( nodeText ) ) {
-        dev = m_Joystick.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
-      } else {
+        if ( !ActionCls.IsBlendedInput( ActionTreeNode.CommandFromNodeText( nodeText ) ) ) {
+          dev = DeviceInst.JoystickListRef.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
+          string toID = Tuningoptions.TuneOptionIDfromJsN( JoystickCls.DeviceClass, dev.XmlInstance );
+          OptionTree ot = m_AT.ActionMaps.TuningOptions.OptionTreeFromToID( toID );
+          if ( ot != null ) tuning =
+              ot.TuningItem( optionName );  // set defaults
+        }
+      }
+      if ( dev == null ) {
         find = ActionTreeNode.ComposeNodeText( action, "xi" );
         nodeText = m_AT.FindText( actionmap, find );
         if ( !string.IsNullOrWhiteSpace( nodeText ) ) {
-          dev = m_Gamepad;
+          if ( !ActionCls.IsBlendedInput( ActionTreeNode.CommandFromNodeText( nodeText ) ) ) {
+            dev = DeviceInst.GamepadRef;
+            string toID = Tuningoptions.TuneOptionIDfromJsN( GamepadCls.DeviceClass, dev.XmlInstance );
+            OptionTree ot = m_AT.ActionMaps.TuningOptions.OptionTreeFromToID( toID );
+            if ( ot != null ) tuning =
+                ot.TuningItem( optionName );  // set defaults
+          }
         }
       }
+      // dev might be null here if no device for the action was found
+      // tuning might be null here if no tuningitem for the device action was found (which should not happen !!)
+      if ( ( dev != null ) && ( tuning == null ) ) {
+        log.ErrorFormat( "UpdateOptionItem - Tuning item for device not found - dev: {0} - option: {1}", dev.DevName, optionName );
+        return; // ERROR EXIT
+      }
 
-      tuning.Reset( );
       if ( dev != null ) {
+        tuning.Reset( );
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) || nodeText.ToLowerInvariant( ).EndsWith( "_throttlex" )
           || nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) || nodeText.ToLowerInvariant( ).EndsWith( "_throttley" )
@@ -1350,9 +1264,9 @@ namespace SCJMapper_V2
           || nodeText.ToLowerInvariant( ).EndsWith( "_slider1" ) || nodeText.ToLowerInvariant( ).EndsWith( "_slider2" ) ) {
           tuning.GameDevice = dev;
           tuning.NodeText = nodeText;
-          string doID =  Deviceoptions.DevOptionID( dev.DevName, nodeText );
+          string doID = Deviceoptions.DevOptionID( dev.DevClass, dev.DevName, nodeText );
           if ( m_AT.ActionMaps.DeviceOptions.ContainsKey( doID ) ) {
-            tuning.Deviceoption = m_AT.ActionMaps.DeviceOptions[doID];
+            tuning.DeviceoptionRef = m_AT.ActionMaps.DeviceOptions[doID];
           }
         }
           // GP commands that are supported
@@ -1360,18 +1274,18 @@ namespace SCJMapper_V2
                  || nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
           tuning.GameDevice = dev;
           tuning.NodeText = nodeText;
-          string doID =  Deviceoptions.DevOptionID( dev.DevName, nodeText );
+          string doID = Deviceoptions.DevOptionID( dev.DevClass, dev.DevName, nodeText );
           if ( m_AT.ActionMaps.DeviceOptions.ContainsKey( doID ) ) {
-            tuning.Deviceoption = m_AT.ActionMaps.DeviceOptions[doID];
+            tuning.DeviceoptionRef = m_AT.ActionMaps.DeviceOptions[doID];
           }
         }
-      } else if ( tuning.DevInstanceNo > 0 ) {
+      } else if ( tuning != null && tuning.DevInstanceNo > 0 ) {
         // a device was assigned but the action is not mapped
         // try to find the gamedevice here
         if ( JoystickCls.IsDeviceClass( tuning.DeviceClass ) ) {
-          tuning.GameDevice = m_Joystick.Find_jsN( tuning.DevInstanceNo );
+          tuning.GameDevice = DeviceInst.JoystickListRef.Find_jsN( tuning.DevInstanceNo );
         } else if ( GamepadCls.IsDeviceClass( tuning.DeviceClass ) ) {
-          tuning.GameDevice = m_Gamepad;
+          tuning.GameDevice = DeviceInst.GamepadRef;
         }
       }
 
@@ -1381,7 +1295,7 @@ namespace SCJMapper_V2
     /// Get the assigned controls for some commands used in Tuning Yaw,Pitch,Roll and the Strafe ones
     /// Connect deviceOption if known
     /// </summary>
-    private void UpdateTuningItems( )
+    private void UpdateTuningItems()
     {
       // cleanup - Actions will be assigned new in below calls
       m_AT.ActionMaps.DeviceOptions.ResetActions( );
@@ -1400,7 +1314,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Get the assigned controls for other Options - if available...
     /// </summary>
-    private void UpdateMoreOptionItems( )
+    private void UpdateMoreOptionItems()
     {
       // get current mapping from ActionMaps
       UpdateOptionItem( "flight_throttle_abs", "v_throttle_abs", "spaceship_movement" );
@@ -1427,7 +1341,7 @@ namespace SCJMapper_V2
       // Have to attach here to capture the currently valid settings
       UpdateTuningItems( );
       // run
-      JSCAL.OptionTree = m_AT.ActionMaps.OptionTree; // assign tuning values
+      JSCAL.TuningOptions = m_AT.ActionMaps.TuningOptions;
       JSCAL.ShowDialog( this );
       m_AT.Dirty = true;
 
@@ -1442,20 +1356,20 @@ namespace SCJMapper_V2
     {
       timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
 
-      FormOptions OPT = new FormOptions();
+      FormOptions OPT = new FormOptions( );
 
       // Have to attach here to capture the currently valid settings
       UpdateTuningItems( );
       UpdateMoreOptionItems( );
 
-      DeviceList devlist = new DeviceList();
-      if ( m_AppSettings.DetectGamepad && m_Gamepad != null ) {
-        devlist.Add( m_Gamepad );
+      DeviceList devlist = new DeviceList( );
+      if ( m_AppSettings.DetectGamepad && (DeviceInst.GamepadRef != null) ) {
+        devlist.Add( DeviceInst.GamepadRef );
       }
-      devlist.AddRange( m_Joystick );
+      devlist.AddRange( DeviceInst.JoystickListRef );
 
 
-      OPT.OptionTree = m_AT.ActionMaps.OptionTree;
+      OPT.TuningOptions = m_AT.ActionMaps.TuningOptions;
       OPT.DeviceOptions = m_AT.ActionMaps.DeviceOptions;
       OPT.Devicelist = devlist;
 
@@ -1474,8 +1388,8 @@ namespace SCJMapper_V2
 
     // Keyboard Input
 
-    Boolean m_keyIn = false;
-    Boolean m_mouseIn = false;
+    bool m_keyIn = false;
+    bool m_mouseIn = false;
 
 
     private void btJsKbd_Click( object sender, EventArgs e )
@@ -1483,7 +1397,7 @@ namespace SCJMapper_V2
       m_keyIn = ( !m_keyIn );
       if ( m_keyIn ) {
         cbxThrottle.Checked = false; cbxThrottle.Enabled = false; // must be disabled..
-        if ( m_Keyboard == null ) {
+        if ( DeviceInst.KeyboardRef == null ) {
           m_keyIn = false;
           btJsKbd.ImageKey = "J";
           return;
@@ -1492,8 +1406,8 @@ namespace SCJMapper_V2
         lblLastJ.BackColor = MyColors.KeyboardColor;
         btJsKbd.ImageKey = "K";
         lblLastJ.Focus( );
-        m_Keyboard.Activate( );
-        m_Keyboard.GetData( ); // poll to aquire once
+        DeviceInst.KeyboardRef.Activate( );
+        DeviceInst.KeyboardRef.GetData( ); // poll to aquire once
       } else {
         m_mouseIn = false; // not longer
         lblLastJ.BackColor = MyColors.ValidColor;
@@ -1507,14 +1421,14 @@ namespace SCJMapper_V2
     private void lblLastJ_KeyDown( object sender, KeyEventArgs e )
     {
       if ( m_keyIn ) {
-        m_Keyboard.GetData( );
-        string modS = m_Keyboard.GetLastChange( false ); // modifiers only
-        string keyModS = m_Keyboard.GetLastChange( true ); // modifiers+keyboard input
+        DeviceInst.KeyboardRef.GetData( );
+        string modS = DeviceInst.KeyboardRef.GetLastChange( false ); // modifiers only
+        string keyModS = DeviceInst.KeyboardRef.GetLastChange( true ); // modifiers+keyboard input
         // don't override modifiers when we are in mouse mode and the mod is the same and there is no kbd entry.... 
         if ( m_mouseIn && ( keyModS == modS ) && ( m_persistentMods == ( modS + "+" ) ) ) {
           ; // nothing here - 
         } else {
-          lblLastJ.Text = m_Keyboard.GetLastChange( true );
+          lblLastJ.Text = DeviceInst.KeyboardRef.GetLastChange( true );
           m_mouseIn = false; // clear on kbd input
         }
         // also maintain persistent mods
@@ -1528,12 +1442,12 @@ namespace SCJMapper_V2
 
 
     // maintain the global modifier store 
-    private void UpdateModifiers( )
+    private void UpdateModifiers()
     {
-      if ( m_Keyboard == null ) return;
+      if ( DeviceInst.KeyboardRef == null ) return;
 
-      m_Keyboard.GetData( );
-      string modS = m_Keyboard.GetLastChange( false );
+      DeviceInst.KeyboardRef.GetData( );
+      string modS = DeviceInst.KeyboardRef.GetLastChange( false );
       if ( !string.IsNullOrEmpty( modS ) ) {
         if ( modS.Contains( KeyboardCls.ClearMods ) ) {
           // allow to cancel modifiers
@@ -1562,24 +1476,24 @@ namespace SCJMapper_V2
     private void tmeItem_Click( object sender, EventArgs e )
     {
       ToolStripMenuItem ts = (ToolStripMenuItem)sender;
-      if ( string.IsNullOrEmpty( ( string )ts.Tag ) ) return;
+      if ( string.IsNullOrEmpty( (string)ts.Tag ) ) return;
 
       string item = "";
       string device = MouseCls.DeviceClass;
 
       int btNum = 0;
-      if ( int.TryParse( ( string )ts.Tag, out btNum ) ) {
+      if ( int.TryParse( (string)ts.Tag, out btNum ) ) {
         // got a button (most likely..)
         item = "mouse" + btNum.ToString( );
-      } else if ( ( string )ts.Tag == "X" )
+      } else if ( (string)ts.Tag == "X" )
         item = "maxis_x";
-      else if ( ( string )ts.Tag == "Y" )
+      else if ( (string)ts.Tag == "Y" )
         item = "maxis_y";
-      else if ( ( string )ts.Tag == "U" )
+      else if ( (string)ts.Tag == "U" )
         item = "mwheel_up";
-      else if ( ( string )ts.Tag == "D" )
+      else if ( (string)ts.Tag == "D" )
         item = "mwheel_down";
-      else if ( ( string )ts.Tag == "K_Tab" ) {
+      else if ( (string)ts.Tag == "K_Tab" ) {
         item = "tab";
         device = KeyboardCls.DeviceClass;
       }
@@ -1587,7 +1501,7 @@ namespace SCJMapper_V2
       string ctrl = "";
       // have to handle the two devices
       if ( MouseCls.IsDeviceClass( device ) ) {
-        if ( m_Keyboard == null ) {
+        if ( DeviceInst.KeyboardRef == null ) {
           // no keyboard = no modifier 
           ctrl = MouseCls.MakeCtrl( item, "" ); // show last handled JS control
         } else {
@@ -1607,7 +1521,7 @@ namespace SCJMapper_V2
 
 
     // Called when the table must be rebuild
-    private void UpdateTable( )
+    private void UpdateTable()
     {
       // only if needed
       if ( ( FTAB != null ) && FTAB.Visible ) {
@@ -1619,7 +1533,7 @@ namespace SCJMapper_V2
     }
 
     // Called when an entry has been modified
-    private void UpdateTableSelectedItem( )
+    private void UpdateTableSelectedItem()
     {
       // only if needed
       if ( ( FTAB != null ) && FTAB.Visible ) {

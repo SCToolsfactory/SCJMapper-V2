@@ -30,49 +30,93 @@ namespace SCJMapper_V2.Options
   /// 
   /// options are given per deviceClass and instance - it seems
   /// 	</summary>
-  public class OptionTree
+  public class OptionTree : ICloneable
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+
 
     // Support only one set of independent options (string storage)
     List<string> m_stringOptions = new List<string>( );
 
     // bag for all tuning items - key is the option name
-    Dictionary<string,DeviceTuningParameter> m_tuning = new Dictionary<string, DeviceTuningParameter>();
+    CloneableDictionary<string,DeviceTuningParameter> m_tuning = new CloneableDictionary<string, DeviceTuningParameter>();
+
+
+
+    /// <summary>
+    /// Clone this object
+    /// </summary>
+    /// <returns>A deep Clone of this object</returns>
+    public object Clone( )
+    {
+      var ot = (OptionTree)this.MemberwiseClone();
+      // more objects to deep copy
+      ot.m_stringOptions = new List<string>( m_stringOptions );
+      if ( this.m_tuning != null ) ot.m_tuning = ( CloneableDictionary<string, DeviceTuningParameter> )this.m_tuning.Clone( );
+
+      return ot;
+    }
+    
+    /// <summary>
+    /// Check clone against This
+    /// </summary>
+    /// <param name="clone"></param>
+    /// <returns>True if the clone is identical but not a shallow copy</returns>
+    internal bool CheckClone( OptionTree clone )
+    {
+      bool ret = true;
+      // object vars first
+      ret &= ( !object.ReferenceEquals( this.m_stringOptions, clone.m_stringOptions ) );  // shall not be the same object !!
+
+      // check m_tuning Dictionary
+      ret &= ( this.m_tuning.Count == clone.m_tuning.Count );
+      if ( ret ) {
+        for ( int i = 0; i < this.m_tuning.Count; i++ ) {
+          ret &= ( this.m_tuning.ElementAt( i ).Key == clone.m_tuning.ElementAt( i ).Key );
+
+          ret &= ( !object.ReferenceEquals( this.m_tuning.ElementAt( i ).Value, clone.m_tuning.ElementAt( i ).Value ) );  // shall not be the same object !!
+          ret &= ( this.m_tuning.ElementAt( i ).Value.CheckClone( clone.m_tuning.ElementAt( i ).Value ) );
+        }
+      }
+      return ret;
+    }
+
+
+
 
     // ctor
-    public OptionTree( )
+    public OptionTree( DeviceCls device )
     {
-      m_tuning.Add( "flight_move_pitch", new DeviceTuningParameter( "flight_move_pitch" ) );
-      m_tuning.Add( "flight_move_yaw", new DeviceTuningParameter( "flight_move_yaw" ) );
-      m_tuning.Add( "flight_move_roll", new DeviceTuningParameter( "flight_move_roll" ) );
-      m_tuning.Add( "flight_move_strafe_vertical", new DeviceTuningParameter( "flight_move_strafe_vertical" ) );
-      m_tuning.Add( "flight_move_strafe_lateral", new DeviceTuningParameter( "flight_move_strafe_lateral" ) );
-      m_tuning.Add( "flight_move_strafe_longitudinal", new DeviceTuningParameter( "flight_move_strafe_longitudinal" ) );
+      m_tuning.Add( "flight_move_pitch", new DeviceTuningParameter( "flight_move_pitch", device ) );
+      m_tuning.Add( "flight_move_yaw", new DeviceTuningParameter( "flight_move_yaw", device ) );
+      m_tuning.Add( "flight_move_roll", new DeviceTuningParameter( "flight_move_roll", device ) );
+      m_tuning.Add( "flight_move_strafe_vertical", new DeviceTuningParameter( "flight_move_strafe_vertical", device ) );
+      m_tuning.Add( "flight_move_strafe_lateral", new DeviceTuningParameter( "flight_move_strafe_lateral", device ) );
+      m_tuning.Add( "flight_move_strafe_longitudinal", new DeviceTuningParameter( "flight_move_strafe_longitudinal", device ) );
 
-      m_tuning.Add( "flight_throttle_abs", new DeviceTuningParameter( "flight_throttle_abs" ) );
-      m_tuning.Add( "flight_throttle_rel", new DeviceTuningParameter( "flight_throttle_rel" ) );
+      m_tuning.Add( "flight_throttle_abs", new DeviceTuningParameter( "flight_throttle_abs", device ) );
+      m_tuning.Add( "flight_throttle_rel", new DeviceTuningParameter( "flight_throttle_rel", device ) );
 
-      m_tuning.Add( "flight_aim_pitch", new DeviceTuningParameter( "flight_aim_pitch" ) );
-      m_tuning.Add( "flight_aim_yaw", new DeviceTuningParameter( "flight_aim_yaw" ) );
+      m_tuning.Add( "flight_aim_pitch", new DeviceTuningParameter( "flight_aim_pitch", device ) );
+      m_tuning.Add( "flight_aim_yaw", new DeviceTuningParameter( "flight_aim_yaw", device ) );
 
-      m_tuning.Add( "flight_view_pitch", new DeviceTuningParameter( "flight_view_pitch" ) );
-      m_tuning.Add( "flight_view_yaw", new DeviceTuningParameter( "flight_view_yaw" ) );
+      m_tuning.Add( "flight_view_pitch", new DeviceTuningParameter( "flight_view_pitch", device ) );
+      m_tuning.Add( "flight_view_yaw", new DeviceTuningParameter( "flight_view_yaw", device ) );
 
-      m_tuning.Add( "turret_aim_pitch", new DeviceTuningParameter( "turret_aim_pitch" ) );
-      m_tuning.Add( "turret_aim_yaw", new DeviceTuningParameter( "turret_aim_yaw" ) );
+      m_tuning.Add( "turret_aim_pitch", new DeviceTuningParameter( "turret_aim_pitch", device ) );
+      m_tuning.Add( "turret_aim_yaw", new DeviceTuningParameter( "turret_aim_yaw", device ) );
 
       // Gamepad specific
-      /* Cannot find out to what actions they relate to -  left alone for now
-      m_tuning.Add( "fps_view_pitch", new DeviceTuningParameter( "fps_view_pitch" ) );
-      m_tuning.Add( "fps_view_yaw", new DeviceTuningParameter( "fps_view_yaw" ) );
+      if ( Gamepad.GamepadCls.IsDeviceClass( device.DevClass ) ) {
+        m_tuning.Add( "fps_view_pitch", new DeviceTuningParameter( "fps_view_pitch", device ) );
+        m_tuning.Add( "fps_view_yaw", new DeviceTuningParameter( "fps_view_yaw", device ) );
 
-      m_tuning.Add( "fps_move_lateral", new DeviceTuningParameter( "fps_move_lateral" ) );
-      m_tuning.Add( "fps_move_longitudinal", new DeviceTuningParameter( "fps_move_longitudinal" ) );
+        m_tuning.Add( "fps_move_lateral", new DeviceTuningParameter( "fps_move_lateral", device ) );
+        m_tuning.Add( "fps_move_longitudinal", new DeviceTuningParameter( "fps_move_longitudinal", device ) );
 
-      m_tuning.Add( "mgv_view_pitch", new DeviceTuningParameter( "mgv_view_pitch" ) );
-      m_tuning.Add( "mgv_view_yaw", new DeviceTuningParameter( "mgv_view_yaw" ) );
-      */
+        m_tuning.Add( "mgv_view_pitch", new DeviceTuningParameter( "mgv_view_pitch", device ) );
+        m_tuning.Add( "mgv_view_yaw", new DeviceTuningParameter( "mgv_view_yaw", device ) );
+      }
     }
 
 
@@ -83,6 +127,7 @@ namespace SCJMapper_V2.Options
 
 
     // provide access to Tuning items
+
 
     /// <summary>
     /// Returns a tuning item for the asked option
@@ -142,7 +187,7 @@ namespace SCJMapper_V2.Options
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public Boolean fromXML( string xml )
+    public bool fromXML( string xml )
     {
       /* 
        * This can be a lot of the following options
@@ -253,6 +298,24 @@ namespace SCJMapper_V2.Options
           } else if ( reader.Name.ToLowerInvariant( ) == "flight_view_yaw" ) {
             m_tuning["flight_view_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
           } else if ( reader.NodeType != XmlNodeType.EndElement ) {
+
+          } else if ( reader.Name.ToLowerInvariant( ) == "fps_view_pitch" ) {
+            m_tuning["fps_view_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "fps_view__yaw" ) {
+            m_tuning["fps_view__yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.NodeType != XmlNodeType.EndElement ) {
+
+          } else if ( reader.Name.ToLowerInvariant( ) == "fps_move_lateral" ) {
+            m_tuning["fps_move_lateral"].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "fps_move_longitudinal" ) {
+            m_tuning["fps_move_longitudinal"].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.NodeType != XmlNodeType.EndElement ) {
+
+          } else if ( reader.Name.ToLowerInvariant( ) == "mgv_view_pitch" ) {
+            m_tuning["mgv_view_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.Name.ToLowerInvariant( ) == "mgv_view_yaw" ) {
+            m_tuning["mgv_view_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
+          } else if ( reader.NodeType != XmlNodeType.EndElement ) {
             //??
             log.InfoFormat( "Options.fromXML: unknown node - {0} - stored as is", reader.Name );
             if ( !m_stringOptions.Contains( xml ) ) m_stringOptions.Add( xml );
@@ -264,8 +327,6 @@ namespace SCJMapper_V2.Options
       }
       return true;
     }
-
-
 
   }
 }

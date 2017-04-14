@@ -18,6 +18,7 @@ using SCJMapper_V2.Mouse;
 using SCJMapper_V2.Gamepad;
 using SCJMapper_V2.Joystick;
 using SCJMapper_V2.Options;
+using System.Linq;
 
 namespace SCJMapper_V2
 {
@@ -40,7 +41,7 @@ namespace SCJMapper_V2
     #region Static Part of ActionMaps
 
     // actionmap names to gather (do we need them to be cofigurable ??)
-    public static String[] ActionMaps = { };
+    public static string[] ActionMaps = { };
 
     public static void LoadSupportedActionMaps( SCActionMapList aml )
     {
@@ -50,26 +51,23 @@ namespace SCJMapper_V2
 
     #endregion Static Part of ActionMaps
 
-    private const String ACM_VERSION = "version=\"1\" optionsVersion=\"2\" rebindVersion=\"2\"";  //AC2  the FIXED version 
+    private const string ACM_VERSION = "version=\"1\" optionsVersion=\"2\" rebindVersion=\"2\"";  //AC2  the FIXED version 
 
-    private String version { get; set; }
+    private string version { get; set; }
 
-    private JoystickList m_joystickList = null;
     private UICustHeader m_uiCustHeader = null;
-    private OptionTree m_optionTree = null; // options are given per deviceClass and instance - it seems
-    private Deviceoptions m_deviceOptions = null;
-    private Modifiers m_modifiers = null;
 
-    private List<CheckBox> m_invertCB = null; // Options owns and handles all Inversions
+    private Tuningoptions m_tuningOptions = null;
+    private Deviceoptions m_deviceOptions = null;
 
     // own additions for JS mapping - should not harm..
-    private String[] m_js;
-    private String[] m_GUIDs;
+    private string[] m_js;
+    private string[] m_GUIDs;
 
     /// <summary>
     /// get/set jsN assignment (use 0-based index i.e. js1 -> [0])
     /// </summary>
-    public String[] jsN
+    public string[] jsN
     {
       get { return m_js; }
     }
@@ -77,7 +75,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// get/set jsN GUID assignment (use 0-based index i.e. js1GUID -> [0])
     /// </summary>
-    public String[] jsNGUID
+    public string[] jsNGUID
     {
       get { return m_GUIDs; }
     }
@@ -96,7 +94,8 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns the device tuning items - the OptionTree
     /// </summary>
-    public OptionTree OptionTree { get { return m_optionTree; } }
+    public Tuningoptions TuningOptions { get { return m_tuningOptions; } }
+    //    public OptionTree OptionTree { get { return m_optionTree; } }
 
 
     /// <summary>
@@ -109,20 +108,41 @@ namespace SCJMapper_V2
 
 
     /// <summary>
-    /// Returns the assigned Modifiers
+    /// Copy return all ActionMaps while reassigning the JsN Tag
     /// </summary>
-    public Modifiers Modifiers
+    /// <param name="newJsList">The JsN reassign list</param>
+    /// <returns>The ActionMaps copy with reassigned input</returns>
+    public ActionMapsCls ReassignJsN( JsReassingList newJsList )
     {
-      get { return m_modifiers; }
+      var newMaps = new ActionMapsCls(this);
+      newMaps.m_uiCustHeader = ( UICustHeader )this.m_uiCustHeader.Clone( );
+      newMaps.m_tuningOptions = ( Tuningoptions )this.m_tuningOptions.Clone( );
+      newMaps.m_deviceOptions = ( Deviceoptions )this.m_deviceOptions.Clone( );
+
+      foreach ( ActionMapCls am in this ) {
+        newMaps.Add( am.ReassignJsN( newJsList ) );  // creates the deep copy of the tree
+      }
+      // remap the tuning options
+      newMaps.m_tuningOptions.ReassignJsN( newJsList );
+
+      return newMaps;
+    }
+
+
+    private ActionMapsCls( ActionMapsCls other )
+    {
+      this.version = other.version;
+      this.m_js = other.m_js;
+      this.m_GUIDs = other.m_GUIDs;
+      // other ref objects are not populated here    
     }
 
     /// <summary>
     /// ctor
     /// </summary>
-    public ActionMapsCls( JoystickList jsList )
+    public ActionMapsCls( )
     {
       version = ACM_VERSION;
-      m_joystickList = jsList; // have to save this for Reassign
 
       // create the Joystick assignments
       Array.Resize( ref m_js, JoystickCls.JSnum_MAX + 1 );
@@ -131,47 +151,20 @@ namespace SCJMapper_V2
         m_js[i] = ""; m_GUIDs[i] = "";
       }
 
+      // create the default mapped optiontree
       CreateNewOptions( );
 
       //LoadSupportedActionMaps( ); // get them from config @@@@@@@@@
     }
 
 
+
     private void CreateNewOptions( )
     {
       // create options objs
       m_uiCustHeader = new UICustHeader( );
-      m_optionTree = new OptionTree( );
-      m_deviceOptions = new Deviceoptions( m_joystickList );
-      m_modifiers = new Modifiers( );
-    }
-
-    /// <summary>
-    /// Copy return all ActionMaps while reassigning the JsN Tag
-    /// </summary>
-    /// <param name="newJsList">The JsN reassign list</param>
-    /// <returns>The ActionMaps copy with reassigned input</returns>
-    public ActionMapsCls ReassignJsN( JsReassingList newJsList )
-    {
-      ActionMapsCls newMaps = new ActionMapsCls( m_joystickList );
-      // full copy from 'this' 
-
-      newMaps.m_uiCustHeader = this.m_uiCustHeader;
-      newMaps.m_deviceOptions = this.m_deviceOptions;
-      newMaps.m_optionTree = this.m_optionTree;
-      newMaps.m_modifiers = this.m_modifiers;
-
-      for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-        newMaps.jsN[i] = this.jsN[i]; newMaps.jsNGUID[i] = this.jsNGUID[i];
-      }
-
-      foreach ( ActionMapCls am in this ) {
-        newMaps.Add( am.ReassignJsN( newJsList ) );
-      }
-
-      //m_options.ReassignJsN( newJsList );
-
-      return newMaps;
+      m_tuningOptions = new Tuningoptions( );
+      m_deviceOptions = new Deviceoptions( );
     }
 
     /// <summary>
@@ -268,7 +261,7 @@ namespace SCJMapper_V2
     /// Dump the ActionMaps as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public String toXML( String fileName )
+    public string toXML( string fileName )
     {
       log.Debug( "ActionMapsCls.toXML - Entry" );
 
@@ -278,17 +271,17 @@ namespace SCJMapper_V2
 
       // handle the versioning of the actionmaps
       // AC2 do not longer support ignoreversion... enter the new fixed header
-      String r = "<ActionMaps " + ACM_VERSION;
-      r += String.Format( " profileName=\"{0}\" \n", fileName.Replace( SCMappings.c_MapStartsWith, "" ) ); //AC2 add profilename
+      string r = "<ActionMaps " + ACM_VERSION;
+      r += string.Format( " profileName=\"{0}\" \n", fileName.Replace( SCMappings.c_MapStartsWith, "" ) ); //AC2 add profilename
 
       // now the devices (our addition)
       for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-        if ( !String.IsNullOrEmpty( jsN[i] ) ) r += String.Format( "\tjs{0}=\"{1}\" ", i + 1, jsN[i] );
-        if ( !String.IsNullOrEmpty( jsNGUID[i] ) ) r += String.Format( "js{0}G=\"{1}\" \n", i + 1, jsNGUID[i] );
+        if ( !string.IsNullOrEmpty( jsN[i] ) ) r += string.Format( "\tjs{0}=\"{1}\" ", i + 1, jsN[i] );
+        if ( !string.IsNullOrEmpty( jsNGUID[i] ) ) r += string.Format( "js{0}G=\"{1}\" \n", i + 1, jsNGUID[i] );
       }
 
       // close the tag
-      r += String.Format( ">\n" );
+      r += string.Format( ">\n" );
 
 
       // *** CustomisationUIHeader
@@ -305,28 +298,27 @@ namespace SCJMapper_V2
 
       // all Joysticks
       for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-        if ( !String.IsNullOrEmpty( jsN[i] ) ) {
+        if ( !string.IsNullOrEmpty( jsN[i] ) ) {
           dr.devType = JoystickCls.DeviceClass; dr.instNo = i + 1; m_uiCustHeader.AddInstances( dr );
         }
       }
       m_uiCustHeader.Label = fileName.Replace( SCMappings.c_MapStartsWith, "" ); // remove redundant part
-      r += m_uiCustHeader.toXML( ) + String.Format( "\n" );
+      r += m_uiCustHeader.toXML( ) + string.Format( "\n" );
 
       // *** OPTIONS 
-      if ( m_optionTree.Count > 0 ) r += m_optionTree.toXML( ) + String.Format( "\n" );
+      foreach ( KeyValuePair<string, OptionTree> kv in m_tuningOptions ) {
+        if ( kv.Value.Count > 0 ) r += kv.Value.toXML( ) + string.Format( "\n" );
+      }
 
       // *** DEVICE OPTIONS
-      if ( m_deviceOptions.Count > 0 ) r += m_deviceOptions.toXML( ) + String.Format( "\n" );
-
-      // *** MODIFIERS
-      if ( m_modifiers.Count > 0 ) r += m_modifiers.toXML( ) + String.Format( "\n" );
+      if ( m_deviceOptions.Count > 0 ) r += m_deviceOptions.toXML( ) + string.Format( "\n" );
 
       // *** ACTION MAPS
 
       foreach ( ActionMapCls amc in this ) {
-        r += String.Format( "{0}\n", amc.toXML( ) );
+        r += string.Format( "{0}\n", amc.toXML( ) );
       }
-      r += String.Format( "</ActionMaps>\n" );
+      r += string.Format( "</ActionMaps>\n" );
       return r;
     }
 
@@ -336,11 +328,9 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public Boolean fromXML( String xml )
+    public bool fromXML( string xml )
     {
       log.Debug( "ActionMapsCls.fromXML - Entry" );
-
-      CreateNewOptions( ); // Reset those options...
 
       XmlReaderSettings settings = new XmlReaderSettings( );
       settings.ConformanceLevel = ConformanceLevel.Fragment;
@@ -348,9 +338,8 @@ namespace SCJMapper_V2
       settings.IgnoreComments = true;
       XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
 
-
       reader.Read( );
-
+      // read the header element
       if ( reader.Name == "ActionMaps" ) {
         if ( reader.HasAttributes ) {
           version = reader["version"];
@@ -358,38 +347,42 @@ namespace SCJMapper_V2
 
           // get the joystick mapping if there is one
           for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-            jsN[i] = reader[String.Format( "js{0}", i + 1 )];
-            jsNGUID[i] = reader[String.Format( "js{0}G", i + 1 )];
+            jsN[i] = reader[string.Format( "js{0}", i + 1 )];
+            jsNGUID[i] = reader[string.Format( "js{0}G", i + 1 )];
           }
         } else {
           return false;
         }
       }
 
+      // now handle the js assignment from the map
+      // Reset with the found mapping
+      DeviceInst.JoystickListRef.ResetJsNAssignment( jsNGUID );
+      // Only now create the default optiontree for this map, containing included joysticks and the gamepad
+      CreateNewOptions( );
+
+      // now read the CIG content of the map
       reader.Read( ); // move to next element
 
       // could be actionmap OR (AC 0.9) deviceoptions OR options
 
-      while ( !reader.EOF ) { //!String.IsNullOrEmpty( x ) ) {
+      while ( !reader.EOF ) { //!string.IsNullOrEmpty( x ) ) {
 
         if ( reader.Name.ToLowerInvariant( ) == "actionmap" ) {
-          String x = reader.ReadOuterXml( );
+          string x = reader.ReadOuterXml( );
           ActionMapCls acm = new ActionMapCls( );
           if ( acm.fromXML( x ) ) {
             this.Merge( acm ); // merge list
           }
         } else if ( reader.Name.ToLowerInvariant( ) == "customisationuiheader" ) {
-          String x = reader.ReadOuterXml( );
+          string x = reader.ReadOuterXml( );
           m_uiCustHeader.fromXML( x );
         } else if ( reader.Name.ToLowerInvariant( ) == "deviceoptions" ) {
-          String x = reader.ReadOuterXml( );
+          string x = reader.ReadOuterXml( );
           m_deviceOptions.fromXML( x );
         } else if ( reader.Name.ToLowerInvariant( ) == "options" ) {
-          String x = reader.ReadOuterXml( );
-          m_optionTree.fromXML( x );
-        } else if ( reader.Name.ToLowerInvariant( ) == "modifiers" ) {
-          String x = reader.ReadOuterXml( );
-          m_modifiers.fromXML( x );
+          string x = reader.ReadOuterXml( );
+          m_tuningOptions.fromXML( x );
         } else {
           reader.Read( );
         }
@@ -397,8 +390,6 @@ namespace SCJMapper_V2
       }
       return true;
     }
-
-
 
   }
 }

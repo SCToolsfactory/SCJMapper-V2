@@ -27,8 +27,28 @@ namespace SCJMapper_V2
     static public string DevInput( string input ) { return input; }
     static public bool DevMatch( string devInput ) { return false; }
 
+    /// <summary>
+    /// Return the CIG instance number (which is the jsN number) - 1 based
+    /// </summary>
+    public abstract int XmlInstance { get; } // holds the CIG instance to be used throughout
+    /// <summary>
+    /// The DeviceClass of this instance
+    /// </summary>
     public abstract string DevClass { get; }
+    /// <summary>
+    /// The DX ProductName property
+    /// </summary>
     public abstract string DevName { get; }
+
+    /// <summary>
+    /// The DX instance number of the object (from enum) - 0 based 
+    /// </summary>
+    public abstract int DevInstance { get; }
+    /// <summary>
+    /// The DX GUID of the device
+    /// </summary>
+    public abstract string DevInstanceGUID { get; }
+
     public abstract System.Drawing.Color MapColor { get; }
     public virtual List<string> AnalogCommands { get { return new List<string>( ); }  } // just return an empty one if not implemented
 

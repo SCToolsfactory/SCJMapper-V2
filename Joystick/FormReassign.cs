@@ -16,7 +16,7 @@ namespace SCJMapper_V2.Joystick
     private ComboBox[] m_cb = new ComboBox[] { null, null, null, null, null, null, null, null, null, null, null, null, };
 
     
-    public Boolean Canceled { get; set; }
+    public bool Canceled { get; set; }
 
     /// <summary>
     /// ctor - gets the owning class instance
@@ -65,6 +65,7 @@ namespace SCJMapper_V2.Joystick
     {
       int textIdx = 0;
       m_owner.JsReassingList.Clear( );
+      // one entry for all joysticks defined - sequ is the DX enum (the list)
       foreach ( JoystickCls j in m_owner ) {
         try {
           m_owner.JsReassingList.Add( m_owner.NewJsList[textIdx], m_cb[textIdx].SelectedIndex );
@@ -77,7 +78,7 @@ namespace SCJMapper_V2.Joystick
       }
     }
 
-    private Boolean IsOK( )
+    private bool IsOK( )
     {
       int[] jsx = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
       foreach ( ComboBox cb in m_cb ) {

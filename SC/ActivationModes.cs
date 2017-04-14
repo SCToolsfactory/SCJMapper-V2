@@ -8,9 +8,12 @@ namespace SCJMapper_V2.SC
   /// <summary>
   /// Defines a single activation mode 
   /// </summary>
-  public class ActivationMode
+  public class ActivationMode : ICloneable
   {
+
     private const string c_DefaultActModeName =  "Use Profile";
+
+    #region Static parts
 
     /// <summary>
     /// The default ActivationMode
@@ -22,11 +25,12 @@ namespace SCJMapper_V2.SC
     /// </summary>
     /// <param name="activationName">Name to test</param>
     /// <returns>True if the name matches the default name</returns>
-    static public Boolean IsDefault( string activationName )
+    static public bool IsDefault( string activationName )
     {
       return ( activationName == Default.Name );
     }
 
+    #endregion
 
     /// <summary>
     /// The name of the ActivationMode
@@ -38,6 +42,19 @@ namespace SCJMapper_V2.SC
     public int MultiTap { get; set; }
 
 
+    /// <summary>
+    /// Clone this object
+    /// </summary>
+    /// <returns>A deep Clone of this object</returns>
+    public object Clone( )
+    {
+      var am = (ActivationMode)this.MemberwiseClone();
+      // more objects to deep copy
+
+      return am;
+    }
+
+    
     /// <summary>
     /// cTor: empty constructor
     /// </summary>
@@ -94,7 +111,7 @@ namespace SCJMapper_V2.SC
     /// <summary>
     /// Returns true if multiTap is more than 1
     /// </summary>
-    public Boolean IsDoubleTap { get { return ( MultiTap > 1 ); } }
+    public bool IsDoubleTap { get { return ( MultiTap > 1 ); } }
 
 
 

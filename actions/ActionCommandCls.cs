@@ -15,17 +15,17 @@ namespace SCJMapper_V2
   ///   devID: jsN, mo1, xi1, kb1, thumbl_down and modified ones: ralt+button1 (modifier+deviceinput)
   ///   input:  x, mouse1, r,  and ~ as internal blend (defined in DeviceCls)
   /// </summary>
-  public class ActionCommandCls
+  public class ActionCommandCls : ICloneable
   {
 
     /// <summary>
     /// The Input commands used incl. modifiers (mod+command)
     /// </summary>
-    public String Input { get; set; }     // AC2 style: input command name AC2  e.g. x, mouse1, r, "~" to blend
+    public string Input { get; set; }     // AC2 style: input command name AC2  e.g. x, mouse1, r, "~" to blend
     /// <summary>
     /// The device ID of the device (jsN, mo1, kb1, xi1)
     /// </summary>
-    public String DevID { get; set; }     // the device ID (jsN, mo1, xi1, kb1) 
+    public string DevID { get; set; }     // the device ID (jsN, mo1, xi1, kb1) 
 
     /// <summary>
     /// The applied ActivationMode for this command
@@ -35,14 +35,14 @@ namespace SCJMapper_V2
     /// <summary>
     /// Returns true if default ActivationMode is set
     /// </summary>
-    public Boolean DefaultActivationMode { get { return ActivationMode == ActivationMode.Default;  } }
+    public bool DefaultActivationMode { get { return ActivationMode == ActivationMode.Default;  } }
 
       /// <summary>
     /// The complete input string  (devID_input)
     /// Assuming internally blended ones only (i.e. no space blends contained)
     /// Can derive if a device tag is given
     /// </summary>
-    public String DevInput
+    public string DevInput
     {
       get
       {
@@ -51,7 +51,7 @@ namespace SCJMapper_V2
         else if ( string.IsNullOrEmpty( DevID ) )
           return Input; // no devID - return input only
         else
-          return String.Format( "{0}_{1}", DevID, Input ); // fully qualified only if both exist
+          return string.Format( "{0}_{1}", DevID, Input ); // fully qualified only if both exist
       }
       set
       {
@@ -81,59 +81,18 @@ namespace SCJMapper_V2
     public int NodeIndex { get; set; }              // index of the vis treenode
 
 
-    // ctor
-    public ActionCommandCls( )
+    /// <summary>
+    /// Clone this object
+    /// </summary>
+    /// <returns>A deep Clone of this object</returns>
+    public object Clone( )
     {
-      // init with something to debug if needed
-      Input = "UNDEF";
-      DevID = "NA0";
-      ActivationMode = new ActivationMode( ActivationMode.Default );
-      NodeIndex = -1;
-    }
+      ActionCommandCls ac = (ActionCommandCls)this.MemberwiseClone();
+      // more objects to deep copy
+      ac.ActivationMode = ( ActivationMode )this.ActivationMode.Clone( );
 
-    // ctor
-    public ActionCommandCls( ActionCommandCls other )
-    {
-      Input = other.Input;
-      DevID = other.DevID;
-      ActivationMode = new ActivationMode( other.ActivationMode );
-      NodeIndex = other.NodeIndex;
+      return ac;
     }
-
-    // ctor
-    public ActionCommandCls( String devInp )
-    {
-      DevInput = devInp;
-      ActivationMode = new ActivationMode( ActivationMode.Default );
-      NodeIndex = -1;
-    }
-
-    // ctor
-    public ActionCommandCls( String devInp, int nodeIx )
-    {
-      DevInput = devInp;
-      ActivationMode = new ActivationMode( ActivationMode.Default );
-      NodeIndex = nodeIx;
-    }
-
-    // ctor
-    public ActionCommandCls( String dev, String inp )
-    {
-      Input = inp;
-      DevID = dev;
-      ActivationMode = new ActivationMode( ActivationMode.Default );
-      NodeIndex = -1;
-    }
-
-    // ctor
-    public ActionCommandCls( String dev, String inp, int nodeIx )
-    {
-      Input = inp;
-      DevID = dev;
-      ActivationMode = new ActivationMode( ActivationMode.Default );
-      NodeIndex = nodeIx;
-    }
-
 
     /// <summary>
     /// Copy return the action while reassigning the JsN Tag
@@ -142,8 +101,7 @@ namespace SCJMapper_V2
     /// <returns>The action copy with reassigned input</returns>
     public ActionCommandCls ReassignJsN( JsReassingList newJsList )
     {
-      // full copy from 'this'
-      ActionCommandCls newAc = new ActionCommandCls( this );
+      ActionCommandCls newAc = (ActionCommandCls)this.Clone();
 
       // reassign the jsX part for Joystick commands
       if ( this.DevID.StartsWith( "js" ) ) {
@@ -157,11 +115,57 @@ namespace SCJMapper_V2
     }
 
 
+
+    // ctor
+    public ActionCommandCls( )
+    {
+      // init with something to debug if needed
+      Input = "UNDEF";
+      DevID = "NA0";
+      ActivationMode = new ActivationMode( ActivationMode.Default );
+      NodeIndex = -1;
+    }
+
+    // ctor
+    public ActionCommandCls( string devInp )
+    {
+      DevInput = devInp;
+      ActivationMode = new ActivationMode( ActivationMode.Default );
+      NodeIndex = -1;
+    }
+
+    // ctor
+    public ActionCommandCls( string devInp, int nodeIx )
+    {
+      DevInput = devInp;
+      ActivationMode = new ActivationMode( ActivationMode.Default );
+      NodeIndex = nodeIx;
+    }
+
+    // ctor
+    public ActionCommandCls( string dev, string inp )
+    {
+      Input = inp;
+      DevID = dev;
+      ActivationMode = new ActivationMode( ActivationMode.Default );
+      NodeIndex = -1;
+    }
+
+    // ctor
+    public ActionCommandCls( string dev, string inp, int nodeIx )
+    {
+      Input = inp;
+      DevID = dev;
+      ActivationMode = new ActivationMode( ActivationMode.Default );
+      NodeIndex = nodeIx;
+    }
+
+
     /// <summary>
     /// Updates an actionCommand with a new input (command)
     /// </summary>
     /// <param name="devInput">The input command</param>
-    public void UpdateCommandFromInput( String devInput, ActionCls.ActionDevice actionDevice) // ActionCommandCls actionCmd )
+    public void UpdateCommandFromInput( string devInput, ActionCls.ActionDevice actionDevice) // ActionCommandCls actionCmd )
     {
       // Apply the input to the ActionTree
       this.DevInput = ActionCls.BlendInput( devInput, actionDevice );
@@ -177,7 +181,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="actMode"></param>
     /// <returns></returns>
-    private String MutitapFudge(  ActivationMode actMode )
+    private string MutitapFudge(  ActivationMode actMode )
     {
       if ( actMode.IsDoubleTap ) {
         return "multiTap = \"2\"";
@@ -191,17 +195,17 @@ namespace SCJMapper_V2
     /// Dump the action as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public String toXML( )
+    public string toXML( )
     {
-      String r = "";
-      if ( !String.IsNullOrEmpty( Input ) ) {
+      string r = "";
+      if ( !string.IsNullOrEmpty( Input ) ) {
         // regular - apply XML formatting to internally blended items
-        r += String.Format( "input=\"{0}_{1}\" {2} ", DevID, DeviceCls.toXML( Input ), DeviceCls.toXMLBlendExtension(Input) ); // add multitap override if needed
+        r += string.Format( "input=\"{0}_{1}\" {2} ", DevID, DeviceCls.toXML( Input ), DeviceCls.toXMLBlendExtension(Input) ); // add multitap override if needed
         if ( ! ActivationMode.Equals( ActivationMode.Default ) ) {
-          r += String.Format( "ActivationMode=\"{0}\" {1} ", ActivationMode.Name, MutitapFudge(ActivationMode) );
+          r += string.Format( "ActivationMode=\"{0}\" {1} ", ActivationMode.Name, MutitapFudge(ActivationMode) );
         }
       }
-      r += String.Format( " />\n" );
+      r += string.Format( " />\n" );
 
       return r;
     }

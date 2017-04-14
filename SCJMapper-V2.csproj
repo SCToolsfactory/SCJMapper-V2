@@ -126,7 +126,9 @@
     <Compile Include="actions\ActionTreeNode.cs" />
     <Compile Include="appConfiguration.cs" />
     <Compile Include="AppSettings.cs" />
+    <Compile Include="CloneableItems.cs" />
     <Compile Include="DeviceCls.cs" />
+    <Compile Include="DeviceInst.cs" />
     <Compile Include="DeviceList.cs" />
     <Compile Include="Options\FormOptions.cs">
       <SubType>Form</SubType>
@@ -134,6 +136,7 @@
     <Compile Include="Options\FormOptions.Designer.cs">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Options\Tuningoptions.cs" />
     <Compile Include="SC\SCActionMapList.cs" />
     <Compile Include="Table\DS_ActionMap.cs" />
     <Compile Include="Table\DS_ActionMaps.cs">

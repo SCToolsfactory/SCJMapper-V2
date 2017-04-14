@@ -22,13 +22,14 @@ namespace SCJMapper_V2.Gamepad
 
     #region Static Items
 
-    public new const String DeviceClass = "xboxpad";  // the device name used throughout this app
-    public new const String DeviceID = "xi1_";
+    public new const string DeviceClass = "xboxpad";  // the device name used throughout this app
+    public new const string DeviceID = "xi1_";
     static public int RegisteredDevices = 0;
+    public const string DevNameCIG = "Controller (Gamepad)"; // seems CIG names the Gamepad always like this - and not as the device replies
 
-    public const String JsUnknown = "xi_";
-    public new const String BlendedInput = DeviceID + DeviceCls.BlendedInput;
-    static public new Boolean IsBlendedInput( String input )
+    public const string JsUnknown = "xi_";
+    public new const string BlendedInput = DeviceID + DeviceCls.BlendedInput;
+    static public new bool IsBlendedInput( string input )
     {
       if ( input == BlendedInput ) return true;
       return false;
@@ -49,7 +50,7 @@ namespace SCJMapper_V2.Gamepad
     /// </summary>
     /// <param name="deviceClass"></param>
     /// <returns></returns>
-    static public new Boolean IsDeviceClass( String deviceClass )
+    static public new bool IsDeviceClass( string deviceClass )
     {
       return ( deviceClass == DeviceClass );
     }
@@ -59,7 +60,7 @@ namespace SCJMapper_V2.Gamepad
     /// </summary>
     /// <param name="devInput"></param>
     /// <returns></returns>
-    static public new String DeviceClassFromInput( String devInput )
+    static public new string DeviceClassFromInput( string devInput )
     {
       if ( DevMatch( devInput ) )
         return DeviceClass; // this
@@ -72,7 +73,7 @@ namespace SCJMapper_V2.Gamepad
     /// </summary>
     /// <param name="input">A gamepad input</param>
     /// <returns>DevInput</returns>
-    static public new String DevInput( String input )
+    static public new string DevInput( string input )
     {
       if ( DevMatch( input ) )
         return input; // already
@@ -85,7 +86,7 @@ namespace SCJMapper_V2.Gamepad
     /// </summary>
     /// <param name="devInput">A devInput string</param>
     /// <returns>True for a match</returns>
-    static public new Boolean DevMatch( String devInput )
+    static public new bool DevMatch( string devInput )
     {
       return devInput.StartsWith( DeviceID );
     }
@@ -98,7 +99,7 @@ namespace SCJMapper_V2.Gamepad
     /// </summary>
     /// <param name="control"></param>
     /// <returns></returns>
-    static public Boolean CanInvert( String control )
+    static public bool CanInvert( string control )
     {
       return rgx_xil.IsMatch( control );
     }
@@ -108,11 +109,11 @@ namespace SCJMapper_V2.Gamepad
     /// </summary>
     /// <param name="input">The AC1 input string</param>
     /// <returns>An AC2 style input string</returns>
-    static public String FromAC1( String input )
+    static public string FromAC1( string input )
     {
       // input is something like a xi_something or compositions like triggerl_btn+thumbrx 
       // try easy: add xi1_ at the beginning; if xi_start subst with xi1_
-      String retVal = input.Replace(" ","");
+      string retVal = input.Replace(" ","");
       if ( IsBlendedInput( input ) ) return input;
 
       if ( retVal.StartsWith( "xi_" ) )
@@ -128,13 +129,13 @@ namespace SCJMapper_V2.Gamepad
     #endregion
 
     private Controller m_device;
-    private String m_devName = "Generic Gamepad";
+    private string m_devName = DevNameCIG;
     private Capabilities m_gpCaps = new Capabilities( );
 
     private State m_state = new State( );
     private State m_prevState = new State( );
 
-    private String m_lastItem = "";
+    private string m_lastItem = "";
     private int m_senseLimit = 500; // axis jitter avoidance...
     private bool m_activated = false;
 
@@ -143,21 +144,33 @@ namespace SCJMapper_V2.Gamepad
 
 
     /// <summary>
+    /// Return the device instance number (which is always 1)
+    /// </summary>
+    public override int XmlInstance { get { return 1; } } // const for Gamepad
+    /// <summary>
+    /// Return the DX device instance number (which is always 0)
+    /// </summary>
+    public override int DevInstance { get { return 0; } }
+    /// <summary>
     /// The DeviceClass of this instance
     /// </summary>
-    public override String DevClass { get { return GamepadCls.DeviceClass; } }
+    public override string DevClass { get { return GamepadCls.DeviceClass; } }
     /// <summary>
-    /// The JS ProductName property
+    /// The Gamepad ProductName property
     /// </summary>
-    public override String DevName { get { return m_devName; } }
+    public override string DevName { get { return m_devName; } }
     /// <summary>
 
-    public void SetDeviceName( String devName )
+    public void SetDeviceName( string devName )
     {
-      m_devName = devName;
+      m_devName = DevNameCIG; // hard override ...
       m_gPanel.Caption = DevName;
     }
 
+    /// <summary>
+    /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
+    /// </summary>
+    public override string DevInstanceGUID { get { return "17809207-4663-4629-b5f8-26cc6afa0e70"; } } // artifical GUID - DX does not maintain one
 
     /// <summary>
     /// Returns the mapping color for this device
@@ -167,7 +180,27 @@ namespace SCJMapper_V2.Gamepad
       get { return MyColors.GamepadColor; }
     }
 
-    public override Boolean Activated
+
+    // Note: GP has deadzone on left and right thumb only
+    public override List<string> AnalogCommands
+    {
+      get {
+        List<string> cmds = new List<string>();
+
+        try {
+          // Enumerate all the objects on the device.
+          if ( ( m_gpCaps.Gamepad.LeftThumbX != 0 ) || ( m_gpCaps.Gamepad.LeftThumbY != 0 ) ) { cmds.Add( "thumbl" ); }
+          if ( ( m_gpCaps.Gamepad.RightThumbX != 0 ) || ( m_gpCaps.Gamepad.RightThumbY != 0 )  ) { cmds.Add( "thumbr" ); }
+        } catch ( Exception ex ) {
+          log.Error( "AnalogCommands - Get Gamepad Objects failed", ex );
+        }
+        cmds.Sort( );
+        return cmds;
+      }
+    }
+
+
+    public override bool Activated
     {
       get { return m_activated; }
       set
@@ -176,7 +209,7 @@ namespace SCJMapper_V2.Gamepad
       }
     }
 
-    private Boolean Bit( GamepadButtonFlags set, GamepadButtonFlags check )
+    private bool Bit( GamepadButtonFlags set, GamepadButtonFlags check )
     {
       Int32 s = ( Int32 )set; Int32 c = ( Int32 )check;
       return ( ( s & c ) == c );
@@ -189,7 +222,7 @@ namespace SCJMapper_V2.Gamepad
     /// <param name="device">A DXInput device</param>
     /// <param name="hwnd">The WinHandle of the main window</param>
     /// <param name="panel">The respective JS panel to show the properties</param>
-    public GamepadCls( SharpDX.XInput.Controller device, UC_GpadPanel panel, int tabIndex )
+    public GamepadCls( Controller device, UC_GpadPanel panel, int tabIndex )
     {
       log.DebugFormat( "GamepadCls ctor - Entry with index {0}", device.ToString( ) );
 
@@ -270,9 +303,9 @@ namespace SCJMapper_V2.Gamepad
     /// Returns true if a modifer button is pressed
     /// </summary>
     /// <returns></returns>
-    private Boolean ModButtonPressed( )
+    private bool ModButtonPressed( )
     {
-      Boolean retVal =  m_state.Gamepad.Buttons != GamepadButtonFlags.None;
+      bool retVal =  m_state.Gamepad.Buttons != GamepadButtonFlags.None;
       retVal = ( retVal || ( Math.Abs( ( Int32 )m_state.Gamepad.LeftTrigger ) > 0 ) );
       retVal = ( retVal || ( Math.Abs( ( Int32 )m_state.Gamepad.RightTrigger ) > 0 ) );
       return retVal;
@@ -283,7 +316,7 @@ namespace SCJMapper_V2.Gamepad
     /// Find the last change the user did on that device
     /// </summary>
     /// <returns>The last action as CryEngine compatible string</returns>
-    public override String GetLastChange( )
+    public override string GetLastChange( )
     {
       if ( ModButtonPressed() ) {
         m_lastItem = "";
@@ -410,7 +443,7 @@ namespace SCJMapper_V2.Gamepad
       m_gPanel.Back = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.Back ) > 0 ) ? "pressed" : "_";
 
 
-      String buttons = "";
+      string buttons = "";
       buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.A ) ) ? "A" : "_";
       buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.B ) ) ? "B" : "_";
       buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.X ) ) ? "X" : "_";
@@ -422,7 +455,7 @@ namespace SCJMapper_V2.Gamepad
     /// <summary>
     /// Collect the current data from the device
     /// </summary>
-    public override void GetCmdData( String cmd, out int data )
+    public override void GetCmdData( string cmd, out int data )
     {
       // Make sure there is a valid device.
       if ( m_device == null ) {

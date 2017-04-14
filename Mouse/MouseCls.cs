@@ -22,12 +22,12 @@ namespace SCJMapper_V2.Mouse
 
     #region Static Items
 
-    public new const String DeviceClass = "mouse";   // the device name used throughout this app
-    public new const String DeviceID = "mo1_";
+    public new const string DeviceClass = "mouse";   // the device name used throughout this app
+    public new const string DeviceID = "mo1_";
     static public int RegisteredDevices = 0;  // devices add here once they are created (though will not decrement as they are not deleted)
 
-    public new const String BlendedInput = DeviceID + DeviceCls.BlendedInput;
-    static public new Boolean IsBlendedInput( String input )
+    public new const string BlendedInput = DeviceID + DeviceCls.BlendedInput;
+    static public new bool IsBlendedInput( string input )
     {
       if ( input == BlendedInput ) return true;
       return false;
@@ -49,7 +49,7 @@ namespace SCJMapper_V2.Mouse
     /// </summary>
     /// <param name="deviceClass"></param>
     /// <returns></returns>
-    static new public Boolean IsDeviceClass( String deviceClass )
+    static new public bool IsDeviceClass( string deviceClass )
     {
       return ( deviceClass == DeviceClass );
     }
@@ -59,7 +59,7 @@ namespace SCJMapper_V2.Mouse
     /// </summary>
     /// <param name="devInput"></param>
     /// <returns></returns>
-    static public new String DeviceClassFromInput( String devInput )
+    static public new string DeviceClassFromInput( string devInput )
     {
       if ( DevMatch( devInput ) )
         return DeviceClass; // this 
@@ -72,7 +72,7 @@ namespace SCJMapper_V2.Mouse
     /// </summary>
     /// <param name="input">A mouse input</param>
     /// <returns>DevInput</returns>
-    static public new String DevInput( String input )
+    static public new string DevInput( string input )
     {
       if ( DevMatch( input ) )
         return input; // already
@@ -85,7 +85,7 @@ namespace SCJMapper_V2.Mouse
     /// </summary>
     /// <param name="devInput">A devInput string</param>
     /// <returns>True for a match</returns>
-    static public new Boolean DevMatch( String devInput )
+    static public new bool DevMatch( string devInput )
     {
       return devInput.StartsWith( DeviceID );
     }
@@ -96,11 +96,11 @@ namespace SCJMapper_V2.Mouse
     /// </summary>
     /// <param name="input">The AC1 input string</param>
     /// <returns>An AC2 style input string</returns>
-    static public String FromAC1( String input )
+    static public string FromAC1( string input )
     {
       // input is something like a mouse1 (TODO compositions like lctrl+mouse1 ??)
       // try easy: add mo1_ at the beginning
-      String retVal = input.Replace(" ","");
+      string retVal = input.Replace(" ","");
       if ( IsBlendedInput( input ) ) return input;
 
       return "mo1_" + retVal;
@@ -113,7 +113,7 @@ namespace SCJMapper_V2.Mouse
     /// <param name="input">The input by the user</param>
     /// <param name="modifiers">Modifiers to be applied</param>
     /// <returns></returns>
-    static public String MakeCtrl( String input, String modifiers )
+    static public string MakeCtrl( string input, string modifiers )
     {
       return DeviceID + modifiers + input;
     }
@@ -127,21 +127,29 @@ namespace SCJMapper_V2.Mouse
     private Control m_hwnd;
     private bool m_activated = false;
 
-    private String m_lastItem = "";
+    private string m_lastItem = "";
     private int m_senseLimit = 150; // axis jitter avoidance...
 
     /// <summary>
+    /// Return the device instance number (which is always 1)
+    /// </summary>
+    public override int XmlInstance { get { return 1; } } // const 1 for mouse
+    /// <summary>
+    /// Return the DX device instance number (which is always 0)
+    /// </summary>
+    public override int DevInstance { get { return 0; } }
+    /// <summary>
     /// The DeviceClass of this instance
     /// </summary>
-    public override String DevClass { get { return MouseCls.DeviceClass; } }
+    public override string DevClass { get { return MouseCls.DeviceClass; } }
     /// <summary>
     /// The JS ProductName property
     /// </summary>
-    public override String DevName { get { return m_device.Properties.ProductName; } }
+    public override string DevName { get { return m_device.Properties.ProductName; } }
     /// <summary>
     /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
     /// </summary>
-    public String DevInstanceGUID { get { return m_device.Information.InstanceGuid.ToString( ); } }
+    public override string DevInstanceGUID { get { return m_device.Information.InstanceGuid.ToString( ); } }
 
     /// <summary>
     /// Returns the mapping color for this device
@@ -152,7 +160,7 @@ namespace SCJMapper_V2.Mouse
     }
 
 
-    public override Boolean Activated
+    public override bool Activated
     {
       get { return m_activated; }
       set
@@ -218,7 +226,7 @@ namespace SCJMapper_V2.Mouse
     /// Z-axis, typically a wheel. If the mouse does not have a z-axis, the value is 0. 
     /// </summary>
     /// <returns>The last action as CryEngine compatible string</returns>
-    public override String GetLastChange( )
+    public override string GetLastChange( )
     {
       // TODO: Expand this out into a joystick class (see commit for details)
       Dictionary<string, string> axies = new Dictionary<string, string>( )
@@ -279,7 +287,7 @@ namespace SCJMapper_V2.Mouse
     /// <summary>
     /// Collect the current data from the device (DUMMY for Mouse)
     /// </summary>
-    public override void GetCmdData( String cmd, out int data )
+    public override void GetCmdData( string cmd, out int data )
     {
       // Make sure there is a valid device.
       data = 0;
@@ -347,9 +355,9 @@ namespace SCJMapper_V2.Mouse
 
     // mwheel_up, mwheel_down
 
-    public static String MouseCmd( MouseEventArgs e )
+    public static string MouseCmd( MouseEventArgs e )
     {
-      String mbs = "";
+      string mbs = "";
       switch ( e.Button ) {
         case MouseButtons.Left: {
             mbs = "mouse1";
