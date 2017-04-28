@@ -7,12 +7,9 @@ using System.Windows.Forms;
 
 namespace SCJMapper_V2.Joystick
 {
-  public class JoystickList : List<JoystickCls>
+  public class JoystickList : List<JoystickCls>, IDisposable
   {
-    private FormReassign FR = null;
-
-    public JsReassingList JsReassingList { get; set; } // index - oldJs, newJs
-    public List<int> NewJsList { get; set; }  // index is this[idx]
+    #region Static Parts
 
     /// <summary>
     /// Reassigns the mapping color based on the jsAssignment list given
@@ -38,7 +35,6 @@ namespace SCJMapper_V2.Joystick
       }
     }
 
-
     static private Color DeviceColor( int dxnumber )
     {
       int devNumber = 0; // this runs asynch due to the gamepad tab somewhere inbetween..
@@ -53,6 +49,30 @@ namespace SCJMapper_V2.Joystick
       }
       return Color.Pink; // error but we should see the pink...
     }
+
+    #endregion
+
+    private FormReassign FR = null;
+
+    public JsReassingList JsReassingList { get; set; } // index - oldJs, newJs
+    public List<int> NewJsList { get; set; }  // index is this[idx]
+
+
+    protected virtual void Dispose( bool disposing )
+    {
+      if ( disposing ) {
+        // dispose managed resources
+        if ( FR != null ) FR.Dispose( );
+      }
+      // free native resources
+    }
+
+    public void Dispose()
+    {
+      Dispose( true );
+      GC.SuppressFinalize( this );
+    }
+
 
 
     /// <summary>

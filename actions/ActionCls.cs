@@ -195,8 +195,7 @@ namespace SCJMapper_V2
           case ActionDevice.AD_Mouse: return MouseCls.BlendedInput;
           default: return "";
         }
-      }
-      else {
+      } else {
         return input; // just return
       }
     }
@@ -227,7 +226,7 @@ namespace SCJMapper_V2
     static public System.Drawing.Color DeviceColor( string devInput )
     {
       // background is along the input 
-      ActionDevice aDevice = ADeviceFromInput( devInput);
+      ActionDevice aDevice = ADeviceFromInput( devInput );
       switch ( aDevice ) {
         case ActionDevice.AD_Gamepad: return GamepadCls.XiColor( );
         case ActionDevice.AD_Joystick: {
@@ -260,12 +259,12 @@ namespace SCJMapper_V2
     /// Clone this object
     /// </summary>
     /// <returns>A deep Clone of this object</returns>
-    private ActionCls MyClone( )
+    private ActionCls MyClone()
     {
-      ActionCls newAc = (ActionCls)this.MemberwiseClone();
+      ActionCls newAc = (ActionCls)this.MemberwiseClone( );
       // more objects to deep copy
-      newAc.defActivationMode = ( ActivationMode )this.defActivationMode.Clone();
-      newAc.inputList = this.inputList.Select( x => ( ActionCommandCls )x.Clone( ) ).ToList( );
+      newAc.defActivationMode = (ActivationMode)this.defActivationMode.Clone( );
+      newAc.inputList = this.inputList.Select( x => (ActionCommandCls)x.Clone( ) ).ToList( );
 
       return newAc;
     }
@@ -278,7 +277,7 @@ namespace SCJMapper_V2
     /// <returns>The action copy with reassigned input</returns>
     public ActionCls ReassignJsN( JsReassingList newJsList )
     {
-      ActionCls newAc = this.MyClone();
+      ActionCls newAc = this.MyClone( );
 
       // creates a copy of the list with reassigned jsN devs
       newAc.inputList.Clear( ); // get rid of cloned list
@@ -293,7 +292,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// ctor
     /// </summary>
-    public ActionCls( )
+    public ActionCls()
     {
       key = "";
       actionDevice = ActionDevice.AD_Unknown;
@@ -346,7 +345,7 @@ namespace SCJMapper_V2
       if ( removeIt >= 0 ) inputList.RemoveAt( removeIt );
     }
 
-    
+
     /// <summary>
     /// Merge action is simply copying the new input control
     /// </summary>
@@ -371,7 +370,7 @@ namespace SCJMapper_V2
       if ( accIndex < 0 ) return;
       // Apply the input to the ActionTree
       this.inputList[accIndex].DevInput = BlendInput( devInput, this.actionDevice );
-      if ( IsBlendedInput( this.inputList[accIndex].DevInput ) || string.IsNullOrEmpty(devInput) ) {
+      if ( IsBlendedInput( this.inputList[accIndex].DevInput ) || string.IsNullOrEmpty( devInput ) ) {
         this.inputList[accIndex].ActivationMode = new ActivationMode( ActivationMode.Default ); // reset activation mode if the input is empty
       }
     }
@@ -418,7 +417,7 @@ namespace SCJMapper_V2
     /// Dump the action as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public string toXML( )
+    public string toXML()
     {
       string r = ""; string
       bindCmd = "rebind";
@@ -458,8 +457,7 @@ namespace SCJMapper_V2
         if ( reader.HasAttributes ) {
           name = reader["name"];
           reader.ReadStartElement( "action" ); // Checks that the current content node is an element with the given Name and advances the reader to the next node
-        }
-        else {
+        } else {
           return false;
         }
       }
@@ -474,8 +472,7 @@ namespace SCJMapper_V2
             if ( string.IsNullOrEmpty( device ) ) {
               // AC2 style - derive the device (Device.DeviceClass)
               device = DeviceClassFromInput( input );
-            }
-            else {
+            } else {
               // AC1 style - need to reformat mouse and keyboard according to AC2 style now
               if ( KeyboardCls.IsDeviceClass( device ) ) input = KeyboardCls.FromAC1( input );
               else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
@@ -487,14 +484,13 @@ namespace SCJMapper_V2
             // if no ActivationMode is given, create one with multitap 1 or may be 2...
             string actModeName = reader["ActivationMode"];
             ActivationMode actMode = null;
-            if ( ! string.IsNullOrEmpty( actModeName ) ) {
+            if ( !string.IsNullOrEmpty( actModeName ) ) {
               actMode = ActivationModes.Instance.ActivationModeByName( actModeName ); // should be a valid ActivationMode for this action
-            }
-            else {
+            } else {
               actMode = new ActivationMode( ActivationMode.Default ); // no specific name given, use default
               string multiTap = reader["multiTap"];
               if ( !string.IsNullOrEmpty( multiTap ) ) {
-                actMode.MultiTap = int.Parse(multiTap); // modify with given multiTap
+                actMode.MultiTap = int.Parse( multiTap ); // modify with given multiTap
               }
             }
 
@@ -505,8 +501,7 @@ namespace SCJMapper_V2
             // advances the reader to the next node
             reader.ReadStartElement( "rebind" );
           }
-        }
-        else if ( reader.Name.ToLowerInvariant( ) == "addbind" ) {
+        } else if ( reader.Name.ToLowerInvariant( ) == "addbind" ) {
           if ( reader.HasAttributes ) {
             device = reader["device"];
             string input = reader["input"];
@@ -515,8 +510,7 @@ namespace SCJMapper_V2
             if ( string.IsNullOrEmpty( device ) ) {
               // AC2 style - derive the device (Device.DeviceClass)
               device = DeviceClassFromInput( input );
-            }
-            else {
+            } else {
               // AC1 style - need to reformat according to AC2 style now
               if ( KeyboardCls.IsDeviceClass( device ) ) input = KeyboardCls.FromAC1( input );
               else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
@@ -530,8 +524,7 @@ namespace SCJMapper_V2
             ActivationMode actMode = null;
             if ( !string.IsNullOrEmpty( actModeName ) ) {
               actMode = ActivationModes.Instance.ActivationModeByName( actModeName ); // should be a valid ActivationMode for this action
-            }
-            else {
+            } else {
               actMode = new ActivationMode( ActivationMode.Default ); // no specific name given, use default
               string multiTap = reader["multiTap"];
               if ( !string.IsNullOrEmpty( multiTap ) ) {
@@ -542,8 +535,7 @@ namespace SCJMapper_V2
             // advances the reader to the next node
             reader.ReadStartElement( "addbind" );
           }
-        }
-        else {
+        } else {
           return false;
         }
       } while ( reader.Name == "addbind" );

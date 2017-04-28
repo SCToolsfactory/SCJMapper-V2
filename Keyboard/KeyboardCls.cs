@@ -283,6 +283,12 @@ namespace SCJMapper_V2.Keyboard
 
     public override bool Activated
     {
+      get { return Activated_low; }
+      set { Activated_low = value; }
+    }
+
+    private bool Activated_low
+    {
       get { return m_activated; }
       set
       {
@@ -302,7 +308,7 @@ namespace SCJMapper_V2.Keyboard
 
       m_device = device;
       m_hwnd = hwnd;
-      Activated = false;
+      Activated_low = false;
 
       // Set BufferSize in order to use buffered data.
       m_device.Properties.BufferSize = 128;
@@ -321,7 +327,7 @@ namespace SCJMapper_V2.Keyboard
 
       KeyboardCls.RegisteredDevices++;
 
-      Activated = true;
+      Activated_low = true;
     }
 
 

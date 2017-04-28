@@ -229,7 +229,7 @@ namespace SCJMapper_V2.Gamepad
       m_device = device;
       m_gPanel = panel;
       MyTabPageIndex = tabIndex;
-      Activated = false;
+      m_activated = false;
 
       m_senseLimit = AppConfiguration.AppConfig.gpSenseLimit; // can be changed in the app.config file if it is still too little
 
@@ -242,7 +242,7 @@ namespace SCJMapper_V2.Gamepad
         log.Error( "Get GamepadCapabilities failed", ex );
       }
 
-      m_gPanel.Caption = DevName;
+      m_gPanel.Caption = m_devName;
       int n = 0;
       if ( Bit( m_gpCaps.Gamepad.Buttons, GamepadButtonFlags.DPadDown ) ) n++;
       if ( Bit( m_gpCaps.Gamepad.Buttons, GamepadButtonFlags.DPadLeft ) ) n++;
@@ -274,10 +274,10 @@ namespace SCJMapper_V2.Gamepad
 
       m_gPanel.ButtonE = true; // what else ...
 
-      ApplySettings( ); // get whatever is needed here from Settings
+      ApplySettings_low( ); // get whatever is needed here from Settings
 
       GamepadCls.RegisteredDevices++;
-      Activated = true;
+      m_activated = true;
     }
 
 
@@ -293,7 +293,12 @@ namespace SCJMapper_V2.Gamepad
     /// <summary>
     /// Tells the Joystick to re-read settings
     /// </summary>
-    public override void ApplySettings( )
+    public override void ApplySettings()
+    {
+      ApplySettings_low( );
+    }
+
+    private void ApplySettings_low()
     {
       appSettings.Reload( );
     }

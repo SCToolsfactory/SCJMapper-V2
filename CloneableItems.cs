@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace SCJMapper_V2
 {
+  //[Serializable]
   public class CloneableDictionary<TKey, TValue> : Dictionary<TKey, TValue> where TValue : ICloneable
   {
     public virtual object Clone( )

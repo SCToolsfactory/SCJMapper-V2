@@ -894,14 +894,6 @@
 		<action  name="edit_loadout"  onPress="1"  keyboard="l"  />
 	</actionmap>
 
-	<actionmap  name="multiplayer"  version="25"  UILabel="@ui_CGEAGeneral"  UICategory="@ui_CCEAGeneral"  >
-		<action  name="respawn"  onPress="1"  keyboard="x"  xboxpad="x"  joystick=" "  UILabel="@ui_CIRespawn"  UIDescription="@ui_CIRespawnDesc"  />
-		<action  name="force_respawn"  ActivationMode="delayed_press"  keyboard="ralt+backspace"  xboxpad="shoulderl+shoulderr+x"  joystick=" "  UILabel="@ui_CIForceRespawn"  UIDescription="@ui_CIForceRespawnDesc"  />
-		<action  name="retry"  onPress="1"  keyboard="x"  xboxpad="x"  />
-		<action  name="ready"  onPress="1"  keyboard="x"  xboxpad="x"  />
-		<action  name="edit_loadout"  onPress="1"  keyboard="l"  />
-	</actionmap>
-
 	<actionmap  name="spectator"  version="1"  UILabel="@ui_CGEASpectator"  UICategory="@ui_CCEASpectator"  >
 		<action  name="spectate_next_target"  onPress="1"  mouse="mouse2"  xboxpad="shoulderr"  joystick="button1"  UILabel="@ui_CISpectatorTargetNext"  UIDescription="@ui_CISpectatorTargetNextDesc"  />
 		<action  name="spectate_prev_target"  onPress="1"  mouse="mouse1"  xboxpad="shoulderl"  joystick="button2"  UILabel="@ui_CISpectatorTargetPrev"  UIDescription="@ui_CISpectatorTargetPrevDesc"  />

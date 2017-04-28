@@ -20,7 +20,7 @@ namespace SCJMapper_V2
   /// Maintains the action tree and its GUI representation, the TreeView
   ///  - the TreeView is managed primary in memory (Master Tree) and copied to the GUI tree via the Filter functions
   /// </summary>
-  class ActionTree
+  class ActionTree : IDisposable
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
@@ -101,6 +101,21 @@ namespace SCJMapper_V2
     public ActionTree()
     {
       IgnoreMaps = ""; // nothing to ignore
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+      if ( disposing ) {
+        // dispose managed resources
+        if (m_MasterTree !=null ) m_MasterTree.Dispose( );
+      }
+      // free native resources
+    }
+
+    public void Dispose()
+    {
+      Dispose( true );
+      GC.SuppressFinalize( this );
     }
 
 

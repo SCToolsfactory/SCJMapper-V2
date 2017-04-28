@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace SCJMapper_V2
 {
-  sealed class AppSettings : ApplicationSettingsBase
+  sealed class AppSettings : ApplicationSettingsBase, IDisposable
   {
     FormSettings FS = null;
 
@@ -24,6 +24,22 @@ namespace SCJMapper_V2
         this.Save( );
       }
     }
+
+    public void Dispose( bool disposing )
+    {
+      if ( disposing ) {
+        // dispose managed resources
+        if ( FS != null ) FS.Dispose( );
+      }
+      // free native resources
+    }
+
+    public void Dispose()
+    {
+      Dispose( true );
+      GC.SuppressFinalize( this );
+    }
+
 
     /// <summary>
     /// Show the Settings Dialog

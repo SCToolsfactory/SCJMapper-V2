@@ -415,6 +415,12 @@ namespace SCJMapper_V2.Joystick
 
     public override bool Activated
     {
+      get { return Activated_low; }
+      set { Activated_low = value; }
+    }
+
+    private bool Activated_low
+    {
       get { return m_activated; }
       set {
         m_activated = value;
@@ -441,14 +447,14 @@ namespace SCJMapper_V2.Joystick
       m_xmlInstance = joystickNum+1; // initial assignment (is 1 based..)
       m_jPanel = panel;
       MyTabPageIndex = tabIndex;
-      Activated = false;
+      Activated_low = false;
 
       m_senseLimit = AppConfiguration.AppConfig.jsSenseLimit; // can be changed in the app.config file if it is still too little
 
       // Set BufferSize in order to use buffered data.
       m_device.Properties.BufferSize = 128;
 
-      m_jPanel.Caption = DevName;
+      m_jPanel.Caption = m_device.Properties.ProductName;
       m_jPanel.nAxis = AxisCount.ToString( );
       m_jPanel.nButtons = ButtonCount.ToString( );
       m_jPanel.nPOVs = POVCount.ToString( );
@@ -481,10 +487,10 @@ namespace SCJMapper_V2.Joystick
         log.Error( "Get JS Objects failed", ex );
       }
 
-      ApplySettings( ); // get whatever is needed here from Settings
+      ApplySettings_low( ); // get whatever is needed here from Settings
       JoystickCls.RegisteredDevices++;
 
-      Activated = true;
+      Activated_low = true;
     }
 
 
@@ -505,7 +511,12 @@ namespace SCJMapper_V2.Joystick
     /// <summary>
     /// Tells the Joystick to re-read settings
     /// </summary>
-    public override void ApplySettings( )
+    public override void ApplySettings()
+    {
+      ApplySettings_low( );
+    }
+
+    private void ApplySettings_low( )
     {
       appSettings.Reload( );
 
@@ -521,6 +532,10 @@ namespace SCJMapper_V2.Joystick
         case 6: igs = appSettings.IgnoreJS6; break;
         case 7: igs = appSettings.IgnoreJS7; break;
         case 8: igs = appSettings.IgnoreJS8; break;
+        case 9: igs = appSettings.IgnoreJS9; break;
+        case 10: igs = appSettings.IgnoreJS10; break;
+        case 11: igs = appSettings.IgnoreJS11; break;
+        case 12: igs = appSettings.IgnoreJS12; break;
         default: break;
       }
       if ( string.IsNullOrWhiteSpace( igs ) ) return; // no setting - all allowed
@@ -668,9 +683,9 @@ namespace SCJMapper_V2.Joystick
       int[] pov = m_state.PointOfViewControllers;
       int[] ppov = m_prevState.PointOfViewControllers;
       if ( pov[0] >= 0 ) if ( pov[0] != ppov[0] ) m_lastItem = "hat1_" + HatDir( pov[0] );
-      if ( pov[1] >= 0 ) if ( pov[1] != ppov[1] ) m_lastItem = "hat2_" + HatDir( pov[0] );
-      if ( pov[2] >= 0 ) if ( pov[2] != ppov[2] ) m_lastItem = "hat3_" + HatDir( pov[0] );
-      if ( pov[3] >= 0 ) if ( pov[3] != ppov[3] ) m_lastItem = "hat4_" + HatDir( pov[0] );
+      if ( pov[1] >= 0 ) if ( pov[1] != ppov[1] ) m_lastItem = "hat2_" + HatDir( pov[1] );
+      if ( pov[2] >= 0 ) if ( pov[2] != ppov[2] ) m_lastItem = "hat3_" + HatDir( pov[2] );
+      if ( pov[3] >= 0 ) if ( pov[3] != ppov[3] ) m_lastItem = "hat4_" + HatDir( pov[3] );
 
       bool[] buttons = m_state.Buttons;
       bool[] prevButtons = m_prevState.Buttons;

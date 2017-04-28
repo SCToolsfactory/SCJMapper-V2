@@ -23,10 +23,6 @@ namespace SCJMapper_V2.CryXMLlib
   /// </summary>
   internal class CryXmlBinContext // CBinaryXmlData
   {
-    ~CryXmlBinContext( )
-    {
-      pBinaryNodes = null; // TODO check later for proper dealloc
-    }
 
     public CryXMLNode[]       pNodes = null;         // gets a copy of all Node entries
     public CryXMLAttribute[]  pAttributes= null;     // gets a copy of all Attribute entries

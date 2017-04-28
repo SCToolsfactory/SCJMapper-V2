@@ -19,14 +19,20 @@ namespace SCJMapper_V2.SC
       if ( inLine.StartsWith( "Executable:" ) ) return String.Format( "\t{0}\n", inLine );
       if ( inLine.StartsWith( "ProductVersion" ) ) return String.Format( "\t{0}\n", inLine );
 
+
       if ( inLine.StartsWith( "Windows:" ) ) return String.Format( "\t{0}\n", inLine );
       if ( inLine.StartsWith( "Current display mode" ) ) return String.Format( "\t{0}\n", inLine );
+
       if ( inLine.Contains( "physical memory" ) ) return String.Format( "\t{0}\n", inLine );
       if ( inLine.StartsWith( "--- Dedicated video memory" ) ) return String.Format( "\t{0}\n", inLine );
       if ( inLine.StartsWith( "- Final rating" ) ) return String.Format( "\t{0}\n", inLine );
 
-      if ( inLine.Contains( "> Creating" ) ) return String.Format( "\t{0}\n", inLine );
-
+      if ( inLine.Contains( "64 bit" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.Contains( "keyboard" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.Contains( "display mode" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.StartsWith( "- Connected" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.StartsWith( "Reset controls" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( inLine.Contains( "Enjoy" ) ) return String.Format( "\t{0}\n", inLine );
 
       return retVal;
     }

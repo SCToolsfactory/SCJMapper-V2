@@ -162,6 +162,12 @@ namespace SCJMapper_V2.Mouse
 
     public override bool Activated
     {
+      get { return Activated_low; }
+      set { Activated_low = value; }
+    }
+
+    private bool Activated_low
+    {
       get { return m_activated; }
       set
       {
@@ -181,7 +187,7 @@ namespace SCJMapper_V2.Mouse
 
       m_device = device;
       m_hwnd = hwnd;
-      Activated = false;
+      Activated_low = false;
 
       m_senseLimit = AppConfiguration.AppConfig.msSenseLimit; // can be changed in the app.config file if it is still too little
 
@@ -202,7 +208,7 @@ namespace SCJMapper_V2.Mouse
 
       MouseCls.RegisteredDevices++;
 
-      Activated = true;
+      Activated_low = true;
     }
 
 

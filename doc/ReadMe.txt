@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.27 - Build 61 BETA
-(c) Cassini, StandardToaster - 25-Dec-2016
+SC Joystick Mapper V 2.28 - Build 62 BETA
+(c) Cassini, StandardToaster - 28-Apr-2017
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.27)
-SCJMapper.exe.config         Program config (V2.27)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.28)
+SCJMapper.exe.config         Program config (V2.28)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -13,10 +13,10 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.27beta.pdf    Quick Guide
+SCJMapper_QGuide V2.28beta.pdf    Quick Guide
 ReadMe.txt                   This file
 
-graphics folder              Skybox Images                       - graphics folder MUST be in the same folder as the Exe file
+graphics folder              Skybox Images (V2.28)               - graphics folder MUST be in the same folder as the Exe file
 
 
 Read the Guide first RTFM ;-)
@@ -29,6 +29,19 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.28 - BETA Build 62
+- add #48 - Tune Strafe controls
+- add - "Options ..." dialog to edit all devince and control options
+- add - 2 more three 3D scenes for Tuning
+- improvement #49 - Mapping area: Current mapping is shown
+- improvement - Gamepad support improved, Tab is now always the most left one if gamepads are enabled
+- improvement - Dump Log: added some more interesting captures from the game log file
+- improvement - Tuning is now closer to CIG implementation, remove Sensitivity, add Saturation instead
+- fix #51 - accepting multiple actionmaps in default profile (collects only the first one found)
+- fix - bug re- joystick hats (affected No 2..4)
+- fixes and refacturing while encountered...
+- update - fallback default profile from SC 2.6.3 alpha
+- update - doc SCJMapper_QGuide V2.28beta.pdf
 V 2.27 - BETA Build 61
 - add - Collapse/Expand in context menu in Mapping tree
 - improvement - actionmaps are taken from the defaultProfile and will no longer need a program update

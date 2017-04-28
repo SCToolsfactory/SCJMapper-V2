@@ -37,10 +37,6 @@ namespace SCJMapper_V2.CryXMLlib
     {
       p = p_.p;
     }
-    ~CryXmlNodeRef( )
-    {
-      p = null;
-    }
 
     // conversions 
 

@@ -20,7 +20,6 @@ namespace SCJMapper_V2.Options
 
     private Label[] lblIn = null;
     private Label[] lblOut = null;
-    private bool m_formLoaded = false;
 
     // Col Index of the ListView items
     private const int LV_DevCtrl = 1;
@@ -102,7 +101,6 @@ namespace SCJMapper_V2.Options
 #endif
 
       // helpers
-      m_formLoaded = false;
       lblIn = new Label[] { null, lblLiveIn1, lblLiveIn2, lblLiveIn3, null, null };     // goes with PtNo 1..
       lblOut = new Label[] { null, lblLiveOut1, lblLiveOut2, lblLiveOut3, lblLiveOutExponent }; // goes with PtNo 1..
 
@@ -133,7 +131,6 @@ namespace SCJMapper_V2.Options
       DeviceTabsSetup( );
 
       PrepOptionsTab( );
-      m_formLoaded = true;
       log.Debug( "Load - Exit" );
     }
 
