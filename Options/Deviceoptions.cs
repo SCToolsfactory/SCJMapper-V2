@@ -31,6 +31,41 @@ namespace SCJMapper_V2.Options
 
     #region Static parts
 
+    // DevOptions GUI Slider properties - have them in one place only
+    public const int DevOptSliderMax = 100;
+    public const int DevOptSliderTick = DevOptSliderMax / 10;
+    private const float DZ_scale = 500.0f; // Deadzone slider   00 .. 100 -> 0 .. 0.20 ( 0.002 scale)
+    private const float SAT_scale = 200.0f;
+    private const float SAT_offs = 1.0f - ( (float)DevOptSliderMax / SAT_scale ); // Saturation slider 00 .. 100 -> 0.5 .. 1.0 ( 0.005 scale)
+
+    public static float DeadzoneFromSlider( int sliderValue )
+    {
+      return ( sliderValue / DZ_scale );
+    }
+    public static int DeadzoneToSlider( float value )
+    {
+      return (int)Math.Floor( value * DZ_scale );
+    }
+    public static int DeadzoneToSlider( string value )
+    {
+      return (int)Math.Floor( float.Parse( value ) * DZ_scale );
+    }
+
+    public static float SaturationFromSlider( int sliderValue )
+    {
+      return ( sliderValue / SAT_scale + SAT_offs );
+    }
+    public static int SaturationToSlider( float value )
+    {
+      return (int)Math.Floor( ( value - SAT_offs ) * SAT_scale );
+    }
+    public static int SaturationToSlider( string value )
+    {
+      return (int)Math.Floor( ( float.Parse( value ) - SAT_offs ) * SAT_scale );
+    }
+
+
+
     private static char ID_Delimiter = '⁞';
     /// <summary>
     /// Create a DeviceOption ID from dev Name and the command
@@ -47,15 +82,15 @@ namespace SCJMapper_V2.Options
       //    v_strafe_longitudinal - xi1_shoulderl+thumbly
       //    v_strafe_longitudinal - xi1_thumbly
 
-      string cmd = cmdCtrl.Trim();
+      string cmd = cmdCtrl.Trim( );
       // messy...
       if ( cmd.Contains( "throttle" ) ) cmd = cmd.Replace( "throttle", "" ); // this is not suitable for the devOption
       if ( cmd.Contains( "_" ) ) {
-        int l = cmd.LastIndexOf("_");
+        int l = cmd.LastIndexOf( "_" );
         cmd = cmd.Substring( l + 1 ); // assuming it is never the last one..
       }
       if ( cmd.Contains( "+" ) ) {
-        int l = cmd.LastIndexOf("+");
+        int l = cmd.LastIndexOf( "+" );
         cmd = cmd.Substring( l + 1 ); // assuming it is never the last one..
       }
       //   we have to trick the gamepad name here to CIG generic
@@ -73,9 +108,9 @@ namespace SCJMapper_V2.Options
     /// Clone this object
     /// </summary>
     /// <returns>A deep Clone of this object</returns>
-    public new object Clone( )
+    public new object Clone()
     {
-      var dop = new Deviceoptions((CloneableDictionary<string, DeviceOptionParameter>)base.Clone());
+      var dop = new Deviceoptions( (CloneableDictionary<string, DeviceOptionParameter>)base.Clone( ) );
       // more objects to deep copy
       dop.m_stringOptions = new List<string>( m_stringOptions );
 
@@ -86,6 +121,7 @@ namespace SCJMapper_V2.Options
       return dop;
     }
 
+#if DEBUG
     /// <summary>
     /// Check clone against This
     /// </summary>
@@ -109,6 +145,7 @@ namespace SCJMapper_V2.Options
       }
       return ret;
     }
+#endif
 
 
 
@@ -121,15 +158,16 @@ namespace SCJMapper_V2.Options
 
 
     // ctor
-    public Deviceoptions( )
+    public Deviceoptions()
     {
       // create all devOptions for all devices found (they may or may no be used)
       foreach ( JoystickCls js in DeviceInst.JoystickListRef ) {
         foreach ( string input in js.AnalogCommands ) {
-          string doid = DevOptionID(JoystickCls.DeviceClass, js.DevName, input);
+          string doid = DevOptionID( JoystickCls.DeviceClass, js.DevName, input );
           if ( !this.ContainsKey( doid ) ) {
             this.Add( doid, new DeviceOptionParameter( js, input, "", "" ) ); // init with disabled defaults
-          } else {
+          }
+          else {
             log.WarnFormat( "cTor - Joystick DO_ID {0} exists (likely a duplicate device name e,g, vJoy ??)", doid );
           }
         }
@@ -138,10 +176,11 @@ namespace SCJMapper_V2.Options
       // add gamepad if there is any
       if ( DeviceInst.GamepadRef != null ) {
         foreach ( string input in DeviceInst.GamepadRef.AnalogCommands ) {
-          string doid = DevOptionID(GamepadCls.DeviceClass, DeviceInst.GamepadRef.DevName, input);
+          string doid = DevOptionID( GamepadCls.DeviceClass, DeviceInst.GamepadRef.DevName, input );
           if ( !this.ContainsKey( doid ) ) {
             this.Add( doid, new DeviceOptionParameter( DeviceInst.GamepadRef, input, "", "" ) ); // init with disabled defaults
-          } else {
+          }
+          else {
             log.WarnFormat( "cTor - Gamepad DO_ID {0} exists", doid );
           }
         }
@@ -155,9 +194,10 @@ namespace SCJMapper_V2.Options
     }
 
     /// <summary>
-    /// Reset all Action strings in the dictionary
+    /// Reset all items that will be assigned dynamically while scanning the actions
+    /// - currently Action
     /// </summary>
-    public void ResetActions( )
+    public void ResetDynamicItems()
     {
       foreach ( KeyValuePair<string, DeviceOptionParameter> kv in this ) {
         kv.Value.Action = "";
@@ -175,7 +215,8 @@ namespace SCJMapper_V2.Options
       double d = 0;
       if ( ( !string.IsNullOrEmpty( valString ) ) && double.TryParse( valString, out d ) ) {
         return d.ToString( "0.000" );
-      } else {
+      }
+      else {
         return valString;
       }
     }
@@ -195,7 +236,7 @@ namespace SCJMapper_V2.Options
     /// Dump the Deviceoptions as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public string toXML( )
+    public string toXML()
     {
       string r = "";
 
@@ -252,7 +293,7 @@ namespace SCJMapper_V2.Options
 
       if ( reader.HasAttributes ) {
         name = reader["name"];
-        string devClass= (name == GamepadCls.DevNameCIG ) ? GamepadCls.DeviceClass : JoystickCls.DeviceClass;// have to trick this one...
+        string devClass = ( name == GamepadCls.DevNameCIG ) ? GamepadCls.DeviceClass : JoystickCls.DeviceClass;// have to trick this one...
 
         reader.Read( );
         // try to disassemble the items
@@ -273,7 +314,8 @@ namespace SCJMapper_V2.Options
                   if ( !this.ContainsKey( doID ) ) {
                     log.InfoFormat( "Cannot caputre Device Options for device <{0}> - unknown device!", name );
                     //this.Add( doID, new DeviceOptionParameter( devClass, name, input, deadzone, saturation ) );
-                  } else {
+                  }
+                  else {
                     // add deadzone value tp existing
                     this[doID].DeadzoneUsed = true;
                     this[doID].Deadzone = deadzone;
@@ -287,17 +329,20 @@ namespace SCJMapper_V2.Options
                   if ( !this.ContainsKey( doID ) ) {
                     log.InfoFormat( "Cannot caputre Device Options for device <{0}> - unknown device!", name );
                     //this.Add( doID, new DeviceOptionParameter( devClass, name, input, deadzone, saturation ) ); // actually not supported..
-                  } else {
+                  }
+                  else {
                     // add saturation value tp existing
                     this[doID].SaturationUsed = true;
                     this[doID].Saturation = saturation;
                   }
                 }
-              } else {
+              }
+              else {
                 //? option node has not the needed attributes
                 log.ErrorFormat( "Deviceoptions.fromXML: option node has not the needed attributes" );
               }
-            } else {
+            }
+            else {
               //?? option node has NO attributes
               log.ErrorFormat( "Deviceoptions.fromXML: option node has NO attributes" );
             }
@@ -305,7 +350,8 @@ namespace SCJMapper_V2.Options
 
           reader.Read( );
         }//while
-      } else {
+      }
+      else {
         //??
         if ( !m_stringOptions.Contains( xml ) ) m_stringOptions.Add( xml );
       }

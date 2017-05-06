@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace SCJMapper_V2.Options
 {
-  public class Tuningoptions : CloneableDictionary<string, OptionTree> , ICloneable
+  public class Tuningoptions : CloneableDictionary<string, OptionTree>, ICloneable
   {
 
     #region Static parts
@@ -47,7 +47,8 @@ namespace SCJMapper_V2.Options
         // not found return
         return string.Format( "{0}{1}{2}", deviceClass, ID_Delimiter, -1 ); // will not be found in the collection
 
-      } else {
+      }
+      else {
         // gamepad
         return string.Format( "{0}{1}{2}", deviceClass, ID_Delimiter, instance );
       }
@@ -57,16 +58,18 @@ namespace SCJMapper_V2.Options
     // translate a ToID built from JsN into the internal collection key
     private static string ToIDfromJsToID( string toIDjs )
     {
-      string deviceClass = ClassFromID(toIDjs);
+      string deviceClass = ClassFromID( toIDjs );
       // only search for joysticks
       if ( JoystickCls.IsDeviceClass( deviceClass ) ) {
-        string[] e = toIDjs.Split (ID_Delimiter);
+        string[] e = toIDjs.Split( ID_Delimiter );
         if ( e.Length > 1 ) {
           int i = int.Parse( e[1] );
           return TuneOptionIDfromJsN( e[0], i );
-        } else
+        }
+        else
           return "";
-      } else {
+      }
+      else {
         // gamepad
         return toIDjs;
       }
@@ -80,7 +83,7 @@ namespace SCJMapper_V2.Options
     /// <returns>The instance part</returns>
     public static int InstanceFromID( string TO_ID )
     {
-      string[] e = TO_ID.Split (ID_Delimiter);
+      string[] e = TO_ID.Split( ID_Delimiter );
       if ( e.Length > 1 )
         return int.Parse( e[1] );
       else
@@ -88,20 +91,25 @@ namespace SCJMapper_V2.Options
     }
 
     /// <summary>
-    /// Returns the xml instance (jsN) part of an ID
+    /// Returns the xml instance (jsN for Joysticks) part of an ID
     /// </summary>
     /// <param name="TO_ID">A tuningOptionID</param>
     /// <returns>The xml instance part</returns>
     public static int XmlInstanceFromID( string TO_ID )
     {
       int inst = 0;
-      string[] e = TO_ID.Split (ID_Delimiter);
+      string[] e = TO_ID.Split( ID_Delimiter );
       if ( e.Length > 1 ) {
+        string deviceClass = ClassFromID( TO_ID );
         inst = int.Parse( e[1] );
-        if ( inst >= 0 )
-          return m_jsMap[inst];
-        else
+        if ( JoystickCls.IsDeviceClass( deviceClass ) ) {
+          if ( inst >= 0 ) return m_jsMap[inst];
+          else return inst;
+        }
+        else {
+          //Gamepad
           return inst;
+        }
       }
       else {
         return -1;
@@ -115,7 +123,7 @@ namespace SCJMapper_V2.Options
     /// <returns>The device class part</returns>
     public static string ClassFromID( string TO_ID )
     {
-      string[] e = TO_ID.Split (ID_Delimiter);
+      string[] e = TO_ID.Split( ID_Delimiter );
       if ( e.Length > 0 )
         return e[0];
       else
@@ -129,9 +137,9 @@ namespace SCJMapper_V2.Options
     /// Clone this object
     /// </summary>
     /// <returns>A deep Clone of this object</returns>
-    public override object Clone( )
+    public override object Clone()
     {
-      var to = new Tuningoptions((CloneableDictionary<string, OptionTree>)base.Clone());
+      var to = new Tuningoptions( (CloneableDictionary<string, OptionTree>)base.Clone( ) );
       // more objects to deep copy
 
 #if DEBUG
@@ -169,7 +177,7 @@ namespace SCJMapper_V2.Options
     /// cTor:  Copy - Initializes the tuning options with the given one
     /// </summary>
     /// <param name="init"></param>
-    private Tuningoptions( CloneableDictionary<string, OptionTree> init)
+    private Tuningoptions( CloneableDictionary<string, OptionTree> init )
     {
       foreach ( KeyValuePair<string, OptionTree> kvp in init ) {
         this.Add( kvp.Key, kvp.Value );
@@ -180,31 +188,46 @@ namespace SCJMapper_V2.Options
     /// ctor: Create tuning options for each device
     ///       access via ToID
     /// </summary>
-    public Tuningoptions( )
+    public Tuningoptions()
     {
       // init reassign map
       m_jsMap = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }; // Max joysticks
 
       // create all Options for all devices found (they may or may no be used)
       foreach ( JoystickCls js in DeviceInst.JoystickListRef ) {
-        string toid = TuneOptionID(JoystickCls.DeviceClass, js.DevInstance ); // initial is the XInput enumeration
+        string toid = TuneOptionID( JoystickCls.DeviceClass, js.DevInstance ); // initial is the XInput enumeration
 
         if ( !this.ContainsKey( toid ) ) {
           this.Add( toid, new OptionTree( js ) ); // init with disabled defaults
-          // update map
+                                                  // update map
           m_jsMap[js.DevInstance] = js.XmlInstance;
-        } else {
+        }
+        else {
           log.WarnFormat( "cTor - Joystick DO_ID {0} exists (likely a duplicate device name", toid );
         }
       }
 
       // add gamepad if there is any
       if ( DeviceInst.GamepadRef != null ) {
-        string toid = TuneOptionID(GamepadCls.DeviceClass, 1 );// const - 
+        string toid = TuneOptionID( GamepadCls.DeviceClass, 1 );// const - 
         if ( !this.ContainsKey( toid ) ) {
           this.Add( toid, new OptionTree( DeviceInst.GamepadRef ) ); // init with disabled defaults
-        } else {
+        }
+        else {
           log.WarnFormat( "cTor - Gamepad DO_ID {0} exists", toid );
+        }
+      }
+    }
+
+    /// <summary>
+    /// Reset all items that will be assigned dynamically while scanning the actions
+    /// </summary>
+    public void ResetDynamicItems()
+    {
+      foreach ( KeyValuePair<string, OptionTree> kv in this ) {
+        OptionTree item = kv.Value;
+        if ( item != null ) {
+          item.ResetDynamicItems( ); ;
         }
       }
     }
@@ -223,7 +246,7 @@ namespace SCJMapper_V2.Options
       for ( int i = 0; i < newJsList.Count; i++ ) {
         jsMapNew[i] = newJsList[i].newJs;
       }
-      m_jsMap = ( int[] )jsMapNew.Clone( ); // make it live
+      m_jsMap = (int[])jsMapNew.Clone( ); // make it live
     }
 
     /// <summary>
@@ -236,7 +259,7 @@ namespace SCJMapper_V2.Options
     public DeviceTuningParameter FirstTuningItem( string option )
     {
       foreach ( KeyValuePair<string, OptionTree> kv in this ) {
-        DeviceTuningParameter item = kv.Value.TuningItem(option);
+        DeviceTuningParameter item = kv.Value.TuningItem( option );
         if ( ( item != null ) && !string.IsNullOrEmpty( item.NodeText ) )
           return item;
       }
@@ -311,15 +334,17 @@ namespace SCJMapper_V2.Options
         type = reader["type"];
         // now dispatch to the instance to capture the content
         if ( type.ToLowerInvariant( ) == "joystick" ) {
-          string toID = TuneOptionIDfromJsN(JoystickCls.DeviceClass, nInstance );
+          string toID = TuneOptionIDfromJsN( JoystickCls.DeviceClass, nInstance );
           // now this might not be availabe if devices have been changed
           if ( this.ContainsKey( toID ) ) {
             this[toID].fromXML( xml );
-          } else {
+          }
+          else {
             log.InfoFormat( "Read XML Options - instance {0} is not available - dropped this content", nInstance );
           }
-        } else if ( type.ToLowerInvariant( ) == "xboxpad" ) {
-          string toID = TuneOptionID(GamepadCls.DeviceClass, nInstance );
+        }
+        else if ( type.ToLowerInvariant( ) == "xboxpad" ) {
+          string toID = TuneOptionID( GamepadCls.DeviceClass, nInstance );
           this[toID].fromXML( xml );
         }
 

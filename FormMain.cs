@@ -508,6 +508,9 @@ namespace SCJMapper_V2
           tc1.TabPages.Add( "" );  // numbering is 1 based for the user
           uUC_JoyPanelNew = new UC_JoyPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
           uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
+          //uUC_JoyPanelNew.Dock = UC_JoyPanel.Dock; uUC_JoyPanelNew.Anchor = UC_JoyPanel.Anchor;
+          //uUC_JoyPanelNew.AutoScaleMode = UC_JoyPanel.AutoScaleMode; uUC_JoyPanelNew.AutoSize = UC_JoyPanel.AutoSize;
+          
         }
         // common part
         tc1.TabPages[tabs].Text = string.Format( "Joystick {0}", nJs + 1 ); // numbering is 1 based for the user
@@ -1223,28 +1226,34 @@ namespace SCJMapper_V2
       DeviceCls dev = null;
       string find = "";
 
-      // find action item for yaw
+      // find action item for Joysticks
       find = ActionTreeNode.ComposeNodeText( action, "js" );
       nodeText = m_AT.FindText( actionmap, find ); // returns "" or a complete text ("action - command")
       if ( !string.IsNullOrWhiteSpace( nodeText ) ) {
         if ( !ActionCls.IsBlendedInput( ActionTreeNode.CommandFromNodeText( nodeText ) ) ) {
           dev = DeviceInst.JoystickListRef.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
-          string toID = Tuningoptions.TuneOptionIDfromJsN( JoystickCls.DeviceClass, dev.XmlInstance );
-          OptionTree ot = m_AT.ActionMaps.TuningOptions.OptionTreeFromToID( toID );
-          if ( ot != null ) tuning =
-              ot.TuningItem( optionName );  // set defaults
+          if ( dev != null ) {
+            // find the tuning item of the action
+            string toID = Tuningoptions.TuneOptionIDfromJsN( JoystickCls.DeviceClass, dev.XmlInstance );
+            OptionTree ot = m_AT.ActionMaps.TuningOptions.OptionTreeFromToID( toID );
+            if ( ot != null ) tuning = ot.TuningItem( optionName );  // set defaults
+          }
         }
       }
+
       if ( dev == null ) {
+        // nothing found? find action item for GPads
         find = ActionTreeNode.ComposeNodeText( action, "xi" );
         nodeText = m_AT.FindText( actionmap, find );
         if ( !string.IsNullOrWhiteSpace( nodeText ) ) {
           if ( !ActionCls.IsBlendedInput( ActionTreeNode.CommandFromNodeText( nodeText ) ) ) {
             dev = DeviceInst.GamepadRef;
-            string toID = Tuningoptions.TuneOptionIDfromJsN( GamepadCls.DeviceClass, dev.XmlInstance );
-            OptionTree ot = m_AT.ActionMaps.TuningOptions.OptionTreeFromToID( toID );
-            if ( ot != null ) tuning =
-                ot.TuningItem( optionName );  // set defaults
+            if ( dev != null ) {
+              // find the tuning item of the action
+              string toID = Tuningoptions.TuneOptionIDfromJsN( GamepadCls.DeviceClass, dev.XmlInstance );
+              OptionTree ot = m_AT.ActionMaps.TuningOptions.OptionTreeFromToID( toID );
+              if ( ot != null ) tuning = ot.TuningItem( optionName );  // set defaults
+            }
           }
         }
       }
@@ -1256,36 +1265,43 @@ namespace SCJMapper_V2
       }
 
       if ( dev != null ) {
-        tuning.Reset( );
+        // having a device and a tuning item here
         // JS commands that are supported
         if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) || nodeText.ToLowerInvariant( ).EndsWith( "_throttlex" )
           || nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) || nodeText.ToLowerInvariant( ).EndsWith( "_throttley" )
           || nodeText.ToLowerInvariant( ).EndsWith( "_Z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) || nodeText.ToLowerInvariant( ).EndsWith( "_throttlez" )
           || nodeText.ToLowerInvariant( ).EndsWith( "_slider1" ) || nodeText.ToLowerInvariant( ).EndsWith( "_slider2" ) ) {
-          tuning.GameDevice = dev;
-          tuning.NodeText = nodeText;
+          // update dynamic properties
           string doID = Deviceoptions.DevOptionID( dev.DevClass, dev.DevName, nodeText );
           if ( m_AT.ActionMaps.DeviceOptions.ContainsKey( doID ) ) {
-            tuning.DeviceoptionRef = m_AT.ActionMaps.DeviceOptions[doID];
+            tuning.AssignDynamicItems( dev, m_AT.ActionMaps.DeviceOptions[doID], nodeText );
+          }
+          else {
+            tuning.AssignDynamicItems( dev, null, nodeText );
           }
         }
           // GP commands that are supported
           else if ( nodeText.ToLowerInvariant( ).Contains( "_thumblx" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbrx" )
                  || nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
+          // update dynamic properties
           tuning.GameDevice = dev;
           tuning.NodeText = nodeText;
           string doID = Deviceoptions.DevOptionID( dev.DevClass, dev.DevName, nodeText );
           if ( m_AT.ActionMaps.DeviceOptions.ContainsKey( doID ) ) {
-            tuning.DeviceoptionRef = m_AT.ActionMaps.DeviceOptions[doID];
+            tuning.AssignDynamicItems( dev, m_AT.ActionMaps.DeviceOptions[doID], nodeText );
+          }
+          else {
+            tuning.AssignDynamicItems( dev, null, nodeText );
           }
         }
       } else if ( tuning != null && tuning.DevInstanceNo > 0 ) {
         // a device was assigned but the action is not mapped
-        // try to find the gamedevice here
+        // try to find the gamedevice here ??
         if ( JoystickCls.IsDeviceClass( tuning.DeviceClass ) ) {
-          tuning.GameDevice = DeviceInst.JoystickListRef.Find_jsN( tuning.DevInstanceNo );
-        } else if ( GamepadCls.IsDeviceClass( tuning.DeviceClass ) ) {
-          tuning.GameDevice = DeviceInst.GamepadRef;
+          tuning.AssignDynamicItems( DeviceInst.JoystickListRef.Find_jsN( tuning.DevInstanceNo ), null, "" );
+        }
+        else if ( GamepadCls.IsDeviceClass( tuning.DeviceClass ) ) {
+          tuning.AssignDynamicItems( DeviceInst.GamepadRef, null, "" );
         }
       }
 
@@ -1298,7 +1314,8 @@ namespace SCJMapper_V2
     private void UpdateTuningItems()
     {
       // cleanup - Actions will be assigned new in below calls
-      m_AT.ActionMaps.DeviceOptions.ResetActions( );
+      m_AT.ActionMaps.DeviceOptions.ResetDynamicItems( );
+      m_AT.ActionMaps.TuningOptions.ResetDynamicItems( );
 
       // get current mapping from ActionMaps
       UpdateOptionItem( "flight_move_pitch", "v_pitch", "spaceship_movement" );
@@ -1363,7 +1380,7 @@ namespace SCJMapper_V2
       UpdateMoreOptionItems( );
 
       DeviceList devlist = new DeviceList( );
-      if ( m_AppSettings.DetectGamepad && (DeviceInst.GamepadRef != null) ) {
+      if ( m_AppSettings.DetectGamepad && ( DeviceInst.GamepadRef != null ) ) {
         devlist.Add( DeviceInst.GamepadRef );
       }
       devlist.AddRange( DeviceInst.JoystickListRef );

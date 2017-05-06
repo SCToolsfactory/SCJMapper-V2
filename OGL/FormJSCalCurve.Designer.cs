@@ -285,6 +285,7 @@
       this.pnlYaw.Name = "pnlYaw";
       this.pnlYaw.Size = new System.Drawing.Size(138, 149);
       this.pnlYaw.TabIndex = 2;
+      this.pnlYaw.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlYaw_MouseUp);
       // 
       // lblYnt
       // 
@@ -507,6 +508,7 @@
       this.pnlPitch.Name = "pnlPitch";
       this.pnlPitch.Size = new System.Drawing.Size(138, 149);
       this.pnlPitch.TabIndex = 3;
+      this.pnlPitch.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlPitch_MouseUp);
       // 
       // lblPnt
       // 
@@ -729,6 +731,7 @@
       this.pnlRoll.Name = "pnlRoll";
       this.pnlRoll.Size = new System.Drawing.Size(138, 149);
       this.pnlRoll.TabIndex = 4;
+      this.pnlRoll.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlRoll_MouseUp);
       // 
       // lblRnt
       // 
@@ -1167,7 +1170,7 @@
       this.label11.Name = "label11";
       this.label11.Size = new System.Drawing.Size(246, 3);
       this.label11.TabIndex = 46;
-      this.label11.Text = " ";
+      this.label11.Text = " sd";
       // 
       // label10
       // 
@@ -1802,8 +1805,8 @@
       // 
       // FormJSCalCurve
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
       this.ClientSize = new System.Drawing.Size(1184, 916);
       this.Controls.Add(this.tlp);
       this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

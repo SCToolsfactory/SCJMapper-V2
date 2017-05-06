@@ -95,16 +95,11 @@ namespace SCJMapper_V2
     /// Returns the device tuning items - the OptionTree
     /// </summary>
     public Tuningoptions TuningOptions { get { return m_tuningOptions; } }
-    //    public OptionTree OptionTree { get { return m_optionTree; } }
-
 
     /// <summary>
-    /// Returns the DeviceOptions containing the deadzones
+    /// Returns the DeviceOptions containing the deadzones and saturation
     /// </summary>
-    public Deviceoptions DeviceOptions
-    {
-      get { return m_deviceOptions; }
-    }
+    public Deviceoptions DeviceOptions { get { return m_deviceOptions; } }
 
 
     /// <summary>

@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.28 - Build 62 BETA
-(c) Cassini, StandardToaster - 28-Apr-2017
+SC Joystick Mapper V 2.29 - Build 63 BETA
+(c) Cassini, StandardToaster - 06-May-2017
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.28)
-SCJMapper.exe.config         Program config (V2.28)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.29)
+SCJMapper.exe.config         Program config (V2.29)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -13,7 +13,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.28beta.pdf    Quick Guide
+SCJMapper_QGuide V2.29beta.pdf    Quick Guide
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images (V2.28)               - graphics folder MUST be in the same folder as the Exe file
@@ -29,9 +29,20 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.29 - BETA Build 63
+- add - Calibrate gamepad thumb axes (press ABXY buttons all together and wait 2 sec - should zero all 4 axes)
+- fix #56 - exception when entering Tuning
+- fix - wrong gamepad action codes (xi1_xi_command instead of xi1_command)
+- fix - some more issues with gamepads
+- fix - options did not properly update when assigning them to another cmd or clearing the entry
+- improvement - Options Dialog selection and deselection of items improved
+- improvement - Tuning Dialog selection and deselection of items improved
+- improvement - Dump Log: added some more interesting captures from the game log file
+- improvement - Win7 / Win10 hidden text/controls with High DPI scaling issues partly resolved
+- update - doc SCJMapper_QGuide V2.29beta.pdf
 V 2.28 - BETA Build 62
 - add #48 - Tune Strafe controls
-- add - "Options ..." dialog to edit all devince and control options
+- add - "Options ..." dialog to edit all device and control options
 - add - 2 more three 3D scenes for Tuning
 - improvement #49 - Mapping area: Current mapping is shown
 - improvement - Gamepad support improved, Tab is now always the most left one if gamepads are enabled

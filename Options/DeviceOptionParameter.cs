@@ -17,13 +17,13 @@ namespace SCJMapper_V2.Options
     private string m_cmdCtrl = "";        // x, y, rotz ...
     private string m_doID = "";
 
-    private string m_action ="";  // v_pitch ..  assigned if known only
+    private string m_action = "";  // v_pitch ..  assigned if known only
 
-    private bool   m_deadzoneEnabled = false;  // default
-    private string m_deadzone = "0.000"; 
+    private bool m_deadzoneEnabled = false;  // default
+    private string m_deadzone = "0.000";
 
-    private bool   m_saturationSupported = false; // supported for Joystick only
-    private bool   m_saturationEnabled = false;  // default
+    private bool m_saturationSupported = false; // supported for Joystick only
+    private bool m_saturationEnabled = false;  // default
     private string m_saturation = "1.000";
 
 
@@ -31,9 +31,9 @@ namespace SCJMapper_V2.Options
     /// Clone this object
     /// </summary>
     /// <returns>A deep Clone of this object</returns>
-    public object Clone( )
+    public object Clone()
     {
-      var dop = (DeviceOptionParameter)this.MemberwiseClone();
+      var dop = (DeviceOptionParameter)this.MemberwiseClone( );
       // more objects to deep copy
 
       return dop;
@@ -68,8 +68,8 @@ namespace SCJMapper_V2.Options
     /// <summary>
     /// cTor : empty
     /// </summary>
-    public DeviceOptionParameter( )
-    {     
+    public DeviceOptionParameter()
+    {
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ namespace SCJMapper_V2.Options
 
       m_deadzone = "0.000";
       m_deadzoneEnabled = false;
-      if ( ! string.IsNullOrEmpty( dz ) ) {
+      if ( !string.IsNullOrEmpty( dz ) ) {
         m_deadzone = dz;
         m_deadzoneEnabled = true;
       }
@@ -101,7 +101,7 @@ namespace SCJMapper_V2.Options
       m_saturationEnabled = false;
       if ( Joystick.JoystickCls.IsDeviceClass( m_deviceClass ) ) {
         m_saturationSupported = true;
-        if ( ! string.IsNullOrEmpty( sa ) ) {
+        if ( !string.IsNullOrEmpty( sa ) ) {
           m_saturation = sa;
           m_saturationEnabled = true;
         }
@@ -157,7 +157,7 @@ namespace SCJMapper_V2.Options
     public bool DeadzoneUsed
     {
       get {
-        return ( m_deadzoneEnabled && ( m_deadzone != "0.0000" ) );
+        return ( m_deadzoneEnabled && ( m_deadzone != "0.000" ) );
       }
       set { m_deadzoneEnabled = value; }
     }
@@ -198,7 +198,7 @@ namespace SCJMapper_V2.Options
     /// Format an XML -deviceoptions- node from the tuning contents
     /// </summary>
     /// <returns>The XML string or an empty string</returns>
-    public string Deviceoptions_toXML( )
+    public string Deviceoptions_toXML()
     {
       /*
            <deviceoptions name="Joystick - HOTAS Warthog">

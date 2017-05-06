@@ -202,14 +202,25 @@ namespace SCJMapper_V2.Options
 
     #endregion
 
-    // reset some defaults
-    public void Reset( )
+    /// <summary>
+    /// Reset all items that will be assigned dynamically while scanning the actions
+    /// - currently DeviceoptionRef, NodeText
+    /// </summary>
+    public void ResetDynamicItems( )
     {
-      //GameDevice = null;
+      // using the public property to ensure the complete processing of the assignment
+      // GameDevice = null;
       DeviceoptionRef = null;
       NodeText = "";
     }
 
+    public void AssignDynamicItems( DeviceCls dev, DeviceOptionParameter devOptionRef,  string nodeText )
+    {
+      // using the public property to ensure the complete processing of the assignment
+      NodeText = nodeText; // must be first - the content is used later for DeviceOptionRef assignment
+      GameDevice = dev;
+      DeviceoptionRef = devOptionRef;
+    }
 
     /// <summary>
     /// Derive values from a command (e.g. v_pitch - js1_x)

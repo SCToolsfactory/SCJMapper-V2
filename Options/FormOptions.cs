@@ -23,24 +23,24 @@ namespace SCJMapper_V2.Options
 
     // Col Index of the ListView items
     private const int LV_DevCtrl = 1;
-    private const int LV_Saturation = LV_DevCtrl+1;
-    private const int LV_Deadzone = LV_Saturation+1;
-    private const int LV_Invert = LV_Deadzone+1;
-    private const int LV_Expo = LV_Invert+1;
-    private const int LV_Pt1 = LV_Expo+1;
-    private const int LV_Pt2 = LV_Pt1+1;
-    private const int LV_Pt3 = LV_Pt2+1;
+    private const int LV_Saturation = LV_DevCtrl + 1;
+    private const int LV_Deadzone = LV_Saturation + 1;
+    private const int LV_Invert = LV_Deadzone + 1;
+    private const int LV_Expo = LV_Invert + 1;
+    private const int LV_Pt1 = LV_Expo + 1;
+    private const int LV_Pt2 = LV_Pt1 + 1;
+    private const int LV_Pt3 = LV_Pt2 + 1;
 
     // allow access by index - index is tabpage index
     private TabPage[] tabs = null;      // Tag = DeviceName
-    private ListView [] lviews = null;  // Tag = ToID
+    private ListView[] lviews = null;  // Tag = ToID
 
     // search the LV with the corresponding Tag
     private ListView FindLV( string toID )
     {
       foreach ( TabPage tp in tabC.TabPages ) {
-        if ( toID == ( string )tp.Controls["LV"].Tag ) {
-          return ( ListView )tp.Controls["LV"];
+        if ( toID == (string)tp.Controls["LV"].Tag ) {
+          return (ListView)tp.Controls["LV"];
         }
       }
       return null;
@@ -50,8 +50,8 @@ namespace SCJMapper_V2.Options
     private ListView FindLVbyGUID( string guid )
     {
       foreach ( TabPage tp in tabC.TabPages ) {
-        if ( guid == ( string )tp.Tag ) {
-          return ( ListView )tp.Controls["LV"];
+        if ( guid == (string)tp.Tag ) {
+          return (ListView)tp.Controls["LV"];
         }
       }
       return null;
@@ -90,7 +90,7 @@ namespace SCJMapper_V2.Options
 
     #region Form handling
 
-    public FormOptions( )
+    public FormOptions()
     {
       InitializeComponent( );
 
@@ -122,6 +122,12 @@ namespace SCJMapper_V2.Options
       chart1.Series[1].Points.AddXY( 0.75, 0.75 );
       chart1.Series[1].Points.AddXY( 1.0, 1.0 );
 
+      // sliders
+      tbDeadzone.Maximum = Deviceoptions.DevOptSliderMax;
+      tbDeadzone.TickFrequency = Deviceoptions.DevOptSliderTick;
+      tbSaturation.Maximum = Deviceoptions.DevOptSliderMax;
+      tbSaturation.TickFrequency = Deviceoptions.DevOptSliderTick;
+
       log.Debug( "cTor - Exit" );
     }
 
@@ -131,6 +137,9 @@ namespace SCJMapper_V2.Options
       DeviceTabsSetup( );
 
       PrepOptionsTab( );
+
+      TabChangeHandling( ); // select the first LV item
+
       log.Debug( "Load - Exit" );
     }
 
@@ -139,7 +148,7 @@ namespace SCJMapper_V2.Options
       log.Debug( "FormClosing - Entry" );
       // have to carry on current edits - NO ListView SelectionChange Event happens 
       try {
-        if ( ( (ListView)tabC.SelectedTab.Controls["LV"]).SelectedItems.Count > 0 ) {
+        if ( ( (ListView)tabC.SelectedTab.Controls["LV"] ).SelectedItems.Count > 0 ) {
           // we push the current one back to tuning and the list view
           UpdateLiveTuning( );
           UpdateLiveDevOption( );
@@ -157,7 +166,7 @@ namespace SCJMapper_V2.Options
     #region Setup
 
     // setup all device tabs
-    private void DeviceTabsSetup( )
+    private void DeviceTabsSetup()
     {
       tabs = new TabPage[] { };
       lviews = new ListView[] { };
@@ -166,7 +175,7 @@ namespace SCJMapper_V2.Options
       for ( int idx = 0; idx < m_devListRef.Count; idx++ ) {
         if ( m_devListRef[idx].XmlInstance > 0 ) {
           // only with mapped devices
-          ListView lview = new ListView();
+          ListView lview = new ListView( );
           Array.Resize( ref lviews, lviews.Length + 1 ); lviews[lviews.Length - 1] = lview;
           // copied from Designer.cs
           lview.Dock = DockStyle.Fill;
@@ -181,7 +190,7 @@ namespace SCJMapper_V2.Options
           lview.Tag = Tuningoptions.TuneOptionIDfromJsN( m_devListRef[idx].DevClass, m_devListRef[idx].XmlInstance );
           //m_devListRef[idx].DevInstanceGUID; // find an LV
 
-          TabPage tab = new TabPage(m_devListRef[idx].DevName);
+          TabPage tab = new TabPage( m_devListRef[idx].DevName );
           Array.Resize( ref tabs, tabs.Length + 1 ); tabs[tabs.Length - 1] = tab;
 
           // copied from Designer.cs
@@ -206,12 +215,12 @@ namespace SCJMapper_V2.Options
     {
       if ( tabIndex < 0 ) return;
 
-      TabPage tab = tabs[tabIndex];
+      //TabPage tab = tabs[tabIndex];
       ListView lview = lviews[tabIndex];
 
       ListViewSetup( lview );
 
-      OptionTreeSetup( lview, ( string )tabs[tabIndex].Tag );
+      OptionTreeSetup( lview, (string)tabs[tabIndex].Tag );
 
     }
 
@@ -230,7 +239,7 @@ namespace SCJMapper_V2.Options
       lview.MultiSelect = false;
       lview.HideSelection = false;
 
-      string instText = " - instance=" + Tuningoptions.XmlInstanceFromID((string)lview.Tag);
+      string instText = " - instance=" + Tuningoptions.XmlInstanceFromID( (string)lview.Tag );
       lview.Columns.Add( "Option" + instText, 180, HorizontalAlignment.Left );
       lview.Columns.Add( "Dev Control", 80, HorizontalAlignment.Left );
       lview.Columns.Add( "Saturation", 80, HorizontalAlignment.Center );
@@ -270,8 +279,8 @@ namespace SCJMapper_V2.Options
       DeviceTuningParameter tuning = null;
       string option = "";
       ListViewGroup lvg = null;
-      ListViewItem  lvi;
-      List<string> devNamesDone = new List<string>();
+      ListViewItem lvi;
+      List<string> devNamesDone = new List<string>( );
 
       // first the analog controls for the device
       string gpGUID = "";
@@ -293,32 +302,32 @@ namespace SCJMapper_V2.Options
       // then the functions
       lvg = new ListViewGroup( "0", "flight_move " ); lview.Groups.Add( lvg );
       {
-        option = "flight_move_pitch"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_move_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
         }
-        option = "flight_move_yaw"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_move_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
         }
-        option = "flight_move_roll"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_move_roll"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
         }
-        option = "flight_move_strafe_vertical"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_move_strafe_vertical"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
         }
-        option = "flight_move_strafe_lateral"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_move_strafe_lateral"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
         }
-        option = "flight_move_strafe_longitudinal"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_move_strafe_longitudinal"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
@@ -327,12 +336,12 @@ namespace SCJMapper_V2.Options
 
       lvg = new ListViewGroup( "1", "flight_throttle" ); lview.Groups.Add( lvg );
       {
-        option = "flight_throttle_abs"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_throttle_abs"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
         }
-        option = "flight_throttle_rel"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_throttle_rel"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
@@ -341,12 +350,12 @@ namespace SCJMapper_V2.Options
 
       lvg = new ListViewGroup( "2", "flight_aim" ); lview.Groups.Add( lvg );
       {
-        option = "flight_aim_pitch"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_aim_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
         }
-        option = "flight_aim_yaw"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_aim_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
@@ -355,12 +364,12 @@ namespace SCJMapper_V2.Options
 
       lvg = new ListViewGroup( "3", "flight_view" ); lview.Groups.Add( lvg );
       {
-        option = "flight_view_pitch"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_view_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
         }
-        option = "flight_view_yaw"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "flight_view_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
@@ -369,12 +378,12 @@ namespace SCJMapper_V2.Options
 
       lvg = new ListViewGroup( "4", "Turret_aim" ); lview.Groups.Add( lvg );
       {
-        option = "turret_aim_pitch"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "turret_aim_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
         }
-        option = "turret_aim_yaw"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+        option = "turret_aim_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
@@ -384,12 +393,12 @@ namespace SCJMapper_V2.Options
       if ( devGUID == gpGUID ) { // now this selector is murks but then it works...
         lvg = new ListViewGroup( "5", "fps_view" ); lview.Groups.Add( lvg );
         {
-          option = "fps_view_pitch"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+          option = "fps_view_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
           if ( m_live.used ) {
             lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
             UpdateLvOptionFromLiveValues( m_live );
           }
-          option = "fps_view_yaw"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+          option = "fps_view_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
           if ( m_live.used ) {
             lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
             UpdateLvOptionFromLiveValues( m_live );
@@ -398,12 +407,12 @@ namespace SCJMapper_V2.Options
 
         lvg = new ListViewGroup( "6", "fps_move" ); lview.Groups.Add( lvg );
         {
-          option = "fps_move_lateral"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+          option = "fps_move_lateral"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
           if ( m_live.used ) {
             lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
             UpdateLvOptionFromLiveValues( m_live );
           }
-          option = "fps_move_longitudinal"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+          option = "fps_move_longitudinal"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
           if ( m_live.used ) {
             lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
             UpdateLvOptionFromLiveValues( m_live );
@@ -412,12 +421,12 @@ namespace SCJMapper_V2.Options
 
         lvg = new ListViewGroup( "7", "manned_ground_vehicle" ); lview.Groups.Add( lvg );
         {
-          option = "mgv_view_pitch"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+          option = "mgv_view_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
           if ( m_live.used ) {
             lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
             UpdateLvOptionFromLiveValues( m_live );
           }
-          option = "mgv_view_yaw"; tuning = m_tuningRef.TuningItem( ( string )lview.Tag, option ); m_live.Load( tuning );
+          option = "mgv_view_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
           if ( m_live.used ) {
             lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
             UpdateLvOptionFromLiveValues( m_live );
@@ -453,10 +462,9 @@ namespace SCJMapper_V2.Options
       // load live from TuningParameters
       public void Load( DeviceTuningParameter dp )
       {
-        optionName = dp.OptionName;
-
+        Reset( );
         if ( dp != null ) {
-          Reset( );
+          optionName = dp.OptionName;
           used = true; // always
 
           isTuningItem = true;
@@ -470,9 +478,11 @@ namespace SCJMapper_V2.Options
               control = e[1].TrimEnd( );
             else
               control = dp.NodeText;
-          } else if ( gameDeviceRef != null ) {
+          }
+          else if ( gameDeviceRef != null ) {
             //control = gameDeviceRef.DevName;
-          } else {
+          }
+          else {
             control = "n.a.";
           }
           command = dp.CommandCtrl;
@@ -487,7 +497,8 @@ namespace SCJMapper_V2.Options
             saturationSupported = dp.DeviceoptionRef.SaturationSupported;
             saturationUsed = dp.DeviceoptionRef.SaturationUsed;
             saturationS = dp.DeviceoptionRef.Saturation;
-          } else {
+          }
+          else {
             deadzoneUsed = false;
             saturationSupported = false;
             saturationUsed = false;
@@ -502,7 +513,8 @@ namespace SCJMapper_V2.Options
             nonLinCurve.Curve( float.Parse( dp.NonLinCurvePtsIn[0] ), float.Parse( dp.NonLinCurvePtsOut[0] ),
                                    float.Parse( dp.NonLinCurvePtsIn[1] ), float.Parse( dp.NonLinCurvePtsOut[1] ),
                                    float.Parse( dp.NonLinCurvePtsIn[2] ), float.Parse( dp.NonLinCurvePtsOut[2] ) );
-          } else {
+          }
+          else {
             // dummy curve
             nonLinCurve.Curve( 0.25f, 0.25f, 0.5f, 0.5f, 0.75f, 0.75f );
           }
@@ -512,10 +524,9 @@ namespace SCJMapper_V2.Options
       // load live from DevOptions
       public void Load( DeviceOptionParameter dp )
       {
-        optionName = dp.CommandCtrl;
-
+        Reset( );
         if ( dp != null ) {
-          Reset( );
+          optionName = dp.CommandCtrl;
           used = true;
 
           isTuningItem = false;
@@ -558,7 +569,8 @@ namespace SCJMapper_V2.Options
           if ( saturationSupported ) {
             dp.DeviceoptionRef.SaturationUsed = saturationUsed;
             dp.DeviceoptionRef.Saturation = saturationS;
-          } else {
+          }
+          else {
             dp.DeviceoptionRef.SaturationUsed = false;
           }
         }
@@ -584,13 +596,14 @@ namespace SCJMapper_V2.Options
         if ( saturationSupported ) {
           dp.SaturationUsed = saturationUsed;
           dp.Saturation = saturationS;
-        } else {
+        }
+        else {
           dp.SaturationUsed = false;
         }
       }
 
       // reset the live parameters
-      public void Reset( )
+      public void Reset()
       {
         used = false;
         nodetext = ""; control = ""; command = "";
@@ -654,7 +667,8 @@ namespace SCJMapper_V2.Options
           double f;
           if ( double.TryParse( value, out f ) ) {
             deadzone = f * 1000.0;
-          } else {
+          }
+          else {
             deadzone = 0.0;
           }
         }
@@ -671,7 +685,8 @@ namespace SCJMapper_V2.Options
           double f;
           if ( double.TryParse( value, out f ) ) {
             saturation = f * 1000.0;
-          } else {
+          }
+          else {
             saturation = 1000.0;
           }
         }
@@ -691,7 +706,8 @@ namespace SCJMapper_V2.Options
           double f;
           if ( double.TryParse( value, out f ) ) {
             exponent = f;
-          } else {
+          }
+          else {
             exponent = 1.0;
           }
         }
@@ -740,10 +756,24 @@ namespace SCJMapper_V2.Options
 
     #endregion
 
-    private LiveValues m_live = new LiveValues();
+    private LiveValues m_live = new LiveValues( );
     private DeviceTuningParameter m_liveTuning = null;
     private DeviceOptionParameter m_liveDevOption = null;
 
+    // handles a Tab change - selecting the first item and make it visible etc.
+    private void TabChangeHandling()
+    {
+      // select the first item in the LV control of the tab
+      if ( tabC.SelectedTab.Controls.ContainsKey( "LV" ) ) {
+
+        if ( ( (ListView)tabC.SelectedTab.Controls["LV"] ).Items.Count > 0 )
+          ( (ListView)tabC.SelectedTab.Controls["LV"] ).Items[0].Selected = true;
+        // select the LV itself
+        tabC.SelectedTab.Controls["LV"].Select( );
+
+        UpdateGUIFromLiveValues( m_live );
+      }
+    }
 
     // update the GUI from Live
     private void UpdateGUIFromLiveValues( LiveValues lv )
@@ -754,7 +784,10 @@ namespace SCJMapper_V2.Options
 
       if ( !lv.used ) {
         // reset
-        pnlOptionInput.Enabled = false;
+        pnlOptionInput.Visible = false;
+        pnlDevOptionInput.Visible = false;
+
+        //        pnlOptionInput.Enabled = false;
         lblLiveNodetext.Text = "---";
         cbxLiveInvert.Checked = false;
         lblLiveOutDeadzone.Text = "0.000"; cbxUseDeadzone.Checked = false; tbDeadzone.Enabled = false;
@@ -814,7 +847,7 @@ namespace SCJMapper_V2.Options
         return; // should finally not happen..
 
       // find the row entry
-      ListView lv = FindLVbyGUID(  lval.gameDeviceRef.DevInstanceGUID );
+      ListView lv = FindLVbyGUID( lval.gameDeviceRef.DevInstanceGUID );
       if ( lv == null ) return; // happens at startup when not all are created yet
 
       if ( !lv.Items.ContainsKey( lval.optionName ) ) {
@@ -829,7 +862,8 @@ namespace SCJMapper_V2.Options
         lvi.SubItems[LV_DevCtrl].Text = m_live.control; // js4_x
         lvi.SubItems[LV_Invert].Text = "---"; lvi.SubItems[LV_Expo].Text = "---"; // inverted .. expo
         lvi.SubItems[4].Text = "--- / ---"; lvi.SubItems[5].Text = "--- / ---"; lvi.SubItems[6].Text = "--- / ---"; // pt1..3
-      } else {
+      }
+      else {
         lvi.SubItems[LV_DevCtrl].Text = m_live.control; // js4_x
         lvi.SubItems[LV_Invert].Text = m_live.invertS;
         if ( m_live.exponentUsed )
@@ -838,7 +872,8 @@ namespace SCJMapper_V2.Options
           lvi.SubItems[LV_Expo].Text = "---"; // inverted .. expo
         if ( m_live.nonLinCurveUsed ) {
           lvi.SubItems[LV_Pt1].Text = m_live.PtS( 1 ); lvi.SubItems[LV_Pt2].Text = m_live.PtS( 2 ); lvi.SubItems[LV_Pt3].Text = m_live.PtS( 3 ); // pt1..3
-        } else {
+        }
+        else {
           lvi.SubItems[LV_Pt1].Text = "--- / ---"; lvi.SubItems[LV_Pt2].Text = "--- / ---"; lvi.SubItems[LV_Pt3].Text = "--- / ---"; // pt1..3
         }
       }
@@ -882,7 +917,7 @@ namespace SCJMapper_V2.Options
     /// <summary>
     /// Evaluate which tune parameter has the chart input
     /// </summary>
-    private void EvalChartInput( )
+    private void EvalChartInput()
     {
       log.Debug( "EvalChartInput - Entry" );
 
@@ -898,13 +933,13 @@ namespace SCJMapper_V2.Options
       tbDeadzone.Enabled = false;
       if ( cbxUseDeadzone.Enabled && cbxUseDeadzone.Checked ) {
         tbDeadzone.Enabled = true;
-        tbDeadzone.Value = ( int )( float.Parse( lblLiveOutDeadzone.Text ) * 250f );
+        tbDeadzone.Value = Deviceoptions.DeadzoneToSlider( lblLiveOutDeadzone.Text );
       }
 
       tbSaturation.Enabled = false;
       if ( cbxUseSaturation.Enabled && cbxUseSaturation.Checked ) {
         tbSaturation.Enabled = true;
-        tbSaturation.Value = ( int )( ( float.Parse( lblLiveOutSaturation.Text ) - 0.2f ) * 50f );
+        tbSaturation.Value = Deviceoptions.SaturationToSlider( lblLiveOutSaturation.Text );
       }
       EvalSlider( );
 
@@ -928,20 +963,23 @@ namespace SCJMapper_V2.Options
       if ( m_live.exponentUsed ) {
         if ( rbUseExpo.Checked ) {
           ; // just nothing
-        } else if ( rbUsePts.Checked ) {
+        }
+        else if ( rbUsePts.Checked ) {
           // switch to NonLin
           rbLivePtExponent.Enabled = false; rbLivePtExponent.Checked = false;
           m_live.exponentUsed = false;
           rbLivePt1.Enabled = true; rbLivePt2.Enabled = true; rbLivePt3.Enabled = true;
           rbLivePt1.Checked = true; // start with the first one
           m_live.nonLinCurveUsed = true;
-        } else {
+        }
+        else {
           //Switch to none
           rbLivePtExponent.Enabled = false; rbLivePtExponent.Checked = false;
           m_live.exponentUsed = false;
         }
 
-      } else if ( m_live.nonLinCurveUsed ) {
+      }
+      else if ( m_live.nonLinCurveUsed ) {
         if ( rbUseExpo.Checked ) {
           // switch to expo
           rbLivePt1.Enabled = false; rbLivePt2.Enabled = false; rbLivePt3.Enabled = false;
@@ -949,27 +987,32 @@ namespace SCJMapper_V2.Options
           m_live.nonLinCurveUsed = false;
           rbLivePtExponent.Enabled = true; rbLivePtExponent.Checked = true;
           m_live.exponentUsed = true;
-        } else if ( rbUsePts.Checked ) {
+        }
+        else if ( rbUsePts.Checked ) {
           ; // just nothing
-        } else {
+        }
+        else {
           //Switch to none
           rbLivePt1.Enabled = false; rbLivePt2.Enabled = false; rbLivePt3.Enabled = false;
           rbLivePt1.Checked = false; rbLivePt2.Checked = false; rbLivePt3.Checked = false;
           m_live.nonLinCurveUsed = false;
         }
 
-      } else {
+      }
+      else {
         // prev was None
         if ( rbUseExpo.Checked ) {
           // switch to expo
           rbLivePtExponent.Enabled = true; rbLivePtExponent.Checked = true;
           m_live.exponentUsed = true;
-        } else if ( rbUsePts.Checked ) {
+        }
+        else if ( rbUsePts.Checked ) {
           // switch to NonLin
           rbLivePt1.Enabled = true; rbLivePt2.Enabled = true; rbLivePt3.Enabled = true;
           rbLivePt1.Checked = true; // start with the first one
           m_live.nonLinCurveUsed = true;
-        } else {
+        }
+        else {
           //Switch to none
           ; // just nothing
         }
@@ -992,7 +1035,7 @@ namespace SCJMapper_V2.Options
     /// <summary>
     /// Update the graph from changes of acitve label values
     /// </summary>
-    private void UpdateChartItems( )
+    private void UpdateChartItems()
     {
       log.Debug( "UpdateChartItems - Entry" );
 
@@ -1001,8 +1044,12 @@ namespace SCJMapper_V2.Options
       bool satSupp = true;
       bool expUsed = true;
       bool ptsUsed = true;
+
       // see what is on display..
-      // Yaw
+      if ( m_live == null ) {
+
+        return;
+      }
       deadzoneUsed = m_live.deadzoneUsed;
       satSupp = m_live.saturationSupported;
       satUsed = ( satSupp && m_live.saturationUsed );
@@ -1013,7 +1060,6 @@ namespace SCJMapper_V2.Options
 
       // generic part
       lblGraphDeadzone.Visible = deadzoneUsed;
-
       lblGraphSaturation.Visible = satUsed;
 
 
@@ -1033,7 +1079,8 @@ namespace SCJMapper_V2.Options
         m_bSeries.BezierPoints[3].SetValueXY( 0.75, Math.Pow( 0.75, expo ) );
         m_bSeries.BezierPoints[4].SetValueXY( 1.0, 1.0 );
 
-      } else if ( ptsUsed ) {
+      }
+      else if ( ptsUsed ) {
         // Pts mode
         // dont touch zero Point
         for ( int i = 1; i <= 3; i++ ) {
@@ -1041,7 +1088,8 @@ namespace SCJMapper_V2.Options
         }
         m_bSeries.BezierPoints[4].SetValueXY( 1.0, 1.0 );
 
-      } else {
+      }
+      else {
         // linear
         // dont touch zero Point
         m_bSeries.BezierPoints[1].SetValueXY( 0.25, 0.25 );
@@ -1073,7 +1121,8 @@ namespace SCJMapper_V2.Options
       if ( m_hitActive ) {
         if ( m_hitPt < 1 ) {
           // nothing selected ...
-        } else if ( m_hitPt <= 3 ) {
+        }
+        else if ( m_hitPt <= 3 ) {
           // Pt1..3
           double newX = double.Parse( lblIn[m_hitPt].Text ) + ( e.X - mX ) * 0.001f; mX = e.X;
           newX = ( newX > 1.0f ) ? 1.0f : newX;
@@ -1090,7 +1139,8 @@ namespace SCJMapper_V2.Options
           // update markers from curve points
           chart1.Series[1].Points[m_hitPt] = m_bSeries.BezierPoints[m_hitPt];
 
-        } else if ( m_hitPt == 4 ) {
+        }
+        else if ( m_hitPt == 4 ) {
           // Exponent
           double newY = double.Parse( lblOut[m_hitPt].Text ) + ( e.Y - mY ) * 0.01f; mY = e.Y;
           newY = ( newY > 3.0f ) ? 3.0f : newY;
@@ -1131,24 +1181,26 @@ namespace SCJMapper_V2.Options
 
     #region Slider Value Changed (Deadzone / Saturation)
 
-    // Deadzone slider   00 .. 40 -> 0 .. 0.160 ( 4 pt scale)
-    // Saturation slider 00 .. 40 -> 0.2 .. 1.0 ( 20 pt scale)
+    private void tbSlider_ValueChanged( object sender, EventArgs e )
+    {
+      EvalSlider( );
+    }
 
     /// <summary>
     /// Update Live from Slider Value
     /// </summary>
-    private void EvalSlider( )
+    private void EvalSlider()
     {
-      lblLiveOutDeadzone.Text = ( tbDeadzone.Value / 250.0f ).ToString( "0.000" );
+      lblLiveOutDeadzone.Text = Deviceoptions.DeadzoneFromSlider( tbDeadzone.Value ).ToString( "0.000" );
       if ( cbxUseDeadzone.Enabled && cbxUseDeadzone.Checked ) {
-        float curDeadzone = 1000.0f * ( tbDeadzone.Value / 250.0f );  // % scaled to maxAxis
+        float curDeadzone = 1000.0f * Deviceoptions.DeadzoneFromSlider( tbDeadzone.Value );  // % scaled to maxAxis
         m_live.deadzone = curDeadzone;
         lblGraphDeadzone.Text = lblLiveOutDeadzone.Text;
 
       }
-      lblLiveOutSaturation.Text = ( tbSaturation.Value / 50.0f + 0.200f ).ToString( "0.000" );
+      lblLiveOutSaturation.Text = Deviceoptions.SaturationFromSlider( tbSaturation.Value ).ToString( "0.000" );
       if ( cbxUseSaturation.Enabled && cbxUseSaturation.Checked ) {
-        float curSaturation = 1000.0f * ( tbSaturation.Value / 50.0f + 0.2f);  // % scaled to maxAxis
+        float curSaturation = 1000.0f * Deviceoptions.SaturationFromSlider( tbSaturation.Value );  // % scaled to maxAxis
         m_live.saturation = curSaturation;
         lblGraphSaturation.Text = lblLiveOutSaturation.Text;
       }
@@ -1175,7 +1227,8 @@ namespace SCJMapper_V2.Options
       if ( cbxUseDeadzone.Checked == true ) {
         tbDeadzone.Enabled = true;
         m_live.deadzoneUsed = true;
-      } else {
+      }
+      else {
         tbDeadzone.Enabled = false;
         tbDeadzone.Value = tbDeadzone.Minimum;
       }
@@ -1193,7 +1246,8 @@ namespace SCJMapper_V2.Options
       if ( cbxUseSaturation.Checked == true ) {
         tbSaturation.Enabled = true;
         m_live.saturationUsed = true;
-      } else {
+      }
+      else {
         tbSaturation.Enabled = false;
         tbSaturation.Value = tbSaturation.Maximum;
       }
@@ -1205,15 +1259,10 @@ namespace SCJMapper_V2.Options
 
 
 
-    private void tbSlider_ValueChanged( object sender, EventArgs e )
-    {
-      EvalSlider( );
-    }
-
     /// <summary>
     /// Update the last Tuning item and the ListView Item from Live
     /// </summary>
-    private void UpdateLiveTuning( )
+    private void UpdateLiveTuning()
     {
       if ( m_liveTuning != null ) {
         m_live.Update( ref m_liveTuning );
@@ -1222,7 +1271,7 @@ namespace SCJMapper_V2.Options
       }
     }
 
-    private void UpdateLiveDevOption( )
+    private void UpdateLiveDevOption()
     {
       if ( m_liveDevOption != null ) {
         m_live.Update( ref m_liveDevOption );
@@ -1231,7 +1280,7 @@ namespace SCJMapper_V2.Options
       }
     }
 
-    private void PrepOptionsTab( )
+    private void PrepOptionsTab()
     {
       pnlOptionInput.Visible = true;
       if ( lvOptionTree.Items.Count > 0 )
@@ -1244,33 +1293,40 @@ namespace SCJMapper_V2.Options
     {
       log.Debug( "lvOptionTree_SelectedIndexChanged - Entry" );
       try {
+        // before loading a new one we push the current one back to tuning and the list view
+        UpdateLiveTuning( );
+        UpdateLiveDevOption( );
+
         if ( ( sender as ListView ).SelectedItems.Count > 0 ) {
-
-          // before loading a new one we push the current one back to tuning and the list view
-          UpdateLiveTuning( );
-          UpdateLiveDevOption( );
-
           ListViewItem lvi = ( sender as ListView ).SelectedItems[0];
           // get the associated parameter - either DevOptions for the first part or Tuning for 2nd and on
-          m_liveTuning = m_tuningRef.TuningItem( ( string )( sender as ListView ).Tag, lvi.Name );
+          m_liveTuning = m_tuningRef.TuningItem( (string)( sender as ListView ).Tag, lvi.Name );
           if ( m_liveTuning == null ) {
             // try devOptions only
             if ( m_devOptRef.ContainsKey( lvi.Name ) ) {
               m_liveDevOption = m_devOptRef[lvi.Name];
               m_live.Load( m_liveDevOption );
-            } else {
+            }
+            else {
               m_liveDevOption = null;
             }
 
-          } else {
+          }
+          else {
             // valid tuning item
             m_liveDevOption = m_liveTuning.DeviceoptionRef; // also connect the DevOptions here 
             m_live.Load( m_liveTuning );
           }
-          UpdateGUIFromLiveValues( m_live );
-
-          UpdateChartItems( );
         }
+        else {
+          // selection got empty - update prev selection
+          m_liveDevOption = null;
+          m_liveTuning = null;
+          m_live.Load( m_liveTuning );
+        }
+
+        UpdateGUIFromLiveValues( m_live );
+        UpdateChartItems( );
       } catch {
         ;
       }
@@ -1288,8 +1344,12 @@ namespace SCJMapper_V2.Options
         UpdateLiveDevOption( );
         m_liveTuning = null;
         m_live.Reset( );
-      } else if ( e.Action == TabControlAction.Selecting ) {
+      }
+      else if ( e.Action == TabControlAction.Selecting ) {
         PrepOptionsTab( );
+        if ( e.TabPage != null ) {
+          TabChangeHandling( );
+        }
       }
 
       e.Cancel = false; // let it change

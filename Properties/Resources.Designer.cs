@@ -65,7 +65,7 @@ namespace SCJMapper_V2.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap _300i1 {
             get {
-                object obj = ResourceManager.GetObject("300i1", resourceCulture);
+                object obj = ResourceManager.GetObject("_300i1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -92,7 +92,7 @@ namespace SCJMapper_V2.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;profile  version=&quot;1&quot;  optionsVersion=&quot;2&quot;  rebindVersion=&quot;2&quot;  &gt;
-        ///	&lt;platforms&gt;
+        ///	&lt;platforms  &gt;
         ///		&lt;PC  keyboard=&quot;1&quot;  mouse=&quot;1&quot;  xboxpad=&quot;1&quot;  ps3pad=&quot;0&quot;  joystick=&quot;1&quot;  /&gt;
         ///		&lt;Xbox  keyboard=&quot;1&quot;  xboxpad=&quot;1&quot;  ps3pad=&quot;0&quot;  /&gt;
         ///		&lt;PS3  keyboard=&quot;1&quot;  xboxpad=&quot;0&quot;  ps3pad=&quot;1&quot;  /&gt;
@@ -104,8 +104,8 @@ namespace SCJMapper_V2.Properties {
         ///		&lt;action  name=&quot;v_attack1_group3&quot;  /&gt;
         ///	&lt;/actiongroup&gt;
         ///
-        ///	&lt;ActivationModes&gt;
-        ///		&lt;ActivationMode  name=&quot;tap&quot;  onPress=&quot;0 [rest of string was truncated]&quot;;.
+        ///	&lt;ActivationModes  &gt;
+        ///		&lt;ActivationMode  name=&quot;tap&quot;  onPres [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string defaultProfile {
             get {

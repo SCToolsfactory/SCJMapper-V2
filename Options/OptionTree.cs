@@ -39,7 +39,7 @@ namespace SCJMapper_V2.Options
     List<string> m_stringOptions = new List<string>( );
 
     // bag for all tuning items - key is the option name
-    CloneableDictionary<string,DeviceTuningParameter> m_tuning = new CloneableDictionary<string, DeviceTuningParameter>();
+    CloneableDictionary<string, DeviceTuningParameter> m_tuning = new CloneableDictionary<string, DeviceTuningParameter>( );
 
 
 
@@ -47,16 +47,16 @@ namespace SCJMapper_V2.Options
     /// Clone this object
     /// </summary>
     /// <returns>A deep Clone of this object</returns>
-    public object Clone( )
+    public object Clone()
     {
-      var ot = (OptionTree)this.MemberwiseClone();
+      var ot = (OptionTree)this.MemberwiseClone( );
       // more objects to deep copy
       ot.m_stringOptions = new List<string>( m_stringOptions );
-      if ( this.m_tuning != null ) ot.m_tuning = ( CloneableDictionary<string, DeviceTuningParameter> )this.m_tuning.Clone( );
+      if ( this.m_tuning != null ) ot.m_tuning = (CloneableDictionary<string, DeviceTuningParameter>)this.m_tuning.Clone( );
 
       return ot;
     }
-    
+
     /// <summary>
     /// Check clone against This
     /// </summary>
@@ -125,6 +125,15 @@ namespace SCJMapper_V2.Options
       get { return ( m_stringOptions.Count + 1 ); }
     }
 
+    public void ResetDynamicItems()
+    {
+      foreach ( KeyValuePair<string, DeviceTuningParameter> kv in m_tuning ) {
+        DeviceTuningParameter item = kv.Value;
+        if ( item != null ) {
+          item.ResetDynamicItems( );
+        }
+      }
+    }
 
     // provide access to Tuning items
 
@@ -142,6 +151,8 @@ namespace SCJMapper_V2.Options
         return null;
     }
 
+
+
     private string[] FormatXml( string xml )
     {
       try {
@@ -156,7 +167,7 @@ namespace SCJMapper_V2.Options
     /// Dump the Options as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public string toXML( )
+    public string toXML()
     {
       string r = "";
 
@@ -271,51 +282,72 @@ namespace SCJMapper_V2.Options
 
           if ( reader.Name.ToLowerInvariant( ) == "flight_move_pitch" ) {
             m_tuning["flight_move_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_yaw" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_yaw" ) {
             m_tuning["flight_move_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_roll" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_roll" ) {
             m_tuning["flight_move_roll"].Options_fromXML( reader, type, int.Parse( instance ) );
 
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_vertical" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_vertical" ) {
             m_tuning["flight_move_strafe_vertical"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_lateral" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_lateral" ) {
             m_tuning["flight_move_strafe_lateral"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_longitudinal" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_longitudinal" ) {
             m_tuning["flight_move_strafe_longitudinal"].Options_fromXML( reader, type, int.Parse( instance ) );
 
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle_abs" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle_abs" ) {
             m_tuning["flight_throttle_abs"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle_rel" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle_rel" ) {
             m_tuning["flight_throttle_rel"].Options_fromXML( reader, type, int.Parse( instance ) );
 
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_pitch" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_pitch" ) {
             m_tuning["flight_aim_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_yaw" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_yaw" ) {
             m_tuning["flight_aim_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
 
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_view_pitch" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_view_pitch" ) {
             m_tuning["flight_view_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.Name.ToLowerInvariant( ) == "flight_view_yaw" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "flight_view_yaw" ) {
             m_tuning["flight_view_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.NodeType != XmlNodeType.EndElement ) {
+          }
+          else if ( reader.NodeType != XmlNodeType.EndElement ) {
 
-          } else if ( reader.Name.ToLowerInvariant( ) == "fps_view_pitch" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "fps_view_pitch" ) {
             m_tuning["fps_view_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.Name.ToLowerInvariant( ) == "fps_view__yaw" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "fps_view__yaw" ) {
             m_tuning["fps_view__yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.NodeType != XmlNodeType.EndElement ) {
+          }
+          else if ( reader.NodeType != XmlNodeType.EndElement ) {
 
-          } else if ( reader.Name.ToLowerInvariant( ) == "fps_move_lateral" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "fps_move_lateral" ) {
             m_tuning["fps_move_lateral"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.Name.ToLowerInvariant( ) == "fps_move_longitudinal" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "fps_move_longitudinal" ) {
             m_tuning["fps_move_longitudinal"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.NodeType != XmlNodeType.EndElement ) {
+          }
+          else if ( reader.NodeType != XmlNodeType.EndElement ) {
 
-          } else if ( reader.Name.ToLowerInvariant( ) == "mgv_view_pitch" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "mgv_view_pitch" ) {
             m_tuning["mgv_view_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.Name.ToLowerInvariant( ) == "mgv_view_yaw" ) {
+          }
+          else if ( reader.Name.ToLowerInvariant( ) == "mgv_view_yaw" ) {
             m_tuning["mgv_view_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
-          } else if ( reader.NodeType != XmlNodeType.EndElement ) {
+          }
+          else if ( reader.NodeType != XmlNodeType.EndElement ) {
             //??
             log.InfoFormat( "Options.fromXML: unknown node - {0} - stored as is", reader.Name );
             if ( !m_stringOptions.Contains( xml ) ) m_stringOptions.Add( xml );

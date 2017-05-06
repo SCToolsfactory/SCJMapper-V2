@@ -48,7 +48,8 @@
       this.btGrab = new System.Windows.Forms.Button();
       this.btDump = new System.Windows.Forms.Button();
       this.panel2 = new System.Windows.Forms.Panel();
-      this.btMakeMod = new System.Windows.Forms.Button();
+      this.label5 = new System.Windows.Forms.Label();
+      this.lblAssigned = new System.Windows.Forms.Label();
       this.btJsKbd = new System.Windows.Forms.Button();
       this.IL = new System.Windows.Forms.ImageList(this.components);
       this.btBlend = new System.Windows.Forms.Button();
@@ -69,6 +70,7 @@
       this.btClear = new System.Windows.Forms.Button();
       this.lblAction = new System.Windows.Forms.Label();
       this.btAssign = new System.Windows.Forms.Button();
+      this.btMakeMod = new System.Windows.Forms.Button();
       this.treeView1 = new System.Windows.Forms.TreeView();
       this.cmAddDel = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.tdiCollapseAll = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,6 +91,7 @@
       this.tdiAddMod3 = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
+      this.UC_JoyPanel = new SCJMapper_V2.Joystick.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -115,18 +118,18 @@
       this.txMappingName = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
       this.lblPTU = new System.Windows.Forms.Label();
-      this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-      this.cbxShowJoystick = new System.Windows.Forms.CheckBox();
-      this.cbxShowGamepad = new System.Windows.Forms.CheckBox();
-      this.cbxShowKeyboard = new System.Windows.Forms.CheckBox();
-      this.cbxShowMouse = new System.Windows.Forms.CheckBox();
-      this.cbxShowMappedOnly = new System.Windows.Forms.CheckBox();
+      this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
       this.label2 = new System.Windows.Forms.Label();
       this.txFilter = new System.Windows.Forms.TextBox();
-      this.btClearFilter = new System.Windows.Forms.Button();
-      this.label3 = new System.Windows.Forms.Label();
       this.lblProfileUsed = new System.Windows.Forms.Label();
-      this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+      this.label3 = new System.Windows.Forms.Label();
+      this.btClearFilter = new System.Windows.Forms.Button();
+      this.cbxShowMappedOnly = new System.Windows.Forms.CheckBox();
+      this.cbxShowMouse = new System.Windows.Forms.CheckBox();
+      this.cbxShowKeyboard = new System.Windows.Forms.CheckBox();
+      this.cbxShowJoystick = new System.Windows.Forms.CheckBox();
+      this.cbxShowGamepad = new System.Windows.Forms.CheckBox();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
       this.tsBtReset = new System.Windows.Forms.ToolStripDropDownButton();
       this.resetDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -141,9 +144,6 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.label5 = new System.Windows.Forms.Label();
-      this.lblAssigned = new System.Windows.Forms.Label();
-      this.UC_JoyPanel = new SCJMapper_V2.Joystick.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmMouseEntry.SuspendLayout();
@@ -155,8 +155,8 @@
       this.tableLayoutPanel1.SuspendLayout();
       this.tableLayoutPanel2.SuspendLayout();
       this.tableLayoutPanel3.SuspendLayout();
-      this.flowLayoutPanel2.SuspendLayout();
       this.tableLayoutPanel4.SuspendLayout();
+      this.tableLayoutPanel5.SuspendLayout();
       this.statusStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -288,16 +288,24 @@
       this.panel2.Size = new System.Drawing.Size(298, 167);
       this.panel2.TabIndex = 17;
       // 
-      // btMakeMod
+      // label5
       // 
-      this.btMakeMod.Location = new System.Drawing.Point(155, 3);
-      this.btMakeMod.Name = "btMakeMod";
-      this.btMakeMod.Size = new System.Drawing.Size(73, 25);
-      this.btMakeMod.TabIndex = 17;
-      this.btMakeMod.Text = "Make MOD";
-      this.btMakeMod.UseVisualStyleBackColor = true;
-      this.btMakeMod.Visible = false;
-      this.btMakeMod.Click += new System.EventHandler(this.btMakeMod_Click);
+      this.label5.AutoSize = true;
+      this.label5.Location = new System.Drawing.Point(4, 41);
+      this.label5.Name = "label5";
+      this.label5.Size = new System.Drawing.Size(54, 13);
+      this.label5.TabIndex = 18;
+      this.label5.Text = "Mapping";
+      // 
+      // lblAssigned
+      // 
+      this.lblAssigned.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+      this.lblAssigned.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblAssigned.Location = new System.Drawing.Point(64, 40);
+      this.lblAssigned.Name = "lblAssigned";
+      this.lblAssigned.Size = new System.Drawing.Size(224, 20);
+      this.lblAssigned.TabIndex = 17;
+      this.lblAssigned.Text = "...";
       // 
       // btJsKbd
       // 
@@ -486,6 +494,17 @@
       this.btAssign.UseVisualStyleBackColor = true;
       this.btAssign.Click += new System.EventHandler(this.btAssign_Click);
       // 
+      // btMakeMod
+      // 
+      this.btMakeMod.Location = new System.Drawing.Point(155, 3);
+      this.btMakeMod.Name = "btMakeMod";
+      this.btMakeMod.Size = new System.Drawing.Size(73, 25);
+      this.btMakeMod.TabIndex = 17;
+      this.btMakeMod.Text = "Make MOD";
+      this.btMakeMod.UseVisualStyleBackColor = true;
+      this.btMakeMod.Visible = false;
+      this.btMakeMod.Click += new System.EventHandler(this.btMakeMod_Click);
+      // 
       // treeView1
       // 
       this.treeView1.ContextMenuStrip = this.cmAddDel;
@@ -673,6 +692,15 @@
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
       // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(284, 336);
+      this.UC_JoyPanel.TabIndex = 0;
+      // 
       // panel1
       // 
       this.tlpanel.SetColumnSpan(this.panel1, 3);
@@ -780,14 +808,14 @@
       this.tlpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 370F));
       this.tlpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 310F));
       this.tlpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tlpanel.Controls.Add(this.rtb, 2, 1);
       this.tlpanel.Controls.Add(this.panel1, 0, 0);
       this.tlpanel.Controls.Add(this.treeView1, 0, 1);
       this.tlpanel.Controls.Add(this.tableLayoutPanel1, 1, 2);
       this.tlpanel.Controls.Add(this.tableLayoutPanel2, 1, 3);
       this.tlpanel.Controls.Add(this.tableLayoutPanel3, 2, 3);
-      this.tlpanel.Controls.Add(this.flowLayoutPanel2, 0, 3);
       this.tlpanel.Controls.Add(this.tableLayoutPanel4, 1, 1);
+      this.tlpanel.Controls.Add(this.rtb, 2, 1);
+      this.tlpanel.Controls.Add(this.tableLayoutPanel5, 0, 3);
       this.tlpanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tlpanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tlpanel.Location = new System.Drawing.Point(0, 0);
@@ -986,23 +1014,140 @@
       this.lblPTU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       this.lblPTU.Visible = false;
       // 
-      // flowLayoutPanel2
+      // tableLayoutPanel4
       // 
-      this.flowLayoutPanel2.Controls.Add(this.cbxShowJoystick);
-      this.flowLayoutPanel2.Controls.Add(this.cbxShowGamepad);
-      this.flowLayoutPanel2.Controls.Add(this.cbxShowKeyboard);
-      this.flowLayoutPanel2.Controls.Add(this.cbxShowMouse);
-      this.flowLayoutPanel2.Controls.Add(this.cbxShowMappedOnly);
-      this.flowLayoutPanel2.Controls.Add(this.label2);
-      this.flowLayoutPanel2.Controls.Add(this.txFilter);
-      this.flowLayoutPanel2.Controls.Add(this.btClearFilter);
-      this.flowLayoutPanel2.Controls.Add(this.label3);
-      this.flowLayoutPanel2.Controls.Add(this.lblProfileUsed);
-      this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 773);
-      this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-      this.flowLayoutPanel2.Size = new System.Drawing.Size(364, 78);
-      this.flowLayoutPanel2.TabIndex = 26;
+      this.tableLayoutPanel4.ColumnCount = 1;
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel4.Controls.Add(this.panel2, 0, 1);
+      this.tableLayoutPanel4.Controls.Add(this.tc1, 0, 0);
+      this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
+      this.tableLayoutPanel4.Location = new System.Drawing.Point(376, 81);
+      this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+      this.tableLayoutPanel4.RowCount = 2;
+      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel4.Size = new System.Drawing.Size(304, 549);
+      this.tableLayoutPanel4.TabIndex = 28;
+      // 
+      // tableLayoutPanel5
+      // 
+      this.tableLayoutPanel5.ColumnCount = 5;
+      this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel5.Controls.Add(this.lblProfileUsed, 1, 2);
+      this.tableLayoutPanel5.Controls.Add(this.label3, 0, 2);
+      this.tableLayoutPanel5.Controls.Add(this.btClearFilter, 4, 1);
+      this.tableLayoutPanel5.Controls.Add(this.label2, 0, 1);
+      this.tableLayoutPanel5.Controls.Add(this.cbxShowMappedOnly, 4, 0);
+      this.tableLayoutPanel5.Controls.Add(this.cbxShowMouse, 3, 0);
+      this.tableLayoutPanel5.Controls.Add(this.cbxShowKeyboard, 2, 0);
+      this.tableLayoutPanel5.Controls.Add(this.cbxShowJoystick, 0, 0);
+      this.tableLayoutPanel5.Controls.Add(this.cbxShowGamepad, 1, 0);
+      this.tableLayoutPanel5.Controls.Add(this.txFilter, 2, 1);
+      this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel5.Location = new System.Drawing.Point(6, 773);
+      this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+      this.tableLayoutPanel5.RowCount = 3;
+      this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+      this.tableLayoutPanel5.Size = new System.Drawing.Size(364, 78);
+      this.tableLayoutPanel5.TabIndex = 29;
+      // 
+      // label2
+      // 
+      this.tableLayoutPanel5.SetColumnSpan(this.label2, 2);
+      this.label2.Location = new System.Drawing.Point(3, 32);
+      this.label2.Margin = new System.Windows.Forms.Padding(3);
+      this.label2.Name = "label2";
+      this.label2.Size = new System.Drawing.Size(83, 23);
+      this.label2.TabIndex = 27;
+      this.label2.Text = "Action Filter:";
+      this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      // 
+      // txFilter
+      // 
+      this.tableLayoutPanel5.SetColumnSpan(this.txFilter, 2);
+      this.txFilter.Dock = System.Windows.Forms.DockStyle.Top;
+      this.txFilter.Location = new System.Drawing.Point(147, 32);
+      this.txFilter.Name = "txFilter";
+      this.txFilter.Size = new System.Drawing.Size(138, 22);
+      this.txFilter.TabIndex = 25;
+      this.txFilter.WordWrap = false;
+      this.txFilter.TextChanged += new System.EventHandler(this.txFilter_TextChanged);
+      // 
+      // lblProfileUsed
+      // 
+      this.tableLayoutPanel5.SetColumnSpan(this.lblProfileUsed, 4);
+      this.lblProfileUsed.Dock = System.Windows.Forms.DockStyle.Top;
+      this.lblProfileUsed.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblProfileUsed.Location = new System.Drawing.Point(75, 61);
+      this.lblProfileUsed.Margin = new System.Windows.Forms.Padding(3);
+      this.lblProfileUsed.Name = "lblProfileUsed";
+      this.lblProfileUsed.Size = new System.Drawing.Size(286, 14);
+      this.lblProfileUsed.TabIndex = 29;
+      this.lblProfileUsed.Text = "...";
+      this.lblProfileUsed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      // 
+      // label3
+      // 
+      this.label3.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label3.Location = new System.Drawing.Point(3, 61);
+      this.label3.Margin = new System.Windows.Forms.Padding(3);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(39, 14);
+      this.label3.TabIndex = 30;
+      this.label3.Text = "Profile:";
+      this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      // 
+      // btClearFilter
+      // 
+      this.btClearFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.btClearFilter.Location = new System.Drawing.Point(291, 32);
+      this.btClearFilter.Name = "btClearFilter";
+      this.btClearFilter.Size = new System.Drawing.Size(70, 23);
+      this.btClearFilter.TabIndex = 26;
+      this.btClearFilter.Text = "Clear Filter";
+      this.btClearFilter.UseVisualStyleBackColor = true;
+      this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
+      // 
+      // cbxShowMappedOnly
+      // 
+      this.cbxShowMappedOnly.AutoSize = true;
+      this.cbxShowMappedOnly.Location = new System.Drawing.Point(291, 3);
+      this.cbxShowMappedOnly.Name = "cbxShowMappedOnly";
+      this.cbxShowMappedOnly.Size = new System.Drawing.Size(69, 17);
+      this.cbxShowMappedOnly.TabIndex = 1;
+      this.cbxShowMappedOnly.Text = "Mapped";
+      this.cbxShowMappedOnly.UseVisualStyleBackColor = true;
+      this.cbxShowMappedOnly.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
+      // 
+      // cbxShowMouse
+      // 
+      this.cbxShowMouse.AutoSize = true;
+      this.cbxShowMouse.Location = new System.Drawing.Point(219, 3);
+      this.cbxShowMouse.Name = "cbxShowMouse";
+      this.cbxShowMouse.Size = new System.Drawing.Size(61, 17);
+      this.cbxShowMouse.TabIndex = 28;
+      this.cbxShowMouse.Text = "Mouse";
+      this.cbxShowMouse.UseVisualStyleBackColor = true;
+      this.cbxShowMouse.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
+      // 
+      // cbxShowKeyboard
+      // 
+      this.cbxShowKeyboard.AutoSize = true;
+      this.cbxShowKeyboard.Checked = true;
+      this.cbxShowKeyboard.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.cbxShowKeyboard.Location = new System.Drawing.Point(147, 3);
+      this.cbxShowKeyboard.Name = "cbxShowKeyboard";
+      this.cbxShowKeyboard.Size = new System.Drawing.Size(53, 17);
+      this.cbxShowKeyboard.TabIndex = 1;
+      this.cbxShowKeyboard.Text = "Keyb.";
+      this.cbxShowKeyboard.UseVisualStyleBackColor = true;
+      this.cbxShowKeyboard.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
       // 
       // cbxShowJoystick
       // 
@@ -1022,115 +1167,13 @@
       this.cbxShowGamepad.AutoSize = true;
       this.cbxShowGamepad.Checked = true;
       this.cbxShowGamepad.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.cbxShowGamepad.Location = new System.Drawing.Point(74, 3);
+      this.cbxShowGamepad.Location = new System.Drawing.Point(75, 3);
       this.cbxShowGamepad.Name = "cbxShowGamepad";
-      this.cbxShowGamepad.Size = new System.Drawing.Size(75, 17);
+      this.cbxShowGamepad.Size = new System.Drawing.Size(66, 17);
       this.cbxShowGamepad.TabIndex = 1;
       this.cbxShowGamepad.Text = "Gamepad";
       this.cbxShowGamepad.UseVisualStyleBackColor = true;
       this.cbxShowGamepad.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
-      // 
-      // cbxShowKeyboard
-      // 
-      this.cbxShowKeyboard.AutoSize = true;
-      this.cbxShowKeyboard.Checked = true;
-      this.cbxShowKeyboard.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.cbxShowKeyboard.Location = new System.Drawing.Point(155, 3);
-      this.cbxShowKeyboard.Name = "cbxShowKeyboard";
-      this.cbxShowKeyboard.Size = new System.Drawing.Size(53, 17);
-      this.cbxShowKeyboard.TabIndex = 1;
-      this.cbxShowKeyboard.Text = "Keyb.";
-      this.cbxShowKeyboard.UseVisualStyleBackColor = true;
-      this.cbxShowKeyboard.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
-      // 
-      // cbxShowMouse
-      // 
-      this.cbxShowMouse.AutoSize = true;
-      this.cbxShowMouse.Location = new System.Drawing.Point(214, 3);
-      this.cbxShowMouse.Name = "cbxShowMouse";
-      this.cbxShowMouse.Size = new System.Drawing.Size(61, 17);
-      this.cbxShowMouse.TabIndex = 28;
-      this.cbxShowMouse.Text = "Mouse";
-      this.cbxShowMouse.UseVisualStyleBackColor = true;
-      this.cbxShowMouse.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
-      // 
-      // cbxShowMappedOnly
-      // 
-      this.cbxShowMappedOnly.AutoSize = true;
-      this.cbxShowMappedOnly.Location = new System.Drawing.Point(281, 3);
-      this.cbxShowMappedOnly.Name = "cbxShowMappedOnly";
-      this.cbxShowMappedOnly.Size = new System.Drawing.Size(69, 17);
-      this.cbxShowMappedOnly.TabIndex = 1;
-      this.cbxShowMappedOnly.Text = "Mapped";
-      this.cbxShowMappedOnly.UseVisualStyleBackColor = true;
-      this.cbxShowMappedOnly.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
-      // 
-      // label2
-      // 
-      this.label2.Location = new System.Drawing.Point(3, 26);
-      this.label2.Margin = new System.Windows.Forms.Padding(3);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(83, 24);
-      this.label2.TabIndex = 27;
-      this.label2.Text = "Action Filter:";
-      this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-      // 
-      // txFilter
-      // 
-      this.txFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.txFilter.Location = new System.Drawing.Point(92, 28);
-      this.txFilter.Name = "txFilter";
-      this.txFilter.Size = new System.Drawing.Size(120, 22);
-      this.txFilter.TabIndex = 25;
-      this.txFilter.WordWrap = false;
-      this.txFilter.TextChanged += new System.EventHandler(this.txFilter_TextChanged);
-      // 
-      // btClearFilter
-      // 
-      this.btClearFilter.Location = new System.Drawing.Point(218, 26);
-      this.btClearFilter.Name = "btClearFilter";
-      this.btClearFilter.Size = new System.Drawing.Size(120, 24);
-      this.btClearFilter.TabIndex = 26;
-      this.btClearFilter.Text = "Clear Filter";
-      this.btClearFilter.UseVisualStyleBackColor = true;
-      this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
-      // 
-      // label3
-      // 
-      this.label3.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label3.Location = new System.Drawing.Point(3, 56);
-      this.label3.Margin = new System.Windows.Forms.Padding(3);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(39, 19);
-      this.label3.TabIndex = 30;
-      this.label3.Text = "Profile:";
-      this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-      // 
-      // lblProfileUsed
-      // 
-      this.lblProfileUsed.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblProfileUsed.Location = new System.Drawing.Point(48, 56);
-      this.lblProfileUsed.Margin = new System.Windows.Forms.Padding(3);
-      this.lblProfileUsed.Name = "lblProfileUsed";
-      this.lblProfileUsed.Size = new System.Drawing.Size(302, 19);
-      this.lblProfileUsed.TabIndex = 29;
-      this.lblProfileUsed.Text = "...";
-      this.lblProfileUsed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-      // 
-      // tableLayoutPanel4
-      // 
-      this.tableLayoutPanel4.ColumnCount = 1;
-      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel4.Controls.Add(this.panel2, 0, 1);
-      this.tableLayoutPanel4.Controls.Add(this.tc1, 0, 0);
-      this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
-      this.tableLayoutPanel4.Location = new System.Drawing.Point(376, 81);
-      this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-      this.tableLayoutPanel4.RowCount = 2;
-      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel4.Size = new System.Drawing.Size(304, 549);
-      this.tableLayoutPanel4.TabIndex = 28;
       // 
       // toolStripStatusLabel2
       // 
@@ -1174,19 +1217,22 @@
       // 
       this.toolStripStatusLabel3.AutoSize = false;
       this.toolStripStatusLabel3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.toolStripStatusLabel3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.toolStripStatusLabel3.Margin = new System.Windows.Forms.Padding(5, 3, 5, 2);
       this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
       this.toolStripStatusLabel3.Size = new System.Drawing.Size(450, 25);
-      this.toolStripStatusLabel3.Text = "            Support: profile version=\"1\" optionsVersion=\"2\" rebindVersion=\"2\"    " +
-    "                    ";
+      this.toolStripStatusLabel3.Text = " Support: profile version=\"1\" optionsVersion=\"2\" rebindVersion=\"2\" ";
       // 
       // toolStripStatusLabel1
       // 
       this.toolStripStatusLabel1.BackColor = System.Drawing.Color.DarkSeaGreen;
       this.toolStripStatusLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
       this.toolStripStatusLabel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.toolStripStatusLabel1.Margin = new System.Windows.Forms.Padding(5, 3, 0, 2);
       this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
       this.toolStripStatusLabel1.Size = new System.Drawing.Size(63, 25);
       this.toolStripStatusLabel1.Text = "Mappings:";
+      this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // tsDDbtMappings
       // 
@@ -1196,9 +1242,11 @@
       this.tsDDbtMappings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
       this.tsDDbtMappings.Image = ((System.Drawing.Image)(resources.GetObject("tsDDbtMappings.Image")));
       this.tsDDbtMappings.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsDDbtMappings.Margin = new System.Windows.Forms.Padding(5, 2, 5, 0);
       this.tsDDbtMappings.Name = "tsDDbtMappings";
-      this.tsDDbtMappings.Size = new System.Drawing.Size(250, 28);
+      this.tsDDbtMappings.Size = new System.Drawing.Size(220, 28);
       this.tsDDbtMappings.Text = "Available Mappings";
+      this.tsDDbtMappings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.tsDDbtMappings.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsDDbtMappings_DropDownItemClicked);
       // 
       // tsBtLoad
@@ -1213,9 +1261,11 @@
             this.loadToolStripMenuItem});
       this.tsBtLoad.Image = ((System.Drawing.Image)(resources.GetObject("tsBtLoad.Image")));
       this.tsBtLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsBtLoad.Margin = new System.Windows.Forms.Padding(5, 2, 5, 0);
       this.tsBtLoad.Name = "tsBtLoad";
-      this.tsBtLoad.Size = new System.Drawing.Size(80, 28);
+      this.tsBtLoad.Size = new System.Drawing.Size(100, 28);
       this.tsBtLoad.Text = "Load...";
+      this.tsBtLoad.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // defaultsLoadAndGrabToolStripMenuItem
       // 
@@ -1266,38 +1316,10 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
-      // label5
-      // 
-      this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(4, 41);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(54, 13);
-      this.label5.TabIndex = 18;
-      this.label5.Text = "Mapping";
-      // 
-      // lblAssigned
-      // 
-      this.lblAssigned.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-      this.lblAssigned.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblAssigned.Location = new System.Drawing.Point(64, 40);
-      this.lblAssigned.Name = "lblAssigned";
-      this.lblAssigned.Size = new System.Drawing.Size(224, 20);
-      this.lblAssigned.TabIndex = 17;
-      this.lblAssigned.Text = "...";
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(284, 336);
-      this.UC_JoyPanel.TabIndex = 0;
-      // 
       // MainForm
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
       this.ClientSize = new System.Drawing.Size(1054, 892);
       this.Controls.Add(this.statusStrip1);
       this.Controls.Add(this.tlpanel);
@@ -1325,9 +1347,9 @@
       this.tableLayoutPanel2.ResumeLayout(false);
       this.tableLayoutPanel3.ResumeLayout(false);
       this.tableLayoutPanel3.PerformLayout();
-      this.flowLayoutPanel2.ResumeLayout(false);
-      this.flowLayoutPanel2.PerformLayout();
       this.tableLayoutPanel4.ResumeLayout(false);
+      this.tableLayoutPanel5.ResumeLayout(false);
+      this.tableLayoutPanel5.PerformLayout();
       this.statusStrip1.ResumeLayout(false);
       this.statusStrip1.PerformLayout();
       this.ResumeLayout(false);
@@ -1402,7 +1424,6 @@
     private System.Windows.Forms.Button btJsKbd;
     private System.Windows.Forms.Button btBlend;
     private System.Windows.Forms.Button btClip;
-    private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
     private System.Windows.Forms.CheckBox cbxShowJoystick;
     private System.Windows.Forms.CheckBox cbxShowGamepad;
     private System.Windows.Forms.CheckBox cbxShowKeyboard;
@@ -1446,6 +1467,7 @@
     private System.Windows.Forms.Button btOptions;
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.Label lblAssigned;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
   }
 }
 

@@ -173,7 +173,7 @@
       // 
       this.rbUsePts.AutoSize = true;
       this.rbUsePts.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rbUsePts.Location = new System.Drawing.Point(13, 383);
+      this.rbUsePts.Location = new System.Drawing.Point(13, 396);
       this.rbUsePts.Name = "rbUsePts";
       this.rbUsePts.Size = new System.Drawing.Size(58, 17);
       this.rbUsePts.TabIndex = 57;
@@ -185,7 +185,7 @@
       // 
       this.rbUseExpo.AutoSize = true;
       this.rbUseExpo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rbUseExpo.Location = new System.Drawing.Point(13, 341);
+      this.rbUseExpo.Location = new System.Drawing.Point(13, 354);
       this.rbUseExpo.Name = "rbUseExpo";
       this.rbUseExpo.Size = new System.Drawing.Size(78, 17);
       this.rbUseExpo.TabIndex = 57;
@@ -224,7 +224,7 @@
       this.panel2.Controls.Add(this.label32);
       this.panel2.Controls.Add(this.rbLivePt1);
       this.panel2.Controls.Add(this.label33);
-      this.panel2.Location = new System.Drawing.Point(103, 332);
+      this.panel2.Location = new System.Drawing.Point(103, 345);
       this.panel2.Name = "panel2";
       this.panel2.Size = new System.Drawing.Size(220, 144);
       this.panel2.TabIndex = 55;
@@ -236,10 +236,10 @@
       this.rbLivePtExponent.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.rbLivePtExponent.Location = new System.Drawing.Point(9, 9);
       this.rbLivePtExponent.Name = "rbLivePtExponent";
-      this.rbLivePtExponent.Size = new System.Drawing.Size(81, 19);
+      this.rbLivePtExponent.Size = new System.Drawing.Size(85, 19);
       this.rbLivePtExponent.TabIndex = 33;
       this.rbLivePtExponent.TabStop = true;
-      this.rbLivePtExponent.Text = "Exponent:";
+      this.rbLivePtExponent.Text = "Exp. Value:";
       this.rbLivePtExponent.UseVisualStyleBackColor = true;
       this.rbLivePtExponent.CheckedChanged += new System.EventHandler(this.rbPtAny_CheckedChanged);
       // 
@@ -405,7 +405,8 @@
       // 
       this.lblLiveNodetext.AutoSize = true;
       this.lblLiveNodetext.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblLiveNodetext.Location = new System.Drawing.Point(13, 313);
+      this.lblLiveNodetext.ForeColor = System.Drawing.Color.ForestGreen;
+      this.lblLiveNodetext.Location = new System.Drawing.Point(13, 321);
       this.lblLiveNodetext.Name = "lblLiveNodetext";
       this.lblLiveNodetext.Size = new System.Drawing.Size(16, 13);
       this.lblLiveNodetext.TabIndex = 51;
@@ -414,7 +415,7 @@
       // label4
       // 
       this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(68, 301);
+      this.label4.Location = new System.Drawing.Point(84, 295);
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(178, 13);
       this.label4.TabIndex = 36;
@@ -596,8 +597,8 @@
       // 
       // FormOptions
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
       this.ClientSize = new System.Drawing.Size(1027, 737);
       this.Controls.Add(this.tableLayoutPanel1);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;

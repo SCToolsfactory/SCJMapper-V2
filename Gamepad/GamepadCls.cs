@@ -18,7 +18,7 @@ namespace SCJMapper_V2.Gamepad
   public class GamepadCls : DeviceCls
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
-    private static readonly AppSettings  appSettings = new AppSettings( );
+    private static readonly AppSettings appSettings = new AppSettings( );
 
     #region Static Items
 
@@ -78,7 +78,7 @@ namespace SCJMapper_V2.Gamepad
       if ( DevMatch( input ) )
         return input; // already
       else
-        return DeviceID + input;
+        return FromAC1( input );
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ namespace SCJMapper_V2.Gamepad
     {
       // input is something like a xi_something or compositions like triggerl_btn+thumbrx 
       // try easy: add xi1_ at the beginning; if xi_start subst with xi1_
-      string retVal = input.Replace(" ","");
+      string retVal = input.Replace( " ", "" );
       if ( IsBlendedInput( input ) ) return input;
 
       if ( retVal.StartsWith( "xi_" ) )
@@ -137,10 +137,15 @@ namespace SCJMapper_V2.Gamepad
 
     private string m_lastItem = "";
     private int m_senseLimit = 500; // axis jitter avoidance...
+    private int m_thlx_zero = 0;
+    private int m_thly_zero = 0;
+    private int m_thrx_zero = 0;
+    private int m_thry_zero = 0;
+
     private bool m_activated = false;
 
     private UC_GpadPanel m_gPanel = null; // the GUI panel
-    internal int  MyTabPageIndex = -1;
+    internal int MyTabPageIndex = -1;
 
 
     /// <summary>
@@ -182,15 +187,21 @@ namespace SCJMapper_V2.Gamepad
 
 
     // Note: GP has deadzone on left and right thumb only
+    /*
+       <deviceoptions name="Controller (Gamepad)">
+        <option input="thumbl" deadzone="0.21575999"/>
+        <option input="thumbr" deadzone="0.22475"/>
+       </deviceoptions>
+     */
     public override List<string> AnalogCommands
     {
       get {
-        List<string> cmds = new List<string>();
+        List<string> cmds = new List<string>( );
 
         try {
           // Enumerate all the objects on the device.
           if ( ( m_gpCaps.Gamepad.LeftThumbX != 0 ) || ( m_gpCaps.Gamepad.LeftThumbY != 0 ) ) { cmds.Add( "thumbl" ); }
-          if ( ( m_gpCaps.Gamepad.RightThumbX != 0 ) || ( m_gpCaps.Gamepad.RightThumbY != 0 )  ) { cmds.Add( "thumbr" ); }
+          if ( ( m_gpCaps.Gamepad.RightThumbX != 0 ) || ( m_gpCaps.Gamepad.RightThumbY != 0 ) ) { cmds.Add( "thumbr" ); }
         } catch ( Exception ex ) {
           log.Error( "AnalogCommands - Get Gamepad Objects failed", ex );
         }
@@ -203,15 +214,14 @@ namespace SCJMapper_V2.Gamepad
     public override bool Activated
     {
       get { return m_activated; }
-      set
-      {
+      set {
         m_activated = value;
       }
     }
 
     private bool Bit( GamepadButtonFlags set, GamepadButtonFlags check )
     {
-      Int32 s = ( Int32 )set; Int32 c = ( Int32 )check;
+      Int32 s = (Int32)set; Int32 c = (Int32)check;
       return ( ( s & c ) == c );
     }
 
@@ -237,8 +247,7 @@ namespace SCJMapper_V2.Gamepad
       log.Debug( "Get GP Objects" );
       try {
         m_gpCaps = m_device.GetCapabilities( DeviceQueryType.Gamepad );
-      }
-      catch ( Exception ex ) {
+      } catch ( Exception ex ) {
         log.Error( "Get GamepadCapabilities failed", ex );
       }
 
@@ -285,7 +294,7 @@ namespace SCJMapper_V2.Gamepad
     /// <summary>
     /// Shutdown device access
     /// </summary>
-    public override void FinishDX( )
+    public override void FinishDX()
     {
       log.DebugFormat( "Release Input device: {0}", m_device );
     }
@@ -308,39 +317,84 @@ namespace SCJMapper_V2.Gamepad
     /// Returns true if a modifer button is pressed
     /// </summary>
     /// <returns></returns>
-    private bool ModButtonPressed( )
+    private bool ModButtonPressed()
     {
-      bool retVal =  m_state.Gamepad.Buttons != GamepadButtonFlags.None;
-      retVal = ( retVal || ( Math.Abs( ( Int32 )m_state.Gamepad.LeftTrigger ) > 0 ) );
-      retVal = ( retVal || ( Math.Abs( ( Int32 )m_state.Gamepad.RightTrigger ) > 0 ) );
+      bool retVal = m_state.Gamepad.Buttons != GamepadButtonFlags.None;
+      retVal = ( retVal || ( Math.Abs( (Int32)m_state.Gamepad.LeftTrigger ) > 0 ) );
+      retVal = ( retVal || ( Math.Abs( (Int32)m_state.Gamepad.RightTrigger ) > 0 ) );
       return retVal;
     }
 
+    /// <summary>
+    /// Checks if all 4 buttons are pressed and then calibrates the thumbaxes
+    /// </summary>
+    private void CheckAndCalibrate( ref State state )
+    {
+      bool check = true;
+      check &= Bit( state.Gamepad.Buttons, GamepadButtonFlags.A );
+      check &= Bit( state.Gamepad.Buttons, GamepadButtonFlags.B );
+      check &= Bit( state.Gamepad.Buttons, GamepadButtonFlags.X );
+      check &= Bit( state.Gamepad.Buttons, GamepadButtonFlags.Y );
+
+      if (check) {
+        m_thlx_zero = state.Gamepad.LeftThumbX;
+        m_thly_zero = state.Gamepad.LeftThumbY;
+        m_thrx_zero = state.Gamepad.RightThumbX;
+        m_thry_zero = state.Gamepad.RightThumbY;
+      }
+
+      ApplyCalibration( ref state );
+    }
+
+    /// <summary>
+    /// Applies the calibration to the state
+    /// and makes sure the values are still in range of +-32767
+    /// </summary>
+    private void ApplyCalibration( ref State state )
+    {
+
+      int val = 0; int sign = 1;
+      sign = Math.Sign( (int)state.Gamepad.LeftThumbX - m_thlx_zero );
+      val = Math.Abs( (int)state.Gamepad.LeftThumbX - m_thlx_zero );
+      state.Gamepad.LeftThumbX = (short)( val > 32767 ? 32767 * sign : val * sign );
+
+      sign = Math.Sign( (int)state.Gamepad.LeftThumbY - m_thly_zero );
+      val = Math.Abs( (int)state.Gamepad.LeftThumbY - m_thly_zero );
+      state.Gamepad.LeftThumbY = (short)( val > 32767 ? 32767 * sign : val * sign );
+
+      sign = Math.Sign( (int)state.Gamepad.RightThumbX - m_thrx_zero );
+      val = Math.Abs( (int)state.Gamepad.RightThumbX - m_thrx_zero );
+      state.Gamepad.RightThumbX = (short)( val > 32767 ? 32767 * sign : val * sign );
+
+      sign = Math.Sign( (int)state.Gamepad.RightThumbY - m_thry_zero );
+      val = Math.Abs( (int)state.Gamepad.RightThumbY - m_thry_zero );
+      state.Gamepad.RightThumbY = (short)( val > 32767 ? 32767 * sign : val * sign );
+    }
 
     /// <summary>
     /// Find the last change the user did on that device
     /// </summary>
     /// <returns>The last action as CryEngine compatible string</returns>
-    public override string GetLastChange( )
+    public override string GetLastChange()
     {
-      if ( ModButtonPressed() ) {
+      if ( ModButtonPressed( ) ) {
         m_lastItem = "";
-        if ( ( Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbX ) > m_senseLimit )
-          && ( Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbX ) > Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbY ) ) 
-          && !Bit(m_state.Gamepad.Buttons, GamepadButtonFlags.LeftThumb) ) m_lastItem += "xi_thumblx+";
-        if ( ( Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbY ) > m_senseLimit )
-          && ( Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbY ) > Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbX ) )
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) > Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) )
+          && !Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.LeftThumb ) ) m_lastItem += "xi_thumblx+";
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) > Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) )
           && !Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.LeftThumb ) ) m_lastItem += "xi_thumbly+";
 
-        if ( ( Math.Abs( ( Int32 )m_state.Gamepad.RightThumbX ) > m_senseLimit )
-          && ( Math.Abs( ( Int32 )m_state.Gamepad.RightThumbX ) > Math.Abs( ( Int32 )m_state.Gamepad.RightThumbY ) )
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) > Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) )
           && !Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.RightThumb ) ) m_lastItem += "xi_thumbrx+";
-        if ( ( Math.Abs( ( Int32 )m_state.Gamepad.RightThumbY ) > m_senseLimit )
-          && ( Math.Abs( ( Int32 )m_state.Gamepad.RightThumbY ) > Math.Abs( ( Int32 )m_state.Gamepad.RightThumbX ) )
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) > Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) )
           && !Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.RightThumb ) ) m_lastItem += "xi_thumbry+";
 
-        if ( Math.Abs( ( Int32 )m_state.Gamepad.LeftTrigger ) > 0 ) m_lastItem += "xi_triggerl_btn+";
-        if ( Math.Abs( ( Int32 )m_state.Gamepad.RightTrigger ) > 0 ) m_lastItem += "xi_triggerr_btn+";
+        if ( Math.Abs( (Int32)m_state.Gamepad.LeftTrigger ) > 0 ) m_lastItem += "xi_triggerl_btn+";
+        if ( Math.Abs( (Int32)m_state.Gamepad.RightTrigger ) > 0 ) m_lastItem += "xi_triggerr_btn+";
 
         if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.A ) ) m_lastItem += "xi_a+";
         if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.B ) ) m_lastItem += "xi_b+";
@@ -363,18 +417,18 @@ namespace SCJMapper_V2.Gamepad
       }
       else {
         // no button -> only non button items will reported - single events
-        if ( ( Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbX ) > m_senseLimit ) 
-          && ( Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbX ) > Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbY )) ) m_lastItem = "xi_thumblx+";
-        if ( ( Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbY ) > m_senseLimit ) 
-          && ( Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbY ) > Math.Abs( ( Int32 )m_state.Gamepad.LeftThumbX )) ) m_lastItem = "xi_thumbly+";
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) > Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) ) ) m_lastItem = "xi_thumblx+";
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) > Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) ) ) m_lastItem = "xi_thumbly+";
 
-        if ( ( Math.Abs( ( Int32 )m_state.Gamepad.RightThumbX ) > m_senseLimit )
-          && ( Math.Abs( ( Int32 )m_state.Gamepad.RightThumbX ) > Math.Abs( ( Int32 )m_state.Gamepad.RightThumbY ) ) ) m_lastItem = "xi_thumbrx+";
-        if ( ( Math.Abs( ( Int32 )m_state.Gamepad.RightThumbY ) > m_senseLimit ) 
-          && ( Math.Abs( ( Int32 )m_state.Gamepad.RightThumbY ) > Math.Abs( ( Int32 )m_state.Gamepad.RightThumbX ) ) ) m_lastItem = "xi_thumbry+";
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) > Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) ) ) m_lastItem = "xi_thumbrx+";
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) > Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) ) ) m_lastItem = "xi_thumbry+";
 
-        if ( Math.Abs( ( Int32 )m_state.Gamepad.LeftTrigger ) > 0 ) m_lastItem = "xi_triggerl_btn+";
-        if ( Math.Abs( ( Int32 )m_state.Gamepad.RightTrigger ) > 0 ) m_lastItem = "xi_triggerr_btn+";
+        if ( Math.Abs( (Int32)m_state.Gamepad.LeftTrigger ) > 0 ) m_lastItem = "xi_triggerl_btn+";
+        if ( Math.Abs( (Int32)m_state.Gamepad.RightTrigger ) > 0 ) m_lastItem = "xi_triggerr_btn+";
       }
 
       return m_lastItem.TrimEnd( new char[] { '+' } ); ;
@@ -394,7 +448,7 @@ namespace SCJMapper_V2.Gamepad
       // old-new/old
       if ( current == prev )
         return false;
-      int change = (Math.Abs( current ) - Math.Abs( prev ) ) / 32;
+      int change = ( Math.Abs( current ) - Math.Abs( prev ) ) / 32;
       // if the axis has changed more than x units to it's last value
       return change > m_senseLimit ? true : false;
 
@@ -420,7 +474,7 @@ namespace SCJMapper_V2.Gamepad
     /// <summary>
     /// Show the current props in the GUI
     /// </summary>
-    private void UpdateUI( )
+    private void UpdateUI()
     {
       // This function updated the UI with joystick state information.
       string strText = "";
@@ -474,17 +528,17 @@ namespace SCJMapper_V2.Gamepad
       // Poll the device for info.
       try {
         m_state = m_device.GetState( );
+        CheckAndCalibrate( ref m_state );
 
         switch ( cmd ) {
-          case "xi_thumblx": data = (int) ((float)m_state.Gamepad.LeftThumbX/32.767f); break; // data should be -1000..1000
-          case "xi_thumbly": data = (int) ((float)m_state.Gamepad.LeftThumbY/32.767f); break;
-          case "xi_thumbrx": data = (int) ((float)m_state.Gamepad.RightThumbX/32.767f); break;
-          case "xi_thumbry": data = ( int )( ( float )m_state.Gamepad.RightThumbY / 32.767f ); break;
+          case "thumblx": data = (int)( m_state.Gamepad.LeftThumbX / 32.767f ); break; // data should be -1000..1000
+          case "thumbly": data = (int)( m_state.Gamepad.LeftThumbY / 32.767f ); break;
+          case "thumbrx": data = (int)( m_state.Gamepad.RightThumbX / 32.767f ); break;
+          case "thumbry": data = (int)( m_state.Gamepad.RightThumbY / 32.767f ); break;
           default: data = 0; break;
         }
 
-      }
-      catch ( SharpDXException e ) {
+      } catch ( SharpDXException e ) {
         log.Error( "Gamepad-GetData: Unexpected Poll Exception", e );
         data = 0;
         return;  // EXIT see ex code
@@ -495,7 +549,7 @@ namespace SCJMapper_V2.Gamepad
     /// <summary>
     /// Collect the current data from the device
     /// </summary>
-    public override void GetData( )
+    public override void GetData()
     {
       // Make sure there is a valid device.
       if ( m_device == null )
@@ -507,8 +561,8 @@ namespace SCJMapper_V2.Gamepad
       // Poll the device for info.
       try {
         m_state = m_device.GetState( );
-      }
-      catch ( SharpDXException e ) {
+        CheckAndCalibrate( ref m_state );
+      } catch ( SharpDXException e ) {
         log.Error( "Gamepad-GetData: Unexpected Poll Exception", e );
         return;  // EXIT see ex code
       }

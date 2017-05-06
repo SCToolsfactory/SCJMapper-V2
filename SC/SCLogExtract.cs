@@ -13,26 +13,27 @@ namespace SCJMapper_V2.SC
     static private String ExtractValuableInfo( String inLine )
     {
       String retVal = "";
+      string l = inLine.ToLowerInvariant( );
 
       // detect what we would like to find..
-      if ( inLine.StartsWith( "Log Started" ) ) return String.Format("\t{0}\n", inLine);
-      if ( inLine.StartsWith( "Executable:" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( inLine.StartsWith( "ProductVersion" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "log started" ) ) return String.Format("\t{0}\n", inLine);
+      if ( l.StartsWith( "executable:" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "productversion" ) ) return String.Format( "\t{0}\n", inLine );
 
 
-      if ( inLine.StartsWith( "Windows:" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( inLine.StartsWith( "Current display mode" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "windows:" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "current display mode" ) ) return String.Format( "\t{0}\n", inLine );
 
-      if ( inLine.Contains( "physical memory" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( inLine.StartsWith( "--- Dedicated video memory" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( inLine.StartsWith( "- Final rating" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "physical memory" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "--- dedicated video memory" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "- final rating" ) ) return String.Format( "\t{0}\n", inLine );
 
-      if ( inLine.Contains( "64 bit" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( inLine.Contains( "keyboard" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( inLine.Contains( "display mode" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( inLine.StartsWith( "- Connected" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( inLine.StartsWith( "Reset controls" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( inLine.Contains( "Enjoy" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "64 bit" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "keyboard" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "display mode" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "- connected" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "reset controls" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "enjoy" ) ) return String.Format( "\t{0}\n", inLine );
 
       return retVal;
     }

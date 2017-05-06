@@ -45,15 +45,15 @@ namespace SCJMapper_V2.OGL
     private string[] SBFiles = { "graphics/SB_OutThere1.dds", "graphics/SB_OutThere3.dds", "graphics/Skybox.dds", "graphics/SB_Canyon.dds",
                                 "graphics/SB_Shiodome.dds", "graphics/SB_Highway.dds", "graphics/SB_BigSight.dds", "graphics/SB_LA_Helipad.dds", "graphics/SB_Sunset.dds" };
     // index into SBFiles
-    const int  SB_OutThere1 = 0;
-    const int  SB_OutThere3 = 1;
-    const int  SB_Skybox = 2;
-    const int  SB_Canyon = 3;
-    const int  SB_Shiodome = 4;
-    const int  SB_Highway = 5;
-    const int  SB_BigSight = 6;
-    const int  SB_LA_Helipad= 7;
-    const int  SB_Sunset= 8;
+    const int SB_OutThere1 = 0;
+    const int SB_OutThere3 = 1;
+    const int SB_Skybox = 2;
+    const int SB_Canyon = 3;
+    const int SB_Shiodome = 4;
+    const int SB_Highway = 5;
+    const int SB_BigSight = 6;
+    const int SB_LA_Helipad = 7;
+    const int SB_Sunset = 8;
 
 
     #endregion internal Fields
@@ -81,7 +81,7 @@ namespace SCJMapper_V2.OGL
 
     #region Form Handling
 
-    public FormJSCalCurve( )
+    public FormJSCalCurve()
     {
       InitializeComponent( );
 
@@ -109,6 +109,11 @@ namespace SCJMapper_V2.OGL
       chart1.Series[1].Points.AddXY( 0.75, 0.75 );
       chart1.Series[1].Points.AddXY( 1.0, 1.0 );
 
+      // sliders
+      tbSlider.Maximum = Deviceoptions.DevOptSliderMax;
+      tbSlider.TickFrequency = Deviceoptions.DevOptSliderTick;
+
+      // OGL map
       TMU0_Filename = SBFiles[SB_OutThere1]; // initial sky
 
       Canceled = true;
@@ -125,8 +130,8 @@ namespace SCJMapper_V2.OGL
       //back to default
       rbY.Checked = true;
 
-      rbPtSaturation.Checked = false; // trigger value change..
-      rbPtSaturation.Checked = true; // default
+      rbPtDeadzone.Checked = false; // trigger value change..
+      rbPtDeadzone.Checked = true; // default
 
       rbTuneYPR.Checked = true;
     }
@@ -171,11 +176,17 @@ namespace SCJMapper_V2.OGL
             control = dp.NodeText;
           command = dp.CommandCtrl;
           // the option data
+          if ( dp.DeviceoptionRef == null ) {
+            deadzoneUsed = false;
+            saturationUsed = false;
+          }
+          else {
+            deadzoneUsed = dp.DeviceoptionRef.DeadzoneUsed;
+            deadzoneS = dp.DeviceoptionRef.Deadzone;
+            saturationUsed = dp.DeviceoptionRef.SaturationUsed;
+            saturationS = dp.DeviceoptionRef.Saturation;
+          }
           invertUsed = dp.InvertUsed;
-          deadzoneUsed = dp.DeviceoptionRef.DeadzoneUsed;
-          deadzoneS = dp.DeviceoptionRef.Deadzone;
-          saturationUsed = dp.DeviceoptionRef.SaturationUsed;
-          saturationS = dp.DeviceoptionRef.Saturation;
           exponentUsed = dp.ExponentUsed;
           exponentS = dp.Exponent;
           nonLinCurveUsed = dp.NonLinCurveUsed;
@@ -183,7 +194,8 @@ namespace SCJMapper_V2.OGL
             nonLinCurve.Curve( float.Parse( dp.NonLinCurvePtsIn[0] ), float.Parse( dp.NonLinCurvePtsOut[0] ),
                                    float.Parse( dp.NonLinCurvePtsIn[1] ), float.Parse( dp.NonLinCurvePtsOut[1] ),
                                    float.Parse( dp.NonLinCurvePtsIn[2] ), float.Parse( dp.NonLinCurvePtsOut[2] ) );
-          } else {
+          }
+          else {
             // dummy curve
             nonLinCurve.Curve( 0.25f, 0.25f, 0.5f, 0.5f, 0.75f, 0.75f );
           }
@@ -195,11 +207,16 @@ namespace SCJMapper_V2.OGL
       {
         if ( !used ) return;
         // don't return strings to control the device
+        if ( dp.DeviceoptionRef == null ) {
+          ; // nothing to update
+        }
+        else {
+          dp.DeviceoptionRef.DeadzoneUsed = deadzoneUsed;
+          dp.DeviceoptionRef.Deadzone = deadzoneS;
+          dp.DeviceoptionRef.SaturationUsed = saturationUsed;
+          dp.DeviceoptionRef.Saturation = saturationS;
+        }
         dp.InvertUsed = invertUsed;
-        dp.DeviceoptionRef.DeadzoneUsed = deadzoneUsed;
-        dp.DeviceoptionRef.Deadzone = deadzoneS;
-        dp.DeviceoptionRef.SaturationUsed = saturationUsed;
-        dp.DeviceoptionRef.Saturation = saturationS;
         dp.ExponentUsed = exponentUsed;
         dp.Exponent = exponentS;
         dp.NonLinCurveUsed = nonLinCurveUsed;
@@ -230,16 +247,18 @@ namespace SCJMapper_V2.OGL
       /// <returns>A double in the range -1.0 .. 0.0 .. 1.0</returns>
       public double ScaledOut( int devIn )
       {
-        int di = Math.Abs(devIn);
+        int di = Math.Abs( devIn );
         if ( di <= m_deadzone ) return 0.0;
         if ( di >= m_saturation ) return 1.0 * Math.Sign( devIn );
 
         double fout = ( di - m_deadzone ) / m_range; // 0 .. 1.0
         if ( exponentUsed ) {
           fout = Math.Pow( fout, exponent ) * Math.Sign( devIn );
-        } else if ( nonLinCurveUsed ) {
-          fout = nonLinCurve.EvalX( ( int )( fout * 1000.0 * Math.Sign( devIn ) ) ); // gets a scaled signed value (-1 .. +1)
-        } else {
+        }
+        else if ( nonLinCurveUsed ) {
+          fout = nonLinCurve.EvalX( (int)( fout * 1000.0 * Math.Sign( devIn ) ) ); // gets a scaled signed value (-1 .. +1)
+        }
+        else {
           fout = fout * Math.Sign( devIn );
         }
 
@@ -271,7 +290,8 @@ namespace SCJMapper_V2.OGL
           double f;
           if ( double.TryParse( value, out f ) ) {
             deadzone = f * 1000.0;
-          } else {
+          }
+          else {
             deadzone = 0.0;
           }
         }
@@ -287,7 +307,8 @@ namespace SCJMapper_V2.OGL
           double f;
           if ( double.TryParse( value, out f ) ) {
             saturation = f * 1000.0;
-          } else {
+          }
+          else {
             saturation = 1000.0;
           }
         }
@@ -302,7 +323,8 @@ namespace SCJMapper_V2.OGL
           double f;
           if ( double.TryParse( value, out f ) ) {
             exponent = f;
-          } else {
+          }
+          else {
             exponent = 1.0;
           }
         }
@@ -349,7 +371,7 @@ namespace SCJMapper_V2.OGL
     #region YAW - Interaction
 
     private DeviceTuningParameter m_YawTuning = new DeviceTuningParameter( "flight_move_yaw" );
-    private LiveValues m_liveYaw = new LiveValues(); // live values
+    private LiveValues m_liveYaw = new LiveValues( ); // live values
 
     /// <summary>
     /// Submit the tuning parameters
@@ -372,7 +394,7 @@ namespace SCJMapper_V2.OGL
     }
 
     // update the GUI from Live
-    private void YawUpdateGUIFromLiveValues( )
+    private void YawUpdateGUIFromLiveValues()
     {
       // updated the working area with Tuning parameters (obey live values)
       LiveValues lv = m_liveYaw;
@@ -401,7 +423,7 @@ namespace SCJMapper_V2.OGL
     }
 
     // update Tuning from Live values
-    private void YawUpdateTuning( )
+    private void YawUpdateTuning()
     {
       m_liveYaw.Update( ref m_YawTuning ); // update from live values
     }
@@ -412,7 +434,7 @@ namespace SCJMapper_V2.OGL
     #region PITCH - Interaction
 
     private DeviceTuningParameter m_PitchTuning = new DeviceTuningParameter( "flight_move_pitch" );
-    private LiveValues m_livePitch = new LiveValues(); // live values
+    private LiveValues m_livePitch = new LiveValues( ); // live values
 
     /// <summary>
     /// Submit the tuning parameters
@@ -436,7 +458,7 @@ namespace SCJMapper_V2.OGL
     }
 
     // update the GUI from Live
-    private void PitchUpdateGUIFromLiveValues( )
+    private void PitchUpdateGUIFromLiveValues()
     {
       // updated the working area with Tuning parameters (obey live values)
       LiveValues lv = m_livePitch;
@@ -464,7 +486,7 @@ namespace SCJMapper_V2.OGL
       rbP.Checked = false; rbP.Checked = true;
     }
 
-    private void PitchUpdateTuning( )
+    private void PitchUpdateTuning()
     {
       m_livePitch.Update( ref m_PitchTuning ); // update from live values
     }
@@ -475,7 +497,7 @@ namespace SCJMapper_V2.OGL
     #region ROLL - Interaction
 
     private DeviceTuningParameter m_RollTuning = new DeviceTuningParameter( "flight_move_roll" );
-    private LiveValues m_liveRoll = new LiveValues(); // live values
+    private LiveValues m_liveRoll = new LiveValues( ); // live values
 
     /// <summary>
     /// Submit the tuning parameters
@@ -499,7 +521,7 @@ namespace SCJMapper_V2.OGL
     }
 
     // update the GUI from Live
-    private void RollUpdateGUIFromLiveValues( )
+    private void RollUpdateGUIFromLiveValues()
     {
       // updated the working area with Tuning parameters (obey live values)
       LiveValues lv = m_liveRoll;
@@ -528,7 +550,7 @@ namespace SCJMapper_V2.OGL
       rbR.Checked = false; rbR.Checked = true;
     }
 
-    private void RollUpdateTuning( )
+    private void RollUpdateTuning()
     {
       m_liveRoll.Update( ref m_RollTuning ); // update from live values
     }
@@ -540,7 +562,7 @@ namespace SCJMapper_V2.OGL
     #region Strafe Lateral - Interaction (yaw GUI values)
 
     private DeviceTuningParameter m_StrafeLatTuning = new DeviceTuningParameter( "flight_move_strafe_lateral" );
-    private LiveValues m_liveStrafeLat = new LiveValues(); // live values
+    private LiveValues m_liveStrafeLat = new LiveValues( ); // live values
 
     /// <summary>
     /// Submit the tuning parameters
@@ -564,7 +586,7 @@ namespace SCJMapper_V2.OGL
     }
 
     // update the GUI from Live
-    private void StrafeLatUpdateGUIFromLiveValues( )
+    private void StrafeLatUpdateGUIFromLiveValues()
     {
       // updated the working area with Tuning parameters (obey live values)
       LiveValues lv = m_liveStrafeLat;
@@ -593,7 +615,7 @@ namespace SCJMapper_V2.OGL
       rbY.Checked = false; rbY.Checked = true;
     }
 
-    private void StrafeLatUpdateTuning( )
+    private void StrafeLatUpdateTuning()
     {
       m_liveStrafeLat.Update( ref m_StrafeLatTuning ); // update from live values
     }
@@ -604,7 +626,7 @@ namespace SCJMapper_V2.OGL
     #region Strafe Vertical - Interaction (pitch GUI values)
 
     private DeviceTuningParameter m_StrafeVertTuning = new DeviceTuningParameter( "flight_move_strafe_vertical" );
-    private LiveValues m_liveStrafeVert = new LiveValues(); // live values
+    private LiveValues m_liveStrafeVert = new LiveValues( ); // live values
 
     /// <summary>
     /// Submit the tuning parameters
@@ -628,7 +650,7 @@ namespace SCJMapper_V2.OGL
     }
 
     // update the GUI from Live
-    private void StrafeVertUpdateGUIFromLiveValues( )
+    private void StrafeVertUpdateGUIFromLiveValues()
     {
       // updated the working area with Tuning parameters (obey live values)
       LiveValues lv = m_liveStrafeVert;
@@ -657,7 +679,7 @@ namespace SCJMapper_V2.OGL
       rbP.Checked = false; rbP.Checked = true;
     }
 
-    private void StrafeVertUpdateTuning( )
+    private void StrafeVertUpdateTuning()
     {
       m_liveStrafeVert.Update( ref m_StrafeVertTuning ); // update from live values
     }
@@ -668,7 +690,7 @@ namespace SCJMapper_V2.OGL
     #region Strafe Longitudinal - Interaction (Roll GUI values)
 
     private DeviceTuningParameter m_StrafeLonTuning = new DeviceTuningParameter( "flight_move_strafe_longitudinal" );
-    private LiveValues m_liveStrafeLon = new LiveValues(); // live values
+    private LiveValues m_liveStrafeLon = new LiveValues( ); // live values
 
     /// <summary>
     /// Submit the tuning parameters
@@ -692,7 +714,7 @@ namespace SCJMapper_V2.OGL
     }
 
     // update the GUI from Live
-    private void StrafeLonUpdateGUIFromLiveValues( )
+    private void StrafeLonUpdateGUIFromLiveValues()
     {
       // updated the working area with Tuning parameters (obey live values)
       LiveValues lv = m_liveStrafeLon;
@@ -721,7 +743,7 @@ namespace SCJMapper_V2.OGL
       rbR.Checked = false; rbR.Checked = true;
     }
 
-    private void StrafeLonUpdateTuning( )
+    private void StrafeLonUpdateTuning()
     {
       m_liveStrafeLon.Update( ref m_StrafeLonTuning ); // update from live values
     }
@@ -731,7 +753,7 @@ namespace SCJMapper_V2.OGL
 
     #region OGL Content
 
-    private void LoadSkybox( )
+    private void LoadSkybox()
     {
       TextureLoaderParameters.FlipImages = false;
       TextureLoaderParameters.MagnificationFilter = TextureMagFilter.Linear;
@@ -914,7 +936,7 @@ namespace SCJMapper_V2.OGL
 
 
 
-    private void SetupViewport( )
+    private void SetupViewport()
     {
       int w = glControl1.Width;
       int h = glControl1.Height;
@@ -922,7 +944,7 @@ namespace SCJMapper_V2.OGL
       GL.Viewport( 0, 0, w, h ); // Use all of the glControl painting area
 
       GL.MatrixMode( MatrixMode.Projection );
-      Matrix4 p = Matrix4.CreatePerspectiveFieldOfView( MathHelper.PiOver4, w / ( float )h, 0.1f, 10.0f );
+      Matrix4 p = Matrix4.CreatePerspectiveFieldOfView( MathHelper.PiOver4, w / (float)h, 0.1f, 10.0f );
       GL.LoadMatrix( ref p );
 
       GL.MatrixMode( MatrixMode.Modelview );
@@ -930,7 +952,7 @@ namespace SCJMapper_V2.OGL
     }
 
     // One render cycle - beware this should be fast...
-    private void Render( )
+    private void Render()
     {
       if ( !loaded ) return;
 
@@ -1030,13 +1052,13 @@ namespace SCJMapper_V2.OGL
     /// <summary>
     /// Sub Handler for Strafe
     /// </summary>
-    Vector3d Idle_Strafe( )
+    Vector3d Idle_Strafe()
     {
       Vector3d m = Vector3d.Zero; ;
 
-      bool lat = (m_StrafeLatTuning != null) && ( m_StrafeLatTuning.GameDevice != null );
-      bool vert = (m_StrafeVertTuning != null) && ( m_StrafeVertTuning.GameDevice != null );
-      bool lon = (m_StrafeLonTuning != null) && ( m_StrafeLonTuning.GameDevice != null );
+      bool lat = ( m_StrafeLatTuning != null ) && ( m_StrafeLatTuning.GameDevice != null );
+      bool vert = ( m_StrafeVertTuning != null ) && ( m_StrafeVertTuning.GameDevice != null );
+      bool lon = ( m_StrafeLonTuning != null ) && ( m_StrafeLonTuning.GameDevice != null );
 
       int i_x = 0, i_y = 0, i_z = 0; // Joystick Input
       int x = 0; int y = 0; int z = 0; // retain real input as i_xyz
@@ -1078,13 +1100,13 @@ namespace SCJMapper_V2.OGL
     /// <summary>
     /// Sub Handler for YPR (Yaw, Pitch, Roll)
     /// </summary>
-    Vector3d Idle_YPR( )
+    Vector3d Idle_YPR()
     {
       Vector3d m = Vector3d.Zero; ;
 
-      bool yaw = (m_YawTuning != null) && ( m_YawTuning.GameDevice != null );
-      bool pitch = (m_PitchTuning != null) && ( m_PitchTuning.GameDevice != null );
-      bool roll = (m_RollTuning != null) && ( m_RollTuning.GameDevice != null );
+      bool yaw = ( m_YawTuning != null ) && ( m_YawTuning.GameDevice != null );
+      bool pitch = ( m_PitchTuning != null ) && ( m_PitchTuning.GameDevice != null );
+      bool roll = ( m_RollTuning != null ) && ( m_RollTuning.GameDevice != null );
 
       int i_x = 0, i_y = 0, i_z = 0; // Joystick Input
       int x = 0; int y = 0; int z = 0; // retain real input as i_xyz
@@ -1156,13 +1178,14 @@ namespace SCJMapper_V2.OGL
         // query the Joysticks for the 3 controls and fill the flight model vector
         if ( m_isStrafe ) {
           m = Idle_Strafe( );
-        } else {
+        }
+        else {
           m = Idle_YPR( );
         }
 
         // finalize
         m_flightModel.Velocity -= m; // new direction change vector
-        Vector3d deltaAngleV = m_flightModel.Integrate( ( double )m_msElapsed / 1000.0, m_damping, 85.0 ); // heuristic K and B ..
+        Vector3d deltaAngleV = m_flightModel.Integrate( (double)m_msElapsed / 1000.0, m_damping, 85.0 ); // heuristic K and B ..
 
         // rotate the view along the input 
         // rotDeg( m );
@@ -1253,7 +1276,7 @@ namespace SCJMapper_V2.OGL
     /// <summary>
     /// Make Yaw Active - copy data from left labels into the working area
     /// </summary>
-    private void rbY_CheckedChanged( object sender, EventArgs e )
+    private void rbY_CheckedChanged()
     {
       if ( rbY.Checked == true ) {
         // get Labels from left area (current)
@@ -1262,19 +1285,36 @@ namespace SCJMapper_V2.OGL
         lblOut[4].Text = lblYexponent.Text;
         lblNodetext.Text = lblYnt.Text;
         // setup chart along the choosen parameter
-        rbPtSaturation.Checked = true; // force back to sense (available for both..)
-        if ( rbPtSaturation.Enabled ) {
-          tbSlider.Value = ( int )( ( float.Parse( lblYsat.Text ) - 0.2f ) * 50f );
+        rbPtDeadzone.Enabled = cbxYdeadzone.Checked;
+        rbPtSaturation.Enabled = cbxYsat.Checked;
+
+        rbPtDeadzone.Checked = true;
+        if ( rbPtDeadzone.Enabled ) {
+          tbSlider.Value = Deviceoptions.DeadzoneToSlider( lblYdeadzone.Text );
+        }
+        else {
+          rbPtSaturation.Checked = true;
+          if ( rbPtSaturation.Enabled ) {
+            tbSlider.Value = Deviceoptions.SaturationToSlider( lblYsat.Text );
+          }
         }
         UpdateChartItems( );
       }
+    }
+    private void rbY_CheckedChanged( object sender, EventArgs e )
+    {
+      rbY_CheckedChanged( );
+    }
+    private void rbY_CheckUpdate()
+    {
+      rbY.Checked = false; rbY.Checked = true; // forces to check and to update in case of already checked
     }
 
 
     /// <summary>
     /// Make Pitch Active - copy data from left labels into the working area
     /// </summary>
-    private void rbP_CheckedChanged( object sender, EventArgs e )
+    private void rbP_CheckedChanged()
     {
       if ( rbP.Checked == true ) {
         // get Labels from left area (current)
@@ -1283,18 +1323,35 @@ namespace SCJMapper_V2.OGL
         lblOut[4].Text = lblPexponent.Text;
         lblNodetext.Text = lblPnt.Text;
         // setup chart along the choosen parameter
-        rbPtSaturation.Checked = true; // force back to sense (available for both..)
-        if ( rbPtSaturation.Enabled ) {
-          tbSlider.Value = ( int )( ( float.Parse( lblYsat.Text ) - 0.2f ) * 50f );
+        rbPtDeadzone.Enabled = cbxPdeadzone.Checked;
+        rbPtSaturation.Enabled = cbxPsat.Checked;
+
+        rbPtDeadzone.Checked = true;
+        if ( rbPtDeadzone.Enabled ) {
+          tbSlider.Value = Deviceoptions.DeadzoneToSlider( lblPdeadzone.Text );
+        }
+        else {
+          rbPtSaturation.Checked = true; // force back to sense (available for both..)
+          if ( rbPtSaturation.Enabled ) {
+            tbSlider.Value = Deviceoptions.SaturationToSlider( lblPsat.Text );
+          }
         }
         UpdateChartItems( );
       }
+    }
+    private void rbP_CheckedChanged( object sender, EventArgs e )
+    {
+      rbP_CheckedChanged( );
+    }
+    private void rbP_CheckUpdate()
+    {
+      rbP.Checked = false; rbP.Checked = true; // forces to check and to update in case of already checked
     }
 
     /// <summary>
     /// Make Roll Active - copy data from left labels into the working area
     /// </summary>
-    private void rbR_CheckedChanged( object sender, EventArgs e )
+    private void rbR_CheckedChanged()
     {
       if ( rbR.Checked == true ) {
         // get Labels from left area (current)
@@ -1303,12 +1360,46 @@ namespace SCJMapper_V2.OGL
         lblOut[4].Text = lblRexponent.Text;
         lblNodetext.Text = lblRnt.Text;
         // setup chart along the choosen parameter
-        rbPtSaturation.Checked = true; // force back to sense (available for both..)
-        if ( rbPtSaturation.Enabled ) {
-          tbSlider.Value = ( int )( ( float.Parse( lblYsat.Text ) - 0.2f ) * 50f );
+        rbPtDeadzone.Enabled = cbxRdeadzone.Checked;
+        rbPtSaturation.Enabled = cbxRsat.Checked;
+
+        rbPtDeadzone.Checked = true;
+        if ( rbPtDeadzone.Enabled ) {
+          tbSlider.Value = Deviceoptions.DeadzoneToSlider( lblRdeadzone.Text );
+        }
+        else {
+          rbPtSaturation.Checked = true; // force back to sense (available for both..)
+          if ( rbPtSaturation.Enabled ) {
+            tbSlider.Value = Deviceoptions.SaturationToSlider( lblRsat.Text );
+          }
         }
         UpdateChartItems( );
       }
+    }
+    private void rbR_CheckedChanged( object sender, EventArgs e )
+    {
+      rbR_CheckedChanged( );
+    }
+    private void rbR_CheckUpdate()
+    {
+      rbR.Checked = false; rbR.Checked = true; // forces to check and to update in case of already checked
+    }
+
+    // Interaction helper - changes panel on mouse up
+
+    private void pnlYaw_MouseUp( object sender, System.Windows.Forms.MouseEventArgs e )
+    {
+      rbY_CheckUpdate( );
+    }
+
+    private void pnlPitch_MouseUp( object sender, System.Windows.Forms.MouseEventArgs e )
+    {
+      rbP_CheckUpdate( );
+    }
+
+    private void pnlRoll_MouseUp( object sender, System.Windows.Forms.MouseEventArgs e )
+    {
+      rbR_CheckUpdate( );
     }
 
     #endregion
@@ -1320,7 +1411,7 @@ namespace SCJMapper_V2.OGL
     /// <summary>
     /// Evaluate which tune parameter has the chart input
     /// </summary>
-    private void EvalChartInput( )
+    private void EvalChartInput()
     {
       m_hitPt = 0;
       if ( rbPt1.Enabled && rbPt1.Checked ) m_hitPt = 1;
@@ -1335,21 +1426,25 @@ namespace SCJMapper_V2.OGL
       if ( rbPtDeadzone.Enabled && rbPtDeadzone.Checked ) {
         tbSlider.Enabled = true;
         if ( rbY.Checked ) {
-          tbSlider.Value = ( int )( float.Parse( lblYdeadzone.Text ) * 250f );
-        } else if ( rbP.Checked ) {
-          tbSlider.Value = ( int )( float.Parse( lblPdeadzone.Text ) * 250f );
-        } else if ( rbR.Checked ) {
-          tbSlider.Value = ( int )( float.Parse( lblRdeadzone.Text ) * 250f );
+          tbSlider.Value = Deviceoptions.DeadzoneToSlider( lblYdeadzone.Text );
+        }
+        else if ( rbP.Checked ) {
+          tbSlider.Value = Deviceoptions.DeadzoneToSlider( lblPdeadzone.Text );
+        }
+        else if ( rbR.Checked ) {
+          tbSlider.Value = Deviceoptions.DeadzoneToSlider( lblRdeadzone.Text );
         }
       }
       if ( rbPtSaturation.Enabled && rbPtSaturation.Checked ) {
         tbSlider.Enabled = true;
         if ( rbY.Checked ) {
-          tbSlider.Value = ( int )( ( float.Parse( lblYsat.Text ) - 0.2f ) * 50f );
-        } else if ( rbP.Checked ) {
-          tbSlider.Value = ( int )( ( float.Parse( lblPsat.Text ) - 0.2f ) * 50f );
-        } else if ( rbR.Checked ) {
-          tbSlider.Value = ( int )( ( float.Parse( lblRsat.Text ) - 0.2f ) * 50f );
+          tbSlider.Value = Deviceoptions.SaturationToSlider( lblYsat.Text );
+        }
+        else if ( rbP.Checked ) {
+          tbSlider.Value = Deviceoptions.SaturationToSlider( lblPsat.Text );
+        }
+        else if ( rbR.Checked ) {
+          tbSlider.Value = Deviceoptions.SaturationToSlider( lblRsat.Text );
         }
       }
       EvalSlider( );
@@ -1374,7 +1469,7 @@ namespace SCJMapper_V2.OGL
     /// <summary>
     /// Update the graph from changes of acitve label values
     /// </summary>
-    private void UpdateChartItems( )
+    private void UpdateChartItems()
     {
       bool deadzoneUsed = true;
       bool satUsed = true;
@@ -1391,7 +1486,8 @@ namespace SCJMapper_V2.OGL
           lblGraphDeadzone.Text = m_liveStrafeLat.deadzoneS;
           lblGraphSaturation.Text = m_liveStrafeLat.saturationS;
 
-        } else {
+        }
+        else {
           deadzoneUsed = ( m_liveYaw.deadzoneUsed == true );
           satUsed = ( m_liveYaw.saturationUsed == true );
           expUsed = ( m_liveYaw.exponentUsed == true );
@@ -1401,7 +1497,8 @@ namespace SCJMapper_V2.OGL
         }
         chart1.BackColor = rbY.BackColor;
 
-      } else if ( rbP.Checked == true ) {
+      }
+      else if ( rbP.Checked == true ) {
         // Pitch
         if ( m_isStrafe ) {
           deadzoneUsed = ( m_liveStrafeVert.deadzoneUsed == true );
@@ -1410,7 +1507,8 @@ namespace SCJMapper_V2.OGL
           ptsUsed = ( m_liveStrafeVert.nonLinCurveUsed == true );
           lblGraphDeadzone.Text = m_liveStrafeVert.deadzoneS;
           lblGraphSaturation.Text = m_liveStrafeVert.saturationS;
-        } else {
+        }
+        else {
           deadzoneUsed = ( m_livePitch.deadzoneUsed == true );
           satUsed = ( m_livePitch.saturationUsed == true );
           expUsed = ( m_livePitch.exponentUsed == true );
@@ -1420,7 +1518,8 @@ namespace SCJMapper_V2.OGL
         }
         chart1.BackColor = rbP.BackColor;
 
-      } else {
+      }
+      else {
         // Roll
         if ( m_isStrafe ) {
           deadzoneUsed = ( m_liveStrafeLon.deadzoneUsed == true );
@@ -1429,7 +1528,8 @@ namespace SCJMapper_V2.OGL
           ptsUsed = ( m_liveStrafeLon.nonLinCurveUsed == true );
           lblGraphDeadzone.Text = m_liveStrafeLon.deadzoneS;
           lblGraphSaturation.Text = m_liveStrafeLon.saturationS;
-        } else {
+        }
+        else {
           deadzoneUsed = ( m_liveRoll.deadzoneUsed == true );
           satUsed = ( m_liveRoll.saturationUsed == true );
           expUsed = ( m_liveRoll.exponentUsed == true );
@@ -1447,7 +1547,6 @@ namespace SCJMapper_V2.OGL
       rbPtSaturation.Enabled = satUsed;
       lblGraphSaturation.Visible = satUsed;
 
-
       rbPtExponent.Enabled = expUsed;
       rbPt1.Enabled = ptsUsed; rbPt2.Enabled = ptsUsed; rbPt3.Enabled = ptsUsed;
       EvalChartInput( );  // review active chart input
@@ -1463,7 +1562,8 @@ namespace SCJMapper_V2.OGL
         m_bSeries.BezierPoints[3].SetValueXY( 0.75, Math.Pow( 0.75, expo ) );
         m_bSeries.BezierPoints[4].SetValueXY( 1.0, 1.0 );
 
-      } else if ( ptsUsed ) {
+      }
+      else if ( ptsUsed ) {
         // Pts mode
         // dont touch zero Point
         for ( int i = 1; i <= 3; i++ ) {
@@ -1471,7 +1571,8 @@ namespace SCJMapper_V2.OGL
         }
         m_bSeries.BezierPoints[4].SetValueXY( 1.0, 1.0 );
 
-      } else {
+      }
+      else {
         // linear
         // dont touch zero Point
         m_bSeries.BezierPoints[1].SetValueXY( 0.25, 0.25 );
@@ -1501,7 +1602,8 @@ namespace SCJMapper_V2.OGL
       if ( m_hitActive ) {
         if ( m_hitPt < 1 ) {
           // nothing selected ...
-        } else if ( m_hitPt <= 3 ) {
+        }
+        else if ( m_hitPt <= 3 ) {
           // Pt1..3
           double newX = double.Parse( lblIn[m_hitPt].Text ) + ( e.X - mX ) * 0.001f; mX = e.X;
           newX = ( newX > 1.0f ) ? 1.0f : newX;
@@ -1518,7 +1620,8 @@ namespace SCJMapper_V2.OGL
           // update markers from curve points
           chart1.Series[1].Points[m_hitPt] = m_bSeries.BezierPoints[m_hitPt];
 
-        } else if ( m_hitPt == 4 ) {
+        }
+        else if ( m_hitPt == 4 ) {
           // Exponent
           double newY = double.Parse( lblOut[m_hitPt].Text ) + ( e.Y - mY ) * 0.01f; mY = e.Y;
           newY = ( newY > 3.0f ) ? 3.0f : newY;
@@ -1561,7 +1664,8 @@ namespace SCJMapper_V2.OGL
                                   float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
                                   float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
           }
-        } else {
+        }
+        else {
           m_liveYaw.exponentS = lblYexponent.Text;
           if ( m_liveYaw.nonLinCurve != null ) {
             m_liveYaw.nonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
@@ -1570,7 +1674,8 @@ namespace SCJMapper_V2.OGL
           }
         }
 
-      } else if ( rbP.Checked == true ) {
+      }
+      else if ( rbP.Checked == true ) {
         // left area labels
         lblPin1.Text = lblIn[1].Text; lblPin2.Text = lblIn[2].Text; lblPin3.Text = lblIn[3].Text;
         lblPout1.Text = lblOut[1].Text; lblPout2.Text = lblOut[2].Text; lblPout3.Text = lblOut[3].Text;
@@ -1583,7 +1688,8 @@ namespace SCJMapper_V2.OGL
                                   float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
                                   float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
           }
-        } else {
+        }
+        else {
           m_livePitch.exponentS = lblPexponent.Text;
           if ( m_livePitch.nonLinCurve != null ) {
             m_livePitch.nonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
@@ -1592,7 +1698,8 @@ namespace SCJMapper_V2.OGL
           }
         }
 
-      } else if ( rbR.Checked == true ) {
+      }
+      else if ( rbR.Checked == true ) {
         // left area labels
         lblRin1.Text = lblIn[1].Text; lblRin2.Text = lblIn[2].Text; lblRin3.Text = lblIn[3].Text;
         lblRout1.Text = lblOut[1].Text; lblRout2.Text = lblOut[2].Text; lblRout3.Text = lblOut[3].Text;
@@ -1605,7 +1712,8 @@ namespace SCJMapper_V2.OGL
                                   float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
                                   float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
           }
-        } else {
+        }
+        else {
           m_liveRoll.exponentS = lblRexponent.Text;
           if ( m_liveRoll.nonLinCurve != null ) {
             m_liveRoll.nonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
@@ -1626,15 +1734,15 @@ namespace SCJMapper_V2.OGL
         m_liveStrafeLat.invertUsed = false;
         if ( cbxYinvert.Checked == true ) {
           m_liveStrafeLat.invertUsed = true;
-          rbY.Checked = false; rbY.Checked = true; // auto switch workarea
         }
-      } else {
+      }
+      else {
         m_liveYaw.invertUsed = false;
         if ( cbxYinvert.Checked == true ) {
           m_liveYaw.invertUsed = true;
-          rbY.Checked = false; rbY.Checked = true; // auto switch workarea
         }
       }
+      rbY_CheckUpdate( );
     }
 
     private void cbxPinvert_CheckedChanged( object sender, EventArgs e )
@@ -1643,15 +1751,15 @@ namespace SCJMapper_V2.OGL
         m_liveStrafeVert.invertUsed = false;
         if ( cbxPinvert.Checked == true ) {
           m_liveStrafeVert.invertUsed = true;
-          rbP.Checked = false; rbP.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_livePitch.invertUsed = false;
         if ( cbxPinvert.Checked == true ) {
           m_livePitch.invertUsed = true;
-          rbP.Checked = false; rbP.Checked = true; // auto switch
         }
       }
+      rbP_CheckUpdate( );
     }
 
     private void cbxRinvert_CheckedChanged( object sender, EventArgs e )
@@ -1660,15 +1768,15 @@ namespace SCJMapper_V2.OGL
         m_liveStrafeLon.invertUsed = false;
         if ( cbxRinvert.Checked == true ) {
           m_liveStrafeLon.invertUsed = true;
-          rbR.Checked = false; rbR.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_liveRoll.invertUsed = false;
         if ( cbxRinvert.Checked == true ) {
           m_liveRoll.invertUsed = true;
-          rbR.Checked = false; rbR.Checked = true; // auto switch
         }
       }
+      rbR_CheckUpdate( );
     }
 
     #endregion
@@ -1678,34 +1786,39 @@ namespace SCJMapper_V2.OGL
     // Deadzone slider   00 .. 40 -> 0 .. 0.160 ( 4 pt scale)
     // Saturation slider 00 .. 40 -> 0.2 .. 1.0 ( 20 pt scale)
 
-    private void EvalSlider( )
+    private void EvalSlider()
     {
       if ( rbPtDeadzone.Enabled && rbPtDeadzone.Checked ) {
-        lblOutSlider.Text = ( tbSlider.Value / 250.0f ).ToString( "0.000" );
-        float curDeadzone = 1000.0f * ( tbSlider.Value / 250.0f );  // % scaled to maxAxis
+        lblOutSlider.Text = Deviceoptions.DeadzoneFromSlider( tbSlider.Value ).ToString( "0.000" );
+        float curDeadzone = 1000.0f * Deviceoptions.DeadzoneFromSlider( tbSlider.Value );  // % scaled to maxAxis
 
         if ( rbY.Checked == true ) {
           if ( m_isStrafe ) m_liveStrafeLat.deadzone = curDeadzone; else m_liveYaw.deadzone = curDeadzone;
           lblYdeadzone.Text = lblOutSlider.Text;
-        } else if ( rbP.Checked == true ) {
+        }
+        else if ( rbP.Checked == true ) {
           if ( m_isStrafe ) m_liveStrafeVert.deadzone = curDeadzone; else m_livePitch.deadzone = curDeadzone;
           lblPdeadzone.Text = lblOutSlider.Text;
-        } else if ( rbR.Checked == true ) {
+        }
+        else if ( rbR.Checked == true ) {
           if ( m_isStrafe ) m_liveStrafeLon.deadzone = curDeadzone; else m_liveRoll.deadzone = curDeadzone;
           lblRdeadzone.Text = lblOutSlider.Text;
         }
         lblGraphDeadzone.Text = lblOutSlider.Text;
-      } else if ( rbPtSaturation.Enabled && rbPtSaturation.Checked ) {
-        lblOutSlider.Text = ( tbSlider.Value / 50.0f + 0.200f ).ToString( "0.000" );
-        float curSaturation = 1000.0f * ( tbSlider.Value / 50.0f + 0.2f);  // % scaled to maxAxis
+      }
+      else if ( rbPtSaturation.Enabled && rbPtSaturation.Checked ) {
+        lblOutSlider.Text = Deviceoptions.SaturationFromSlider( tbSlider.Value ).ToString( "0.000" );
+        float curSaturation = 1000.0f * Deviceoptions.SaturationFromSlider( tbSlider.Value );  // % scaled to maxAxis
 
         if ( rbY.Checked == true ) {
           if ( m_isStrafe ) m_liveStrafeLat.saturation = curSaturation; else m_liveYaw.saturation = curSaturation;
           lblYsat.Text = lblOutSlider.Text;
-        } else if ( rbP.Checked == true ) {
+        }
+        else if ( rbP.Checked == true ) {
           if ( m_isStrafe ) m_liveStrafeVert.saturation = curSaturation; else m_livePitch.saturation = curSaturation;
           lblPsat.Text = lblOutSlider.Text;
-        } else if ( rbR.Checked == true ) {
+        }
+        else if ( rbR.Checked == true ) {
           if ( m_isStrafe ) m_liveStrafeLon.saturation = curSaturation; else m_liveRoll.saturation = curSaturation;
           lblRsat.Text = lblOutSlider.Text;
         }
@@ -1728,15 +1841,16 @@ namespace SCJMapper_V2.OGL
         m_liveStrafeLat.deadzoneUsed = false;
         if ( cbxYdeadzone.Checked == true ) {
           m_liveStrafeLat.deadzoneUsed = true;
-          rbY.Checked = false; rbY.Checked = true; // auto switch workarea
         }
-      } else {
+      }
+      else {
         m_liveYaw.deadzoneUsed = false;
         if ( cbxYdeadzone.Checked == true ) {
           m_liveYaw.deadzoneUsed = true;
-          rbY.Checked = false; rbY.Checked = true; // auto switch workarea
         }
       }
+      rbY_CheckUpdate( );
+      rbPtDeadzone.Checked = cbxYdeadzone.Checked;
       UpdateChartItems( );
     }
 
@@ -1746,15 +1860,16 @@ namespace SCJMapper_V2.OGL
         m_liveStrafeVert.deadzoneUsed = false;
         if ( cbxPdeadzone.Checked == true ) {
           m_liveStrafeVert.deadzoneUsed = true;
-          rbP.Checked = false; rbP.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_livePitch.deadzoneUsed = false;
         if ( cbxPdeadzone.Checked == true ) {
           m_livePitch.deadzoneUsed = true;
-          rbP.Checked = false; rbP.Checked = true; // auto switch
         }
       }
+      rbP_CheckUpdate( );
+      rbPtDeadzone.Checked = cbxPdeadzone.Checked;
       UpdateChartItems( );
     }
 
@@ -1764,21 +1879,22 @@ namespace SCJMapper_V2.OGL
         m_liveStrafeLon.deadzoneUsed = false;
         if ( cbxRdeadzone.Checked == true ) {
           m_liveStrafeLon.deadzoneUsed = true; // update storage
-          rbR.Checked = false; rbR.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_liveRoll.deadzoneUsed = false;
         if ( cbxRdeadzone.Checked == true ) {
           m_liveRoll.deadzoneUsed = true; // update storage
-          rbR.Checked = false; rbR.Checked = true; // auto switch
         }
       }
+      rbR_CheckUpdate( );
+      rbPtDeadzone.Checked = cbxRdeadzone.Checked;
       UpdateChartItems( );
     }
 
     #endregion
 
-    #region Checked Sense Changed
+    #region Checked Saturation Changed
 
     private void cbxYsense_CheckedChanged( object sender, EventArgs e )
     {
@@ -1786,15 +1902,16 @@ namespace SCJMapper_V2.OGL
         m_liveStrafeLat.saturationUsed = false;
         if ( cbxYsat.Checked == true ) {
           m_liveStrafeLat.saturationUsed = true;
-          rbY.Checked = false; rbY.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_liveYaw.saturationUsed = false;
         if ( cbxYsat.Checked == true ) {
           m_liveYaw.saturationUsed = true;
-          rbY.Checked = false; rbY.Checked = true; // auto switch
         }
       }
+      rbY_CheckUpdate( );
+      rbPtSaturation.Checked = cbxYsat.Checked;
       UpdateChartItems( );
     }
 
@@ -1804,15 +1921,16 @@ namespace SCJMapper_V2.OGL
         m_liveStrafeVert.saturationUsed = false;
         if ( cbxPsat.Checked == true ) {
           m_liveStrafeVert.saturationUsed = true;
-          rbP.Checked = false; rbP.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_livePitch.saturationUsed = false;
         if ( cbxPsat.Checked == true ) {
           m_livePitch.saturationUsed = true;
-          rbP.Checked = false; rbP.Checked = true; // auto switch
         }
       }
+      rbP_CheckUpdate( );
+      rbPtSaturation.Checked = cbxPsat.Checked;
       UpdateChartItems( );
     }
 
@@ -1822,15 +1940,16 @@ namespace SCJMapper_V2.OGL
         m_liveStrafeLon.saturationUsed = false;
         if ( cbxRsat.Checked == true ) {
           m_liveStrafeLon.saturationUsed = true;
-          rbR.Checked = false; rbR.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_liveRoll.saturationUsed = false;
         if ( cbxRsat.Checked == true ) {
           m_liveRoll.saturationUsed = true;
-          rbR.Checked = false; rbR.Checked = true; // auto switch
         }
       }
+      rbR_CheckUpdate( );
+      rbPtSaturation.Checked = cbxRsat.Checked;
       UpdateChartItems( );
     }
 
@@ -1845,16 +1964,16 @@ namespace SCJMapper_V2.OGL
         if ( cbxYexpo.Checked == true ) {
           m_liveStrafeLat.exponentUsed = true;
           cbxYpts.Checked = false;       // forced: either expo OR points
-          rbY.Checked = false; rbY.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_liveYaw.exponentUsed = false;
         if ( cbxYexpo.Checked == true ) {
           m_liveYaw.exponentUsed = true;
           cbxYpts.Checked = false;       // forced: either expo OR points
-          rbY.Checked = false; rbY.Checked = true; // auto switch
         }
       }
+      rbY_CheckUpdate( );
       UpdateChartItems( );
     }
 
@@ -1865,16 +1984,16 @@ namespace SCJMapper_V2.OGL
         if ( cbxPexpo.Checked == true ) {
           m_liveStrafeVert.exponentUsed = true;
           cbxPpts.Checked = false;       // forced: either expo OR points
-          rbP.Checked = false; rbP.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_livePitch.exponentUsed = false;
         if ( cbxPexpo.Checked == true ) {
           m_livePitch.exponentUsed = true;
           cbxPpts.Checked = false;       // forced: either expo OR points
-          rbP.Checked = false; rbP.Checked = true; // auto switch
         }
       }
+      rbP_CheckUpdate( );
       UpdateChartItems( );
     }
 
@@ -1885,16 +2004,16 @@ namespace SCJMapper_V2.OGL
         if ( cbxRexpo.Checked == true ) {
           m_liveStrafeLon.exponentUsed = true;
           cbxRpts.Checked = false;       // forced: either expo OR points
-          rbR.Checked = false; rbR.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_liveRoll.exponentUsed = false;
         if ( cbxRexpo.Checked == true ) {
           m_liveRoll.exponentUsed = true;
           cbxRpts.Checked = false;       // forced: either expo OR points
-          rbR.Checked = false; rbR.Checked = true; // auto switch
         }
       }
+      rbR_CheckUpdate( );
       UpdateChartItems( );
     }
 
@@ -1909,16 +2028,16 @@ namespace SCJMapper_V2.OGL
         if ( cbxYpts.Checked == true ) {
           m_liveStrafeLat.nonLinCurveUsed = true;
           cbxYexpo.Checked = false;       // forced: either expo OR points
-          rbY.Checked = false; rbY.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_liveYaw.nonLinCurveUsed = false;
         if ( cbxYpts.Checked == true ) {
           m_liveYaw.nonLinCurveUsed = true;
           cbxYexpo.Checked = false;       // forced: either expo OR points
-          rbY.Checked = false; rbY.Checked = true; // auto switch
         }
       }
+      rbY_CheckUpdate( );
       UpdateChartItems( );
     }
 
@@ -1929,16 +2048,16 @@ namespace SCJMapper_V2.OGL
         if ( cbxPpts.Checked == true ) {
           m_liveStrafeVert.nonLinCurveUsed = true;
           cbxPexpo.Checked = false;       // forced: either expo OR points
-          rbP.Checked = false; rbP.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_livePitch.nonLinCurveUsed = false;
         if ( cbxPpts.Checked == true ) {
           m_livePitch.nonLinCurveUsed = true;
           cbxPexpo.Checked = false;       // forced: either expo OR points
-          rbP.Checked = false; rbP.Checked = true; // auto switch
         }
       }
+      rbP_CheckUpdate( );
       UpdateChartItems( );
     }
 
@@ -1949,16 +2068,16 @@ namespace SCJMapper_V2.OGL
         if ( cbxRpts.Checked == true ) {
           m_liveStrafeLon.nonLinCurveUsed = true;
           cbxRexpo.Checked = false;       // forced: either expo OR points
-          rbR.Checked = false; rbR.Checked = true; // auto switch
         }
-      } else {
+      }
+      else {
         m_liveRoll.nonLinCurveUsed = false;
         if ( cbxRpts.Checked == true ) {
           m_liveRoll.nonLinCurveUsed = true;
           cbxRexpo.Checked = false;       // forced: either expo OR points
-          rbR.Checked = false; rbR.Checked = true; // auto switch
         }
       }
+      rbR_CheckUpdate( );
       UpdateChartItems( );
     }
 
@@ -2035,7 +2154,8 @@ namespace SCJMapper_V2.OGL
                                 float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
                                 float.Parse( lblYin3.Text ), float.Parse( lblYout3.Text ) );
         }
-      } else {
+      }
+      else {
         if ( m_liveYaw.nonLinCurve != null ) {
           m_liveYaw.nonLinCurve.Curve( float.Parse( lblYin1.Text ), float.Parse( lblYout1.Text ),
                                 float.Parse( lblYin2.Text ), float.Parse( lblYout2.Text ),
@@ -2052,7 +2172,8 @@ namespace SCJMapper_V2.OGL
                                 float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
                                 float.Parse( lblPin3.Text ), float.Parse( lblPout3.Text ) );
         }
-      } else {
+      }
+      else {
         if ( m_livePitch.nonLinCurve != null ) {
           m_livePitch.nonLinCurve.Curve( float.Parse( lblPin1.Text ), float.Parse( lblPout1.Text ),
                                 float.Parse( lblPin2.Text ), float.Parse( lblPout2.Text ),
@@ -2069,7 +2190,8 @@ namespace SCJMapper_V2.OGL
                                 float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),
                                 float.Parse( lblRin3.Text ), float.Parse( lblRout3.Text ) );
         }
-      } else {
+      }
+      else {
         if ( m_liveRoll.nonLinCurve != null ) {
           m_liveRoll.nonLinCurve.Curve( float.Parse( lblRin1.Text ), float.Parse( lblRout1.Text ),
                                 float.Parse( lblRin2.Text ), float.Parse( lblRout2.Text ),

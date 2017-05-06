@@ -413,13 +413,14 @@
       // 
       // label1
       // 
+      this.label1.AutoSize = true;
       this.label1.ForeColor = System.Drawing.Color.Red;
-      this.label1.Location = new System.Drawing.Point(228, 427);
+      this.label1.Location = new System.Drawing.Point(12, 426);
       this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(414, 28);
+      this.label1.Size = new System.Drawing.Size(401, 26);
       this.label1.TabIndex = 26;
-      this.label1.Text = "Note: Accepting changes will clear the action tree to apply the new settings; Can" +
-    "cel now if you want to save your work first.";
+      this.label1.Text = "Note: Accepting changes will clear the action tree to apply the new settings; \r\nC" +
+    "ancel now if you want to save your work first.";
       // 
       // groupBox4
       // 
@@ -478,8 +479,8 @@
       // 
       // FormSettings
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
       this.CancelButton = this.btCancel;
       this.ClientSize = new System.Drawing.Size(861, 467);
       this.Controls.Add(this.groupBox4);
@@ -505,6 +506,7 @@
       this.groupBox4.ResumeLayout(false);
       this.groupBox4.PerformLayout();
       this.ResumeLayout(false);
+      this.PerformLayout();
 
     }
 
