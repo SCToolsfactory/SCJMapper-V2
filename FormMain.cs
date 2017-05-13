@@ -87,18 +87,20 @@ namespace SCJMapper_V2
         // take care of the sequence.. mouse overrides key but both override joy and game
         if ( m_mouseIn ) {   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
           return ActionCls.ActionDevice.AD_Mouse;
-        } else if ( m_keyIn ) {
+        }
+        else if ( m_keyIn ) {
           return ActionCls.ActionDevice.AD_Keyboard;
-        } else {
+        }
+        else {
           if ( IsGamepadTab( tc1.SelectedTab ) ) {
             return ActionCls.ActionDevice.AD_Gamepad;
-          } else {
+          }
+          else {
             return ActionCls.ActionDevice.AD_Joystick;
           }
         }
       }
     }
-
 
     /// <summary>
     /// Get the current JsN string for the active device tab
@@ -110,8 +112,25 @@ namespace SCJMapper_V2
       return jp.JsName;
     }
 
-    #endregion
+    // tab index for the tcXML control
+    private enum EATabXML
+    {
+      Tab_XML = 0,
+      Tab_Assignment,
+    }
 
+    private void AutoTabXML_Assignment( EATabXML tab )
+    {
+      if ( m_AppSettings.AutoTabXML ) {
+        if ( tcXML.SelectedIndex != (int)tab ) {
+          tcXML.SelectedTab = tcXML.TabPages[(int)tab];
+          if ( tab == EATabXML.Tab_Assignment )
+            lblLastJ.Select( ); // select again as when changing the Tabs
+        }
+      }
+    }
+
+    #endregion
 
     #region Main Form Handling
 
@@ -230,7 +249,8 @@ namespace SCJMapper_V2
         Grab( );
         m_AppSettings.MyMappingName = txMappingName.Text; m_AppSettings.Save( );// last used - persist
         txMappingName.BackColor = MyColors.SuccessColor;
-      } else {
+      }
+      else {
         log.WarnFormat( "Last used mapping not available ({0})", txMappingName.Text );
         txMappingName.BackColor = MyColors.ErrorColor;
       }
@@ -260,9 +280,15 @@ namespace SCJMapper_V2
       lblPTU.Visible = m_AppSettings.UsePTU;
       if ( m_AppSettings.UsePTU ) log.Debug( "Using PTU Folders" );
 
+
       // poll the XInput
       log.Debug( "Start XInput polling" );
+      timer1_Tick( null,null );
+
       timer1.Start( ); // this one polls the joysticks to show the props
+
+      // Select XML tab to start with 
+      AutoTabXML_Assignment( EATabXML.Tab_XML );
 
       m_appLoading = false; // no longer
     }
@@ -319,7 +345,8 @@ namespace SCJMapper_V2
           }
           tabRegion.Exclude( TabItemRect );
           e.Graphics.FillRegion( backBrush, tabRegion );
-        } else {
+        }
+        else {
           f = e.Font;
           foreBrush = new SolidBrush( e.ForeColor );
         }
@@ -340,7 +367,8 @@ namespace SCJMapper_V2
         if ( e.Index == this.tc1.SelectedIndex ) {
           f.Dispose( );
           backBrush.Dispose( );
-        } else {
+        }
+        else {
           backBrush.Dispose( );
           foreBrush.Dispose( );
         }
@@ -389,7 +417,8 @@ namespace SCJMapper_V2
           // valid Device Tab
           if ( IsGamepadTab( tc1.TabPages[deviceTabIndex] ) ) {
             ; // ignore gamepads
-          } else if ( DeviceInst.JoystickListRef.Count > joyStickIndex ) {
+          }
+          else if ( DeviceInst.JoystickListRef.Count > joyStickIndex ) {
             // there is a joystick device left..
             DeviceInst.JoystickListRef[joyStickIndex].JSAssignment = joyStickIndex + 1; // assign number 1..
             m_AT.ActionMaps.jsN[deviceTabIndex] = DeviceInst.JoystickListRef[joyStickIndex].DevName;
@@ -458,7 +487,8 @@ namespace SCJMapper_V2
                 break; // get only the first one
               }
             }
-          } else {
+          }
+          else {
             myDxJoystick myJs = new myDxJoystick( );
             myJs.js = new SharpDX.DirectInput.Joystick( directInput, instance.InstanceGuid );
             myJs.prodName = instance.ProductName;
@@ -502,7 +532,8 @@ namespace SCJMapper_V2
           // first panel - The Tab content exists already 
           log.Debug( "Add first Joystick panel" );
           uUC_JoyPanelNew = UC_JoyPanel;
-        } else {
+        }
+        else {
           log.Debug( "Add next Joystick panel" );
           // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
           tc1.TabPages.Add( "" );  // numbering is 1 based for the user
@@ -510,7 +541,7 @@ namespace SCJMapper_V2
           uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
           //uUC_JoyPanelNew.Dock = UC_JoyPanel.Dock; uUC_JoyPanelNew.Anchor = UC_JoyPanel.Anchor;
           //uUC_JoyPanelNew.AutoScaleMode = UC_JoyPanel.AutoScaleMode; uUC_JoyPanelNew.AutoSize = UC_JoyPanel.AutoSize;
-          
+
         }
         // common part
         tc1.TabPages[tabs].Text = string.Format( "Joystick {0}", nJs + 1 ); // numbering is 1 based for the user
@@ -607,6 +638,8 @@ namespace SCJMapper_V2
     {
       log.Debug( "Dump - Entry" );
 
+      AutoTabXML_Assignment( EATabXML.Tab_XML );
+
       rtb.Text = string.Format( "<!-- {0} - SC Joystick Mapping - {1} -->\n{2}", DateTime.Now, txMappingName.Text, m_AT.toXML( txMappingName.Text ) );
 
       btDump.BackColor = btClear.BackColor; btDump.UseVisualStyleBackColor = btClear.UseVisualStyleBackColor; // neutral again
@@ -663,14 +696,16 @@ namespace SCJMapper_V2
           ctrl = DeviceInst.GamepadRef.GetLastChange( );
           timer1.Interval = 750; // allow more time to release buttons [msec]
         }
-      } else {
+      }
+      else {
         // poll active Joystick
         DeviceInst.JoystickRef.GetData( );  // poll the device
         // add keyboard modifier - if there are ..
         if ( DeviceInst.KeyboardRef == null ) {
           // no keyboard => no modifier 
           ctrl = JSStr( ) + DeviceInst.JoystickRef.GetLastChange( ); // show last handled JS control
-        } else {
+        }
+        else {
           UpdateModifiers( );   // get the last keyboard modifer to compose the command, also handles the modifier lifetime
           ctrl = JSStr( ) + m_persistentMods + DeviceInst.JoystickRef.GetLastChange( ); // show last handled JS control
         }
@@ -682,7 +717,8 @@ namespace SCJMapper_V2
       // Handle Throttle checkbox
       if ( JoystickCls.CanThrottle( ctrl ) ) {
         cbxThrottle.Enabled = true;
-      } else {
+      }
+      else {
         cbxThrottle.Checked = false; cbxThrottle.Enabled = false;
       }
       // Update joystick modifiers - not currently used
@@ -696,7 +732,7 @@ namespace SCJMapper_V2
     private void treeView1_NodeMouseClick( object sender, TreeNodeMouseClickEventArgs e )
     {
       if ( e.Button == MouseButtons.Right ) {
-        treeView1.SelectedNode = e.Node;
+        treeView1.SelectedNode = e.Node; // trigger ActionTree events..
       }
     }
 
@@ -736,7 +772,8 @@ namespace SCJMapper_V2
       if ( m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), InputMode, true ) ) {
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
         UpdateTableSelectedItem( );
-      } else MySounds.PlayNotfound( );
+      }
+      else MySounds.PlayNotfound( );
     }
 
     private void btBlend_Click( object sender, EventArgs e )
@@ -745,7 +782,8 @@ namespace SCJMapper_V2
         m_AT.BlendBinding( );
         UpdateTableSelectedItem( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-      } else MySounds.PlayCannot( );
+      }
+      else MySounds.PlayCannot( );
     }
 
     private void btClear_Click( object sender, EventArgs e )
@@ -754,7 +792,8 @@ namespace SCJMapper_V2
         m_AT.ClearBinding( );
         UpdateTableSelectedItem( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-      } else MySounds.PlayCannot( );
+      }
+      else MySounds.PlayCannot( );
     }
 
     //TODO
@@ -777,6 +816,8 @@ namespace SCJMapper_V2
 
     private void btDumpList_Click( object sender, EventArgs e )
     {
+      AutoTabXML_Assignment( EATabXML.Tab_XML );
+
       if ( m_AppSettings.UseCSVListing )
         rtb.Text = string.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActionsCSV( m_AppSettings.ListModifiers ) );
       else
@@ -786,12 +827,15 @@ namespace SCJMapper_V2
 
     private void btDumpLog_Click( object sender, EventArgs e )
     {
-      rtb.Text = string.Format( "-- {0} - SC Joystick AC Log Controller Detection --\n{1}", DateTime.Now, SCLogExtract.ExtractLog( ) );
+      AutoTabXML_Assignment( EATabXML.Tab_XML );
 
+      rtb.Text = string.Format( "-- {0} - SC Joystick AC Log Controller Detection --\n{1}", DateTime.Now, SCLogExtract.ExtractLog( ) );
     }
 
     private void btDumpProfile_Click( object sender, EventArgs e )
     {
+      AutoTabXML_Assignment( EATabXML.Tab_XML );
+
       rtb.Text = SCDefaultProfile.DefaultProfile( SCDefaultProfile.DefaultProfileName );
     }
 
@@ -1078,13 +1122,15 @@ namespace SCJMapper_V2
             break;
           }
         }
-      } else {
+      }
+      else {
         dropEnabled = false;
       }
 
       if ( dropEnabled ) {
         e.Effect = DragDropEffects.Copy;
-      } else {
+      }
+      else {
         e.Effect = DragDropEffects.None;
       }
     }
@@ -1100,6 +1146,9 @@ namespace SCJMapper_V2
     private void btSaveMyMapping_Click( object sender, EventArgs e )
     {
       bool cancel = false;
+
+      AutoTabXML_Assignment( EATabXML.Tab_XML );
+
       if ( SCMappings.IsValidMappingName( txMappingName.Text ) ) {
         Dump( );
         if ( SCMappings.MappingFileExists( txMappingName.Text ) ) {
@@ -1116,7 +1165,8 @@ namespace SCJMapper_V2
           m_AppSettings.MyMappingName = txMappingName.Text; m_AppSettings.Save( );// last used - persist
           txMappingName.BackColor = MyColors.SuccessColor;
         }
-      } else {
+      }
+      else {
         txMappingName.BackColor = MyColors.ErrorColor;
       }
     }
@@ -1125,7 +1175,8 @@ namespace SCJMapper_V2
     {
       if ( SCMappings.IsValidMappingName( txMappingName.Text ) ) {
         txMappingName.BackColor = MyColors.ValidColor;
-      } else {
+      }
+      else {
         txMappingName.BackColor = MyColors.InvalidColor;
       }
     }
@@ -1140,7 +1191,7 @@ namespace SCJMapper_V2
 
     private void btClip_Click( object sender, EventArgs e )
     {
-      System.Windows.Forms.Clipboard.SetText( txRebind.Text );
+      Clipboard.SetText( txRebind.Text );
     }
 
 
@@ -1183,7 +1234,8 @@ namespace SCJMapper_V2
           j = DeviceInst.JoystickListRef.Find_jsN( i + 1 );
           if ( j != null ) {
             newTree.ActionMaps.jsN[i] = j.DevName; newTree.ActionMaps.jsNGUID[i] = j.DevInstanceGUID;
-          } else {
+          }
+          else {
             newTree.ActionMaps.jsN[i] = ""; newTree.ActionMaps.jsNGUID[i] = "";
           }
         }
@@ -1280,9 +1332,9 @@ namespace SCJMapper_V2
             tuning.AssignDynamicItems( dev, null, nodeText );
           }
         }
-          // GP commands that are supported
-          else if ( nodeText.ToLowerInvariant( ).Contains( "_thumblx" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbrx" )
-                 || nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
+        // GP commands that are supported
+        else if ( nodeText.ToLowerInvariant( ).Contains( "_thumblx" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbrx" )
+               || nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
           // update dynamic properties
           tuning.GameDevice = dev;
           tuning.NodeText = nodeText;
@@ -1294,7 +1346,8 @@ namespace SCJMapper_V2
             tuning.AssignDynamicItems( dev, null, nodeText );
           }
         }
-      } else if ( tuning != null && tuning.DevInstanceNo > 0 ) {
+      }
+      else if ( tuning != null && tuning.DevInstanceNo > 0 ) {
         // a device was assigned but the action is not mapped
         // try to find the gamedevice here ??
         if ( JoystickCls.IsDeviceClass( tuning.DeviceClass ) ) {
@@ -1346,8 +1399,7 @@ namespace SCJMapper_V2
       UpdateOptionItem( "turret_aim_pitch", "v_aim_pitch", "spaceship_turret" );
       UpdateOptionItem( "turret_aim_yaw", "v_aim_yaw", "spaceship_turret" );
     }
-
-
+    
 
     private void btJSTuning_Click( object sender, EventArgs e )
     {
@@ -1385,7 +1437,6 @@ namespace SCJMapper_V2
       }
       devlist.AddRange( DeviceInst.JoystickListRef );
 
-
       OPT.TuningOptions = m_AT.ActionMaps.TuningOptions;
       OPT.DeviceOptions = m_AT.ActionMaps.DeviceOptions;
       OPT.Devicelist = devlist;
@@ -1401,13 +1452,10 @@ namespace SCJMapper_V2
     }
 
 
-
-
     // Keyboard Input
 
     bool m_keyIn = false;
     bool m_mouseIn = false;
-
 
     private void btJsKbd_Click( object sender, EventArgs e )
     {
@@ -1425,7 +1473,8 @@ namespace SCJMapper_V2
         lblLastJ.Focus( );
         DeviceInst.KeyboardRef.Activate( );
         DeviceInst.KeyboardRef.GetData( ); // poll to aquire once
-      } else {
+      }
+      else {
         m_mouseIn = false; // not longer
         lblLastJ.BackColor = MyColors.ValidColor;
         btJsKbd.ImageKey = "J";
@@ -1444,7 +1493,8 @@ namespace SCJMapper_V2
         // don't override modifiers when we are in mouse mode and the mod is the same and there is no kbd entry.... 
         if ( m_mouseIn && ( keyModS == modS ) && ( m_persistentMods == ( modS + "+" ) ) ) {
           ; // nothing here - 
-        } else {
+        }
+        else {
           lblLastJ.Text = DeviceInst.KeyboardRef.GetLastChange( true );
           m_mouseIn = false; // clear on kbd input
         }
@@ -1456,6 +1506,22 @@ namespace SCJMapper_V2
       e.Handled = true;
     }
 
+    // text of input has changed
+    private void lblLastJ_TextChanged( object sender, EventArgs e )
+    {
+      AutoTabXML_Assignment( EATabXML.Tab_Assignment );
+
+      string devInput = ActionCls.DevInput( lblLastJ.Text, InputMode );
+      List<string> r = m_AT.FindAllActions( devInput );
+      lbxOther.Items.Clear( );
+      foreach ( string s in r ) lbxOther.Items.Add( s );
+      // have to check if throttle is used and if - add those to the list
+      string altDevInput = JoystickCls.MakeThrottle( devInput, true );
+      if ( altDevInput != devInput ) {
+        r = m_AT.FindAllActions( altDevInput );
+        foreach ( string s in r ) lbxOther.Items.Add( s );
+      }
+    }
 
 
     // maintain the global modifier store 
@@ -1469,11 +1535,13 @@ namespace SCJMapper_V2
         if ( modS.Contains( KeyboardCls.ClearMods ) ) {
           // allow to cancel modifiers
           m_persistentMods = ""; // kill persistent ones
-        } else {
+        }
+        else {
           m_persistentMods = modS + "+";
           m_modifierTimeout = c_modifierTime; // restart show interval
         }
-      } else {
+      }
+      else {
         if ( m_modifierTimeout <= 0 ) {
           m_persistentMods = ""; // modifier timed out
           m_mouseIn = false;
@@ -1502,7 +1570,8 @@ namespace SCJMapper_V2
       if ( int.TryParse( (string)ts.Tag, out btNum ) ) {
         // got a button (most likely..)
         item = "mouse" + btNum.ToString( );
-      } else if ( (string)ts.Tag == "X" )
+      }
+      else if ( (string)ts.Tag == "X" )
         item = "maxis_x";
       else if ( (string)ts.Tag == "Y" )
         item = "maxis_y";
@@ -1521,12 +1590,14 @@ namespace SCJMapper_V2
         if ( DeviceInst.KeyboardRef == null ) {
           // no keyboard = no modifier 
           ctrl = MouseCls.MakeCtrl( item, "" ); // show last handled JS control
-        } else {
+        }
+        else {
           UpdateModifiers( );
           ctrl = MouseCls.MakeCtrl( item, m_persistentMods ); // show last handled JS control
         }
         m_mouseIn = true; // for this one only
-      } else if ( KeyboardCls.IsDeviceClass( device ) ) {
+      }
+      else if ( KeyboardCls.IsDeviceClass( device ) ) {
         UpdateModifiers( );
         ctrl = KeyboardCls.MakeCtrl( item, m_persistentMods ); // show last handled JS control
       }
@@ -1577,7 +1648,8 @@ namespace SCJMapper_V2
         m_AppSettings.FormTableColumnWidth = FTAB.LastColSize;
         FTAB.Hide( );
 
-      } else {
+      }
+      else {
         FTAB.Show( );
 
         if ( created ) {
@@ -1615,5 +1687,6 @@ namespace SCJMapper_V2
     {
       m_AT.FindAndSelectActionKey( e.Actionmap, e.Actionkey, e.Nodeindex );
     }
+
   }
 }

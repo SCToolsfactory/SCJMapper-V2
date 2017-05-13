@@ -120,16 +120,20 @@
       this.lblPTU = new System.Windows.Forms.Label();
       this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
       this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-      this.label2 = new System.Windows.Forms.Label();
-      this.txFilter = new System.Windows.Forms.TextBox();
       this.lblProfileUsed = new System.Windows.Forms.Label();
       this.label3 = new System.Windows.Forms.Label();
       this.btClearFilter = new System.Windows.Forms.Button();
+      this.label2 = new System.Windows.Forms.Label();
       this.cbxShowMappedOnly = new System.Windows.Forms.CheckBox();
       this.cbxShowMouse = new System.Windows.Forms.CheckBox();
       this.cbxShowKeyboard = new System.Windows.Forms.CheckBox();
       this.cbxShowJoystick = new System.Windows.Forms.CheckBox();
       this.cbxShowGamepad = new System.Windows.Forms.CheckBox();
+      this.txFilter = new System.Windows.Forms.TextBox();
+      this.tcXML = new System.Windows.Forms.TabControl();
+      this.tPageOther = new System.Windows.Forms.TabPage();
+      this.lbxOther = new System.Windows.Forms.ListBox();
+      this.tPageDump = new System.Windows.Forms.TabPage();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
       this.tsBtReset = new System.Windows.Forms.ToolStripDropDownButton();
       this.resetDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -157,6 +161,9 @@
       this.tableLayoutPanel3.SuspendLayout();
       this.tableLayoutPanel4.SuspendLayout();
       this.tableLayoutPanel5.SuspendLayout();
+      this.tcXML.SuspendLayout();
+      this.tPageOther.SuspendLayout();
+      this.tPageDump.SuspendLayout();
       this.statusStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -177,10 +184,9 @@
       this.rtb.DetectUrls = false;
       this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
       this.rtb.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rtb.Location = new System.Drawing.Point(686, 81);
+      this.rtb.Location = new System.Drawing.Point(3, 3);
       this.rtb.Name = "rtb";
-      this.tlpanel.SetRowSpan(this.rtb, 2);
-      this.rtb.Size = new System.Drawing.Size(362, 686);
+      this.rtb.Size = new System.Drawing.Size(348, 654);
       this.rtb.TabIndex = 21;
       this.rtb.Text = "";
       this.rtb.WordWrap = false;
@@ -354,6 +360,7 @@
       this.lblLastJ.Size = new System.Drawing.Size(224, 22);
       this.lblLastJ.TabIndex = 14;
       this.lblLastJ.Text = "...";
+      this.lblLastJ.TextChanged += new System.EventHandler(this.lblLastJ_TextChanged);
       this.lblLastJ.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lblLastJ_KeyDown);
       // 
       // cmMouseEntry
@@ -614,6 +621,7 @@
       // tdiTxDefActivationMode
       // 
       this.tdiTxDefActivationMode.BackColor = System.Drawing.Color.PapayaWhip;
+      this.tdiTxDefActivationMode.Font = new System.Drawing.Font("Segoe UI", 9F);
       this.tdiTxDefActivationMode.Name = "tdiTxDefActivationMode";
       this.tdiTxDefActivationMode.ReadOnly = true;
       this.tdiTxDefActivationMode.Size = new System.Drawing.Size(160, 23);
@@ -814,8 +822,8 @@
       this.tlpanel.Controls.Add(this.tableLayoutPanel2, 1, 3);
       this.tlpanel.Controls.Add(this.tableLayoutPanel3, 2, 3);
       this.tlpanel.Controls.Add(this.tableLayoutPanel4, 1, 1);
-      this.tlpanel.Controls.Add(this.rtb, 2, 1);
       this.tlpanel.Controls.Add(this.tableLayoutPanel5, 0, 3);
+      this.tlpanel.Controls.Add(this.tcXML, 2, 1);
       this.tlpanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tlpanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tlpanel.Location = new System.Drawing.Point(0, 0);
@@ -1057,28 +1065,6 @@
       this.tableLayoutPanel5.Size = new System.Drawing.Size(364, 78);
       this.tableLayoutPanel5.TabIndex = 29;
       // 
-      // label2
-      // 
-      this.tableLayoutPanel5.SetColumnSpan(this.label2, 2);
-      this.label2.Location = new System.Drawing.Point(3, 32);
-      this.label2.Margin = new System.Windows.Forms.Padding(3);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(83, 23);
-      this.label2.TabIndex = 27;
-      this.label2.Text = "Action Filter:";
-      this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-      // 
-      // txFilter
-      // 
-      this.tableLayoutPanel5.SetColumnSpan(this.txFilter, 2);
-      this.txFilter.Dock = System.Windows.Forms.DockStyle.Top;
-      this.txFilter.Location = new System.Drawing.Point(147, 32);
-      this.txFilter.Name = "txFilter";
-      this.txFilter.Size = new System.Drawing.Size(138, 22);
-      this.txFilter.TabIndex = 25;
-      this.txFilter.WordWrap = false;
-      this.txFilter.TextChanged += new System.EventHandler(this.txFilter_TextChanged);
-      // 
       // lblProfileUsed
       // 
       this.tableLayoutPanel5.SetColumnSpan(this.lblProfileUsed, 4);
@@ -1113,6 +1099,17 @@
       this.btClearFilter.Text = "Clear Filter";
       this.btClearFilter.UseVisualStyleBackColor = true;
       this.btClearFilter.Click += new System.EventHandler(this.btClearFilter_Click);
+      // 
+      // label2
+      // 
+      this.tableLayoutPanel5.SetColumnSpan(this.label2, 2);
+      this.label2.Location = new System.Drawing.Point(3, 32);
+      this.label2.Margin = new System.Windows.Forms.Padding(3);
+      this.label2.Name = "label2";
+      this.label2.Size = new System.Drawing.Size(83, 23);
+      this.label2.TabIndex = 27;
+      this.label2.Text = "Action Filter:";
+      this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbxShowMappedOnly
       // 
@@ -1174,6 +1171,63 @@
       this.cbxShowGamepad.Text = "Gamepad";
       this.cbxShowGamepad.UseVisualStyleBackColor = true;
       this.cbxShowGamepad.CheckedChanged += new System.EventHandler(this.cbxShowTreeOptions_CheckedChanged);
+      // 
+      // txFilter
+      // 
+      this.tableLayoutPanel5.SetColumnSpan(this.txFilter, 2);
+      this.txFilter.Dock = System.Windows.Forms.DockStyle.Top;
+      this.txFilter.Location = new System.Drawing.Point(147, 32);
+      this.txFilter.Name = "txFilter";
+      this.txFilter.Size = new System.Drawing.Size(138, 22);
+      this.txFilter.TabIndex = 25;
+      this.txFilter.WordWrap = false;
+      this.txFilter.TextChanged += new System.EventHandler(this.txFilter_TextChanged);
+      // 
+      // tcXML
+      // 
+      this.tcXML.Controls.Add(this.tPageDump);
+      this.tcXML.Controls.Add(this.tPageOther);
+      this.tcXML.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tcXML.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.tcXML.Location = new System.Drawing.Point(686, 81);
+      this.tcXML.Name = "tcXML";
+      this.tlpanel.SetRowSpan(this.tcXML, 2);
+      this.tcXML.SelectedIndex = 0;
+      this.tcXML.Size = new System.Drawing.Size(362, 686);
+      this.tcXML.TabIndex = 30;
+      // 
+      // tPageOther
+      // 
+      this.tPageOther.Controls.Add(this.lbxOther);
+      this.tPageOther.Location = new System.Drawing.Point(4, 22);
+      this.tPageOther.Name = "tPageOther";
+      this.tPageOther.Padding = new System.Windows.Forms.Padding(3);
+      this.tPageOther.Size = new System.Drawing.Size(354, 660);
+      this.tPageOther.TabIndex = 0;
+      this.tPageOther.Text = "All Mappings";
+      this.tPageOther.UseVisualStyleBackColor = true;
+      // 
+      // lbxOther
+      // 
+      this.lbxOther.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.lbxOther.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lbxOther.FormattingEnabled = true;
+      this.lbxOther.ItemHeight = 14;
+      this.lbxOther.Location = new System.Drawing.Point(3, 3);
+      this.lbxOther.Name = "lbxOther";
+      this.lbxOther.Size = new System.Drawing.Size(348, 654);
+      this.lbxOther.TabIndex = 0;
+      // 
+      // tPageDump
+      // 
+      this.tPageDump.Controls.Add(this.rtb);
+      this.tPageDump.Location = new System.Drawing.Point(4, 22);
+      this.tPageDump.Name = "tPageDump";
+      this.tPageDump.Padding = new System.Windows.Forms.Padding(3);
+      this.tPageDump.Size = new System.Drawing.Size(354, 660);
+      this.tPageDump.TabIndex = 1;
+      this.tPageDump.Text = "Dumps (XML, Logs etc.)";
+      this.tPageDump.UseVisualStyleBackColor = true;
       // 
       // toolStripStatusLabel2
       // 
@@ -1350,6 +1404,9 @@
       this.tableLayoutPanel4.ResumeLayout(false);
       this.tableLayoutPanel5.ResumeLayout(false);
       this.tableLayoutPanel5.PerformLayout();
+      this.tcXML.ResumeLayout(false);
+      this.tPageOther.ResumeLayout(false);
+      this.tPageDump.ResumeLayout(false);
       this.statusStrip1.ResumeLayout(false);
       this.statusStrip1.PerformLayout();
       this.ResumeLayout(false);
@@ -1468,6 +1525,10 @@
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.Label lblAssigned;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+    private System.Windows.Forms.TabControl tcXML;
+    private System.Windows.Forms.TabPage tPageOther;
+    private System.Windows.Forms.ListBox lbxOther;
+    private System.Windows.Forms.TabPage tPageDump;
   }
 }
 

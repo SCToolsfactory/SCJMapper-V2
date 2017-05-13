@@ -345,7 +345,8 @@ namespace SCJMapper_V2.Options
         }
         else if ( type.ToLowerInvariant( ) == "xboxpad" ) {
           string toID = TuneOptionID( GamepadCls.DeviceClass, nInstance );
-          this[toID].fromXML( xml );
+          if ( this.ContainsKey( toID ) ) // 20170513: bugfix if gamepad is in the XML but not connected right now - ignore
+            this[toID].fromXML( xml );
         }
 
       }

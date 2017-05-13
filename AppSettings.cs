@@ -295,6 +295,15 @@ namespace SCJMapper_V2
       set { this["ListModifiers"] = value; }
     }
 
+    [UserScopedSettingAttribute( )]
+    [DefaultSettingValueAttribute( "False" )]
+    public Boolean AutoTabXML
+    {
+      get { return (Boolean)this["AutoTabXML"]; }
+      set { this["AutoTabXML"] = value; }
+    }
+
+    
 
     //**** Form Table
 

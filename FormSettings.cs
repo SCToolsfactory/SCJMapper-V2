@@ -75,6 +75,9 @@ namespace SCJMapper_V2
       // Use PTU
       cbxPTU.Checked = m_owner.UsePTU;
 
+      // AutoTabXML
+      cbxAutoTabXML.Checked = m_owner.AutoTabXML;
+
       // Use CSV Listing
       cbxCSVListing.Checked = m_owner.UseCSVListing;
       cbxListModifiers.Checked = m_owner.ListModifiers;
@@ -124,6 +127,9 @@ namespace SCJMapper_V2
       }
       m_owner.UsePTU = cbxPTU.Checked;
 
+      // AutoTabXML
+      m_owner.AutoTabXML = cbxAutoTabXML.Checked;
+      
       // Use CSV Listing
       m_owner.UseCSVListing = cbxCSVListing.Checked;
       m_owner.ListModifiers = cbxListModifiers.Checked;

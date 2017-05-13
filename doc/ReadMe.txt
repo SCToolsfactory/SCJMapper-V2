@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.29 - Build 63 BETA
-(c) Cassini, StandardToaster - 06-May-2017
+SC Joystick Mapper V 2.30 - Build 64 BETA
+(c) Cassini, StandardToaster - 13-May-2017
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.29)
-SCJMapper.exe.config         Program config (V2.29)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.30)
+SCJMapper.exe.config         Program config (V2.30)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -13,7 +13,7 @@ Ionic.Zip.Reduced.dll        Managed Zip Assembly                - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.29beta.pdf    Quick Guide
+SCJMapper_QGuide V2.30beta.pdf    Quick Guide
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images (V2.28)               - graphics folder MUST be in the same folder as the Exe file
@@ -28,6 +28,13 @@ https://github.com/SCToolsfactory/SCJMapper-V2
 Scanned for viruses before packing... 
 cassini@burri-web.org
 
+Changelog:
+V 2.30 - BETA Build 64
+- add - Tab to show all mappings for the current input (Tabbed with XML other Dump items)
+- add - Setting (enabled, disabled -> default) to automatically switch the new tabs - either Input or Dump
+- fix - issue with user activations modes while dumping the mapping list
+- fix - issue with loading a map with gamepad mappings and the gamepad is not connected
+- update - doc SCJMapper_QGuide V2.30beta.pdf
 Changelog:
 V 2.29 - BETA Build 63
 - add - Calibrate gamepad thumb axes (press ABXY buttons all together and wait 2 sec - should zero all 4 axes)

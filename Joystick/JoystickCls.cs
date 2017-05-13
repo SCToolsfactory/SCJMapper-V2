@@ -657,24 +657,6 @@ namespace SCJMapper_V2.Joystick
     /// <returns>The last action as CryEngine compatible string</returns>
     public override string GetLastChange( )
     {
-      // TODO: Expand this out into a joystick class (see commit for details)
-      Dictionary<string, string> axies = new Dictionary<string, string>( )
-        {
-          {"X","x"},
-          {"Y","y"},
-          {"Z","z"},
-          {"RotationX","rotx"},
-          {"RotationY","roty"},
-          {"RotationZ","rotz"}
-        };
-
-      foreach ( KeyValuePair<string, string> entry in axies ) {
-        PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( entry.Key );
-
-        if ( DidAxisChange2( ( int )axisProperty.GetValue( this.m_state, null ), ( int )axisProperty.GetValue( this.m_prevState, null ) ) )
-          this.m_lastItem = entry.Value;
-      }
-
       int[] slider = m_state.Sliders;
       int[] pslider = m_prevState.Sliders;
       if ( DidAxisChange2( slider[0], pslider[0] ) ) m_lastItem = "slider1";
@@ -695,6 +677,25 @@ namespace SCJMapper_V2.Joystick
             m_lastItem = "button" + ( bi + 1 ).ToString( );
         }
       }
+
+      // TODO: Expand this out into a joystick class (see commit for details)
+      Dictionary<string, string> axies = new Dictionary<string, string>( )
+        {
+          {"X","x"},
+          {"Y","y"},
+          {"Z","z"},
+          {"RotationX","rotx"},
+          {"RotationY","roty"},
+          {"RotationZ","rotz"}
+        };
+
+      foreach ( KeyValuePair<string, string> entry in axies ) {
+        PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( entry.Key );
+
+        if ( DidAxisChange2( (int)axisProperty.GetValue( this.m_state, null ), (int)axisProperty.GetValue( this.m_prevState, null ) ) )
+          this.m_lastItem = entry.Value;
+      }
+
       return m_lastItem;
     }
 
