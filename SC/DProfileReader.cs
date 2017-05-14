@@ -15,9 +15,9 @@ namespace SCJMapper_V2.SC
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    public Boolean ValidContent { get; set; }
+    public bool ValidContent { get; set; }
 
-    private Stack<String> m_nodeNameStack = null; // element name stack - keeping track where we are
+    private Stack<string> m_nodeNameStack = null; // element name stack - keeping track where we are
 
     // state for the parser
     enum EState
@@ -30,22 +30,22 @@ namespace SCJMapper_V2.SC
     // an action map and its actions
     class ProfileAction
     {
-      public String name { get; set; }    // the action name
-      public String devID { get; set; }  // the input method K,J,X,P
-      private String m_defBinding = "";   // NOTE: this is AC1 style in the Profile - need to conver later when dumping out
-      public String defBinding { get { return m_defBinding; } set { m_defBinding = value; } }  // DONT! need to clean this one, found spaces...
+      public string name { get; set; }    // the action name
+      public string devID { get; set; }  // the input method K,J,X,P
+      private string m_defBinding = "";   // NOTE: this is AC1 style in the Profile - need to conver later when dumping out
+      public string defBinding { get { return m_defBinding; } set { m_defBinding = value; } }  // DONT! need to clean this one, found spaces...
 
       private ActivationMode m_defActivationMode = ActivationMode.Default;
       public ActivationMode defActivationMode { get { return m_defActivationMode; } set { m_defActivationMode = value; } }
 
-      public String keyName
+      public string keyName
       { get { return devID + name; } } // prep for TreView usage - create a key from input+name
     }
 
 
     class ActionMap : List<ProfileAction>  // carries the action list
     {
-      public String name { get; set; } // the map name
+      public string name { get; set; } // the map name
 
       static int ContainsLoop( List<ProfileAction> list, string value )
       {
@@ -76,7 +76,7 @@ namespace SCJMapper_V2.SC
         base.Add( pact );
       }
     };
-    Dictionary<String, ActionMap> m_aMap = null; // key would be the actionmap name
+    Dictionary<string, ActionMap> m_aMap = null; // key would be the actionmap name
     ActionMap m_currentMap = null;
 
 
@@ -96,18 +96,18 @@ namespace SCJMapper_V2.SC
     /// Returns the collected actionmaps as CSV (same format as MappingVars)
     /// i.e. one line per actionmap where the first element is the actionmap and following are actions;defaultBinding lead by the input Key in uppercase (JKXP)
     /// </summary>
-    public String CSVMap
+    public string CSVMap
     {
       get {
         log.Debug( "DProfileReader.CSVMap - Entry" );
 
-        String buf = "";
+        string buf = "";
         foreach ( ActionMap am in m_aMap.Values ) {
           buf += am.name + ";";
           foreach ( ProfileAction a in am ) {
             buf += a.keyName + ";" + a.defBinding + ";" + a.defActivationMode.Name + ";" + a.defActivationMode.MultiTap.ToString( ) + ";"; // add default binding + activation mode to the CSV
           }
-          buf += String.Format( "\n" );
+          buf += string.Format( "\n" );
         }
         return buf;
       }
@@ -150,7 +150,7 @@ namespace SCJMapper_V2.SC
         if ( ac.defBinding == " " ) {
           ac.defBinding = Joystick.JoystickCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
-        } else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+        } else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
           ac.defBinding = "js1_" + ac.defBinding;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
@@ -165,7 +165,7 @@ namespace SCJMapper_V2.SC
         if ( ac.defBinding == " " ) {
           ac.defBinding = Keyboard.KeyboardCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
-        } else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+        } else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
           ac.defBinding = "kb1_" + ac.defBinding;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
@@ -180,7 +180,7 @@ namespace SCJMapper_V2.SC
         if ( ac.defBinding == " " ) {
           ac.defBinding = Mouse.MouseCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
-        } else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+        } else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
           ac.defBinding = "mo1_" + ac.defBinding;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
@@ -195,7 +195,7 @@ namespace SCJMapper_V2.SC
         if ( ac.defBinding == " " ) {
           ac.defBinding = Gamepad.GamepadCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
-        } else if ( !String.IsNullOrEmpty( ac.defBinding ) ) {
+        } else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
           ac.defBinding = "xi1_" + ac.defBinding;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
@@ -214,10 +214,10 @@ namespace SCJMapper_V2.SC
     /// </summary>
     /// <param name="xr">An XML reader @ StartElement</param>
     /// <returns>True if reading can continue</returns>
-    private Boolean ReadEmptyElement( XmlReader xr )
+    private bool ReadEmptyElement( XmlReader xr )
     {
-      Dictionary<String, String> attr = new Dictionary<string, string>( );
-      String eName = xr.Name;
+      Dictionary<string, string> attr = new Dictionary<string, string>( );
+      string eName = xr.Name;
       switch ( xr.NodeType ) {
         case XmlNodeType.Element:
           //Console.Write( "<{0}", xr.Name );
@@ -250,7 +250,7 @@ namespace SCJMapper_V2.SC
     /// Reads an action sub element
     /// </summary>
     /// <param name="xr">An XML reader @ StartElement</param>
-    private void ReadActionSub( XmlReader xr, String actionName, String device )
+    private void ReadActionSub( XmlReader xr, string actionName, string device )
     {
 
       /*
@@ -281,14 +281,14 @@ namespace SCJMapper_V2.SC
           </action>
 
       */
-      Boolean done = false;
+      bool done = false;
       do {
         xr.Read( ); // get next element
-        Dictionary<String, String> attr = new Dictionary<string, string>( );
+        Dictionary<string, string> attr = new Dictionary<string, string>( );
         // add what is not contained in the structure we are about to parse
         attr.Add( "name", actionName );  // actionName is in the outer element
 
-        String eName = xr.Name; // this is either the device or inputdata if there are multiple entries
+        string eName = xr.Name; // this is either the device or inputdata if there are multiple entries
 
         // read attributes if any
         while ( xr.MoveToNextAttribute( ) ) {
@@ -299,10 +299,26 @@ namespace SCJMapper_V2.SC
 
         // Have to add the device, otherwise the following does not work..
         if ( attr.ContainsKey( "input" ) ) {
-          if ( !string.IsNullOrEmpty( device ) )
-            attr.Add( device, attr["input"] ); // if the device is given, use it
-          else
-            attr.Add( eName, attr["input"] ); // else it should be the eName element
+          if ( !string.IsNullOrEmpty( device ) ) {
+            // device is given i.e. enclosing the input statements
+            // 20170512 - some keyboard entries are listed with mouse input ... ?!?
+            // we substitute and add such mouse entries - don't know what the game does later...
+            string ip = attr["input"];
+            if ( !string.IsNullOrEmpty( ip ) ) {
+              if ( ip.StartsWith( "mouse" ) ) {
+                attr.Add( "mouse", attr["input"] ); // override the device given
+              }
+              else {
+                attr.Add( device, attr["input"] ); // if the device is given, use it
+              }
+            }
+          }
+          else {
+            string ip = attr["input"];
+            if ( !string.IsNullOrEmpty( ip ) ) {
+              attr.Add( eName, ip ); // else it should be the eName element
+            }
+          }
         }
 
         // the element name is a control
@@ -331,10 +347,10 @@ namespace SCJMapper_V2.SC
     /// </summary>
     /// <param name="xr">An XML reader @ StartElement</param>
     /// <returns>True if reading can continue</returns>
-    private Boolean ReadElement( XmlReader xr )
+    private bool ReadElement( XmlReader xr )
     {
-      Dictionary<String, String> attr = new Dictionary<string, string>( );
-      String eName = xr.Name;
+      Dictionary<string, string> attr = new Dictionary<string, string>( );
+      string eName = xr.Name;
       switch ( xr.NodeType ) {
         case XmlNodeType.Element:
           //Console.Write( "<{0}", xr.Name );
@@ -346,9 +362,9 @@ namespace SCJMapper_V2.SC
           if ( m_state == EState.idle ) {
             if ( m_nodeNameStack.Peek( ).ToLower( ) == "actionmap" ) {
               // check for a valid one
-              String mapName = attr["name"];
-              String item = Array.Find( ActionMapsCls.ActionMaps, delegate ( String sstr ) { return sstr == mapName; } );
-              if ( !String.IsNullOrEmpty( item ) ) {
+              string mapName = attr["name"];
+              string item = Array.Find( ActionMapsCls.ActionMaps, delegate ( string sstr ) { return sstr == mapName; } );
+              if ( !string.IsNullOrEmpty( item ) ) {
                 // finally.... it is a valid actionmap
                 m_currentMap = new ActionMap( );
                 m_currentMap.name = mapName;
@@ -386,11 +402,11 @@ namespace SCJMapper_V2.SC
     /// </summary>
     /// <param name="xr"></param>
     /// <returns></returns>
-    private Boolean ReadXML( XmlReader xr )
+    private bool ReadXML( XmlReader xr )
     {
       log.Debug( "DProfileReader.ReadXML - Entry" );
 
-      Boolean retVal = true;
+      bool retVal = true;
 
       try {
         do {
@@ -404,7 +420,7 @@ namespace SCJMapper_V2.SC
             }
           } else if ( xr.NodeType == XmlNodeType.EndElement ) {
             //Console.Write( "</{0}>\n", xr.Name );
-            String exitElement = m_nodeNameStack.Pop( );
+            string exitElement = m_nodeNameStack.Pop( );
             if ( m_state == EState.inActionMap )
               if ( exitElement.ToLower( ) == "actionmap" ) m_state = EState.idle; // finished 
           }
@@ -424,7 +440,7 @@ namespace SCJMapper_V2.SC
     }
 
 
-    private Boolean ReadActivationModes( XmlReader xr )
+    private bool ReadActivationModes( XmlReader xr )
     {
       log.Debug( "DProfileReader.ReadActivationModes - Entry" );
 
@@ -436,8 +452,8 @@ namespace SCJMapper_V2.SC
             xr.Read( );
             break; // finished
           }
-          String name = xr["name"];
-          String mTap = xr["multiTap"];
+          string name = xr["name"];
+          string mTap = xr["multiTap"];
           if ( !string.IsNullOrEmpty( name ) ) ActivationModes.Instance.Add( new ActivationMode( name, int.Parse( mTap ) ) );
         } while ( xr.Read( ) );
 
@@ -455,7 +471,7 @@ namespace SCJMapper_V2.SC
     /// </summary>
     /// <param name="xml">the XML action defaultProfile Content</param>
     /// <returns>True if an action was decoded</returns>
-    public Boolean fromXML( String xml )
+    public bool fromXML( string xml )
     {
       log.Debug( "DProfileReader.fromXML - Entry" );
 
@@ -468,8 +484,8 @@ namespace SCJMapper_V2.SC
       XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
 
 
-      m_nodeNameStack = new Stack<String>( );
-      m_aMap = new Dictionary<String, ActionMap>( );
+      m_nodeNameStack = new Stack<string>( );
+      m_aMap = new Dictionary<string, ActionMap>( );
       // init the activation modes singleton
       ActivationModes.Instance.Clear( );
       ActivationModes.Instance.Add( ActivationMode.Default );

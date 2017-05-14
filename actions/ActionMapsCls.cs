@@ -314,7 +314,9 @@ namespace SCJMapper_V2
         r += string.Format( "{0}\n", amc.toXML( ) );
       }
       r += string.Format( "</ActionMaps>\n" );
-      return r;
+
+      // tidy up..
+      return r.Replace( string.Format( "\n\n" ), string.Format( "\n" ) );
     }
 
 

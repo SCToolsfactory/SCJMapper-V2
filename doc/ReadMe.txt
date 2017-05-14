@@ -33,6 +33,8 @@ V 2.30 - BETA Build 64
 - add - Tab to show all mappings for the current input (Tabbed with XML other Dump items)
 - add - Setting (enabled, disabled -> default) to automatically switch the new tabs - either Input or Dump
 - add - addbind of Mouse input is possible for Keyboard actions - seems to work somehow in the game...
+- improvement - mouse mappings in kbd entries in defaultProfile are collected as mouse now and allowed to map
+- improvement - removed some unneeded tree scans - to speed things up
 - fix - issue with user activations modes while dumping the mapping list
 - fix - issue with loading a map with gamepad mappings and the gamepad is not connected
 - fixes and refacturing while encountered...

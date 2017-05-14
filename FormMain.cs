@@ -286,6 +286,8 @@ namespace SCJMapper_V2
       lblPTU.Visible = m_AppSettings.UsePTU;
       if ( m_AppSettings.UsePTU ) log.Debug( "Using PTU Folders" );
 
+      // Auto Tab XML
+      cbxAutoTabXML.Checked = m_AppSettings.AutoTabXML;
 
       // poll the XInput
       log.Debug( "Start XInput polling" );
@@ -776,11 +778,12 @@ namespace SCJMapper_V2
 
     private void btFind_Click( object sender, EventArgs e )
     {
-      m_AT.FindAndSelectCtrl( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ) ); // find the action for a Control (joystick input)
+      m_AT.FindAndSelectCtrl( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ) , ""); // find the action for a Control (joystick input)
     }
 
     private void btAssign_Click( object sender, EventArgs e )
     {
+      log.Debug( "btAssign_Click" );
       if ( m_AT.UpdateSelectedItem( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), InputMode, true ) ) {
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
         UpdateTableSelectedItem( );
@@ -790,6 +793,7 @@ namespace SCJMapper_V2
 
     private void btBlend_Click( object sender, EventArgs e )
     {
+      log.Debug( "btBlend_Click" );
       if ( m_AT.CanBlendBinding ) {
         m_AT.BlendBinding( );
         UpdateTableSelectedItem( );
@@ -800,6 +804,7 @@ namespace SCJMapper_V2
 
     private void btClear_Click( object sender, EventArgs e )
     {
+      log.Debug( "btClear_Click" );
       if ( m_AT.CanClearBinding || m_AT.CanBlendBinding ) {
         m_AT.ClearBinding( );
         UpdateTableSelectedItem( );
@@ -866,6 +871,10 @@ namespace SCJMapper_V2
       m_AT.FilterTree( txFilter.Text );
     }
 
+    private void cbxAutoTabXML_CheckedChanged( object sender, EventArgs e )
+    {
+      m_AppSettings.AutoTabXML = cbxAutoTabXML.Checked; m_AppSettings.Save( );
+    }
 
     // Toolstrip Items
 
@@ -1100,6 +1109,7 @@ namespace SCJMapper_V2
     private void tsiAddBinding_Click( object sender, EventArgs e )
     {
       // note: the right click selected the node
+      log.Debug( "tsiAddBinding_Click" );
       m_AT.AddBinding( );
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }
@@ -1107,6 +1117,7 @@ namespace SCJMapper_V2
     private void tdiDelBinding_Click( object sender, EventArgs e )
     {
       // note: the right click selected the node
+      log.Debug( "tdiDelBinding_Click" );
       m_AT.DelBinding( );
       if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
     }

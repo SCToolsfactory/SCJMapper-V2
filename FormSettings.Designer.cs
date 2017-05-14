@@ -64,11 +64,11 @@
       this.btCancel = new System.Windows.Forms.Button();
       this.label1 = new System.Windows.Forms.Label();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.cbxAutoTabXML = new System.Windows.Forms.CheckBox();
       this.cbxListModifiers = new System.Windows.Forms.CheckBox();
       this.cbxCSVListing = new System.Windows.Forms.CheckBox();
       this.cbxPTU = new System.Windows.Forms.CheckBox();
       this.cbxDetectGamepad = new System.Windows.Forms.CheckBox();
-      this.cbxAutoTabXML = new System.Windows.Forms.CheckBox();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -438,6 +438,16 @@
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "Advanced Options ...";
       // 
+      // cbxAutoTabXML
+      // 
+      this.cbxAutoTabXML.AutoSize = true;
+      this.cbxAutoTabXML.Location = new System.Drawing.Point(9, 44);
+      this.cbxAutoTabXML.Name = "cbxAutoTabXML";
+      this.cbxAutoTabXML.Size = new System.Drawing.Size(233, 17);
+      this.cbxAutoTabXML.TabIndex = 10;
+      this.cbxAutoTabXML.Text = "Switch XML/Mapping tab automatically";
+      this.cbxAutoTabXML.UseVisualStyleBackColor = true;
+      // 
       // cbxListModifiers
       // 
       this.cbxListModifiers.AutoSize = true;
@@ -478,16 +488,6 @@
       this.cbxDetectGamepad.TabIndex = 6;
       this.cbxDetectGamepad.Text = "Use Gamepad";
       this.cbxDetectGamepad.UseVisualStyleBackColor = true;
-      // 
-      // cbxAutoTabXML
-      // 
-      this.cbxAutoTabXML.AutoSize = true;
-      this.cbxAutoTabXML.Location = new System.Drawing.Point(9, 44);
-      this.cbxAutoTabXML.Name = "cbxAutoTabXML";
-      this.cbxAutoTabXML.Size = new System.Drawing.Size(247, 17);
-      this.cbxAutoTabXML.TabIndex = 10;
-      this.cbxAutoTabXML.Text = "Switch XML/Assignment tab automatically";
-      this.cbxAutoTabXML.UseVisualStyleBackColor = true;
       // 
       // FormSettings
       // 

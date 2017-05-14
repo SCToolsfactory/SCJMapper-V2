@@ -148,6 +148,7 @@ namespace SCJMapper_V2
       this.BackColor = other.BackColor;
       this.Command = other.Command;
       this.Modified = other.Modified;
+      this.Action = other.Action; //?????????????????
     }
 
     /// <summary>
