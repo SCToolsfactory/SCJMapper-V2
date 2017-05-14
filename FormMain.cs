@@ -130,6 +130,13 @@ namespace SCJMapper_V2
       }
     }
 
+    private void UpdateDDMapping(string mapName )
+    {
+      tsDDbtMappings.Text = mapName;
+      m_AppSettings.DefMappingName = mapName; m_AppSettings.Save( );
+    }
+
+
     #endregion
 
     #region Main Form Handling
@@ -229,8 +236,7 @@ namespace SCJMapper_V2
       SetRebindField( txMappingName.Text );
       foreach ( ToolStripDropDownItem d in tsDDbtMappings.DropDownItems ) {
         if ( d.Text == txMappingName.Text ) {
-          tsDDbtMappings.Text = txMappingName.Text;
-          m_AppSettings.DefMappingName = txMappingName.Text; m_AppSettings.Save( ); // update if it exists
+          UpdateDDMapping( txMappingName.Text );
           break;
         }
       }
@@ -391,8 +397,14 @@ namespace SCJMapper_V2
       log.Debug( "InitActionTree - Entry" );
 
       // build TreeView and the ActionMaps
-      if ( m_AT != null ) m_AT.NodeSelectedEvent -= M_AT_NodeSelectedEvent; // disconnect the Event
+      if ( m_AT != null ) {
+        m_AT.NodeSelectedEvent -= M_AT_NodeSelectedEvent; // disconnect the Event
+        m_AT.Dispose( );
+      }
+
       m_AT = new ActionTree( );
+      log.DebugFormat( "InitActionTree - New AT: {0}", m_AT.GetHashCode().ToString() );
+
       m_AT.NodeSelectedEvent += M_AT_NodeSelectedEvent; // connect the Event
 
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
@@ -879,8 +891,7 @@ namespace SCJMapper_V2
 
     private void tsDDbtMappings_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
     {
-      tsDDbtMappings.Text = e.ClickedItem.Text;
-      m_AppSettings.DefMappingName = e.ClickedItem.Text; m_AppSettings.Save( );
+      UpdateDDMapping( e.ClickedItem.Text );
     }
 
 
@@ -1162,6 +1173,7 @@ namespace SCJMapper_V2
 
           // get the new one into the list
           LoadMappingDD( );
+          UpdateDDMapping( txMappingName.Text );
           m_AppSettings.MyMappingName = txMappingName.Text; m_AppSettings.Save( );// last used - persist
           txMappingName.BackColor = MyColors.SuccessColor;
         }

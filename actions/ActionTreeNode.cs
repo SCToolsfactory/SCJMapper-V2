@@ -173,7 +173,7 @@ namespace SCJMapper_V2
       else {
         // mapped ( regular ones )
         this.Command = actionCmd.DevInput;
-        if ( this.Level == 2 ) this.Action = ""; // remove UNDEF - 20160525 fix addbind not showing UNDEF if assigned
+        //if ( this.Level == 2 ) this.Action = ""; // remove UNDEF - 20160525 fix addbind not showing UNDEF if assigned
         // background is along the input 
         this.BackColor = ActionCls.DeviceColor( actionCmd.DevInput );
       }
@@ -253,10 +253,23 @@ namespace SCJMapper_V2
       get { return ( m_actionDevice == ActionCls.ActionDevice.AD_Mouse ); }
     }
 
+    /// <summary>
+    /// Returns true if the action is mapped
+    /// </summary>
     public Boolean IsMappedAction
     {
       get {
         return !( string.IsNullOrEmpty( m_command ) || ActionCls.IsBlendedInput( m_command ) );
+      }
+    }
+
+    /// <summary>
+    /// Returns true if the action is disabled
+    /// </summary>
+    public Boolean IsDisabledAction
+    {
+      get {
+        return ActionCls.IsBlendedInput( m_command );
       }
     }
 

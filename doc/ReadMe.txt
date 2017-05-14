@@ -1,5 +1,5 @@
 SC Joystick Mapper V 2.30 - Build 64 BETA
-(c) Cassini, StandardToaster - 13-May-2017
+(c) Cassini, StandardToaster - 14-May-2017
 
 Contains 9 files:
 
@@ -32,8 +32,10 @@ Changelog:
 V 2.30 - BETA Build 64
 - add - Tab to show all mappings for the current input (Tabbed with XML other Dump items)
 - add - Setting (enabled, disabled -> default) to automatically switch the new tabs - either Input or Dump
+- add - addbind of Mouse input is possible for Keyboard actions - seems to work somehow in the game...
 - fix - issue with user activations modes while dumping the mapping list
 - fix - issue with loading a map with gamepad mappings and the gamepad is not connected
+- fixes and refacturing while encountered...
 - update - doc SCJMapper_QGuide V2.30beta.pdf
 Changelog:
 V 2.29 - BETA Build 63

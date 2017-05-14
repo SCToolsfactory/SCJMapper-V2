@@ -100,6 +100,7 @@ namespace SCJMapper_V2
     /// </summary>
     public ActionTree()
     {
+      log.DebugFormat( "ctor - Entry {0}", m_MasterTree.GetHashCode( ).ToString( ) );
       IgnoreMaps = ""; // nothing to ignore
     }
 
@@ -110,6 +111,7 @@ namespace SCJMapper_V2
         if ( m_MasterTree != null ) m_MasterTree.Dispose( );
       }
       // free native resources
+      m_tvCtrlRef.AfterSelect -= M_ctrl_AfterSelect;
     }
 
     public void Dispose()
@@ -152,11 +154,14 @@ namespace SCJMapper_V2
       }
     }
 
+    /// <summary>
+    /// Returns true if a binding can be cleared
+    /// </summary>
     public bool CanClearBinding
     {
       get {
         if ( Ctrl.SelectedNode == null ) return false;
-        else return ( Ctrl.SelectedNode.Level == 1 ) && IsMappedAction;
+        else return ( ( Ctrl.SelectedNode.Level == 1 ) && (IsMappedAction || IsDisabledAction)) ;
       }
     }
 
@@ -177,6 +182,9 @@ namespace SCJMapper_V2
       }
     }
 
+    /// <summary>
+    /// Returns true if the action is mapped
+    /// </summary>
     public bool IsMappedAction
     {
       get {
@@ -185,6 +193,20 @@ namespace SCJMapper_V2
         if ( Ctrl.SelectedNode.Parent == null ) return false; // ERROR EXIT
 
         return ( Ctrl.SelectedNode as ActionTreeNode ).IsMappedAction;
+      }
+    }
+
+    /// <summary>
+    /// Returns true if the action is disabled
+    /// </summary>
+    public bool IsDisabledAction
+    {
+      get {
+        if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return false; // not on node
+        if ( Ctrl.SelectedNode == null ) return false; // no node selected
+        if ( Ctrl.SelectedNode.Parent == null ) return false; // ERROR EXIT
+
+        return ( Ctrl.SelectedNode as ActionTreeNode ).IsDisabledAction;
       }
     }
 
@@ -291,6 +313,7 @@ namespace SCJMapper_V2
 
     private void UpdateMasterNode( ActionTreeInputNode node )
     {
+      log.DebugFormat( "UpdateMasterNode - Entry {0}", m_MasterTree.GetHashCode( ).ToString( ) );
       // copy to master node
       TreeNode[] masterNode = m_MasterTree.Nodes.Find( node.Name, true ); // find the same node in master
       if ( masterNode.Length == 0 ) throw new IndexOutOfRangeException( "ActionTree ERROR - cannot find synched node in master" ); // OUT OF SYNC
@@ -310,12 +333,34 @@ namespace SCJMapper_V2
     /// <returns>The sought node or null</returns>
     private ActionTreeNode FindMasterAction( ActionTreeNode atn )
     {
+      log.DebugFormat( "FindMasterAction(ActionTreeNode) - Entry {0}", m_MasterTree.GetHashCode( ).ToString( ) );
       if ( atn.Level != 1 ) return null; // sanity
 
       TreeNode[] masterNode = m_MasterTree.Nodes.Find( atn.Name, true ); // find the same node in master
       if ( masterNode.Length == 0 ) throw new IndexOutOfRangeException( "ActionTree ERROR - cannot find synched node in master" ); // OUT OF SYNC
       // could return more than one if the action is the same in different actionmaps
       foreach ( ActionTreeNode mtn in masterNode ) {
+        if ( mtn.Parent.Name == atn.Parent.Name ) {
+          return mtn;
+        }
+      }
+      return null;
+    }
+
+    /// <summary>
+    /// Find the master element for the given ActionTreeInputNode
+    /// </summary>
+    /// <param name="atn">The ActionTreeInputNode to find</param>
+    /// <returns>The sought node or null</returns>
+    private ActionTreeInputNode FindMasterAction( ActionTreeInputNode atn )
+    {
+      log.DebugFormat( "FindMasterAction(ActionTreeInputNode) - Entry {0}", m_MasterTree.GetHashCode().ToString() );
+      if ( atn.Level != 2 ) return null; // sanity
+
+      TreeNode[] masterNode = m_MasterTree.Nodes.Find( atn.Name, true ); // find the same node in master
+      if ( masterNode.Length == 0 ) throw new IndexOutOfRangeException( "ActionTree ERROR - cannot find synched node in master" ); // OUT OF SYNC
+      // could return more than one if the action is the same in different actionmaps
+      foreach ( ActionTreeInputNode mtn in masterNode ) {
         if ( mtn.Parent.Name == atn.Parent.Name ) {
           return mtn;
         }
@@ -666,10 +711,17 @@ namespace SCJMapper_V2
         if ( string.IsNullOrEmpty( input ) )
           atn.Action = "UNDEF"; // apply UNDEF
         else
-          atn.Action = ""; // remove UNDEF
+          atn.Action = patn.Action; // apply the parent Action 
         ActionCls ac = FindActionObject( patn.Parent.Name, patn.Name );   // the related action in an actionmap
         if ( ac == null ) return false; // ERROR exit
-        if ( checkKind && ( ac.actionDevice != inKind ) ) return false; // ERROR exit
+        if ( checkKind ) {
+          if (ac.actionDevice == ActionCls.ActionDevice.AD_Keyboard ) {
+            if (( inKind != ActionCls.ActionDevice.AD_Keyboard ) && (inKind != ActionCls.ActionDevice.AD_Mouse)) return false; // ERROR exit
+          }
+          else {
+            if ( ac.actionDevice != inKind ) return false; // ERROR exit
+          }
+        }
         ActionCommandCls acc = ac.FindActionInputObject( atn.Index );
         if ( acc == null ) return false; // ERROR exit
         // have it - continue
@@ -772,7 +824,7 @@ namespace SCJMapper_V2
     /// </summary>
     public void ReloadTreeView()
     {
-      log.Debug( "ReloadTreeView - Entry" );
+      log.DebugFormat( "ReloadTreeView - Entry {0}", m_MasterTree.GetHashCode().ToString() );
 
       foreach ( ActionMapCls acm in ActionMaps ) {
         if ( IgnoreMaps.Contains( "," + acm.name + "," ) ) break; // next
@@ -794,7 +846,9 @@ namespace SCJMapper_V2
                 }
                 else {
                   // have to recreate the action child nodes
-                  ActionTreeInputNode matin = new ActionTreeInputNode( "UNDEF" ); matin.ImageKey = "Add";
+                  //ActionTreeInputNode matin = new ActionTreeInputNode( "UNDEF" ); matin.ImageKey = "Add";
+                  ActionTreeInputNode matin = new ActionTreeInputNode( ac.name ); matin.ImageKey = "Add";
+                  matin.Name = matn.Name + "_" + matin.Index; // unique name needed
                   acc.NodeIndex = matin.Index; // assign visual reference
                   matn.Nodes.Add( matin ); // add to master tree
                   matin.UpdateAction( acc ); UpdateMasterNode( matin );
@@ -802,12 +856,11 @@ namespace SCJMapper_V2
               } catch {
                 ; // key not found
               }
-              NodeSelected( this.SelectedAction, this.SelectedCtrl );
               Dirty = true;
             } // foreach
           }
-        } catch {
-          ; // map key not found ??
+        } catch (Exception e) {
+          log.DebugFormat( "ReloadTreeView - Exception in loading Treevie\n{0}", e.Message ); // map key not found ??
         }
       }
 
@@ -1061,7 +1114,7 @@ namespace SCJMapper_V2
           return ActionTreeNode.CommandFromNodeText( matn.Text );
         }
         else if ( Ctrl.SelectedNode.Level == 2 ) {
-          ActionTreeNode matn = FindMasterAction( (ActionTreeNode)Ctrl.SelectedNode.Parent ); // the parent treenode
+          ActionTreeNode matn = FindMasterAction( (ActionTreeInputNode)Ctrl.SelectedNode ); // the parent treenode
           return ActionTreeNode.CommandFromNodeText( matn.Text );
         }
         else return "";

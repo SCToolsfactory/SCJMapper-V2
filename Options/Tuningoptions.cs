@@ -340,13 +340,17 @@ namespace SCJMapper_V2.Options
             this[toID].fromXML( xml );
           }
           else {
-            log.InfoFormat( "Read XML Options - instance {0} is not available - dropped this content", nInstance );
+            log.InfoFormat( "Read XML Options - joystick instance {0} is not available - dropped this content", nInstance );
           }
         }
         else if ( type.ToLowerInvariant( ) == "xboxpad" ) {
           string toID = TuneOptionID( GamepadCls.DeviceClass, nInstance );
-          if ( this.ContainsKey( toID ) ) // 20170513: bugfix if gamepad is in the XML but not connected right now - ignore
+          if ( this.ContainsKey( toID ) ) {// 20170513: bugfix if gamepad is in the XML but not connected right now - ignore
             this[toID].fromXML( xml );
+          }
+          else {
+            log.InfoFormat( "Read XML Options - xboxpad instance {0} is not available - dropped this content", nInstance );
+          }
         }
 
       }
