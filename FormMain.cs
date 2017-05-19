@@ -1535,15 +1535,14 @@ namespace SCJMapper_V2
       AutoTabXML_Assignment( EATabXML.Tab_Assignment );
 
       string devInput = ActionCls.DevInput( lblLastJ.Text, InputMode );
-      List<string> r = m_AT.FindAllActions( devInput );
-      lbxOther.Items.Clear( );
-      foreach ( string s in r ) lbxOther.Items.Add( s );
+      RTF.RTFformatter RTF = new RTF.RTFformatter( );
+      m_AT.FindAllActionsRTF( devInput, RTF );
       // have to check if throttle is used and if - add those to the list
       string altDevInput = JoystickCls.MakeThrottle( devInput, true );
       if ( altDevInput != devInput ) {
-        r = m_AT.FindAllActions( altDevInput );
-        foreach ( string s in r ) lbxOther.Items.Add( s );
+        m_AT.FindAllActionsRTF( altDevInput, RTF );
       }
+      lbxOther.Rtf = RTF.RTFtext;
     }
 
 

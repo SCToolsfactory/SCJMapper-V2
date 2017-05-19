@@ -250,7 +250,7 @@ namespace SCJMapper_V2
       ActionCommandCls acc = ac.AddCommand( "", matin.Index );
       // show stuff
       FilterTree( );
-      FindAndSelectCtrlByName( matn.Name, (matn.Parent as ActionTreeNode ).Action );
+      FindAndSelectCtrlByName( matn.Name, ( matn.Parent as ActionTreeNode ).Action );
       // jump to the latest if a new one was added
       if ( Ctrl.SelectedNode.LastNode != null ) {
         Ctrl.SelectedNode = Ctrl.SelectedNode.LastNode;
@@ -1020,6 +1020,52 @@ namespace SCJMapper_V2
       }
       return ret;
     }
+
+    /// <summary>
+    /// Find all actions that are mapped to this input
+    /// formatted as RTF text
+    /// </summary>
+    /// <param name="input">The input string to find</param>
+    public void FindAllActionsRTF( string input, RTF.RTFformatter rtf )
+    {
+      if ( string.IsNullOrEmpty( input ) ) return; // nothing to find here...
+      if ( ActionCls.IsBlendedInput( input ) ) return; // nothing to find here...
+      rtf.FontSize( 12 );
+      rtf.Write( "Actions listed for input: " );
+      rtf.RBold = true; rtf.WriteLn( input ); rtf.RBold = false;
+
+      rtf.FontSize( 9 ); // 9pt
+      rtf.ClearTabs( ); rtf.SetTab( 852 ); rtf.SetTab( 4260 ); rtf.SetTab( 6532 );
+
+      rtf.WriteLn( );
+      rtf.RULine = true;
+      rtf.Write( "Location" ); rtf.WriteTab( "Action" ); rtf.WriteTab( "Actionmap" ); rtf.WriteTab( "Activation Mode".PadRight( 40 ) ); rtf.WriteLn( );
+      rtf.RULine = false;
+      rtf.WriteLn( );
+      string aMode = "";
+      foreach ( ActionMapCls acm in ActionMaps ) {
+        // have to search Actions in Maps
+        foreach ( ActionCls ac in acm ) {
+          if ( ac.defBinding == input ) {
+            aMode = string.Format( "{0};{1}", ac.defActivationMode.Name, ac.defActivationMode.MultiTap );
+            rtf.Write( "profile" ); rtf.WriteTab( ac.name ); rtf.WriteTab( acm.name ); rtf.WriteTab( aMode ); rtf.WriteLn( );
+            rtf.WriteLn( );
+          }
+          foreach ( ActionCommandCls acc in ac.inputList ) {
+            if ( acc.DevInput == input ) {
+              aMode = string.Format( "modified;{0};{1}", acc.ActivationMode.Name, acc.ActivationMode.MultiTap );
+              if ( acc.ActivationMode == ActivationMode.Default )
+                aMode = string.Format( "default" );
+              rtf.RHighlightColor = RTF.RTFformatter.ERColor.ERC_Green;
+              rtf.Write( "mapped" ); rtf.WriteTab( ac.name ); rtf.WriteTab( acm.name ); rtf.WriteTab( aMode.PadRight( 80 ) ); rtf.WriteLn( );
+              rtf.RHighlightColor = RTF.RTFformatter.ERColor.ERC_Black;
+              rtf.WriteLn( );
+            }
+          }
+        }
+      }
+    }
+
 
     /// <summary>
     /// Find a control the the actionmap that contains the Text

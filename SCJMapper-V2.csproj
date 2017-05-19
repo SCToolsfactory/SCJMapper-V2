@@ -140,6 +140,7 @@
       <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="Options\Tuningoptions.cs" />
+    <Compile Include="RTF\RTFformatter.cs" />
     <Compile Include="SC\SCActionMapList.cs" />
     <Compile Include="Table\DS_ActionMap.cs" />
     <Compile Include="Table\DS_ActionMaps.cs">

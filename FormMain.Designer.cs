@@ -133,6 +133,8 @@
       this.tcXML = new System.Windows.Forms.TabControl();
       this.tPageDump = new System.Windows.Forms.TabPage();
       this.tPageOther = new System.Windows.Forms.TabPage();
+      this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+      this.cbxAutoTabXML = new System.Windows.Forms.CheckBox();
       this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
       this.tsBtReset = new System.Windows.Forms.ToolStripDropDownButton();
       this.resetDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -147,9 +149,7 @@
       this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-      this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-      this.lbxOther = new System.Windows.Forms.ListBox();
-      this.cbxAutoTabXML = new System.Windows.Forms.CheckBox();
+      this.lbxOther = new System.Windows.Forms.RichTextBox();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmMouseEntry.SuspendLayout();
@@ -166,8 +166,8 @@
       this.tcXML.SuspendLayout();
       this.tPageDump.SuspendLayout();
       this.tPageOther.SuspendLayout();
-      this.statusStrip1.SuspendLayout();
       this.tableLayoutPanel6.SuspendLayout();
+      this.statusStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
       // btDumpList
@@ -1220,6 +1220,32 @@
       this.tPageOther.Text = "All Mappings";
       this.tPageOther.UseVisualStyleBackColor = true;
       // 
+      // tableLayoutPanel6
+      // 
+      this.tableLayoutPanel6.ColumnCount = 1;
+      this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel6.Controls.Add(this.cbxAutoTabXML, 0, 0);
+      this.tableLayoutPanel6.Controls.Add(this.lbxOther, 0, 1);
+      this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 3);
+      this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+      this.tableLayoutPanel6.RowCount = 2;
+      this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel6.Size = new System.Drawing.Size(348, 654);
+      this.tableLayoutPanel6.TabIndex = 0;
+      // 
+      // cbxAutoTabXML
+      // 
+      this.cbxAutoTabXML.AutoSize = true;
+      this.cbxAutoTabXML.Location = new System.Drawing.Point(3, 3);
+      this.cbxAutoTabXML.Name = "cbxAutoTabXML";
+      this.cbxAutoTabXML.Size = new System.Drawing.Size(233, 17);
+      this.cbxAutoTabXML.TabIndex = 2;
+      this.cbxAutoTabXML.Text = "Switch XML/Mapping tab automatically";
+      this.cbxAutoTabXML.UseVisualStyleBackColor = true;
+      this.cbxAutoTabXML.CheckedChanged += new System.EventHandler(this.cbxAutoTabXML_CheckedChanged);
+      // 
       // toolStripStatusLabel2
       // 
       this.toolStripStatusLabel2.BackColor = System.Drawing.Color.DarkKhaki;
@@ -1361,43 +1387,17 @@
       this.statusStrip1.TabIndex = 26;
       this.statusStrip1.Text = "statusStrip1";
       // 
-      // tableLayoutPanel6
-      // 
-      this.tableLayoutPanel6.ColumnCount = 1;
-      this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel6.Controls.Add(this.lbxOther, 0, 1);
-      this.tableLayoutPanel6.Controls.Add(this.cbxAutoTabXML, 0, 0);
-      this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 3);
-      this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-      this.tableLayoutPanel6.RowCount = 2;
-      this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-      this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.tableLayoutPanel6.Size = new System.Drawing.Size(348, 654);
-      this.tableLayoutPanel6.TabIndex = 0;
-      // 
       // lbxOther
       // 
       this.lbxOther.BackColor = System.Drawing.Color.WhiteSmoke;
+      this.lbxOther.BorderStyle = System.Windows.Forms.BorderStyle.None;
       this.lbxOther.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.lbxOther.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lbxOther.FormattingEnabled = true;
-      this.lbxOther.ItemHeight = 14;
       this.lbxOther.Location = new System.Drawing.Point(3, 33);
       this.lbxOther.Name = "lbxOther";
       this.lbxOther.Size = new System.Drawing.Size(342, 618);
-      this.lbxOther.TabIndex = 1;
-      // 
-      // cbxAutoTabXML
-      // 
-      this.cbxAutoTabXML.AutoSize = true;
-      this.cbxAutoTabXML.Location = new System.Drawing.Point(3, 3);
-      this.cbxAutoTabXML.Name = "cbxAutoTabXML";
-      this.cbxAutoTabXML.Size = new System.Drawing.Size(233, 17);
-      this.cbxAutoTabXML.TabIndex = 2;
-      this.cbxAutoTabXML.Text = "Switch XML/Mapping tab automatically";
-      this.cbxAutoTabXML.UseVisualStyleBackColor = true;
-      this.cbxAutoTabXML.CheckedChanged += new System.EventHandler(this.cbxAutoTabXML_CheckedChanged);
+      this.lbxOther.TabIndex = 3;
+      this.lbxOther.Text = "";
+      this.lbxOther.WordWrap = false;
       // 
       // MainForm
       // 
@@ -1436,10 +1436,10 @@
       this.tcXML.ResumeLayout(false);
       this.tPageDump.ResumeLayout(false);
       this.tPageOther.ResumeLayout(false);
-      this.statusStrip1.ResumeLayout(false);
-      this.statusStrip1.PerformLayout();
       this.tableLayoutPanel6.ResumeLayout(false);
       this.tableLayoutPanel6.PerformLayout();
+      this.statusStrip1.ResumeLayout(false);
+      this.statusStrip1.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1560,8 +1560,8 @@
     private System.Windows.Forms.TabPage tPageOther;
     private System.Windows.Forms.TabPage tPageDump;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-    private System.Windows.Forms.ListBox lbxOther;
     private System.Windows.Forms.CheckBox cbxAutoTabXML;
+    private System.Windows.Forms.RichTextBox lbxOther;
   }
 }
 

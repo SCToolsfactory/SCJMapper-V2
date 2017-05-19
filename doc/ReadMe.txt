@@ -1,5 +1,5 @@
 SC Joystick Mapper V 2.30 - Build 64 BETA
-(c) Cassini, StandardToaster - 14-May-2017
+(c) Cassini, StandardToaster - 19-May-2017
 
 Contains 9 files:
 
