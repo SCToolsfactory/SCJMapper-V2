@@ -1132,7 +1132,7 @@ namespace SCJMapper_V2.OGL
         double fout = m_livePitch.ScaledOut( y ); // 0 .. 1000.0
         lblPInput.Text = ( i_y / 1000.0 ).ToString( "0.00" ); lblPOutput.Text = ( fout ).ToString( "0.00" );
         // calculate new direction vector
-        m.Y = m_livePitch.InvertedSign * ( ( !cbPuse.Checked ) ? fout : 0 ) * m_msElapsed * DegPerMS;
+        m.Y = m_livePitch.InvertedSign * ( ( !cbPuse.Checked ) ? -fout : 0 ) * m_msElapsed * DegPerMS; // 20170801: fix - Must use inverted out value
       }
 
       // Roll
