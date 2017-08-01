@@ -348,6 +348,10 @@
     <Content Include="graphics\Readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="graphics\SB_SC_Area18.dds" />
+    <Content Include="graphics\SB_SC_BrokenMoon.dds" />
+    <Content Include="graphics\SB_SC_Demien.dds" />
+    <Content Include="graphics\SB_SC_DyingStar.dds" />
     <Content Include="graphics\selected.png" />
     <Content Include="graphics\XBOX.ico" />
   </ItemGroup>
