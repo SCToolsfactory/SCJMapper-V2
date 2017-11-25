@@ -337,18 +337,28 @@
 		<action  name="v_exit"  onPress="1"  onHold="0"  onRelease="1"  multiTap="1"  multiTapBlock="1"  pressTriggerThreshold="1.0"  releaseTriggerThreshold="-1"  releaseTriggerDelay="0"  keyboard="f"  xboxpad="y"  UILabel="@ui_CIExit"  UIDescription="@ui_CIExitDesc"  >
 			<joystick  ActivationMode="press"  input=" "  />
 		</action>
-
 		<action  name="v_self_destruct"  ActivationMode="delayed_press"  keyboard="ralt+backspace"  xboxpad="shoulderl+shoulderr+x"  joystick=" "  UILabel="@ui_CISelfDestruct"  UIDescription="@ui_CISelfDestructDesc"  />
+
+		<action  name="v_flightready" keyboard="f5"  xboxpad=" "  joystick=" "  />
+		<action  name="v_doors_open_all" keyboard="f7"  xboxpad=" "  joystick=" "  />
+		<action  name="v_doors_close_all" keyboard="f7"  xboxpad=" "  joystick=" "  />
+		<action  name="v_doors_lock_all" keyboard="f8"  xboxpad=" "  joystick=" "  />
+		<action  name="v_doors_unlock_all" keyboard="f8"  xboxpad=" "  joystick=" "  />
+
+
 		<action  name="v_toggle_cabin_lights"  ActivationMode="smart_toggle"  keyboard="lalt+t"  xboxpad="shoulderl+dpad_left"  joystick=" "  UILabel="@ui_CIToggleLights"  UIDescription="@ui_CIToggleLightsDesc"  />
 		<action  name="v_toggle_running_lights"  ActivationMode="smart_toggle"  keyboard="lalt+t"  joystick=" "  />
-		<action  name="v_starmap"  ActivationMode="press"  keyboard="home"  />
 		<action  name="v_debug_1"  onPress="1"  onRelease="1"  keyboard=""  />
 		<action  name="v_cooler_throttle_up"  onPress="1"  onHold="1"  keyboard="lalt+np_8"  xboxpad=" "  joystick=" "  UILabel="@ui_CICoolerThrottleUp"  UIDescription="@ui_CICoolerThrottleUpDesc"  />
 		<action  name="v_cooler_throttle_down"  onPress="1"  onHold="1"  keyboard="lalt+np_7"  xboxpad=" "  joystick=" "  UILabel="@ui_CICoolerThrottleDown"  UIDescription="@ui_CICoolerThrottleDownDesc"  />
 		<action  name="spectate_enterpuremode"  ActivationMode="delayed_press"  keyboard="rctrl+insert"  UILabel=""  UIDescription=""  />
 	</actionmap>
 
-	<actionmap  name="spaceship_view"  version="20"  UILabel="@ui_CGSpaceFlightView"  UICategory="@ui_CCSpaceFlight"  >
+ <actionmap name="lights_controller" version="1">
+		<action  name="v_lights"  ActivationMode="smart_toggle"  keyboard="lalt+t"  xboxpad="shoulderl+dpad_left"  joystick=" "  UILabel="@ui_CIToggleLights"  UIDescription="@ui_CIToggleLightsDesc"  />
+	</actionmap>
+	
+	<actionmap  name="spaceship_view"  version="21"  UILabel="@ui_CGSpaceFlightView"  UICategory="@ui_CCSpaceFlight"  >
 		<action  name="v_view_yaw_left"  onPress="1"  onRelease="1"  keyboard=" "  joystick="hat2_left"  optionGroup="flight_view_yaw_left"  UILabel="@ui_CIRotateViewLeft"  UIDescription="@ui_CIRotateViewLeftDesc"  />
 		<action  name="v_view_yaw_right"  onPress="1"  onRelease="1"  keyboard=" "  joystick="hat2_right"  optionGroup="flight_view_yaw_right"  UILabel="@ui_CIRotateViewRight"  UIDescription="@ui_CIRotateViewRightDesc"  />
 		<action  name="v_view_yaw"  xboxpad="thumbrx"  joystick="x"  optionGroup="flight_view_yaw"  UILabel="@ui_CIYawView"  UIDescription="@ui_CIYawViewDesc"  />
@@ -448,10 +458,11 @@
 		<action  name="v_boost"  onPress="1"  onRelease="1"  keyboard="x"  xboxpad="thumbl"  joystick="button6"  UILabel="@ui_CIboost"  UIDescription="@ui_CIboostDesc"  />
 		<action  name="v_cycle_landing_mode"  ActivationMode="press"  keyboard="ralt+n"  xboxpad="shoulderl+dpad_right"  joystick="hat1_right"  UILabel="@ui_CIToggleLandingMode"  UIDescription="@ui_CIToggleLandingModeDesc"  />
 		<action  name="v_landing_target_lock"  ActivationMode="press"  mouse="f"  xboxpad="y"  joystick="button4"  UILabel="@ui_CILandingTargetLock"  UIDescription="@ui_CILandingTargetLockDesc"  />
-		<action  name="v_toggle_landing_system"  ActivationMode="tap"  keyboard="n"  xboxpad="shoulderl+b"  joystick="button10"  UILabel="@ui_CIToggleLandingSystem"  UIDescription="@ui_CIToggleLandingSystemDesc"  />
-		<action  name="v_autoland"  ActivationMode="delayed_hold"  keyboard="n"  xboxpad="shoulderl+b"  joystick="button10"  UILabel="@ui_CIAutoland"  UIDescription="@ui_CIAutolandDesc"  />
-		<action  name="v_toggle_qdrive_system"  ActivationMode="press"  keyboard="b"  xboxpad="a"  joystick="button12"  UILabel="@ui_CIQuantumTravelSystemToggle"  UIDescription="@ui_CIQuantumTravelSystemToggleDesc"  />
-		<action  name="v_toggle_qdrive_engagement"  ActivationMode="press"  keyboard="f"  xboxpad="y"  joystick="button4"  UILabel="@ui_CIQuantumDriveToggle"  UIDescription="@ui_CIQuantumDriveToggleDesc"  />
+		<action  name="v_toggle_landing_system"  ActivationMode="tap"  keyboard="n"  xboxpad="shoulderl+b"  joystick="button12"  UILabel="@ui_CIToggleLandingSystem"  UIDescription="@ui_CIToggleLandingSystemDesc"  />
+		<action  name="v_autoland"  ActivationMode="delayed_hold"  keyboard="n"  xboxpad="shoulderl+b"  joystick="button12"  UILabel="@ui_CIAutoland"  UIDescription="@ui_CIAutolandDesc"  />
+		<action  name="v_toggle_qdrive_system"  ActivationMode="press"  keyboard="b"  xboxpad="a"  joystick=" "  UILabel="@ui_CIQuantumTravelSystemToggle"  UIDescription="@ui_CIQuantumTravelSystemToggleDesc"  />
+		<action  name="v_clear_qdrive_target"  ActivationMode="tap"  keyboard="b"  xboxpad="a"  joystick=" "  UILabel="@ui_CIQuantumTravelSystemToggle"  UIDescription="@ui_CIQuantumTravelSystemToggleDesc"  />
+		<action  name="v_toggle_qdrive_engagement"  ActivationMode="delayed_hold"  keyboard="b"  xboxpad="a"  joystick=" "  UILabel="@ui_CIQuantumDriveToggle"  UIDescription="@ui_CIQuantumDriveToggleDesc"  />
 	</actionmap>
 
 	<actionmap  name="spaceship_targeting"  version="8"  UILabel="@ui_CGSpaceFlightTargeting"  UICategory="@ui_CCSpaceFlight"  >
@@ -504,8 +515,8 @@
 
 		</action>
 
-		<action  name="scan_toggle_mode"  ActivationMode="delayed_tap"  keyboard="tab"  xboxpad="shoulderl+a"  joystick=" "  UILabel="@ui_CIScanningMode"  UIDescription="@ui_CIScanningModeDesc"  />
-		<action  name="scan_active_ping"  ActivationMode="delayed_hold"  keyboard="tab"  xboxpad="shoulderl+a"  joystick=" "  UILabel="@ui_CIScanningRadarPulse"  UIDescription="@ui_CIScanningRadarPulseDesc"  />
+		<action  name="scan_toggle_mode"  ActivationMode="tap"  keyboard="tab"  xboxpad="shoulderl+a"  joystick=" "  UILabel="@ui_CIScanningMode"  UIDescription="@ui_CIScanningModeDesc"  />
+		<action  name="scan_active_ping"  ActivationMode="double_tap"  keyboard="tab"  xboxpad="shoulderl+a"  joystick=" "  UILabel="@ui_CIScanningRadarPulse"  UIDescription="@ui_CIScanningRadarPulseDesc"  />
 		<action  name="scan_focus_scan"  ActivationMode="hold"  mouse="mouse1"  xboxpad="triggerr_btn"  joystick=""  UILabel="@ui_CIScanningFocus"  UIDescription="@ui_CIScanningFocusDesc"  />
 		<action  name="scan_tag_object"  ActivationMode="press"  mouse="mouse3"  xboxpad="x"  joystick=""  UILabel="@ui_CIScanningTag"  UIDescription="@ui_CIScanningTagDesc"  />
 	</actionmap>
@@ -557,7 +568,9 @@
 	</actionmap>
 
 	<actionmap  name="spaceship_missiles"  version="1"  UILabel="@ui_CGSpaceFlightMissiles"  UICategory="@ui_CCSpaceFlight"  >
+		<action  name="v_weapon_arm_missile"  onPress="1"  onHold="1"  onRelease="1"  mouse="mouse3"  xboxpad="x"  joystick="button4"  UILabel="@ui_CILaunchMissile"  UIDescription="@ui_CILaunchMissileDesc"  />
 		<action  name="v_weapon_launch_missile"  onPress="1"  onHold="1"  onRelease="1"  mouse="mouse3"  xboxpad="x"  joystick="button4"  UILabel="@ui_CILaunchMissile"  UIDescription="@ui_CILaunchMissileDesc"  />
+		
 	</actionmap>
 
 	<actionmap  name="spaceship_defensive"  version="2"  UILabel="@ui_CGSpaceFlightDefensive"  UICategory="@ui_CCSpaceFlight"  >
@@ -634,6 +647,13 @@
 	</actionmap>
 
 	<actionmap  name="spaceship_hud"  version="2"  UILabel="@ui_CGSpaceFlightHUD"  UICategory="@ui_CCSpaceFlight"  >
+		<action  name="mobiglas"  ActivationMode="press"  keyboard="f1"  UILabel="@ui_CIMobiGlas"  UIDescription="@ui_CIMobiGlasDesc"  >
+			<xboxpad  ActivationMode="delayed_press"  input="back"  />
+		</action>
+		<action  name="v_hud_open_scoreboard"  ActivationMode="hold"  keyboard="f1"  xboxpad="back"  joystick=" "  UILabel="@ui_CIOpenScoreboard"  UIDescription="@ui_CIOpenScoreboardDesc"  />
+		<action  name="v_starmap"  ActivationMode="press"  keyboard="home"  xboxpad=" "  joystick=" " />
+
+
 		<action  name="v_hud_open_tab1"  onPress="1"  onRelease="1"  keyboard=" "  xboxpad=" "  joystick=" "  />
 		<action  name="v_hud_open_tab2"  onPress="1"  onRelease="1"  keyboard=" "  xboxpad=" "  joystick=" "  />
 		<action  name="v_hud_open_tab3"  onPress="1"  onRelease="1"  keyboard=" "  xboxpad=" "  joystick=" "  />
@@ -641,39 +661,13 @@
 		<action  name="v_hud_open_tab5"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
 		<action  name="v_hud_open_tab6"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
 		<action  name="v_hud_open_tab7"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
-		<action  name="mobiglas"  ActivationMode="press"  keyboard="f1"  UILabel="@ui_CIMobiGlas"  UIDescription="@ui_CIMobiGlasDesc"  >
-			<xboxpad  ActivationMode="delayed_press"  input="back"  />
-		</action>
-
 		<action  name="toggle_ar_mode"  onPress="1"  keyboard=""  xboxpad=""  />
-		<action  name="v_hud_open_scoreboard"  ActivationMode="hold"  keyboard="f1"  xboxpad="back"  joystick=" "  UILabel="@ui_CIOpenScoreboard"  UIDescription="@ui_CIOpenScoreboardDesc"  />
 		<action  name="v_hud_interact_toggle"  onPress="1"  keyboard=" "  joystick=" "  >
 			<xboxpad  >
 				<inputdata  ActivationMode="tap"  input=" "  />
 			</xboxpad>
 
 		</action>
-
-		<action  name="v_hud_cycle_mode_fwd"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
-		<action  name="v_hud_cycle_mode_back"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
-		<action  name="v_hud_focused_cycle_mode_fwd"  onPress="1"  onRelease="1"  keyboard="e"  xboxpad="triggerr_btn"  joystick=" "  />
-		<action  name="v_hud_focused_cycle_mode_back"  onPress="1"  onRelease="1"  keyboard="q"  xboxpad="triggerl_btn"  joystick=" "  />
-		<action  name="v_hud_left_panel_up"  onPress="1"  onRelease="1"  keyboard=" "  xboxpad=" "  joystick=" "  />
-		<action  name="v_hud_left_panel_down"  onPress="1"  onRelease="1"  keyboard=" "  xboxpad=" "  joystick=" "  />
-		<action  name="v_hud_left_panel_left"  onPress="1"  onRelease="1"  keyboard=" "  xboxpad=" "  joystick=" "  />
-		<action  name="v_hud_left_panel_right"  onPress="1"  onRelease="1"  keyboard="d"  xboxpad=" "  joystick=" "  />
-		<action  name="v_hud_confirm"  onPress="1"  onRelease="1"  keyboard=" "  xboxpad=" "  joystick=" "  />
-		<action  name="v_hud_cancel"  onPress="1"  onRelease="1"  keyboard=" "  xboxpad=" "  joystick=" "  />
-		<action  name="v_hud_stick_x"  onPress="1"  onRelease="1"  xboxpad=" "  joystick=""  />
-		<action  name="v_hud_stick_y"  onPress="1"  onRelease="1"  xboxpad=" "  joystick=""  />
-		<action  name="v_comm_open_chat"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
-		<action  name="v_comm_show_chat"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
-		<action  name="v_comm_open_precanned"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
-		<action  name="v_comm_select_precanned_1"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
-		<action  name="v_comm_select_precanned_2"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
-		<action  name="v_comm_select_precanned_3"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
-		<action  name="v_comm_select_precanned_4"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
-		<action  name="v_comm_select_precanned_5"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  joystick=""  />
 	</actionmap>
 
 	<actionmap  name="player"  version="27"  UILabel="@ui_CGFPSMovement"  UICategory="@ui_CCFPS"  >
@@ -752,8 +746,8 @@
 			<xboxpad  >
 				<inputdata  ActivationMode="delayed_press"  input="back"  />
 			</xboxpad>
-
 		</action>
+		<action  name="v_starmap"  ActivationMode="press"  keyboard="home"  xboxpad=" "  joystick=" " />
 
 		<action  name="pl_hud_open_scoreboard"  onPress="1"  onRelease="1"  keyboard="f1"  xboxpad="back"  UILabel="@ui_CIOpenScoreboard"  UIDescription="@ui_CIOpenScoreboardDesc"  />
 		<action  name="pl_hud_confirm"  onPress="1"  keyboard="enter"  xboxpad="a"  />
@@ -838,6 +832,20 @@
 		<action  name="v_view_yaw_absolute"  keyboard="HMD_Yaw"  />
 		<action  name="v_view_pitch_absolute"  keyboard="HMD_Pitch"  />
 		<action  name="v_view_roll_absolute"  keyboard="HMD_Roll"  />
+		
+		<action  name="v_flightready" keyboard="f5"  xboxpad=" "  joystick=" "  />
+		<action  name="v_doors_open_all" keyboard="f7"  xboxpad=" "  joystick=" "  />
+		<action  name="v_doors_close_all" keyboard="f7"  xboxpad=" "  joystick=" "  />
+		<action  name="v_doors_lock_all" keyboard="f8"  xboxpad=" "  joystick=" "  />
+		<action  name="v_doors_unlock_all" keyboard="f8"  xboxpad=" "  joystick=" "  />
+		
+		<action  name="mobiglas"  ActivationMode="press"  keyboard="f1"  UILabel="@ui_CIMobiGlas"  UIDescription="@ui_CIMobiGlasDesc"  >
+			<xboxpad  >
+				<inputdata  ActivationMode="delayed_press"  input="back"  />
+			</xboxpad>
+		</action>
+		<action  name="v_starmap"  ActivationMode="press"  keyboard="home"  xboxpad=" "  joystick=" " />
+		
 	</actionmap>
 
 	<actionmap  name="vehicle_driver"  version="23"  UILabel="@ui_CGVehicleMovement"  UICategory="@ui_CCVehicle"  >
@@ -859,18 +867,6 @@
 		<action  name="v_attack2"  onPress="1"  onRelease="1"  onHold="1"  mouse="mouse2"  xboxpad="triggerl_btn"  joystick=" "  UILabel="@ui_CIVehicleSecondaryFire"  UIDescription="@ui_CIVehicleSecondaryFireDesc"  />
 	</actionmap>
 
-	<actionmap  name="debug"  version="23"  >
-		<action  name="flymode"  onPress="1"  noModifiers="1"  keyboard="f3"  />
-		<action  name="flymode_strafe_up"  onHold="1"  keyboard="space"  />
-		<action  name="flymode_strafe_down"  onHold="1"  keyboard="lctrl"  />
-		<action  name="godmode"  onPress="1"  noModifiers="1"  keyboard="f9"  />
-		<action  name="toggleaidebugdraw"  onPress="1"  noModifiers="1"  keyboard="f11"  />
-		<action  name="ai_DebugCenterViewAgent"  onPress="1"  noModifiers="1"  keyboard="np_divide"  />
-		<action  name="togglepdrawhelpers"  onPress="1"  noModifiers="1"  keyboard="f10"  />
-		<action  name="ulammo"  onPress="1"  noModifiers="1"  keyboard=""  />
-		<action  name="mannequin_debugai"  onPress="1"  noModifiers="1"  keyboard="np_multiply"  />
-	</actionmap>
-
 	<actionmap  name="IFCS_controls"  version="2"  >
 		<action  name="v_IFCS_A"  onPress="1"  onRelease="1"  onHold=""  xboxpad="a"  keyboard="rctrl+a"  />
 		<action  name="v_IFCS_B"  onPress="1"  onRelease="1"  onHold=""  xboxpad="b"  keyboard="rctrl+b"  />
@@ -884,6 +880,14 @@
 		<action  name="load"  onPress="1"  consoleCmd="1"  keyboard="f8"  />
 		<action  name="retry"  onPress="1"  keyboard="x"  xboxpad="x"  />
 		<action  name="ready"  onPress="1"  keyboard="x"  xboxpad="x"  />
+	</actionmap>
+
+	<actionmap  name="multiplayer"  version="25"  UILabel="@ui_CGEAGeneral"  UICategory="@ui_CCEAGeneral"  >
+		<action  name="respawn"  onPress="1"  keyboard="x"  xboxpad="x"  joystick=" "  UILabel="@ui_CIRespawn"  UIDescription="@ui_CIRespawnDesc"  />
+		<action  name="force_respawn"  ActivationMode="delayed_press"  keyboard="ralt+backspace"  xboxpad="shoulderl+shoulderr+x"  joystick=" "  UILabel="@ui_CIForceRespawn"  UIDescription="@ui_CIForceRespawnDesc"  />
+		<action  name="retry"  onPress="1"  keyboard="x"  xboxpad="x"  />
+		<action  name="ready"  onPress="1"  keyboard="x"  xboxpad="x"  />
+		<action  name="edit_loadout"  onPress="1"  keyboard="l"  />
 	</actionmap>
 
 	<actionmap  name="multiplayer"  version="25"  UILabel="@ui_CGEAGeneral"  UICategory="@ui_CCEAGeneral"  >
@@ -1072,8 +1076,9 @@
 			</keyboard>
 
 		</action>
-
-		<action  name="enable_cursor_ui_2d"  ActivationMode="press"  keyboard="ralt+slash"  UILabel="@ui_CIUI2DCursor"  UIDescription="@ui_CIUI2DCursorDesc"  />
+		<action  name="enable_cursor_ui_2d"  ActivationMode="press"  keyboard="ralt"  UILabel="@ui_CIUI2DCursor"  UIDescription="@ui_CIUI2DCursorDesc"  />
+		
+		
 		<action  name="ui_copy"  onPress="1"  keyboard="lctrl+c"  />
 		<action  name="ui_cut"  onPress="1"  keyboard="lctrl+x"  />
 		<action  name="ui_paste"  onPress="1"  keyboard="lctrl+v"  />
@@ -1159,27 +1164,19 @@
 		<action  name="emote_whistle"  ActivationMode="press"  keyboard=" "  xboxpad=" "  joystick=" "  UILabel="@ui_CIEmoteWhistle"  UIDescription="@ui_CIEmoteWhistleDesc"  />
 	</actionmap>
 
-	<actionmap  name="player_choice"  version="1"  >
-		<action  name="pc_primary_interaction"  onRelease="1"  keyboard="f"  xboxpad="y"  UILabel="@ui_CIPlayerChoicePrimaryInteraction"  UIDescription="@ui_CIPlayerChoicePrimaryInteractionDesc"  />
-		<action  name="pc_secondary_interactions"  keyboard="f"  xboxpad="y"  onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
-		<action  name="pc_radial_xaxis"  xboxpad="thumblx"  UILabel="@ui_PlayerChoiceXAxis"  UIDescription="@ui_PlayerChoiceXAxisDesc"  />
-		<action  name="pc_radial_yaxis"  xboxpad="thumbly"  UILabel="@ui_PlayerChoiceYAxis"  UIDescription="@ui_PlayerChoiceYAxisDesc"  />
-		<action  name="pc_index_up"  onPress="1"  mouse="mwheel_up"  UILabel="@ui_PlayerChoiceIndexUp"  UIDescription="@ui_PlayerChoiceIndexUpDesc"  >
-			<xboxpad  >
-				<inputdata  input="thumbl_up"  />
-				<inputdata  input="dpad_up"  />
-			</xboxpad>
-
-		</action>
-
-		<action  name="pc_index_down"  onPress="1"  mouse="mwheel_down"  UILabel="@ui_PlayerChoiceIndexDown"  UIDescription="@ui_PlayerChoiceIndexDownDesc"  >
-			<xboxpad  >
-				<inputdata  input="thumbl_down"  />
-				<inputdata  input="dpad_down"  />
-			</xboxpad>
-
-		</action>
-
+	<actionmap  name="player_choice"  version="2"  >
+		<action  name="pc_interaction_mode"  keyboard="f"  xboxpad="y"  joystick="button6" onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
+		<action  name="pc_select"  keyboard="mouse1"  xboxpad="triggerr_btn"  joystick="button1" onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
+		<action  name="pc_focus"  keyboard="mouse2"  xboxpad="triggerl_btn"  joystick="button7" onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
+		<action  name="pc_throw_decrease"  keyboard="mouse3"  xboxpad="triggerl_btn"  joystick="button7" onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
+		<action  name="pc_zoom_in"  keyboard="mouse3"  xboxpad="thumbl_up"  joystick=" " onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
+		<action  name="pc_zoom_out"  keyboard="mouse3"  xboxpad="thumbl_down"  joystick=" " onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
+	
+		<action  name="pc_screen_focus_left"  keyboard="a"  xboxpad="thumbr+dpad_left"    joystick=" "  onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
+		<action  name="pc_screen_focus_right"  keyboard="d"  xboxpad="thumbr+dpad_right"    joystick=" "  onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
+		<action  name="pc_screen_focus_up"  keyboard="w"  xboxpad="thumbr+dpad_up"    joystick=" "  onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
+		<action  name="pc_screen_focus_down"  keyboard="s"  xboxpad="thumbr+dpad_down"    joystick=" "  onHold="1"  holdTriggerDelay="0.3"  holdRepeatDelay="-1"  UILabel="@ui_CIPlayerChoiceSecondaryInteractions"  UIDescription="@ui_CIPlayerChoiceSecondaryInteractionsDesc"  />
+	
 	</actionmap>
 
 	<actionmap  name="flycam"  version="2"  >

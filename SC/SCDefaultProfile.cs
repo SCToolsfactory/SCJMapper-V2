@@ -57,6 +57,19 @@ namespace SCJMapper_V2.SC
       }
 
       // second try to get the SC defaultProfile from the DataXML.pak
+      string patchProfile = Path.Combine( SCPath.SCClientUSERPath, defaultProfileName );
+      if ( File.Exists( patchProfile ) ) { // 20171126 PTU  patch location in ..\USER\defaultProfile.xml
+        using ( StreamReader sr = new StreamReader( patchProfile ) ) {
+          retVal = sr.ReadToEnd( );
+          UsedDefProfile = "USER Directory defaultProfile.xml";
+          log.InfoFormat( "- Use {0}", UsedDefProfile );
+
+          return retVal; // EXIT
+        }
+      }
+
+      // PTU 3.0 those cannot longer work - but let them in for a while
+      // second try to get the SC defaultProfile from the DataXML.pak
       retVal = ExtractDefaultBinProfile( defaultProfileName );
       if ( !String.IsNullOrEmpty( retVal ) ) {
         UsedDefProfile = "DataXML defaultProfile";

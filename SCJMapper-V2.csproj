@@ -26,8 +26,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>65</ApplicationRevision>
-    <ApplicationVersion>2.31.0.%2a</ApplicationVersion>
+    <ApplicationRevision>66</ApplicationRevision>
+    <ApplicationVersion>2.32.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>

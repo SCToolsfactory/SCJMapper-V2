@@ -16,9 +16,12 @@ namespace SCJMapper_V2.OGL.TextureLoaders
     /// <summary>The parameters in this class have only effect on the following Texture loads.</summary>
     public static class TextureLoaderParameters
     {
+#if DEBUG
+        public static bool Verbose = true;
+#else
         /// <summary>(Debug Aid, should be set to false) If set to false only Errors will be printed. If set to true, debug information (Warnings and Queries) will be printed in addition to Errors.</summary>
         public static bool Verbose = false;
-
+#endif
         /// <summary>Always-valid fallback parameter for GL.BindTexture (Default: 0). This number will be returned if loading the Texture failed. You can set this to a checkerboard texture or similar, which you have already loaded.</summary>
         public static uint OpenGLDefaultTexture = 0;
 

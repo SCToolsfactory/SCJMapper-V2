@@ -240,3 +240,4 @@ pip-log.txt
 *.suo
 SCJMapper-V2.suo
 *.suo
+/.vs/SCJMapper-V2/v15/Server/sqlite3

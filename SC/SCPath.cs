@@ -92,12 +92,13 @@ namespace SCJMapper_V2.SC
     {
       get {
         log.Debug( "SCLauncherFile4 - Entry" );
-        String scLauncher = ( String )Registry.GetValue( @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\App Paths\CIGLauncher.exe", "", null );
+        String scLauncher = (String)Registry.GetValue( @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\App Paths\CIGLauncher.exe", "", null );
         if ( scLauncher != null ) {
           log.Info( "SCLauncherFile4 - Found HKCU - CIGLauncher.exe" );
           if ( File.Exists( scLauncher ) ) {
             return scLauncher;
-          } else {
+          }
+          else {
             log.WarnFormat( "SCLauncherFile4 - file does not exist: {0}", scLauncher );
             return "";
           }
@@ -107,8 +108,30 @@ namespace SCJMapper_V2.SC
       }
     }
 
+    /// <summary>
+    /// Try to locate the launcher from Alpha 3.0.0 PTU - e.g. E:\G\StarCitizen\RSI PTU Launcher
+    /// </summary>
+    static private String SCLauncherDir5
+    {
+      get {
+        log.Debug( "SCLauncherDir5 - Entry" );
+        String scLauncher = (String)Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\94a6df8a-d3f9-558d-bb04-097c192530b9", "InstallLocation", null );
+        if ( scLauncher != null ) {
+          log.Info( "SCLauncherDir5 - Found HKLM -InstallLocation" );
+          if ( Directory.Exists( scLauncher ) ) {
+            return scLauncher;
+          }
+          else {
+            log.WarnFormat( "SCLauncherDir5 - directory does not exist: {0}", scLauncher );
+            return "";
+          }
+        }
+        log.Warn( "SCLauncherDir5 - did not found HKLM - InstallLocation" );
+        return "";
+      }
+    }
+
     // one more would be here
-    // HKEY_CURRENT_USER\Software\Cloud Imperium Games\StarCitizen UninstallString  e.g. E:\G\StarCitizen\uninst.exe
 
 
 
@@ -148,7 +171,19 @@ namespace SCJMapper_V2.SC
           return ""; // sorry path does not exist
 
         } else {
-          // start the registry search - sequence  4..1 to get the newest method first
+          // start the registry search - sequence  5..1 to get the newest method first
+
+          scp = SCLauncherDir5;
+#if DEBUG
+          //***************************************
+          //scp = ""; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
+          //***************************************
+#endif
+          if ( !string.IsNullOrEmpty( scp ) ) {
+            // AC 1.1.6 path OK - this one needs no adjustments anymore but removing the filename
+            scp = Path.GetDirectoryName( scp );  // "E:\G\StarCitizen"
+            return scp;
+          }
 
           scp = SCLauncherFile4;
 #if DEBUG
@@ -256,7 +291,7 @@ namespace SCJMapper_V2.SC
         scp = Path.Combine( scp, "StarCitizen" );
         string scpX = "";
         if ( appSettings.UsePTU ) {
-          scpX = Path.Combine( scp, "Test" );
+          scpX = Path.Combine( scp, "LIVE" ); // NEW for PTU 3.0.0
           if ( Directory.Exists( scpX ) ) return scpX;
           // else not found PTU
           // Issue a warning here to let the user know
