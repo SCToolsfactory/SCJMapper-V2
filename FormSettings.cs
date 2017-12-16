@@ -74,6 +74,7 @@ namespace SCJMapper_V2
 
       // Use PTU
       cbxPTU.Checked = m_owner.UsePTU;
+      m_owner.UsePTU = false; // no longer used
 
       // AutoTabXML
       cbxAutoTabXML.Checked = m_owner.AutoTabXML;
@@ -121,11 +122,11 @@ namespace SCJMapper_V2
       }
       m_owner.DetectGamepad = cbxDetectGamepad.Checked;
 
-      // Use PTU
-      if ( m_owner.UsePTU != cbxPTU.Checked ) {
-        MessageBox.Show( "Changing to / from PTU folders needs a restart of the application !!", "Settings Notification", MessageBoxButtons.OK, MessageBoxIcon.Information );
-      }
-      m_owner.UsePTU = cbxPTU.Checked;
+      //// Use PTU
+      //if ( m_owner.UsePTU != cbxPTU.Checked ) {
+      //  MessageBox.Show( "Changing to / from PTU folders needs a restart of the application !!", "Settings Notification", MessageBoxButtons.OK, MessageBoxIcon.Information );
+      //}
+      //m_owner.UsePTU = cbxPTU.Checked; // no longer used
 
       // AutoTabXML
       m_owner.AutoTabXML = cbxAutoTabXML.Checked;

@@ -283,7 +283,7 @@ namespace SCJMapper_V2
       if ( jsIndex >= 0 ) DeviceInst.JoystickInst = DeviceInst.JoystickListRef[jsIndex];
 
       // init PTU folder usage sign
-      lblPTU.Visible = m_AppSettings.UsePTU;
+      lblPTU.Visible = false; // m_AppSettings.UsePTU;  no longer used
       if ( m_AppSettings.UsePTU ) log.Debug( "Using PTU Folders" );
 
       // Auto Tab XML

@@ -275,7 +275,7 @@ namespace SCJMapper_V2
     [DefaultSettingValueAttribute( "False" )]
     public Boolean UsePTU
     {
-      get { return ( Boolean )this["UsePTU"]; }
+      get { return false; } // ( Boolean )this["UsePTU"]; } no longer used
       set { this["UsePTU"] = value; }
     }
 
