@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.30 - Build 64 BETA
-(c) Cassini, StandardToaster - 19-May-2017
+SC Joystick Mapper V 2.32 - Build 66 BETA
+(c) Cassini, StandardToaster - 16-Dec-2017
 
 Contains 9 files:
 
-SCJMapper.exe                The program (V2.30)
-SCJMapper.exe.config         Program config (V2.30)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.32)
+SCJMapper.exe.config         Program config (V2.32)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -16,7 +16,7 @@ log4net.config.OFF           Config file for logging             - To use it - r
 SCJMapper_QGuide V2.30beta.pdf    Quick Guide
 ReadMe.txt                   This file
 
-graphics folder              Skybox Images (V2.28)               - graphics folder MUST be in the same folder as the Exe file
+graphics folder              Skybox Images (V2.32)               - graphics folder MUST be in the same folder as the Exe file
 
 
 Read the Guide first RTFM ;-)
@@ -29,6 +29,11 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.32 - BETA Build 66
+- add - path to defaultProfile can be in USER directory of SC
+- removed - PTU folders in Settings - no longer used in PTU 3.0
+- fix - finding SC game folder - may work automatically for PTU 3.0 else define it in Settings
+- update - defaultProfile from PTU 3.0-689345 (Dec 15, build)
 V 2.30 - BETA Build 64
 - add - Tab to show all mappings for the current input (Tabbed with XML other Dump items)
 - add - Setting (enabled, disabled -> default) to automatically switch the new tabs - either Input or Dump
