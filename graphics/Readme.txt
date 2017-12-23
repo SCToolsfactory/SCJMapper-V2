@@ -1,5 +1,9 @@
-Canyon, Highway, Shiodome, BigSight, LA Heliport:
+Image Credits:
 
+SC_Area18, _GrimHex, _DyingStar, _BrokenMoon, _Kareah 
+by Rellim (SC handle)
+
+Canyon, Highway, Shiodome, BigSight, LA Heliport:
 http://www.hdrlabs.com/sibl/archive.html
 sIBL Archive - Free HDRI sets for smart Image-Based Lighting
 

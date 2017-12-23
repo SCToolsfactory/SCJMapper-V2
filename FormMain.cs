@@ -10,13 +10,16 @@ using System.Windows.Forms;
 using SharpDX.DirectInput;
 using System.IO;
 
+using SCJMapper_V2.Common;
+using SCJMapper_V2.Actions;
 using SCJMapper_V2.SC;
 using SCJMapper_V2.Table;
-using SCJMapper_V2.Keyboard;
-using SCJMapper_V2.Mouse;
-using SCJMapper_V2.Gamepad;
-using SCJMapper_V2.Joystick;
-using SCJMapper_V2.Options;
+using SCJMapper_V2.Devices;
+using SCJMapper_V2.Devices.Keyboard;
+using SCJMapper_V2.Devices.Mouse;
+using SCJMapper_V2.Devices.Gamepad;
+using SCJMapper_V2.Devices.Joystick;
+using SCJMapper_V2.Devices.Options;
 
 namespace SCJMapper_V2
 {
@@ -414,7 +417,7 @@ namespace SCJMapper_V2
       // provide the display items (init)
       m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
       // Init with default profile filepath
-      m_AT.LoadProfileTree( SCDefaultProfile.DefaultProfileName, addDefaultBinding );
+      m_AT.LoadProfileTree( addDefaultBinding );
       lblProfileUsed.Text = SCDefaultProfile.UsedDefProfile; // SCA 2.2 show used profile
 
       // Activation Update
@@ -853,7 +856,7 @@ namespace SCJMapper_V2
     {
       AutoTabXML_Assignment( EATabXML.Tab_XML );
 
-      rtb.Text = SCDefaultProfile.DefaultProfile( SCDefaultProfile.DefaultProfileName );
+      rtb.Text = SCDefaultProfile.DefaultProfile( );
     }
 
     private void btGrab_Click( object sender, EventArgs e )

@@ -14,7 +14,8 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>3422add1</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -26,8 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>66</ApplicationRevision>
-    <ApplicationVersion>2.32.0.%2a</ApplicationVersion>
+    <ApplicationRevision>67</ApplicationRevision>
+    <ApplicationVersion>2.33.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -85,9 +86,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip.Reduced">
-      <HintPath>packages\DotNetZip.Reduced.1.9.1.8\lib\net20\Ionic.Zip.Reduced.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
@@ -121,26 +119,40 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ZstdNet, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ZstdNet.1.3.1\lib\net45\ZstdNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="actions\ActionCommandCls.cs" />
-    <Compile Include="actions\ActionTreeEventArgs.cs" />
-    <Compile Include="actions\ActionTreeInputNode.cs" />
-    <Compile Include="actions\ActionTreeNode.cs" />
+    <Compile Include="Actions\ActionCommandCls.cs" />
+    <Compile Include="Actions\ActionTreeEventArgs.cs" />
+    <Compile Include="Actions\ActionTreeInputNode.cs" />
+    <Compile Include="Actions\ActionTreeNode.cs" />
     <Compile Include="appConfiguration.cs" />
     <Compile Include="AppSettings.cs" />
-    <Compile Include="CloneableItems.cs" />
-    <Compile Include="DeviceCls.cs" />
-    <Compile Include="DeviceInst.cs" />
-    <Compile Include="DeviceList.cs" />
-    <Compile Include="Options\FormOptions.cs">
+    <Compile Include="Common\CloneableItems.cs" />
+    <Compile Include="Devices\DeviceCls.cs" />
+    <Compile Include="Devices\DeviceInst.cs" />
+    <Compile Include="Devices\DeviceList.cs" />
+    <Compile Include="Devices\Options\FormOptions.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Options\FormOptions.Designer.cs">
+    <Compile Include="Devices\Options\FormOptions.Designer.cs">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Options\Tuningoptions.cs" />
+    <Compile Include="Devices\Options\Tuningoptions.cs" />
     <Compile Include="RTF\RTFformatter.cs" />
+    <Compile Include="SC\Modifiers.cs" />
+    <Compile Include="SC\p4kFile\p4kDirectory.cs" />
+    <Compile Include="SC\p4kFile\p4kDirectoryEntry.cs" />
+    <Compile Include="SC\p4kFile\p4kEndOfCentralDirRecord.cs" />
+    <Compile Include="SC\p4kFile\p4kFile.cs" />
+    <Compile Include="SC\p4kFile\p4kFileHeader.cs" />
+    <Compile Include="SC\p4kFile\p4kFileTStamp.cs" />
+    <Compile Include="SC\p4kFile\p4kRecReader.cs" />
+    <Compile Include="SC\p4kFile\p4kSignatures.cs" />
+    <Compile Include="SC\p4kFile\p4kZ64EndOfCentralDirLocator.cs" />
+    <Compile Include="SC\p4kFile\p4kZ64EndOfCentralDirRecord.cs" />
     <Compile Include="SC\SCActionMapList.cs" />
     <Compile Include="Table\DS_ActionMap.cs" />
     <Compile Include="Table\DS_ActionMaps.cs">
@@ -158,16 +170,16 @@
     <Compile Include="Table\FormTable.Designer.cs">
       <DependentUpon>FormTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="Options\DeviceOptionParameter.cs" />
-    <Compile Include="Gamepad\GamepadCls.cs" />
-    <Compile Include="Joystick\JsReassingList.cs" />
-    <Compile Include="Keyboard\KeyboardCls.cs" />
-    <Compile Include="Joystick\Modifiers.cs" />
-    <Compile Include="Mouse\MouseCls.cs" />
-    <Compile Include="MySounds.cs" />
+    <Compile Include="Devices\Options\DeviceOptionParameter.cs" />
+    <Compile Include="Devices\Gamepad\GamepadCls.cs" />
+    <Compile Include="Devices\Joystick\JsReassingList.cs" />
+    <Compile Include="Devices\Keyboard\KeyboardCls.cs" />
+    <Compile Include="Devices\Joystick\Modifiers.cs" />
+    <Compile Include="Devices\Mouse\MouseCls.cs" />
+    <Compile Include="Common\MySounds.cs" />
     <Compile Include="OGL\BezierSeries.cs" />
     <Compile Include="OGL\CalcBezierCurve.cs" />
-    <Compile Include="Options\DeviceTuningParameter.cs" />
+    <Compile Include="Devices\Options\DeviceTuningParameter.cs" />
     <Compile Include="OGL\CubicSpline.cs" />
     <Compile Include="OGL\LoaderStatics.cs" />
     <Compile Include="OGL\FormJSCalCurve.cs">
@@ -176,17 +188,17 @@
     <Compile Include="OGL\FormJSCalCurve.Designer.cs">
       <DependentUpon>FormJSCalCurve.cs</DependentUpon>
     </Compile>
-    <Compile Include="Options\Deviceoptions.cs" />
+    <Compile Include="Devices\Options\Deviceoptions.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Joystick\FormReassign.cs">
+    <Compile Include="Devices\Joystick\FormReassign.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Joystick\FormReassign.Designer.cs">
+    <Compile Include="Devices\Joystick\FormReassign.Designer.cs">
       <DependentUpon>FormReassign.cs</DependentUpon>
     </Compile>
     <Compile Include="FormSettings.cs">
@@ -195,11 +207,11 @@
     <Compile Include="FormSettings.Designer.cs">
       <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Joystick\JoystickList.cs" />
-    <Compile Include="actions\ActionCls.cs" />
-    <Compile Include="actions\ActionMapCls.cs" />
-    <Compile Include="actions\ActionMapsCls.cs" />
-    <Compile Include="actions\ActionTree.cs" />
+    <Compile Include="Devices\Joystick\JoystickList.cs" />
+    <Compile Include="Actions\ActionCls.cs" />
+    <Compile Include="Actions\ActionMapCls.cs" />
+    <Compile Include="Actions\ActionMapsCls.cs" />
+    <Compile Include="Actions\ActionTree.cs" />
     <Compile Include="SC\ActivationModes.cs" />
     <Compile Include="SC\CryXMLlib\Conversions.cs" />
     <Compile Include="SC\CryXMLlib\CryIXml.cs" />
@@ -210,17 +222,17 @@
     <Compile Include="SC\CryXMLlib\CryXmlNodeRef.cs" />
     <Compile Include="SC\CryXMLlib\XmlTree.cs" />
     <Compile Include="SC\DProfileReader.cs" />
-    <Compile Include="Joystick\JoystickCls.cs" />
-    <Compile Include="actions\MyColors.cs" />
-    <Compile Include="Joystick\UC_JoyPanel.cs">
+    <Compile Include="Devices\Joystick\JoystickCls.cs" />
+    <Compile Include="Common\MyColors.cs" />
+    <Compile Include="Devices\Joystick\UC_JoyPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Joystick\UC_JoyPanel.Designer.cs">
+    <Compile Include="Devices\Joystick\UC_JoyPanel.Designer.cs">
       <DependentUpon>UC_JoyPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Options\OptionTree.cs" />
+    <Compile Include="Devices\Options\OptionTree.cs" />
     <Compile Include="OGL\LoaderDDS.cs" />
-    <Compile Include="Options\OptionsInvert.cs" />
+    <Compile Include="Devices\Options\OptionsInvert.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OGL\RK4Integrator.cs" />
@@ -229,20 +241,20 @@
     <Compile Include="SC\SCMappings.cs" />
     <Compile Include="SC\SCPath.cs" />
     <Compile Include="TheUser.cs" />
-    <Compile Include="Joystick\UICustHeader.cs" />
+    <Compile Include="Devices\Joystick\UICustHeader.cs" />
     <Compile Include="OGL\TriDiagonalMatrix.cs" />
-    <Compile Include="Joystick\xyPoints.cs" />
-    <Compile Include="Gamepad\UC_GpadPanel.cs">
+    <Compile Include="Devices\Joystick\xyPoints.cs" />
+    <Compile Include="Devices\Gamepad\UC_GpadPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gamepad\UC_GpadPanel.Designer.cs">
+    <Compile Include="Devices\Gamepad\UC_GpadPanel.Designer.cs">
       <DependentUpon>UC_GpadPanel.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Options\FormOptions.resx">
+    <EmbeddedResource Include="Devices\Options\FormOptions.resx">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Table\FormTable.resx">
@@ -251,13 +263,13 @@
     <EmbeddedResource Include="OGL\FormJSCalCurve.resx">
       <DependentUpon>FormJSCalCurve.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Joystick\FormReassign.resx">
+    <EmbeddedResource Include="Devices\Joystick\FormReassign.resx">
       <DependentUpon>FormReassign.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSettings.resx">
       <DependentUpon>FormSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Joystick\UC_JoyPanel.resx">
+    <EmbeddedResource Include="Devices\Joystick\UC_JoyPanel.resx">
       <DependentUpon>UC_JoyPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -270,7 +282,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Gamepad\UC_GpadPanel.resx">
+    <EmbeddedResource Include="Devices\Gamepad\UC_GpadPanel.resx">
       <DependentUpon>UC_GpadPanel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
@@ -286,6 +298,8 @@
     <None Include="graphics\SB_Sunset.dds">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="LICENSE" />
+    <None Include="README.md" />
     <None Include="Table\DS_ActionMaps.xsc">
       <DependentUpon>DS_ActionMaps.xsd</DependentUpon>
     </None>
@@ -333,6 +347,7 @@
     <Content Include="AC_Examples.txt" />
     <Content Include="Cassini_Logo_Icon.ico" />
     <Content Include="defaultProfile.xml" />
+    <Content Include="ReadMe.txt" />
     <None Include="graphics\YPR.png" />
     <None Include="graphics\300i.jpg" />
     <None Include="graphics\aurora.jpg" />
@@ -385,7 +400,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('packages\SharpDX.2.6.3\build\SharpDX.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\SharpDX.2.6.3\build\SharpDX.targets'))" />
+    <Error Condition="!Exists('packages\ZstdNet.1.3.1\build\ZstdNet.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\ZstdNet.1.3.1\build\ZstdNet.targets'))" />
   </Target>
+  <Import Project="packages\ZstdNet.1.3.1\build\ZstdNet.targets" Condition="Exists('packages\ZstdNet.1.3.1\build\ZstdNet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

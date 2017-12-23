@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SCJMapper_V2.Devices;
 
 namespace SCJMapper_V2.Table
 {

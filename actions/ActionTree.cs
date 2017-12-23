@@ -8,13 +8,13 @@ using System.Drawing;
 using SCJMapper_V2.Properties;
 using SCJMapper_V2.SC;
 using SCJMapper_V2.Table;
-using SCJMapper_V2.Keyboard;
-using SCJMapper_V2.Mouse;
-using SCJMapper_V2.Gamepad;
-using SCJMapper_V2.Joystick;
-using SCJMapper_V2.Options;
+using SCJMapper_V2.Devices;
+using SCJMapper_V2.Devices.Keyboard;
+using SCJMapper_V2.Devices.Mouse;
+using SCJMapper_V2.Devices.Gamepad;
+using SCJMapper_V2.Devices.Joystick;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Actions
 {
   /// <summary>
   /// Maintains the action tree and its GUI representation, the TreeView
@@ -460,7 +460,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="defaultProfileName">The name of the profile to load (w extension)</param>
     /// <param name="applyDefaults">True if default mappings should be carried on</param>
-    public void LoadProfileTree( string defaultProfileName, bool applyDefaults )
+    public void LoadProfileTree( bool applyDefaults )
     {
       log.Debug( "LoadProfileTree - Entry" );
 
@@ -480,7 +480,7 @@ namespace SCJMapper_V2
       DProfileReader dpReader = new DProfileReader( ); // we may read a profile
       TextReader txReader = null;
 
-      dpReader.fromXML( SCDefaultProfile.DefaultProfile( defaultProfileName ) );
+      dpReader.fromXML( SCDefaultProfile.DefaultProfile( ) );
       if ( dpReader.ValidContent ) {
         txReader = new StringReader( dpReader.CSVMap );
       }

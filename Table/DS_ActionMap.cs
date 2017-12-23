@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SCJMapper_V2.Devices;
 
 namespace SCJMapper_V2.Table
 {

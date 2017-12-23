@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using SCJMapper_V2.Actions;
+
 namespace SCJMapper_V2
 {
   partial class FormSettings : Form

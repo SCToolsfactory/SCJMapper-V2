@@ -19,6 +19,7 @@ namespace SCJMapper_V2.SC
       if ( l.StartsWith( "log started" ) ) return String.Format("\t{0}\n", inLine);
       if ( l.StartsWith( "executable:" ) ) return String.Format( "\t{0}\n", inLine );
       if ( l.StartsWith( "productversion" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "host cpu" ) ) return String.Format( "\t{0}\n", inLine );
 
 
       if ( l.StartsWith( "windows:" ) ) return String.Format( "\t{0}\n", inLine );

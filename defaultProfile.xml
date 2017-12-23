@@ -393,7 +393,7 @@
 		<action  name="v_view_zoom_in"  onPress="1"  onHold="1"  mouse="mwheel_up"  xboxpad=" "  joystick=" "  UILabel="@ui_CIZoomIn"  UIDescription="@ui_CIZoomInDesc"  />
 		<action  name="v_view_zoom_out"  onPress="1"  onHold="1"  mouse="mwheel_down"  xboxpad=" "  joystick=" "  UILabel="@ui_CIZoomOut"  UIDescription="@ui_CIZoomOutDesc"  />
 		<action  name="v_view_interact"  onPress="1"  onRelease="1"  keyboard="f"  xboxpad="triggerr_btn"  joystick=" "  />
-		<action  name="v_view_freelook_mode"  ActivationMode="all"  keyboard="lalt"  xboxpad=" "  joystick=" "  UILabel="@ui_CIUnlockView"  UIDescription="@ui_CIUnlockViewDesc"  />
+		<action  name="v_view_freelook_mode"  ActivationMode="all"  keyboard="z"  xboxpad=" "  joystick=" "  UILabel="@ui_CIUnlockView"  UIDescription="@ui_CIUnlockViewDesc"  />
 		<action  name="v_view_dynamic_focus"  keyboard="maxis_z"  xboxpad=" "  joystick=" "  optionGroup="flight_zoom"  UILabel="@ui_CIDynamicZoomInOut"  UIDescription="@ui_CIDynamicZoomInOutDesc"  />
 		<action  name="v_view_dynamic_focus_in"  ActivationMode="all"  keyboard=" "  xboxpad=" "  joystick=" "  UILabel="@ui_CIDynamicZoomIn"  UIDescription="@ui_CIDynamicZoomInDesc"  />
 		<action  name="v_view_dynamic_focus_out"  ActivationMode="all"  keyboard=" "  xboxpad=" "  joystick=" "  UILabel="@ui_CIDynamicZoomOut"  UIDescription="@ui_CIDynamicZoomOutDesc"  />
@@ -422,7 +422,7 @@
 		<action  name="v_throttle_down"  onPress="1"  onRelease="1"  always="1"  keyboard="s"  xboxpad="triggerl_btn"  joystick=" "  optiongroup="flight_move_throttle_down"  UILabel="@ui_CIThrottleDown"  UIDescription="@ui_CIThrottleDownDesc"  UICategory="@ui_CCThrottleControl"  />
 		<action  name="v_throttle_abs"  onPress="1"  onRelease="1"  always="1"  joystick="throttlez"  optionGroup="flight_throttle_abs"  UILabel="@ui_CIThrottle"  UIDescription="@ui_CIThrottleDesc"  />
 		<action  name="v_throttle_rel"  keyboard=" "  xboxpad=" "  joystick=" "  optionGroup="flight_throttle_rel"  UILabel="@ui_CIThrottleRel"  UIDescription="@ui_CIThrottleRelDesc"  />
-		<action  name="v_brake"  onPress="1"  onRelease="1"  keyboard="z"  xboxpad=" "  joystick=" "  UILabel="@ui_CIBrake"  UIDescription="@ui_CIBrakeDesc"  />
+		<action  name="v_brake"  onPress="1"  onRelease="1"  keyboard="capslock"  xboxpad=" "  joystick=" "  UILabel="@ui_CIBrake"  UIDescription="@ui_CIBrakeDesc"  />
 		<action  name="v_target_match_vel"  ActivationMode="press"  keyboard=" "  xboxpad=" "  joystick=" "  UILabel="@ui_CIMatchTargetSpeed"  UIDescription="@ui_CIMatchTargetSpeedDesc"  />
 		<action  name="v_ifcs_toggle_vector_decoupling"  ActivationMode="smart_toggle"  keyboard=" "  xboxpad=" "  joystick=" "  UILabel="@ui_CIToggleDecoupledMode"  UIDescription="@ui_CIToggleDecoupledModeDesc"  UICategory="@ui_CCFlightModes"  />
 		<action  name="v_strafe_up"  onPress="1"  onRelease="1"  always="1"  keyboard="space"  xboxpad=" "  joystick="button9"  optionGroup="flight_move_strafe_vertical"  UILabel="@ui_CIStrafeUp"  UIDescription="@ui_CIStrafeUpDesc"  />
@@ -461,7 +461,6 @@
 		<action  name="v_boost"  ActivationMode="all"  keyboard="x"  xboxpad="thumbl"  joystick="button7"  UILabel="@ui_CIboost"  UIDescription="@ui_CIboostDesc"  />
 		<action  name="v_toggle_landing_system"  ActivationMode="tap"  keyboard="n"  xboxpad="shoulderl+dpad_up"  joystick="button12"  UILabel="@ui_CIToggleLandingSystem"  UIDescription="@ui_CIToggleLandingSystemDesc"  />
 		<action  name="v_autoland"  ActivationMode="delayed_hold"  keyboard="n"  xboxpad="y"  joystick="button12"  UILabel="@ui_CIAutoland"  UIDescription="@ui_CIAutolandDesc"  />
-																																																																																																					
 		<action  name="v_toggle_qdrive_engagement"  ActivationMode="delayed_press"  keyboard="b"  xboxpad="y"  UILabel="@ui_CIQuantumDriveToggle"  UIDescription="@ui_CIQuantumDriveToggleDesc"  >
 			<joystick  ActivationMode="press"  input=" "  />
 		</action>
@@ -696,7 +695,7 @@
 			<joystick  ActivationMode="press"  input=" "  />
 		</action>
 
-		<action  name="prone"  ActivationMode="hold"  keyboard="z"  joystick=" "  UILabel="@ui_CIFPSStanceProne"  UIDescription="@ui_CIFPSStanceProneDesc"  >
+		<action  name="prone"  ActivationMode="hold"  keyboard="capslock"  joystick=" "  UILabel="@ui_CIFPSStanceProne"  UIDescription="@ui_CIFPSStanceProneDesc"  >
 			<xboxpad  ActivationMode="delayed_press"  input="b"  />
 		</action>
 
@@ -748,7 +747,7 @@
 		<action  name="cancelselect"  ActivationMode="press"  onRelease="1"  keyboard="mouse2"  xboxpad="b"  />
 		<action  name="thirdperson"  ActivationMode="tap"  noModifiers="1"  keyboard="f4"  xboxpad=" "  joystick=" "  UILabel="@ui_CIFPSToggleThirdPerson"  UIDescription="@ui_CIFPSToggleThirdPersonDesc"  />
 		<action  name="toggle_cursor_input"  ActivationMode="hold"  keyboard="tab"  xboxpad="back"  />
-		<action  name="free_thirdperson_camera"  ActivationMode="tap"  keyboard="lalt"  xboxpad=" "  joystick=" "  UILabel="@ui_CIFPSToggle3rdPersonFreeView"  UIDescription="@ui_CIFPSToggle3rdPersonFreeViewDesc"  />
+		<action  name="free_thirdperson_camera"  ActivationMode="tap"  keyboard="z"  xboxpad=" "  joystick=" "  UILabel="@ui_CIFPSToggle3rdPersonFreeView"  UIDescription="@ui_CIFPSToggle3rdPersonFreeViewDesc"  />
 		<action  name="pan_thirdperson_up"  ActivationMode="press"  keyboard="up"  />
 		<action  name="pan_thirdperson_down"  ActivationMode="press"  keyboard="down"  />
 		<action  name="break_conversation_effects"  onPress="1"  onRelease="1"  keyboard="lshift"  xboxpad="thumbl"  UILabel=""  UIDescription=""  />
@@ -823,9 +822,9 @@
 		<action  name="eva_strafe_forward"  ActivationMode="hold"  always="1"  keyboard="w"  xboxpad=" "  joystick=" "  UILabel="@ui_CIEVAStrafeForward"  UIDescription="@ui_CIEVAStrafeForwardDesc"  />
 		<action  name="eva_strafe_back"  ActivationMode="hold"  always="1"  keyboard="s"  xboxpad=" "  joystick=" "  UILabel="@ui_CIEVAStrafeBack"  UIDescription="@ui_CIEVAStrafeBackDesc"  />
 		<action  name="eva_strafe_longitudinal"  keyboard=" "  xboxpad="thumbly"  joystick=" "  UILabel="@ui_CIEVAStrafeLongitudinal"  UIDescription="@ui_CIEVAStrafeLongitudinalDesc"  />
-		<action  name="eva_brake"  ActivationMode="hold"  keyboard="z"  xboxpad="b"  joystick=" "  UILabel="@ui_CIEVABrake"  UIDescription="@ui_CIEVABrakeDesc"  />
+		<action  name="eva_brake"  ActivationMode="hold"  keyboard="capslock"  xboxpad="b"  joystick=" "  UILabel="@ui_CIEVABrake"  UIDescription="@ui_CIEVABrakeDesc"  />
 		<action  name="eva_boost"  ActivationMode="hold"  keyboard="lshift"  xboxpad="thumbl"  joystick=" "  UILabel="@ui_CIEVABoost"  UIDescription="@ui_CIEVABoostDesc"  />
-		<action  name="eva_toggle_headlook_mode"  ActivationMode="tap"  keyboard="lalt"  xboxpad=" "  joystick=" "  UILabel="@ui_CIEVAFreelook"  UIDescription="@ui_CIEVAFreelookDesc"  />
+		<action  name="eva_toggle_headlook_mode"  ActivationMode="tap"  keyboard="z"  xboxpad=" "  joystick=" "  UILabel="@ui_CIEVAFreelook"  UIDescription="@ui_CIEVAFreelookDesc"  />
 	</actionmap>
 
 	<actionmap  name="vehicle_general"  version="27"  UILabel="@ui_CGVehicleGeneral"  UICategory="@ui_CCVehicle"  >
@@ -833,7 +832,7 @@
 			<xboxpad  ActivationMode="delayed_press"  input="shoulderl+y"  />
 		</action>
 
-		<action  name="v_horn"  onPress="1"  onRelease="1"  keyboard="z"  xboxpad="b"  joystick="button8"  UILabel="@ui_CIVehicleHorn"  UIDescription="@ui_CIVehicleHornDesc"  />
+		<action  name="v_horn"  onPress="1"  onRelease="1"  keyboard="capslock"  xboxpad="b"  joystick="button8"  UILabel="@ui_CIVehicleHorn"  UIDescription="@ui_CIVehicleHornDesc"  />
 		<action  name="v_view_cycle_fwd"  ActivationMode="tap"  keyboard="f4"  xboxpad=" "  joystick=" "  UILabel="@ui_CICycleView"  UIDescription="@ui_CICycleViewDesc"  />
 		<action  name="v_view_option"  onPress="1"  onRelease="1"  keyboard=""  xboxpad=""  />
 		<action  name="v_view_zoom_in"  onPress="1"  onHold="1"  mouse="mwheel_up"  xboxpad=" "  joystick=" "  UILabel="@ui_CIZoomIn"  UIDescription="@ui_CIZoomInDesc"  />
@@ -948,7 +947,7 @@
 		<action  name="spectate_moveup"  ActivationMode="hold"  keyboard="space"  xboxpad="shoulderl+thumbr_up"  UILabel=""  UIDescription=""  />
 		<action  name="spectate_movedown"  ActivationMode="hold"  keyboard="lctrl"  xboxpad="shoulderl+thumbr_down"  UILabel=""  UIDescription=""  />
 		<action  name="spectate_freecam_sprint"  ActivationMode="hold"  keyboard="lshift"  xboxpad="thumbl"  UILabel=""  UIDescription=""  />
-		<action  name="spectate_toggle_freecam"  ActivationMode="tap"  keyboard="lalt"  xboxpad="thumbr"  UILabel=""  UIDescription=""  />
+		<action  name="spectate_toggle_freecam"  ActivationMode="tap"  keyboard="z"  xboxpad="thumbr"  UILabel=""  UIDescription=""  />
 	</actionmap>
 
 	<actionmap  name="default"  version="24"  UILabel="@ui_CGUIGeneral"  UIDescription="@ui_CGUGeneralDesc"  >
@@ -1287,3 +1286,4 @@
 	</actionmap>
 
 </profile>
+

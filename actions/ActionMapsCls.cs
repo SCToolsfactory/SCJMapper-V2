@@ -13,14 +13,15 @@ using System.Data;
 
 using SCJMapper_V2.SC;
 using SCJMapper_V2.Table;
-using SCJMapper_V2.Keyboard;
-using SCJMapper_V2.Mouse;
-using SCJMapper_V2.Gamepad;
-using SCJMapper_V2.Joystick;
-using SCJMapper_V2.Options;
+using SCJMapper_V2.Devices;
+using SCJMapper_V2.Devices.Keyboard;
+using SCJMapper_V2.Devices.Mouse;
+using SCJMapper_V2.Devices.Gamepad;
+using SCJMapper_V2.Devices.Joystick;
+using SCJMapper_V2.Devices.Options;
 using System.Linq;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Actions
 {
   /// <summary>
   ///   Maintains the complete ActionMaps - something like:
@@ -109,10 +110,10 @@ namespace SCJMapper_V2
     /// <returns>The ActionMaps copy with reassigned input</returns>
     public ActionMapsCls ReassignJsN( JsReassingList newJsList )
     {
-      var newMaps = new ActionMapsCls(this);
-      newMaps.m_uiCustHeader = ( UICustHeader )this.m_uiCustHeader.Clone( );
-      newMaps.m_tuningOptions = ( Tuningoptions )this.m_tuningOptions.Clone( );
-      newMaps.m_deviceOptions = ( Deviceoptions )this.m_deviceOptions.Clone( );
+      var newMaps = new ActionMapsCls( this );
+      newMaps.m_uiCustHeader = (UICustHeader)this.m_uiCustHeader.Clone( );
+      newMaps.m_tuningOptions = (Tuningoptions)this.m_tuningOptions.Clone( );
+      newMaps.m_deviceOptions = (Deviceoptions)this.m_deviceOptions.Clone( );
 
       foreach ( ActionMapCls am in this ) {
         newMaps.Add( am.ReassignJsN( newJsList ) );  // creates the deep copy of the tree
@@ -135,7 +136,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// ctor
     /// </summary>
-    public ActionMapsCls( )
+    public ActionMapsCls()
     {
       version = ACM_VERSION;
 
@@ -154,7 +155,7 @@ namespace SCJMapper_V2
 
 
 
-    private void CreateNewOptions( )
+    private void CreateNewOptions()
     {
       // create options objs
       m_uiCustHeader = new UICustHeader( );
@@ -172,12 +173,13 @@ namespace SCJMapper_V2
       log.Debug( "Merge - Entry" );
 
       // do we find an actionmap like the new one in our list ?
-      ActionMapCls ACM = this.Find( delegate( ActionMapCls acm ) {
+      ActionMapCls ACM = this.Find( delegate ( ActionMapCls acm ) {
         return acm.name == newAcm.name;
       } );
       if ( ACM == null ) {
         ; // this.Add( newAcm ); // no, add new
-      } else {
+      }
+      else {
         ACM.Merge( newAcm ); // yes, merge it
       }
     }
@@ -192,8 +194,8 @@ namespace SCJMapper_V2
 
       int AMcount = 1;
       foreach ( ActionMapCls am in this ) {
-        DS_ActionMaps.T_ActionMapRow amr =  dsa.T_ActionMap.NewT_ActionMapRow();
-        string amShown = DS_ActionMap.ActionMapShown(am.name, AMcount++);
+        DS_ActionMaps.T_ActionMapRow amr = dsa.T_ActionMap.NewT_ActionMapRow( );
+        string amShown = DS_ActionMap.ActionMapShown( am.name, AMcount++ );
 
         amr.ID_ActionMap = amShown;
         dsa.T_ActionMap.AddT_ActionMapRow( amr );
@@ -201,7 +203,7 @@ namespace SCJMapper_V2
         foreach ( ActionCls ac in am ) {
           int ilIndex = 0;
           while ( ac.inputList.Count > ilIndex ) {
-            DS_ActionMaps.T_ActionRow ar =  dsa.T_Action.NewT_ActionRow();
+            DS_ActionMaps.T_ActionRow ar = dsa.T_Action.NewT_ActionRow( );
             ar.ID_Action = DS_ActionMap.ActionID( am.name, ac.key, ac.inputList[ilIndex].NodeIndex ); // make a unique key
             ar.AddBind = ( ilIndex > 0 ); // all but the first are addbinds
             ar.REF_ActionMap = amShown;
@@ -228,13 +230,13 @@ namespace SCJMapper_V2
     public void updateDataSet( DS_ActionMaps dsa, string actionID )
     {
       foreach ( ActionMapCls am in this ) {
-        DS_ActionMaps.T_ActionMapRow amr =  dsa.T_ActionMap.NewT_ActionMapRow();
+        DS_ActionMaps.T_ActionMapRow amr = dsa.T_ActionMap.NewT_ActionMapRow( );
 
         foreach ( ActionCls ac in am ) {
           int ilIndex = 0;
           while ( ac.inputList.Count > ilIndex ) {
             if ( actionID == DS_ActionMap.ActionID( am.name, ac.key, ac.inputList[ilIndex].NodeIndex ) ) {
-              DS_ActionMaps.T_ActionRow ar =dsa.T_Action.FindByID_Action(actionID);
+              DS_ActionMaps.T_ActionRow ar = dsa.T_Action.FindByID_Action( actionID );
               ar.Usr_Binding = ac.inputList[ilIndex].DevInput;
               ar.Usr_Modifier = ac.inputList[ilIndex].ActivationMode.Name;
               ar.Disabled = DeviceCls.IsBlendedInput( ac.inputList[ilIndex].Input );
@@ -260,7 +262,7 @@ namespace SCJMapper_V2
     {
       log.Debug( "ActionMapsCls.toXML - Entry" );
 
-      AppSettings  appSettings = new AppSettings( );
+      AppSettings appSettings = new AppSettings( );
 
       // *** HEADER  
 
@@ -308,8 +310,10 @@ namespace SCJMapper_V2
       // *** DEVICE OPTIONS
       if ( m_deviceOptions.Count > 0 ) r += m_deviceOptions.toXML( ) + string.Format( "\n" );
 
-      // *** ACTION MAPS
+      // *** MODIFIERS
+      if ( SC.Modifiers.Instance.UserCount > 0 ) r += SC.Modifiers.Instance.ToXML( ) + string.Format( "\n" );
 
+      // *** ACTION MAPS
       foreach ( ActionMapCls amc in this ) {
         r += string.Format( "{0}\n", amc.toXML( ) );
       }
@@ -347,7 +351,8 @@ namespace SCJMapper_V2
             jsN[i] = reader[string.Format( "js{0}", i + 1 )];
             jsNGUID[i] = reader[string.Format( "js{0}G", i + 1 )];
           }
-        } else {
+        }
+        else {
           return false;
         }
       }
@@ -371,16 +376,24 @@ namespace SCJMapper_V2
           if ( acm.fromXML( x ) ) {
             this.Merge( acm ); // merge list
           }
-        } else if ( reader.Name.ToLowerInvariant( ) == "customisationuiheader" ) {
+        }
+        else if ( reader.Name.ToLowerInvariant( ) == "customisationuiheader" ) {
           string x = reader.ReadOuterXml( );
           m_uiCustHeader.fromXML( x );
-        } else if ( reader.Name.ToLowerInvariant( ) == "deviceoptions" ) {
+        }
+        else if ( reader.Name.ToLowerInvariant( ) == "deviceoptions" ) {
           string x = reader.ReadOuterXml( );
           m_deviceOptions.fromXML( x );
-        } else if ( reader.Name.ToLowerInvariant( ) == "options" ) {
+        }
+        else if ( reader.Name.ToLowerInvariant( ) == "options" ) {
           string x = reader.ReadOuterXml( );
           m_tuningOptions.fromXML( x );
-        } else {
+        }
+        else if ( reader.Name.ToLowerInvariant( ) == "modifiers" ) {
+          string x = reader.ReadOuterXml( );
+          SC.Modifiers.Instance.FromXML( x ); // add as 'non profile'
+        }
+        else {
           reader.Read( );
         }
 

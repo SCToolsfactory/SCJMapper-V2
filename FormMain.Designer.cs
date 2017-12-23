@@ -15,8 +15,8 @@
     {
       timer1.Stop( );
       // Unacquire all DirectInput objects.
-      foreach ( Joystick.JoystickCls js in DeviceInst.JoystickListRef ) js.FinishDX( );
-      DeviceInst.JoystickListRef.Clear( );
+      foreach ( Devices.Joystick.JoystickCls js in Devices.DeviceInst.JoystickListRef ) js.FinishDX( );
+      Devices.DeviceInst.JoystickListRef.Clear( );
 
       if ( disposing && ( components != null ) ) components.Dispose( );
       if ( disposing && ( m_AT != null ) ) m_AT.Dispose( );
@@ -91,7 +91,7 @@
       this.tdiAddMod3 = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
-      this.UC_JoyPanel = new SCJMapper_V2.Joystick.UC_JoyPanel();
+      this.UC_JoyPanel = new SCJMapper_V2.Devices.Joystick.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -1478,7 +1478,7 @@
     private System.Windows.Forms.ToolStripMenuItem tsiSaveAs;
     private System.Windows.Forms.SaveFileDialog SFD;
     private System.Windows.Forms.ImageList IL;
-    private Joystick.UC_JoyPanel UC_JoyPanel;
+    private Devices.Joystick.UC_JoyPanel UC_JoyPanel;
     private System.Windows.Forms.TableLayoutPanel tlpanel;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;

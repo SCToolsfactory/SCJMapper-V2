@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Actions
 {
   /// <summary>
   /// Our INPUT TreeNode - inherits a regular one and adds some functionality

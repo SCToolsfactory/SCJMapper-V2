@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SCJMapper_V2
+using SCJMapper_V2.Common;
+using SCJMapper_V2.Devices;
+
+namespace SCJMapper_V2.Actions
 {
   /// <summary>
   /// Our TreeNode - inherits a regular one and adds some functionality

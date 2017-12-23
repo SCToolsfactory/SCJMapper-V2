@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Actions
 {
   /// <summary>
   /// Event class to automate selection,

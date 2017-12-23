@@ -249,7 +249,7 @@ namespace SCJMapper_V2.SC
     /// Returns the list of ActivationMode names
     /// </summary>
     /// <returns>A list of names</returns>
-    public List<string> Names
+    public IList<string> Names
     {
       get
       {

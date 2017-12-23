@@ -4,10 +4,10 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
-using SCJMapper_V2.Joystick;
+using SCJMapper_V2.Devices.Joystick;
 using System.Linq;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Actions
 {
   /// <summary>
   ///   Maintains an actionmap - something like:

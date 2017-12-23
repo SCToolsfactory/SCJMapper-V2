@@ -4,6 +4,8 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
+using SCJMapper_V2.Actions;
+
 namespace SCJMapper_V2.SC
 {
   /// <summary>
@@ -131,7 +133,8 @@ namespace SCJMapper_V2.SC
       if ( attr.ContainsKey( "ActivationMode" ) ) {
         actModeName = attr["ActivationMode"];
         multiTap = ActivationModes.Instance.MultiTapFor( actModeName ).ToString( ); // given by the already collected items
-      } else {
+      }
+      else {
         // name remains default - we handle multiTaps only here
         multiTap = "1"; // default if not changed in the action to may be 2 or so..
         if ( attr.ContainsKey( "multiTap" ) ) {
@@ -148,9 +151,10 @@ namespace SCJMapper_V2.SC
         ac.defBinding = attr["joystick"];
         ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
-          ac.defBinding = Joystick.JoystickCls.BlendedInput;
+          ac.defBinding = Devices.Joystick.JoystickCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
-        } else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
+        }
+        else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
           ac.defBinding = "js1_" + ac.defBinding;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
@@ -163,9 +167,10 @@ namespace SCJMapper_V2.SC
         ac.defBinding = attr["keyboard"];
         ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
-          ac.defBinding = Keyboard.KeyboardCls.BlendedInput;
+          ac.defBinding = Devices.Keyboard.KeyboardCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
-        } else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
+        }
+        else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
           ac.defBinding = "kb1_" + ac.defBinding;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
@@ -178,9 +183,10 @@ namespace SCJMapper_V2.SC
         ac.defBinding = attr["mouse"];
         ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
-          ac.defBinding = Mouse.MouseCls.BlendedInput;
+          ac.defBinding = Devices.Mouse.MouseCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
-        } else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
+        }
+        else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
           ac.defBinding = "mo1_" + ac.defBinding;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
@@ -193,9 +199,10 @@ namespace SCJMapper_V2.SC
         ac.defBinding = attr["xboxpad"];
         ac.defActivationMode = actMode;
         if ( ac.defBinding == " " ) {
-          ac.defBinding = Gamepad.GamepadCls.BlendedInput;
+          ac.defBinding = Devices.Gamepad.GamepadCls.BlendedInput;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
-        } else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
+        }
+        else if ( !string.IsNullOrEmpty( ac.defBinding ) ) {
           ac.defBinding = "xi1_" + ac.defBinding;
           m_currentMap.Add( ac );  // finally add it to the current map if it was bound
         }
@@ -324,10 +331,12 @@ namespace SCJMapper_V2.SC
         // the element name is a control
         if ( xr.NodeType == XmlNodeType.EndElement ) {
           done = ( xr.Name == m_nodeNameStack.Peek( ) ); // EXIT if the end element matches the entry
-        } else if ( xr.IsEmptyElement ) {
+        }
+        else if ( xr.IsEmptyElement ) {
           // an attribute only element
           CollectActions( attr );
-        } else {
+        }
+        else {
           // one with subelements again
           m_nodeNameStack.Push( xr.Name ); // recursive .. push element name to terminate later (this is i.e. keyboard) 
           ReadActionSub( xr, actionName, xr.Name );
@@ -370,13 +379,15 @@ namespace SCJMapper_V2.SC
                 m_currentMap.name = mapName;
                 if ( !m_aMap.ContainsKey( mapName ) ) { //20170325 - fix multiple map names - don't add the second, third etc. (CIG bug..)
                   m_aMap.Add( mapName, m_currentMap ); // add to our inventory
-                }else {
+                }
+                else {
                   log.DebugFormat( "ReadElement: IGNORED duplicate map with name: {0}", mapName );
                 }
                 m_state = EState.inActionMap; // now we are in and processing the map
               }
             }
-          } else if ( m_state == EState.inActionMap ) {
+          }
+          else if ( m_state == EState.inActionMap ) {
             // processing a valid action map - collect actions
             if ( eName.ToLower( ) == "action" ) {
               // this is an action.. - collect it
@@ -415,10 +426,12 @@ namespace SCJMapper_V2.SC
             if ( xr.IsEmptyElement ) {
               retVal = retVal && ReadEmptyElement( xr );
               m_nodeNameStack.Pop( ); // empty ones end inline
-            } else {
+            }
+            else {
               retVal = retVal && ReadElement( xr );
             }
-          } else if ( xr.NodeType == XmlNodeType.EndElement ) {
+          }
+          else if ( xr.NodeType == XmlNodeType.EndElement ) {
             //Console.Write( "</{0}>\n", xr.Name );
             string exitElement = m_nodeNameStack.Pop( );
             if ( m_state == EState.inActionMap )
@@ -432,14 +445,20 @@ namespace SCJMapper_V2.SC
         else
           return false;
 
-      } catch ( Exception ex ) {
+      }
+      catch ( Exception ex ) {
         // get any exceptions from reading
         log.Error( "DProfileReader.ReadXML - unexpected", ex );
         return false;
       }
     }
 
-
+    /*
+	//<ActivationModes  >
+	//	<ActivationMode  name="tap"  onPress="0"  onHold="0"  onRelease="1"  multiTap="1"  multiTapBlock="1"  pressTriggerThreshold="-1"  releaseTriggerThreshold="0.25"  releaseTriggerDelay="0"  />
+  ... 
+	//</ActivationModes>
+     */
     private bool ReadActivationModes( XmlReader xr )
     {
       log.Debug( "DProfileReader.ReadActivationModes - Entry" );
@@ -458,7 +477,45 @@ namespace SCJMapper_V2.SC
         } while ( xr.Read( ) );
 
         return true;
-      } catch ( Exception ex ) {
+      }
+      catch ( Exception ex ) {
+        // get any exceptions from reading
+        log.Error( "DProfileReader.ReadXML - unexpected", ex );
+        return false;
+      }
+    }
+
+
+    // Read modifiers
+
+    //<modifiers>
+    //  <mod input = "xi_shoulderl" />
+    //  <mod input ="xi_triggerl_btn"  />
+    //  <mod input = "xi_dpad_down" />
+    //  <mod input ="xi_y"  />
+    //  <mod input = "kb_z" />
+    //  <mod input ="kb_f3"  />
+    //  <mod input = "kb_lalt" />
+
+    //  <mod input = "kb_lalt" />
+    //  <mod input = "kb_f4"  />
+    //  <mod input = "kb_mouse2" />
+
+    //  <mod input = "xi_dpad_down" />
+    //  <mod input = "xi_shoulderl"  />
+    //  <mod input = "xi_triggerl_btn" />
+
+    //</ modifiers >
+
+    private bool ReadModifiers( XmlReader xr )
+    {
+      log.Debug( "DProfileReader.ReadModifiers - Entry" );
+
+      try {
+        xr.ReadToFollowing( "modifiers" );
+        return Modifiers.Instance.FromXML( xr.ReadOuterXml(), true );
+      }
+      catch ( Exception ex ) {
         // get any exceptions from reading
         log.Error( "DProfileReader.ReadXML - unexpected", ex );
         return false;
@@ -493,6 +550,9 @@ namespace SCJMapper_V2.SC
       ValidContent = true; // init
       reader.Read( );
       ValidContent &= ReadActivationModes( reader );
+
+      Modifiers.Instance.Clear( );
+      ValidContent &= ReadModifiers( reader );
 
       m_nodeNameStack.Push( "profile" ); // we are already in the XML now
 

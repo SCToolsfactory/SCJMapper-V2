@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 
 using SCJMapper_V2.SC;
-using SCJMapper_V2.Joystick;
+using SCJMapper_V2.Devices;
+using SCJMapper_V2.Devices.Joystick;
 
-namespace SCJMapper_V2
+namespace SCJMapper_V2.Actions
 {
   /// <summary>
   /// Maintains one ActionCommand 

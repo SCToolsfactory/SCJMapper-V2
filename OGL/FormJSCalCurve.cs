@@ -8,17 +8,16 @@ using System.Text;
 using System.Windows.Forms;
 
 using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
 
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms.DataVisualization.Charting;
 
+using SCJMapper_V2.Actions;
+using SCJMapper_V2.Devices.Joystick;
+using SCJMapper_V2.Devices.Options;
 using SCJMapper_V2.OGL.TextureLoaders;
-using SCJMapper_V2.Joystick;
-using SCJMapper_V2.Options;
 
 namespace SCJMapper_V2.OGL
 {

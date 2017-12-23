@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using System.Linq;
 using System.IO;
 
+using SCJMapper_V2.Common;
 using SCJMapper_V2.SC;
-using SCJMapper_V2.Keyboard;
-using SCJMapper_V2.Mouse;
-using SCJMapper_V2.Gamepad;
-using SCJMapper_V2.Joystick;
-using System.Linq;
+using SCJMapper_V2.Devices;
+using SCJMapper_V2.Devices.Keyboard;
+using SCJMapper_V2.Devices.Mouse;
+using SCJMapper_V2.Devices.Gamepad;
+using SCJMapper_V2.Devices.Joystick;
 
-namespace SCJMapper_V2
+
+namespace SCJMapper_V2.Actions
 {
   /// <summary>
   ///   Maintains an action - something like:
