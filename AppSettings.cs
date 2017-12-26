@@ -44,7 +44,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// Show the Settings Dialog
     /// </summary>
-    public DialogResult ShowSettings( String pasteString )
+    public DialogResult ShowSettings( string pasteString )
     {
       if ( FS == null ) FS = new FormSettings( this );
       FS.PasteString = pasteString; // propagate joyinput
@@ -58,9 +58,9 @@ namespace SCJMapper_V2
     // manages Upgrade
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "True" )] 
-    public Boolean FirstRun
+    public bool FirstRun
     {
-      get { return ( Boolean )this["FirstRun"]; }
+      get { return ( bool )this["FirstRun"]; }
       set { this["FirstRun"] = value; }
     }
 
@@ -85,57 +85,57 @@ namespace SCJMapper_V2
     // User Config Settings
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "layout_joystick_spacesim" )] // from Game Bundle
-    public String DefMappingName
+    public string DefMappingName
     {
-      get { return ( String )this["DefMappingName"]; }
+      get { return ( string )this["DefMappingName"]; }
       set { this["DefMappingName"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "layout_my_joystick" )] // just a default
-    public String MyMappingName
+    public string MyMappingName
     {
-      get { return ( String )this["MyMappingName"]; }
+      get { return ( string )this["MyMappingName"]; }
       set { this["MyMappingName"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "True" )]
-    public Boolean ShowJoystick
+    public bool ShowJoystick
     {
-      get { return ( Boolean )this["ShowJoystick"]; }
+      get { return ( bool )this["ShowJoystick"]; }
       set { this["ShowJoystick"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "True" )]
-    public Boolean ShowGamepad
+    public bool ShowGamepad
     {
-      get { return ( Boolean )this["ShowGamepad"]; }
+      get { return ( bool )this["ShowGamepad"]; }
       set { this["ShowGamepad"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "True" )]
-    public Boolean ShowKeyboard
+    public bool ShowKeyboard
     {
-      get { return ( Boolean )this["ShowKeyboard"]; }
+      get { return ( bool )this["ShowKeyboard"]; }
       set { this["ShowKeyboard"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "True" )]
-    public Boolean ShowMouse  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
+    public bool ShowMouse  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
     {
-      get { return ( Boolean )this["ShowMouse"]; }
+      get { return ( bool )this["ShowMouse"]; }
       set { this["ShowMouse"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "False" )]
-    public Boolean ShowMapped
+    public bool ShowMapped
     {
-      get { return ( Boolean )this["ShowMapped"]; }
+      get { return ( bool )this["ShowMapped"]; }
       set { this["ShowMapped"] = value; }
     }
 
@@ -144,162 +144,162 @@ namespace SCJMapper_V2
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS1
+    public string IgnoreJS1
     {
-      get { return ( String )this["IgnoreJS1"]; }
+      get { return ( string )this["IgnoreJS1"]; }
       set { this["IgnoreJS1"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS2
+    public string IgnoreJS2
     {
-      get { return ( String )this["IgnoreJS2"]; }
+      get { return ( string )this["IgnoreJS2"]; }
       set { this["IgnoreJS2"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS3
+    public string IgnoreJS3
     {
-      get { return ( String )this["IgnoreJS3"]; }
+      get { return ( string )this["IgnoreJS3"]; }
       set { this["IgnoreJS3"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS4
+    public string IgnoreJS4
     {
-      get { return ( String )this["IgnoreJS4"]; }
+      get { return ( string )this["IgnoreJS4"]; }
       set { this["IgnoreJS4"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS5
+    public string IgnoreJS5
     {
-      get { return ( String )this["IgnoreJS5"]; }
+      get { return ( string )this["IgnoreJS5"]; }
       set { this["IgnoreJS5"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS6
+    public string IgnoreJS6
     {
-      get { return ( String )this["IgnoreJS6"]; }
+      get { return ( string )this["IgnoreJS6"]; }
       set { this["IgnoreJS6"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS7
+    public string IgnoreJS7
     {
-      get { return ( String )this["IgnoreJS7"]; }
+      get { return ( string )this["IgnoreJS7"]; }
       set { this["IgnoreJS7"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS8
+    public string IgnoreJS8
     {
-      get { return ( String )this["IgnoreJS8"]; }
+      get { return ( string )this["IgnoreJS8"]; }
       set { this["IgnoreJS8"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS9
+    public string IgnoreJS9
     {
-      get { return ( String )this["IgnoreJS9"]; }
+      get { return ( string )this["IgnoreJS9"]; }
       set { this["IgnoreJS9"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS10
+    public string IgnoreJS10
     {
-      get { return ( String )this["IgnoreJS10"]; }
+      get { return ( string )this["IgnoreJS10"]; }
       set { this["IgnoreJS10"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS11
+    public string IgnoreJS11
     {
-      get { return ( String )this["IgnoreJS11"]; }
+      get { return ( string )this["IgnoreJS11"]; }
       set { this["IgnoreJS11"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String IgnoreJS12
+    public string IgnoreJS12
     {
-      get { return ( String )this["IgnoreJS12"]; }
+      get { return ( string )this["IgnoreJS12"]; }
       set { this["IgnoreJS12"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "" )]
-    public String UserSCPath
+    public string UserSCPath
     {
-      get { return ( String )this["UserSCPath"]; }
+      get { return ( string )this["UserSCPath"]; }
       set { this["UserSCPath"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "False" )]
-    public Boolean UserSCPathUsed
+    public bool UserSCPathUsed
     {
-      get { return ( Boolean )this["UserSCPathUsed"]; }
+      get { return ( bool )this["UserSCPathUsed"]; }
       set { this["UserSCPathUsed"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( ",default,multiplayer,singleplayer,player,flycam,vehicle_driver," )] // empty  Note: comma separated list, must have a comma at the begining and the end (to find 'player' on its own...)
-    public String IgnoreActionmaps
+    public string IgnoreActionmaps
     {
-      get { return ( String )this["IgnoreActionmaps"]; }
+      get { return ( string )this["IgnoreActionmaps"]; }
       set { this["IgnoreActionmaps"] = value; }
     }
 
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "False" )]
-    public Boolean DetectGamepad
+    public bool DetectGamepad
     {
-      get { return ( Boolean )this["DetectGamepad"]; }
+      get { return ( bool )this["DetectGamepad"]; }
       set { this["DetectGamepad"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "False" )]
-    public Boolean UsePTU
+    public bool UsePTU
     {
-      get { return false; } // ( Boolean )this["UsePTU"]; } no longer used
+      get { return false; } // ( bool )this["UsePTU"]; } no longer used
       set { this["UsePTU"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "False" )]
-    public Boolean UseCSVListing
+    public bool UseCSVListing
     {
-      get { return ( Boolean )this["UseCSVListing"]; }
+      get { return ( bool )this["UseCSVListing"]; }
       set { this["UseCSVListing"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "False" )]
-    public Boolean ListModifiers
+    public bool ListModifiers
     {
-      get { return ( Boolean )this["ListModifiers"]; }
+      get { return ( bool )this["ListModifiers"]; }
       set { this["ListModifiers"] = value; }
     }
 
     [UserScopedSettingAttribute( )]
     [DefaultSettingValueAttribute( "False" )]
-    public Boolean AutoTabXML
+    public bool AutoTabXML
     {
-      get { return (Boolean)this["AutoTabXML"]; }
+      get { return (bool)this["AutoTabXML"]; }
       set { this["AutoTabXML"] = value; }
     }
 

@@ -1521,8 +1521,8 @@ namespace SCJMapper_V2
           ; // nothing here - 
         }
         else {
+          m_mouseIn = false; // clear on kbd input - 20171226 must prepend text change
           lblLastJ.Text = DeviceInst.KeyboardRef.GetLastChange( true );
-          m_mouseIn = false; // clear on kbd input
         }
         // also maintain persistent mods
         UpdateModifiers( );
@@ -1591,8 +1591,7 @@ namespace SCJMapper_V2
       string item = "";
       string device = MouseCls.DeviceClass;
 
-      int btNum = 0;
-      if ( int.TryParse( (string)ts.Tag, out btNum ) ) {
+      if ( int.TryParse( (string)ts.Tag, out int btNum ) ) {
         // got a button (most likely..)
         item = "mouse" + btNum.ToString( );
       }
@@ -1625,6 +1624,7 @@ namespace SCJMapper_V2
       else if ( KeyboardCls.IsDeviceClass( device ) ) {
         UpdateModifiers( );
         ctrl = KeyboardCls.MakeCtrl( item, m_persistentMods ); // show last handled JS control
+        m_mouseIn = false;
       }
 
       lblLastJ.Text = ctrl;

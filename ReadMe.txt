@@ -42,6 +42,7 @@ cassini@burri-web.org
 Changelog:
 V 2.34 - BETA Build 68
 - improvement - complete rework of XML defaultProfile/mapping parsing
+- internal cleanup - consistent type naming, others
 V 2.33 - BETA Build 67
 - update for SC 3.0.0 Alpha public
 - fix - finding SC game folder - may work automatically for 3.0 Alpha else define it in Settings

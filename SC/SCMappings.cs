@@ -14,10 +14,10 @@ namespace SCJMapper_V2.SC
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    public  const String c_MapStartsWith = "layout_";  // we only allow those mapping names
-    private const String c_UserMapStartsWith =  c_MapStartsWith + "my_";  // we only allow those mapping names
+    public  const string c_MapStartsWith = "layout_";  // we only allow those mapping names
+    private const string c_UserMapStartsWith =  c_MapStartsWith + "my_";  // we only allow those mapping names
 
-    static private List<String> m_scMappings = new List<string>( );
+    static private List<string> m_scMappings = new List<string>( );
 
 
     /// <summary>
@@ -25,9 +25,9 @@ namespace SCJMapper_V2.SC
     /// </summary>
     /// <param name="mapName">The mapping name</param>
     /// <returns>True if the file exists</returns>
-    static public Boolean MappingFileExists( String mapName )
+    static public bool MappingFileExists( string mapName )
     {
-      Boolean retVal = false;
+      bool retVal = false;
       if ( Directory.Exists( SCPath.SCClientMappingPath ) ) {
         retVal = File.Exists( Path.Combine( SCPath.SCClientMappingPath, mapName + ".xml" ) );
       }
@@ -39,7 +39,7 @@ namespace SCJMapper_V2.SC
     /// </summary>
     /// <param name="mapName">The mapping name</param>
     /// <returns>A fully qualified filename</returns>
-    static public String MappingFileName( String mapName )
+    static public string MappingFileName( string mapName )
     {
       return Path.Combine( SCPath.SCClientMappingPath, mapName + ".xml" );
     }
@@ -50,7 +50,7 @@ namespace SCJMapper_V2.SC
     /// </summary>
     /// <param name="mapName">The mapping name</param>
     /// <returns>True if it is a user mapping name</returns>
-    static public Boolean IsUserMapping( String mapName )
+    static public bool IsUserMapping( string mapName )
     {
       return mapName.StartsWith( c_UserMapStartsWith );
     }
@@ -60,9 +60,9 @@ namespace SCJMapper_V2.SC
     /// </summary>
     /// <param name="mapName">A map name</param>
     /// <returns>True if valid</returns>
-    static public Boolean IsValidMappingName( String mapName )
+    static public bool IsValidMappingName( string mapName )
     {
-      Boolean retVal = true; // for now
+      bool retVal = true; // for now
       retVal &= mapName.StartsWith( c_UserMapStartsWith );
       retVal &= ( mapName.IndexOfAny( new char[] { ' ', '\t', '\n', '\r', '\0' } ) < 0 ); // make sure we don't have spaces etc.
       return retVal;
@@ -73,7 +73,7 @@ namespace SCJMapper_V2.SC
     {
       if ( Directory.Exists( SCPath.SCClientMappingPath ) ) {
         m_scMappings.Clear( );
-        m_scMappings = ( List<String> )Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
+        m_scMappings = ( List<string> )Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
       }
       else {
         log.Warn( "UpdateMappingNames - cannot find SC Mapping directory" );
@@ -85,7 +85,7 @@ namespace SCJMapper_V2.SC
     /// Returns a list of files found 
     /// </summary>
     /// <returns>A list of filenames - can be empty</returns>
-    static public List<String> MappingNames
+    static public List<string> MappingNames
     {
       get
       {
@@ -102,10 +102,10 @@ namespace SCJMapper_V2.SC
     /// </summary>
     /// <param name="defaultProfileName">The filename of the profile to be extracted</param>
     /// <returns>A string containing the file contents</returns>
-    static public String Mapping( String mappingName )
+    static public string Mapping( string mappingName )
     {
-      String retVal = "";
-      String mFile = Path.Combine( SCPath.SCClientMappingPath, ( mappingName + ".xml" ) );
+      string retVal = "";
+      string mFile = Path.Combine( SCPath.SCClientMappingPath, ( mappingName + ".xml" ) );
       if ( File.Exists( mFile ) ) {
         using ( StreamReader sr = new StreamReader( mFile ) ) {
           retVal = sr.ReadToEnd( );

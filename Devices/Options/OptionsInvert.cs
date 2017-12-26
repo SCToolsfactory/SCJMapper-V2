@@ -28,9 +28,9 @@ namespace SCJMapper_V2.Devices.Options
 
     public struct MappedActionRec
     {
-      public MappedActionRec( String m, String a ) { Map = m; Action = a; }
-      public String Map;
-      public String Action;
+      public MappedActionRec( string m, string a ) { Map = m; Action = a; }
+      public string Map;
+      public string Action;
     }
 
     // setup of mapped actions as of AC 1.0 (may need a change once in a while...)
@@ -48,10 +48,10 @@ namespace SCJMapper_V2.Devices.Options
 
     private CheckBox m_cbInvert = null;
     private DeviceCls m_device = null;
-    private String m_type = "";         // joystick OR xboxpad
+    private string m_type = "";         // joystick OR xboxpad
     private int m_devInstanceNo = -1;   // jsN - instance in XML
 
-    String m_option = ""; // the option name (level where it applies)
+    string m_option = ""; // the option name (level where it applies)
 
     // ctor
     public OptionsInvert( Inversions item )
@@ -112,21 +112,21 @@ namespace SCJMapper_V2.Devices.Options
     /// Format an XML -options- node from the tuning contents
     /// </summary>
     /// <returns>The XML string or an empty string</returns>
-    public String Options_toXML( )
+    public string Options_toXML( )
     {
       if ( InvertUsed == false ) return ""; // not used
       if ( DevInstanceNo <= 0 ) return "";  // not assigned or not valid...
 
-      String tmp = "";
-      tmp += String.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", m_type, m_devInstanceNo.ToString( ) );
-      tmp += String.Format( "\t\t<{0} ", m_option );
+      string tmp = "";
+      tmp += string.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", m_type, m_devInstanceNo.ToString( ) );
+      tmp += string.Format( "\t\t<{0} ", m_option );
 
       if ( InvertUsed ) { // leave this IF in - to allow to extend the code for sensitivity
-        tmp += String.Format( "invert=\"1\" " );
+        tmp += string.Format( "invert=\"1\" " );
       }
-      tmp += String.Format( "/> \n" );// CIG get to default expo 2.something if not set to 1 here
+      tmp += string.Format( "/> \n" );// CIG get to default expo 2.something if not set to 1 here
 
-      tmp += String.Format( "\t</options>\n \n" );
+      tmp += string.Format( "\t</options>\n \n" );
 
       return tmp;
     }
@@ -138,17 +138,17 @@ namespace SCJMapper_V2.Devices.Options
     /// <param name="reader">A prepared XML reader</param>
     /// <param name="instance">the Joystick instance number</param>
     /// <returns></returns>
-    public Boolean Options_fromXML( XmlReader reader, String type, int instance )
+    public bool Options_fromXML( XmlReader reader, string type, int instance )
     {
       m_type = type;
 
-      String invert = "";
+      string invert = "";
       m_option = reader.Name;
       m_devInstanceNo = instance;
 
       if ( reader.HasAttributes ) {
         invert = reader["invert"];
-        if ( !String.IsNullOrWhiteSpace( invert ) ) {
+        if ( !string.IsNullOrWhiteSpace( invert ) ) {
           InvertUsed = false;
           if ( invert == "1" ) InvertUsed = true;
         }

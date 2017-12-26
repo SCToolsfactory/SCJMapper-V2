@@ -17,7 +17,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// Returns a properly formatted Modifier entry
     /// </summary>
     /// <returns></returns>
-    public String toXML()
+    public string toXML()
     {
       string r = "";
       r += string.Format( "\t<modifiers>\n" );
@@ -35,14 +35,14 @@ namespace SCJMapper_V2.Devices.Joystick
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    private Boolean Instance_fromXML( XmlReader reader )
+    private bool Instance_fromXML( XmlReader reader )
     {
       reader.Read( );
 
       while ( !reader.EOF ) {
         if ( reader.Name.ToLowerInvariant() == "mod" ) {
-          String input = reader["input"];
-          if ( !String.IsNullOrWhiteSpace( input ) ) {
+          string input = reader["input"];
+          if ( !string.IsNullOrWhiteSpace( input ) ) {
             this.Add( input );
           }
         }
@@ -57,7 +57,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// <summary>
     /// Reads the Modifier entry from an action map file
     /// </summary>
-    public Boolean fromXML( String xml )
+    public bool fromXML( string xml )
     {
       /*
         <!-- Key modifiers -->

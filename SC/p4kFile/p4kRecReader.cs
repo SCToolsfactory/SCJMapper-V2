@@ -25,7 +25,7 @@ namespace SCJMapper_V2.p4kFile
     /// ctor: 
     /// </summary>
     /// <param name="filename">The filename</param>
-    public p4kRecReader( String filename )
+    public p4kRecReader( string filename )
     {
       Open( filename );
       m_fileCreatedT = File.GetCreationTimeUtc( m_filestr.Name );
@@ -36,7 +36,7 @@ namespace SCJMapper_V2.p4kFile
     /// </summary>
     /// <param name="filename">The filename</param>
     /// <returns>True when successfull</returns>
-    private bool Open( String filename )
+    private bool Open( string filename )
     {
       if ( File.Exists( filename ) ) {
         m_filestr = File.OpenRead( filename );

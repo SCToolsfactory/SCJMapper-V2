@@ -62,14 +62,14 @@ namespace SCJMapper_V2.CryXMLlib
   {
 
     /// <summary>
-    /// Converts a number of ASCII chars into a String
+    /// Converts a number of ASCII chars into a string
     /// </summary>
     /// <param name="bPtr">Mem Location of the ASCII Chars</param>
     /// <param name="size">Max number of ASCII chars to convert, stops at \0 however</param>
     /// <returns>The converted string</returns>
     static public string ToString( byte[] byteArr, uint size = 999 )
     {
-      String s = "";
+      string s = "";
       for ( uint i = 0; i < size; i++ ) {
         if ( byteArr[i] != 0 )
           s += Char.ConvertFromUtf32( byteArr[i] );

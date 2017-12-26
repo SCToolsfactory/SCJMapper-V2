@@ -169,7 +169,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// </summary>
     /// <param name="n">The device name</param>
     /// <returns>The instance or null if not found</returns>
-    public JoystickCls Find_jsDev( String devName )
+    public JoystickCls Find_jsDev( string devName )
     {
       foreach ( JoystickCls j in this ) {
         if ( j.DevName == devName ) return j;
@@ -183,7 +183,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// </summary>
     /// <param name="n">The instance GUID</param>
     /// <returns>The instance or null if not found</returns>
-    public JoystickCls Find_jsInstance( String instGUID )
+    public JoystickCls Find_jsInstance( string instGUID )
     {
       foreach ( JoystickCls j in this ) {
         if ( j.DevInstanceGUID == instGUID ) return j;

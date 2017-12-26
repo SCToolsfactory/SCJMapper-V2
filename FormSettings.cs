@@ -16,9 +16,9 @@ namespace SCJMapper_V2
     private readonly AppSettings m_owner = null; // owner class - access to settings
 
 
-    public Boolean Canceled { get; set; }
+    public bool Canceled { get; set; }
 
-    public String PasteString { get; set; } // used to copy, paste JS commands
+    public string PasteString { get; set; } // used to copy, paste JS commands
 
     /// <summary>
     /// ctor - gets the owning class instance
@@ -110,7 +110,7 @@ namespace SCJMapper_V2
       m_owner.IgnoreJS12 = txJS12.Text;
 
       // Ignore actionmaps
-      String ignore = ",";
+      string ignore = ",";
       for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
         if ( chkLbActionMaps.GetItemCheckState( i ) == CheckState.Checked ) {
           ignore += chkLbActionMaps.Items[i].ToString( ) + ",";

@@ -10,43 +10,43 @@ namespace SCJMapper_V2.SC
   {
 
 
-    static private String ExtractValuableInfo( String inLine )
+    static private string ExtractValuableInfo( string inLine )
     {
-      String retVal = "";
+      string retVal = "";
       string l = inLine.ToLowerInvariant( );
 
       // detect what we would like to find..
-      if ( l.StartsWith( "log started" ) ) return String.Format("\t{0}\n", inLine);
-      if ( l.StartsWith( "executable:" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "productversion" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "host cpu" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "log started" ) ) return string.Format("\t{0}\n", inLine);
+      if ( l.StartsWith( "executable:" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "productversion" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "host cpu" ) ) return string.Format( "\t{0}\n", inLine );
 
 
-      if ( l.StartsWith( "windows:" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "current display mode" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "windows:" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "current display mode" ) ) return string.Format( "\t{0}\n", inLine );
 
-      if ( l.Contains( "physical memory" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "--- dedicated video memory" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "- final rating" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "physical memory" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "--- dedicated video memory" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "- final rating" ) ) return string.Format( "\t{0}\n", inLine );
 
-      if ( l.Contains( "64 bit" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( l.Contains( "keyboard" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( l.Contains( "display mode" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "- connected" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "reset controls" ) ) return String.Format( "\t{0}\n", inLine );
-      if ( l.Contains( "enjoy" ) ) return String.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "64 bit" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "keyboard" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "display mode" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "- connected" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.StartsWith( "reset controls" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "enjoy" ) ) return string.Format( "\t{0}\n", inLine );
 
       return retVal;
     }
 
 
-    static public String ExtractLog( )
+    static public string ExtractLog( )
     {
-      String content = String.Format( "\n\n" );
+      string content = string.Format( "\n\n" );
 
-      String fname = SCPath.SCLastLog;
-      if ( String.IsNullOrEmpty( fname ) ) {
-        return String.Format( "\nCould not find a logfile\n" );
+      string fname = SCPath.SCLastLog;
+      if ( string.IsNullOrEmpty( fname ) ) {
+        return string.Format( "\nCould not find a logfile\n" );
       }
       // first choice a defaultProfile.xml in the app dir distributed with the application ??? to be deleted ???
       if ( File.Exists( fname ) ) {
@@ -56,7 +56,7 @@ namespace SCJMapper_V2.SC
           }
         }
       }
-      return content += String.Format( "\n\n" ); ; ;
+      return content += string.Format( "\n\n" ); ; ;
     }
 
 

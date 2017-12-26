@@ -20,108 +20,108 @@ namespace SCJMapper_V2.Devices.Gamepad
     /// <summary>
     /// Return s only if length is max 12 (some crazy names may kill the layout...)
     /// </summary>
-    /// <param name="s">String to return if length less than 12</param>
-    /// <param name="d">String to return if s length more than 12</param>
+    /// <param name="s">string to return if length less than 12</param>
+    /// <param name="d">string to return if s length more than 12</param>
     /// <returns>A string</returns>
-    private String Chk( String s, String d )
+    private string Chk( string s, string d )
     {
       if ( s.Length > 12 ) return d; else return s;
     }
 
 
-    public String Caption
+    public string Caption
     {
       set { gBoxCap.Text = value; }
     }
 
-    public String DPad
+    public string DPad
     {
       set { iDPad.Text = value; }
     }
 
-    public String TStickXL
+    public string TStickXL
     {
       set { iTStickXL.Text = value; }
     }
 
-    public String TStickYL
+    public string TStickYL
     {
       set { iTStickYL.Text = value; }
     }
 
-    public String TStickBtL
+    public string TStickBtL
     {
       set { iTStickBtL.Text = value; }
     }
 
-    public String TStickXR
+    public string TStickXR
     {
       set { iTStickXR.Text = value; }
     }
 
-    public String TStickYR
+    public string TStickYR
     {
       set { iTStickYR.Text = value; }
     }
 
-    public String TStickBtR
+    public string TStickBtR
     {
       set { iTStickBtR.Text = value; }
     }
 
-    public String TriggerL
+    public string TriggerL
     {
       set { iTrigL.Text = value; }
     }
 
-    public String TriggerR
+    public string TriggerR
     {
       set { iTrigR.Text = value; }
     }
 
-    public String ShoulderL
+    public string ShoulderL
     {
       set { iShL.Text = value; }
     }
 
-    public String ShoulderR
+    public string ShoulderR
     {
       set { iShR.Text = value; }
     }
 
-    public String Start
+    public string Start
     {
       set { iBtStart.Text = value; }
     }
 
-    public String Back
+    public string Back
     {
       set { iBtBack.Text = value; }
     }
 
-    public String Button
+    public string Button
     {
       set { lbl1Buttons.Text = value; }
     }
 
     // Caps
 
-    public String nButtons
+    public string nButtons
     {
       set { lblnButtons.Text = value; }
     }
 
-    public String nDPads
+    public string nDPads
     {
       set { lblnDPad.Text = value; }
     }
 
-    public String nTSticks
+    public string nTSticks
     {
       set { lblnTSticks.Text = value; }
     }
 
-    public String nTriggers
+    public string nTriggers
     {
       set { lblnTriggers.Text = value; }
     }
@@ -132,52 +132,52 @@ namespace SCJMapper_V2.Devices.Gamepad
 
     #region Enables
 
-    public Boolean DPadE
+    public bool DPadE
     {
       set { iDPad.Enabled = value; lDPad.Enabled = value; }
     }
 
-    public Boolean TStickLE
+    public bool TStickLE
     {
       set { iTStickXL.Enabled = value; iTStickYL.Enabled = value; iTStickBtL.Enabled = true; lTStickL.Enabled = value; }
     }
 
-    public Boolean TStickRE
+    public bool TStickRE
     {
       set { iTStickXR.Enabled = value; iTStickYR.Enabled = value; iTStickBtR.Enabled = true; lTStickR.Enabled = value; }
     }
 
-    public Boolean TriggerLE
+    public bool TriggerLE
     {
       set { iTrigL.Enabled = value; lTrigL.Enabled = value; }
     }
 
-    public Boolean TriggerRE
+    public bool TriggerRE
     {
       set { iTrigR.Enabled = value; lTrigR.Enabled = value; }
     }
 
-    public Boolean ShoulderLE
+    public bool ShoulderLE
     {
       set { iShL.Enabled = value; lH0.Enabled = value; }
     }
 
-    public Boolean ShoulderRE
+    public bool ShoulderRE
     {
       set { iShR.Enabled = value; lH1.Enabled = value; }
     }
 
-    public Boolean StartE
+    public bool StartE
     {
       set { iBtStart.Enabled = value; lH2.Enabled = value; }
     }
 
-    public Boolean BackE
+    public bool BackE
     {
       set { iBtBack.Enabled = value; lH3.Enabled = value; }
     }
 
-    public Boolean ButtonE
+    public bool ButtonE
     {
       set { lbl1Buttons.Enabled = value; lB.Enabled = value; }
     }

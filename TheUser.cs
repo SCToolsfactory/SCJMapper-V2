@@ -19,12 +19,12 @@ namespace SCJMapper_V2
     /// Creates the folder if needed
     /// </summary>
     /// <returns>Path to the Personal Program directory</returns>
-    static public String UserDir
+    static public string UserDir
     {
       get
       {
         log.Debug( "UserDir - Entry" );
-        String docPath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.Personal ), Application.ProductName);
+        string docPath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.Personal ), Application.ProductName);
         if ( !Directory.Exists( docPath ) ) Directory.CreateDirectory( docPath );
         return docPath;
       }
@@ -36,7 +36,7 @@ namespace SCJMapper_V2
     /// </summary>
     /// <param name="mapName">The mapping name</param>
     /// <returns>A fully qualified filename</returns>
-    static public String MappingFileName( String mapName )
+    static public string MappingFileName( string mapName )
     {
       log.Debug( "MappingFileName - Entry" );
 
@@ -48,11 +48,11 @@ namespace SCJMapper_V2
     /// Create a backupfile from the given file
     /// </summary>
     /// <param name="mapName">The mapping name</param>
-    static public void BackupMappingFile( String mapName )
+    static public void BackupMappingFile( string mapName )
     {
       log.Debug( "BackupMappingFile - Entry" );
 
-      String mf = MappingFileName( mapName );
+      string mf = MappingFileName( mapName );
       if ( File.Exists( mf ) ) File.Copy( mf, mf + ".backup", true );
     }
 

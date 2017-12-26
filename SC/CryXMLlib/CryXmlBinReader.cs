@@ -28,8 +28,8 @@ namespace SCJMapper_V2.CryXMLlib
       Error,
     }
 
-    private String m_errorDescription = "";
-    private void SetErrorDescription( String text )
+    private string m_errorDescription = "";
+    private void SetErrorDescription( string text )
     {
       m_errorDescription = text;
     }
@@ -38,7 +38,7 @@ namespace SCJMapper_V2.CryXMLlib
     /// Get error information if something goes wrong
     /// </summary>
     /// <returns>The error description</returns>
-    public String GetErrorDescription( ) { return m_errorDescription; }
+    public string GetErrorDescription( ) { return m_errorDescription; }
 
     /// <summary>
     /// Load a Cry Binary XML file into memory and return the NodeRef for the root element
@@ -46,7 +46,7 @@ namespace SCJMapper_V2.CryXMLlib
     /// <param name="filename">The file to read</param>
     /// <param name="result">Read result</param>
     /// <returns>The NodeRef of the root element or NULL</returns>
-    public CryXmlNodeRef LoadFromFile( String filename, out EResult result )
+    public CryXmlNodeRef LoadFromFile( string filename, out EResult result )
     {
       m_errorDescription = "";
       result = EResult.Error;

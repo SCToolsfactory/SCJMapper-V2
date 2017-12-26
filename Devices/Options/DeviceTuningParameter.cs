@@ -334,7 +334,7 @@ namespace SCJMapper_V2.Devices.Options
     /// <param name="reader">A prepared XML reader</param>
     /// <param name="instance">the Joystick instance number</param>
     /// <returns></returns>
-    public Boolean Options_fromXML( XElement option, string type, int instance )
+    public bool Options_fromXML( XElement option, string type, int instance )
     {
       /*
 		    <flight_move_pitch exponent="1.00" > 

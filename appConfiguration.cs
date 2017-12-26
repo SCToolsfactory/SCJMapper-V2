@@ -84,11 +84,11 @@ namespace SCJMapper_V2
     }
 
     [StringValidator( InvalidCharacters = " ~!@#$%^&*()[]{}/;'\"|\\", MinLength = 10, MaxLength = 500 )]
-    public String scActionmaps
+    public string scActionmaps
     {
       get
       {
-        return ( String )this["scActionmaps"];
+        return ( string )this["scActionmaps"];
       }
       set
       {
