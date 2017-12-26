@@ -14,11 +14,11 @@ namespace SCJMapper_V2.SC
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    public  const string c_MapStartsWith = "layout_";  // we only allow those mapping names
-    private const string c_UserMapStartsWith =  c_MapStartsWith + "my_";  // we only allow those mapping names
+    public const string c_MapStartsWith = "layout_";  // we only allow those mapping names
+    private const string c_UserMapStartsWith = c_MapStartsWith + "my_";  // we only allow those mapping names
 
     static private List<string> m_scMappings = new List<string>( );
-
+    static private SCGameMaps m_scGameMaps = new SCGameMaps( );
 
     /// <summary>
     /// Returns true if a mapping file exists
@@ -52,7 +52,7 @@ namespace SCJMapper_V2.SC
     /// <returns>True if it is a user mapping name</returns>
     static public bool IsUserMapping( string mapName )
     {
-      return mapName.StartsWith( c_UserMapStartsWith );
+      return Path.GetFileNameWithoutExtension( mapName ).StartsWith( c_UserMapStartsWith );
     }
 
     /// <summary>
@@ -69,11 +69,14 @@ namespace SCJMapper_V2.SC
     }
 
 
-    static public void UpdateMappingNames( )
+    static public void UpdateMappingNames()
     {
       if ( Directory.Exists( SCPath.SCClientMappingPath ) ) {
         m_scMappings.Clear( );
-        m_scMappings = ( List<string> )Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
+        m_scMappings = (List<string>)Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
+        foreach ( KeyValuePair<string, string> kv in m_scGameMaps ) {
+          m_scMappings.Insert( 0, kv.Key ); // insert before others
+        }
       }
       else {
         log.Warn( "UpdateMappingNames - cannot find SC Mapping directory" );
@@ -87,8 +90,7 @@ namespace SCJMapper_V2.SC
     /// <returns>A list of filenames - can be empty</returns>
     static public List<string> MappingNames
     {
-      get
-      {
+      get {
         log.Debug( "MappingNames - Entry" );
         if ( m_scMappings.Count == 0 ) {
           UpdateMappingNames( );
@@ -98,20 +100,27 @@ namespace SCJMapper_V2.SC
     }
 
     /// <summary>
-    /// Returns the sought default profile as string from GameData.pak
+    /// Returns the sought mapping
     /// </summary>
-    /// <param name="defaultProfileName">The filename of the profile to be extracted</param>
+    /// <param name="mappingName">The filename of the profile to be extracted</param>
     /// <returns>A string containing the file contents</returns>
     static public string Mapping( string mappingName )
     {
       string retVal = "";
-      string mFile = Path.Combine( SCPath.SCClientMappingPath, ( mappingName + ".xml" ) );
-      if ( File.Exists( mFile ) ) {
-        using ( StreamReader sr = new StreamReader( mFile ) ) {
-          retVal = sr.ReadToEnd( );
+      if ( IsUserMapping( mappingName ) ) {
+        string mFile = Path.Combine( SCPath.SCClientMappingPath, ( mappingName + ".xml" ) );
+        if ( File.Exists( mFile ) ) {
+          using ( StreamReader sr = new StreamReader( mFile ) ) {
+            retVal = sr.ReadToEnd( );
+          }
         }
       }
-
+      else {
+        // game mapping
+        if ( m_scGameMaps.ContainsKey( mappingName ) ) {
+          retVal = m_scGameMaps[mappingName];
+        }
+      }
       return retVal;
     }
 

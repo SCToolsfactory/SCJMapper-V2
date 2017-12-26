@@ -155,6 +155,7 @@
     <Compile Include="SC\p4kFile\p4kZ64EndOfCentralDirLocator.cs" />
     <Compile Include="SC\p4kFile\p4kZ64EndOfCentralDirRecord.cs" />
     <Compile Include="SC\SCActionMapList.cs" />
+    <Compile Include="SC\SCGameMaps.cs" />
     <Compile Include="Table\DS_ActionMap.cs" />
     <Compile Include="Table\DS_ActionMaps.cs">
       <DependentUpon>DS_ActionMaps.xsd</DependentUpon>
@@ -348,6 +349,16 @@
     <Content Include="AC_Examples.txt" />
     <Content Include="Cassini_Logo_Icon.ico" />
     <Content Include="defaultProfile.xml" />
+    <None Include="graphics\Folder.png" />
+    <None Include="graphics\Home.png" />
+    <None Include="graphics\Info.png" />
+    <None Include="graphics\Monitor.png" />
+    <None Include="graphics\Settings.png" />
+    <None Include="graphics\Load.png" />
+    <None Include="graphics\RArrow.png" />
+    <None Include="graphics\LArrow.png" />
+    <None Include="graphics\RSI.png" />
+    <None Include="graphics\NPad.png" />
     <Content Include="ReadMe.txt" />
     <None Include="graphics\YPR.png" />
     <None Include="graphics\300i.jpg" />

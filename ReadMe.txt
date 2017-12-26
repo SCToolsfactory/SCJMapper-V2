@@ -42,7 +42,11 @@ cassini@burri-web.org
 Changelog:
 V 2.34 - BETA Build 68
 - improvement - complete rework of XML defaultProfile/mapping parsing
+- add - provide CIG mappings from game assets
+- update - unclutter GUI, allow more scaling
 - internal cleanup - consistent type naming, others
+- fix - overwritten profile actions removed in Assignment Tab
+- update - doc SCJMapper_QGuide V2.34beta.pdf
 V 2.33 - BETA Build 67
 - update for SC 3.0.0 Alpha public
 - fix - finding SC game folder - may work automatically for 3.0 Alpha else define it in Settings

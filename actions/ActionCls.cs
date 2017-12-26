@@ -252,8 +252,15 @@ namespace SCJMapper_V2.Actions
         if ( string.IsNullOrEmpty( input ) ) input = "";
         actModeName = (string)bindingNode.Attribute( "ActivationMode" );
         multi = (string)bindingNode.Attribute( "multiTap" );
+        string device = (string)bindingNode.Attribute( "device" );
         //process
         input = DeviceCls.fromXML( input ); // move from external to internal blend
+        if ( !string.IsNullOrEmpty( device ) ) {
+          // AC1 style - need to reformat mouse and keyboard according to AC2 style now
+          if ( KeyboardCls.IsDeviceClass( device ) ) input = KeyboardCls.FromAC1( input );
+          else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
+          else if ( GamepadCls.IsDeviceClass( device ) ) input = GamepadCls.FromAC1( input );
+        }
         Device = Act.DeviceClassFromInput( input );
         ActivationMode actMode = null;
         if ( !string.IsNullOrEmpty( actModeName ) ) {

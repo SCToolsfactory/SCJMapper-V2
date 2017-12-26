@@ -135,7 +135,7 @@ namespace SCJMapper_V2
 
     private void UpdateDDMapping(string mapName )
     {
-      tsDDbtMappings.Text = mapName;
+      msSelectMapping.Text = mapName;
       m_AppSettings.DefMappingName = mapName; m_AppSettings.Save( );
     }
 
@@ -178,9 +178,14 @@ namespace SCJMapper_V2
     private void LoadMappingDD()
     {
       SCMappings.UpdateMappingNames( );
-      tsDDbtMappings.DropDownItems.Clear( );
+      msSelectMapping.DropDownItems.Clear( );
       foreach ( string s in SCMappings.MappingNames ) {
-        tsDDbtMappings.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ) );
+        if ( !SCMappings.IsUserMapping( s ) ) {
+          msSelectMapping.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ), IL2.Images["RSI"] );
+        }
+        else {
+          msSelectMapping.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ), IL2.Images["User"] );
+        }
       }
     }
 
@@ -189,8 +194,8 @@ namespace SCJMapper_V2
     /// </summary>
     private void SCFileIndication()
     {
-      if ( string.IsNullOrEmpty( SCPath.SCClientMappingPath ) ) tsDDbtMappings.BackColor = MyColors.InvalidColor;
-      else tsDDbtMappings.BackColor = MyColors.MappingColor;
+      if ( string.IsNullOrEmpty( SCPath.SCClientMappingPath ) ) msSelectMapping.BackColor = MyColors.InvalidColor;
+      else msSelectMapping.BackColor = MyColors.MappingColor;
     }
 
 
@@ -229,7 +234,7 @@ namespace SCJMapper_V2
       // load mappings
       log.Debug( "Loading Mappings" );
       LoadMappingDD( );
-      tsDDbtMappings.Text = m_AppSettings.DefMappingName;
+      msSelectMapping.Text = m_AppSettings.DefMappingName;
 
       SCFileIndication( );
 
@@ -237,7 +242,7 @@ namespace SCJMapper_V2
       log.Debug( "Loading Other" );
       txMappingName.Text = m_AppSettings.MyMappingName;
       SetRebindField( txMappingName.Text );
-      foreach ( ToolStripDropDownItem d in tsDDbtMappings.DropDownItems ) {
+      foreach ( ToolStripDropDownItem d in msSelectMapping.DropDownItems ) {
         if ( d.Text == txMappingName.Text ) {
           UpdateDDMapping( txMappingName.Text );
           break;
@@ -286,7 +291,7 @@ namespace SCJMapper_V2
       if ( jsIndex >= 0 ) DeviceInst.JoystickInst = DeviceInst.JoystickListRef[jsIndex];
 
       // init PTU folder usage sign
-      lblPTU.Visible = false; // m_AppSettings.UsePTU;  no longer used
+      //lblPTU.Visible = false; // m_AppSettings.UsePTU;  no longer used
       if ( m_AppSettings.UsePTU ) log.Debug( "Using PTU Folders" );
 
       // Auto Tab XML
@@ -341,11 +346,8 @@ namespace SCJMapper_V2
         Brush foreBrush = new SolidBrush( Color.Black );
 
 
-        //This construct will hell you to deside which tab page have current focus
-        //to change the style.
+        //This construct will tell you which tab page has focus to change the style.
         if ( e.Index == this.tc1.SelectedIndex ) {
-          //This line of code will help you to change the apperance like size,name,style.
-          f = new Font( e.Font, FontStyle.Bold | FontStyle.Bold );
           f = new Font( e.Font, FontStyle.Bold );
 
           Rectangle tabRect = tc1.Bounds;
@@ -418,7 +420,7 @@ namespace SCJMapper_V2
       m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
       // Init with default profile filepath
       m_AT.LoadProfileTree( addDefaultBinding );
-      lblProfileUsed.Text = SCDefaultProfile.UsedDefProfile; // SCA 2.2 show used profile
+      tslblProfileUsed.Text = SCDefaultProfile.UsedDefProfile; // SCA 2.2 show used profile
 
       // Activation Update
       tdiCbxActivation.Items.Clear( );
@@ -645,6 +647,7 @@ namespace SCJMapper_V2
         ; // just ignore
       }
       UpdateTable( );
+      UpdateAssignmentList( );
     }
 
 
@@ -739,7 +742,7 @@ namespace SCJMapper_V2
         cbxThrottle.Checked = false; cbxThrottle.Enabled = false;
       }
       // Update joystick modifiers - not currently used
-      btMakeMod.Enabled = JoystickCls.ValidModifier( ctrl );
+      //btMakeMod.Enabled = JoystickCls.ValidModifier( ctrl );
 
     }
 
@@ -816,47 +819,11 @@ namespace SCJMapper_V2
       else MySounds.PlayCannot( );
     }
 
-    //TODO
-    // possibly obsolete - we dont support to make own modifiers - button is invisible
-    private void btMakeMod_Click( object sender, EventArgs e )
-    {
-    }
-    // possibly obsolete - we dont support to make own modifiers
-    private void Cbx_CheckedChanged( object sender, EventArgs e )
-    {
-    }
-
-
     // General Area Items
 
     private void btDump_Click( object sender, EventArgs e )
     {
       Dump( );
-    }
-
-    private void btDumpList_Click( object sender, EventArgs e )
-    {
-      AutoTabXML_Assignment( EATabXML.Tab_XML );
-
-      if ( m_AppSettings.UseCSVListing )
-        rtb.Text = string.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActionsCSV( m_AppSettings.ListModifiers ) );
-      else
-        rtb.Text = string.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActions( ) );
-
-    }
-
-    private void btDumpLog_Click( object sender, EventArgs e )
-    {
-      AutoTabXML_Assignment( EATabXML.Tab_XML );
-
-      rtb.Text = string.Format( "-- {0} - SC Joystick AC Log Controller Detection --\n{1}", DateTime.Now, SCLogExtract.ExtractLog( ) );
-    }
-
-    private void btDumpProfile_Click( object sender, EventArgs e )
-    {
-      AutoTabXML_Assignment( EATabXML.Tab_XML );
-
-      rtb.Text = SCDefaultProfile.DefaultProfile( );
     }
 
     private void btGrab_Click( object sender, EventArgs e )
@@ -881,33 +848,239 @@ namespace SCJMapper_V2
 
     // Toolstrip Items
 
-    private void tsBtReset_ButtonClick( object sender, EventArgs e )
-    {
-    }
-
-    private void resetEmptyToolStripMenuItem_Click( object sender, EventArgs e )
-    {
-      // start over 
-      InitActionTree( false );
-      rtb.Text = "";
-      UpdateTable( );
-    }
-
-    private void resetDefaultsToolStripMenuItem_Click( object sender, EventArgs e )
+    private void meResetDefaults_Click( object sender, EventArgs e )
     {
       // start over and if chosen, load defaults from SC game
       InitActionTree( true );
       rtb.Text = "";
       UpdateTable( );
+      UpdateAssignmentList( );
     }
 
-    private void tsDDbtMappings_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
+    private void meResetEmpty_Click( object sender, EventArgs e )
+    {
+      // start over 
+      cbxShowMappedOnly.Checked = false; // else it might get empty..
+      InitActionTree( false );
+      rtb.Text = "";
+      UpdateTable( );
+      UpdateAssignmentList( );
+    }
+
+
+    private void meDumpMappingList_Click( object sender, EventArgs e )
+    {
+      AutoTabXML_Assignment( EATabXML.Tab_XML );
+
+      if ( m_AppSettings.UseCSVListing )
+        rtb.Text = string.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActionsCSV( m_AppSettings.ListModifiers ) );
+      else
+        rtb.Text = string.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActions( ) );
+    }
+
+    private void meDumpLogfile_Click( object sender, EventArgs e )
+    {
+      AutoTabXML_Assignment( EATabXML.Tab_XML );
+      rtb.Text = string.Format( "-- {0} - SC Joystick AC Log Controller Detection --\n{1}", DateTime.Now, SCLogExtract.ExtractLog( ) );
+    }
+
+    private void meDumpDefaultProfile_Click( object sender, EventArgs e )
+    {
+      AutoTabXML_Assignment( EATabXML.Tab_XML );
+      rtb.Text = SCDefaultProfile.DefaultProfile( );
+    }
+
+    private void meDumpActiontreeAsXML_Click( object sender, EventArgs e )
+    {
+      Dump( );
+    }
+
+    // Dialogs
+
+    // Show the Table Window
+    private void meShowToggleTable_Click( object sender, EventArgs e )
+    {
+      bool created = false;
+      if ( FTAB == null ) {
+        FTAB = new FormTable( );
+        FTAB.EditActionEvent += FTAB_EditActionEvent;
+        FTAB.UpdateEditEvent += FTAB_UpdateEditEvent;
+        created = true;
+      }
+
+      if ( FTAB.Visible ) {
+        m_AppSettings.FormTableSize = FTAB.LastSize;
+        m_AppSettings.FormTableLocation = FTAB.LastLocation;
+        m_AppSettings.FormTableColumnWidth = FTAB.LastColSize;
+        FTAB.Hide( );
+
+      }
+      else {
+        FTAB.Show( );
+
+        if ( created ) {
+          FTAB.Size = m_AppSettings.FormTableSize;
+          FTAB.Location = m_AppSettings.FormTableLocation;
+          FTAB.LastColSize = m_AppSettings.FormTableColumnWidth;
+        }
+        // reload the data to display
+        UpdateTable( );
+      }
+    }
+
+    private void meShowOptionsDialog_Click( object sender, EventArgs e )
+    {
+      timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
+
+      FormOptions OPT = new FormOptions( );
+
+      // Have to attach here to capture the currently valid settings
+      UpdateTuningItems( );
+      UpdateMoreOptionItems( );
+
+      DeviceList devlist = new DeviceList( );
+      if ( m_AppSettings.DetectGamepad && ( DeviceInst.GamepadRef != null ) ) {
+        devlist.Add( DeviceInst.GamepadRef );
+      }
+      devlist.AddRange( DeviceInst.JoystickListRef );
+
+      OPT.TuningOptions = m_AT.ActionMaps.TuningOptions;
+      OPT.DeviceOptions = m_AT.ActionMaps.DeviceOptions;
+      OPT.Devicelist = devlist;
+
+      OPT.ShowDialog( this );
+      m_AT.Dirty = true;
+
+      OPT = null; // get rid and create a new one next time..
+      devlist = null;
+
+      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      timer1.Enabled = true;
+    }
+
+    private void meShowDeviceTuningDialog_Click( object sender, EventArgs e )
+    {
+      timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
+
+      JSCAL = new OGL.FormJSCalCurve( );
+
+      // Have to attach here to capture the currently valid settings
+      UpdateTuningItems( );
+      // run
+      JSCAL.TuningOptions = m_AT.ActionMaps.TuningOptions;
+      JSCAL.ShowDialog( this );
+      m_AT.Dirty = true;
+
+      JSCAL = null; // get rid and create a new one next time..
+
+      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      timer1.Enabled = true;
+    }
+
+
+    // Settings
+    private void meSettingsDialog_Click( object sender, EventArgs e )
+    {
+      // have to stop polling while the Settings window is open
+      timer1.Enabled = false;
+      if ( m_AppSettings.ShowSettings( "" ) != System.Windows.Forms.DialogResult.Cancel ) {
+        m_AppSettings.Reload( ); // must reload in case of any changes in the form
+        // then reload the profile and mappings
+        LoadMappingDD( );
+        // indicates (in)valid folders
+        SCFileIndication( );
+
+        // now update the contents according to new settings
+        foreach ( JoystickCls j in DeviceInst.JoystickListRef ) j.ApplySettings( ); // update Seetings
+        m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
+        // and start over with an empty tree
+        InitActionTree( false );
+        UpdateTable( );
+      }
+
+      timer1.Enabled = true;
+    }
+
+    private void meJsReassignDialog_Click( object sender, EventArgs e )
+    {
+      // have to stop polling while the Reassign window is open
+      timer1.Enabled = false;
+      if ( DeviceInst.JoystickListRef.ShowReassign( ) != DialogResult.Cancel ) {
+        // copy the action tree while reassigning the jsN mappings from OLD to NEW
+        ActionTree newTree = m_AT.ReassignJsN( DeviceInst.JoystickListRef.JsReassingList );
+
+        // we have still the old assignment in the ActionMap - change it here (map does not know about the devices)
+        JoystickCls j = null;
+        // for all supported jsN devices
+        for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
+          j = DeviceInst.JoystickListRef.Find_jsN( i + 1 );
+          if ( j != null ) {
+            newTree.ActionMaps.jsN[i] = j.DevName; newTree.ActionMaps.jsNGUID[i] = j.DevInstanceGUID;
+          }
+          else {
+            newTree.ActionMaps.jsN[i] = ""; newTree.ActionMaps.jsNGUID[i] = "";
+          }
+        }
+
+        m_AT.NodeSelectedEvent -= M_AT_NodeSelectedEvent; // disconnect the Event
+        m_AT = newTree; // make it the valid one
+        m_AT.NodeSelectedEvent += M_AT_NodeSelectedEvent; // reconnect the Event
+
+        m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
+        m_AT.ReloadTreeView( );
+        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
+      }
+
+      timer1.Enabled = true;
+    }
+
+    // Load maps
+
+    private void msSelectMapping_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
     {
       UpdateDDMapping( e.ClickedItem.Text );
     }
 
+    private void meDefaultsLoadAndGrab_Click( object sender, EventArgs e )
+    {
+      // start over 
+      InitActionTree( true );
+      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      Grab( );
+      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
+        txMappingName.Text = m_AppSettings.DefMappingName;
+        SetRebindField( txMappingName.Text );
+      }
+      btDump.BackColor = MyColors.DirtyColor;
+      txMappingName.BackColor = MyColors.ValidColor;
+    }
 
-    private void loadToolStripMenuItem_Click( object sender, EventArgs e )
+    private void meResetLoadAndGrab_Click( object sender, EventArgs e )
+    {
+      // start over 
+      InitActionTree( false );
+      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
+        txMappingName.Text = m_AppSettings.DefMappingName;
+        SetRebindField( txMappingName.Text );
+      }
+      Grab( );
+      txMappingName.BackColor = MyColors.ValidColor;
+    }
+
+    private void meLoadAndGrab_Click( object sender, EventArgs e )
+    {
+      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      Grab( );
+      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
+        txMappingName.Text = m_AppSettings.DefMappingName;
+        SetRebindField( txMappingName.Text );
+      }
+      btDump.BackColor = MyColors.DirtyColor;
+      txMappingName.BackColor = MyColors.ValidColor;
+    }
+
+    private void meLoad_Click( object sender, EventArgs e )
     {
       rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
       if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
@@ -918,43 +1091,28 @@ namespace SCJMapper_V2
       txMappingName.BackColor = MyColors.ValidColor;
     }
 
+
+
+    private void tsDDbtMappings_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
+    {
+    }
+
+
+
+    private void loadToolStripMenuItem_Click( object sender, EventArgs e )
+    {
+    }
+
     private void loadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
     {
-      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
-      Grab( );
-      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
-        txMappingName.Text = m_AppSettings.DefMappingName;
-        SetRebindField( txMappingName.Text );
-      }
-      btDump.BackColor = MyColors.DirtyColor;
-      txMappingName.BackColor = MyColors.ValidColor;
     }
 
     private void resetLoadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
     {
-      // start over 
-      InitActionTree( false );
-      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
-      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
-        txMappingName.Text = m_AppSettings.DefMappingName;
-        SetRebindField( txMappingName.Text );
-      }
-      Grab( );
-      txMappingName.BackColor = MyColors.ValidColor;
     }
 
     private void defaultsLoadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
     {
-      // start over 
-      InitActionTree( true );
-      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
-      Grab( );
-      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
-        txMappingName.Text = m_AppSettings.DefMappingName;
-        SetRebindField( txMappingName.Text );
-      }
-      btDump.BackColor = MyColors.DirtyColor;
-      txMappingName.BackColor = MyColors.ValidColor;
     }
 
 
@@ -1221,62 +1379,6 @@ namespace SCJMapper_V2
     }
 
 
-    // Settings
-
-    private void btSettings_Click( object sender, EventArgs e )
-    {
-      // have to stop polling while the Settings window is open
-      timer1.Enabled = false;
-      if ( m_AppSettings.ShowSettings( "" ) != System.Windows.Forms.DialogResult.Cancel ) {
-        m_AppSettings.Reload( ); // must reload in case of any changes in the form
-        // then reload the profile and mappings
-        LoadMappingDD( );
-        // indicates (in)valid folders
-        SCFileIndication( );
-
-        // now update the contents according to new settings
-        foreach ( JoystickCls j in DeviceInst.JoystickListRef ) j.ApplySettings( ); // update Seetings
-        m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
-        // and start over with an empty tree
-        InitActionTree( false );
-        UpdateTable( );
-      }
-
-      timer1.Enabled = true;
-    }
-
-    private void btJsReassign_Click( object sender, EventArgs e )
-    {
-      // have to stop polling while the Reassign window is open
-      timer1.Enabled = false;
-      if ( DeviceInst.JoystickListRef.ShowReassign( ) != DialogResult.Cancel ) {
-        // copy the action tree while reassigning the jsN mappings from OLD to NEW
-        ActionTree newTree = m_AT.ReassignJsN( DeviceInst.JoystickListRef.JsReassingList );
-
-        // we have still the old assignment in the ActionMap - change it here (map does not know about the devices)
-        JoystickCls j = null;
-        // for all supported jsN devices
-        for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-          j = DeviceInst.JoystickListRef.Find_jsN( i + 1 );
-          if ( j != null ) {
-            newTree.ActionMaps.jsN[i] = j.DevName; newTree.ActionMaps.jsNGUID[i] = j.DevInstanceGUID;
-          }
-          else {
-            newTree.ActionMaps.jsN[i] = ""; newTree.ActionMaps.jsNGUID[i] = "";
-          }
-        }
-
-        m_AT.NodeSelectedEvent -= M_AT_NodeSelectedEvent; // disconnect the Event
-        m_AT = newTree; // make it the valid one
-        m_AT.NodeSelectedEvent += M_AT_NodeSelectedEvent; // reconnect the Event
-
-        m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
-        m_AT.ReloadTreeView( );
-        if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-      }
-
-      timer1.Enabled = true;
-    }
 
 
     // Joystick Tuning
@@ -1427,55 +1529,6 @@ namespace SCJMapper_V2
     }
     
 
-    private void btJSTuning_Click( object sender, EventArgs e )
-    {
-      timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
-
-      JSCAL = new OGL.FormJSCalCurve( );
-
-      // Have to attach here to capture the currently valid settings
-      UpdateTuningItems( );
-      // run
-      JSCAL.TuningOptions = m_AT.ActionMaps.TuningOptions;
-      JSCAL.ShowDialog( this );
-      m_AT.Dirty = true;
-
-      JSCAL = null; // get rid and create a new one next time..
-
-      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-      timer1.Enabled = true;
-    }
-
-
-    private void btOptions_Click( object sender, EventArgs e )
-    {
-      timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
-
-      FormOptions OPT = new FormOptions( );
-
-      // Have to attach here to capture the currently valid settings
-      UpdateTuningItems( );
-      UpdateMoreOptionItems( );
-
-      DeviceList devlist = new DeviceList( );
-      if ( m_AppSettings.DetectGamepad && ( DeviceInst.GamepadRef != null ) ) {
-        devlist.Add( DeviceInst.GamepadRef );
-      }
-      devlist.AddRange( DeviceInst.JoystickListRef );
-
-      OPT.TuningOptions = m_AT.ActionMaps.TuningOptions;
-      OPT.DeviceOptions = m_AT.ActionMaps.DeviceOptions;
-      OPT.Devicelist = devlist;
-
-      OPT.ShowDialog( this );
-      m_AT.Dirty = true;
-
-      OPT = null; // get rid and create a new one next time..
-      devlist = null;
-
-      if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
-      timer1.Enabled = true;
-    }
 
 
     // Keyboard Input
@@ -1532,11 +1585,8 @@ namespace SCJMapper_V2
       e.Handled = true;
     }
 
-    // text of input has changed
-    private void lblLastJ_TextChanged( object sender, EventArgs e )
+    private void UpdateAssignmentList()
     {
-      AutoTabXML_Assignment( EATabXML.Tab_Assignment );
-
       string devInput = Act.DevInput( lblLastJ.Text, InputMode );
       RTF.RTFformatter RTF = new RTF.RTFformatter( );
       m_AT.FindAllActionsRTF( devInput, RTF );
@@ -1546,6 +1596,12 @@ namespace SCJMapper_V2
         m_AT.FindAllActionsRTF( altDevInput, RTF );
       }
       lbxOther.Rtf = RTF.RTFtext;
+    }
+    // text of input has changed
+    private void lblLastJ_TextChanged( object sender, EventArgs e )
+    {
+      AutoTabXML_Assignment( EATabXML.Tab_Assignment );
+      UpdateAssignmentList( );
     }
 
 
@@ -1656,38 +1712,6 @@ namespace SCJMapper_V2
       }
     }
 
-    // Show the Table Window
-    private void btTable_Click( object sender, EventArgs e )
-    {
-      bool created = false;
-      if ( FTAB == null ) {
-        FTAB = new FormTable( );
-        FTAB.EditActionEvent += FTAB_EditActionEvent;
-        FTAB.UpdateEditEvent += FTAB_UpdateEditEvent;
-        created = true;
-      }
-
-      if ( FTAB.Visible ) {
-        m_AppSettings.FormTableSize = FTAB.LastSize;
-        m_AppSettings.FormTableLocation = FTAB.LastLocation;
-        m_AppSettings.FormTableColumnWidth = FTAB.LastColSize;
-        FTAB.Hide( );
-
-      }
-      else {
-        FTAB.Show( );
-
-        if ( created ) {
-          FTAB.Size = m_AppSettings.FormTableSize;
-          FTAB.Location = m_AppSettings.FormTableLocation;
-          FTAB.LastColSize = m_AppSettings.FormTableColumnWidth;
-        }
-        // reload the data to display
-        UpdateTable( );
-      }
-
-    }
-
     // called when the user clicks Update from the Table Window
     private void FTAB_UpdateEditEvent( object sender, UpdateEditEventArgs e )
     {
@@ -1712,6 +1736,5 @@ namespace SCJMapper_V2
     {
       m_AT.FindAndSelectActionKey( e.Actionmap, e.Actionkey, e.Nodeindex );
     }
-
   }
 }

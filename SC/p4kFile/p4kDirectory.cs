@@ -65,11 +65,10 @@ namespace SCJMapper_V2.p4kFile
     private p4kZ64EndOfCentralDirRecord m_z64EndOfCentralDirRecord = null;
 
     /// <summary>
-    /// Scans directory entries and extract a file (string.EndsWith is used)
+    /// Scans directory entries and return the a file descriptor (string.EndsWith is used)
     /// </summary>
     /// <param name="p4kFilename">The p4k file</param>
     /// <param name="filename">The filename to look for</param>
-    /// <param name="bgw">A BackgroundWorker object</param>
     public p4kFile ScanDirectoryFor( string p4kFilename, string filename )
     {
       if ( !File.Exists( p4kFilename ) ) return null;
@@ -102,6 +101,46 @@ namespace SCJMapper_V2.p4kFile
         }
       }
       return null;
+    }
+
+
+    /// <summary>
+    /// Scans directory entries and return the a list of matching file descriptors (string.Contains is used)
+    /// </summary>
+    /// <param name="p4kFilename">The p4k file</param>
+    /// <param name="filenamepart">The filename part to look for</param>
+    public IList<p4kFile> ScanDirectoryContaining( string p4kFilename, string filenamepart )
+    {
+      if ( !File.Exists( p4kFilename ) ) return null;
+
+      List<p4kFile> fileList = new List<p4kFile>( );
+
+      using ( p4kRecReader reader = new p4kRecReader( p4kFilename ) ) {
+        // work from the end of the file
+        reader.GotoLastPage( );
+        m_endOfCentralDirRecord = new p4kEndOfCentralDirRecord( reader );
+
+        // position first
+        reader.Seek( m_endOfCentralDirRecord.RecordOffset - p4kRecReader.PageSize );
+        m_z64EndOfCentralDirLocator = new p4kZ64EndOfCentralDirLocator( reader );
+
+        // for the next the position should be found already - seek it
+        reader.Seek( m_z64EndOfCentralDirLocator.Z64EndOfCentralDir );
+        m_z64EndOfCentralDirRecord = new p4kZ64EndOfCentralDirRecord( reader );
+        // now we should have the start of the directory entries...
+
+        // position first
+        reader.Seek( m_z64EndOfCentralDirRecord.Z64StartOfCentralDir );
+        // loop all file - as per dir reporting
+        for ( long i = 0; i < m_z64EndOfCentralDirRecord.NumberOfEntries; i++ ) {
+          p4kDirectoryEntry de = new p4kDirectoryEntry( reader );
+          if ( !string.IsNullOrEmpty( filenamepart ) && de.Filename.ToLower( ).Contains( filenamepart.ToLower( ) ) ) {
+            var p = new p4kFile( de ); // FOUND
+            fileList.Add( p );
+          }
+        }
+      }
+      return fileList;
     }
 
 

@@ -867,13 +867,15 @@ namespace SCJMapper_V2.Actions
                   matn.Nodes.Add( matin ); // add to master tree
                   matin.UpdateAction( acc ); UpdateMasterNode( matin );
                 }
-              } catch {
+              }
+              catch {
                 ; // key not found
               }
               Dirty = true;
             } // foreach
           }
-        } catch ( Exception e ) {
+        }
+        catch ( Exception e ) {
           log.DebugFormat( "ReloadTreeView - Exception in loading Treevie\n{0}", e.Message ); // map key not found ??
         }
       }
@@ -1051,11 +1053,7 @@ namespace SCJMapper_V2.Actions
       foreach ( ActionMapCls acm in ActionMaps ) {
         // have to search Actions in Maps
         foreach ( ActionCls ac in acm ) {
-          if ( ac.DefBinding == input ) {
-            aMode = string.Format( "{0};{1}", ac.DefActivationMode.Name, ac.DefActivationMode.MultiTap );
-            rtf.Write( "profile" ); rtf.WriteTab( ac.Name ); rtf.WriteTab( acm.Name ); rtf.WriteTab( aMode ); rtf.WriteLn( );
-            rtf.WriteLn( );
-          }
+          bool used = false;
           foreach ( ActionCommandCls acc in ac.InputList ) {
             if ( acc.DevInput == input ) {
               aMode = string.Format( "modified;{0};{1}", acc.ActivationMode.Name, acc.ActivationMode.MultiTap );
@@ -1065,7 +1063,14 @@ namespace SCJMapper_V2.Actions
               rtf.Write( "mapped" ); rtf.WriteTab( ac.Name ); rtf.WriteTab( acm.Name ); rtf.WriteTab( aMode.PadRight( 80 ) ); rtf.WriteLn( );
               rtf.RHighlightColor = RTF.RTFformatter.ERColor.ERC_Black;
               rtf.WriteLn( );
+              used = true;
             }
+            used = !string.IsNullOrEmpty( acc.DevInput );
+          }
+          if ( ( !used ) && ac.DefBinding == input ) {
+            aMode = string.Format( "{0};{1}", ac.DefActivationMode.Name, ac.DefActivationMode.MultiTap );
+            rtf.Write( "profile" ); rtf.WriteTab( ac.Name ); rtf.WriteTab( acm.Name ); rtf.WriteTab( aMode ); rtf.WriteLn( );
+            rtf.WriteLn( );
           }
         }
       }

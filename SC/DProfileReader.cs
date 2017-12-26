@@ -384,7 +384,7 @@ namespace SCJMapper_V2.SC
                                             where ( x.Name == "modifiers" )
                                             select x;
           foreach ( XElement modifier in modifiers ) {
-            ValidContent &= Modifiers.Instance.FromXML( modifier );
+            ValidContent &= Modifiers.Instance.FromXML( modifier, true );
           }
 
           IEnumerable<XElement> actionmaps = from x in el.Elements( )

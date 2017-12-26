@@ -342,38 +342,39 @@ namespace SCJMapper_V2.Actions
       using ( XmlReader reader = XmlReader.Create( new StringReader( xml ), settings ) ) {
 
         reader.MoveToContent( );
-        // read the header element
-        if ( reader.Name == "ActionMaps" ) {
-          if ( reader.HasAttributes ) {
-            version = reader["version"];
-            if ( version == "0" ) version = ACM_VERSION; // update from legacy to actual version 
+        if ( reader.EOF ) return false;
 
-            // get the joystick mapping if there is one
-            for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-              jsN[i] = reader[string.Format( "js{0}", i + 1 )];
-              jsNGUID[i] = reader[string.Format( "js{0}G", i + 1 )];
-            }
-          }
-          else {
-            return false;
-          }
-        }
-
-        // now handle the js assignment from the map
-        // Reset with the found mapping
-        DeviceInst.JoystickListRef.ResetJsNAssignment( jsNGUID );
-        // Only now create the default optiontree for this map, containing included joysticks and the gamepad
-        CreateNewOptions( );
-
-        // now read the CIG content of the map
-        reader.MoveToContent( );
-
-        // could be actionmap OR (AC 0.9) deviceoptions OR options
         if ( XNode.ReadFrom( reader ) is XElement el ) {
 
+          // read the header element
+          if ( el.Name.LocalName == "ActionMaps" ) {
+            if ( el.HasAttributes ) {
+              version = (string)el.Attribute( "version" );
+              if ( version == "0" ) version = ACM_VERSION; // update from legacy to actual version 
+
+              // get the joystick mapping if there is one
+              for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
+                jsN[i] = (string)el.Attribute( string.Format( "js{0}", i + 1 ) );
+                jsNGUID[i] = (string)el.Attribute( string.Format( "js{0}G", i + 1 ) );
+              }
+            }
+            else {
+              return false;
+            }
+          }
+
+          // now handle the js assignment from the map
+          // Reset with the found mapping
+          DeviceInst.JoystickListRef.ResetJsNAssignment( jsNGUID );
+          // Only now create the default optiontree for this map, containing included joysticks and the gamepad
+          CreateNewOptions( );
+
+
+          // now read the CIG content of the map
+
           IEnumerable<XElement> actionmaps = from x in el.Elements( )
-                                     where ( x.Name == "actionmap" )
-                                     select x;
+                                             where ( x.Name == "actionmap" )
+                                             select x;
           foreach ( XElement actionmap in actionmaps ) {
             ActionMapCls acm = new ActionMapCls( );
             if ( acm.fromXML( actionmap ) ) {
@@ -403,8 +404,8 @@ namespace SCJMapper_V2.Actions
           }
 
           IEnumerable<XElement> modifiers = from x in el.Elements( )
-                                          where ( x.Name == "modifiers" )
-                                          select x;
+                                            where ( x.Name == "modifiers" )
+                                            select x;
           foreach ( XElement modifier in modifiers ) {
             SC.Modifiers.Instance.FromXML( modifier );
           }
