@@ -20,6 +20,7 @@ using SCJMapper_V2.Devices.Gamepad;
 using SCJMapper_V2.Devices.Joystick;
 using SCJMapper_V2.Devices.Options;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace SCJMapper_V2.Actions
 {
@@ -174,7 +175,7 @@ namespace SCJMapper_V2.Actions
 
       // do we find an actionmap like the new one in our list ?
       ActionMapCls ACM = this.Find( delegate ( ActionMapCls acm ) {
-        return acm.name == newAcm.name;
+        return acm.Name == newAcm.Name;
       } );
       if ( ACM == null ) {
         ; // this.Add( newAcm ); // no, add new
@@ -187,7 +188,7 @@ namespace SCJMapper_V2.Actions
 
 #if USE_DS_ACTIONMAPS  // see and (un)define on top of file to allow for editing the DataSet entities
 
-    public void toDataSet( DS_ActionMaps dsa )
+    public void ToDataSet( DS_ActionMaps dsa )
     {
       dsa.Clear( );
       if ( dsa.HasChanges( ) ) dsa.T_ActionMap.AcceptChanges( );
@@ -195,25 +196,25 @@ namespace SCJMapper_V2.Actions
       int AMcount = 1;
       foreach ( ActionMapCls am in this ) {
         DS_ActionMaps.T_ActionMapRow amr = dsa.T_ActionMap.NewT_ActionMapRow( );
-        string amShown = DS_ActionMap.ActionMapShown( am.name, AMcount++ );
+        string amShown = DS_ActionMap.ActionMapShown( am.Name, AMcount++ );
 
         amr.ID_ActionMap = amShown;
         dsa.T_ActionMap.AddT_ActionMapRow( amr );
 
         foreach ( ActionCls ac in am ) {
           int ilIndex = 0;
-          while ( ac.inputList.Count > ilIndex ) {
+          while ( ac.InputList.Count > ilIndex ) {
             DS_ActionMaps.T_ActionRow ar = dsa.T_Action.NewT_ActionRow( );
-            ar.ID_Action = DS_ActionMap.ActionID( am.name, ac.key, ac.inputList[ilIndex].NodeIndex ); // make a unique key
+            ar.ID_Action = DS_ActionMap.ActionID( am.Name, ac.Key, ac.InputList[ilIndex].NodeIndex ); // make a unique key
             ar.AddBind = ( ilIndex > 0 ); // all but the first are addbinds
             ar.REF_ActionMap = amShown;
-            ar.ActionName = ac.name;
-            ar.Device = ac.device;
-            ar.Def_Binding = ac.defBinding;
-            ar.Def_Modifier = ac.defActivationMode.Name;
-            ar.Usr_Binding = ac.inputList[ilIndex].DevInput;
-            ar.Usr_Modifier = ac.inputList[ilIndex].ActivationMode.Name;
-            ar.Disabled = DeviceCls.IsBlendedInput( ac.inputList[ilIndex].Input );
+            ar.ActionName = ac.Name;
+            ar.Device = ac.Device;
+            ar.Def_Binding = ac.DefBinding;
+            ar.Def_Modifier = ac.DefActivationMode.Name;
+            ar.Usr_Binding = ac.InputList[ilIndex].DevInput;
+            ar.Usr_Modifier = ac.InputList[ilIndex].ActivationMode.Name;
+            ar.Disabled = DeviceCls.IsDisabledInput( ac.InputList[ilIndex].Input );
             dsa.T_Action.AddT_ActionRow( ar );
 
             ilIndex++;
@@ -227,19 +228,19 @@ namespace SCJMapper_V2.Actions
         dsa.AcceptChanges( );
     }
 
-    public void updateDataSet( DS_ActionMaps dsa, string actionID )
+    public void UpdateDataSet( DS_ActionMaps dsa, string actionID )
     {
       foreach ( ActionMapCls am in this ) {
         DS_ActionMaps.T_ActionMapRow amr = dsa.T_ActionMap.NewT_ActionMapRow( );
 
         foreach ( ActionCls ac in am ) {
           int ilIndex = 0;
-          while ( ac.inputList.Count > ilIndex ) {
-            if ( actionID == DS_ActionMap.ActionID( am.name, ac.key, ac.inputList[ilIndex].NodeIndex ) ) {
+          while ( ac.InputList.Count > ilIndex ) {
+            if ( actionID == DS_ActionMap.ActionID( am.Name, ac.Key, ac.InputList[ilIndex].NodeIndex ) ) {
               DS_ActionMaps.T_ActionRow ar = dsa.T_Action.FindByID_Action( actionID );
-              ar.Usr_Binding = ac.inputList[ilIndex].DevInput;
-              ar.Usr_Modifier = ac.inputList[ilIndex].ActivationMode.Name;
-              ar.Disabled = DeviceCls.IsBlendedInput( ac.inputList[ilIndex].Input );
+              ar.Usr_Binding = ac.InputList[ilIndex].DevInput;
+              ar.Usr_Modifier = ac.InputList[ilIndex].ActivationMode.Name;
+              ar.Disabled = DeviceCls.IsDisabledInput( ac.InputList[ilIndex].Input );
               ar.AcceptChanges( );
               return;
             }
@@ -333,68 +334,80 @@ namespace SCJMapper_V2.Actions
     {
       log.Debug( "ActionMapsCls.fromXML - Entry" );
 
-      XmlReaderSettings settings = new XmlReaderSettings( );
-      settings.ConformanceLevel = ConformanceLevel.Fragment;
-      settings.IgnoreWhitespace = true;
-      settings.IgnoreComments = true;
-      XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
+      XmlReaderSettings settings = new XmlReaderSettings {
+        ConformanceLevel = ConformanceLevel.Fragment,
+        IgnoreWhitespace = true,
+        IgnoreComments = true
+      };
+      using ( XmlReader reader = XmlReader.Create( new StringReader( xml ), settings ) ) {
 
-      reader.Read( );
-      // read the header element
-      if ( reader.Name == "ActionMaps" ) {
-        if ( reader.HasAttributes ) {
-          version = reader["version"];
-          if ( version == "0" ) version = ACM_VERSION; // update from legacy to actual version 
+        reader.MoveToContent( );
+        // read the header element
+        if ( reader.Name == "ActionMaps" ) {
+          if ( reader.HasAttributes ) {
+            version = reader["version"];
+            if ( version == "0" ) version = ACM_VERSION; // update from legacy to actual version 
 
-          // get the joystick mapping if there is one
-          for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-            jsN[i] = reader[string.Format( "js{0}", i + 1 )];
-            jsNGUID[i] = reader[string.Format( "js{0}G", i + 1 )];
+            // get the joystick mapping if there is one
+            for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
+              jsN[i] = reader[string.Format( "js{0}", i + 1 )];
+              jsNGUID[i] = reader[string.Format( "js{0}G", i + 1 )];
+            }
+          }
+          else {
+            return false;
           }
         }
-        else {
-          return false;
-        }
-      }
 
-      // now handle the js assignment from the map
-      // Reset with the found mapping
-      DeviceInst.JoystickListRef.ResetJsNAssignment( jsNGUID );
-      // Only now create the default optiontree for this map, containing included joysticks and the gamepad
-      CreateNewOptions( );
+        // now handle the js assignment from the map
+        // Reset with the found mapping
+        DeviceInst.JoystickListRef.ResetJsNAssignment( jsNGUID );
+        // Only now create the default optiontree for this map, containing included joysticks and the gamepad
+        CreateNewOptions( );
 
-      // now read the CIG content of the map
-      reader.Read( ); // move to next element
+        // now read the CIG content of the map
+        reader.MoveToContent( );
 
-      // could be actionmap OR (AC 0.9) deviceoptions OR options
+        // could be actionmap OR (AC 0.9) deviceoptions OR options
+        if ( XNode.ReadFrom( reader ) is XElement el ) {
 
-      while ( !reader.EOF ) { //!string.IsNullOrEmpty( x ) ) {
-
-        if ( reader.Name.ToLowerInvariant( ) == "actionmap" ) {
-          string x = reader.ReadOuterXml( );
-          ActionMapCls acm = new ActionMapCls( );
-          if ( acm.fromXML( x ) ) {
-            this.Merge( acm ); // merge list
+          IEnumerable<XElement> actionmaps = from x in el.Elements( )
+                                     where ( x.Name == "actionmap" )
+                                     select x;
+          foreach ( XElement actionmap in actionmaps ) {
+            ActionMapCls acm = new ActionMapCls( );
+            if ( acm.fromXML( actionmap ) ) {
+              this.Merge( acm ); // merge list
+            }
           }
-        }
-        else if ( reader.Name.ToLowerInvariant( ) == "customisationuiheader" ) {
-          string x = reader.ReadOuterXml( );
-          m_uiCustHeader.fromXML( x );
-        }
-        else if ( reader.Name.ToLowerInvariant( ) == "deviceoptions" ) {
-          string x = reader.ReadOuterXml( );
-          m_deviceOptions.fromXML( x );
-        }
-        else if ( reader.Name.ToLowerInvariant( ) == "options" ) {
-          string x = reader.ReadOuterXml( );
-          m_tuningOptions.fromXML( x );
-        }
-        else if ( reader.Name.ToLowerInvariant( ) == "modifiers" ) {
-          string x = reader.ReadOuterXml( );
-          SC.Modifiers.Instance.FromXML( x ); // add as 'non profile'
-        }
-        else {
-          reader.Read( );
+
+          IEnumerable<XElement> custHeaders = from x in el.Elements( )
+                                              where ( x.Name == UICustHeader.XmlName )
+                                              select x;
+          foreach ( XElement custHeader in custHeaders ) {
+            m_uiCustHeader.fromXML( custHeader );
+          }
+
+          IEnumerable<XElement> deviceOptions = from x in el.Elements( )
+                                                where ( x.Name == "deviceoptions" )
+                                                select x;
+          foreach ( XElement deviceOption in deviceOptions ) {
+            m_deviceOptions.fromXML( deviceOption );
+          }
+
+          IEnumerable<XElement> options = from x in el.Elements( )
+                                          where ( x.Name == "options" )
+                                          select x;
+          foreach ( XElement option in options ) {
+            m_tuningOptions.fromXML( option );
+          }
+
+          IEnumerable<XElement> modifiers = from x in el.Elements( )
+                                          where ( x.Name == "modifiers" )
+                                          select x;
+          foreach ( XElement modifier in modifiers ) {
+            SC.Modifiers.Instance.FromXML( modifier );
+          }
         }
 
       }

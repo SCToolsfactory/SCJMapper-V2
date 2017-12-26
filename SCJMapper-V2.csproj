@@ -27,8 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>67</ApplicationRevision>
-    <ApplicationVersion>2.33.0.%2a</ApplicationVersion>
+    <ApplicationRevision>68</ApplicationRevision>
+    <ApplicationVersion>2.34.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\ActionCommandCls.cs" />
+    <Compile Include="Actions\Act.cs" />
     <Compile Include="Actions\ActionTreeEventArgs.cs" />
     <Compile Include="Actions\ActionTreeInputNode.cs" />
     <Compile Include="Actions\ActionTreeNode.cs" />
@@ -241,7 +242,7 @@
     <Compile Include="SC\SCMappings.cs" />
     <Compile Include="SC\SCPath.cs" />
     <Compile Include="TheUser.cs" />
-    <Compile Include="Devices\Joystick\UICustHeader.cs" />
+    <Compile Include="Devices\UICustHeader.cs" />
     <Compile Include="OGL\TriDiagonalMatrix.cs" />
     <Compile Include="Devices\Joystick\xyPoints.cs" />
     <Compile Include="Devices\Gamepad\UC_GpadPanel.cs">

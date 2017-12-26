@@ -27,10 +27,10 @@ namespace SCJMapper_V2.Devices.Keyboard
 
     public const string ClearMods = "escape";
 
-    public new const string BlendedInput = DeviceID + DeviceCls.BlendedInput;
-    static public new bool IsBlendedInput ( string input )
+    public new const string DisabledInput = DeviceID + DeviceCls.DisabledInput;
+    static public new bool IsDisabledInput( string input )
     {
-      if ( input == BlendedInput ) return true;
+      if ( input == DisabledInput ) return true;
       return false;
     }
 
@@ -101,7 +101,7 @@ namespace SCJMapper_V2.Devices.Keyboard
       // input is something like a letter or a composition like lctrl+c 
       // try easy: add kb1_ at the beginning and before any +; first remove spaces
       string retVal = input.Replace(" ","");
-      if ( IsBlendedInput( input ) ) return input;
+      if ( IsDisabledInput( input ) ) return input;
 
       int plPos = retVal.IndexOf("+");
       while (plPos>0) {

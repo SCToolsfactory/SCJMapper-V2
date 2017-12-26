@@ -166,11 +166,11 @@ namespace SCJMapper_V2.Actions
     /// Updates an actionCommand with a new input (command)
     /// </summary>
     /// <param name="devInput">The input command</param>
-    public void UpdateCommandFromInput( string devInput, ActionCls.ActionDevice actionDevice) // ActionCommandCls actionCmd )
+    public void UpdateCommandFromInput( string devInput, Act.ActionDevice actionDevice) // ActionCommandCls actionCmd )
     {
       // Apply the input to the ActionTree
-      this.DevInput = ActionCls.BlendInput( devInput, actionDevice );
-      if ( ActionCls.IsBlendedInput( this.DevInput ) || string.IsNullOrEmpty( devInput ) ) {
+      this.DevInput = Act.DisableInput( devInput, actionDevice );
+      if ( Act.IsDisabledInput( this.DevInput ) || string.IsNullOrEmpty( devInput ) ) {
         this.ActivationMode = new ActivationMode( ActivationMode.Default ); // reset activation mode if the input is empty
       }
     }

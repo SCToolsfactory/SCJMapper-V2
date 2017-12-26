@@ -28,10 +28,10 @@ namespace SCJMapper_V2.Devices.Mouse
     public new const string DeviceID = "mo1_";
     static public int RegisteredDevices = 0;  // devices add here once they are created (though will not decrement as they are not deleted)
 
-    public new const string BlendedInput = DeviceID + DeviceCls.BlendedInput;
-    static public new bool IsBlendedInput( string input )
+    public new const string DisabledInput = DeviceID + DeviceCls.DisabledInput;
+    static public new bool IsDisabledInput( string input )
     {
-      if ( input == BlendedInput ) return true;
+      if ( input == DisabledInput ) return true;
       return false;
     }
 
@@ -103,7 +103,7 @@ namespace SCJMapper_V2.Devices.Mouse
       // input is something like a mouse1 (TODO compositions like lctrl+mouse1 ??)
       // try easy: add mo1_ at the beginning
       string retVal = input.Replace(" ","");
-      if ( IsBlendedInput( input ) ) return input;
+      if ( IsDisabledInput( input ) ) return input;
 
       return "mo1_" + retVal;
     }

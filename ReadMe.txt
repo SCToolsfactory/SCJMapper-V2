@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.33 - Build 67 BETA
-(c) Cassini, StandardToaster - 23-Dec-2017
+SC Joystick Mapper V 2.34 - Build 68 BETA
+(c) Cassini, StandardToaster - 26-Dec-2017
 
 Contains 12 files + graphics:
 
-SCJMapper.exe                The program (V2.33)
-SCJMapper.exe.config         Program config (V2.33)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.34)
+SCJMapper.exe.config         Program config (V2.34)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -20,7 +20,7 @@ ReadMe.txt                   This file
 
 graphics folder              Skybox Images (V2.32)               - graphics folder MUST be in the same folder as the Exe file
 
-NOTE V 2.33:
+NOTE V 2.34:
   search order for defaultProfile.xml to build the action tree is:
    1. directory where SCJMapper Exe is located
    2. directory of <SC>\LIVE\USER
@@ -40,6 +40,8 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.34 - BETA Build 68
+- improvement - complete rework of XML defaultProfile/mapping parsing
 V 2.33 - BETA Build 67
 - update for SC 3.0.0 Alpha public
 - fix - finding SC game folder - may work automatically for 3.0 Alpha else define it in Settings

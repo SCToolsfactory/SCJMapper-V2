@@ -6,6 +6,7 @@ using System.IO;
 
 using SCJMapper_V2.Devices.Joystick;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace SCJMapper_V2.Actions
 {
@@ -25,7 +26,7 @@ namespace SCJMapper_V2.Actions
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    public string name { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Copy return the complete ActionMap while reassigning the JsN Tag
@@ -34,7 +35,7 @@ namespace SCJMapper_V2.Actions
     /// <returns>The ActionMap copy with reassigned input</returns>
     public ActionMapCls ReassignJsN( JsReassingList newJsList )
     {
-      var newMap = new ActionMapCls(this);
+      var newMap = new ActionMapCls( this );
 
       foreach ( ActionCls ac in this ) {
         newMap.Add( ac.ReassignJsN( newJsList ) ); // creates the deep copy of the tree
@@ -46,11 +47,11 @@ namespace SCJMapper_V2.Actions
 
     private ActionMapCls( ActionMapCls other )
     {
-      this.name = other.name;
+      this.Name = other.Name;
       // no deep copy of refs
     }
 
-    public ActionMapCls( ) { }
+    public ActionMapCls() { }
 
     /// <summary>
     /// Merge the given Map with this Map
@@ -61,12 +62,13 @@ namespace SCJMapper_V2.Actions
     {
       // do we find all actions in the new list that are like the new ones in our list ?
       foreach ( ActionCls newAc in newAcm ) {
-        ActionCls AC = this.Find( delegate( ActionCls ac ) {
-          return ac.key == newAc.key;
+        ActionCls AC = this.Find( delegate ( ActionCls ac ) {
+          return ac.Key == newAc.Key;
         } );
         if ( AC == null ) {
           ; //  this.Add( newAc ); // no, add it
-        } else {
+        }
+        else {
           AC.Merge( newAc ); // yes, merge it
         }
       }
@@ -77,15 +79,15 @@ namespace SCJMapper_V2.Actions
     /// Dump the actionmap as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public string toXML( )
+    public string toXML()
     {
       string acs = "";
       foreach ( ActionCls ac in this ) {
-        string x =  ac.toXML( );
+        string x = ac.toXML( );
         if ( !string.IsNullOrEmpty( x ) ) acs += string.Format( "\t{0}", x );
       }
       if ( !string.IsNullOrWhiteSpace( acs ) ) {
-        string r = string.Format( "\t<actionmap name=\"{0}\">\n", name );
+        string r = string.Format( "\t<actionmap name=\"{0}\">\n", Name );
         r += acs;
         r += string.Format( "\t</actionmap>\n" );
         return r;
@@ -100,33 +102,14 @@ namespace SCJMapper_V2.Actions
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public Boolean fromXML( string xml )
+    public bool fromXML( XElement actionmap )
     {
-      XmlReaderSettings settings = new XmlReaderSettings( );
-      settings.ConformanceLevel = ConformanceLevel.Fragment;
-      settings.IgnoreWhitespace = true;
-      settings.IgnoreComments = true;
-      XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
-
-      reader.Read( );
-
-      if ( reader.Name == "actionmap" ) {
-        if ( reader.HasAttributes ) {
-          name = reader["name"];
-        } else {
-          return false;
-        }
-      }
-
-      reader.Read( ); // move to next element
-
-      string x = reader.ReadOuterXml( );
-      while ( !string.IsNullOrEmpty( x ) ) {
+      Name = (string)actionmap.Attribute( "name" ); // mandadory
+      foreach ( XElement actionNode in actionmap.Nodes( ) ) {
         ActionCls ac = new ActionCls( );
-        if ( ac.fromXML( x ) ) {
+        if ( ac.fromXML( actionNode ) ) {
           this.Add( ac ); // add to list
         }
-        x = reader.ReadOuterXml( );
       }
       return true;
     }

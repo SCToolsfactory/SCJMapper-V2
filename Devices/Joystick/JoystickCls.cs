@@ -34,10 +34,10 @@ namespace SCJMapper_V2.Devices.Joystick
 
     public const string JsUnknown = "jsx_";
 
-    public new const string BlendedInput = DeviceID + DeviceCls.BlendedInput; //AC2 ..
-    static public new bool IsBlendedInput( string input )
+    public new const string DisabledInput = DeviceID + DeviceCls.DisabledInput; //AC2 ..
+    static public new bool IsDisabledInput( string input )
     {
-      if ( input == BlendedInput ) return true;
+      if ( input == DisabledInput ) return true;
       return false;
     }
 

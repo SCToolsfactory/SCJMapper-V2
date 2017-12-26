@@ -157,7 +157,8 @@ namespace SCJMapper_V2.Devices.Options
       try {
         XDocument doc = XDocument.Parse( xml );
         return doc.ToString( ).Split( new string[] { string.Format( "\n" ) }, StringSplitOptions.RemoveEmptyEntries );
-      } catch ( Exception ) {
+      }
+      catch ( Exception ) {
         return new string[] { xml };
       }
     }
@@ -197,7 +198,7 @@ namespace SCJMapper_V2.Devices.Options
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public bool fromXML( string xml )
+    public bool fromXML( XElement options )
     {
       /* 
        * This can be a lot of the following options
@@ -225,136 +226,96 @@ namespace SCJMapper_V2.Devices.Options
             </options>
 
        */
-      XmlReaderSettings settings = new XmlReaderSettings( );
-      settings.ConformanceLevel = ConformanceLevel.Fragment;
-      settings.IgnoreWhitespace = true;
-      settings.IgnoreComments = true;
-      XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
+      string instance = (string)options.Attribute( "instance" ); // mandadory
+      string type = (string)options.Attribute( "type" ); // mandadory
+      if ( !int.TryParse( instance, out int nInstance ) ) nInstance = 0;
 
-      reader.Read( );
-
-      string type = "";
-      string instance = ""; int nInstance = 0;
-
-      if ( reader.HasAttributes ) {
-        type = reader["type"];
-        if ( !( ( type.ToLowerInvariant( ) == "joystick" ) || ( type.ToLowerInvariant( ) == "xboxpad" ) ) ) {
-          // save as plain text
-          if ( !m_stringOptions.Contains( xml ) ) m_stringOptions.Add( xml );
-          return true;
+      // try to disassemble the items
+      /*
+       * <flight> instance="0/1" sensitivity="n.nn" exponent="n.nn"  (instance should be invert)
+       *   <flight_move>
+       *     <flight_move_pitch>  
+       *     <flight_move_yaw>  
+       *     <flight_move_roll>  
+       *     <flight_move_strafe_vertical>  
+       *     <flight_move_strafe_lateral>  
+       *     <flight_move_strafe_longitudinal>  
+       *   <flight_throttle> invert="0/1"
+       *     <flight_throttle_abs>
+       *     <flight_throttle_rel>
+       *   <flight_aim>
+       *       <flight_aim_pitch>  
+       *       <flight_aim_yaw>  
+       *   <flight_view>
+       *       <flight_view_pitch>  
+       *       <flight_view_yaw>  
+       *   
+       * 
+              <nonlinearity_curve>
+                <point in="0.1"  out="0.001"/>
+       *          ..
+              </nonlinearity_curve>
+       * 
+       * 
+       * 
+       */
+      foreach ( XElement item in options.Elements( ) ) {
+        if ( item.Name.LocalName == "flight_move_pitch" ) {
+          m_tuning["flight_move_pitch"].Options_fromXML( item, type, int.Parse( instance ) );
         }
-        // further on..
-        instance = reader["instance"];
-        if ( !int.TryParse( instance, out nInstance ) ) nInstance = 0;
-
-        reader.Read( );
-        // try to disassemble the items
-        /*
-         * <flight> instance="0/1" sensitivity="n.nn" exponent="n.nn"  (instance should be invert)
-         *   <flight_move>
-         *     <flight_move_pitch>  
-         *     <flight_move_yaw>  
-         *     <flight_move_roll>  
-         *     <flight_move_strafe_vertical>  
-         *     <flight_move_strafe_lateral>  
-         *     <flight_move_strafe_longitudinal>  
-         *   <flight_throttle> invert="0/1"
-         *     <flight_throttle_abs>
-         *     <flight_throttle_rel>
-         *   <flight_aim>
-         *       <flight_aim_pitch>  
-         *       <flight_aim_yaw>  
-         *   <flight_view>
-         *       <flight_view_pitch>  
-         *       <flight_view_yaw>  
-         *   
-         * 
-                <nonlinearity_curve>
-                  <point in="0.1"  out="0.001"/>
-         *          ..
-                </nonlinearity_curve>
-         * 
-         * 
-         * 
-         */
-        while ( !reader.EOF ) {
-
-          if ( reader.Name.ToLowerInvariant( ) == "flight_move_pitch" ) {
-            m_tuning["flight_move_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_yaw" ) {
-            m_tuning["flight_move_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_roll" ) {
-            m_tuning["flight_move_roll"].Options_fromXML( reader, type, int.Parse( instance ) );
-
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_vertical" ) {
-            m_tuning["flight_move_strafe_vertical"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_lateral" ) {
-            m_tuning["flight_move_strafe_lateral"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_move_strafe_longitudinal" ) {
-            m_tuning["flight_move_strafe_longitudinal"].Options_fromXML( reader, type, int.Parse( instance ) );
-
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle_abs" ) {
-            m_tuning["flight_throttle_abs"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_throttle_rel" ) {
-            m_tuning["flight_throttle_rel"].Options_fromXML( reader, type, int.Parse( instance ) );
-
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_pitch" ) {
-            m_tuning["flight_aim_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_aim_yaw" ) {
-            m_tuning["flight_aim_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
-
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_view_pitch" ) {
-            m_tuning["flight_view_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "flight_view_yaw" ) {
-            m_tuning["flight_view_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.NodeType != XmlNodeType.EndElement ) {
-
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "fps_view_pitch" ) {
-            m_tuning["fps_view_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "fps_view__yaw" ) {
-            m_tuning["fps_view__yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.NodeType != XmlNodeType.EndElement ) {
-
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "fps_move_lateral" ) {
-            m_tuning["fps_move_lateral"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "fps_move_longitudinal" ) {
-            m_tuning["fps_move_longitudinal"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.NodeType != XmlNodeType.EndElement ) {
-
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "mgv_view_pitch" ) {
-            m_tuning["mgv_view_pitch"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "mgv_view_yaw" ) {
-            m_tuning["mgv_view_yaw"].Options_fromXML( reader, type, int.Parse( instance ) );
-          }
-          else if ( reader.NodeType != XmlNodeType.EndElement ) {
-            //??
-            log.InfoFormat( "Options.fromXML: unknown node - {0} - stored as is", reader.Name );
-            if ( !m_stringOptions.Contains( xml ) ) m_stringOptions.Add( xml );
-          }
-
-          reader.Read( );
+        else if ( item.Name.LocalName == "flight_move_yaw" ) {
+          m_tuning["flight_move_yaw"].Options_fromXML( item, type, int.Parse( instance ) );
         }
+        else if ( item.Name.LocalName == "flight_move_roll" ) {
+          m_tuning["flight_move_roll"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "flight_move_strafe_vertical" ) {
+          m_tuning["flight_move_strafe_vertical"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "flight_move_strafe_lateral" ) {
+          m_tuning["flight_move_strafe_lateral"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "flight_move_strafe_longitudinal" ) {
+          m_tuning["flight_move_strafe_longitudinal"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "flight_throttle_abs" ) {
+          m_tuning["flight_throttle_abs"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "flight_throttle_rel" ) {
+          m_tuning["flight_throttle_rel"].Options_fromXML( item, type, int.Parse( instance ) );
 
+        }
+        else if ( item.Name.LocalName == "flight_aim_pitch" ) {
+          m_tuning["flight_aim_pitch"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "flight_aim_yaw" ) {
+          m_tuning["flight_aim_yaw"].Options_fromXML( item, type, int.Parse( instance ) );
+
+        }
+        else if ( item.Name.LocalName == "flight_view_pitch" ) {
+          m_tuning["flight_view_pitch"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "flight_view_yaw" ) {
+          m_tuning["flight_view_yaw"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "fps_view_pitch" ) {
+          m_tuning["fps_view_pitch"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "fps_view__yaw" ) {
+          m_tuning["fps_view__yaw"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "fps_move_lateral" ) {
+          m_tuning["fps_move_lateral"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "fps_move_longitudinal" ) {
+          m_tuning["fps_move_longitudinal"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "mgv_view_pitch" ) {
+          m_tuning["mgv_view_pitch"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
+        else if ( item.Name.LocalName == "mgv_view_yaw" ) {
+          m_tuning["mgv_view_yaw"].Options_fromXML( item, type, int.Parse( instance ) );
+        }
       }
       return true;
     }

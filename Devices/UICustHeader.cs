@@ -6,7 +6,7 @@ using System.Xml;
 using System.IO;
 using System.Xml.Linq;
 
-namespace SCJMapper_V2.Devices.Joystick
+namespace SCJMapper_V2.Devices
 {
   /// <summary>
   ///   Maintains an CustomisationUIHeader - something like:
@@ -28,10 +28,13 @@ namespace SCJMapper_V2.Devices.Joystick
 
     List<string> m_stringOptions = new List<string>( );
 
+    public const string XmlName = "CustomisationUIHeader";
+
+
     public struct DevRec : ICloneable
     {
       public string devType;
-      public int    instNo;
+      public int instNo;
 
       public object Clone()
       {
@@ -45,7 +48,7 @@ namespace SCJMapper_V2.Devices.Joystick
       /// </summary>
       /// <param name="clone"></param>
       /// <returns>True if the clone is identical but not a shallow copy</returns>
-      public bool CheckClone(DevRec clone)
+      public bool CheckClone( DevRec clone )
       {
         bool ret = true;
         ret &= ( this.devType == clone.devType ); // immutable string - shallow copy is OK
@@ -64,11 +67,11 @@ namespace SCJMapper_V2.Devices.Joystick
     /// Clone this object
     /// </summary>
     /// <returns>A deep Clone of this object</returns>
-    public object Clone( )
+    public object Clone()
     {
-      var uic = (UICustHeader)this.MemberwiseClone();
+      var uic = (UICustHeader)this.MemberwiseClone( );
       // more objects to deep copy
-      uic.m_devInstances = m_devInstances.Select( x => ( DevRec )x.Clone( ) ).ToList( );
+      uic.m_devInstances = m_devInstances.Select( x => (DevRec)x.Clone( ) ).ToList( );
 
 #if DEBUG
       // check cloned item
@@ -82,7 +85,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// </summary>
     /// <param name="clone"></param>
     /// <returns>True if the clone is identical but not a shallow copy</returns>
-    private bool CheckClone (UICustHeader clone )
+    private bool CheckClone( UICustHeader clone )
     {
       bool ret = true;
       ret &= ( this.m_stringOptions == clone.m_stringOptions ); // immutable string list - shallow copy is OK
@@ -91,7 +94,7 @@ namespace SCJMapper_V2.Devices.Joystick
       ret &= ( this.m_image == clone.m_image ); // immutable string - shallow copy is OK
 
       ret &= ( this.m_devInstances.Count == clone.m_devInstances.Count );
-      if (ret) {
+      if ( ret ) {
         for ( int i = 0; i < this.m_devInstances.Count; i++ ) {
           ret &= ( this.m_devInstances[i].CheckClone( clone.m_devInstances[i] ) );
         }
@@ -111,7 +114,7 @@ namespace SCJMapper_V2.Devices.Joystick
       set { m_label = value; }
     }
 
-    public void ClearInstances( )
+    public void ClearInstances()
     {
       m_devInstances.Clear( );
     }
@@ -136,7 +139,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// Dump the CustomisationUIHeader as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public string toXML( )
+    public string toXML()
     {
       /*
        <CustomisationUIHeader label="sdsd" description="" image="">
@@ -155,7 +158,7 @@ namespace SCJMapper_V2.Devices.Joystick
 
       string r = "";
 
-      r += string.Format( "\t<CustomisationUIHeader label=\"{0}\" description=\"{1}\" image=\"{2}\">\n", m_label, m_description, m_image );
+      r += string.Format( "\t<{0} label=\"{1}\" description=\"{2}\" image=\"{3}\">\n", XmlName, m_label, m_description, m_image );
       if ( m_devInstances.Count > 0 ) {
         r += string.Format( "\t\t<devices>\n" );
 
@@ -191,16 +194,22 @@ namespace SCJMapper_V2.Devices.Joystick
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    private Boolean Instance_fromXML( XmlReader reader )
+    private bool Instance_fromXML( XElement devices )
     {
-      reader.Read( );
-
-      while ( !reader.EOF ) {
-        string devType = reader.Name;
-        string instance = reader["instance"];
+      /*
+		        <devices>
+			        <keyboard instance="1"/>
+			        <mouse instance="1"/>
+			        <joystick instance="1"/>
+			        <joystick instance="2"/>
+		        </devices>
+       */
+      foreach ( XElement dev in devices.Nodes( ) ) {
+        string devType = (string)dev.Name.LocalName;
         int instNo = 0;
-        if ( !string.IsNullOrWhiteSpace( instance ) ) {
-          if ( !int.TryParse( instance, out instNo ) ) {
+        IEnumerable<XAttribute> attr = dev.Attributes( ).Where( _a => _a.Name == "instance" );
+        if ( attr.Count( ) > 0 ) {
+          if ( !int.TryParse( attr.ElementAt( 0 ).Value.ToString( ), out instNo ) ) {
             instNo = 0;
           }
           else {
@@ -210,10 +219,7 @@ namespace SCJMapper_V2.Devices.Joystick
             m_devInstances.Add( dr );
           }
         }
-        reader.Read( );
-        if ( reader.NodeType == XmlNodeType.EndElement ) break; // expect end of <Devices> here
-      }//while
-
+      }
       return true;
     }
 
@@ -223,49 +229,41 @@ namespace SCJMapper_V2.Devices.Joystick
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public Boolean fromXML( string xml )
+    public bool fromXML( XElement cuiHeader )
     {
-      XmlReaderSettings settings = new XmlReaderSettings( );
-      settings.ConformanceLevel = ConformanceLevel.Fragment;
-      settings.IgnoreWhitespace = true;
-      settings.IgnoreComments = true;
-      XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
+      /*
+        <CustomisationUIHeader label="my_x55_65o" description="@@ui_JoystickSaitekX55Desc" image="JoystickSaitekX55">
+            <devices>
+              <keyboard instance="1"/>
+              <mouse instance="1"/>
+              <joystick instance="1"/>
+              <joystick instance="2"/>
+            </devices>
+            <categories>
+            <category label="@ui_CCSpaceFlight"/>
+            </categories>
+          </CustomisationUIHeader>
 
-      reader.Read( );
+       */
+      m_label = (string)cuiHeader.Attributes( ).First( a => a.Name == "label" ); // mandadory - else Exception
+      IEnumerable<XAttribute> attr = cuiHeader.Attributes( ).Where( _a => _a.Name == "description" );
+      if ( attr.Count( ) > 0 )
+        m_description = attr.ElementAt( 0 ).Value.ToString( );
+      else
+        m_description = "@ui_JoystickDefaultDesc";
 
-      if ( reader.HasAttributes ) {
-        m_label = reader["label"];
-        m_description = reader["description"];
-        if ( string.IsNullOrEmpty( m_description ) ) m_description = "@ui_JoystickDefaultDesc";
-        m_image = reader["image"];
-        if ( string.IsNullOrEmpty( m_image ) ) m_image = "JoystickDefault";
+      attr = cuiHeader.Attributes( ).Where( _a => _a.Name == "image" );
+      if ( attr.Count( ) > 0 )
+        m_image = attr.ElementAt( 0 ).Value.ToString( );
+      else
+        m_image = "JoystickDefault";
 
-        reader.Read( );
-        // try to disassemble the items
-        /*
-         *  <Devices>
-         *  	<joystick instance="1" />
-         *		<joystick instance="2" />
-         *  </Devices>
-         */
-        while ( !reader.EOF ) {
-
-          if ( reader.Name.ToLowerInvariant( ) == "devices" ) {
-            Instance_fromXML( reader );
-          }
-          else if ( reader.Name.ToLowerInvariant( ) == "categories" ) {
-            reader.ReadInnerXml( );
-          }
-          else {
-            //??
-            log.InfoFormat( "UICustHeader.fromXML: unknown node - {0} - stored as is", reader.Name );
-            if ( !m_stringOptions.Contains( xml ) ) m_stringOptions.Add( xml );
-          }
-
-          reader.Read( );
-          if ( reader.NodeType == XmlNodeType.EndElement ) break; // expect end of <CustomisationUIHeader> here
-        }
-
+      // try to disassemble the devices items
+      IEnumerable<XElement> elements = from x in cuiHeader.Elements( )
+                                       where ( x.Name == "devices" )
+                                       select x;
+      foreach ( XElement devices in elements ) {
+        Instance_fromXML( devices );
       }
 
       return true;

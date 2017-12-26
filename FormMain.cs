@@ -84,22 +84,22 @@ namespace SCJMapper_V2
     /// <summary>
     /// Detects and returns the current Input device
     /// </summary>
-    private ActionCls.ActionDevice InputMode
+    private Act.ActionDevice InputMode
     {
       get {
         // take care of the sequence.. mouse overrides key but both override joy and game
         if ( m_mouseIn ) {   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
-          return ActionCls.ActionDevice.AD_Mouse;
+          return Act.ActionDevice.AD_Mouse;
         }
         else if ( m_keyIn ) {
-          return ActionCls.ActionDevice.AD_Keyboard;
+          return Act.ActionDevice.AD_Keyboard;
         }
         else {
           if ( IsGamepadTab( tc1.SelectedTab ) ) {
-            return ActionCls.ActionDevice.AD_Gamepad;
+            return Act.ActionDevice.AD_Gamepad;
           }
           else {
-            return ActionCls.ActionDevice.AD_Joystick;
+            return Act.ActionDevice.AD_Joystick;
           }
         }
       }
@@ -798,7 +798,7 @@ namespace SCJMapper_V2
     {
       log.Debug( "btBlend_Click" );
       if ( m_AT.CanBlendBinding ) {
-        m_AT.BlendBinding( );
+        m_AT.DisableBinding( );
         UpdateTableSelectedItem( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
       }
@@ -1308,7 +1308,7 @@ namespace SCJMapper_V2
       find = ActionTreeNode.ComposeNodeText( action, "js" );
       nodeText = m_AT.FindText( actionmap, find ); // returns "" or a complete text ("action - command")
       if ( !string.IsNullOrWhiteSpace( nodeText ) ) {
-        if ( !ActionCls.IsBlendedInput( ActionTreeNode.CommandFromNodeText( nodeText ) ) ) {
+        if ( !Act.IsDisabledInput( ActionTreeNode.CommandFromNodeText( nodeText ) ) ) {
           dev = DeviceInst.JoystickListRef.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
           if ( dev != null ) {
             // find the tuning item of the action
@@ -1324,7 +1324,7 @@ namespace SCJMapper_V2
         find = ActionTreeNode.ComposeNodeText( action, "xi" );
         nodeText = m_AT.FindText( actionmap, find );
         if ( !string.IsNullOrWhiteSpace( nodeText ) ) {
-          if ( !ActionCls.IsBlendedInput( ActionTreeNode.CommandFromNodeText( nodeText ) ) ) {
+          if ( !Act.IsDisabledInput( ActionTreeNode.CommandFromNodeText( nodeText ) ) ) {
             dev = DeviceInst.GamepadRef;
             if ( dev != null ) {
               // find the tuning item of the action
@@ -1537,7 +1537,7 @@ namespace SCJMapper_V2
     {
       AutoTabXML_Assignment( EATabXML.Tab_Assignment );
 
-      string devInput = ActionCls.DevInput( lblLastJ.Text, InputMode );
+      string devInput = Act.DevInput( lblLastJ.Text, InputMode );
       RTF.RTFformatter RTF = new RTF.RTFformatter( );
       m_AT.FindAllActionsRTF( devInput, RTF );
       // have to check if throttle is used and if - add those to the list
@@ -1639,7 +1639,7 @@ namespace SCJMapper_V2
       // only if needed
       if ( ( FTAB != null ) && FTAB.Visible ) {
         FTAB.SuspendDGV( );
-        m_AT.ActionMaps.toDataSet( FTAB.DS_AMaps );
+        m_AT.ActionMaps.ToDataSet( FTAB.DS_AMaps );
         FTAB.ResumeDGV( );
         FTAB.Populate( );
       }
@@ -1651,7 +1651,7 @@ namespace SCJMapper_V2
       // only if needed
       if ( ( FTAB != null ) && FTAB.Visible ) {
         string actionID = m_AT.SelectedActionID;
-        m_AT.ActionMaps.updateDataSet( FTAB.DS_AMaps, actionID );
+        m_AT.ActionMaps.UpdateDataSet( FTAB.DS_AMaps, actionID );
         // FTAB.UpdateRow( actionID );  seems not needed...
       }
     }

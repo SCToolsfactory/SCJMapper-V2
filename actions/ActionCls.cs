@@ -12,7 +12,7 @@ using SCJMapper_V2.Devices.Keyboard;
 using SCJMapper_V2.Devices.Mouse;
 using SCJMapper_V2.Devices.Gamepad;
 using SCJMapper_V2.Devices.Joystick;
-
+using System.Xml.Linq;
 
 namespace SCJMapper_V2.Actions
 {
@@ -46,217 +46,13 @@ namespace SCJMapper_V2.Actions
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    /// <summary>
-    /// Device Enums
-    /// </summary>
-    public enum ActionDevice
-    {
-      AD_Unknown = -1,
-      AD_Joystick = 0,
-      AD_Gamepad,
-      AD_Keyboard,
-      AD_Mouse,   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
-    }
-
-    #region Static Items
-
-    /// <summary>
-    /// Return the Device Enum from a DeviceClass string
-    /// </summary>
-    /// <param name="deviceClass">Device Class string</param>
-    /// <returns>Device Enum</returns>
-    static public ActionDevice ADevice( string deviceClass )
-    {
-      switch ( deviceClass.ToLower( ) ) {
-        case KeyboardCls.DeviceClass: return ActionDevice.AD_Keyboard;
-        case JoystickCls.DeviceClass: return ActionDevice.AD_Joystick;
-        case GamepadCls.DeviceClass: return ActionDevice.AD_Gamepad;
-        case MouseCls.DeviceClass: return ActionDevice.AD_Mouse;   // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
-        case "ps3pad": return ActionDevice.AD_Gamepad;
-        default: return ActionDevice.AD_Unknown;
-      }
-    }
-
-    // Static items to have this mapping in only one place
-
-    /// <summary>
-    /// Returns the Device Tag i.e. the single letter to mark a device in Actions
-    /// </summary>
-    /// <param name="device">The device name from the defaultProfile</param>
-    /// <returns>The single UCase device Tag letter</returns>
-    static public string DevTag( string device )
-    {
-      switch ( device.ToLower( ) ) {
-        case KeyboardCls.DeviceClass: return "K";
-        case JoystickCls.DeviceClass: return "J";
-        case GamepadCls.DeviceClass: return "X";
-        case MouseCls.DeviceClass: return "M";  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
-        case "ps3pad": return "P";
-        default: return "Z";
-      }
-    }
-
-    /// <summary>
-    /// Returns the Device name from the Device Tag
-    /// </summary>
-    /// <param name="device">The single UCase device Tag letter</param>
-    /// <returns>The device name from the defaultProfile</returns>
-    static public string DeviceClassFromTag( string devTag )
-    {
-      switch ( devTag ) {
-        case "K": return KeyboardCls.DeviceClass;
-        case "J": return JoystickCls.DeviceClass;
-        case "X": return GamepadCls.DeviceClass;
-        case "M": return MouseCls.DeviceClass;  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
-        case "P": return "ps3pad";
-        default: return "unknown";
-      }
-    }
-
-
-    /// <summary>
-    /// Try to derive the device class from the devInput string (mo1_, kb1_, xi1_, jsN_)
-    /// </summary>
-    /// <param name="devInput">The input command string dev_input format</param>
-    /// <returns>A proper DeviceClass string</returns>
-    static public string DeviceClassFromInput( string devInput )
-    {
-      string deviceClass = DeviceCls.DeviceClass;
-
-      deviceClass = JoystickCls.DeviceClassFromInput( devInput );
-      if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
-      deviceClass = GamepadCls.DeviceClassFromInput( devInput );
-      if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
-      deviceClass = KeyboardCls.DeviceClassFromInput( devInput );
-      if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
-      deviceClass = MouseCls.DeviceClassFromInput( devInput );
-      if ( !DeviceCls.IsUndefined( deviceClass ) ) return deviceClass;
-      // others..
-      return deviceClass;
-    }
-
-    /// <summary>
-    /// Returns the ActionDevice from a deviceID (a trailing _ is added if not there)
-    /// </summary>
-    /// <param name="devID">DeviceID</param>
-    /// <returns>The ActionDevice</returns>
-    static public ActionDevice ADeviceFromDevID( string devID )
-    {
-      string val = devID;
-      if ( !devID.EndsWith( "_" ) ) val += "_";
-      return ADevice( DeviceClassFromInput( val ) );
-    }
-
-    /// <summary>
-    /// Returns the ActionDevice from the devInput string (mo1_, kb1_, xi1_, jsN_)
-    /// </summary>
-    /// <param name="devInput">The input command string dev_input format</param>
-    /// <returns>The ActionDevice</returns>
-    static public ActionDevice ADeviceFromInput( string devInput )
-    {
-      return ADevice( DeviceClassFromInput( devInput ) );
-    }
-
-    /// <summary>
-    /// Query the devices if the input is blended
-    /// </summary>
-    /// <param name="input">The input command</param>
-    /// <returns>True if blended input</returns>
-    static public Boolean IsBlendedInput( string input )
-    {
-      Boolean blendedInput = false;
-
-      blendedInput = DeviceCls.IsBlendedInput( input ); // generic
-      if ( blendedInput ) return blendedInput;
-
-      blendedInput = JoystickCls.IsBlendedInput( input );
-      if ( blendedInput ) return blendedInput;
-      blendedInput = GamepadCls.IsBlendedInput( input );
-      if ( blendedInput ) return blendedInput;
-      blendedInput = KeyboardCls.IsBlendedInput( input );
-      if ( blendedInput ) return blendedInput;
-      blendedInput = MouseCls.IsBlendedInput( input );
-      if ( blendedInput ) return blendedInput;
-      // others..
-      return blendedInput;
-    }
-
-    /// <summary>
-    /// Blend the input using the device specific format of the input is generic Blind
-    /// </summary>
-    /// <param name="input">An input (generic blend or a valid command)</param>
-    /// <param name="aDevice">A valid device</param>
-    /// <returns>A device blend or the original input if it was not a blend</returns>
-    static public string BlendInput( string input, ActionDevice aDevice )
-    {
-      if ( DeviceCls.IsBlendedInput( input ) ) {
-        // was generic blind
-        switch ( aDevice ) {
-          case ActionDevice.AD_Gamepad: return GamepadCls.BlendedInput;
-          case ActionDevice.AD_Joystick: return JoystickCls.BlendedInput;
-          case ActionDevice.AD_Keyboard: return KeyboardCls.BlendedInput;
-          case ActionDevice.AD_Mouse: return MouseCls.BlendedInput;
-          default: return "";
-        }
-      } else {
-        return input; // just return
-      }
-    }
-
-    /// <summary>
-    /// Extends the input to a device input if not already done
-    /// </summary>
-    /// <param name="input">An input</param>
-    /// <param name="aDevice">The ActionDevice</param>
-    /// <returns>A valid devInput (dev_input) format</returns>
-    static public string DevInput( string input, ActionDevice aDevice )
-    {
-      switch ( aDevice ) {
-        case ActionDevice.AD_Gamepad: return GamepadCls.DevInput( input );
-        case ActionDevice.AD_Joystick: return JoystickCls.DevInput( input );
-        case ActionDevice.AD_Keyboard: return KeyboardCls.DevInput( input );
-        case ActionDevice.AD_Mouse: return MouseCls.DevInput( input );
-        default: return input;
-      }
-    }
-
-    /// <summary>
-    /// Return the color of a device
-    /// </summary>
-    /// <param name="devInput">The devinput (determine JS colors)</param>
-    /// <param name="aDevice">The ActionDevice</param>
-    /// <returns>The device color</returns>
-    static public System.Drawing.Color DeviceColor( string devInput )
-    {
-      // background is along the input 
-      ActionDevice aDevice = ADeviceFromInput( devInput );
-      switch ( aDevice ) {
-        case ActionDevice.AD_Gamepad: return GamepadCls.XiColor( );
-        case ActionDevice.AD_Joystick: {
-            int jNum = JoystickCls.JSNum( devInput ); // need to know which JS 
-            return JoystickCls.JsNColor( jNum );
-          }
-        case ActionDevice.AD_Keyboard: return KeyboardCls.KbdColor( );
-        case ActionDevice.AD_Mouse: return MouseCls.MouseColor( );
-        default: return MyColors.UnassignedColor;
-      }
-    }
-
-
-    #endregion
-
-
-    // ****************  Class items **********************
-
-    public string key { get; set; }                 // the key is the "Daction" formatted item (as we can have the same name multiple times)
-    public string name { get; set; }                // the plain action name e.g. v_yaw
-    public ActionDevice actionDevice { get; set; }  // the enum of the device
-    public string device { get; set; }              // name of the device (uses DeviceClass)
-    public string defBinding { get; set; }          // the default binding
-    public ActivationMode defActivationMode { get; set; }   // the default binding ActivationMode
-    public List<ActionCommandCls> inputList { get; set; } // regular bind is the 0-element, addbinds are added to the list
-
-
+    public string Key { get; set; }                       // the key is the "Daction" formatted item (as we can have the same name multiple times)
+    public string Name { get; set; }                      // the plain action name e.g. v_yaw
+    public Act.ActionDevice ActionDevice { get; set; }    // the enum of the device
+    public string Device { get; set; }                    // name of the device (uses DeviceClass)
+    public string DefBinding { get; set; }                // the default binding
+    public ActivationMode DefActivationMode { get; set; } // the default binding ActivationMode
+    public List<ActionCommandCls> InputList { get; set; } // regular bind is the 0-element, addbinds are added to the list
 
     /// <summary>
     /// Clone this object
@@ -266,8 +62,8 @@ namespace SCJMapper_V2.Actions
     {
       ActionCls newAc = (ActionCls)this.MemberwiseClone( );
       // more objects to deep copy
-      newAc.defActivationMode = (ActivationMode)this.defActivationMode.Clone( );
-      newAc.inputList = this.inputList.Select( x => (ActionCommandCls)x.Clone( ) ).ToList( );
+      newAc.DefActivationMode = (ActivationMode)this.DefActivationMode.Clone( );
+      newAc.InputList = this.InputList.Select( x => (ActionCommandCls)x.Clone( ) ).ToList( );
 
       return newAc;
     }
@@ -283,9 +79,9 @@ namespace SCJMapper_V2.Actions
       ActionCls newAc = this.MyClone( );
 
       // creates a copy of the list with reassigned jsN devs
-      newAc.inputList.Clear( ); // get rid of cloned list
-      foreach ( ActionCommandCls acc in inputList ) {
-        newAc.inputList.Add( acc.ReassignJsN( newJsList ) ); // creates the deep copy of the list
+      newAc.InputList.Clear( ); // get rid of cloned list
+      foreach ( ActionCommandCls acc in InputList ) {
+        newAc.InputList.Add( acc.ReassignJsN( newJsList ) ); // creates the deep copy of the list
       }
 
       return newAc;
@@ -297,13 +93,13 @@ namespace SCJMapper_V2.Actions
     /// </summary>
     public ActionCls()
     {
-      key = "";
-      actionDevice = ActionDevice.AD_Unknown;
-      device = JoystickCls.DeviceClass;
-      name = "";
-      defBinding = "";
-      defActivationMode = ActivationMode.Default;
-      inputList = new List<ActionCommandCls>( ); // empty list
+      Key = "";
+      ActionDevice = Act.ActionDevice.AD_Unknown;
+      Device = JoystickCls.DeviceClass;
+      Name = "";
+      DefBinding = "";
+      DefActivationMode = ActivationMode.Default;
+      InputList = new List<ActionCommandCls>( ); // empty list
     }
 
 
@@ -316,9 +112,9 @@ namespace SCJMapper_V2.Actions
     /// <returns>Returns the ActionCommand created</returns>
     public ActionCommandCls AddCommand( string devInput, ActivationMode activationMode )
     {
-      ActionCommandCls acc = new ActionCommandCls( devInput, inputList.Count - 1 ); // starts from -1 ...
+      ActionCommandCls acc = new ActionCommandCls( devInput, InputList.Count - 1 ); // starts from -1 ...
       acc.ActivationMode = new ActivationMode( activationMode );
-      inputList.Add( acc );
+      InputList.Add( acc );
       return acc;
     }
 
@@ -333,7 +129,7 @@ namespace SCJMapper_V2.Actions
     {
       ActionCommandCls acc = new ActionCommandCls( devInput, index );
       acc.ActivationMode = new ActivationMode( ActivationMode.Default );
-      inputList.Add( acc );
+      InputList.Add( acc );
       return acc;
     }
 
@@ -341,11 +137,11 @@ namespace SCJMapper_V2.Actions
     {
       int removeIt = -1;
 
-      for ( int i = 0; i < inputList.Count; i++ ) {
-        if ( inputList[i].NodeIndex == index ) removeIt = i;
-        if ( inputList[i].NodeIndex > index ) inputList[i].NodeIndex -= 1; // reorder trailing ones
+      for ( int i = 0; i < InputList.Count; i++ ) {
+        if ( InputList[i].NodeIndex == index ) removeIt = i;
+        if ( InputList[i].NodeIndex > index ) InputList[i].NodeIndex -= 1; // reorder trailing ones
       }
-      if ( removeIt >= 0 ) inputList.RemoveAt( removeIt );
+      if ( removeIt >= 0 ) InputList.RemoveAt( removeIt );
     }
 
 
@@ -355,9 +151,9 @@ namespace SCJMapper_V2.Actions
     /// <param name="newAc"></param>
     public void Merge( ActionCls newAc )
     {
-      this.inputList.Clear( );
-      foreach ( ActionCommandCls acc in newAc.inputList ) {
-        this.inputList.Add( acc );
+      this.InputList.Clear( );
+      foreach ( ActionCommandCls acc in newAc.InputList ) {
+        this.InputList.Add( acc );
       }
     }
 
@@ -367,14 +163,15 @@ namespace SCJMapper_V2.Actions
     /// Updates an actionCommand with a new input (command)
     /// </summary>
     /// <param name="devInput">The input command</param>
+    /// <param name="accIndex">The input index to update</param>
     public void UpdateCommandFromInput( string devInput, int accIndex ) // ActionCommandCls actionCmd )
     {
       //log.Debug( "UpdateCommandFromInput - Entry" );
       if ( accIndex < 0 ) return;
       // Apply the input to the ActionTree
-      this.inputList[accIndex].DevInput = BlendInput( devInput, this.actionDevice );
-      if ( IsBlendedInput( this.inputList[accIndex].DevInput ) || string.IsNullOrEmpty( devInput ) ) {
-        this.inputList[accIndex].ActivationMode = new ActivationMode( ActivationMode.Default ); // reset activation mode if the input is empty
+      this.InputList[accIndex].DevInput = Act.DisableInput( devInput, this.ActionDevice );
+      if ( Act.IsDisabledInput( this.InputList[accIndex].DevInput ) || string.IsNullOrEmpty( devInput ) ) {
+        this.InputList[accIndex].ActivationMode = new ActivationMode( ActivationMode.Default ); // reset activation mode if the input is empty
       }
     }
 
@@ -388,7 +185,7 @@ namespace SCJMapper_V2.Actions
       log.Debug( "FindActionInputObject - Entry" );
       // Apply the input to the ActionTree
       ActionCommandCls acc = null;
-      acc = this.inputList.Find( delegate ( ActionCommandCls _ACC ) { return _ACC.DevInput == devInput; } );
+      acc = this.InputList.Find( delegate ( ActionCommandCls _ACC ) { return _ACC.DevInput == devInput; } );
       if ( acc == null ) {
         log.Error( "FindActionInputObject - Action Input not found in Action" );
         return null;  // ERROR - Action Input not found in tree
@@ -400,14 +197,14 @@ namespace SCJMapper_V2.Actions
     /// <summary>
     /// Find an ActionCommand with index in an Action
     /// </summary>
-    /// <param name="input">The input</param>
+    /// <param name="index">The input index to find</param>
     /// <returns>An actionCommand or null if not found</returns>
     public ActionCommandCls FindActionInputObject( int index )
     {
       log.Debug( "FindActionInputObject - Entry" );
       // Apply the input to the ActionTree
       ActionCommandCls acc = null;
-      acc = this.inputList.Find( delegate ( ActionCommandCls _ACC ) { return _ACC.NodeIndex == index; } );
+      acc = this.InputList.Find( delegate ( ActionCommandCls _ACC ) { return _ACC.NodeIndex == index; } );
       if ( acc == null ) {
         log.Error( "FindActionInputObject - Action Input not found in Action" );
         return null;  // ERROR - Action Input not found in tree
@@ -423,13 +220,12 @@ namespace SCJMapper_V2.Actions
     public string toXML()
     {
       string r = ""; string
-      bindCmd = "rebind";
-      if ( inputList.Count > 0 ) {
-        if ( !string.IsNullOrEmpty( inputList[0].Input ) ) {
-          r = string.Format( "\t<action name=\"{0}\">\n", name );
-          foreach ( ActionCommandCls acc in inputList ) {
+      bindCmd = "rebind"; // first entry is rebind
+      if ( InputList.Count > 0 ) {
+        if ( !string.IsNullOrEmpty( InputList[0].Input ) ) {
+          r = string.Format( "\t<action name=\"{0}\">\n", Name );
+          foreach ( ActionCommandCls acc in InputList ) {
             if ( !string.IsNullOrEmpty( acc.Input ) ) {
-              // r += string.Format( "\t\t\t<{0} device=\"{1}\" {2}", bindCmd, device, acc.toXML( ) ); // OLD style
               r += string.Format( "\t\t\t<{0} {1}", bindCmd, acc.toXML( ) ); // 20151220BM: format for AC2 style 
               bindCmd = "addbind"; // switch to addbind
             }
@@ -442,106 +238,39 @@ namespace SCJMapper_V2.Actions
     }
 
     /// <summary>
-    /// Read an action from XML - do some sanity check
+    /// Read an action from XML - do some sanity checks
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public Boolean fromXML( string xml )
+    public bool fromXML( XElement actionNode )
     {
-      XmlReaderSettings settings = new XmlReaderSettings( );
-      settings.ConformanceLevel = ConformanceLevel.Fragment;
-      settings.IgnoreWhitespace = true;
-      settings.IgnoreComments = true;
-      XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
-
-      reader.Read( );
-
-      if ( reader.Name.ToLowerInvariant( ) == "action" ) {
-        if ( reader.HasAttributes ) {
-          name = reader["name"];
-          reader.ReadStartElement( "action" ); // Checks that the current content node is an element with the given Name and advances the reader to the next node
-        } else {
-          return false;
+      Name = (string)actionNode.Attribute( "name" ); // mandadory
+      foreach ( XElement bindingNode in actionNode.Nodes( ) ) {
+        string binding = bindingNode.Name.ToString( );
+        string input = "", actModeName = "", multi = "";
+        input = (string)bindingNode.Attribute( "input" ); // mandadory
+        if ( string.IsNullOrEmpty( input ) ) input = "";
+        actModeName = (string)bindingNode.Attribute( "ActivationMode" );
+        multi = (string)bindingNode.Attribute( "multiTap" );
+        //process
+        input = DeviceCls.fromXML( input ); // move from external to internal blend
+        Device = Act.DeviceClassFromInput( input );
+        ActivationMode actMode = null;
+        if ( !string.IsNullOrEmpty( actModeName ) ) {
+          actMode = ActivationModes.Instance.ActivationModeByName( actModeName ); // should be a valid ActivationMode for this action
         }
-      }
-      do {
-        // support AC2 and AC1 i.e. without and with device attribute 
-        if ( reader.Name.ToLowerInvariant( ) == "rebind" ) {
-          if ( reader.HasAttributes ) {
-            device = reader["device"];
-            string input = reader["input"];
-            if ( string.IsNullOrEmpty( input ) ) return false; // ERROR exit
-            input = DeviceCls.fromXML( input ); // move from external to internal blend
-            if ( string.IsNullOrEmpty( device ) ) {
-              // AC2 style - derive the device (Device.DeviceClass)
-              device = DeviceClassFromInput( input );
-            } else {
-              // AC1 style - need to reformat mouse and keyboard according to AC2 style now
-              if ( KeyboardCls.IsDeviceClass( device ) ) input = KeyboardCls.FromAC1( input );
-              else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
-              else if ( GamepadCls.IsDeviceClass( device ) ) input = GamepadCls.FromAC1( input );
-            }
-            //first find an ActivationMode if there is - applies to all actions
-            // this can be an Activation Mode OR a multitap
-            // if there is an activationMode - copy the one from our List
-            // if no ActivationMode is given, create one with multitap 1 or may be 2...
-            string actModeName = reader["ActivationMode"];
-            ActivationMode actMode = null;
-            if ( !string.IsNullOrEmpty( actModeName ) ) {
-              actMode = ActivationModes.Instance.ActivationModeByName( actModeName ); // should be a valid ActivationMode for this action
-            } else {
-              actMode = new ActivationMode( ActivationMode.Default ); // no specific name given, use default
-              string multiTap = reader["multiTap"];
-              if ( !string.IsNullOrEmpty( multiTap ) ) {
-                actMode.MultiTap = int.Parse( multiTap ); // modify with given multiTap
-              }
-            }
-
-            key = DevTag( device ) + name; // unique id of the action
-            actionDevice = ADevice( device ); // get the enum of the input device
-
-            AddCommand( input, actMode );
-            // advances the reader to the next node
-            reader.ReadStartElement( "rebind" );
+        else {
+          actMode = new ActivationMode( ActivationMode.Default ); // no specific name given, use default
+          if ( !string.IsNullOrEmpty( multi ) ) {
+            actMode.MultiTap = int.Parse( multi ); // modify with given multiTap
           }
-        } else if ( reader.Name.ToLowerInvariant( ) == "addbind" ) {
-          if ( reader.HasAttributes ) {
-            device = reader["device"];
-            string input = reader["input"];
-            if ( string.IsNullOrEmpty( input ) ) return false; // ERROR exit
-            input = DeviceCls.fromXML( input ); // move from external to internal blend
-            if ( string.IsNullOrEmpty( device ) ) {
-              // AC2 style - derive the device (Device.DeviceClass)
-              device = DeviceClassFromInput( input );
-            } else {
-              // AC1 style - need to reformat according to AC2 style now
-              if ( KeyboardCls.IsDeviceClass( device ) ) input = KeyboardCls.FromAC1( input );
-              else if ( MouseCls.IsDeviceClass( device ) ) input = MouseCls.FromAC1( input );
-              else if ( GamepadCls.IsDeviceClass( device ) ) input = GamepadCls.FromAC1( input );
-            }
-            //first find an ActivationMode if there is - applies to all actions
-            // this can be an Activation Mode OR a multitap
-            // if there is an activationMode - copy the one from our List
-            // if no ActivationMode is given, create one with multitap 1 or may be 2...
-            string actModeName = reader["ActivationMode"];
-            ActivationMode actMode = null;
-            if ( !string.IsNullOrEmpty( actModeName ) ) {
-              actMode = ActivationModes.Instance.ActivationModeByName( actModeName ); // should be a valid ActivationMode for this action
-            } else {
-              actMode = new ActivationMode( ActivationMode.Default ); // no specific name given, use default
-              string multiTap = reader["multiTap"];
-              if ( !string.IsNullOrEmpty( multiTap ) ) {
-                actMode.MultiTap = int.Parse( multiTap ); // modify with given multiTap
-              }
-            }
-            AddCommand( input, actMode );
-            // advances the reader to the next node
-            reader.ReadStartElement( "addbind" );
-          }
-        } else {
-          return false;
         }
-      } while ( reader.Name == "addbind" );
+        if ( binding == "rebind" ) {
+          Key = Act.DevTag( Device ) + Name; // unique id of the action
+          ActionDevice = Act.ADevice( Device ); // get the enum of the input device
+        }
+        AddCommand( input, actMode );
+      }//foreach
       return true;
     }
 

@@ -227,7 +227,8 @@ namespace SCJMapper_V2.Devices.Options
       try {
         XDocument doc = XDocument.Parse( xml );
         return doc.ToString( ).Split( new string[] { string.Format( "\n" ) }, StringSplitOptions.RemoveEmptyEntries );
-      } catch ( Exception ) {
+      }
+      catch ( Exception ) {
         return new string[] { xml };
       }
     }
@@ -267,7 +268,7 @@ namespace SCJMapper_V2.Devices.Options
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public Boolean fromXML( string xml )
+    public bool fromXML( XElement deviceOptions )
     {
       /* 
        * This can be a lot of the following options
@@ -281,81 +282,41 @@ namespace SCJMapper_V2.Devices.Options
        * 
       */
 
-      XmlReaderSettings settings = new XmlReaderSettings( );
-      settings.ConformanceLevel = ConformanceLevel.Fragment;
-      settings.IgnoreWhitespace = true;
-      settings.IgnoreComments = true;
-      XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
+      string name = (string)deviceOptions.Attribute( "name" ); // mandadory
+      string devClass = ( name == GamepadCls.DevNameCIG ) ? GamepadCls.DeviceClass : JoystickCls.DeviceClass;// have to trick this one...
 
-      reader.Read( );
+      IEnumerable<XElement> options = from x in deviceOptions.Elements( )
+                                      where ( x.Name == "option" )
+                                      select x;
+      foreach ( XElement option in options ) {
+        string input = (string)option.Attribute( "input" ); // mandadory
+        string doID = DevOptionID( devClass, name, input );
 
-      string name = "";
-
-      if ( reader.HasAttributes ) {
-        name = reader["name"];
-        string devClass = ( name == GamepadCls.DevNameCIG ) ? GamepadCls.DeviceClass : JoystickCls.DeviceClass;// have to trick this one...
-
-        reader.Read( );
-        // try to disassemble the items
-        while ( !reader.EOF ) {
-          if ( reader.Name.ToLowerInvariant( ) == "option" ) {
-            if ( reader.HasAttributes ) {
-              string input = reader["input"];
-              string deadzone = RoundString( reader["deadzone"] );
-              string saturation = RoundString( reader["saturation"] );
-              if ( !string.IsNullOrWhiteSpace( input ) ) {
-                string doID = "";
-                doID = DevOptionID( devClass, name, input );
-                if ( !string.IsNullOrWhiteSpace( deadzone ) ) {
-                  float testF;
-                  if ( !float.TryParse( deadzone, out testF ) ) { // check for valid number in string
-                    deadzone = "0.000";
-                  }
-                  if ( !this.ContainsKey( doID ) ) {
-                    log.InfoFormat( "Cannot caputre Device Options for device <{0}> - unknown device!", name );
-                    //this.Add( doID, new DeviceOptionParameter( devClass, name, input, deadzone, saturation ) );
-                  }
-                  else {
-                    // add deadzone value tp existing
-                    this[doID].DeadzoneUsed = true;
-                    this[doID].Deadzone = deadzone;
-                  }
-                }
-                if ( !string.IsNullOrWhiteSpace( saturation ) ) {
-                  float testF;
-                  if ( !float.TryParse( saturation, out testF ) ) { // check for valid number in string
-                    saturation = "1.000";
-                  }
-                  if ( !this.ContainsKey( doID ) ) {
-                    log.InfoFormat( "Cannot caputre Device Options for device <{0}> - unknown device!", name );
-                    //this.Add( doID, new DeviceOptionParameter( devClass, name, input, deadzone, saturation ) ); // actually not supported..
-                  }
-                  else {
-                    // add saturation value tp existing
-                    this[doID].SaturationUsed = true;
-                    this[doID].Saturation = saturation;
-                  }
-                }
-              }
-              else {
-                //? option node has not the needed attributes
-                log.ErrorFormat( "Deviceoptions.fromXML: option node has not the needed attributes" );
-              }
-            }
-            else {
-              //?? option node has NO attributes
-              log.ErrorFormat( "Deviceoptions.fromXML: option node has NO attributes" );
-            }
+        string deadzone = RoundString( (string)option.Attribute( "deadzone" ));
+        if ( !string.IsNullOrEmpty(deadzone) ) {
+          if ( !this.ContainsKey( doID ) ) {
+            log.InfoFormat( "Cannot caputre Device Options for device <{0}> - unknown device!", name );
           }
+          else {
+            // add deadzone value tp existing
+            this[doID].DeadzoneUsed = true;
+            this[doID].Deadzone = deadzone;
+          }
+        }
 
-          reader.Read( );
-        }//while
-      }
-      else {
-        //??
-        if ( !m_stringOptions.Contains( xml ) ) m_stringOptions.Add( xml );
-      }
+        string saturation = RoundString( (string)option.Attribute( "saturation" ) );
+        if ( !string.IsNullOrEmpty( saturation ) ) {
+          if ( !this.ContainsKey( doID ) ) {
+            log.InfoFormat( "Cannot caputre Device Options for device <{0}> - unknown device!", name );
+          }
+          else {
+            // add saturation value tp existing
+            this[doID].SaturationUsed = true;
+            this[doID].Saturation = saturation;
+          }
+        }
 
+      }
       return true;
     }
 

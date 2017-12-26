@@ -18,8 +18,8 @@ namespace SCJMapper_V2.Devices
       return ( deviceClass == DeviceClass );
     }
     
-    public const string BlendedInput = "~"; // internal used only
-    static public bool IsBlendedInput( string input ) { return ( input == BlendedInput ); }
+    public const string DisabledInput = "~"; // internal used only
+    static public bool IsDisabledInput( string input ) { return ( input == DisabledInput ); }
 
     
     static public bool IsDeviceClass( string deviceClass ) { return false; }
@@ -62,15 +62,15 @@ namespace SCJMapper_V2.Devices
 
     static public string toXML( string blendedInput )
     {
-      return blendedInput.Replace( BlendedInput, " " ); // must make spaces (tilde is for internal processing only)
+      return blendedInput.Replace( DisabledInput, " " ); // must make spaces (tilde is for internal processing only)
     }
     static public string toXMLBlendExtension( string blendedInput )
     {
-      return (IsBlendedInput(blendedInput) ? string.Format( "multiTap=\"1\"") : "" ); // blending needs to overwrite potential multitaps (2+)
+      return (IsDisabledInput(blendedInput) ? string.Format( "multiTap=\"1\"") : "" ); // blending needs to overwrite potential multitaps (2+)
     }
     static public string fromXML( string blendedInput )
     {
-      return blendedInput.Replace( " ", BlendedInput ); // must make tilde (spaces is for external processing only)
+      return blendedInput.Replace( " ", DisabledInput ); // must make tilde (spaces is for external processing only)
     }
 
   }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace SCJMapper_V2.Devices.Options
 {
@@ -300,7 +301,7 @@ namespace SCJMapper_V2.Devices.Options
     /// </summary>
     /// <param name="xml">the XML action fragment</param>
     /// <returns>True if an action was decoded</returns>
-    public bool fromXML( string xml )
+    public bool fromXML( XElement options )
     {
       /* 
        * This can be a lot of the following options
@@ -316,43 +317,29 @@ namespace SCJMapper_V2.Devices.Options
            </options>
 
        */
-      XmlReaderSettings settings = new XmlReaderSettings( );
-      settings.ConformanceLevel = ConformanceLevel.Fragment;
-      settings.IgnoreWhitespace = true;
-      settings.IgnoreComments = true;
-      XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
+      string instance = (string)options.Attribute( "instance" ); // mandadory
+      string type = (string)options.Attribute( "type" ); // mandadory
+      if ( !int.TryParse( instance, out int nInstance ) ) nInstance = 0;
 
-      reader.Read( );
-
-      string type = "";
-      string instance = ""; int nInstance = 0;
-
-      if ( reader.HasAttributes ) {
-        instance = reader["instance"];
-        if ( !int.TryParse( instance, out nInstance ) ) nInstance = 0;
-
-        type = reader["type"];
-        // now dispatch to the instance to capture the content
-        if ( type.ToLowerInvariant( ) == "joystick" ) {
-          string toID = TuneOptionIDfromJsN( JoystickCls.DeviceClass, nInstance );
-          // now this might not be availabe if devices have been changed
-          if ( this.ContainsKey( toID ) ) {
-            this[toID].fromXML( xml );
-          }
-          else {
-            log.InfoFormat( "Read XML Options - joystick instance {0} is not available - dropped this content", nInstance );
-          }
+      // now dispatch to the instance to capture the content
+      if ( JoystickCls.IsDeviceClass( type ) ) {
+        string toID = TuneOptionIDfromJsN( JoystickCls.DeviceClass, nInstance );
+        // now this might not be availabe if devices have been changed
+        if ( this.ContainsKey( toID ) ) {
+          this[toID].fromXML( options );
         }
-        else if ( type.ToLowerInvariant( ) == "xboxpad" ) {
-          string toID = TuneOptionID( GamepadCls.DeviceClass, nInstance );
-          if ( this.ContainsKey( toID ) ) {// 20170513: bugfix if gamepad is in the XML but not connected right now - ignore
-            this[toID].fromXML( xml );
-          }
-          else {
-            log.InfoFormat( "Read XML Options - xboxpad instance {0} is not available - dropped this content", nInstance );
-          }
+        else {
+          log.InfoFormat( "Read XML Options - joystick instance {0} is not available - dropped this content", nInstance );
         }
-
+      }
+      else if ( GamepadCls.IsDeviceClass( type ) ) {
+        string toID = TuneOptionID( GamepadCls.DeviceClass, nInstance );
+        if ( this.ContainsKey( toID ) ) {// 20170513: bugfix if gamepad is in the XML but not connected right now - ignore
+          this[toID].fromXML( options );
+        }
+        else {
+          log.InfoFormat( "Read XML Options - xboxpad instance {0} is not available - dropped this content", nInstance );
+        }
       }
       return true;
     }

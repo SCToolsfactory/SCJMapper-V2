@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace SCJMapper_V2.Actions
 {
   /// <summary>
-  /// Our INPUT TreeNode - inherits a regular one and adds some functionality
+  /// Our INPUT TreeNode - inherits a ActionTreeNode one and adds some functionality
   /// 
   /// contains the input command  i.e.  - js2_button3 OR ! js1_x  (MODs applies at the very beginning of the string)
   /// </summary>
@@ -61,8 +61,7 @@ namespace SCJMapper_V2.Actions
     /// <returns>the command part or an empty string</returns>
     public new static string CommandFromNodeText( string nodeText )
     {
-      string cmd;
-      ActionTreeInputNode.DecompNodeText( nodeText, out cmd );
+      ActionTreeInputNode.DecompNodeText( nodeText, out string cmd );
       return cmd;
     }
 
@@ -81,24 +80,12 @@ namespace SCJMapper_V2.Actions
     public ActionTreeInputNode( ActionTreeInputNode srcNode )
       : base( srcNode )
     {
-      if ( srcNode == null ) return;
-      /*
-      this.Name = srcNode.Name;
-      this.Text = srcNode.Text;
-      this.BackColor = srcNode.BackColor;
-      this.ForeColor = srcNode.ForeColor;
-      this.NodeFont = srcNode.NodeFont;
-      this.ImageKey = srcNode.ImageKey;
-      this.Tag = srcNode.Tag;
-      this.m_command = srcNode.m_command;
-       */
     }
 
     // ctor
     public ActionTreeInputNode( string text )
       : base ( text )
     {
-      //this.Text = text;
     }
 
     // ctor
@@ -108,20 +95,24 @@ namespace SCJMapper_V2.Actions
     }
 
 
-    //private string m_command ="";
-
+    /// <summary>
+    /// Property Text of an Input node
+    /// </summary>
     public new string Text
     {
       get { return base.Text; }
       set
       {
         ActionTreeInputNode.DecompNodeText( value, out m_command );
-        base.Text = ActionTreeInputNode.ComposeNodeText( "$" + m_command, m_modified ); // tag for the node processing
+        base.Text = ActionTreeInputNode.ComposeNodeText( AddDiv + m_command, m_modified ); // tag for the node processing
       }
     }
 
 
     public new string Command
+    /// <summary>
+    /// Property Command of an Input node
+    /// </summary>
     {
       get { return m_command; }
       set

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
-
+using System.Xml.Linq;
 using SCJMapper_V2.Actions;
 using SCJMapper_V2.Devices.Joystick;
 
@@ -24,16 +25,16 @@ namespace SCJMapper_V2.Devices.Options
     string m_option = ""; // the option name (level where it applies)
 
     private string m_deviceName = "";
-    private bool   m_isStrafe = false;  // default
+    private bool m_isStrafe = false;  // default
 
-    private bool   m_expEnabled = false;  // default
+    private bool m_expEnabled = false;  // default
     private string m_exponent = "1.000";
 
-    private bool   m_ptsEnabled = false;  // default
+    private bool m_ptsEnabled = false;  // default
     private List<string> m_PtsIn = new List<string>( );
     private List<string> m_PtsOut = new List<string>( );
 
-    private bool   m_invertEnabled = false; // default
+    private bool m_invertEnabled = false; // default
 
     private DeviceCls m_deviceRef = null; // Ref
 
@@ -44,9 +45,9 @@ namespace SCJMapper_V2.Devices.Options
     /// Clone this object
     /// </summary>
     /// <returns>A deep Clone of this object</returns>
-    public object Clone( )
+    public object Clone()
     {
-      var dt = (DeviceTuningParameter)this.MemberwiseClone(); // self and all value types
+      var dt = (DeviceTuningParameter)this.MemberwiseClone( ); // self and all value types
       // more objects to deep copy
       // --> NO cloning as this Ref will be overwritten when editing
       dt.m_deviceoptionRef = null; // just reset
@@ -207,7 +208,7 @@ namespace SCJMapper_V2.Devices.Options
     /// Reset all items that will be assigned dynamically while scanning the actions
     /// - currently DeviceoptionRef, NodeText
     /// </summary>
-    public void ResetDynamicItems( )
+    public void ResetDynamicItems()
     {
       // using the public property to ensure the complete processing of the assignment
       // GameDevice = null;
@@ -215,7 +216,7 @@ namespace SCJMapper_V2.Devices.Options
       NodeText = "";
     }
 
-    public void AssignDynamicItems( DeviceCls dev, DeviceOptionParameter devOptionRef,  string nodeText )
+    public void AssignDynamicItems( DeviceCls dev, DeviceOptionParameter devOptionRef, string nodeText )
     {
       // using the public property to ensure the complete processing of the assignment
       NodeText = nodeText; // must be first - the content is used later for DeviceOptionRef assignment
@@ -226,7 +227,7 @@ namespace SCJMapper_V2.Devices.Options
     /// <summary>
     /// Derive values from a command (e.g. v_pitch - js1_x)
     /// </summary>
-    private void DecomposeCommand( )
+    private void DecomposeCommand()
     {
       // populate from input
       // something like "v_pitch - js1_x" OR "v_pitch - xi_thumbl" OR "v_pitch - ximod+xi_thumbl+xi_mod"
@@ -239,21 +240,24 @@ namespace SCJMapper_V2.Devices.Options
           // gamepad
           m_cmdCtrl = "xi_thumblx";
           m_deviceName = m_deviceRef.DevName;
-        } else if ( cmd.Contains( "xi_thumbly" ) ) {
+        }
+        else if ( cmd.Contains( "xi_thumbly" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbly";
           m_deviceName = m_deviceRef.DevName;
-        } else if ( cmd.Contains( "xi_thumbrx" ) ) {
+        }
+        else if ( cmd.Contains( "xi_thumbrx" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbrx";
           m_deviceName = m_deviceRef.DevName;
-        } else if ( cmd.Contains( "xi_thumbry" ) ) {
+        }
+        else if ( cmd.Contains( "xi_thumbry" ) ) {
           // gamepad
           m_cmdCtrl = "xi_thumbry";
           m_deviceName = m_deviceRef.DevName;
         }
-          // assume joystick
-          else {
+        // assume joystick
+        else {
           // get parts
           m_cmdCtrl = JoystickCls.ActionFromJsCommand( cmd ); //js1_x -> x; js2_rotz -> rotz
           m_deviceName = m_deviceRef.DevName;
@@ -271,7 +275,8 @@ namespace SCJMapper_V2.Devices.Options
       double d = 0;
       if ( ( !string.IsNullOrEmpty( valString ) ) && double.TryParse( valString, out d ) ) {
         return d.ToString( "0.000" );
-      } else {
+      }
+      else {
         return valString;
       }
     }
@@ -280,7 +285,7 @@ namespace SCJMapper_V2.Devices.Options
     /// Format an XML -options- node from the tuning contents
     /// </summary>
     /// <returns>The XML string or an empty string</returns>
-    public string Options_toXML( )
+    public string Options_toXML()
     {
       if ( ( /*SensitivityUsed ||*/ ExponentUsed || InvertUsed || NonLinCurveUsed ) == false ) return ""; // not used
       if ( DevInstanceNo < 1 ) return ""; // no device to assign it to..
@@ -306,10 +311,12 @@ namespace SCJMapper_V2.Devices.Options
         tmp += string.Format( "\t\t\t\t<point in=\"{0}\"  out=\"{1}\"/>\n", m_PtsIn[2], m_PtsOut[2] );
         tmp += string.Format( "\t\t\t</nonlinearity_curve>\n" );
         tmp += string.Format( "\t\t</{0}> \n", m_option );
-      } else if ( ExponentUsed ) {
+      }
+      else if ( ExponentUsed ) {
         // only exp used
         tmp += string.Format( "exponent=\"{0}\" /> \n", Exponent );
-      } else {
+      }
+      else {
         // neither exp or curve
         tmp += string.Format( " /> \n" );// nothing...
       }
@@ -327,75 +334,60 @@ namespace SCJMapper_V2.Devices.Options
     /// <param name="reader">A prepared XML reader</param>
     /// <param name="instance">the Joystick instance number</param>
     /// <returns></returns>
-    public Boolean Options_fromXML( XmlReader reader, string type, int instance )
+    public Boolean Options_fromXML( XElement option, string type, int instance )
     {
+      /*
+		    <flight_move_pitch exponent="1.00" > 
+			    <nonlinearity_curve>
+				    <point in="0.182"  out="0.028"/>
+				    <point in="0.629"  out="0.235"/>
+				    <point in="0.895"  out="0.629"/>
+			    </nonlinearity_curve>
+		    </flight_move_pitch> 
+             */
       m_class = type;
-
-      string invert = "";
-      string exponent = "";
-
-      m_option = reader.Name;
       m_devInstanceNo = instance;
+      m_option = option.Name.LocalName;
 
       // derive from flight_move_pitch || flight_move_yaw || flight_move_roll (nothing bad should arrive here)
       string[] e = m_option.ToLowerInvariant( ).Split( new char[] { '_' } );
       if ( e.Length > 2 ) m_cmdCtrl = e[2]; // TODO - see if m_cmdCtrl is needed to be derived here
 
+      string invert = (string)option.Attribute( "invert" );
+      if ( !string.IsNullOrEmpty(invert) ) {
+        InvertUsed = false;
+        if ( invert == "1" ) InvertUsed = true;
+      }
 
-      if ( reader.HasAttributes ) {
-        invert = reader["invert"];
-        if ( !string.IsNullOrWhiteSpace( invert ) ) {
-          InvertUsed = false;
-          if ( invert == "1" ) InvertUsed = true;
-        }
+      string exponent = (string)option.Attribute( "exponent" );
+      if ( !string.IsNullOrEmpty( exponent ) ) {
+        Exponent = RoundString( exponent );
+        ExponentUsed = true;
+      }
 
-        /*
-        sensitivity = reader["sensitivity"];
-        if ( !string.IsNullOrWhiteSpace( sensitivity ) ) {
-          Sensitivity = sensitivity;
-          SensitivityUsed = true;
-        }
-        */
-        exponent = reader["exponent"];
-        if ( !string.IsNullOrWhiteSpace( exponent ) ) {
-          Exponent = RoundString( exponent );
-          ExponentUsed = true;
+      // we may have a nonlin curve...
+      XElement nlc = option.Element( "nonlinearity_curve" );
+      if ( nlc != null ) {
+        m_PtsIn.Clear( ); m_PtsOut.Clear( ); // reset pts
+        IEnumerable<XElement> points = from x in nlc.Elements( )
+                                       where ( x.Name == "point" )
+                                       select x;
+        foreach ( XElement point in points ) {
+          string ptIn = RoundString( (string)point.Attribute( "in" ) );
+          string ptOut = RoundString( (string)point.Attribute( "out" ) );
+          m_PtsIn.Add( ptIn ); m_PtsOut.Add( ptOut ); m_ptsEnabled = true;
         }
       }
-      // we may have a nonlin curve...
-      if ( !reader.IsEmptyElement ) {
-        reader.Read( );
-        if ( !reader.EOF ) {
-          if ( reader.Name.ToLowerInvariant( ) == "nonlinearity_curve" ) {
-            m_PtsIn.Clear( ); m_PtsOut.Clear( ); // reset pts
-            ExponentUsed = false; // NonLin Curve takes prio
-
-            reader.Read( );
-            while ( !reader.EOF ) {
-              string ptIn = "";
-              string ptOut = "";
-              if ( reader.Name.ToLowerInvariant( ) == "point" ) {
-                if ( reader.HasAttributes ) {
-                  ptIn = RoundString( reader["in"] );
-                  ptOut = RoundString( reader["out"] );
-                  m_PtsIn.Add( ptIn ); m_PtsOut.Add( ptOut ); m_ptsEnabled = true;
-                }
-              }
-              reader.Read( );
-            }//while
-             // sanity check - we've have to have 3 pts  here - else we subst
-             // add 2nd
-            if ( m_PtsIn.Count < 2 ) {
-              m_PtsIn.Add( "0.500" ); m_PtsOut.Add( "0.500" );
-              log.Info( "Options_fromXML: got only one nonlin point, added (0.5|0.5)" );
-            }
-            // add 3rd
-            if ( m_PtsIn.Count < 3 ) {
-              m_PtsIn.Add( "0.750" ); m_PtsOut.Add( "0.750" );
-              log.Info( "Options_fromXML: got only two nonlin points, added (0.75|0.75)" );
-            }
-          }
-        }
+      // sanity check - we've have to have 3 pts  here - else we subst
+      // add 2nd
+      if ( m_PtsIn.Count < 2 ) {
+        m_PtsIn.Add( "0.500" ); m_PtsOut.Add( "0.500" );
+        log.Info( "Options_fromXML: got only one nonlin point, added (0.5|0.5)" );
+      }
+      // add 3rd
+      if ( m_PtsIn.Count < 3 ) {
+        m_PtsIn.Add( "0.750" ); m_PtsOut.Add( "0.750" );
+        log.Info( "Options_fromXML: got only two nonlin points, added (0.75|0.75)" );
       }
 
       return true;

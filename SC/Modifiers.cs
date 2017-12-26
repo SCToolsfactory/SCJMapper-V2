@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace SCJMapper_V2.SC
 {
@@ -144,37 +145,26 @@ namespace SCJMapper_V2.SC
     /// <param name="xml"></param>
     /// <param name="defProfile"></param>
     /// <returns></returns>
-    public bool FromXML( string xml, bool defProfile = false )
+    public bool FromXML( XElement modifiers, bool defProfile = false )
     {
-      XmlReaderSettings settings = new XmlReaderSettings( );
-      settings.ConformanceLevel = ConformanceLevel.Fragment;
-      settings.IgnoreWhitespace = true;
-      settings.IgnoreComments = true;
-      XmlReader reader = XmlReader.Create( new StringReader( xml ), settings );
-
-      try {
-        reader.ReadToFollowing( "modifiers" );
-        reader.ReadToDescendant( "mod" );
-        do {
-          if ( reader.NodeType == XmlNodeType.EndElement ) {
-            reader.Read( );
-            break; // finished
-          }
-          string name = reader["input"];
-          if ( !string.IsNullOrEmpty( name ) ) {
-            var m = new Modifier( name, defProfile );
-            if ( !Contains( m ) )
-              Add( m );
-          }
-        } while ( reader.Read( ) );
-
-        return true;
+      /*
+	      <modifiers  >
+		      <mod  input="xi1_shoulderl"  />
+          ...
+	      </modifiers>
+       */
+      IEnumerable<XElement> mods = from x in modifiers.Elements( )
+                                   where ( x.Name == "mod" )
+                                   select x;
+      foreach ( XElement mod in mods ) {
+        string name = (string)mod.Attribute( "input" );
+        if ( !string.IsNullOrEmpty( name ) ) {
+          var m = new Modifier( name, defProfile );
+          if ( !Contains( m ) )
+            Add( m );
+        }
       }
-      catch ( Exception ex ) {
-        // get any exceptions from reading
-        return false;
-      }
-
+      return true;
     }
 
 

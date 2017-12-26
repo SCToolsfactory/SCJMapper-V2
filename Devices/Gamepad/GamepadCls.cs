@@ -30,10 +30,10 @@ namespace SCJMapper_V2.Devices.Gamepad
     public const string DevNameCIG = "Controller (Gamepad)"; // seems CIG names the Gamepad always like this - and not as the device replies
 
     public const string JsUnknown = "xi_";
-    public new const string BlendedInput = DeviceID + DeviceCls.BlendedInput;
-    static public new bool IsBlendedInput( string input )
+    public new const string DisabledInput = DeviceID + DeviceCls.DisabledInput;
+    static public new bool IsDisabledInput( string input )
     {
-      if ( input == BlendedInput ) return true;
+      if ( input == DisabledInput ) return true;
       return false;
     }
 
@@ -116,7 +116,7 @@ namespace SCJMapper_V2.Devices.Gamepad
       // input is something like a xi_something or compositions like triggerl_btn+thumbrx 
       // try easy: add xi1_ at the beginning; if xi_start subst with xi1_
       string retVal = input.Replace( " ", "" );
-      if ( IsBlendedInput( input ) ) return input;
+      if ( IsDisabledInput( input ) ) return input;
 
       if ( retVal.StartsWith( "xi_" ) )
         retVal = retVal.Insert( 2, "1" );

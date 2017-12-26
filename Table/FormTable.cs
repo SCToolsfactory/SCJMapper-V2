@@ -322,7 +322,7 @@ namespace SCJMapper_V2.Table
       if ( e.ColumnIndex != DGV.Columns["Disabled"].Index ) return;
 
       if ( ( bool )DGV.Rows[e.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value == true )
-        DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = DeviceCls.BlendedInput;
+        DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = DeviceCls.DisabledInput;
       else
         DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = ""; // don't know anything else...
 

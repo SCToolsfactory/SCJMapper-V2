@@ -10,24 +10,25 @@ using SCJMapper_V2.Devices;
 namespace SCJMapper_V2.Actions
 {
   /// <summary>
-  /// Our TreeNode - inherits a regular one and adds some functionality
+  /// Our TreeNode - inherits a regular TreeNode one and adds some functionality
   /// </summary>
   class ActionTreeNode : TreeNode
   {
 
     #region Static items
 
-    public const char RegDiv = '-';
-    public const char ModDiv = '#';
+    public const char RegDiv = '-'; // action, cmd separator tag
+    public const char ModDiv = '#'; // modified tag
+    public const string AddDiv = "$"; // addbind tag
 
     // Handle all text label composition and extraction here
 
-    public static String ComposeNodeText( String action, String cmd, Boolean modified = false )
+    public static string ComposeNodeText( string action, string cmd, bool modified = false )
     {
-      if ( String.IsNullOrEmpty( cmd ) ) {
+      if ( string.IsNullOrEmpty( cmd ) ) {
         return action;                                                            // v_eject
       }
-      else if ( String.IsNullOrEmpty( action ) ) {
+      else if ( string.IsNullOrEmpty( action ) ) {
         return cmd;                                                               // js1_button1
       }
       else {
@@ -38,14 +39,20 @@ namespace SCJMapper_V2.Actions
       }
     }
 
-
-    public static void DecompNodeText( String nodeText, out String action, out String cmd )
+    /// <summary>
+    /// Decompose from node.Text to the individual parts
+    /// e.g.  v_eject - js1_button1 # =>  v_eject, js1_button1
+    /// </summary>
+    /// <param name="nodeText">The node Text</param>
+    /// <param name="action">The action</param>
+    /// <param name="cmd">The device command</param>
+    public static void DecompNodeText( string nodeText, out string action, out string cmd )
     {
       action = ""; cmd = "";
-      String[] e = nodeText.Split( new char[] { RegDiv, ModDiv }, StringSplitOptions.RemoveEmptyEntries );
+      string[] e = nodeText.Split( new char[] { RegDiv, ModDiv }, StringSplitOptions.RemoveEmptyEntries );
       if ( e.Length > 1 ) {
         action = e[0].TrimEnd( );
-        if ( e[1].Trim() == DeviceCls.BlendedInput ) {
+        if ( e[1].Trim() == DeviceCls.DisabledInput ) {
           cmd = e[1];
         }
         else {
@@ -53,11 +60,12 @@ namespace SCJMapper_V2.Actions
         }
       }
       else if ( e.Length > 0 ) {
+        // action part only - i.e. not bound node
         action = e[0].TrimEnd( );
         cmd = "";
         // consider if the single item is not an action but a command (from ActionTreeInputNode)
         // it is then starting with the tag $ (that must be removed)
-        if ( action.StartsWith( "$" ) ) {
+        if ( action.StartsWith( AddDiv ) ) {
           cmd = action.Substring( 1 );
           action = "";
         }
@@ -72,10 +80,9 @@ namespace SCJMapper_V2.Actions
     /// </summary>
     /// <param name="nodeText">The node text in 'action - command' notation</param>
     /// <returns>the action part or an empty string</returns>
-    public static String ActionFromNodeText( String nodeText )
+    public static string ActionFromNodeText( string nodeText )
     {
-      String action, cmd;
-      ActionTreeNode.DecompNodeText( nodeText, out action, out cmd );
+      ActionTreeNode.DecompNodeText( nodeText, out string action, out string cmd );
       return action;
     }
 
@@ -85,10 +92,9 @@ namespace SCJMapper_V2.Actions
     /// </summary>
     /// <param name="nodeText">The node text in 'action - command' notation</param>
     /// <returns>the command part or an empty string</returns>
-    public static String CommandFromNodeText( String nodeText )
+    public static string CommandFromNodeText( string nodeText )
     {
-      String action, cmd;
-      ActionTreeNode.DecompNodeText( nodeText, out action, out cmd );
+      ActionTreeNode.DecompNodeText( nodeText, out string action, out string cmd );
       return cmd;
     }
 
@@ -135,10 +141,10 @@ namespace SCJMapper_V2.Actions
     }
 
     // our own properties
-    private String m_action = "";
-    protected String m_command ="";
+    private string m_action = "";
+    protected string m_command ="";
     protected bool m_modified = false; // any modifier applied? (ActivationMode)
-    private ActionCls.ActionDevice m_actionDevice = ActionCls.ActionDevice.AD_Unknown;
+    private Act.ActionDevice m_actionDevice = Act.ActionDevice.AD_Unknown;
 
 
     /// <summary>
@@ -165,28 +171,30 @@ namespace SCJMapper_V2.Actions
       if ( actionCmd == null ) return;
 
       // input is either "" or a valid mapping or a blended mapping
-      if ( String.IsNullOrEmpty( actionCmd.Input ) ) {
+      if ( string.IsNullOrEmpty( actionCmd.Input ) ) {
         // new unmapped
         this.Command = ""; this.BackColor = MyColors.UnassignedColor;
         if ( this.Level == 2 ) this.Action = "UNDEF"; // apply UNDEF - 20160525 fix addbind not showing UNDEF if assigned
       }
       // blended mapped ones - can only get a Blend Background
-      else if ( actionCmd.Input == DeviceCls.BlendedInput ) {
+      else if ( actionCmd.Input == DeviceCls.DisabledInput ) {
         this.Command = actionCmd.DevInput; this.BackColor = MyColors.BlendedColor;
       }
       else {
         // mapped ( regular ones )
         this.Command = actionCmd.DevInput;
-        //if ( this.Level == 2 ) this.Action = ""; // remove UNDEF - 20160525 fix addbind not showing UNDEF if assigned
         // background is along the input 
-        this.BackColor = ActionCls.DeviceColor( actionCmd.DevInput );
+        this.BackColor = Act.DeviceColor( actionCmd.DevInput );
       }
       this.Modified = !actionCmd.DefaultActivationMode; // apply modifier visual
     }
 
 
 
-    public new String Text
+    /// <summary>
+    /// Property Text of an Action node
+    /// </summary>
+    public new string Text
     {
       get { return base.Text; }
       set
@@ -197,7 +205,10 @@ namespace SCJMapper_V2.Actions
     }
 
 
-    public String Action
+    /// <summary>
+    /// Property Action of an Action node
+    /// </summary>
+    public string Action
     {
       get { return m_action; }
       set
@@ -207,7 +218,10 @@ namespace SCJMapper_V2.Actions
       }
     }
 
-    public String Command
+    /// <summary>
+    /// Property Command of an Action node
+    /// </summary>
+    public string Command
     {
       get { return m_command; }
       set
@@ -217,7 +231,10 @@ namespace SCJMapper_V2.Actions
       }
     }
 
-    public ActionCls.ActionDevice ActionDevice
+    /// <summary>
+    /// Property ActionDevice of an Action node
+    /// </summary>
+    public Act.ActionDevice ActionDevice
     {
       get { return m_actionDevice; }
       set
@@ -226,7 +243,10 @@ namespace SCJMapper_V2.Actions
       }
     }
 
-    public Boolean Modified
+    /// <summary>
+    /// Property Modified of an Action node
+    /// </summary>
+    public bool Modified
     {
       get { return m_modified; }
       set
@@ -237,43 +257,55 @@ namespace SCJMapper_V2.Actions
     }
 
 
-    public Boolean IsJoystickAction
+    /// <summary>
+    /// Property IsJoystickAction of an Action node
+    /// </summary>
+    public bool IsJoystickAction
     {
-      get { return ( m_actionDevice == ActionCls.ActionDevice.AD_Joystick ); }
+      get { return ( m_actionDevice == Act.ActionDevice.AD_Joystick ); }
     }
 
-    public Boolean IsGamepadAction
+    /// <summary>
+    /// Property IsGamepadAction of an Action node
+    /// </summary>
+    public bool IsGamepadAction
     {
-      get { return ( m_actionDevice == ActionCls.ActionDevice.AD_Gamepad ); }
+      get { return ( m_actionDevice == Act.ActionDevice.AD_Gamepad ); }
     }
 
-    public Boolean IsKeyboardAction
+    /// <summary>
+    /// Property IsKeyboardAction of an Action node
+    /// </summary>
+    public bool IsKeyboardAction
     {
-      get { return ( m_actionDevice == ActionCls.ActionDevice.AD_Keyboard ); }
+      get { return ( m_actionDevice == Act.ActionDevice.AD_Keyboard ); }
     }
 
-    public Boolean IsMouseAction  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
+    /// <summary>
+    /// Property IsMouseAction of an Action node
+    /// </summary>
+    public bool IsMouseAction  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
     {
-      get { return ( m_actionDevice == ActionCls.ActionDevice.AD_Mouse ); }
+      get { return ( m_actionDevice == Act.ActionDevice.AD_Mouse ); }
     }
 
     /// <summary>
     /// Returns true if the action is mapped
     /// </summary>
-    public Boolean IsMappedAction
+    public bool IsMappedAction
     {
       get {
-        return !( string.IsNullOrEmpty( m_command ) || ActionCls.IsBlendedInput( m_command ) );
+        return !( string.IsNullOrEmpty( m_command ) || Act.IsDisabledInput( m_command ) );
       }
     }
 
     /// <summary>
     /// Returns true if the action is disabled
     /// </summary>
-    public Boolean IsDisabledAction
+    public bool IsDisabledAction
     {
       get {
-        return ActionCls.IsBlendedInput( m_command );
+        return Act.IsDisabledInput( m_command );
       }
     }
 
