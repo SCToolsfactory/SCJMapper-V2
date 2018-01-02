@@ -29,7 +29,6 @@ namespace SCJMapper_V2
 
     private const string c_GithubLink = @"https://github.com/SCToolsfactory/SCJMapper-V2/releases";
 
-    private AppSettings m_AppSettings = new AppSettings( );
     private bool m_appLoading = true; // used to detect if we are loading (or running)
 
     // keyboard modifier handling variables
@@ -76,7 +75,8 @@ namespace SCJMapper_V2
       // catch if the Tag is not an int...
       try {
         return ( (int)page.Tag == ID_GAMEPAD_TAB );
-      } catch {
+      }
+      catch {
         return false;
       }
     }
@@ -124,7 +124,7 @@ namespace SCJMapper_V2
 
     private void AutoTabXML_Assignment( EATabXML tab )
     {
-      if ( m_AppSettings.AutoTabXML ) {
+      if ( AppSettings.Instance.AutoTabXML ) {
         if ( tcXML.SelectedIndex != (int)tab ) {
           tcXML.SelectedTab = tcXML.TabPages[(int)tab];
           if ( tab == EATabXML.Tab_Assignment )
@@ -133,10 +133,10 @@ namespace SCJMapper_V2
       }
     }
 
-    private void UpdateDDMapping(string mapName )
+    private void UpdateDDMapping( string mapName )
     {
       msSelectMapping.Text = mapName;
-      m_AppSettings.DefMappingName = mapName; m_AppSettings.Save( );
+      AppSettings.Instance.DefMappingName = mapName; AppSettings.Instance.Save( );
     }
 
 
@@ -151,8 +151,9 @@ namespace SCJMapper_V2
       try {
         // Load the icon from our resources
         System.Resources.ResourceManager resources = new System.Resources.ResourceManager( this.GetType( ) );
-        this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "$this.Icon" ) ) );
-      } catch {
+        this.Icon = ( (Icon)( resources.GetObject( "$this.Icon" ) ) );
+      }
+      catch {
         ; // well...
       }
 
@@ -211,8 +212,8 @@ namespace SCJMapper_V2
       // some applic initialization 
       // Assign Size property, since databinding to Size doesn't work well.
 
-      this.Size = m_AppSettings.FormSize;
-      this.Location = m_AppSettings.FormLocation;
+      this.Size = AppSettings.Instance.FormSize;
+      this.Location = AppSettings.Instance.FormLocation;
 
       string version = Application.ProductVersion;  // get the version information
       // BETA VERSION; TODO -  comment out if not longer
@@ -231,16 +232,22 @@ namespace SCJMapper_V2
       rtb.DragDrop += new DragEventHandler( rtb_DragDrop );
       rtb.AllowDrop = true; // add Drop to rtb
 
+      // load languages
+      SCUiText.Instance.Language = SCUiText.Languages.profile;
+      if ( Enum.TryParse( AppSettings.Instance.UseLanguage, out SCUiText.Languages lang ) ) {
+        SCUiText.Instance.Language = lang;
+      }
+
       // load mappings
       log.Debug( "Loading Mappings" );
       LoadMappingDD( );
-      msSelectMapping.Text = m_AppSettings.DefMappingName;
+      msSelectMapping.Text = AppSettings.Instance.DefMappingName;
 
       SCFileIndication( );
 
       // load other defaults
       log.Debug( "Loading Other" );
-      txMappingName.Text = m_AppSettings.MyMappingName;
+      txMappingName.Text = AppSettings.Instance.MyMappingName;
       SetRebindField( txMappingName.Text );
       foreach ( ToolStripDropDownItem d in msSelectMapping.DropDownItems ) {
         if ( d.Text == txMappingName.Text ) {
@@ -261,7 +268,7 @@ namespace SCJMapper_V2
         rtb.LoadFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
         InitActionTree( false );
         Grab( );
-        m_AppSettings.MyMappingName = txMappingName.Text; m_AppSettings.Save( );// last used - persist
+        AppSettings.Instance.MyMappingName = txMappingName.Text; AppSettings.Instance.Save( );// last used - persist
         txMappingName.BackColor = MyColors.SuccessColor;
       }
       else {
@@ -280,11 +287,11 @@ namespace SCJMapper_V2
 
 
       // load show checkboxes
-      cbxShowJoystick.Checked = m_AppSettings.ShowJoystick;
-      cbxShowGamepad.Checked = m_AppSettings.ShowGamepad;
-      cbxShowKeyboard.Checked = m_AppSettings.ShowKeyboard;
-      cbxShowMouse.Checked = m_AppSettings.ShowMouse;
-      cbxShowMappedOnly.Checked = m_AppSettings.ShowMapped;
+      cbxShowJoystick.Checked = AppSettings.Instance.ShowJoystick;
+      cbxShowGamepad.Checked = AppSettings.Instance.ShowGamepad;
+      cbxShowKeyboard.Checked = AppSettings.Instance.ShowKeyboard;
+      cbxShowMouse.Checked = AppSettings.Instance.ShowMouse;
+      cbxShowMappedOnly.Checked = AppSettings.Instance.ShowMapped;
 
       // init current Joystick
       int jsIndex = (int)tc1.SelectedTab.Tag; // gets the index into the JS list
@@ -292,14 +299,14 @@ namespace SCJMapper_V2
 
       // init PTU folder usage sign
       //lblPTU.Visible = false; // m_AppSettings.UsePTU;  no longer used
-      if ( m_AppSettings.UsePTU ) log.Debug( "Using PTU Folders" );
+      if ( AppSettings.Instance.UsePTU ) log.Debug( "Using PTU Folders" );
 
       // Auto Tab XML
-      cbxAutoTabXML.Checked = m_AppSettings.AutoTabXML;
+      cbxAutoTabXML.Checked = AppSettings.Instance.AutoTabXML;
 
       // poll the XInput
       log.Debug( "Start XInput polling" );
-      timer1_Tick( null,null );
+      timer1_Tick( null, null );
 
       timer1.Start( ); // this one polls the joysticks to show the props
 
@@ -385,7 +392,8 @@ namespace SCJMapper_V2
           backBrush.Dispose( );
           foreBrush.Dispose( );
         }
-      } catch ( Exception Ex ) {
+      }
+      catch ( Exception Ex ) {
         log.Error( "Ex DrawItem", Ex );
         MessageBox.Show( Ex.Message.ToString( ), "Error Occured", MessageBoxButtons.OK, MessageBoxIcon.Information );
       }
@@ -410,12 +418,12 @@ namespace SCJMapper_V2
       }
 
       m_AT = new ActionTree( );
-      log.DebugFormat( "InitActionTree - New AT: {0}", m_AT.GetHashCode().ToString() );
+      log.DebugFormat( "InitActionTree - New AT: {0}", m_AT.GetHashCode( ).ToString( ) );
 
       m_AT.NodeSelectedEvent += M_AT_NodeSelectedEvent; // connect the Event
 
       m_AT.Ctrl = treeView1;  // the ActionTree owns the TreeView control
-      m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
+      m_AT.IgnoreMaps = AppSettings.Instance.IgnoreActionmaps;
       // provide the display items (init)
       m_AT.DefineShowOptions( cbxShowJoystick.Checked, cbxShowGamepad.Checked, cbxShowKeyboard.Checked, cbxShowMouse.Checked, cbxShowMappedOnly.Checked );
       // Init with default profile filepath
@@ -480,7 +488,8 @@ namespace SCJMapper_V2
         log.Debug( "Get Mouse device" );
         DeviceInst.MouseInst = new MouseCls( new SharpDX.DirectInput.Mouse( directInput ), this );
 
-      } catch ( Exception ex ) {
+      }
+      catch ( Exception ex ) {
         log.Debug( "InitDirectInput phase 1 failed unexpectedly", ex );
         return false;
       }
@@ -496,7 +505,7 @@ namespace SCJMapper_V2
           log.InfoFormat( "GameControl: Type:{0} Device:{1}", instance.Type.ToString( ), instance.ProductName );
           // Create the device interface
           log.Debug( "Create the device interface" );
-          if ( m_AppSettings.DetectGamepad && ( instance.Usage == SharpDX.Multimedia.UsageId.GenericGamepad ) ) {
+          if ( AppSettings.Instance.DetectGamepad && ( instance.Usage == SharpDX.Multimedia.UsageId.GenericGamepad ) ) {
             // detect Gamepad only if the user wishes to do so
             for ( SharpDX.XInput.UserIndex i = SharpDX.XInput.UserIndex.One; i < SharpDX.XInput.UserIndex.Four; i++ ) {
               dxGamepad = new SharpDX.XInput.Controller( i );
@@ -515,7 +524,8 @@ namespace SCJMapper_V2
             log.DebugFormat( "Create the device interface for: {0}", myJs.prodName );
           }
         }
-      } catch ( Exception ex ) {
+      }
+      catch ( Exception ex ) {
         log.Debug( "InitDirectInput phase 2 failed unexpectedly", ex );
         return false;
       }
@@ -643,7 +653,8 @@ namespace SCJMapper_V2
       // get the text into the view
       try {
         rtb.ScrollToCaret( );
-      } catch {
+      }
+      catch {
         ; // just ignore
       }
       UpdateTable( );
@@ -681,19 +692,19 @@ namespace SCJMapper_V2
     {
       log.Debug( "MainForm_FormClosing - Entry" );
 
-      m_AppSettings.FormSize = this.Size;
-      m_AppSettings.FormLocation = this.Location;
+      AppSettings.Instance.FormSize = this.Size;
+      AppSettings.Instance.FormLocation = this.Location;
 
       if ( FTAB != null ) {
-        m_AppSettings.FormTableLocation = FTAB.LastLocation;
-        m_AppSettings.FormTableSize = FTAB.LastSize;
-        m_AppSettings.FormTableColumnWidth = FTAB.LastColSize;
+        AppSettings.Instance.FormTableLocation = FTAB.LastLocation;
+        AppSettings.Instance.FormTableSize = FTAB.LastSize;
+        AppSettings.Instance.FormTableColumnWidth = FTAB.LastColSize;
 
         FTAB.Close( );
         FTAB = null;
       }
 
-      m_AppSettings.Save( );
+      AppSettings.Instance.Save( );
     }
 
 
@@ -773,9 +784,9 @@ namespace SCJMapper_V2
       m_AT.ReloadTreeView( );
 
       if ( m_appLoading ) return; // don't assign while loading defaults
-      m_AppSettings.ShowJoystick = cbxShowJoystick.Checked; m_AppSettings.ShowGamepad = cbxShowGamepad.Checked;
-      m_AppSettings.ShowKeyboard = cbxShowKeyboard.Checked; m_AppSettings.ShowMouse = cbxShowMouse.Checked;
-      m_AppSettings.ShowMapped = cbxShowMappedOnly.Checked;
+      AppSettings.Instance.ShowJoystick = cbxShowJoystick.Checked; AppSettings.Instance.ShowGamepad = cbxShowGamepad.Checked;
+      AppSettings.Instance.ShowKeyboard = cbxShowKeyboard.Checked; AppSettings.Instance.ShowMouse = cbxShowMouse.Checked;
+      AppSettings.Instance.ShowMapped = cbxShowMappedOnly.Checked;
     }
 
 
@@ -784,7 +795,7 @@ namespace SCJMapper_V2
 
     private void btFind_Click( object sender, EventArgs e )
     {
-      m_AT.FindAndSelectCtrl( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ) , ""); // find the action for a Control (joystick input)
+      m_AT.FindAndSelectCtrl( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), "" ); // find the action for a Control (joystick input)
     }
 
     private void btAssign_Click( object sender, EventArgs e )
@@ -843,7 +854,7 @@ namespace SCJMapper_V2
 
     private void cbxAutoTabXML_CheckedChanged( object sender, EventArgs e )
     {
-      m_AppSettings.AutoTabXML = cbxAutoTabXML.Checked; m_AppSettings.Save( );
+      AppSettings.Instance.AutoTabXML = cbxAutoTabXML.Checked; AppSettings.Instance.Save( );
     }
 
     // Toolstrip Items
@@ -872,8 +883,8 @@ namespace SCJMapper_V2
     {
       AutoTabXML_Assignment( EATabXML.Tab_XML );
 
-      if ( m_AppSettings.UseCSVListing )
-        rtb.Text = string.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActionsCSV( m_AppSettings.ListModifiers ) );
+      if ( AppSettings.Instance.UseCSVListing )
+        rtb.Text = string.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActionsCSV( AppSettings.Instance.ListModifiers ) );
       else
         rtb.Text = string.Format( "-- {0} - SC Joystick Mapping --\n{1}", DateTime.Now, m_AT.ReportActions( ) );
     }
@@ -909,9 +920,9 @@ namespace SCJMapper_V2
       }
 
       if ( FTAB.Visible ) {
-        m_AppSettings.FormTableSize = FTAB.LastSize;
-        m_AppSettings.FormTableLocation = FTAB.LastLocation;
-        m_AppSettings.FormTableColumnWidth = FTAB.LastColSize;
+        AppSettings.Instance.FormTableSize = FTAB.LastSize;
+        AppSettings.Instance.FormTableLocation = FTAB.LastLocation;
+        AppSettings.Instance.FormTableColumnWidth = FTAB.LastColSize;
         FTAB.Hide( );
 
       }
@@ -919,9 +930,9 @@ namespace SCJMapper_V2
         FTAB.Show( );
 
         if ( created ) {
-          FTAB.Size = m_AppSettings.FormTableSize;
-          FTAB.Location = m_AppSettings.FormTableLocation;
-          FTAB.LastColSize = m_AppSettings.FormTableColumnWidth;
+          FTAB.Size = AppSettings.Instance.FormTableSize;
+          FTAB.Location = AppSettings.Instance.FormTableLocation;
+          FTAB.LastColSize = AppSettings.Instance.FormTableColumnWidth;
         }
         // reload the data to display
         UpdateTable( );
@@ -939,7 +950,7 @@ namespace SCJMapper_V2
       UpdateMoreOptionItems( );
 
       DeviceList devlist = new DeviceList( );
-      if ( m_AppSettings.DetectGamepad && ( DeviceInst.GamepadRef != null ) ) {
+      if ( AppSettings.Instance.DetectGamepad && ( DeviceInst.GamepadRef != null ) ) {
         devlist.Add( DeviceInst.GamepadRef );
       }
       devlist.AddRange( DeviceInst.JoystickListRef );
@@ -983,16 +994,19 @@ namespace SCJMapper_V2
     {
       // have to stop polling while the Settings window is open
       timer1.Enabled = false;
-      if ( m_AppSettings.ShowSettings( "" ) != System.Windows.Forms.DialogResult.Cancel ) {
-        m_AppSettings.Reload( ); // must reload in case of any changes in the form
+      if ( AppSettings.Instance.ShowSettings( "" ) != DialogResult.Cancel ) {
+        AppSettings.Instance.Reload( ); // must reload in case of any changes in the form
         // then reload the profile and mappings
         LoadMappingDD( );
         // indicates (in)valid folders
         SCFileIndication( );
-
+        // change language if needed
+        if ( Enum.TryParse( AppSettings.Instance.UseLanguage, out SCUiText.Languages lang ) ) {
+          SCUiText.Instance.Language = lang;
+        }
         // now update the contents according to new settings
         foreach ( JoystickCls j in DeviceInst.JoystickListRef ) j.ApplySettings( ); // update Seetings
-        m_AT.IgnoreMaps = m_AppSettings.IgnoreActionmaps;
+        m_AT.IgnoreMaps = AppSettings.Instance.IgnoreActionmaps;
         // and start over with an empty tree
         InitActionTree( false );
         UpdateTable( );
@@ -1045,10 +1059,10 @@ namespace SCJMapper_V2
     {
       // start over 
       InitActionTree( true );
-      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      rtb.Text = SCMappings.Mapping( AppSettings.Instance.DefMappingName );
       Grab( );
-      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
-        txMappingName.Text = m_AppSettings.DefMappingName;
+      if ( SCMappings.IsUserMapping( AppSettings.Instance.DefMappingName ) ) {
+        txMappingName.Text = AppSettings.Instance.DefMappingName;
         SetRebindField( txMappingName.Text );
       }
       btDump.BackColor = MyColors.DirtyColor;
@@ -1059,9 +1073,9 @@ namespace SCJMapper_V2
     {
       // start over 
       InitActionTree( false );
-      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
-      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
-        txMappingName.Text = m_AppSettings.DefMappingName;
+      rtb.Text = SCMappings.Mapping( AppSettings.Instance.DefMappingName );
+      if ( SCMappings.IsUserMapping( AppSettings.Instance.DefMappingName ) ) {
+        txMappingName.Text = AppSettings.Instance.DefMappingName;
         SetRebindField( txMappingName.Text );
       }
       Grab( );
@@ -1070,10 +1084,10 @@ namespace SCJMapper_V2
 
     private void meLoadAndGrab_Click( object sender, EventArgs e )
     {
-      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
+      rtb.Text = SCMappings.Mapping( AppSettings.Instance.DefMappingName );
       Grab( );
-      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
-        txMappingName.Text = m_AppSettings.DefMappingName;
+      if ( SCMappings.IsUserMapping( AppSettings.Instance.DefMappingName ) ) {
+        txMappingName.Text = AppSettings.Instance.DefMappingName;
         SetRebindField( txMappingName.Text );
       }
       btDump.BackColor = MyColors.DirtyColor;
@@ -1082,9 +1096,9 @@ namespace SCJMapper_V2
 
     private void meLoad_Click( object sender, EventArgs e )
     {
-      rtb.Text = SCMappings.Mapping( m_AppSettings.DefMappingName );
-      if ( SCMappings.IsUserMapping( m_AppSettings.DefMappingName ) ) {
-        txMappingName.Text = m_AppSettings.DefMappingName;
+      rtb.Text = SCMappings.Mapping( AppSettings.Instance.DefMappingName );
+      if ( SCMappings.IsUserMapping( AppSettings.Instance.DefMappingName ) ) {
+        txMappingName.Text = AppSettings.Instance.DefMappingName;
         SetRebindField( txMappingName.Text );
       }
       btGrab.BackColor = MyColors.DirtyColor;
@@ -1346,7 +1360,7 @@ namespace SCJMapper_V2
           // get the new one into the list
           LoadMappingDD( );
           UpdateDDMapping( txMappingName.Text );
-          m_AppSettings.MyMappingName = txMappingName.Text; m_AppSettings.Save( );// last used - persist
+          AppSettings.Instance.MyMappingName = txMappingName.Text; AppSettings.Instance.Save( );// last used - persist
           txMappingName.BackColor = MyColors.SuccessColor;
         }
       }
@@ -1407,11 +1421,11 @@ namespace SCJMapper_V2
       string find = "";
 
       // find action item for Joysticks
-      find = ActionTreeNode.ComposeNodeText( action, "js" );
+      find = ActionTreeNode.ComposeNodeActionText( action, "js" );
       nodeText = m_AT.FindText( actionmap, find ); // returns "" or a complete text ("action - command")
       if ( !string.IsNullOrWhiteSpace( nodeText ) ) {
-        if ( !Act.IsDisabledInput( ActionTreeNode.CommandFromNodeText( nodeText ) ) ) {
-          dev = DeviceInst.JoystickListRef.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromNodeText( nodeText ) ) );
+        if ( !Act.IsDisabledInput( ActionTreeNode.CommandFromActionText( nodeText ) ) ) {
+          dev = DeviceInst.JoystickListRef.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromActionText( nodeText ) ) );
           if ( dev != null ) {
             // find the tuning item of the action
             string toID = Tuningoptions.TuneOptionIDfromJsN( JoystickCls.DeviceClass, dev.XmlInstance );
@@ -1423,10 +1437,10 @@ namespace SCJMapper_V2
 
       if ( dev == null ) {
         // nothing found? find action item for GPads
-        find = ActionTreeNode.ComposeNodeText( action, "xi" );
+        find = ActionTreeNode.ComposeNodeActionText( action, "xi" );
         nodeText = m_AT.FindText( actionmap, find );
         if ( !string.IsNullOrWhiteSpace( nodeText ) ) {
-          if ( !Act.IsDisabledInput( ActionTreeNode.CommandFromNodeText( nodeText ) ) ) {
+          if ( !Act.IsDisabledInput( ActionTreeNode.CommandFromActionText( nodeText ) ) ) {
             dev = DeviceInst.GamepadRef;
             if ( dev != null ) {
               // find the tuning item of the action
@@ -1527,7 +1541,7 @@ namespace SCJMapper_V2
       UpdateOptionItem( "turret_aim_pitch", "v_aim_pitch", "spaceship_turret" );
       UpdateOptionItem( "turret_aim_yaw", "v_aim_yaw", "spaceship_turret" );
     }
-    
+
 
 
 

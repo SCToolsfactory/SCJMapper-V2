@@ -12,7 +12,20 @@ namespace SCJMapper_V2
   /// </summary>
   class TheUser
   {
-    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType ); 
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+
+    private static bool hasWriteAccessToFolder( string folderPath )
+    {
+      try {
+        // Attempt to get a list of security permissions from the folder. 
+        // This will raise an exception if the path is read only or do not have access to view the permissions. 
+        System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl( folderPath );
+        return true;
+      }
+      catch ( UnauthorizedAccessException ) {
+        return false;
+      }
+    }
 
     /// <summary>
     /// Returns the name of the Personal Program folder in My Documents
@@ -21,14 +34,34 @@ namespace SCJMapper_V2
     /// <returns>Path to the Personal Program directory</returns>
     static public string UserDir
     {
-      get
-      {
+      get {
         log.Debug( "UserDir - Entry" );
-        string docPath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.Personal ), Application.ProductName);
+        string docPath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.Personal ), Application.ProductName );
         if ( !Directory.Exists( docPath ) ) Directory.CreateDirectory( docPath );
         return docPath;
       }
     }
+
+    /// <summary>
+    /// The directory to store the assets
+    /// </summary>
+    static public string FileStoreDir
+    {
+      get {
+        log.Debug( "FileStoreDir - Entry" );
+        string docPath = AppDir;
+        // fallback
+        if ( !hasWriteAccessToFolder( docPath ) )
+          docPath = UserDir;
+        return Path.Combine( docPath, "Storage");
+      }
+    }
+
+    
+    /// <summary>
+    /// The application directory
+    /// </summary>
+    static public string AppDir { get => Path.GetDirectoryName( Application.ExecutablePath); } 
 
 
     /// <summary>

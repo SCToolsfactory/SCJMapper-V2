@@ -20,7 +20,6 @@ namespace SCJMapper_V2.Devices.Gamepad
   public class GamepadCls : DeviceCls
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
-    private static readonly AppSettings appSettings = new AppSettings( );
 
     #region Static Items
 
@@ -311,7 +310,7 @@ namespace SCJMapper_V2.Devices.Gamepad
 
     private void ApplySettings_low()
     {
-      appSettings.Reload( );
+      AppSettings.Instance.Reload( );
     }
 
 

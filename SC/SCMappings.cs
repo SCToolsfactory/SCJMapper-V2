@@ -18,7 +18,7 @@ namespace SCJMapper_V2.SC
     private const string c_UserMapStartsWith = c_MapStartsWith + "my_";  // we only allow those mapping names
 
     static private List<string> m_scMappings = new List<string>( );
-    static private SCGameMaps m_scGameMaps = new SCGameMaps( );
+    static private SCGameMaps m_scGameMaps = new SCGameMaps( ); // only one instance allowed... else we read it multiple times from the pak file
 
     /// <summary>
     /// Returns true if a mapping file exists

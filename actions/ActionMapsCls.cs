@@ -208,7 +208,7 @@ namespace SCJMapper_V2.Actions
             ar.ID_Action = DS_ActionMap.ActionID( am.Name, ac.Key, ac.InputList[ilIndex].NodeIndex ); // make a unique key
             ar.AddBind = ( ilIndex > 0 ); // all but the first are addbinds
             ar.REF_ActionMap = amShown;
-            ar.ActionName = ac.Name;
+            ar.ActionName = ac.ActionName;
             ar.Device = ac.Device;
             ar.Def_Binding = ac.DefBinding;
             ar.Def_Modifier = ac.DefActivationMode.Name;
@@ -263,7 +263,7 @@ namespace SCJMapper_V2.Actions
     {
       log.Debug( "ActionMapsCls.toXML - Entry" );
 
-      AppSettings appSettings = new AppSettings( );
+      AppSettings appSettings = AppSettings.Instance; // shortcut only
 
       // *** HEADER  
 

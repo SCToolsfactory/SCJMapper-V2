@@ -69,10 +69,8 @@ namespace SCJMapper_V2.SC
         }
       }
 
-      // PTU 3.0 those cannot longer work - but let them in for a while
-
-      // third try to get the SC defaultProfile from the Data.p4k
-      retVal = ExtractDefaultBinProfileP4k( DefaultProfileName );
+      // third try to get the SC defaultProfile from the Data.p4k TODO
+      retVal = SCFiles.Instance.DefaultProfile;
       if ( !string.IsNullOrEmpty( retVal ) ) {
         UsedDefProfile = "GamePack defaultProfile";
         log.InfoFormat( "- Use {0}", UsedDefProfile );
@@ -89,47 +87,6 @@ namespace SCJMapper_V2.SC
     }
 
 
-    /// <summary>
-    /// Zip Extracts the file to a string
-    /// SC Alpha 2.2: Have to find the new one in E:\G\StarCitizen\StarCitizen\LIVE\Data.p4k (contains the binary XML now)
-    /// </summary>
-    static private string ExtractDefaultBinProfileP4k( string defaultProfileName )
-    {
-      log.Debug( "ExtractDefaultBinProfileP4k - Entry" );
-
-      string retVal = "";
-      if ( File.Exists( SCPath.SCData_p4k ) ) {
-        try {
-          var PD = new p4kFile.p4kDirectory( );
-          p4kFile.p4kFile p4K = PD.ScanDirectoryFor( SCPath.SCData_p4k, defaultProfileName );
-          if ( p4K != null ) {
-            byte[] fContent = PD.GetFile( SCPath.SCData_p4k, p4K );
-
-            // use the binary XML reader
-            CryXmlNodeRef ROOT = null;
-            CryXmlBinReader.EResult readResult = CryXmlBinReader.EResult.Error;
-            CryXmlBinReader cbr = new CryXmlBinReader( );
-            ROOT = cbr.LoadFromBuffer( fContent, out readResult );
-            if ( readResult == CryXmlBinReader.EResult.Success ) {
-              XmlTree tree = new XmlTree( );
-              tree.BuildXML( ROOT );
-              retVal = tree.XML_string;
-            }
-            else {
-              log.ErrorFormat( "  Error in CryXmlBinReader: {0}", cbr.GetErrorDescription( ) );
-              retVal = ""; // clear any remanents
-            }
-
-
-          }
-        }
-        catch ( Exception ex ) {
-          log.Error( "  Unexpected ", ex );
-        }
-
-      }
-      return retVal;
-    }
 
 
   }

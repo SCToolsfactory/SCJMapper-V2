@@ -29,6 +29,7 @@ namespace SCJMapper_V2.SC
     class ProfileAction
     {
       public string Name { get; set; }    // the action name
+      public string UILabel { get; set; }    // the action name translated
       public string DevID { get; set; }  // the input method K,J,X,P
       private string m_defBinding = "";   // NOTE: this is AC1 style in the Profile - need to conver later when dumping out
       public string DefBinding { get { return m_defBinding; } set { m_defBinding = value; } }  // DONT! need to clean this one, found spaces...
@@ -44,6 +45,7 @@ namespace SCJMapper_V2.SC
     class ActionMap : List<ProfileAction>  // carries the action list
     {
       public string Name { get; set; } // the map name
+      public string UILabel { get; set; } // the map label
 
       static int ContainsLoop( List<ProfileAction> list, string value )
       {
@@ -95,6 +97,9 @@ namespace SCJMapper_V2.SC
     /// <summary>
     /// Returns the collected actionmaps as CSV (same format as MappingVars)
     /// i.e. one line per actionmap where the first element is the actionmap and following are actions;defaultBinding lead by the input Key in uppercase (JKXP)
+    /// 
+    /// actmap;actmaplabel;action;actionlabel;defBinding;defActMode;defActMultitap;
+    /// 
     /// </summary>
     public string CSVMap
     {
@@ -103,9 +108,11 @@ namespace SCJMapper_V2.SC
 
         string buf = "";
         foreach ( ActionMap am in m_aMap.Values ) {
-          buf += am.Name + ";";
+          buf += am.Name + ";"+ am.UILabel + ";";
           foreach ( ProfileAction a in am ) {
-            buf += a.KeyName + ";" + a.DefBinding + ";" + a.DefActivationMode.Name + ";" + a.DefActivationMode.MultiTap.ToString( ) + ";"; // add default binding + activation mode to the CSV
+            buf += a.KeyName + ";" + a.UILabel + ";" 
+              + a.DefBinding + ";" 
+              + a.DefActivationMode.Name + ";" + a.DefActivationMode.MultiTap.ToString( ) + ";"; // add default binding + activation mode to the CSV
           }
           buf += string.Format( "\n" );
         }
@@ -208,12 +215,15 @@ namespace SCJMapper_V2.SC
       bool retVal = true;
 
       string name = (string)action.Attribute( "name" );
+      string uiLabel = (string)action.Attribute( "UILabel" );
+      if ( string.IsNullOrEmpty( uiLabel ) )
+        uiLabel = name; // subst if not found in Action node
 
       // prep all kinds
-      var jAC = new ProfileAction( ) { Name = name, DevID = Act.DevTag( JoystickCls.DeviceClass ) };
-      var kAC = new ProfileAction( ) { Name = name, DevID = Act.DevTag( KeyboardCls.DeviceClass ) };
-      var mAC = new ProfileAction( ) { Name = name, DevID = Act.DevTag( MouseCls.DeviceClass ) };
-      var xAC = new ProfileAction( ) { Name = name, DevID = Act.DevTag( GamepadCls.DeviceClass ) };
+      var jAC = new ProfileAction( ) { Name = name, UILabel = uiLabel, DevID = Act.DevTag( JoystickCls.DeviceClass ) };
+      var kAC = new ProfileAction( ) { Name = name, UILabel = uiLabel, DevID = Act.DevTag( KeyboardCls.DeviceClass ) };
+      var mAC = new ProfileAction( ) { Name = name, UILabel = uiLabel, DevID = Act.DevTag( MouseCls.DeviceClass ) };
+      var xAC = new ProfileAction( ) { Name = name, UILabel = uiLabel, DevID = Act.DevTag( GamepadCls.DeviceClass ) };
 
       // process element items
       JInput( ref jAC, action, (string)action.Attribute( JoystickCls.DeviceClass ) );
@@ -291,11 +301,14 @@ namespace SCJMapper_V2.SC
 
       // check for a valid one
       string mapName = (string)actionmap.Attribute( "name" ); // mandatory
+      string uiLabel = (string)actionmap.Attribute( "UILabel" );
+      if ( string.IsNullOrEmpty( uiLabel ) )
+        uiLabel = mapName; // subst if not found in Action node
+
       string item = Array.Find( ActionMapsCls.ActionMaps, delegate ( string sstr ) { return sstr == mapName; } );
       if ( !string.IsNullOrEmpty( item ) ) {
         // finally.... it is a valid actionmap
-        m_currentMap = new ActionMap( );
-        m_currentMap.Name = mapName;
+        m_currentMap = new ActionMap { Name = mapName, UILabel = uiLabel };
         if ( !m_aMap.ContainsKey( mapName ) ) { //20170325 - fix multiple map names - don't add the second, third etc. (CIG bug..)
           m_aMap.Add( mapName, m_currentMap ); // add to our inventory
           IEnumerable<XElement> actions = from x in actionmap.Elements( )
@@ -421,7 +434,7 @@ namespace SCJMapper_V2.SC
                                              where ( x.Name == "actionmap" )
                                              select x;
           foreach ( XElement actionmap in actionmaps ) {
-            aml.AddActionMap( (string)actionmap.Attribute("name") );
+            aml.AddActionMap( (string)actionmap.Attribute( "name" ) );
           }
         }
       }

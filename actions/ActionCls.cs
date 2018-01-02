@@ -47,7 +47,7 @@ namespace SCJMapper_V2.Actions
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     public string Key { get; set; }                       // the key is the "Daction" formatted item (as we can have the same name multiple times)
-    public string Name { get; set; }                      // the plain action name e.g. v_yaw
+    public string ActionName { get; set; }                      // the plain action name e.g. v_yaw
     public Act.ActionDevice ActionDevice { get; set; }    // the enum of the device
     public string Device { get; set; }                    // name of the device (uses DeviceClass)
     public string DefBinding { get; set; }                // the default binding
@@ -96,7 +96,7 @@ namespace SCJMapper_V2.Actions
       Key = "";
       ActionDevice = Act.ActionDevice.AD_Unknown;
       Device = JoystickCls.DeviceClass;
-      Name = "";
+      ActionName = "";
       DefBinding = "";
       DefActivationMode = ActivationMode.Default;
       InputList = new List<ActionCommandCls>( ); // empty list
@@ -223,7 +223,7 @@ namespace SCJMapper_V2.Actions
       bindCmd = "rebind"; // first entry is rebind
       if ( InputList.Count > 0 ) {
         if ( !string.IsNullOrEmpty( InputList[0].Input ) ) {
-          r = string.Format( "\t<action name=\"{0}\">\n", Name );
+          r = string.Format( "\t<action name=\"{0}\">\n", ActionName );
           foreach ( ActionCommandCls acc in InputList ) {
             if ( !string.IsNullOrEmpty( acc.Input ) ) {
               r += string.Format( "\t\t\t<{0} {1}", bindCmd, acc.toXML( ) ); // 20151220BM: format for AC2 style 
@@ -244,7 +244,7 @@ namespace SCJMapper_V2.Actions
     /// <returns>True if an action was decoded</returns>
     public bool fromXML( XElement actionNode )
     {
-      Name = (string)actionNode.Attribute( "name" ); // mandadory
+      ActionName = (string)actionNode.Attribute( "name" ); // mandadory
       foreach ( XElement bindingNode in actionNode.Nodes( ) ) {
         string binding = bindingNode.Name.ToString( );
         string input = "", actModeName = "", multi = "";
@@ -273,7 +273,7 @@ namespace SCJMapper_V2.Actions
           }
         }
         if ( binding == "rebind" ) {
-          Key = Act.DevTag( Device ) + Name; // unique id of the action
+          Key = Act.DevTag( Device ) + ActionName; // unique id of the action
           ActionDevice = Act.ADevice( Device ); // get the enum of the input device
         }
         AddCommand( input, actMode );

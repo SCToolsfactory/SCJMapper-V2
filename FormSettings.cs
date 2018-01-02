@@ -13,9 +13,6 @@ namespace SCJMapper_V2
 {
   partial class FormSettings : Form
   {
-    private readonly AppSettings m_owner = null; // owner class - access to settings
-
-
     public bool Canceled { get; set; }
 
     public string PasteString { get; set; } // used to copy, paste JS commands
@@ -24,10 +21,9 @@ namespace SCJMapper_V2
     /// ctor - gets the owning class instance
     /// </summary>
     /// <param name="owner"></param>
-    public FormSettings( AppSettings owner )
+    public FormSettings( )
     {
       InitializeComponent( );
-      m_owner = owner;
     }
 
 
@@ -37,6 +33,10 @@ namespace SCJMapper_V2
       for ( int i = 0; i < ActionMapsCls.ActionMaps.Length; i++ ) {
         chkLbActionMaps.Items.Add( ActionMapsCls.ActionMaps[i] );
       }
+
+      comboLanguage.Items.Clear( );
+      comboLanguage.Items.AddRange( SC.SCUiText.Instance.LanguagesS.ToArray() );
+
       LoadSettings( );
     }
 
@@ -45,26 +45,26 @@ namespace SCJMapper_V2
     private void LoadSettings( )
     {
       // SC path
-      txSCPath.Text = m_owner.UserSCPath;
-      cbxUsePath.Checked = m_owner.UserSCPathUsed;
+      txSCPath.Text = AppSettings.Instance.UserSCPath;
+      cbxUsePath.Checked = AppSettings.Instance.UserSCPathUsed;
 
       //Ignore Buttons
-      txJS1.Text = m_owner.IgnoreJS1;
-      txJS2.Text = m_owner.IgnoreJS2;
-      txJS3.Text = m_owner.IgnoreJS3;
-      txJS4.Text = m_owner.IgnoreJS4;
-      txJS5.Text = m_owner.IgnoreJS5;
-      txJS6.Text = m_owner.IgnoreJS6;
-      txJS7.Text = m_owner.IgnoreJS7;
-      txJS8.Text = m_owner.IgnoreJS8;
-      txJS9.Text = m_owner.IgnoreJS9;
-      txJS10.Text = m_owner.IgnoreJS10;
-      txJS11.Text = m_owner.IgnoreJS11;
-      txJS12.Text = m_owner.IgnoreJS12;
+      txJS1.Text = AppSettings.Instance.IgnoreJS1;
+      txJS2.Text = AppSettings.Instance.IgnoreJS2;
+      txJS3.Text = AppSettings.Instance.IgnoreJS3;
+      txJS4.Text = AppSettings.Instance.IgnoreJS4;
+      txJS5.Text = AppSettings.Instance.IgnoreJS5;
+      txJS6.Text = AppSettings.Instance.IgnoreJS6;
+      txJS7.Text = AppSettings.Instance.IgnoreJS7;
+      txJS8.Text = AppSettings.Instance.IgnoreJS8;
+      txJS9.Text = AppSettings.Instance.IgnoreJS9;
+      txJS10.Text = AppSettings.Instance.IgnoreJS10;
+      txJS11.Text = AppSettings.Instance.IgnoreJS11;
+      txJS12.Text = AppSettings.Instance.IgnoreJS12;
 
       // Ignore actionmaps
       for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
-        if ( m_owner.IgnoreActionmaps.Contains( "," + chkLbActionMaps.Items[i].ToString( ) + "," ) ) {
+        if ( AppSettings.Instance.IgnoreActionmaps.Contains( "," + chkLbActionMaps.Items[i].ToString( ) + "," ) ) {
           chkLbActionMaps.SetItemChecked( i, true );
         } else {
           chkLbActionMaps.SetItemChecked( i, false ); // 20161223: fix checked items and Canceled
@@ -72,19 +72,21 @@ namespace SCJMapper_V2
       }
 
       // DetectGamepad
-      cbxDetectGamepad.Checked = m_owner.DetectGamepad;
+      cbxDetectGamepad.Checked = AppSettings.Instance.DetectGamepad;
 
       // Use PTU
-      cbxPTU.Checked = m_owner.UsePTU;
-      m_owner.UsePTU = false; // no longer used
+      cbxPTU.Checked = AppSettings.Instance.UsePTU;
+      AppSettings.Instance.UsePTU = false; // no longer used
 
       // AutoTabXML
-      cbxAutoTabXML.Checked = m_owner.AutoTabXML;
+      cbxAutoTabXML.Checked = AppSettings.Instance.AutoTabXML;
 
       // Use CSV Listing
-      cbxCSVListing.Checked = m_owner.UseCSVListing;
-      cbxListModifiers.Checked = m_owner.ListModifiers;
+      cbxCSVListing.Checked = AppSettings.Instance.UseCSVListing;
+      cbxListModifiers.Checked = AppSettings.Instance.ListModifiers;
 
+      // Language
+      comboLanguage.SelectedItem = AppSettings.Instance.UseLanguage;
     }
 
 
@@ -92,22 +94,22 @@ namespace SCJMapper_V2
     private void SaveSettings( )
     {
       // SC path
-      m_owner.UserSCPath = txSCPath.Text;
-      m_owner.UserSCPathUsed = cbxUsePath.Checked;
+      AppSettings.Instance.UserSCPath = txSCPath.Text;
+      AppSettings.Instance.UserSCPathUsed = cbxUsePath.Checked;
 
       //Ignore Buttons
-      m_owner.IgnoreJS1 = txJS1.Text;
-      m_owner.IgnoreJS2 = txJS2.Text;
-      m_owner.IgnoreJS3 = txJS3.Text;
-      m_owner.IgnoreJS4 = txJS4.Text;
-      m_owner.IgnoreJS5 = txJS5.Text;
-      m_owner.IgnoreJS6 = txJS6.Text;
-      m_owner.IgnoreJS7 = txJS7.Text;
-      m_owner.IgnoreJS8 = txJS8.Text;
-      m_owner.IgnoreJS9 = txJS9.Text;
-      m_owner.IgnoreJS10 = txJS10.Text;
-      m_owner.IgnoreJS11 = txJS11.Text;
-      m_owner.IgnoreJS12 = txJS12.Text;
+      AppSettings.Instance.IgnoreJS1 = txJS1.Text;
+      AppSettings.Instance.IgnoreJS2 = txJS2.Text;
+      AppSettings.Instance.IgnoreJS3 = txJS3.Text;
+      AppSettings.Instance.IgnoreJS4 = txJS4.Text;
+      AppSettings.Instance.IgnoreJS5 = txJS5.Text;
+      AppSettings.Instance.IgnoreJS6 = txJS6.Text;
+      AppSettings.Instance.IgnoreJS7 = txJS7.Text;
+      AppSettings.Instance.IgnoreJS8 = txJS8.Text;
+      AppSettings.Instance.IgnoreJS9 = txJS9.Text;
+      AppSettings.Instance.IgnoreJS10 = txJS10.Text;
+      AppSettings.Instance.IgnoreJS11 = txJS11.Text;
+      AppSettings.Instance.IgnoreJS12 = txJS12.Text;
 
       // Ignore actionmaps
       string ignore = ",";
@@ -116,28 +118,31 @@ namespace SCJMapper_V2
           ignore += chkLbActionMaps.Items[i].ToString( ) + ",";
         }
       }
-      m_owner.IgnoreActionmaps = ignore;
+      AppSettings.Instance.IgnoreActionmaps = ignore;
 
       // DetectGamepad
-      if ( m_owner.DetectGamepad != cbxDetectGamepad.Checked ) {
+      if ( AppSettings.Instance.DetectGamepad != cbxDetectGamepad.Checked ) {
         MessageBox.Show( "Changing the Gamepad option needs a restart of the application !!", "Settings Notification", MessageBoxButtons.OK, MessageBoxIcon.Information );
       }
-      m_owner.DetectGamepad = cbxDetectGamepad.Checked;
+      AppSettings.Instance.DetectGamepad = cbxDetectGamepad.Checked;
 
       //// Use PTU
-      //if ( m_owner.UsePTU != cbxPTU.Checked ) {
+      //if ( AppSettings.Instance.UsePTU != cbxPTU.Checked ) {
       //  MessageBox.Show( "Changing to / from PTU folders needs a restart of the application !!", "Settings Notification", MessageBoxButtons.OK, MessageBoxIcon.Information );
       //}
-      //m_owner.UsePTU = cbxPTU.Checked; // no longer used
+      //AppSettings.Instance.UsePTU = cbxPTU.Checked; // no longer used
 
       // AutoTabXML
-      m_owner.AutoTabXML = cbxAutoTabXML.Checked;
+      AppSettings.Instance.AutoTabXML = cbxAutoTabXML.Checked;
       
       // Use CSV Listing
-      m_owner.UseCSVListing = cbxCSVListing.Checked;
-      m_owner.ListModifiers = cbxListModifiers.Checked;
+      AppSettings.Instance.UseCSVListing = cbxCSVListing.Checked;
+      AppSettings.Instance.ListModifiers = cbxListModifiers.Checked;
 
-      m_owner.Save( );
+      // Language
+      AppSettings.Instance.UseLanguage = (string)comboLanguage.SelectedItem;
+
+      AppSettings.Instance.Save( );
     }
 
 
@@ -201,6 +206,9 @@ namespace SCJMapper_V2
       }
     }
 
+    private void comboLanguage_SelectedIndexChanged( object sender, EventArgs e )
+    {
 
+    }
   }
 }

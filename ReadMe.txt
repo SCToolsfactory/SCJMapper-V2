@@ -1,10 +1,10 @@
-SC Joystick Mapper V 2.34 - Build 68 BETA
-(c) Cassini, StandardToaster - 26-Dec-2017
+SC Joystick Mapper V 2.35 - Build 69 BETA
+(c) Cassini, StandardToaster - 05-Jan-2018
 
 Contains 12 files + graphics:
 
-SCJMapper.exe                The program (V2.34)
-SCJMapper.exe.config         Program config (V2.34)              - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.35)
+SCJMapper.exe.config         Program config (V2.35)              - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -15,12 +15,12 @@ x86/libzstd.dll              Native dll for ZstdNet (v2.33)      - MUST be in th
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.30beta.pdf    Quick Guide
+SCJMapper_QGuide V2.34beta.pdf    Quick Guide (v2.34)
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images (V2.32)               - graphics folder MUST be in the same folder as the Exe file
 
-NOTE V 2.34:
+NOTE V 2.35:
   search order for defaultProfile.xml to build the action tree is:
    1. directory where SCJMapper Exe is located
    2. directory of <SC>\LIVE\USER
@@ -40,6 +40,12 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.35 - BETA Build 69
+- add - provide CIG asset texts for actions and maps 
+  (use Settings to choose - for now only French and German are in but have no translations
+   for English not all have a proper text - may not be used in the game ??)
+- improvement - cache CIG assets into the app/Storage folder, reads from p4k file only if those are updated
+- internal cleanup - to many to list
 V 2.34 - BETA Build 68
 - improvement - complete rework of XML defaultProfile/mapping parsing
 - add - provide CIG mappings from game assets

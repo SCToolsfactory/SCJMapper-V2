@@ -64,6 +64,8 @@
       this.btCancel = new System.Windows.Forms.Button();
       this.label1 = new System.Windows.Forms.Label();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.label14 = new System.Windows.Forms.Label();
+      this.comboLanguage = new System.Windows.Forms.ComboBox();
       this.cbxAutoTabXML = new System.Windows.Forms.CheckBox();
       this.cbxListModifiers = new System.Windows.Forms.CheckBox();
       this.cbxCSVListing = new System.Windows.Forms.CheckBox();
@@ -425,6 +427,8 @@
       // 
       // groupBox4
       // 
+      this.groupBox4.Controls.Add(this.label14);
+      this.groupBox4.Controls.Add(this.comboLanguage);
       this.groupBox4.Controls.Add(this.cbxAutoTabXML);
       this.groupBox4.Controls.Add(this.cbxListModifiers);
       this.groupBox4.Controls.Add(this.cbxCSVListing);
@@ -437,6 +441,24 @@
       this.groupBox4.TabIndex = 27;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "Advanced Options ...";
+      // 
+      // label14
+      // 
+      this.label14.AutoSize = true;
+      this.label14.Location = new System.Drawing.Point(200, 22);
+      this.label14.Name = "label14";
+      this.label14.Size = new System.Drawing.Size(62, 13);
+      this.label14.TabIndex = 12;
+      this.label14.Text = "Language:";
+      // 
+      // comboLanguage
+      // 
+      this.comboLanguage.FormattingEnabled = true;
+      this.comboLanguage.Location = new System.Drawing.Point(271, 19);
+      this.comboLanguage.Name = "comboLanguage";
+      this.comboLanguage.Size = new System.Drawing.Size(100, 21);
+      this.comboLanguage.TabIndex = 11;
+      this.comboLanguage.SelectedIndexChanged += new System.EventHandler(this.comboLanguage_SelectedIndexChanged);
       // 
       // cbxAutoTabXML
       // 
@@ -566,5 +588,7 @@
     private System.Windows.Forms.CheckBox cbxCSVListing;
     private System.Windows.Forms.CheckBox cbxListModifiers;
     private System.Windows.Forms.CheckBox cbxAutoTabXML;
+    private System.Windows.Forms.Label label14;
+    private System.Windows.Forms.ComboBox comboLanguage;
   }
 }

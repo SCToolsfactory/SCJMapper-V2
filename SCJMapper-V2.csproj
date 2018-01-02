@@ -27,8 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>68</ApplicationRevision>
-    <ApplicationVersion>2.34.0.%2a</ApplicationVersion>
+    <ApplicationRevision>69</ApplicationRevision>
+    <ApplicationVersion>2.35.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -155,7 +155,11 @@
     <Compile Include="SC\p4kFile\p4kZ64EndOfCentralDirLocator.cs" />
     <Compile Include="SC\p4kFile\p4kZ64EndOfCentralDirRecord.cs" />
     <Compile Include="SC\SCActionMapList.cs" />
+    <Compile Include="SC\SCFile.cs" />
+    <Compile Include="SC\SCFiles.cs" />
     <Compile Include="SC\SCGameMaps.cs" />
+    <Compile Include="SC\SCLocale.cs" />
+    <Compile Include="SC\SCUiText.cs" />
     <Compile Include="Table\DS_ActionMap.cs" />
     <Compile Include="Table\DS_ActionMaps.cs">
       <DependentUpon>DS_ActionMaps.xsd</DependentUpon>

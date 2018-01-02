@@ -20,7 +20,6 @@ namespace SCJMapper_V2.Devices.Joystick
   public class JoystickCls : DeviceCls
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( MethodBase.GetCurrentMethod( ).DeclaringType );
-    private static readonly AppSettings  appSettings = new AppSettings( );
 
     #region Static Items
 
@@ -520,24 +519,24 @@ namespace SCJMapper_V2.Devices.Joystick
 
     private void ApplySettings_low( )
     {
-      appSettings.Reload( );
+      AppSettings.Instance.Reload( );
 
       ResetButtons( m_ignoreButtons );
       // read ignore buttons
       string igs = "";
       switch ( m_joystickNumber ) {
-        case 1: igs = appSettings.IgnoreJS1; break;
-        case 2: igs = appSettings.IgnoreJS2; break;
-        case 3: igs = appSettings.IgnoreJS3; break;
-        case 4: igs = appSettings.IgnoreJS4; break;
-        case 5: igs = appSettings.IgnoreJS5; break;
-        case 6: igs = appSettings.IgnoreJS6; break;
-        case 7: igs = appSettings.IgnoreJS7; break;
-        case 8: igs = appSettings.IgnoreJS8; break;
-        case 9: igs = appSettings.IgnoreJS9; break;
-        case 10: igs = appSettings.IgnoreJS10; break;
-        case 11: igs = appSettings.IgnoreJS11; break;
-        case 12: igs = appSettings.IgnoreJS12; break;
+        case 1: igs = AppSettings.Instance.IgnoreJS1; break;
+        case 2: igs = AppSettings.Instance.IgnoreJS2; break;
+        case 3: igs = AppSettings.Instance.IgnoreJS3; break;
+        case 4: igs = AppSettings.Instance.IgnoreJS4; break;
+        case 5: igs = AppSettings.Instance.IgnoreJS5; break;
+        case 6: igs = AppSettings.Instance.IgnoreJS6; break;
+        case 7: igs = AppSettings.Instance.IgnoreJS7; break;
+        case 8: igs = AppSettings.Instance.IgnoreJS8; break;
+        case 9: igs = AppSettings.Instance.IgnoreJS9; break;
+        case 10: igs = AppSettings.Instance.IgnoreJS10; break;
+        case 11: igs = AppSettings.Instance.IgnoreJS11; break;
+        case 12: igs = AppSettings.Instance.IgnoreJS12; break;
         default: break;
       }
       if ( string.IsNullOrWhiteSpace( igs ) ) return; // no setting - all allowed

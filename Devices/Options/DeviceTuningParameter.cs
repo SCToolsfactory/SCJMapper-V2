@@ -231,8 +231,8 @@ namespace SCJMapper_V2.Devices.Options
     {
       // populate from input
       // something like "v_pitch - js1_x" OR "v_pitch - xi_thumbl" OR "v_pitch - ximod+xi_thumbl+xi_mod"
-      string cmd = ActionTreeNode.CommandFromNodeText( NodeText );
-      m_action = ActionTreeNode.ActionFromNodeText( NodeText );
+      string cmd = ActionTreeNode.CommandFromActionText( NodeText );
+      m_action = ActionTreeNode.ActionFromActionText( NodeText );
       m_cmdCtrl = "";
       if ( !string.IsNullOrWhiteSpace( cmd ) ) {
         // decomp gamepad entries - could have modifiers so check for contains...

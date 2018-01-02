@@ -20,7 +20,6 @@
 
       if ( disposing && ( components != null ) ) components.Dispose( );
       if ( disposing && ( m_AT != null ) ) m_AT.Dispose( );
-      if ( disposing && ( m_AppSettings != null ) ) m_AppSettings.Dispose( );
 
       base.Dispose( disposing );
     }

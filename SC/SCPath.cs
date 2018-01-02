@@ -13,7 +13,6 @@ namespace SCJMapper_V2.SC
   class SCPath
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
-    private static readonly AppSettings appSettings = new AppSettings( );
 
     private static bool hasInformed = false; // prevent msgbox chains..
 
@@ -74,12 +73,12 @@ namespace SCJMapper_V2.SC
     {
       get {
         log.Debug( "SCBasePath - Entry" );
-        appSettings.Reload( ); // local instance - reload as it might be changed outside
+        AppSettings.Instance.Reload( ); // local instance - reload as it might be changed outside
         string scp = "";
 
         // User setting has Prio
-        if ( appSettings.UserSCPathUsed ) {
-          scp = appSettings.UserSCPath;
+        if ( AppSettings.Instance.UserSCPathUsed ) {
+          scp = AppSettings.Instance.UserSCPath;
           log.InfoFormat( "SCBasePath - user defined folder given: {0}", scp );
 #if DEBUG
           //***************************************
