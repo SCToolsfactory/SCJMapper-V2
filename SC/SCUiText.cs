@@ -27,8 +27,9 @@ namespace SCJMapper_V2.SC
                                      new SCLocale( Languages.french.ToString( ) ),
                                      new SCLocale( Languages.german.ToString( ) ) }; // add supported languages
 
+    private Dictionary<string, string> m_action2label = new Dictionary<string, string>( );
 
-    private Languages m_language = Languages.english;
+        private Languages m_language = Languages.english;
     /// <summary>
     /// Set the language to be used
     /// </summary>
@@ -82,6 +83,34 @@ namespace SCJMapper_V2.SC
         }
       }// all files
     }
+
+    /// <summary>
+    /// Add an Action - UILabel pair to the translation table
+    /// </summary>
+    /// <param name="action">An item from defaultProfile</param>
+    /// <param name="uiLabel">The UILabel of the item</param>
+    public void Add(string action, string uiLabel )
+    {
+      if ( m_action2label.ContainsKey( action ) ) {
+        return;
+      }
+      m_action2label.Add( action, uiLabel );
+    }
+
+
+    /// <summary>
+    /// Returns the content from the matching UILabel in the set Language
+    /// </summary>
+    /// <param name="action">The profile item (action etc)</param>
+    /// <returns>A text string</returns>
+    public string Text( string action )
+    {
+      if ( m_action2label.ContainsKey( action ) ) {
+        return Text( m_action2label[action], action );
+      }
+      else return action; // no translation possible
+    }
+
 
     /// <summary>
     /// Returns the content from the UILabel in the set Language

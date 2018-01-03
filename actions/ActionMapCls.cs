@@ -26,7 +26,7 @@ namespace SCJMapper_V2.Actions
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
-    public string Name { get; set; }
+    public string MapName { get; set; }
 
     /// <summary>
     /// Copy return the complete ActionMap while reassigning the JsN Tag
@@ -47,11 +47,14 @@ namespace SCJMapper_V2.Actions
 
     private ActionMapCls( ActionMapCls other )
     {
-      this.Name = other.Name;
+      this.MapName = other.MapName;
       // no deep copy of refs
     }
 
-    public ActionMapCls() { }
+    public ActionMapCls()
+    {
+      MapName = "";
+    }
 
     /// <summary>
     /// Merge the given Map with this Map
@@ -74,7 +77,6 @@ namespace SCJMapper_V2.Actions
       }
     }
 
-
     /// <summary>
     /// Dump the actionmap as partial XML nicely formatted
     /// </summary>
@@ -87,7 +89,7 @@ namespace SCJMapper_V2.Actions
         if ( !string.IsNullOrEmpty( x ) ) acs += string.Format( "\t{0}", x );
       }
       if ( !string.IsNullOrWhiteSpace( acs ) ) {
-        string r = string.Format( "\t<actionmap name=\"{0}\">\n", Name );
+        string r = string.Format( "\t<actionmap name=\"{0}\">\n", MapName );
         r += acs;
         r += string.Format( "\t</actionmap>\n" );
         return r;
@@ -96,7 +98,6 @@ namespace SCJMapper_V2.Actions
       return "";
     }
 
-
     /// <summary>
     /// Read an actionmap from XML - do some sanity check
     /// </summary>
@@ -104,7 +105,7 @@ namespace SCJMapper_V2.Actions
     /// <returns>True if an action was decoded</returns>
     public bool fromXML( XElement actionmap )
     {
-      Name = (string)actionmap.Attribute( "name" ); // mandadory
+      MapName = (string)actionmap.Attribute( "name" ); // mandadory
       foreach ( XElement actionNode in actionmap.Nodes( ) ) {
         ActionCls ac = new ActionCls( );
         if ( ac.fromXML( actionNode ) ) {

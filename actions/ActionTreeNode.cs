@@ -155,7 +155,6 @@ namespace SCJMapper_V2.Actions
       this.NodeFont = srcNode.NodeFont;
       this.ImageKey = srcNode.ImageKey;
       this.Tag = srcNode.Tag;
-      this.m_actionLabel = srcNode.m_actionLabel;
       this.m_action = srcNode.m_action;
       this.m_actionDevice = srcNode.m_actionDevice;
       this.m_actionText = srcNode.m_actionText;
@@ -165,7 +164,6 @@ namespace SCJMapper_V2.Actions
     }
 
     // our own properties
-    private string m_actionLabel = "";  // the text shown - translated m_action
     protected string m_actionText = ""; // contains the former Text property of the TreeNode
     private string m_action = "";       // i.e.  v_pitch
     protected string m_command = "";     // i.e.  js2_button3
@@ -176,9 +174,9 @@ namespace SCJMapper_V2.Actions
     /// Crates the translated node text for display
     /// </summary>
     /// <returns>A composed string</returns>
-    protected string ComposeNodeText(  )
+    protected string ComposeNodeText()
     {
-      string tAction = SC.SCUiText.Instance.Text( m_actionLabel, m_action );
+      string tAction = SC.SCUiText.Instance.Text( m_action );
 
       if ( string.IsNullOrEmpty( m_command ) ) {
         return tAction;                                                            // v_eject
@@ -194,8 +192,6 @@ namespace SCJMapper_V2.Actions
       }
     }
 
-
-
     /// <summary>
     /// Update this node from the other node
     ///  applies dynamic props only 
@@ -205,10 +201,11 @@ namespace SCJMapper_V2.Actions
     {
       // TreeNode props
       this.BackColor = other.BackColor;
+      this.ToolTipText = other.ToolTipText;
+
       // own props
       this.Command = other.Command;
       this.Modified = other.Modified;
-      this.ActionLabel = other.ActionLabel;
       this.Action = other.Action; //? does this fill all the rest properly?
     }
 
@@ -228,7 +225,6 @@ namespace SCJMapper_V2.Actions
         this.Command = ""; this.BackColor = MyColors.UnassignedColor;
         if ( this.Level == 2 ) {
           this.Action = ( this.Parent as ActionTreeNode ).Action;
-          this.ActionLabel = (this.Parent as ActionTreeNode).ActionLabel; // apply UNDEF - 20160525 fix addbind not showing UNDEF if assigned
         }
       }
       // blended mapped ones - can only get a Blend Background
@@ -244,29 +240,10 @@ namespace SCJMapper_V2.Actions
       this.Modified = !actionCmd.DefaultActivationMode; // apply modifier visual
     }
 
-
-    ///// <summary>
-    ///// Property Text of an Action node
-    ///// </summary>
-    //public new string Text
-    //{
-    //  get { return base.Text; }
-    //  private set {
-    //    ActionTreeNode.DecompNodeActionText( value, out m_action, out m_command );
-    //    m_actionText = ActionTreeNode.ComposeNodeActionText( m_action, m_command, m_modified );
-    //    base.Text = ComposeNodeText(); // TODO for now
-    //  }
-    //}
-
     /// <summary>
     /// Property ActionText (action in profile notation i.e. v_something) of an Action node
     /// </summary>
     public string ActionText { get => m_actionText; }
-    
-    /// <summary>
-    /// Property ActionLabel of an Action node
-    /// </summary>
-    public string ActionLabel { get => m_actionLabel; set => m_actionLabel = value; }
 
     /// <summary>
     /// Property Action of an Action node
@@ -277,6 +254,7 @@ namespace SCJMapper_V2.Actions
       set {
         m_action = value;
         // may need to update too
+        this.ToolTipText = m_action;
         m_actionText = ActionTreeNode.ComposeNodeActionText( m_action, m_command, m_modified );
         base.Text = ComposeNodeText( );
       }
@@ -306,20 +284,14 @@ namespace SCJMapper_V2.Actions
         m_modified = value;
         // may need to update too
         m_actionText = ActionTreeNode.ComposeNodeActionText( m_action, m_command, m_modified );
-        base.Text = ComposeNodeText( ); 
+        base.Text = ComposeNodeText( );
       }
     }
 
     /// <summary>
     /// Property ActionDevice of an Action node
     /// </summary>
-    public Act.ActionDevice ActionDevice
-    {
-      get { return m_actionDevice; }
-      set {
-        m_actionDevice = value;
-      }
-    }
+    public Act.ActionDevice ActionDevice { get => m_actionDevice; set => m_actionDevice = value; }
 
     /// <summary>
     /// Return true if the content of Action - Command contains the match string
@@ -328,7 +300,32 @@ namespace SCJMapper_V2.Actions
     /// <returns>True if the node contains the match</returns>
     public bool Contains( string match )
     {
-      if ( m_actionText.Contains( match ) ) return true;
+      string m = match.ToLowerInvariant( );
+      if ( m_actionText.Contains( m ) || this.Text.ToLowerInvariant().Contains( m ) ) return true;
+      return false;
+    }
+
+    /// <summary>
+    /// Return true if the content of Action - Command contains the match string
+    /// </summary>
+    /// <param name="match">A string to match</param>
+    /// <returns>True if the node contains the match</returns>
+    public bool ContainsCtrl( string match )
+    {
+      string m = match.ToLowerInvariant( );
+      if ( m_command.Contains( m ) ) return true;
+      return false;
+    }
+
+    /// <summary>
+    /// Return true if the content of Action - Command contains the match string
+    /// </summary>
+    /// <param name="match">A string to match</param>
+    /// <returns>True if the node contains the match</returns>
+    public bool ContainsAction( string match )
+    {
+      string m = match.ToLowerInvariant( );
+      if ( m_action.Contains( m ) ) return true;
       return false;
     }
 

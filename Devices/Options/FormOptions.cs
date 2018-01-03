@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
 using SCJMapper_V2.Actions;
+using SCJMapper_V2.Devices.Mouse;
+using SCJMapper_V2.SC;
 
 namespace SCJMapper_V2.Devices.Options
 {
@@ -155,7 +157,8 @@ namespace SCJMapper_V2.Devices.Options
           UpdateLiveTuning( );
           UpdateLiveDevOption( );
         }
-      } catch {
+      }
+      catch {
         ;
       }
 
@@ -283,174 +286,52 @@ namespace SCJMapper_V2.Devices.Options
       ListViewGroup lvg = null;
       ListViewItem lvi;
       List<string> devNamesDone = new List<string>( );
+      string devClass = DeviceCls.DeviceClass;
 
-      // first the analog controls for the device
-      string gpGUID = "";
+      // scan for DeviceOptions to be added for this device(GUID)
       foreach ( KeyValuePair<string, DeviceOptionParameter> kv in m_devOptRef ) {
-        if ( GamepadCls.IsDeviceClass( kv.Value.DevClass ) )
-          gpGUID = kv.Value.DevInstanceGUID; // save for later below
-
         if ( kv.Value.DevInstanceGUID == devGUID ) {
+          devClass = kv.Value.DevClass;
           if ( !devNamesDone.Contains( kv.Value.DevName ) ) {
             lvg = new ListViewGroup( "Device Options" ); lview.Groups.Add( lvg );
             devNamesDone.Add( kv.Value.DevName );
           }
-          lvi = new ListViewItem( kv.Value.CommandCtrl, lvg ); lvi.Name = kv.Value.DoID; lview.Items.Add( lvi );
+          lvi = new ListViewItem( kv.Value.CommandCtrl, lvg ) { Name = kv.Value.DoID };
+          lview.Items.Add( lvi );
           ListViewItemSetup( lvi );
           UpdateLvDevOptionFromLiveValues( kv.Value );
         }
       }
 
+      if ( DeviceCls.IsUndefined(devClass) ) {
+        // still undefined - solve here
+        if ( devGUID == DeviceInst.GamepadRef?.DevInstanceGUID )
+          devClass = GamepadCls.DeviceClass;
+        else if ( devGUID == DeviceInst.MouseRef?.DevInstanceGUID )
+          devClass = MouseCls.DeviceClass;
+      }
+
+      int lvCount = 0;
       // then the functions
-      lvg = new ListViewGroup( "0", "flight_move " ); lview.Groups.Add( lvg );
-      {
-        option = "flight_move_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
+      string group = "";
+      foreach ( var pOpt in OptionTree.ProfileOptions.Where( x => x.DeviceClass == devClass ) ) {
+        if ( pOpt.OptGroup != group ) {
+          group = pOpt.OptGroup;
+          lvg = new ListViewGroup( lvCount++.ToString( ), SCUiText.Instance.Text( group ) ); lview.Groups.Add( lvg );
         }
-        option = "flight_move_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
+
+        option = pOpt.OptName; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-        option = "flight_move_roll"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-        option = "flight_move_strafe_vertical"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-        option = "flight_move_strafe_lateral"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-        option = "flight_move_strafe_longitudinal"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
+          lvi = new ListViewItem( SCUiText.Instance.Text( option ), lvg ) { Name = option };
+          lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
           UpdateLvOptionFromLiveValues( m_live );
         }
       }
-
-      lvg = new ListViewGroup( "1", "flight_throttle" ); lview.Groups.Add( lvg );
-      {
-        option = "flight_throttle_abs"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-        option = "flight_throttle_rel"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-      }
-
-      lvg = new ListViewGroup( "2", "flight_aim" ); lview.Groups.Add( lvg );
-      {
-        option = "flight_aim_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-        option = "flight_aim_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-      }
-
-      lvg = new ListViewGroup( "3", "flight_view" ); lview.Groups.Add( lvg );
-      {
-        option = "flight_view_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-        option = "flight_view_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-      }
-
-      lvg = new ListViewGroup( "4", "Turret_aim" ); lview.Groups.Add( lvg );
-      {
-        option = "turret_aim_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-        option = "turret_aim_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-        if ( m_live.used ) {
-          lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-          UpdateLvOptionFromLiveValues( m_live );
-        }
-      }
-      // GP only
-      if ( devGUID == gpGUID ) { // now this selector is murks but then it works...
-        lvg = new ListViewGroup( "5", "fps_view" ); lview.Groups.Add( lvg );
-        {
-          option = "fps_view_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-          if ( m_live.used ) {
-            lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-            UpdateLvOptionFromLiveValues( m_live );
-          }
-          option = "fps_view_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-          if ( m_live.used ) {
-            lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-            UpdateLvOptionFromLiveValues( m_live );
-          }
-        }
-
-        lvg = new ListViewGroup( "6", "fps_move" ); lview.Groups.Add( lvg );
-        {
-          option = "fps_move_lateral"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-          if ( m_live.used ) {
-            lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-            UpdateLvOptionFromLiveValues( m_live );
-          }
-          option = "fps_move_longitudinal"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-          if ( m_live.used ) {
-            lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-            UpdateLvOptionFromLiveValues( m_live );
-          }
-        }
-
-        lvg = new ListViewGroup( "7", "manned_ground_vehicle" ); lview.Groups.Add( lvg );
-        {
-          option = "mgv_view_pitch"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-          if ( m_live.used ) {
-            lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-            UpdateLvOptionFromLiveValues( m_live );
-          }
-          option = "mgv_view_yaw"; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
-          if ( m_live.used ) {
-            lvi = new ListViewItem( option, lvg ); lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
-            UpdateLvOptionFromLiveValues( m_live );
-          }
-        }
-      }// if GP
-
-
-
-
       log.Debug( "OptionTreeSetup - Exit" );
     }
 
 
     #endregion
-
-
-
-    public void SetTuningRecord( DeviceTuningParameter tp )
-    {
-
-    }
 
     private void button2_Click( object sender, EventArgs e )
     {
@@ -895,7 +776,7 @@ namespace SCJMapper_V2.Devices.Options
       }
 
       ListViewItem lvi = lv.Items[dp.DoID];
-      lvi.SubItems[LV_DevCtrl].Text = dp.Action; // Action 
+      lvi.SubItems[LV_DevCtrl].Text = SCUiText.Instance.Text( dp.Action ); // Action 
       if ( dp.SaturationSupported && dp.SaturationUsed )
         lvi.SubItems[LV_Saturation].Text = dp.Saturation; // saturation
       else if ( dp.SaturationSupported )
@@ -1329,7 +1210,8 @@ namespace SCJMapper_V2.Devices.Options
 
         UpdateGUIFromLiveValues( m_live );
         UpdateChartItems( );
-      } catch {
+      }
+      catch {
         ;
       }
       log.Debug( "lvOptionTree_SelectedIndexChanged - Exit" );

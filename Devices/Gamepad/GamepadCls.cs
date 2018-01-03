@@ -92,6 +92,18 @@ namespace SCJMapper_V2.Devices.Gamepad
       return devInput.StartsWith( DeviceID );
     }
 
+    /// <summary>
+    /// Returns true if a command is an axis command 
+    /// </summary>
+    /// <param name="command">The command string</param>
+    /// <returns>True if it is an axis command</returns>
+    static public new bool IsAxisCommand( string command )
+    {
+      string cLower = command.ToLowerInvariant( );
+      return ( cLower.EndsWith( "_thumblx" ) || cLower.EndsWith( "_thumbly" )
+          || cLower.EndsWith( "_thumbrx" ) || cLower.EndsWith( "_thumbry" ) );
+    }
+
 
     const string xil_pattern = @"^xi_thumb[lr][xy]$";
     static Regex rgx_xil = new Regex( xil_pattern, RegexOptions.IgnoreCase );

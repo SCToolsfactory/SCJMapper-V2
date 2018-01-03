@@ -27,6 +27,8 @@ namespace SCJMapper_V2.Devices
     static public string DevInput( string input ) { return input; }
     static public bool DevMatch( string devInput ) { return false; }
 
+    static public bool IsAxisCommand( string command ) { return false; }
+
     /// <summary>
     /// Return the CIG instance number (which is the jsN number) - 1 based
     /// </summary>

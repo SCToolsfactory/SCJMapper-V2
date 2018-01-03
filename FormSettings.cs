@@ -21,7 +21,7 @@ namespace SCJMapper_V2
     /// ctor - gets the owning class instance
     /// </summary>
     /// <param name="owner"></param>
-    public FormSettings( )
+    public FormSettings()
     {
       InitializeComponent( );
     }
@@ -35,14 +35,14 @@ namespace SCJMapper_V2
       }
 
       comboLanguage.Items.Clear( );
-      comboLanguage.Items.AddRange( SC.SCUiText.Instance.LanguagesS.ToArray() );
+      comboLanguage.Items.AddRange( SC.SCUiText.Instance.LanguagesS.ToArray( ) );
 
       LoadSettings( );
     }
 
 
     // Save from app settings into actuals
-    private void LoadSettings( )
+    private void LoadSettings()
     {
       // SC path
       txSCPath.Text = AppSettings.Instance.UserSCPath;
@@ -66,7 +66,8 @@ namespace SCJMapper_V2
       for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
         if ( AppSettings.Instance.IgnoreActionmaps.Contains( "," + chkLbActionMaps.Items[i].ToString( ) + "," ) ) {
           chkLbActionMaps.SetItemChecked( i, true );
-        } else {
+        }
+        else {
           chkLbActionMaps.SetItemChecked( i, false ); // 20161223: fix checked items and Canceled
         }
       }
@@ -87,11 +88,12 @@ namespace SCJMapper_V2
 
       // Language
       comboLanguage.SelectedItem = AppSettings.Instance.UseLanguage;
+      cbxTreeTips.Checked = AppSettings.Instance.ShowTreeTips;
     }
 
 
     // Save the current settings
-    private void SaveSettings( )
+    private void SaveSettings()
     {
       // SC path
       AppSettings.Instance.UserSCPath = txSCPath.Text;
@@ -134,13 +136,14 @@ namespace SCJMapper_V2
 
       // AutoTabXML
       AppSettings.Instance.AutoTabXML = cbxAutoTabXML.Checked;
-      
+
       // Use CSV Listing
       AppSettings.Instance.UseCSVListing = cbxCSVListing.Checked;
       AppSettings.Instance.ListModifiers = cbxListModifiers.Checked;
 
       // Language
       AppSettings.Instance.UseLanguage = (string)comboLanguage.SelectedItem;
+      AppSettings.Instance.ShowTreeTips = cbxTreeTips.Checked;
 
       AppSettings.Instance.Save( );
     }

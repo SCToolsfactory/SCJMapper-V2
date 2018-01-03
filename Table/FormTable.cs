@@ -13,7 +13,7 @@ namespace SCJMapper_V2.Table
 {
   public partial class FormTable : Form
   {
-    public FormTable( )
+    public FormTable()
     {
       InitializeComponent( );
 
@@ -31,6 +31,7 @@ namespace SCJMapper_V2.Table
       btUpdateFromEdit.Enabled = chkEditBlend.Checked;
       DGV.Columns["Usr_Binding"].ReadOnly = true;
       DGV.Columns["Usr_Modifier"].ReadOnly = true;
+      DGV.Columns["ActionName"].Visible = false;
       DGV.ReadOnly = !chkEditBlend.Checked;
     }
 
@@ -45,7 +46,7 @@ namespace SCJMapper_V2.Table
     }
 
     public event EventHandler<UpdateEditEventArgs> UpdateEditEvent;
-    private void RaiseUpdateEditEvent( )
+    private void RaiseUpdateEditEvent()
     {
       if ( UpdateEditEvent != null ) {
         UpdateEditEvent( this, new UpdateEditEventArgs( ) );
@@ -57,7 +58,7 @@ namespace SCJMapper_V2.Table
     public Point LastLocation { get; set; }
     public string LastColSize { get; set; }
 
-    private BindingSource m_bSrc = new BindingSource();
+    private BindingSource m_bSrc = new BindingSource( );
 
     /// <summary>
     /// Assign or retrieve the underlying DataSet
@@ -65,8 +66,8 @@ namespace SCJMapper_V2.Table
     public DS_ActionMaps DS_AMaps { get; private set; }
 
 
-    
-    public void SuspendDGV( )
+
+    public void SuspendDGV()
     {
       // add things to improve speed while re-loading the DataSet outside - nothing found so far
     }
@@ -80,12 +81,12 @@ namespace SCJMapper_V2.Table
     /// <summary>
     /// Populate the view from the dataset
     /// </summary>
-    public void Populate( )
+    public void Populate()
     {
-//      DGV.SuspendLayout( );
+      //      DGV.SuspendLayout( );
 
       if ( !string.IsNullOrEmpty( LastColSize ) ) {
-        string[] e = LastColSize.Split( new char [] {';'}, StringSplitOptions.RemoveEmptyEntries );
+        string[] e = LastColSize.Split( new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries );
         for ( int i = 0; i < e.Length; i++ ) {
           if ( i < DGV.Columns.Count )
             DGV.Columns[i].Width = int.Parse( e[i] );
@@ -93,7 +94,7 @@ namespace SCJMapper_V2.Table
       }
       DGV.AllowUserToResizeColumns = true;
       ComposeFilter( );
-  //    DGV.ResumeLayout( );
+      //    DGV.ResumeLayout( );
     }
 
     /// <summary>
@@ -114,11 +115,11 @@ namespace SCJMapper_V2.Table
     /// <param name="rowIndex"></param>
     private void EditRow( int rowIndex )
     {
-      string id = DGV.Rows[rowIndex].Cells["ID_Action"].Value.ToString();
+      string id = DGV.Rows[rowIndex].Cells["ID_Action"].Value.ToString( );
       // we have nn-actionmap.actionkey.nodeindex
-      string actionMap = DS_ActionMap.ActionMap(id);
-      string actionKey = DS_ActionMap.ActionKey(id);
-      int nodeIndex = DS_ActionMap.ActionCommandIndex(id);
+      string actionMap = DS_ActionMap.ActionMap( id );
+      string actionKey = DS_ActionMap.ActionKey( id );
+      int nodeIndex = DS_ActionMap.ActionCommandIndex( id );
 
       RaiseEditActionEvent( actionMap, actionKey, nodeIndex );
     }
@@ -127,11 +128,11 @@ namespace SCJMapper_V2.Table
 
 
 
-    private void ComposeFilter( )
+    private void ComposeFilter()
     {
       // make sure we only add parts that are really used - else it is using too much time to resolve '*'
       string filter = "";
-      if ( ! string.IsNullOrEmpty( txFilterAction.Text)) {
+      if ( !string.IsNullOrEmpty( txFilterAction.Text ) ) {
         filter += string.Format( "(ActionName LIKE '*{0}*')", txFilterAction.Text );
       }
       if ( !string.IsNullOrEmpty( txFilterDefBinding.Text ) ) {
@@ -146,7 +147,8 @@ namespace SCJMapper_V2.Table
       string deviceFilter = "";
       if ( ( chkJoystick.Checked == false ) && ( chkGamepad.Checked == false ) && ( chkMouse.Checked == false ) && ( chkKbd.Checked == false ) ) {
         // none checked means all
-      } else {
+      }
+      else {
         deviceFilter = "( Device='X'"
         + ( ( chkJoystick.Checked ) ? string.Format( " OR Device = 'joystick'" ) : "" )
         + ( ( chkGamepad.Checked ) ? string.Format( " OR Device = 'xboxpad'" ) : "" )
@@ -229,21 +231,25 @@ namespace SCJMapper_V2.Table
 
     private void FormTable_LocationChanged( object sender, EventArgs e )
     {
-      LastLocation = this.Location;
+      if ( this.WindowState == FormWindowState.Normal )
+        LastLocation = this.Location;
     }
 
     private void FormTable_SizeChanged( object sender, EventArgs e )
     {
-      LastSize = this.Size;
+      if ( this.WindowState == FormWindowState.Normal )
+        LastSize = this.Size;
     }
 
     private void DGV_ColumnWidthChanged( object sender, DataGridViewColumnEventArgs e )
     {
-      string setting = "";
-      foreach ( DataGridViewColumn col in DGV.Columns ) {
-        setting += string.Format( "{0};", col.Width.ToString( ) );
+      if ( this.WindowState == FormWindowState.Normal ) {
+        string setting = "";
+        foreach ( DataGridViewColumn col in DGV.Columns ) {
+          setting += string.Format( "{0};", col.Width.ToString( ) );
+        }
+        LastColSize = setting;
       }
-      LastColSize = setting;
     }
 
 
@@ -294,7 +300,7 @@ namespace SCJMapper_V2.Table
       if ( !chkEditBlend.Checked ) return; // only if Edit is allowed
 
       foreach ( DataGridViewRow row in DGV.Rows ) {
-        if (string.IsNullOrEmpty((string) row.Cells[DGV.Columns["Usr_Binding"].Index].Value )) 
+        if ( string.IsNullOrEmpty( (string)row.Cells[DGV.Columns["Usr_Binding"].Index].Value ) )
           row.Cells[DGV.Columns["Disabled"].Index].Value = true;
       }
     }
@@ -308,9 +314,10 @@ namespace SCJMapper_V2.Table
 
       // only if dirty and the Blended column ..
       // it still has it's previous value i.e. inverse the logic here - commit the value imediately
-      if ( ( bool )DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value == false ) {
+      if ( (bool)DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value == false ) {
         DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value = true; // toggle value - triggers the ValueChanged Event below
-      } else {
+      }
+      else {
         DGV.Rows[DGV.CurrentCell.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value = false;
       }
       DGV.NotifyCurrentCellDirty( false ); // have set the value - so set not dirty anymore
@@ -321,7 +328,7 @@ namespace SCJMapper_V2.Table
       // set the Usr_Binding only if Blended column items Changes
       if ( e.ColumnIndex != DGV.Columns["Disabled"].Index ) return;
 
-      if ( ( bool )DGV.Rows[e.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value == true )
+      if ( (bool)DGV.Rows[e.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value == true )
         DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = DeviceCls.DisabledInput;
       else
         DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = ""; // don't know anything else...

@@ -320,6 +320,14 @@ namespace SCJMapper_V2
       set { this["UseLanguage"] = value; }
     }
 
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "False" )]
+    public bool ShowTreeTips
+    {
+      get { return (bool)this["ShowTreeTips"]; }
+      set { this["ShowTreeTips"] = value; }
+    }
+
 
 
     //**** Form Table

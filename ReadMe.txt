@@ -41,10 +41,13 @@ cassini@burri-web.org
 
 Changelog:
 V 2.35 - BETA Build 69
-- add - provide CIG asset texts for actions and maps 
+- add - provide CIG asset texts/translations for actions and maps 
   (use Settings to choose - for now only French and German are in but have no translations
    for English not all have a proper text - may not be used in the game ??)
+- add - tooltips for profile action names in treeview (enable in Settings)
+- add - mouse tuning items (curve, expo, invert)
 - improvement - cache CIG assets into the app/Storage folder, reads from p4k file only if those are updated
+- fix - window should always be visible on startup now
 - internal cleanup - to many to list
 V 2.34 - BETA Build 68
 - improvement - complete rework of XML defaultProfile/mapping parsing

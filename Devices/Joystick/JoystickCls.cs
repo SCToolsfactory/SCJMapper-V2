@@ -112,6 +112,23 @@ namespace SCJMapper_V2.Devices.Joystick
       return IsJsN( devInput );
     }
 
+    /// <summary>
+    /// Returns true if a command is an axis command 
+    /// </summary>
+    /// <param name="command">The command string</param>
+    /// <returns>True if it is an axis command</returns>
+    static public new bool IsAxisCommand( string command )
+    {
+      string cLower = command.ToLowerInvariant( );
+      if ( IsJsN( command ) )
+        return ( cLower.EndsWith( "_x" ) || cLower.EndsWith( "_rotx" ) || cLower.EndsWith( "_throttlex" )
+            || cLower.EndsWith( "_y" ) || cLower.EndsWith( "_roty" ) || cLower.EndsWith( "_throttley" )
+            || cLower.EndsWith( "_Z" ) || cLower.EndsWith( "_rotz" ) || cLower.EndsWith( "_throttlez" )
+            || cLower.EndsWith( "_slider1" ) || cLower.EndsWith( "_slider2" ) );
+      else
+        return false;
+    }
+
 
     /// <summary>
     /// Returns the jsN part from a joystick command
@@ -139,9 +156,6 @@ namespace SCJMapper_V2.Devices.Joystick
       return sAction;
     }
 
-
-
-
     /// <summary>
     /// Returns properly formatted jsn_ string (jsx_ if the input is UNKNOWN)
     /// </summary>
@@ -152,7 +166,6 @@ namespace SCJMapper_V2.Devices.Joystick
       if ( IsJSValid( jsNum ) ) return "js" + jsNum.ToString( );
       return JsUnknown;
     }
-
 
     /// <summary>
     /// Extract the JS number from a JS string (jsx_ returns 0 - UNKNOWN)
@@ -172,13 +185,15 @@ namespace SCJMapper_V2.Devices.Joystick
               retNum = JSnum_UNKNOWN; // neither double nor single digit found
             }
           }
-        } else if ( jsTag.StartsWith( "js" ) ) {
+        }
+        else if ( jsTag.StartsWith( "js" ) ) {
           if ( !int.TryParse( ( jsTag + "XX" ).Substring( 2, 2 ), out retNum ) ) {  // cheap .. test for double digits ( have to extend the string to parse)
             if ( !int.TryParse( jsTag.Substring( 2, 1 ), out retNum ) ) { // now for only single ones
               retNum = JSnum_UNKNOWN;  // neither double nor single digit found
             }
           }
-        } else {
+        }
+        else {
           retNum = JSnum_UNKNOWN;  // neither double nor single digit found
         }
       }
@@ -223,11 +238,13 @@ namespace SCJMapper_V2.Devices.Joystick
         int inJsN = JSNum( input );
         if ( inJsN < 10 ) {
           return input.Replace( input.Substring( 0, 3 ), JSTag( newJsN ) );
-        } else {
+        }
+        else {
           // 2 digit input JsN
           return input.Replace( input.Substring( 0, 4 ), JSTag( newJsN ) );
         }
-      } else {
+      }
+      else {
         return input;
       }
     }
@@ -255,7 +272,8 @@ namespace SCJMapper_V2.Devices.Joystick
         int inJsN = JSNum( control );
         if ( inJsN < 10 ) {
           retVal = retVal.Insert( 4, "throttle" );
-        } else {
+        }
+        else {
           // 2 digit input JsN
           retVal = retVal.Insert( 5, "throttle" );
         }
@@ -316,7 +334,7 @@ namespace SCJMapper_V2.Devices.Joystick
     private bool[] m_modifierButtons;
 
     private UC_JoyPanel m_jPanel = null; // the GUI panel
-    internal int  MyTabPageIndex = -1; 
+    internal int MyTabPageIndex = -1;
 
     /// <summary>
     /// Returns a CryEngine compatible hat direction
@@ -382,7 +400,7 @@ namespace SCJMapper_V2.Devices.Joystick
     public override List<string> AnalogCommands
     {
       get {
-        List<string> cmds = new List<string>();
+        List<string> cmds = new List<string>( );
 
         try {
           // Enumerate all the objects on the device.
@@ -406,7 +424,8 @@ namespace SCJMapper_V2.Devices.Joystick
               }
             }
           }
-        } catch ( Exception ex ) {
+        }
+        catch ( Exception ex ) {
           log.Error( "AnalogCommands - Get JS Objects failed", ex );
         }
         cmds.Sort( );
@@ -445,7 +464,7 @@ namespace SCJMapper_V2.Devices.Joystick
       m_device = device;
       m_hwnd = hwnd;
       m_joystickNumber = joystickNum; // this remains fixed
-      m_xmlInstance = joystickNum+1; // initial assignment (is 1 based..)
+      m_xmlInstance = joystickNum + 1; // initial assignment (is 1 based..)
       m_jPanel = panel;
       MyTabPageIndex = tabIndex;
       Activated_low = false;
@@ -484,7 +503,8 @@ namespace SCJMapper_V2.Devices.Joystick
           // Update the controls to reflect what objects the device supports.
           UpdateControls( d );
         }
-      } catch ( Exception ex ) {
+      }
+      catch ( Exception ex ) {
         log.Error( "Get JS Objects failed", ex );
       }
 
@@ -499,7 +519,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// <summary>
     /// Shutdown device access
     /// </summary>
-    public override void FinishDX( )
+    public override void FinishDX()
     {
       if ( null != m_device ) {
         log.DebugFormat( "Release DirectInput device: {0}", m_device.Information.ProductName );
@@ -517,7 +537,7 @@ namespace SCJMapper_V2.Devices.Joystick
       ApplySettings_low( );
     }
 
-    private void ApplySettings_low( )
+    private void ApplySettings_low()
     {
       AppSettings.Instance.Reload( );
 
@@ -571,7 +591,7 @@ namespace SCJMapper_V2.Devices.Joystick
       if ( !ValidModifier( modS ) ) return; // sanity..
 
       // check if it is applicable
-      int jsn = JSNum(modS);
+      int jsn = JSNum( modS );
       if ( jsn == m_joystickNumber ) {
         // format is jsN_buttonM i.e. get button number at the end
         int bNr = 0;
@@ -656,7 +676,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// Find the last change the user did on that device
     /// </summary>
     /// <returns>The last action as CryEngine compatible string</returns>
-    public override string GetLastChange( )
+    public override string GetLastChange()
     {
       int[] slider = m_state.Sliders;
       int[] pslider = m_prevState.Sliders;
@@ -740,7 +760,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// <summary>
     /// Show the current props in the GUI
     /// </summary>
-    private void UpdateUI( )
+    private void UpdateUI()
     {
       // This function updated the UI with joystick state information.
       string strText = null;
@@ -793,18 +813,21 @@ namespace SCJMapper_V2.Devices.Joystick
       // Poll the device for info.
       try {
         m_device.Poll( );
-      } catch ( SharpDXException e ) {
+      }
+      catch ( SharpDXException e ) {
         if ( ( e.ResultCode == ResultCode.NotAcquired ) || ( e.ResultCode == ResultCode.InputLost ) ) {
           // Check to see if either the app needs to acquire the device, or
           // if the app lost the device to another process.
           try {
             // Acquire the device.
             m_device.Acquire( );
-          } catch ( SharpDXException ) {
+          }
+          catch ( SharpDXException ) {
             // Failed to acquire the device. This could be because the app doesn't have focus.
             return;  // EXIT unaquired
           }
-        } else {
+        }
+        else {
           log.Error( "Unexpected Poll Exception", e );
           return;  // EXIT see ex code
         }
@@ -851,18 +874,21 @@ namespace SCJMapper_V2.Devices.Joystick
       // Poll the device for info.
       try {
         m_device.Poll( );
-      } catch ( SharpDXException e ) {
+      }
+      catch ( SharpDXException e ) {
         if ( ( e.ResultCode == ResultCode.NotAcquired ) || ( e.ResultCode == ResultCode.InputLost ) ) {
           // Check to see if either the app needs to acquire the device, or
           // if the app lost the device to another process.
           try {
             // Acquire the device.
             m_device.Acquire( );
-          } catch ( SharpDXException ) {
+          }
+          catch ( SharpDXException ) {
             // Failed to acquire the device. This could be because the app doesn't have focus.
             return;  // EXIT unaquired
           }
-        } else {
+        }
+        else {
           log.Error( "Unexpected Poll Exception", e );
           return;  // EXIT see ex code
         }
@@ -880,8 +906,9 @@ namespace SCJMapper_V2.Devices.Joystick
 
       try {
         PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( axies[cmd] );
-        data = ( int )axisProperty.GetValue( this.m_state, null );
-      } catch {
+        data = (int)axisProperty.GetValue( this.m_state, null );
+      }
+      catch {
         data = 0;
       }
     }
@@ -892,7 +919,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// <summary>
     /// Collect the current data from the device
     /// </summary>
-    public override void GetData( )
+    public override void GetData()
     {
       // Make sure there is a valid device.
       if ( null == m_device )
@@ -901,18 +928,21 @@ namespace SCJMapper_V2.Devices.Joystick
       // Poll the device for info.
       try {
         m_device.Poll( );
-      } catch ( SharpDXException e ) {
+      }
+      catch ( SharpDXException e ) {
         if ( ( e.ResultCode == ResultCode.NotAcquired ) || ( e.ResultCode == ResultCode.InputLost ) ) {
           // Check to see if either the app needs to acquire the device, or
           // if the app lost the device to another process.
           try {
             // Acquire the device - if the (main)window is active
             if ( Activated ) m_device.Acquire( );
-          } catch ( SharpDXException ) {
+          }
+          catch ( SharpDXException ) {
             // Failed to acquire the device. This could be because the app doesn't have focus.
             return;  // EXIT unaquired
           }
-        } else {
+        }
+        else {
           log.Error( "Unexpected Poll Exception", e );
           return;  // EXIT see ex code
         }

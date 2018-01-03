@@ -1,5 +1,7 @@
 ﻿using SCJMapper_V2.Devices.Gamepad;
 using SCJMapper_V2.Devices.Joystick;
+using SCJMapper_V2.Devices.Keyboard;
+using SCJMapper_V2.Devices.Mouse;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,14 +13,16 @@ using System.Xml.Linq;
 
 namespace SCJMapper_V2.Devices.Options
 {
+  /// <summary>
+  /// One tuning item - curves, saturation 
+  /// </summary>
   public class Tuningoptions : CloneableDictionary<string, OptionTree>, ICloneable
   {
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     #region Static parts
 
-    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
-
-    private static char ID_Delimiter = '⁞';
+    private static char ID_Delimiter = '⁞'; // rarely used char to build lists
 
     // Translate toID  keys to the proper OptionTree.. (reassing stuff)
     // index is the DevNumber (DX enum) - value is the JsN/XmlInstance from reassign
@@ -49,8 +53,15 @@ namespace SCJMapper_V2.Devices.Options
         return string.Format( "{0}{1}{2}", deviceClass, ID_Delimiter, -1 ); // will not be found in the collection
 
       }
-      else {
+      else if ( GamepadCls.IsDeviceClass( deviceClass ) ) {
         // gamepad
+        return string.Format( "{0}{1}{2}", deviceClass, ID_Delimiter, instance );
+      }
+      else if ( MouseCls.IsDeviceClass( deviceClass ) ) {
+        // mouse
+        return string.Format( "{0}{1}{2}", deviceClass, ID_Delimiter, instance );
+      }
+      else {
         return string.Format( "{0}{1}{2}", deviceClass, ID_Delimiter, instance );
       }
     }
@@ -71,7 +82,7 @@ namespace SCJMapper_V2.Devices.Options
           return "";
       }
       else {
-        // gamepad
+        // gamepad, mouse
         return toIDjs;
       }
     }
@@ -108,7 +119,7 @@ namespace SCJMapper_V2.Devices.Options
           else return inst;
         }
         else {
-          //Gamepad
+          //Gamepad, mouse
           return inst;
         }
       }
@@ -216,6 +227,17 @@ namespace SCJMapper_V2.Devices.Options
         }
         else {
           log.WarnFormat( "cTor - Gamepad DO_ID {0} exists", toid );
+        }
+      }
+
+      // add mouse if there is any
+      if ( DeviceInst.MouseRef != null ) {
+        string toid = TuneOptionID( MouseCls.DeviceClass, 1 );// const - 
+        if ( !this.ContainsKey( toid ) ) {
+          this.Add( toid, new OptionTree( DeviceInst.MouseRef ) ); // init with disabled defaults
+        }
+        else {
+          log.WarnFormat( "cTor - Mouse DO_ID {0} exists", toid );
         }
       }
     }
@@ -339,6 +361,15 @@ namespace SCJMapper_V2.Devices.Options
         }
         else {
           log.InfoFormat( "Read XML Options - xboxpad instance {0} is not available - dropped this content", nInstance );
+        }
+      }
+      else if ( KeyboardCls.IsDeviceClass( type ) ) { // CIG names mouse - keyboard
+        string toID = TuneOptionID( MouseCls.DeviceClass, nInstance );
+        if ( this.ContainsKey( toID ) ) {
+          this[toID].fromXML( options );
+        }
+        else {
+          log.InfoFormat( "Read XML Options - keyboard(mouse) instance {0} is not available - dropped this content", nInstance );
         }
       }
       return true;

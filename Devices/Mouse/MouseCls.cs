@@ -39,7 +39,7 @@ namespace SCJMapper_V2.Devices.Mouse
     /// Returns the currently valid color
     /// </summary>
     /// <returns>A color</returns>
-    static public System.Drawing.Color MouseColor( )
+    static public System.Drawing.Color MouseColor()
     {
       return MyColors.MouseColor;
     }
@@ -91,6 +91,16 @@ namespace SCJMapper_V2.Devices.Mouse
       return devInput.StartsWith( DeviceID );
     }
 
+    /// <summary>
+    /// Returns true if a command is an axis command 
+    /// </summary>
+    /// <param name="command">The command string</param>
+    /// <returns>True if it is an axis command</returns>
+    static public new bool IsAxisCommand( string command )
+    {
+      string cLower = command.ToLowerInvariant( );
+      return ( cLower.EndsWith( "_maxis_x" ) || cLower.EndsWith( "_maxis_y" ) );
+    }
 
     /// <summary>
     /// Reformat the input from AC1 style to AC2 style
@@ -101,7 +111,7 @@ namespace SCJMapper_V2.Devices.Mouse
     {
       // input is something like a mouse1 (TODO compositions like lctrl+mouse1 ??)
       // try easy: add mo1_ at the beginning
-      string retVal = input.Replace(" ","");
+      string retVal = input.Replace( " ", "" );
       if ( IsDisabledInput( input ) ) return input;
 
       return "mo1_" + retVal;
@@ -146,7 +156,7 @@ namespace SCJMapper_V2.Devices.Mouse
     /// <summary>
     /// The JS ProductName property
     /// </summary>
-    public override string DevName { get { return m_device.Properties.ProductName; } }
+    public override string DevName { get { return "Mouse"; } } // no props in directX
     /// <summary>
     /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
     /// </summary>
@@ -170,8 +180,7 @@ namespace SCJMapper_V2.Devices.Mouse
     private bool Activated_low
     {
       get { return m_activated; }
-      set
-      {
+      set {
         m_activated = value;
         if ( m_activated == false ) m_device.Unacquire( ); // explicitely if not longer active
       }
@@ -214,11 +223,11 @@ namespace SCJMapper_V2.Devices.Mouse
 
 
 
-    public void Deactivate( )
+    public void Deactivate()
     {
       this.Activated = false;
     }
-    public void Activate( )
+    public void Activate()
     {
       this.Activated = true;
     }
@@ -233,7 +242,7 @@ namespace SCJMapper_V2.Devices.Mouse
     /// Z-axis, typically a wheel. If the mouse does not have a z-axis, the value is 0. 
     /// </summary>
     /// <returns>The last action as CryEngine compatible string</returns>
-    public override string GetLastChange( )
+    public override string GetLastChange()
     {
       // TODO: Expand this out into a joystick class (see commit for details)
       Dictionary<string, string> axies = new Dictionary<string, string>( )
@@ -246,11 +255,11 @@ namespace SCJMapper_V2.Devices.Mouse
       foreach ( KeyValuePair<string, string> entry in axies ) {
         PropertyInfo axisProperty = typeof( MouseState ).GetProperty( entry.Key );
 
-        if ( DidAxisChange2( ( int )axisProperty.GetValue( this.m_state, null ), ( int )axisProperty.GetValue( this.m_prevState, null ), true ) ) {
+        if ( DidAxisChange2( (int)axisProperty.GetValue( this.m_state, null ), (int)axisProperty.GetValue( this.m_prevState, null ), true ) ) {
           this.m_lastItem = entry.Value;
           if ( entry.Key == "Z" ) this.m_lastItem += "down";
         }
-        else if ( DidAxisChange2( ( int )axisProperty.GetValue( this.m_state, null ), ( int )axisProperty.GetValue( this.m_prevState, null ), false ) ) {
+        else if ( DidAxisChange2( (int)axisProperty.GetValue( this.m_state, null ), (int)axisProperty.GetValue( this.m_prevState, null ), false ) ) {
           this.m_lastItem = entry.Value;
           if ( entry.Key == "Z" ) this.m_lastItem += "up";
         }
@@ -290,21 +299,45 @@ namespace SCJMapper_V2.Devices.Mouse
     }
 
 
-
+    System.Drawing.Rectangle m_targetRect = Screen.PrimaryScreen.Bounds;
     /// <summary>
-    /// Collect the current data from the device (DUMMY for Mouse)
+    /// Fudge - must have a target rectangle to scale the mouse input into the target
+    /// </summary>
+    /// <param name="target"></param>
+    public void SetTargetRectForCmdData( System.Drawing.Rectangle target )
+    {
+      m_targetRect = target;
+    }
+    /// <summary>
+    /// Collect the current data from the device (using WinForms.Cursor)
     /// </summary>
     public override void GetCmdData( string cmd, out int data )
     {
-      // Make sure there is a valid device.
-      data = 0;
+      System.Drawing.Point cPt = Cursor.Position;
+      // somewhere on all screens 
+      if ( m_targetRect.Contains( cPt ) ) {
+        cPt = cPt - new System.Drawing.Size( m_targetRect.X, m_targetRect.Y ); // move the point relative to the target rect origin
+        switch ( cmd ) {
+          case "maxis_x": data = (int)( 2000 * cPt.X / m_targetRect.Width ) - 1000; break; // data should be -1000..1000
+          case "maxis_y": data = -1 * ( (int)( 2000 * cPt.Y / m_targetRect.Height ) - 1000 ); break; // data should be -1000..1000
+          default: data = 0; break;
+        }
+      }
+      else {
+        data = 0;
+      }
+
+      System.Diagnostics.Debug.Print( string.Format( "C:({0})-T({1})({2}) - data: {3}",
+        Cursor.Position.ToString( ),
+        m_targetRect.Location.ToString( ), m_targetRect.Size.ToString( ),
+        data.ToString( ) ) );
     }
 
 
     /// <summary>
     /// Collect the current data from the device
     /// </summary>
-    public override void GetData( )
+    public override void GetData()
     {
       // Make sure there is a valid device.
       if ( null == m_device )

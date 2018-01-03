@@ -544,7 +544,6 @@
             this.tdiAddMod3});
       this.cmAddDel.Name = "cmAddDel";
       this.cmAddDel.Size = new System.Drawing.Size(221, 457);
-      this.cmAddDel.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.cmAddDel_Closed);
       this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
       // 
       // tdiCollapseAll

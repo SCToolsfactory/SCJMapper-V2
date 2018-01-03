@@ -139,11 +139,35 @@ namespace SCJMapper_V2
       AppSettings.Instance.DefMappingName = mapName; AppSettings.Instance.Save( );
     }
 
+    /// <summary>
+    /// Indicates if the SC directory is a valid one
+    /// </summary>
+    private void SCFileIndication()
+    {
+      if ( string.IsNullOrEmpty( SCPath.SCClientMappingPath ) ) msSelectMapping.BackColor = MyColors.InvalidColor;
+      else msSelectMapping.BackColor = MyColors.MappingColor;
+    }
+
+    /// <summary>
+    /// Checks if a rectangle is visible on any screen
+    /// </summary>
+    /// <param name="formRect"></param>
+    /// <returns>True if visible</returns>
+    private static bool IsOnScreen( Rectangle formRect )
+    {
+      Screen[] screens = Screen.AllScreens;
+      foreach ( Screen screen in screens ) {
+        if ( screen.WorkingArea.Contains( formRect ) ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
 
     #endregion
 
     #region Main Form Handling
-
 
     public MainForm()
     {
@@ -176,6 +200,29 @@ namespace SCJMapper_V2
     }
 
 
+    private void MainForm_FormClosing( object sender, FormClosingEventArgs e )
+    {
+      log.Debug( "MainForm_FormClosing - Entry" );
+
+      // don't record minimized, maximized forms
+      if ( this.WindowState == FormWindowState.Normal ) {
+        AppSettings.Instance.FormSize = this.Size;
+        AppSettings.Instance.FormLocation = this.Location;
+      }
+
+      if ( FTAB != null ) {
+        AppSettings.Instance.FormTableLocation = FTAB.LastLocation;
+        AppSettings.Instance.FormTableSize = FTAB.LastSize;
+        AppSettings.Instance.FormTableColumnWidth = FTAB.LastColSize;
+
+        FTAB.Close( );
+        FTAB = null;
+      }
+
+      AppSettings.Instance.Save( );
+    }
+
+
     private void LoadMappingDD()
     {
       SCMappings.UpdateMappingNames( );
@@ -191,16 +238,6 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
-    /// Indicates if the SC directory is a valid one
-    /// </summary>
-    private void SCFileIndication()
-    {
-      if ( string.IsNullOrEmpty( SCPath.SCClientMappingPath ) ) msSelectMapping.BackColor = MyColors.InvalidColor;
-      else msSelectMapping.BackColor = MyColors.MappingColor;
-    }
-
-
-    /// <summary>
     ///  Handle the load event
     /// </summary>
     /// <param name="sender"></param>
@@ -210,10 +247,11 @@ namespace SCJMapper_V2
       log.Debug( "MainForm_Load - Entry" );
 
       // some applic initialization 
-      // Assign Size property, since databinding to Size doesn't work well.
-
-      this.Size = AppSettings.Instance.FormSize;
-      this.Location = AppSettings.Instance.FormLocation;
+      // Assign Size property - check if on screen, else use defaults
+      if ( IsOnScreen( new Rectangle( AppSettings.Instance.FormLocation, AppSettings.Instance.FormSize ) ) ) {
+        this.Size = AppSettings.Instance.FormSize;
+        this.Location = AppSettings.Instance.FormLocation;
+      }
 
       string version = Application.ProductVersion;  // get the version information
       // BETA VERSION; TODO -  comment out if not longer
@@ -237,6 +275,7 @@ namespace SCJMapper_V2
       if ( Enum.TryParse( AppSettings.Instance.UseLanguage, out SCUiText.Languages lang ) ) {
         SCUiText.Instance.Language = lang;
       }
+      treeView1.ShowNodeToolTips = AppSettings.Instance.ShowTreeTips;
 
       // load mappings
       log.Debug( "Loading Mappings" );
@@ -437,7 +476,6 @@ namespace SCJMapper_V2
 
       // apply a default JS to Joystick mapping - can be changed and reloaded from XML mappings
       // must take care of Gamepads if there are (but we take care of one only...)
-      //@@@@@@@
       int joyStickIndex = 0; // Joystick List Index
       for ( int deviceTabIndex = 0; deviceTabIndex < JoystickCls.JSnum_MAX; deviceTabIndex++ ) {
         if ( tc1.TabPages.Count > deviceTabIndex ) {
@@ -457,8 +495,6 @@ namespace SCJMapper_V2
       m_AT.FilterTree( txFilter.Text );
     }
 
-
-
     // Helper: collect the joysticks here
     struct myDxJoystick
     {
@@ -472,45 +508,44 @@ namespace SCJMapper_V2
     /// <returns></returns>
     public bool InitDirectInput()
     {
-      log.Debug( "Entry" );
+      log.Debug( "InitDirectInput - Entry" );
 
       // Enumerate gamepads in the system.
       SharpDX.XInput.UserIndex gpDeviceIndex = SharpDX.XInput.UserIndex.Any;
 
       // Initialize DirectInput
-      log.Debug( "Instantiate DirectInput" );
+      log.Debug( "  - Instantiate DirectInput" );
       var directInput = new DirectInput( );
 
       try {
-        log.Debug( "Get Keyboard device" );
+        log.Debug( "  - Get Keyboard device" );
         DeviceInst.KeyboardInst = new KeyboardCls( new SharpDX.DirectInput.Keyboard( directInput ), this );
 
-        log.Debug( "Get Mouse device" );
+        log.Debug( "  - Get Mouse device" );
         DeviceInst.MouseInst = new MouseCls( new SharpDX.DirectInput.Mouse( directInput ), this );
 
       }
       catch ( Exception ex ) {
-        log.Debug( "InitDirectInput phase 1 failed unexpectedly", ex );
+        log.Debug( "  *** InitDirectInput phase 1 failed unexpectedly", ex );
         return false;
       }
-
 
       List<myDxJoystick> dxJoysticks = new List<myDxJoystick>( );
       SharpDX.XInput.Controller dxGamepad = null;
 
       try {
         // scan the Input for attached devices
-        log.Debug( "Scan GameControl devices" );
+        log.Debug( "  - Scan GameControl devices" );
         foreach ( DeviceInstance instance in directInput.GetDevices( DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly ) ) {
-          log.InfoFormat( "GameControl: Type:{0} Device:{1}", instance.Type.ToString( ), instance.ProductName );
+          log.InfoFormat( "  - GameControl: Type:{0} Device:{1}", instance.Type.ToString( ), instance.ProductName );
           // Create the device interface
-          log.Debug( "Create the device interface" );
+          log.Debug( "  - Create the device interface" );
           if ( AppSettings.Instance.DetectGamepad && ( instance.Usage == SharpDX.Multimedia.UsageId.GenericGamepad ) ) {
             // detect Gamepad only if the user wishes to do so
             for ( SharpDX.XInput.UserIndex i = SharpDX.XInput.UserIndex.One; i < SharpDX.XInput.UserIndex.Four; i++ ) {
               dxGamepad = new SharpDX.XInput.Controller( i );
               if ( dxGamepad.IsConnected ) {
-                log.InfoFormat( "Scan Input {0} for gamepad - {1}", i, dxGamepad.GetCapabilities( SharpDX.XInput.DeviceQueryType.Gamepad ).ToString( ) );
+                log.InfoFormat( "  - Scan Input {0} for gamepad - {1}", i, dxGamepad.GetCapabilities( SharpDX.XInput.DeviceQueryType.Gamepad ).ToString( ) );
                 gpDeviceIndex = i;
                 break; // get only the first one
               }
@@ -521,25 +556,24 @@ namespace SCJMapper_V2
             myJs.js = new SharpDX.DirectInput.Joystick( directInput, instance.InstanceGuid );
             myJs.prodName = instance.ProductName;
             dxJoysticks.Add( myJs );
-            log.DebugFormat( "Create the device interface for: {0}", myJs.prodName );
+            log.DebugFormat( "  - Create the device interface for: {0}", myJs.prodName );
           }
         }
       }
       catch ( Exception ex ) {
-        log.Debug( "InitDirectInput phase 2 failed unexpectedly", ex );
+        log.Debug( "  *** InitDirectInput phase 2 failed unexpectedly", ex );
         return false;
       }
-
 
       int tabs = 0;
       // make the GP the first device if there is one.
       if ( dxGamepad != null ) {
-        log.Debug( "Add first Gamepad panel" );
+        log.Debug( "  - Add first Gamepad panel" );
         tc1.TabPages[tabs].Text = "Gamepad ";
         UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
         uUC_GpadPanelNew.Size = UC_JoyPanel.Size; uUC_GpadPanelNew.Location = UC_JoyPanel.Location;
         UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
-        log.Debug( "Create Gamepad instance" );
+        log.Debug( "  - Create Gamepad instance" );
         DeviceInst.GamepadInst = new GamepadCls( dxGamepad, uUC_GpadPanelNew, tabs ); // does all device related activities for that particular item
         DeviceInst.GamepadRef.SetDeviceName( GamepadCls.DevNameCIG ); // this is fixed ...
         tc1.TabPages[tabs].ToolTipText = string.Format( "{0}\n{1}", DeviceInst.GamepadRef.DevName, " " );
@@ -559,22 +593,20 @@ namespace SCJMapper_V2
         JoystickCls js = null; UC_JoyPanel uUC_JoyPanelNew = null;
         if ( tabs == 0 ) {
           // first panel - The Tab content exists already 
-          log.Debug( "Add first Joystick panel" );
+          log.Debug( "  - Add first Joystick panel" );
           uUC_JoyPanelNew = UC_JoyPanel;
         }
         else {
-          log.Debug( "Add next Joystick panel" );
+          log.Debug( "  - Add next Joystick panel" );
           // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
           tc1.TabPages.Add( "" );  // numbering is 1 based for the user
           uUC_JoyPanelNew = new UC_JoyPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
           uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
-          //uUC_JoyPanelNew.Dock = UC_JoyPanel.Dock; uUC_JoyPanelNew.Anchor = UC_JoyPanel.Anchor;
-          //uUC_JoyPanelNew.AutoScaleMode = UC_JoyPanel.AutoScaleMode; uUC_JoyPanelNew.AutoSize = UC_JoyPanel.AutoSize;
 
         }
         // common part
         tc1.TabPages[tabs].Text = string.Format( "Joystick {0}", nJs + 1 ); // numbering is 1 based for the user
-        log.Debug( "Create Joystick instance " + nJs.ToString( ) );
+        log.Debug( "  - Create Joystick instance " + nJs.ToString( ) );
         js = new JoystickCls( myJs.js, this, nJs, uUC_JoyPanelNew, tabs ); // does all device related activities for that particular item
         DeviceInst.JoystickListRef.Add( js ); // add to joystick list
         tc1.TabPages[tabs].ToolTipText = string.Format( "{0}\n{1}", js.DevName, js.DevInstanceGUID );
@@ -588,16 +620,16 @@ namespace SCJMapper_V2
         if ( tabs >= JoystickCls.JSnum_MAX ) break; // cannot load more JSticks than predefined Tabs
       }
 
-      log.DebugFormat( "Added {0} GameControl devices", tabs );
+      log.DebugFormat( "  - Added {0} GameControl devices", tabs );
 
       if ( tabs == 0 ) {
-        log.Warn( "Unable to find and/or create any joystick devices." );
+        log.Warn( "  - Unable to find and/or create any joystick devices." );
         MessageBox.Show( "Unable to create a joystick device. Program will exit.", "No joystick found", MessageBoxButtons.OK, MessageBoxIcon.Information );
         return false;
       }
 
       // load the profile items from the XML
-      log.Debug( "Init ActionTree" );
+      log.Debug( "  - End of, InitActionTree now" );
       InitActionTree( true );
 
       return true;
@@ -605,8 +637,7 @@ namespace SCJMapper_V2
 
     #endregion
 
-
-
+    #region Tree Handling
 
     /// <summary>
     ///  Grab the rtb data and load them into config
@@ -683,30 +714,11 @@ namespace SCJMapper_V2
       txRebind.Text = "pp_rebindkeys " + map;
     }
 
+    #endregion
 
     #region Event Handling
 
-    // Form Events
-
-    private void MainForm_FormClosing( object sender, FormClosingEventArgs e )
-    {
-      log.Debug( "MainForm_FormClosing - Entry" );
-
-      AppSettings.Instance.FormSize = this.Size;
-      AppSettings.Instance.FormLocation = this.Location;
-
-      if ( FTAB != null ) {
-        AppSettings.Instance.FormTableLocation = FTAB.LastLocation;
-        AppSettings.Instance.FormTableSize = FTAB.LastSize;
-        AppSettings.Instance.FormTableColumnWidth = FTAB.LastColSize;
-
-        FTAB.Close( );
-        FTAB = null;
-      }
-
-      AppSettings.Instance.Save( );
-    }
-
+    // *** Timer Events
 
     // polls the devices to get the latest update
     private void timer1_Tick( object sender, System.EventArgs e )
@@ -714,7 +726,6 @@ namespace SCJMapper_V2
       // Handle Kbd modifier timeout for joystick
       m_modifierTimeout -= timer1.Interval;  // decrement timeout
       if ( m_modifierTimeout < 0 ) m_modifierTimeout = 0; // prevent undeflow after long time not using modifiers
-
 
       if ( m_keyIn || tc1.SelectedTab.Tag == null ) return; // don't handle those
 
@@ -758,7 +769,7 @@ namespace SCJMapper_V2
     }
 
 
-    // TreeView Events
+    // *** TreeView Events
 
     private void treeView1_NodeMouseClick( object sender, TreeNodeMouseClickEventArgs e )
     {
@@ -770,12 +781,12 @@ namespace SCJMapper_V2
     // Action Tree Event - manages the de/selection of a node
     private void M_AT_NodeSelectedEvent( object sender, ActionTreeEventArgs e )
     {
-      lblAction.Text = e.SelectedAction;
+      lblAction.Text = SCUiText.Instance.Text( e.SelectedAction );
       lblAssigned.Text = e.SelectedCtrl;
     }
 
 
-    // Show options
+    // *** Show options
 
     private void cbxShowTreeOptions_CheckedChanged( object sender, EventArgs e )
     {
@@ -791,11 +802,12 @@ namespace SCJMapper_V2
 
 
 
-    // Assign Panel Items
+    // *** Assign Panel Items
 
     private void btFind_Click( object sender, EventArgs e )
     {
-      m_AT.FindAndSelectCtrl( JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked ), "" ); // find the action for a Control (joystick input)
+
+      m_AT.FindAndSelectCtrl( JoystickCls.MakeThrottle( Act.DevInput( lblLastJ.Text, InputMode ), cbxThrottle.Checked ), "" ); // find the action for a Control (joystick input)
     }
 
     private void btAssign_Click( object sender, EventArgs e )
@@ -811,7 +823,7 @@ namespace SCJMapper_V2
     private void btBlend_Click( object sender, EventArgs e )
     {
       log.Debug( "btBlend_Click" );
-      if ( m_AT.CanBlendBinding ) {
+      if ( m_AT.CanDisableBinding ) {
         m_AT.DisableBinding( );
         UpdateTableSelectedItem( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
@@ -822,7 +834,7 @@ namespace SCJMapper_V2
     private void btClear_Click( object sender, EventArgs e )
     {
       log.Debug( "btClear_Click" );
-      if ( m_AT.CanClearBinding || m_AT.CanBlendBinding ) {
+      if ( m_AT.CanClearBinding || m_AT.CanDisableBinding ) {
         m_AT.ClearBinding( );
         UpdateTableSelectedItem( );
         if ( m_AT.Dirty ) btDump.BackColor = MyColors.DirtyColor;
@@ -830,7 +842,7 @@ namespace SCJMapper_V2
       else MySounds.PlayCannot( );
     }
 
-    // General Area Items
+    // *** General Area Items
 
     private void btDump_Click( object sender, EventArgs e )
     {
@@ -857,7 +869,7 @@ namespace SCJMapper_V2
       AppSettings.Instance.AutoTabXML = cbxAutoTabXML.Checked; AppSettings.Instance.Save( );
     }
 
-    // Toolstrip Items
+    // *** Toolstrip Items
 
     private void meResetDefaults_Click( object sender, EventArgs e )
     {
@@ -906,7 +918,7 @@ namespace SCJMapper_V2
       Dump( );
     }
 
-    // Dialogs
+    // *** Dialogs
 
     // Show the Table Window
     private void meShowToggleTable_Click( object sender, EventArgs e )
@@ -924,11 +936,9 @@ namespace SCJMapper_V2
         AppSettings.Instance.FormTableLocation = FTAB.LastLocation;
         AppSettings.Instance.FormTableColumnWidth = FTAB.LastColSize;
         FTAB.Hide( );
-
       }
       else {
         FTAB.Show( );
-
         if ( created ) {
           FTAB.Size = AppSettings.Instance.FormTableSize;
           FTAB.Location = AppSettings.Instance.FormTableLocation;
@@ -946,14 +956,20 @@ namespace SCJMapper_V2
       FormOptions OPT = new FormOptions( );
 
       // Have to attach here to capture the currently valid settings
-      UpdateTuningItems( );
-      UpdateMoreOptionItems( );
+      // cleanup - Actions will be assigned new in below calls
+      m_AT.ActionMaps.DeviceOptions.ResetDynamicItems( );
+      m_AT.ActionMaps.TuningOptions.ResetDynamicItems( );
+
+      UpdateAllTuningItems( JoystickCls.DeviceClass );
+      UpdateAllTuningItems( GamepadCls.DeviceClass );
+      UpdateAllTuningItems( MouseCls.DeviceClass );
 
       DeviceList devlist = new DeviceList( );
       if ( AppSettings.Instance.DetectGamepad && ( DeviceInst.GamepadRef != null ) ) {
         devlist.Add( DeviceInst.GamepadRef );
       }
       devlist.AddRange( DeviceInst.JoystickListRef );
+      devlist.Add( DeviceInst.MouseRef );
 
       OPT.TuningOptions = m_AT.ActionMaps.TuningOptions;
       OPT.DeviceOptions = m_AT.ActionMaps.DeviceOptions;
@@ -976,7 +992,12 @@ namespace SCJMapper_V2
       JSCAL = new OGL.FormJSCalCurve( );
 
       // Have to attach here to capture the currently valid settings
+      // cleanup - Actions will be assigned new in below calls
+      m_AT.ActionMaps.DeviceOptions.ResetDynamicItems( );
+      m_AT.ActionMaps.TuningOptions.ResetDynamicItems( );
+
       UpdateTuningItems( );
+
       // run
       JSCAL.TuningOptions = m_AT.ActionMaps.TuningOptions;
       JSCAL.ShowDialog( this );
@@ -989,7 +1010,8 @@ namespace SCJMapper_V2
     }
 
 
-    // Settings
+    // *** Settings
+
     private void meSettingsDialog_Click( object sender, EventArgs e )
     {
       // have to stop polling while the Settings window is open
@@ -1004,6 +1026,8 @@ namespace SCJMapper_V2
         if ( Enum.TryParse( AppSettings.Instance.UseLanguage, out SCUiText.Languages lang ) ) {
           SCUiText.Instance.Language = lang;
         }
+        treeView1.ShowNodeToolTips = AppSettings.Instance.ShowTreeTips;
+
         // now update the contents according to new settings
         foreach ( JoystickCls j in DeviceInst.JoystickListRef ) j.ApplySettings( ); // update Seetings
         m_AT.IgnoreMaps = AppSettings.Instance.IgnoreActionmaps;
@@ -1011,7 +1035,6 @@ namespace SCJMapper_V2
         InitActionTree( false );
         UpdateTable( );
       }
-
       timer1.Enabled = true;
     }
 
@@ -1048,7 +1071,7 @@ namespace SCJMapper_V2
       timer1.Enabled = true;
     }
 
-    // Load maps
+    // *** Load maps
 
     private void msSelectMapping_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
     {
@@ -1106,31 +1129,7 @@ namespace SCJMapper_V2
     }
 
 
-
-    private void tsDDbtMappings_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
-    {
-    }
-
-
-
-    private void loadToolStripMenuItem_Click( object sender, EventArgs e )
-    {
-    }
-
-    private void loadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
-    {
-    }
-
-    private void resetLoadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
-    {
-    }
-
-    private void defaultsLoadAndGrabToolStripMenuItem_Click( object sender, EventArgs e )
-    {
-    }
-
-
-    // Context Menu Items
+    // *** Context Menu Items
 
     // RTB Menu
     private void tsiCopy_Click( object sender, EventArgs e )
@@ -1175,7 +1174,7 @@ namespace SCJMapper_V2
       }
     }
 
-    // Node Menu
+    // *** Node Menu
     private ActivationMode m_prevActivationMode = new ActivationMode( ActivationMode.Default );
 
 
@@ -1193,12 +1192,11 @@ namespace SCJMapper_V2
         tdiAssignBinding.Text = "Assign: " + JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked );
       }
       tdiAssignBinding.Visible = m_AT.CanAssignBinding; any2 = any2 || m_AT.CanAssignBinding; // Assign
-      tdiBlendBinding.Visible = m_AT.CanBlendBinding; any2 = any2 || m_AT.CanBlendBinding; // Blend
+      tdiBlendBinding.Visible = m_AT.CanDisableBinding; any2 = any2 || m_AT.CanDisableBinding; // Blend
       tdiClearBinding.Visible = m_AT.CanClearBinding; any2 = any2 || m_AT.CanClearBinding; // Clear
 
       tdiAddBinding.Visible = m_AT.CanAddBinding; any3 = any3 || m_AT.CanAddBinding; // Add
       tdiDelBinding.Visible = m_AT.CanDelBinding; any3 = any3 || m_AT.CanDelBinding; // Del
-
 
       // handle activation modes - there is a default one and the list of choosable ones
       // there is no further decision on can or cannot - any(2) is enough to know
@@ -1223,11 +1221,6 @@ namespace SCJMapper_V2
       tdiTxDefActivationMode.Visible = any4;
 
       e.Cancel = false; // !( any2 || any3 );
-    }
-
-    // after user entry of the context menu - see if one has changed the ActivationMode
-    private void cmAddDel_Closed( object sender, ToolStripDropDownClosedEventArgs e )
-    {
     }
 
     // Collapses all but the selected node or the part where it is in
@@ -1339,7 +1332,7 @@ namespace SCJMapper_V2
       if ( droppedFilenames.Length > 0 ) rtb.LoadFile( droppedFilenames[0], RichTextBoxStreamType.PlainText );
     }
 
-    // XML load and save
+    // *** XML load and save
     private void btSaveMyMapping_Click( object sender, EventArgs e )
     {
       bool cancel = false;
@@ -1379,7 +1372,7 @@ namespace SCJMapper_V2
       }
     }
 
-    // Hyperlink
+    // *** Hyperlink
 
     private void linkLblReleases_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
     {
@@ -1395,7 +1388,7 @@ namespace SCJMapper_V2
 
 
 
-    // Joystick Tuning
+    // *** Joystick Tuning
 
     private void cbxInv_XY_MouseClick( object sender, MouseEventArgs e )
     {
@@ -1407,100 +1400,78 @@ namespace SCJMapper_V2
     /// <summary>
     /// Updates Gamedevice, Nodetext for one Tuning (Option) item from current assignment
     /// </summary>
-    /// <param name="optionName">THe option to handle</param>
+    /// <param name="deviceClass">The device class</param>
+    /// <param name="optionName">The option to handle</param>
     /// <param name="action">The corresponding action</param>
     /// <param name="actionmap">The actionmap to search for the action</param>
-    private void UpdateOptionItem( string optionName, string action, string actionmap )
+    private bool UpdateTuningForDevice( string deviceClass, string optionName, string action, string actionmap )
     {
-      // get current mapping from ActionMaps
-      string nodeText = "";
-
-      // attach Yaw command
       DeviceTuningParameter tuning = null;
       DeviceCls dev = null;
-      string find = "";
+      string match = "";
+      string nodeText = "";
 
-      // find action item for Joysticks
-      find = ActionTreeNode.ComposeNodeActionText( action, "js" );
-      nodeText = m_AT.FindText( actionmap, find ); // returns "" or a complete text ("action - command")
-      if ( !string.IsNullOrWhiteSpace( nodeText ) ) {
-        if ( !Act.IsDisabledInput( ActionTreeNode.CommandFromActionText( nodeText ) ) ) {
-          dev = DeviceInst.JoystickListRef.Find_jsN( JoystickCls.JSNum( ActionTreeNode.CommandFromActionText( nodeText ) ) );
-          if ( dev != null ) {
-            // find the tuning item of the action
-            string toID = Tuningoptions.TuneOptionIDfromJsN( JoystickCls.DeviceClass, dev.XmlInstance );
-            OptionTree ot = m_AT.ActionMaps.TuningOptions.OptionTreeFromToID( toID );
-            if ( ot != null ) tuning = ot.TuningItem( optionName );  // set defaults
-          }
-        }
+      if ( JoystickCls.IsDeviceClass( deviceClass ) ) {
+        match = ActionTreeNode.ComposeNodeActionText( action, "js" );
+      }
+      else if ( GamepadCls.IsDeviceClass( deviceClass ) ) {
+        match = ActionTreeNode.ComposeNodeActionText( action, "xi" );
+      }
+      else if ( MouseCls.IsDeviceClass( deviceClass ) ) {
+        match = ActionTreeNode.ComposeNodeActionText( action + "_mouse", "mo" ); // CIG cannot decide on terminology rules at all...
       }
 
-      if ( dev == null ) {
-        // nothing found? find action item for GPads
-        find = ActionTreeNode.ComposeNodeActionText( action, "xi" );
-        nodeText = m_AT.FindText( actionmap, find );
-        if ( !string.IsNullOrWhiteSpace( nodeText ) ) {
-          if ( !Act.IsDisabledInput( ActionTreeNode.CommandFromActionText( nodeText ) ) ) {
-            dev = DeviceInst.GamepadRef;
-            if ( dev != null ) {
-              // find the tuning item of the action
-              string toID = Tuningoptions.TuneOptionIDfromJsN( GamepadCls.DeviceClass, dev.XmlInstance );
-              OptionTree ot = m_AT.ActionMaps.TuningOptions.OptionTreeFromToID( toID );
-              if ( ot != null ) tuning = ot.TuningItem( optionName );  // set defaults
-            }
-          }
-        }
-      }
-      // dev might be null here if no device for the action was found
-      // tuning might be null here if no tuningitem for the device action was found (which should not happen !!)
-      if ( ( dev != null ) && ( tuning == null ) ) {
-        log.ErrorFormat( "UpdateOptionItem - Tuning item for device not found - dev: {0} - option: {1}", dev.DevName, optionName );
-        return; // ERROR EXIT
-      }
+      nodeText = m_AT.FindText( actionmap, match ); // returns "" or a complete text ("action - command")
+      // check for exit states
+      if ( string.IsNullOrWhiteSpace( nodeText ) ) return false; // EXIT - no node assigned
+      if ( Act.IsDisabledInput( ActionTreeNode.CommandFromActionText( nodeText ) ) ) return false; // EXIT disabled item
 
+      // find the device for the action if it is an axis (analog command)
+      string command = ActionTreeNode.CommandFromActionText( nodeText );
+      if ( JoystickCls.IsAxisCommand( command ) ) {
+        dev = DeviceInst.JoystickListRef.Find_jsN( JoystickCls.JSNum( command ) );
+      }
+      else if ( GamepadCls.IsAxisCommand( command ) ) {
+        dev = DeviceInst.GamepadRef;
+      }
+      else if ( MouseCls.IsAxisCommand( command ) ) {
+        dev = DeviceInst.MouseRef;
+      }
+      // finally do the job..
       if ( dev != null ) {
-        // having a device and a tuning item here
-        // JS commands that are supported
-        if ( nodeText.ToLowerInvariant( ).EndsWith( "_x" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotx" ) || nodeText.ToLowerInvariant( ).EndsWith( "_throttlex" )
-          || nodeText.ToLowerInvariant( ).EndsWith( "_y" ) || nodeText.ToLowerInvariant( ).EndsWith( "_roty" ) || nodeText.ToLowerInvariant( ).EndsWith( "_throttley" )
-          || nodeText.ToLowerInvariant( ).EndsWith( "_Z" ) || nodeText.ToLowerInvariant( ).EndsWith( "_rotz" ) || nodeText.ToLowerInvariant( ).EndsWith( "_throttlez" )
-          || nodeText.ToLowerInvariant( ).EndsWith( "_slider1" ) || nodeText.ToLowerInvariant( ).EndsWith( "_slider2" ) ) {
-          // update dynamic properties
-          string doID = Deviceoptions.DevOptionID( dev.DevClass, dev.DevName, nodeText );
-          if ( m_AT.ActionMaps.DeviceOptions.ContainsKey( doID ) ) {
-            tuning.AssignDynamicItems( dev, m_AT.ActionMaps.DeviceOptions[doID], nodeText );
-          }
-          else {
-            tuning.AssignDynamicItems( dev, null, nodeText );
-          }
-        }
-        // GP commands that are supported
-        else if ( nodeText.ToLowerInvariant( ).Contains( "_thumblx" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbrx" )
-               || nodeText.ToLowerInvariant( ).Contains( "_thumbly" ) || nodeText.ToLowerInvariant( ).Contains( "_thumbry" ) ) {
-          // update dynamic properties
-          tuning.GameDevice = dev;
-          tuning.NodeText = nodeText;
-          string doID = Deviceoptions.DevOptionID( dev.DevClass, dev.DevName, nodeText );
-          if ( m_AT.ActionMaps.DeviceOptions.ContainsKey( doID ) ) {
-            tuning.AssignDynamicItems( dev, m_AT.ActionMaps.DeviceOptions[doID], nodeText );
-          }
-          else {
-            tuning.AssignDynamicItems( dev, null, nodeText );
-          }
-        }
-      }
-      else if ( tuning != null && tuning.DevInstanceNo > 0 ) {
-        // a device was assigned but the action is not mapped
-        // try to find the gamedevice here ??
-        if ( JoystickCls.IsDeviceClass( tuning.DeviceClass ) ) {
-          tuning.AssignDynamicItems( DeviceInst.JoystickListRef.Find_jsN( tuning.DevInstanceNo ), null, "" );
-        }
-        else if ( GamepadCls.IsDeviceClass( tuning.DeviceClass ) ) {
-          tuning.AssignDynamicItems( DeviceInst.GamepadRef, null, "" );
-        }
-      }
+        // find the tuning item of the action
+        string toID = Tuningoptions.TuneOptionIDfromJsN( deviceClass, dev.XmlInstance );
+        OptionTree ot = m_AT.ActionMaps.TuningOptions.OptionTreeFromToID( toID );
+        if ( ot == null ) return false; // EXIT no optiontree for the device
 
+        tuning = ot.TuningItem( optionName );  // set defaults
+        if ( tuning == null ) return false; // EXIT no tuning item for the device
+
+        string doID = Deviceoptions.DevOptionID( dev.DevClass, dev.DevName, nodeText );
+        if ( m_AT.ActionMaps.DeviceOptions.ContainsKey( doID ) ) {
+          tuning.AssignDynamicItems( dev, m_AT.ActionMaps.DeviceOptions[doID], nodeText );
+        }
+        else {
+          tuning.AssignDynamicItems( dev, null, nodeText );
+        }
+      }
+      return true;
     }
+
+    /// <summary>
+    /// Updates the option for the first device found only
+    ///   Used for the Tuning Dialog, only one item can be tuned
+    /// </summary>
+    /// <param name="optionName">The option to handle</param>
+    /// <param name="action">The corresponding action</param>
+    /// <param name="actionmap">The actionmap to search for the action</param>
+    private void UpdateTuningPrioritized( string optionName, string action, string actionmap )
+    {
+      bool retVal = UpdateTuningForDevice( JoystickCls.DeviceClass, optionName, action, actionmap );
+      if ( !retVal ) retVal = UpdateTuningForDevice( GamepadCls.DeviceClass, optionName, action, actionmap );
+      if ( !retVal ) retVal = UpdateTuningForDevice( MouseCls.DeviceClass, optionName, action, actionmap );
+    }
+
 
     /// <summary>
     /// Get the assigned controls for some commands used in Tuning Yaw,Pitch,Roll and the Strafe ones
@@ -1508,44 +1479,46 @@ namespace SCJMapper_V2
     /// </summary>
     private void UpdateTuningItems()
     {
-      // cleanup - Actions will be assigned new in below calls
-      m_AT.ActionMaps.DeviceOptions.ResetDynamicItems( );
-      m_AT.ActionMaps.TuningOptions.ResetDynamicItems( );
+      UpdateTuningPrioritized( "flight_move_pitch", "v_pitch", "spaceship_movement" );
+      UpdateTuningPrioritized( "flight_move_yaw", "v_yaw", "spaceship_movement" );
+      UpdateTuningPrioritized( "flight_move_roll", "v_roll", "spaceship_movement" );
 
-      // get current mapping from ActionMaps
-      UpdateOptionItem( "flight_move_pitch", "v_pitch", "spaceship_movement" );
-      UpdateOptionItem( "flight_move_yaw", "v_yaw", "spaceship_movement" );
-      UpdateOptionItem( "flight_move_roll", "v_roll", "spaceship_movement" );
-
-      UpdateOptionItem( "flight_move_strafe_vertical", "v_strafe_vertical", "spaceship_movement" );
-      UpdateOptionItem( "flight_move_strafe_lateral", "v_strafe_lateral", "spaceship_movement" );
-      UpdateOptionItem( "flight_move_strafe_longitudinal", "v_strafe_longitudinal", "spaceship_movement" );
+      UpdateTuningPrioritized( "flight_move_strafe_vertical", "v_strafe_vertical", "spaceship_movement" );
+      UpdateTuningPrioritized( "flight_move_strafe_lateral", "v_strafe_lateral", "spaceship_movement" );
+      UpdateTuningPrioritized( "flight_move_strafe_longitudinal", "v_strafe_longitudinal", "spaceship_movement" );
     }
 
 
     /// <summary>
     /// Get the assigned controls for other Options - if available...
     /// </summary>
-    private void UpdateMoreOptionItems()
+    private void UpdateAllTuningItems( string deviceClass )
     {
-      // get current mapping from ActionMaps
-      UpdateOptionItem( "flight_throttle_abs", "v_throttle_abs", "spaceship_movement" );
-      UpdateOptionItem( "flight_throttle_rel", "v_throttle_rel", "spaceship_movement" );
+      UpdateTuningForDevice( deviceClass, "flight_move_pitch", "v_pitch", "spaceship_movement" );
+      UpdateTuningForDevice( deviceClass, "flight_move_yaw", "v_yaw", "spaceship_movement" );
+      UpdateTuningForDevice( deviceClass, "flight_move_roll", "v_roll", "spaceship_movement" );
 
-      UpdateOptionItem( "flight_aim_pitch", "v_aim_pitch", "spaceship_targeting" );
-      UpdateOptionItem( "flight_aim_yaw", "v_aim_yaw", "spaceship_targeting" );
+      UpdateTuningForDevice( deviceClass, "flight_move_strafe_vertical", "v_strafe_vertical", "spaceship_movement" );
+      UpdateTuningForDevice( deviceClass, "flight_move_strafe_lateral", "v_strafe_lateral", "spaceship_movement" );
+      UpdateTuningForDevice( deviceClass, "flight_move_strafe_longitudinal", "v_strafe_longitudinal", "spaceship_movement" );
 
-      UpdateOptionItem( "flight_view_pitch", "v_view_pitch", "spaceship_view" );
-      UpdateOptionItem( "flight_view_yaw", "v_view_yaw", "spaceship_view" );
+      UpdateTuningForDevice( deviceClass, "flight_view_pitch", "v_view_pitch", "spaceship_view" );
+      UpdateTuningForDevice( deviceClass, "flight_view_yaw", "v_view_yaw", "spaceship_view" );
 
-      UpdateOptionItem( "turret_aim_pitch", "v_aim_pitch", "spaceship_turret" );
-      UpdateOptionItem( "turret_aim_yaw", "v_aim_yaw", "spaceship_turret" );
+      UpdateTuningForDevice( deviceClass, "flight_throttle_abs", "v_throttle_abs", "spaceship_movement" );
+      UpdateTuningForDevice( deviceClass, "flight_throttle_rel", "v_throttle_rel", "spaceship_movement" );
+
+      UpdateTuningForDevice( deviceClass, "flight_aim_pitch", "v_aim_pitch", "spaceship_targeting" );
+      UpdateTuningForDevice( deviceClass, "flight_aim_yaw", "v_aim_yaw", "spaceship_targeting" );
+
+      UpdateTuningForDevice( deviceClass, "turret_aim_pitch", "v_aim_pitch", "spaceship_turret" );
+      UpdateTuningForDevice( deviceClass, "turret_aim_yaw", "v_aim_yaw", "spaceship_turret" );
+
+      UpdateTuningForDevice( deviceClass, "mgv_view_pitch", "v_view_pitch", "vehicle_general" );
+      UpdateTuningForDevice( deviceClass, "mgv_view_yaw", "v_view_yaw", "vehicle_general" );
     }
 
-
-
-
-    // Keyboard Input
+    // *** Keyboard Input
 
     bool m_keyIn = false;
     bool m_mouseIn = false;
@@ -1644,7 +1617,7 @@ namespace SCJMapper_V2
       }
     }
 
-    // Mouse Input
+    // *** Mouse Input
 
     private void cmMouseEntry_Opening( object sender, CancelEventArgs e )
     {
@@ -1702,6 +1675,7 @@ namespace SCJMapper_V2
 
     #endregion
 
+    #region DataTable Handling
 
     // Called when the table must be rebuild
     private void UpdateTable()
@@ -1722,7 +1696,6 @@ namespace SCJMapper_V2
       if ( ( FTAB != null ) && FTAB.Visible ) {
         string actionID = m_AT.SelectedActionID;
         m_AT.ActionMaps.UpdateDataSet( FTAB.DS_AMaps, actionID );
-        // FTAB.UpdateRow( actionID );  seems not needed...
       }
     }
 
@@ -1744,11 +1717,13 @@ namespace SCJMapper_V2
 
     }
 
-
     // called when the user if the TAB form wants to edit a row
     private void FTAB_EditActionEvent( object sender, EditRowEventArgs e )
     {
       m_AT.FindAndSelectActionKey( e.Actionmap, e.Actionkey, e.Nodeindex );
     }
+
+    #endregion
+
   }
 }

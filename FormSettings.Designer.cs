@@ -71,6 +71,7 @@
       this.cbxCSVListing = new System.Windows.Forms.CheckBox();
       this.cbxPTU = new System.Windows.Forms.CheckBox();
       this.cbxDetectGamepad = new System.Windows.Forms.CheckBox();
+      this.cbxTreeTips = new System.Windows.Forms.CheckBox();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -427,6 +428,7 @@
       // 
       // groupBox4
       // 
+      this.groupBox4.Controls.Add(this.cbxTreeTips);
       this.groupBox4.Controls.Add(this.label14);
       this.groupBox4.Controls.Add(this.comboLanguage);
       this.groupBox4.Controls.Add(this.cbxAutoTabXML);
@@ -445,7 +447,7 @@
       // label14
       // 
       this.label14.AutoSize = true;
-      this.label14.Location = new System.Drawing.Point(200, 22);
+      this.label14.Location = new System.Drawing.Point(6, 73);
       this.label14.Name = "label14";
       this.label14.Size = new System.Drawing.Size(62, 13);
       this.label14.TabIndex = 12;
@@ -454,7 +456,7 @@
       // comboLanguage
       // 
       this.comboLanguage.FormattingEnabled = true;
-      this.comboLanguage.Location = new System.Drawing.Point(271, 19);
+      this.comboLanguage.Location = new System.Drawing.Point(77, 70);
       this.comboLanguage.Name = "comboLanguage";
       this.comboLanguage.Size = new System.Drawing.Size(100, 21);
       this.comboLanguage.TabIndex = 11;
@@ -494,7 +496,7 @@
       // 
       this.cbxPTU.AutoSize = true;
       this.cbxPTU.BackColor = System.Drawing.Color.SandyBrown;
-      this.cbxPTU.Location = new System.Drawing.Point(9, 67);
+      this.cbxPTU.Location = new System.Drawing.Point(400, 82);
       this.cbxPTU.Name = "cbxPTU";
       this.cbxPTU.Size = new System.Drawing.Size(108, 17);
       this.cbxPTU.TabIndex = 7;
@@ -511,6 +513,16 @@
       this.cbxDetectGamepad.TabIndex = 6;
       this.cbxDetectGamepad.Text = "Use Gamepad";
       this.cbxDetectGamepad.UseVisualStyleBackColor = true;
+      // 
+      // cbxTreeTips
+      // 
+      this.cbxTreeTips.AutoSize = true;
+      this.cbxTreeTips.Location = new System.Drawing.Point(196, 72);
+      this.cbxTreeTips.Name = "cbxTreeTips";
+      this.cbxTreeTips.Size = new System.Drawing.Size(101, 17);
+      this.cbxTreeTips.TabIndex = 13;
+      this.cbxTreeTips.Text = "Show Tree tips";
+      this.cbxTreeTips.UseVisualStyleBackColor = true;
       // 
       // FormSettings
       // 
@@ -590,5 +602,6 @@
     private System.Windows.Forms.CheckBox cbxAutoTabXML;
     private System.Windows.Forms.Label label14;
     private System.Windows.Forms.ComboBox comboLanguage;
+    private System.Windows.Forms.CheckBox cbxTreeTips;
   }
 }

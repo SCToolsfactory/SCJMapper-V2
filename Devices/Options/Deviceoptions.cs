@@ -6,12 +6,15 @@ using System.Xml.Linq;
 using SCJMapper_V2.Devices.Joystick;
 using SCJMapper_V2.Devices.Gamepad;
 using System.Linq;
+using SCJMapper_V2.Devices.Mouse;
 
 namespace SCJMapper_V2.Devices.Options
 {
   /// <summary>
-  ///   Maintains an Deviceoptions - something like:
-  ///
+  ///   Maintains all Deviceoptions i.e. Analog controls of all devices connected
+  ///   There are dynamic parts (actions) only for the GUI
+  ///       those are derived from the current mapping which need to be updated before use
+  /// 
   ///	<deviceoptions name="Joystick - HOTAS Warthog">
   ///		<!-- Reduce the deadzone -->
   ///		<option input="x" deadzone="0.015" />
@@ -27,8 +30,7 @@ namespace SCJMapper_V2.Devices.Options
   public class Deviceoptions : CloneableDictionary<string, DeviceOptionParameter>
   {
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
-
-
+    
     #region Static parts
 
     // DevOptions GUI Slider properties - have them in one place only
@@ -99,10 +101,7 @@ namespace SCJMapper_V2.Devices.Options
 
     #endregion
 
-
-    private List<string> m_stringOptions = new List<string>( ); // collected options from XML that are not parsed
-
-
+    #region Cloning support
 
     /// <summary>
     /// Clone this object
@@ -147,8 +146,14 @@ namespace SCJMapper_V2.Devices.Options
     }
 #endif
 
+    #endregion
 
+    private List<string> m_stringOptions = new List<string>( ); // collected options from XML that are not parsed
 
+    /// <summary>
+    /// cTor: Private - Init from a given Directory
+    /// </summary>
+    /// <param name="init">Dev parameters to init from</param>
     private Deviceoptions( CloneableDictionary<string, DeviceOptionParameter> init )
     {
       foreach ( KeyValuePair<string, DeviceOptionParameter> kvp in init ) {
@@ -157,7 +162,9 @@ namespace SCJMapper_V2.Devices.Options
     }
 
 
-    // ctor
+    /// <summary>
+    /// cTor: collects the Analog commands from the devices on order to apply Deadzone and Saturation properties for them
+    /// </summary>
     public Deviceoptions()
     {
       // create all devOptions for all devices found (they may or may no be used)
@@ -185,9 +192,24 @@ namespace SCJMapper_V2.Devices.Options
           }
         }
       }
+
+      // add mouse if there is any
+      if ( DeviceInst.MouseRef != null ) {
+        foreach ( string input in DeviceInst.MouseRef.AnalogCommands ) {
+          string doid = DevOptionID( MouseCls.DeviceClass, DeviceInst.MouseRef.DevName, input );
+          if ( !this.ContainsKey( doid ) ) {
+            this.Add( doid, new DeviceOptionParameter( DeviceInst.MouseRef, input, "", "" ) ); // init with disabled defaults
+          }
+          else {
+            log.WarnFormat( "cTor - Mouse DO_ID {0} exists", doid );
+          }
+        }
+      }
     }
 
-
+    /// <summary>
+    /// Returns the number of items in this
+    /// </summary>
     new public int Count
     {
       get { return ( m_stringOptions.Count + base.Count ); }
@@ -203,8 +225,7 @@ namespace SCJMapper_V2.Devices.Options
         kv.Value.Action = "";
       }
     }
-
-
+    
     /// <summary>
     /// Rounds a string to 3 decimals (if it is a number..)
     /// </summary>
@@ -221,7 +242,11 @@ namespace SCJMapper_V2.Devices.Options
       }
     }
 
-
+    /// <summary>
+    /// Lowlevel formatting
+    /// </summary>
+    /// <param name="xml"></param>
+    /// <returns></returns>
     private string[] FormatXml( string xml )
     {
       try {
@@ -252,7 +277,6 @@ namespace SCJMapper_V2.Devices.Options
 
         r += string.Format( "\n" );
       }
-
       // dump Tuning 
       foreach ( KeyValuePair<string, DeviceOptionParameter> kv in this ) {
         r += kv.Value.Deviceoptions_toXML( );

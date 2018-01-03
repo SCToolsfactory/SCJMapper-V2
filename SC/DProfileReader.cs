@@ -11,6 +11,7 @@ using SCJMapper_V2.Devices.Joystick;
 using SCJMapper_V2.Devices.Keyboard;
 using SCJMapper_V2.Devices.Mouse;
 using SCJMapper_V2.Devices.Gamepad;
+using SCJMapper_V2.Devices.Options;
 
 namespace SCJMapper_V2.SC
 {
@@ -218,6 +219,7 @@ namespace SCJMapper_V2.SC
       string uiLabel = (string)action.Attribute( "UILabel" );
       if ( string.IsNullOrEmpty( uiLabel ) )
         uiLabel = name; // subst if not found in Action node
+      SCUiText.Instance.Add( name, uiLabel ); // Register item for translation
 
       // prep all kinds
       var jAC = new ProfileAction( ) { Name = name, UILabel = uiLabel, DevID = Act.DevTag( JoystickCls.DeviceClass ) };
@@ -304,6 +306,7 @@ namespace SCJMapper_V2.SC
       string uiLabel = (string)actionmap.Attribute( "UILabel" );
       if ( string.IsNullOrEmpty( uiLabel ) )
         uiLabel = mapName; // subst if not found in Action node
+      SCUiText.Instance.Add( mapName, uiLabel ); // Register item for translation
 
       string item = Array.Find( ActionMapsCls.ActionMaps, delegate ( string sstr ) { return sstr == mapName; } );
       if ( !string.IsNullOrEmpty( item ) ) {
@@ -354,6 +357,7 @@ namespace SCJMapper_V2.SC
       return true;
     }
 
+
     /// <summary>
     /// Read the defaultProfile.xml - do some sanity check
     /// </summary>
@@ -398,6 +402,14 @@ namespace SCJMapper_V2.SC
                                             select x;
           foreach ( XElement modifier in modifiers ) {
             ValidContent &= Modifiers.Instance.FromXML( modifier, true );
+          }
+
+          OptionTree.InitOptionReader( );
+          IEnumerable<XElement> optiontrees = from x in el.Elements( )
+                                            where ( x.Name == "optiontree" )
+                                            select x;
+          foreach ( XElement optiontree in optiontrees ) {
+            ValidContent &= OptionTree.fromProfileXML( optiontree );
           }
 
           IEnumerable<XElement> actionmaps = from x in el.Elements( )

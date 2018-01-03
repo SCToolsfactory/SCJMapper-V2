@@ -6,11 +6,15 @@ using System.Xml;
 using System.IO;
 using System.Xml.Linq;
 using System.Windows.Forms;
+using SCJMapper_V2.SC;
+using SCJMapper_V2.Devices.Mouse;
+using SCJMapper_V2.Devices.Keyboard;
+using System.Collections;
 
 namespace SCJMapper_V2.Devices.Options
 {
   /// <summary>
-  ///   Maintains an Options - something like:
+  ///   Maintains Options - something like:
   ///
   ///	<options type="joystick" instance="1">
   ///		<!-- Make all piloting input linear -->
@@ -21,7 +25,7 @@ namespace SCJMapper_V2.Devices.Options
   ///	  <flight_move_strafe_longitudinal  invert="1"  />
   /// </options>
   ///	
-  /// [type] : set to shared, keyboard, xboxpad, or joystick
+  /// [type] : set to shared, mouse, xboxpad, or joystick  (NOTE the CIG type used is keyboard .. for the mouse....(Grrr) - we use MOUSE
   /// [instance] : set to the device number; js1=1, js2=2, etc
   /// [optiongroup] : set to what group the option should affect (for available groups see default actionmap)
   /// [option] : instance, sensitivity, exponent, nonlinearity *instance is a bug that will be fixed to 'invert' in the future
@@ -37,10 +41,10 @@ namespace SCJMapper_V2.Devices.Options
     // Support only one set of independent options (string storage)
     List<string> m_stringOptions = new List<string>( );
 
+    #region Clonable support
+
     // bag for all tuning items - key is the option name
     CloneableDictionary<string, DeviceTuningParameter> m_tuning = new CloneableDictionary<string, DeviceTuningParameter>( );
-
-
 
     /// <summary>
     /// Clone this object
@@ -80,41 +84,21 @@ namespace SCJMapper_V2.Devices.Options
       return ret;
     }
 
+    #endregion
 
 
 
     // ctor
     public OptionTree( DeviceCls device )
     {
-      m_tuning.Add( "flight_move_pitch", new DeviceTuningParameter( "flight_move_pitch", device ) );
-      m_tuning.Add( "flight_move_yaw", new DeviceTuningParameter( "flight_move_yaw", device ) );
-      m_tuning.Add( "flight_move_roll", new DeviceTuningParameter( "flight_move_roll", device ) );
-      m_tuning.Add( "flight_move_strafe_vertical", new DeviceTuningParameter( "flight_move_strafe_vertical", device ) );
-      m_tuning.Add( "flight_move_strafe_lateral", new DeviceTuningParameter( "flight_move_strafe_lateral", device ) );
-      m_tuning.Add( "flight_move_strafe_longitudinal", new DeviceTuningParameter( "flight_move_strafe_longitudinal", device ) );
+      if ( m_profileOptions.Count( ) == 0 ) {
+        log.Error( "cTor OptionTree - profile not yet read" );
+      }
 
-      m_tuning.Add( "flight_throttle_abs", new DeviceTuningParameter( "flight_throttle_abs", device ) );
-      m_tuning.Add( "flight_throttle_rel", new DeviceTuningParameter( "flight_throttle_rel", device ) );
-
-      m_tuning.Add( "flight_aim_pitch", new DeviceTuningParameter( "flight_aim_pitch", device ) );
-      m_tuning.Add( "flight_aim_yaw", new DeviceTuningParameter( "flight_aim_yaw", device ) );
-
-      m_tuning.Add( "flight_view_pitch", new DeviceTuningParameter( "flight_view_pitch", device ) );
-      m_tuning.Add( "flight_view_yaw", new DeviceTuningParameter( "flight_view_yaw", device ) );
-
-      m_tuning.Add( "turret_aim_pitch", new DeviceTuningParameter( "turret_aim_pitch", device ) );
-      m_tuning.Add( "turret_aim_yaw", new DeviceTuningParameter( "turret_aim_yaw", device ) );
-
-      // Gamepad specific
-      if ( Devices.Gamepad.GamepadCls.IsDeviceClass( device.DevClass ) ) {
-        m_tuning.Add( "fps_view_pitch", new DeviceTuningParameter( "fps_view_pitch", device ) );
-        m_tuning.Add( "fps_view_yaw", new DeviceTuningParameter( "fps_view_yaw", device ) );
-
-        m_tuning.Add( "fps_move_lateral", new DeviceTuningParameter( "fps_move_lateral", device ) );
-        m_tuning.Add( "fps_move_longitudinal", new DeviceTuningParameter( "fps_move_longitudinal", device ) );
-
-        m_tuning.Add( "mgv_view_pitch", new DeviceTuningParameter( "mgv_view_pitch", device ) );
-        m_tuning.Add( "mgv_view_yaw", new DeviceTuningParameter( "mgv_view_yaw", device ) );
+      // get options for the device class
+      var devOpts = m_profileOptions.Where( x => x.DeviceClass == device.DevClass );
+      foreach (ProfileOptionRec rec in devOpts ) {
+        m_tuning.Add( rec.OptName, new DeviceTuningParameter( rec.OptName, device ) );
       }
     }
 
@@ -228,97 +212,139 @@ namespace SCJMapper_V2.Devices.Options
        */
       string instance = (string)options.Attribute( "instance" ); // mandadory
       string type = (string)options.Attribute( "type" ); // mandadory
-      if ( !int.TryParse( instance, out int nInstance ) ) nInstance = 0;
+      if ( !int.TryParse( instance, out int nInstance ) ) nInstance = 0; // get the one from the map if given (else it's a map error...)
 
-      // try to disassemble the items
-      /*
-       * <flight> instance="0/1" sensitivity="n.nn" exponent="n.nn"  (instance should be invert)
-       *   <flight_move>
-       *     <flight_move_pitch>  
-       *     <flight_move_yaw>  
-       *     <flight_move_roll>  
-       *     <flight_move_strafe_vertical>  
-       *     <flight_move_strafe_lateral>  
-       *     <flight_move_strafe_longitudinal>  
-       *   <flight_throttle> invert="0/1"
-       *     <flight_throttle_abs>
-       *     <flight_throttle_rel>
-       *   <flight_aim>
-       *       <flight_aim_pitch>  
-       *       <flight_aim_yaw>  
-       *   <flight_view>
-       *       <flight_view_pitch>  
-       *       <flight_view_yaw>  
-       *   
-       * 
-              <nonlinearity_curve>
-                <point in="0.1"  out="0.001"/>
-       *          ..
-              </nonlinearity_curve>
-       * 
-       * 
-       * 
-       */
+      string devClass = DeviceCls.DeviceClass; // the generic one
+      if ( !string.IsNullOrEmpty(type)) devClass = type; // get the one from the map if given (else it's a map error...)
+
+      // mouse arrives as type keyboard - fix it to deviceClass mouse here
+      if ( KeyboardCls.IsDeviceClass( devClass ) )
+        devClass = MouseCls.DeviceClass;
+
+      // check if the profile contains the one we found in the map - then parse the element
       foreach ( XElement item in options.Elements( ) ) {
-        if ( item.Name.LocalName == "flight_move_pitch" ) {
-          m_tuning["flight_move_pitch"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "flight_move_yaw" ) {
-          m_tuning["flight_move_yaw"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "flight_move_roll" ) {
-          m_tuning["flight_move_roll"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "flight_move_strafe_vertical" ) {
-          m_tuning["flight_move_strafe_vertical"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "flight_move_strafe_lateral" ) {
-          m_tuning["flight_move_strafe_lateral"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "flight_move_strafe_longitudinal" ) {
-          m_tuning["flight_move_strafe_longitudinal"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "flight_throttle_abs" ) {
-          m_tuning["flight_throttle_abs"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "flight_throttle_rel" ) {
-          m_tuning["flight_throttle_rel"].Options_fromXML( item, type, int.Parse( instance ) );
-
-        }
-        else if ( item.Name.LocalName == "flight_aim_pitch" ) {
-          m_tuning["flight_aim_pitch"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "flight_aim_yaw" ) {
-          m_tuning["flight_aim_yaw"].Options_fromXML( item, type, int.Parse( instance ) );
-
-        }
-        else if ( item.Name.LocalName == "flight_view_pitch" ) {
-          m_tuning["flight_view_pitch"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "flight_view_yaw" ) {
-          m_tuning["flight_view_yaw"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "fps_view_pitch" ) {
-          m_tuning["fps_view_pitch"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "fps_view__yaw" ) {
-          m_tuning["fps_view__yaw"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "fps_move_lateral" ) {
-          m_tuning["fps_move_lateral"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "fps_move_longitudinal" ) {
-          m_tuning["fps_move_longitudinal"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "mgv_view_pitch" ) {
-          m_tuning["mgv_view_pitch"].Options_fromXML( item, type, int.Parse( instance ) );
-        }
-        else if ( item.Name.LocalName == "mgv_view_yaw" ) {
-          m_tuning["mgv_view_yaw"].Options_fromXML( item, type, int.Parse( instance ) );
+        if ( m_profileOptions.Contains( new ProfileOptionRec( ) { DeviceClass = devClass, OptName = item.Name.LocalName } ) ) {
+          m_tuning[item.Name.LocalName].Options_fromXML( item, devClass, int.Parse( instance ) );
         }
       }
+
       return true;
     }
+
+    #region static - Profile Handling
+
+    public class ProfileOptionRec : IEquatable<ProfileOptionRec>
+    {
+      public string DeviceClass { get; set; }
+      public string OptGroup { get; set; }
+      public string OptName { get; set; }
+      public bool ShowCurve { get; set; }
+      public bool ShowInvert { get; set; }
+      public ProfileOptionRec()
+      {
+        DeviceClass = DeviceCls.DeviceClass; OptGroup = ""; OptName = ""; ShowCurve = false; ShowInvert = false;
+      }
+      // same class and name means records match
+      public bool Equals( ProfileOptionRec other )
+      {
+        return ( ( this.DeviceClass == other.DeviceClass ) && ( this.OptName == other.OptName ) );
+      }
+    }
+
+    private static List<ProfileOptionRec> m_profileOptions = new List<ProfileOptionRec>( );
+    /// <summary>
+    /// Returns a list of ProfileOptions found in the defaultProfile
+    /// </summary>
+    public static IList<ProfileOptionRec> ProfileOptions { get => m_profileOptions; }
+
+    /// <summary>
+    /// Clears the stored optiontree items from the profile
+    ///   must be cleared before re-reading them from profile
+    /// </summary>
+    public static void InitOptionReader()
+    {
+      m_profileOptions = new List<ProfileOptionRec>( );
+    }
+
+    /// <summary>
+    /// Reads optiongroup nodes
+    ///  the tree is composed of such nodes - we dive recursively
+    /// </summary>
+    /// <param name="optiongroupIn">The optiongroup to parse</param>
+    /// <param name="devClass">The deviceclass it belongs to</param>
+    /// <returns>True if OK</returns>
+    private static bool ReadOptiongroup( XElement optiongroupIn, string devClass, string optGroup )
+    {
+      bool retVal = true;
+
+      // collect content and process further groups
+      string name = (string)optiongroupIn.Attribute( "name" );
+      string uiLabel = (string)optiongroupIn.Attribute( "UILabel" );
+      if ( string.IsNullOrEmpty( uiLabel ) )
+        uiLabel = name; // subst if not found in Action node
+      SCUiText.Instance.Add( name, uiLabel ); // Register item for translation
+
+      // further groups
+      IEnumerable<XElement> optiongroups = from x in optiongroupIn.Elements( )
+                                           where ( x.Name == "optiongroup" )
+                                           select x;
+      foreach ( XElement optiongroup in optiongroups ) {
+        retVal &= ReadOptiongroup( optiongroup, devClass, name ); // current is the group if we dive one down
+      }
+      // murks.. determine if it is a terminal node, then get items
+      if ( optiongroups.Count() == 0 ) {
+        ProfileOptionRec optRec = new ProfileOptionRec { DeviceClass = devClass, OptGroup=optGroup, OptName = name }; // create a new one
+        // override props if they arrive in the node
+        string attr = (string)optiongroupIn.Attribute( "UIShowCurve" );
+        if ( !string.IsNullOrEmpty( attr ) ) {
+          if ( int.TryParse( attr, out int showCurve ) ) {
+            optRec.ShowCurve = ( showCurve == 1 );
+          }
+        }
+        attr = (string)optiongroupIn.Attribute( "UIShowInvert" );
+        if ( !string.IsNullOrEmpty( attr ) ) {
+          if ( int.TryParse( attr, out int showInvert ) ) {
+            optRec.ShowInvert = ( showInvert == 1 );
+          }
+        }
+        if ( optRec.ShowCurve || optRec.ShowInvert)
+          m_profileOptions.Add( optRec ); // add only if something is to tweak..
+      }
+      return retVal;
+    }
+
+    /// <summary>
+    /// Collects items from the profile optiontree
+    /// </summary>
+    /// <param name="optiontree">The optiontree node</param>
+    /// <returns>True if OK</returns>
+    public static bool fromProfileXML( XElement optiontree )
+    {
+      /*
+	      //<optiontree  type="keyboard"  name="root"  UIShowInvert="-1"  UIShowSensitivity="-1"  UISensitivityMin="0.01"  UISensitivityMax="6.25"  >
+	      //	<optiongroup  name="master"  UILabel="@ui_COMasterSensitivity"  UIShowSensitivity="0"  UIShowInvert="0"  UIShowCurve="0"  >
+	      //		<optiongroup  name="mouse_curves"  UILabel="@ui_COMasterSensitivityCurvesMouse"  UIShowCurve="-1"  UIShowSensitivity="0"  UIShowInvert="0"  >
+       */
+      log.Debug( "fromProfileXML - Entry" );
+
+      bool retVal = true;
+
+      string devClass = (string)optiontree.Attribute( "type" );
+      // mouse arrives as type keyboard - fix it to deviceClass mouse here
+      if ( KeyboardCls.IsDeviceClass( devClass ) )
+        devClass = MouseCls.DeviceClass;
+
+      IEnumerable<XElement> optiongroups = from x in optiontree.Elements( )
+                                           where ( x.Name == "optiongroup" )
+                                           select x;
+      foreach ( XElement optiongroup in optiongroups ) {
+        retVal &= ReadOptiongroup( optiongroup, devClass, "master" );
+      }
+
+      return retVal;
+    }
+
+    #endregion
 
   }
 }

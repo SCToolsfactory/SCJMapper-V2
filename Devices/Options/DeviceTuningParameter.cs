@@ -5,6 +5,8 @@ using System.Xml;
 using System.Xml.Linq;
 using SCJMapper_V2.Actions;
 using SCJMapper_V2.Devices.Joystick;
+using SCJMapper_V2.Devices.Keyboard;
+using SCJMapper_V2.Devices.Mouse;
 
 namespace SCJMapper_V2.Devices.Options
 {
@@ -19,7 +21,7 @@ namespace SCJMapper_V2.Devices.Options
     private string m_nodetext = "";     // v_pitch - js1_x
     private string m_action = "";       // v_pitch
     private string m_cmdCtrl = "";      // js1_x, js1_y, js1_rotz ...
-    private string m_class = "";         // joystick OR xboxpad
+    private string m_devClass = "";     // joystick OR xboxpad OR mouse
     private int m_devInstanceNo = -1;   // jsN - instance in XML
 
     string m_option = ""; // the option name (level where it applies)
@@ -67,7 +69,7 @@ namespace SCJMapper_V2.Devices.Options
       ret &= ( this.m_nodetext == clone.m_nodetext ); // immutable string - shallow copy is OK
       ret &= ( this.m_action == clone.m_action ); // immutable string - shallow copy is OK
       ret &= ( this.m_cmdCtrl == clone.m_cmdCtrl );// immutable string - shallow copy is OK
-      ret &= ( this.m_class == clone.m_class ); // immutable string - shallow copy is OK
+      ret &= ( this.m_devClass == clone.m_devClass ); // immutable string - shallow copy is OK
       ret &= ( this.m_devInstanceNo == clone.m_devInstanceNo );
       ret &= ( this.m_option == clone.m_option );
       ret &= ( this.m_deviceName == clone.m_deviceName );
@@ -106,11 +108,11 @@ namespace SCJMapper_V2.Devices.Options
       get { return m_deviceRef; }
       set {
         m_deviceRef = value;
-        m_class = "";
+        m_devClass = "";
         m_devInstanceNo = -1;
         if ( m_deviceRef == null ) return; // got a null device
 
-        m_class = m_deviceRef.DevClass;
+        m_devClass = m_deviceRef.DevClass;
         m_devInstanceNo = m_deviceRef.XmlInstance;
       }
     }
@@ -129,7 +131,7 @@ namespace SCJMapper_V2.Devices.Options
 
     public string DeviceClass
     {
-      get { return m_class; }
+      get { return m_devClass; }
     }
 
 
@@ -256,6 +258,16 @@ namespace SCJMapper_V2.Devices.Options
           m_cmdCtrl = "xi_thumbry";
           m_deviceName = m_deviceRef.DevName;
         }
+        else if ( cmd.Contains( "maxis_x" ) ) {
+          // mouse
+          m_cmdCtrl = "maxis_x";
+          m_deviceName = m_deviceRef.DevName;
+        }
+        else if ( cmd.Contains( "maxis_y" ) ) {
+          // mouse
+          m_cmdCtrl = "maxis_y";
+          m_deviceName = m_deviceRef.DevName;
+        }
         // assume joystick
         else {
           // get parts
@@ -291,7 +303,12 @@ namespace SCJMapper_V2.Devices.Options
       if ( DevInstanceNo < 1 ) return ""; // no device to assign it to..
 
       string tmp = "";
-      tmp += string.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", m_class, m_devInstanceNo.ToString( ) );
+
+      // again we have to translate from internal deviceClass mouse to CIG type keyboard ...
+      string type = m_devClass;
+      if ( MouseCls.IsDeviceClass( type ) ) type = KeyboardCls.DeviceClass;
+
+      tmp += string.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", type, m_devInstanceNo.ToString( ) );
       tmp += string.Format( "\t\t<{0} ", m_option );
 
       if ( InvertUsed ) {
@@ -334,7 +351,7 @@ namespace SCJMapper_V2.Devices.Options
     /// <param name="reader">A prepared XML reader</param>
     /// <param name="instance">the Joystick instance number</param>
     /// <returns></returns>
-    public bool Options_fromXML( XElement option, string type, int instance )
+    public bool Options_fromXML( XElement option, string deviceClass, int instance )
     {
       /*
 		    <flight_move_pitch exponent="1.00" > 
@@ -345,7 +362,7 @@ namespace SCJMapper_V2.Devices.Options
 			    </nonlinearity_curve>
 		    </flight_move_pitch> 
              */
-      m_class = type;
+      m_devClass = deviceClass;
       m_devInstanceNo = instance;
       m_option = option.Name.LocalName;
 
@@ -377,6 +394,8 @@ namespace SCJMapper_V2.Devices.Options
           string ptOut = RoundString( (string)point.Attribute( "out" ) );
           m_PtsIn.Add( ptIn ); m_PtsOut.Add( ptOut ); m_ptsEnabled = true;
         }
+        ExponentUsed = false; // despite having the Expo=1.00 in the options - it is not used with nonlin curve
+        Exponent = RoundString( "1.00" );
       }
       // sanity check - we've have to have 3 pts  here - else we subst
       // add 2nd

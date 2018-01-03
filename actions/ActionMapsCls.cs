@@ -1,9 +1,4 @@
-﻿
-
-#define USE_DS_ACTIONMAPS
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -111,10 +106,11 @@ namespace SCJMapper_V2.Actions
     /// <returns>The ActionMaps copy with reassigned input</returns>
     public ActionMapsCls ReassignJsN( JsReassingList newJsList )
     {
-      var newMaps = new ActionMapsCls( this );
-      newMaps.m_uiCustHeader = (UICustHeader)this.m_uiCustHeader.Clone( );
-      newMaps.m_tuningOptions = (Tuningoptions)this.m_tuningOptions.Clone( );
-      newMaps.m_deviceOptions = (Deviceoptions)this.m_deviceOptions.Clone( );
+      var newMaps = new ActionMapsCls( this ) {
+        m_uiCustHeader = (UICustHeader)this.m_uiCustHeader.Clone( ),
+        m_tuningOptions = (Tuningoptions)this.m_tuningOptions.Clone( ),
+        m_deviceOptions = (Deviceoptions)this.m_deviceOptions.Clone( )
+      };
 
       foreach ( ActionMapCls am in this ) {
         newMaps.Add( am.ReassignJsN( newJsList ) );  // creates the deep copy of the tree
@@ -125,7 +121,10 @@ namespace SCJMapper_V2.Actions
       return newMaps;
     }
 
-
+    /// <summary>
+    /// cTor: private copy constructor
+    /// </summary>
+    /// <param name="other"></param>
     private ActionMapsCls( ActionMapsCls other )
     {
       this.version = other.version;
@@ -135,7 +134,7 @@ namespace SCJMapper_V2.Actions
     }
 
     /// <summary>
-    /// ctor
+    /// cTor: plain, initializes values
     /// </summary>
     public ActionMapsCls()
     {
@@ -147,16 +146,14 @@ namespace SCJMapper_V2.Actions
       for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
         m_js[i] = ""; m_GUIDs[i] = "";
       }
-
       // create the default mapped optiontree
-      CreateNewOptions( );
-
-      //LoadSupportedActionMaps( ); // get them from config @@@@@@@@@
+     // CreateNewOptions( );
     }
 
-
-
-    private void CreateNewOptions()
+    /// <summary>
+    /// Helper to create all needed objs
+    /// </summary>
+    public void CreateNewOptions()
     {
       // create options objs
       m_uiCustHeader = new UICustHeader( );
@@ -171,11 +168,9 @@ namespace SCJMapper_V2.Actions
     /// <param name="newAcm"></param>
     private void Merge( ActionMapCls newAcm )
     {
-      log.Debug( "Merge - Entry" );
-
       // do we find an actionmap like the new one in our list ?
       ActionMapCls ACM = this.Find( delegate ( ActionMapCls acm ) {
-        return acm.Name == newAcm.Name;
+        return acm.MapName == newAcm.MapName;
       } );
       if ( ACM == null ) {
         ; // this.Add( newAcm ); // no, add new
@@ -186,8 +181,10 @@ namespace SCJMapper_V2.Actions
     }
 
 
-#if USE_DS_ACTIONMAPS  // see and (un)define on top of file to allow for editing the DataSet entities
-
+    /// <summary>
+    /// Converts all maps into a DataSet
+    /// </summary>
+    /// <param name="dsa">The dataset to populate</param>
     public void ToDataSet( DS_ActionMaps dsa )
     {
       dsa.Clear( );
@@ -196,7 +193,7 @@ namespace SCJMapper_V2.Actions
       int AMcount = 1;
       foreach ( ActionMapCls am in this ) {
         DS_ActionMaps.T_ActionMapRow amr = dsa.T_ActionMap.NewT_ActionMapRow( );
-        string amShown = DS_ActionMap.ActionMapShown( am.Name, AMcount++ );
+        string amShown = DS_ActionMap.ActionMapShown( SCUiText.Instance.Text( am.MapName), AMcount++ );
 
         amr.ID_ActionMap = amShown;
         dsa.T_ActionMap.AddT_ActionMapRow( amr );
@@ -205,10 +202,11 @@ namespace SCJMapper_V2.Actions
           int ilIndex = 0;
           while ( ac.InputList.Count > ilIndex ) {
             DS_ActionMaps.T_ActionRow ar = dsa.T_Action.NewT_ActionRow( );
-            ar.ID_Action = DS_ActionMap.ActionID( am.Name, ac.Key, ac.InputList[ilIndex].NodeIndex ); // make a unique key
+            ar.ID_Action = DS_ActionMap.ActionID( am.MapName, ac.Key, ac.InputList[ilIndex].NodeIndex ); // make a unique key
             ar.AddBind = ( ilIndex > 0 ); // all but the first are addbinds
             ar.REF_ActionMap = amShown;
             ar.ActionName = ac.ActionName;
+            ar.ActionText = SCUiText.Instance.Text( ac.ActionName );
             ar.Device = ac.Device;
             ar.Def_Binding = ac.DefBinding;
             ar.Def_Modifier = ac.DefActivationMode.Name;
@@ -228,6 +226,11 @@ namespace SCJMapper_V2.Actions
         dsa.AcceptChanges( );
     }
 
+    /// <summary>
+    /// Update the dataset
+    /// </summary>
+    /// <param name="dsa">The dataset</param>
+    /// <param name="actionID">The actionID to update from</param>
     public void UpdateDataSet( DS_ActionMaps dsa, string actionID )
     {
       foreach ( ActionMapCls am in this ) {
@@ -236,7 +239,7 @@ namespace SCJMapper_V2.Actions
         foreach ( ActionCls ac in am ) {
           int ilIndex = 0;
           while ( ac.InputList.Count > ilIndex ) {
-            if ( actionID == DS_ActionMap.ActionID( am.Name, ac.Key, ac.InputList[ilIndex].NodeIndex ) ) {
+            if ( actionID == DS_ActionMap.ActionID( am.MapName, ac.Key, ac.InputList[ilIndex].NodeIndex ) ) {
               DS_ActionMaps.T_ActionRow ar = dsa.T_Action.FindByID_Action( actionID );
               ar.Usr_Binding = ac.InputList[ilIndex].DevInput;
               ar.Usr_Modifier = ac.InputList[ilIndex].ActivationMode.Name;
@@ -248,12 +251,7 @@ namespace SCJMapper_V2.Actions
           }
         }// each Action
       }// each ActionMap
-
     }
-
-#endif
-
-
 
     /// <summary>
     /// Dump the ActionMaps as partial XML nicely formatted
@@ -280,7 +278,6 @@ namespace SCJMapper_V2.Actions
 
       // close the tag
       r += string.Format( ">\n" );
-
 
       // *** CustomisationUIHeader
 

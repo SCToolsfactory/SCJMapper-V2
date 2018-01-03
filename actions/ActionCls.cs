@@ -47,7 +47,7 @@ namespace SCJMapper_V2.Actions
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
 
     public string Key { get; set; }                       // the key is the "Daction" formatted item (as we can have the same name multiple times)
-    public string ActionName { get; set; }                      // the plain action name e.g. v_yaw
+    public string ActionName { get; set; }                // the plain action name e.g. v_yaw
     public Act.ActionDevice ActionDevice { get; set; }    // the enum of the device
     public string Device { get; set; }                    // name of the device (uses DeviceClass)
     public string DefBinding { get; set; }                // the default binding
@@ -77,7 +77,6 @@ namespace SCJMapper_V2.Actions
     public ActionCls ReassignJsN( JsReassingList newJsList )
     {
       ActionCls newAc = this.MyClone( );
-
       // creates a copy of the list with reassigned jsN devs
       newAc.InputList.Clear( ); // get rid of cloned list
       foreach ( ActionCommandCls acc in InputList ) {
@@ -86,7 +85,6 @@ namespace SCJMapper_V2.Actions
 
       return newAc;
     }
-
 
     /// <summary>
     /// ctor
@@ -101,7 +99,6 @@ namespace SCJMapper_V2.Actions
       DefActivationMode = ActivationMode.Default;
       InputList = new List<ActionCommandCls>( ); // empty list
     }
-
 
     /// <summary>
     /// Creates and adds the inputCommand list with given input string
@@ -122,17 +119,22 @@ namespace SCJMapper_V2.Actions
     /// Add an ActionCommand with Input at nodeindex
     ///   apply default ActivationMode
     /// </summary>
-    /// <param name="devInput"></param>
-    /// <param name="index"></param>
-    /// <returns></returns>
+    /// <param name="devInput">The input to apply</param>
+    /// <param name="index">The nodeindex</param>
+    /// <returns>The created ActionCommand</returns>
     public ActionCommandCls AddCommand( string devInput, int index )
     {
-      ActionCommandCls acc = new ActionCommandCls( devInput, index );
-      acc.ActivationMode = new ActivationMode( ActivationMode.Default );
+      ActionCommandCls acc = new ActionCommandCls( devInput, index ) {
+        ActivationMode = new ActivationMode( ActivationMode.Default )
+      };
       InputList.Add( acc );
       return acc;
     }
 
+    /// <summary>
+    /// Delete an ActionCommand with nodeindex
+    /// </summary>
+    /// <param name="index">The nodeindex</param>
     public void DelCommand( int index )
     {
       int removeIt = -1;
@@ -143,7 +145,6 @@ namespace SCJMapper_V2.Actions
       }
       if ( removeIt >= 0 ) InputList.RemoveAt( removeIt );
     }
-
 
     /// <summary>
     /// Merge action is simply copying the new input control
@@ -156,8 +157,6 @@ namespace SCJMapper_V2.Actions
         this.InputList.Add( acc );
       }
     }
-
-
 
     /// <summary>
     /// Updates an actionCommand with a new input (command)
@@ -193,7 +192,6 @@ namespace SCJMapper_V2.Actions
       return acc;
     }
 
-
     /// <summary>
     /// Find an ActionCommand with index in an Action
     /// </summary>
@@ -211,7 +209,6 @@ namespace SCJMapper_V2.Actions
       }
       return acc;
     }
-
 
     /// <summary>
     /// Dump the action as partial XML nicely formatted
@@ -233,7 +230,6 @@ namespace SCJMapper_V2.Actions
           r += string.Format( "\t\t</action>\n" );
         }
       }
-
       return r;
     }
 
