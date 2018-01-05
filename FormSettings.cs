@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using SCJMapper_V2.Actions;
+using SCJMapper_V2.Translation;
 
 namespace SCJMapper_V2
 {
@@ -29,6 +30,8 @@ namespace SCJMapper_V2
 
     private void FormSettings_Load( object sender, EventArgs e )
     {
+      Tx.LocalizeControlTree( this );
+
       chkLbActionMaps.Items.Clear( );
       for ( int i = 0; i < ActionMapsCls.ActionMaps.Length; i++ ) {
         chkLbActionMaps.Items.Add( ActionMapsCls.ActionMaps[i] );

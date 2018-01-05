@@ -27,14 +27,19 @@
     /// </summary>
     private void InitializeComponent( )
     {
-      this.gBoxCap = new System.Windows.Forms.GroupBox();
+      this.gbxBoxCap = new System.Windows.Forms.GroupBox();
+      this.lblnTriggers = new System.Windows.Forms.Label();
+      this.lblNumTriggers = new System.Windows.Forms.Label();
       this.lblnButtons = new System.Windows.Forms.Label();
       this.lblnTSticks = new System.Windows.Forms.Label();
       this.lblnDPad = new System.Windows.Forms.Label();
-      this.label5 = new System.Windows.Forms.Label();
-      this.label3 = new System.Windows.Forms.Label();
-      this.label2 = new System.Windows.Forms.Label();
-      this.gBox = new System.Windows.Forms.GroupBox();
+      this.lblNumButtons = new System.Windows.Forms.Label();
+      this.lblNumSticks = new System.Windows.Forms.Label();
+      this.lblNumDPad = new System.Windows.Forms.Label();
+      this.gbxGBox = new System.Windows.Forms.GroupBox();
+      this.iTStickBtR = new System.Windows.Forms.Label();
+      this.iTStickBtL = new System.Windows.Forms.Label();
+      this.iTStickYL = new System.Windows.Forms.Label();
       this.lbl1Buttons = new System.Windows.Forms.Label();
       this.lB = new System.Windows.Forms.Label();
       this.iBtBack = new System.Windows.Forms.Label();
@@ -43,6 +48,7 @@
       this.iBtStart = new System.Windows.Forms.Label();
       this.iShR = new System.Windows.Forms.Label();
       this.iShL = new System.Windows.Forms.Label();
+      this.iTStickYR = new System.Windows.Forms.Label();
       this.iTStickXR = new System.Windows.Forms.Label();
       this.iTStickXL = new System.Windows.Forms.Label();
       this.iDPad = new System.Windows.Forms.Label();
@@ -55,32 +61,46 @@
       this.lTStickR = new System.Windows.Forms.Label();
       this.lTStickL = new System.Windows.Forms.Label();
       this.lDPad = new System.Windows.Forms.Label();
-      this.lblnTriggers = new System.Windows.Forms.Label();
-      this.label4 = new System.Windows.Forms.Label();
-      this.iTStickYL = new System.Windows.Forms.Label();
-      this.iTStickYR = new System.Windows.Forms.Label();
-      this.iTStickBtL = new System.Windows.Forms.Label();
-      this.iTStickBtR = new System.Windows.Forms.Label();
-      this.gBoxCap.SuspendLayout();
-      this.gBox.SuspendLayout();
+      this.gbxBoxCap.SuspendLayout();
+      this.gbxGBox.SuspendLayout();
       this.SuspendLayout();
       // 
-      // gBoxCap
+      // gbxBoxCap
       // 
-      this.gBoxCap.Controls.Add(this.lblnTriggers);
-      this.gBoxCap.Controls.Add(this.label4);
-      this.gBoxCap.Controls.Add(this.lblnButtons);
-      this.gBoxCap.Controls.Add(this.lblnTSticks);
-      this.gBoxCap.Controls.Add(this.lblnDPad);
-      this.gBoxCap.Controls.Add(this.label5);
-      this.gBoxCap.Controls.Add(this.label3);
-      this.gBoxCap.Controls.Add(this.label2);
-      this.gBoxCap.Location = new System.Drawing.Point(3, 3);
-      this.gBoxCap.Name = "gBoxCap";
-      this.gBoxCap.Size = new System.Drawing.Size(232, 60);
-      this.gBoxCap.TabIndex = 5;
-      this.gBoxCap.TabStop = false;
-      this.gBoxCap.Text = "Device Capabilities";
+      this.gbxBoxCap.Controls.Add(this.lblnTriggers);
+      this.gbxBoxCap.Controls.Add(this.lblNumTriggers);
+      this.gbxBoxCap.Controls.Add(this.lblnButtons);
+      this.gbxBoxCap.Controls.Add(this.lblnTSticks);
+      this.gbxBoxCap.Controls.Add(this.lblnDPad);
+      this.gbxBoxCap.Controls.Add(this.lblNumButtons);
+      this.gbxBoxCap.Controls.Add(this.lblNumSticks);
+      this.gbxBoxCap.Controls.Add(this.lblNumDPad);
+      this.gbxBoxCap.Location = new System.Drawing.Point(3, 3);
+      this.gbxBoxCap.Name = "gbxBoxCap";
+      this.gbxBoxCap.Size = new System.Drawing.Size(232, 60);
+      this.gbxBoxCap.TabIndex = 5;
+      this.gbxBoxCap.TabStop = false;
+      this.gbxBoxCap.Tag = "§";
+      this.gbxBoxCap.Text = "Device Capabilities";
+      // 
+      // lblnTriggers
+      // 
+      this.lblnTriggers.AutoSize = true;
+      this.lblnTriggers.Location = new System.Drawing.Point(188, 40);
+      this.lblnTriggers.Name = "lblnTriggers";
+      this.lblnTriggers.Size = new System.Drawing.Size(13, 13);
+      this.lblnTriggers.TabIndex = 16;
+      this.lblnTriggers.Text = "0";
+      // 
+      // lblNumTriggers
+      // 
+      this.lblNumTriggers.AutoSize = true;
+      this.lblNumTriggers.Location = new System.Drawing.Point(124, 40);
+      this.lblNumTriggers.Name = "lblNumTriggers";
+      this.lblNumTriggers.Size = new System.Drawing.Size(58, 13);
+      this.lblNumTriggers.TabIndex = 15;
+      this.lblNumTriggers.Tag = "§";
+      this.lblNumTriggers.Text = "# Triggers:";
       // 
       // lblnButtons
       // 
@@ -109,65 +129,99 @@
       this.lblnDPad.TabIndex = 14;
       this.lblnDPad.Text = "0";
       // 
-      // label5
+      // lblNumButtons
       // 
-      this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(9, 40);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(56, 13);
-      this.label5.TabIndex = 13;
-      this.label5.Text = "# Buttons:";
+      this.lblNumButtons.AutoSize = true;
+      this.lblNumButtons.Location = new System.Drawing.Point(9, 40);
+      this.lblNumButtons.Name = "lblNumButtons";
+      this.lblNumButtons.Size = new System.Drawing.Size(56, 13);
+      this.lblNumButtons.TabIndex = 13;
+      this.lblNumButtons.Tag = "§";
+      this.lblNumButtons.Text = "# Buttons:";
       // 
-      // label3
+      // lblNumSticks
       // 
-      this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(124, 24);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(56, 13);
-      this.label3.TabIndex = 13;
-      this.label3.Text = "# TSticks:";
+      this.lblNumSticks.AutoSize = true;
+      this.lblNumSticks.Location = new System.Drawing.Point(124, 24);
+      this.lblNumSticks.Name = "lblNumSticks";
+      this.lblNumSticks.Size = new System.Drawing.Size(56, 13);
+      this.lblNumSticks.TabIndex = 13;
+      this.lblNumSticks.Tag = "§";
+      this.lblNumSticks.Text = "# TSticks:";
       // 
-      // label2
+      // lblNumDPad
       // 
-      this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(9, 24);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(47, 13);
-      this.label2.TabIndex = 13;
-      this.label2.Text = "# DPad:";
+      this.lblNumDPad.AutoSize = true;
+      this.lblNumDPad.Location = new System.Drawing.Point(9, 24);
+      this.lblNumDPad.Name = "lblNumDPad";
+      this.lblNumDPad.Size = new System.Drawing.Size(47, 13);
+      this.lblNumDPad.TabIndex = 13;
+      this.lblNumDPad.Tag = "§";
+      this.lblNumDPad.Text = "# DPad:";
       // 
-      // gBox
+      // gbxGBox
       // 
-      this.gBox.Controls.Add(this.iTStickBtR);
-      this.gBox.Controls.Add(this.iTStickBtL);
-      this.gBox.Controls.Add(this.iTStickYL);
-      this.gBox.Controls.Add(this.lbl1Buttons);
-      this.gBox.Controls.Add(this.lB);
-      this.gBox.Controls.Add(this.iBtBack);
-      this.gBox.Controls.Add(this.iTrigR);
-      this.gBox.Controls.Add(this.iTrigL);
-      this.gBox.Controls.Add(this.iBtStart);
-      this.gBox.Controls.Add(this.iShR);
-      this.gBox.Controls.Add(this.iShL);
-      this.gBox.Controls.Add(this.iTStickYR);
-      this.gBox.Controls.Add(this.iTStickXR);
-      this.gBox.Controls.Add(this.iTStickXL);
-      this.gBox.Controls.Add(this.iDPad);
-      this.gBox.Controls.Add(this.lH3);
-      this.gBox.Controls.Add(this.lH2);
-      this.gBox.Controls.Add(this.lH1);
-      this.gBox.Controls.Add(this.lH0);
-      this.gBox.Controls.Add(this.lTrigR);
-      this.gBox.Controls.Add(this.lTrigL);
-      this.gBox.Controls.Add(this.lTStickR);
-      this.gBox.Controls.Add(this.lTStickL);
-      this.gBox.Controls.Add(this.lDPad);
-      this.gBox.Location = new System.Drawing.Point(3, 67);
-      this.gBox.Name = "gBox";
-      this.gBox.Size = new System.Drawing.Size(232, 161);
-      this.gBox.TabIndex = 6;
-      this.gBox.TabStop = false;
-      this.gBox.Text = "GamePad State";
+      this.gbxGBox.Controls.Add(this.iTStickBtR);
+      this.gbxGBox.Controls.Add(this.iTStickBtL);
+      this.gbxGBox.Controls.Add(this.iTStickYL);
+      this.gbxGBox.Controls.Add(this.lbl1Buttons);
+      this.gbxGBox.Controls.Add(this.lB);
+      this.gbxGBox.Controls.Add(this.iBtBack);
+      this.gbxGBox.Controls.Add(this.iTrigR);
+      this.gbxGBox.Controls.Add(this.iTrigL);
+      this.gbxGBox.Controls.Add(this.iBtStart);
+      this.gbxGBox.Controls.Add(this.iShR);
+      this.gbxGBox.Controls.Add(this.iShL);
+      this.gbxGBox.Controls.Add(this.iTStickYR);
+      this.gbxGBox.Controls.Add(this.iTStickXR);
+      this.gbxGBox.Controls.Add(this.iTStickXL);
+      this.gbxGBox.Controls.Add(this.iDPad);
+      this.gbxGBox.Controls.Add(this.lH3);
+      this.gbxGBox.Controls.Add(this.lH2);
+      this.gbxGBox.Controls.Add(this.lH1);
+      this.gbxGBox.Controls.Add(this.lH0);
+      this.gbxGBox.Controls.Add(this.lTrigR);
+      this.gbxGBox.Controls.Add(this.lTrigL);
+      this.gbxGBox.Controls.Add(this.lTStickR);
+      this.gbxGBox.Controls.Add(this.lTStickL);
+      this.gbxGBox.Controls.Add(this.lDPad);
+      this.gbxGBox.Location = new System.Drawing.Point(3, 67);
+      this.gbxGBox.Name = "gbxGBox";
+      this.gbxGBox.Size = new System.Drawing.Size(232, 161);
+      this.gbxGBox.TabIndex = 6;
+      this.gbxGBox.TabStop = false;
+      this.gbxGBox.Tag = "§";
+      this.gbxGBox.Text = "GamePad State";
+      // 
+      // iTStickBtR
+      // 
+      this.iTStickBtR.AutoSize = true;
+      this.iTStickBtR.Enabled = false;
+      this.iTStickBtR.Location = new System.Drawing.Point(185, 56);
+      this.iTStickBtR.Name = "iTStickBtR";
+      this.iTStickBtR.Size = new System.Drawing.Size(13, 13);
+      this.iTStickBtR.TabIndex = 27;
+      this.iTStickBtR.Text = "0";
+      // 
+      // iTStickBtL
+      // 
+      this.iTStickBtL.AutoSize = true;
+      this.iTStickBtL.Enabled = false;
+      this.iTStickBtL.Location = new System.Drawing.Point(185, 40);
+      this.iTStickBtL.Name = "iTStickBtL";
+      this.iTStickBtL.Size = new System.Drawing.Size(13, 13);
+      this.iTStickBtL.TabIndex = 27;
+      this.iTStickBtL.Text = "0";
+      // 
+      // iTStickYL
+      // 
+      this.iTStickYL.AutoSize = true;
+      this.iTStickYL.Enabled = false;
+      this.iTStickYL.Location = new System.Drawing.Point(124, 40);
+      this.iTStickYL.Name = "iTStickYL";
+      this.iTStickYL.Size = new System.Drawing.Size(13, 13);
+      this.iTStickYL.TabIndex = 26;
+      this.iTStickYL.Text = "0";
       // 
       // lbl1Buttons
       // 
@@ -244,6 +298,16 @@
       this.iShL.Size = new System.Drawing.Size(13, 13);
       this.iShL.TabIndex = 18;
       this.iShL.Text = "0";
+      // 
+      // iTStickYR
+      // 
+      this.iTStickYR.AutoSize = true;
+      this.iTStickYR.Enabled = false;
+      this.iTStickYR.Location = new System.Drawing.Point(124, 56);
+      this.iTStickYR.Name = "iTStickYR";
+      this.iTStickYR.Size = new System.Drawing.Size(13, 13);
+      this.iTStickYR.TabIndex = 14;
+      this.iTStickYR.Text = "0";
       // 
       // iTStickXR
       // 
@@ -365,90 +429,31 @@
       this.lDPad.TabIndex = 0;
       this.lDPad.Text = "DPad:";
       // 
-      // lblnTriggers
-      // 
-      this.lblnTriggers.AutoSize = true;
-      this.lblnTriggers.Location = new System.Drawing.Point(188, 40);
-      this.lblnTriggers.Name = "lblnTriggers";
-      this.lblnTriggers.Size = new System.Drawing.Size(13, 13);
-      this.lblnTriggers.TabIndex = 16;
-      this.lblnTriggers.Text = "0";
-      // 
-      // label4
-      // 
-      this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(124, 40);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(58, 13);
-      this.label4.TabIndex = 15;
-      this.label4.Text = "# Triggers:";
-      // 
-      // iTStickYL
-      // 
-      this.iTStickYL.AutoSize = true;
-      this.iTStickYL.Enabled = false;
-      this.iTStickYL.Location = new System.Drawing.Point(124, 40);
-      this.iTStickYL.Name = "iTStickYL";
-      this.iTStickYL.Size = new System.Drawing.Size(13, 13);
-      this.iTStickYL.TabIndex = 26;
-      this.iTStickYL.Text = "0";
-      // 
-      // iTStickYR
-      // 
-      this.iTStickYR.AutoSize = true;
-      this.iTStickYR.Enabled = false;
-      this.iTStickYR.Location = new System.Drawing.Point(124, 56);
-      this.iTStickYR.Name = "iTStickYR";
-      this.iTStickYR.Size = new System.Drawing.Size(13, 13);
-      this.iTStickYR.TabIndex = 14;
-      this.iTStickYR.Text = "0";
-      // 
-      // iTStickBtL
-      // 
-      this.iTStickBtL.AutoSize = true;
-      this.iTStickBtL.Enabled = false;
-      this.iTStickBtL.Location = new System.Drawing.Point(185, 40);
-      this.iTStickBtL.Name = "iTStickBtL";
-      this.iTStickBtL.Size = new System.Drawing.Size(13, 13);
-      this.iTStickBtL.TabIndex = 27;
-      this.iTStickBtL.Text = "0";
-      // 
-      // iTStickBtR
-      // 
-      this.iTStickBtR.AutoSize = true;
-      this.iTStickBtR.Enabled = false;
-      this.iTStickBtR.Location = new System.Drawing.Point(185, 56);
-      this.iTStickBtR.Name = "iTStickBtR";
-      this.iTStickBtR.Size = new System.Drawing.Size(13, 13);
-      this.iTStickBtR.TabIndex = 27;
-      this.iTStickBtR.Text = "0";
-      // 
       // UC_GpadPanel
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.Controls.Add(this.gBox);
-      this.Controls.Add(this.gBoxCap);
+      this.Controls.Add(this.gbxGBox);
+      this.Controls.Add(this.gbxBoxCap);
       this.Name = "UC_GpadPanel";
       this.Size = new System.Drawing.Size(239, 295);
-      this.gBoxCap.ResumeLayout(false);
-      this.gBoxCap.PerformLayout();
-      this.gBox.ResumeLayout(false);
-      this.gBox.PerformLayout();
+      this.gbxBoxCap.ResumeLayout(false);
+      this.gbxBoxCap.PerformLayout();
+      this.gbxGBox.ResumeLayout(false);
+      this.gbxGBox.PerformLayout();
       this.ResumeLayout(false);
 
     }
 
     #endregion
 
-    private System.Windows.Forms.GroupBox gBoxCap;
+    private System.Windows.Forms.GroupBox gbxBoxCap;
     private System.Windows.Forms.Label lblnButtons;
     private System.Windows.Forms.Label lblnTSticks;
     private System.Windows.Forms.Label lblnDPad;
-    private System.Windows.Forms.Label label5;
-    private System.Windows.Forms.Label label3;
-    private System.Windows.Forms.Label label2;
-    private System.Windows.Forms.GroupBox gBox;
+    private System.Windows.Forms.Label lblNumButtons;
+    private System.Windows.Forms.Label lblNumSticks;
+    private System.Windows.Forms.Label lblNumDPad;
     private System.Windows.Forms.Label lbl1Buttons;
     private System.Windows.Forms.Label lB;
     private System.Windows.Forms.Label iBtBack;
@@ -470,10 +475,11 @@
     private System.Windows.Forms.Label lTStickL;
     private System.Windows.Forms.Label lDPad;
     private System.Windows.Forms.Label lblnTriggers;
-    private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Label lblNumTriggers;
     private System.Windows.Forms.Label iTStickYL;
     private System.Windows.Forms.Label iTStickYR;
     private System.Windows.Forms.Label iTStickBtR;
     private System.Windows.Forms.Label iTStickBtL;
+    private System.Windows.Forms.GroupBox gbxGBox;
   }
 }

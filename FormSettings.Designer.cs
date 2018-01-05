@@ -28,7 +28,7 @@
     private void InitializeComponent( )
     {
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSettings));
-      this.btDone = new System.Windows.Forms.Button();
+      this.btAccept = new System.Windows.Forms.Button();
       this.txSCPath = new System.Windows.Forms.TextBox();
       this.btChooseSCDir = new System.Windows.Forms.Button();
       this.cbxUsePath = new System.Windows.Forms.CheckBox();
@@ -49,7 +49,7 @@
       this.label10 = new System.Windows.Forms.Label();
       this.txJS8 = new System.Windows.Forms.TextBox();
       this.fbDlg = new System.Windows.Forms.FolderBrowserDialog();
-      this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.gbxIgnoreBt = new System.Windows.Forms.GroupBox();
       this.txJS11 = new System.Windows.Forms.TextBox();
       this.label2 = new System.Windows.Forms.Label();
       this.txJS12 = new System.Windows.Forms.TextBox();
@@ -58,35 +58,36 @@
       this.txJS10 = new System.Windows.Forms.TextBox();
       this.label13 = new System.Windows.Forms.Label();
       this.txJS9 = new System.Windows.Forms.TextBox();
-      this.groupBox2 = new System.Windows.Forms.GroupBox();
-      this.groupBox3 = new System.Windows.Forms.GroupBox();
+      this.gbxSCPath = new System.Windows.Forms.GroupBox();
+      this.gbxIgnoreMaps = new System.Windows.Forms.GroupBox();
       this.chkLbActionMaps = new System.Windows.Forms.CheckedListBox();
       this.btCancel = new System.Windows.Forms.Button();
-      this.label1 = new System.Windows.Forms.Label();
-      this.groupBox4 = new System.Windows.Forms.GroupBox();
-      this.label14 = new System.Windows.Forms.Label();
+      this.lblSettingNote = new System.Windows.Forms.Label();
+      this.gbxAdvanced = new System.Windows.Forms.GroupBox();
+      this.cbxTreeTips = new System.Windows.Forms.CheckBox();
+      this.lblProfileLang = new System.Windows.Forms.Label();
       this.comboLanguage = new System.Windows.Forms.ComboBox();
       this.cbxAutoTabXML = new System.Windows.Forms.CheckBox();
       this.cbxListModifiers = new System.Windows.Forms.CheckBox();
       this.cbxCSVListing = new System.Windows.Forms.CheckBox();
       this.cbxPTU = new System.Windows.Forms.CheckBox();
       this.cbxDetectGamepad = new System.Windows.Forms.CheckBox();
-      this.cbxTreeTips = new System.Windows.Forms.CheckBox();
-      this.groupBox1.SuspendLayout();
-      this.groupBox2.SuspendLayout();
-      this.groupBox3.SuspendLayout();
-      this.groupBox4.SuspendLayout();
+      this.gbxIgnoreBt.SuspendLayout();
+      this.gbxSCPath.SuspendLayout();
+      this.gbxIgnoreMaps.SuspendLayout();
+      this.gbxAdvanced.SuspendLayout();
       this.SuspendLayout();
       // 
-      // btDone
+      // btAccept
       // 
-      this.btDone.Location = new System.Drawing.Point(658, 423);
-      this.btDone.Name = "btDone";
-      this.btDone.Size = new System.Drawing.Size(93, 31);
-      this.btDone.TabIndex = 1;
-      this.btDone.Text = "Accept";
-      this.btDone.UseVisualStyleBackColor = true;
-      this.btDone.Click += new System.EventHandler(this.btDone_Click);
+      this.btAccept.Location = new System.Drawing.Point(658, 423);
+      this.btAccept.Name = "btAccept";
+      this.btAccept.Size = new System.Drawing.Size(93, 31);
+      this.btAccept.TabIndex = 1;
+      this.btAccept.Tag = "§";
+      this.btAccept.Text = "Accept";
+      this.btAccept.UseVisualStyleBackColor = true;
+      this.btAccept.Click += new System.EventHandler(this.btDone_Click);
       // 
       // txSCPath
       // 
@@ -263,39 +264,40 @@
       this.fbDlg.RootFolder = System.Environment.SpecialFolder.MyComputer;
       this.fbDlg.ShowNewFolderButton = false;
       // 
-      // groupBox1
+      // gbxIgnoreBt
       // 
-      this.groupBox1.Controls.Add(this.txJS11);
-      this.groupBox1.Controls.Add(this.label2);
-      this.groupBox1.Controls.Add(this.txJS12);
-      this.groupBox1.Controls.Add(this.label11);
-      this.groupBox1.Controls.Add(this.label12);
-      this.groupBox1.Controls.Add(this.txJS10);
-      this.groupBox1.Controls.Add(this.label13);
-      this.groupBox1.Controls.Add(this.txJS9);
-      this.groupBox1.Controls.Add(this.txJS7);
-      this.groupBox1.Controls.Add(this.label10);
-      this.groupBox1.Controls.Add(this.txJS1);
-      this.groupBox1.Controls.Add(this.txJS8);
-      this.groupBox1.Controls.Add(this.label3);
-      this.groupBox1.Controls.Add(this.label9);
-      this.groupBox1.Controls.Add(this.txJS2);
-      this.groupBox1.Controls.Add(this.label4);
-      this.groupBox1.Controls.Add(this.label8);
-      this.groupBox1.Controls.Add(this.txJS3);
-      this.groupBox1.Controls.Add(this.txJS6);
-      this.groupBox1.Controls.Add(this.label5);
-      this.groupBox1.Controls.Add(this.label7);
-      this.groupBox1.Controls.Add(this.txJS4);
-      this.groupBox1.Controls.Add(this.txJS5);
-      this.groupBox1.Controls.Add(this.label6);
-      this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.groupBox1.Location = new System.Drawing.Point(12, 12);
-      this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(561, 226);
-      this.groupBox1.TabIndex = 22;
-      this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Ignore Buttons - enter button numbers which should be ignored separated by spaces" +
+      this.gbxIgnoreBt.Controls.Add(this.txJS11);
+      this.gbxIgnoreBt.Controls.Add(this.label2);
+      this.gbxIgnoreBt.Controls.Add(this.txJS12);
+      this.gbxIgnoreBt.Controls.Add(this.label11);
+      this.gbxIgnoreBt.Controls.Add(this.label12);
+      this.gbxIgnoreBt.Controls.Add(this.txJS10);
+      this.gbxIgnoreBt.Controls.Add(this.label13);
+      this.gbxIgnoreBt.Controls.Add(this.txJS9);
+      this.gbxIgnoreBt.Controls.Add(this.txJS7);
+      this.gbxIgnoreBt.Controls.Add(this.label10);
+      this.gbxIgnoreBt.Controls.Add(this.txJS1);
+      this.gbxIgnoreBt.Controls.Add(this.txJS8);
+      this.gbxIgnoreBt.Controls.Add(this.label3);
+      this.gbxIgnoreBt.Controls.Add(this.label9);
+      this.gbxIgnoreBt.Controls.Add(this.txJS2);
+      this.gbxIgnoreBt.Controls.Add(this.label4);
+      this.gbxIgnoreBt.Controls.Add(this.label8);
+      this.gbxIgnoreBt.Controls.Add(this.txJS3);
+      this.gbxIgnoreBt.Controls.Add(this.txJS6);
+      this.gbxIgnoreBt.Controls.Add(this.label5);
+      this.gbxIgnoreBt.Controls.Add(this.label7);
+      this.gbxIgnoreBt.Controls.Add(this.txJS4);
+      this.gbxIgnoreBt.Controls.Add(this.txJS5);
+      this.gbxIgnoreBt.Controls.Add(this.label6);
+      this.gbxIgnoreBt.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.gbxIgnoreBt.Location = new System.Drawing.Point(12, 12);
+      this.gbxIgnoreBt.Name = "gbxIgnoreBt";
+      this.gbxIgnoreBt.Size = new System.Drawing.Size(561, 226);
+      this.gbxIgnoreBt.TabIndex = 22;
+      this.gbxIgnoreBt.TabStop = false;
+      this.gbxIgnoreBt.Tag = "§";
+      this.gbxIgnoreBt.Text = "Ignore Buttons - enter button numbers which should be ignored separated by spaces" +
     " (e.g. 24 25)";
       // 
       // txJS11
@@ -370,29 +372,31 @@
       this.txJS9.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txJS1_KeyDown);
       this.txJS9.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txJS1_KeyPress);
       // 
-      // groupBox2
+      // gbxSCPath
       // 
-      this.groupBox2.Controls.Add(this.txSCPath);
-      this.groupBox2.Controls.Add(this.btChooseSCDir);
-      this.groupBox2.Controls.Add(this.cbxUsePath);
-      this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.groupBox2.Location = new System.Drawing.Point(15, 244);
-      this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(561, 59);
-      this.groupBox2.TabIndex = 23;
-      this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "Path to the Star Citizen Installation (e.g. C:\\Games\\StarCitizen)";
+      this.gbxSCPath.Controls.Add(this.txSCPath);
+      this.gbxSCPath.Controls.Add(this.btChooseSCDir);
+      this.gbxSCPath.Controls.Add(this.cbxUsePath);
+      this.gbxSCPath.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.gbxSCPath.Location = new System.Drawing.Point(15, 244);
+      this.gbxSCPath.Name = "gbxSCPath";
+      this.gbxSCPath.Size = new System.Drawing.Size(561, 59);
+      this.gbxSCPath.TabIndex = 23;
+      this.gbxSCPath.TabStop = false;
+      this.gbxSCPath.Tag = "§";
+      this.gbxSCPath.Text = "Path to the Star Citizen Installation (e.g. C:\\Games\\StarCitizen)";
       // 
-      // groupBox3
+      // gbxIgnoreMaps
       // 
-      this.groupBox3.Controls.Add(this.chkLbActionMaps);
-      this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.groupBox3.Location = new System.Drawing.Point(579, 12);
-      this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(274, 405);
-      this.groupBox3.TabIndex = 24;
-      this.groupBox3.TabStop = false;
-      this.groupBox3.Text = "Ignore Actionmaps - check the ones to hide";
+      this.gbxIgnoreMaps.Controls.Add(this.chkLbActionMaps);
+      this.gbxIgnoreMaps.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.gbxIgnoreMaps.Location = new System.Drawing.Point(579, 12);
+      this.gbxIgnoreMaps.Name = "gbxIgnoreMaps";
+      this.gbxIgnoreMaps.Size = new System.Drawing.Size(274, 405);
+      this.gbxIgnoreMaps.TabIndex = 24;
+      this.gbxIgnoreMaps.TabStop = false;
+      this.gbxIgnoreMaps.Tag = "§";
+      this.gbxIgnoreMaps.Text = "Ignore Actionmaps - check the ones to hide";
       // 
       // chkLbActionMaps
       // 
@@ -411,52 +415,67 @@
       this.btCancel.Name = "btCancel";
       this.btCancel.Size = new System.Drawing.Size(93, 31);
       this.btCancel.TabIndex = 25;
+      this.btCancel.Tag = "§";
       this.btCancel.Text = "Cancel";
       this.btCancel.UseVisualStyleBackColor = true;
       this.btCancel.Click += new System.EventHandler(this.btCancel_Click);
       // 
-      // label1
+      // lblSettingNote
       // 
-      this.label1.AutoSize = true;
-      this.label1.ForeColor = System.Drawing.Color.Red;
-      this.label1.Location = new System.Drawing.Point(12, 426);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(401, 26);
-      this.label1.TabIndex = 26;
-      this.label1.Text = "Note: Accepting changes will clear the action tree to apply the new settings; \r\nC" +
+      this.lblSettingNote.AutoSize = true;
+      this.lblSettingNote.ForeColor = System.Drawing.Color.Red;
+      this.lblSettingNote.Location = new System.Drawing.Point(12, 426);
+      this.lblSettingNote.Name = "lblSettingNote";
+      this.lblSettingNote.Size = new System.Drawing.Size(401, 26);
+      this.lblSettingNote.TabIndex = 26;
+      this.lblSettingNote.Tag = "§";
+      this.lblSettingNote.Text = "Note: Accepting changes will clear the action tree to apply the new settings; \r\nC" +
     "ancel now if you want to save your work first.";
       // 
-      // groupBox4
+      // gbxAdvanced
       // 
-      this.groupBox4.Controls.Add(this.cbxTreeTips);
-      this.groupBox4.Controls.Add(this.label14);
-      this.groupBox4.Controls.Add(this.comboLanguage);
-      this.groupBox4.Controls.Add(this.cbxAutoTabXML);
-      this.groupBox4.Controls.Add(this.cbxListModifiers);
-      this.groupBox4.Controls.Add(this.cbxCSVListing);
-      this.groupBox4.Controls.Add(this.cbxPTU);
-      this.groupBox4.Controls.Add(this.cbxDetectGamepad);
-      this.groupBox4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.groupBox4.Location = new System.Drawing.Point(15, 309);
-      this.groupBox4.Name = "groupBox4";
-      this.groupBox4.Size = new System.Drawing.Size(561, 105);
-      this.groupBox4.TabIndex = 27;
-      this.groupBox4.TabStop = false;
-      this.groupBox4.Text = "Advanced Options ...";
+      this.gbxAdvanced.Controls.Add(this.cbxTreeTips);
+      this.gbxAdvanced.Controls.Add(this.lblProfileLang);
+      this.gbxAdvanced.Controls.Add(this.comboLanguage);
+      this.gbxAdvanced.Controls.Add(this.cbxAutoTabXML);
+      this.gbxAdvanced.Controls.Add(this.cbxListModifiers);
+      this.gbxAdvanced.Controls.Add(this.cbxCSVListing);
+      this.gbxAdvanced.Controls.Add(this.cbxPTU);
+      this.gbxAdvanced.Controls.Add(this.cbxDetectGamepad);
+      this.gbxAdvanced.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.gbxAdvanced.Location = new System.Drawing.Point(15, 309);
+      this.gbxAdvanced.Name = "gbxAdvanced";
+      this.gbxAdvanced.Size = new System.Drawing.Size(561, 105);
+      this.gbxAdvanced.TabIndex = 27;
+      this.gbxAdvanced.TabStop = false;
+      this.gbxAdvanced.Tag = "§";
+      this.gbxAdvanced.Text = "Advanced Options ...";
       // 
-      // label14
+      // cbxTreeTips
       // 
-      this.label14.AutoSize = true;
-      this.label14.Location = new System.Drawing.Point(6, 73);
-      this.label14.Name = "label14";
-      this.label14.Size = new System.Drawing.Size(62, 13);
-      this.label14.TabIndex = 12;
-      this.label14.Text = "Language:";
+      this.cbxTreeTips.AutoSize = true;
+      this.cbxTreeTips.Location = new System.Drawing.Point(245, 72);
+      this.cbxTreeTips.Name = "cbxTreeTips";
+      this.cbxTreeTips.Size = new System.Drawing.Size(101, 17);
+      this.cbxTreeTips.TabIndex = 13;
+      this.cbxTreeTips.Tag = "§";
+      this.cbxTreeTips.Text = "Show Tree tips";
+      this.cbxTreeTips.UseVisualStyleBackColor = true;
+      // 
+      // lblProfileLang
+      // 
+      this.lblProfileLang.AutoSize = true;
+      this.lblProfileLang.Location = new System.Drawing.Point(6, 73);
+      this.lblProfileLang.Name = "lblProfileLang";
+      this.lblProfileLang.Size = new System.Drawing.Size(99, 13);
+      this.lblProfileLang.TabIndex = 12;
+      this.lblProfileLang.Tag = "§";
+      this.lblProfileLang.Text = "Profile Language:";
       // 
       // comboLanguage
       // 
       this.comboLanguage.FormattingEnabled = true;
-      this.comboLanguage.Location = new System.Drawing.Point(77, 70);
+      this.comboLanguage.Location = new System.Drawing.Point(139, 70);
       this.comboLanguage.Name = "comboLanguage";
       this.comboLanguage.Size = new System.Drawing.Size(100, 21);
       this.comboLanguage.TabIndex = 11;
@@ -469,6 +488,7 @@
       this.cbxAutoTabXML.Name = "cbxAutoTabXML";
       this.cbxAutoTabXML.Size = new System.Drawing.Size(233, 17);
       this.cbxAutoTabXML.TabIndex = 10;
+      this.cbxAutoTabXML.Tag = "§";
       this.cbxAutoTabXML.Text = "Switch XML/Mapping tab automatically";
       this.cbxAutoTabXML.UseVisualStyleBackColor = true;
       // 
@@ -479,6 +499,7 @@
       this.cbxListModifiers.Name = "cbxListModifiers";
       this.cbxListModifiers.Size = new System.Drawing.Size(97, 17);
       this.cbxListModifiers.TabIndex = 9;
+      this.cbxListModifiers.Tag = "§";
       this.cbxListModifiers.Text = "List Modifiers";
       this.cbxListModifiers.UseVisualStyleBackColor = true;
       // 
@@ -489,6 +510,7 @@
       this.cbxCSVListing.Name = "cbxCSVListing";
       this.cbxCSVListing.Size = new System.Drawing.Size(106, 17);
       this.cbxCSVListing.TabIndex = 8;
+      this.cbxCSVListing.Tag = "§";
       this.cbxCSVListing.Text = "Use CSV Listing";
       this.cbxCSVListing.UseVisualStyleBackColor = true;
       // 
@@ -511,18 +533,9 @@
       this.cbxDetectGamepad.Name = "cbxDetectGamepad";
       this.cbxDetectGamepad.Size = new System.Drawing.Size(98, 17);
       this.cbxDetectGamepad.TabIndex = 6;
+      this.cbxDetectGamepad.Tag = "§";
       this.cbxDetectGamepad.Text = "Use Gamepad";
       this.cbxDetectGamepad.UseVisualStyleBackColor = true;
-      // 
-      // cbxTreeTips
-      // 
-      this.cbxTreeTips.AutoSize = true;
-      this.cbxTreeTips.Location = new System.Drawing.Point(196, 72);
-      this.cbxTreeTips.Name = "cbxTreeTips";
-      this.cbxTreeTips.Size = new System.Drawing.Size(101, 17);
-      this.cbxTreeTips.TabIndex = 13;
-      this.cbxTreeTips.Text = "Show Tree tips";
-      this.cbxTreeTips.UseVisualStyleBackColor = true;
       // 
       // FormSettings
       // 
@@ -530,28 +543,29 @@
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
       this.CancelButton = this.btCancel;
       this.ClientSize = new System.Drawing.Size(861, 467);
-      this.Controls.Add(this.groupBox4);
-      this.Controls.Add(this.label1);
+      this.Controls.Add(this.gbxAdvanced);
+      this.Controls.Add(this.lblSettingNote);
       this.Controls.Add(this.btCancel);
-      this.Controls.Add(this.groupBox3);
-      this.Controls.Add(this.groupBox2);
-      this.Controls.Add(this.groupBox1);
-      this.Controls.Add(this.btDone);
+      this.Controls.Add(this.gbxIgnoreMaps);
+      this.Controls.Add(this.gbxSCPath);
+      this.Controls.Add(this.gbxIgnoreBt);
+      this.Controls.Add(this.btAccept);
       this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "FormSettings";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+      this.Tag = "§";
       this.Text = "Settings";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSettings_FormClosing);
       this.Load += new System.EventHandler(this.FormSettings_Load);
-      this.groupBox1.ResumeLayout(false);
-      this.groupBox1.PerformLayout();
-      this.groupBox2.ResumeLayout(false);
-      this.groupBox2.PerformLayout();
-      this.groupBox3.ResumeLayout(false);
-      this.groupBox4.ResumeLayout(false);
-      this.groupBox4.PerformLayout();
+      this.gbxIgnoreBt.ResumeLayout(false);
+      this.gbxIgnoreBt.PerformLayout();
+      this.gbxSCPath.ResumeLayout(false);
+      this.gbxSCPath.PerformLayout();
+      this.gbxIgnoreMaps.ResumeLayout(false);
+      this.gbxAdvanced.ResumeLayout(false);
+      this.gbxAdvanced.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -559,7 +573,7 @@
 
     #endregion
 
-    private System.Windows.Forms.Button btDone;
+    private System.Windows.Forms.Button btAccept;
     private System.Windows.Forms.TextBox txSCPath;
     private System.Windows.Forms.Button btChooseSCDir;
     private System.Windows.Forms.CheckBox cbxUsePath;
@@ -580,13 +594,13 @@
     private System.Windows.Forms.Label label10;
     private System.Windows.Forms.TextBox txJS8;
     private System.Windows.Forms.FolderBrowserDialog fbDlg;
-    private System.Windows.Forms.GroupBox groupBox1;
-    private System.Windows.Forms.GroupBox groupBox2;
-    private System.Windows.Forms.GroupBox groupBox3;
+    private System.Windows.Forms.GroupBox gbxIgnoreBt;
+    private System.Windows.Forms.GroupBox gbxSCPath;
+    private System.Windows.Forms.GroupBox gbxIgnoreMaps;
     private System.Windows.Forms.CheckedListBox chkLbActionMaps;
     private System.Windows.Forms.Button btCancel;
-    private System.Windows.Forms.Label label1;
-    private System.Windows.Forms.GroupBox groupBox4;
+    private System.Windows.Forms.Label lblSettingNote;
+    private System.Windows.Forms.GroupBox gbxAdvanced;
     private System.Windows.Forms.CheckBox cbxDetectGamepad;
     private System.Windows.Forms.CheckBox cbxPTU;
     private System.Windows.Forms.TextBox txJS11;
@@ -600,7 +614,7 @@
     private System.Windows.Forms.CheckBox cbxCSVListing;
     private System.Windows.Forms.CheckBox cbxListModifiers;
     private System.Windows.Forms.CheckBox cbxAutoTabXML;
-    private System.Windows.Forms.Label label14;
+    private System.Windows.Forms.Label lblProfileLang;
     private System.Windows.Forms.ComboBox comboLanguage;
     private System.Windows.Forms.CheckBox cbxTreeTips;
   }

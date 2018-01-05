@@ -13,6 +13,7 @@ using SCJMapper_V2.Devices.Keyboard;
 using SCJMapper_V2.Devices.Mouse;
 using SCJMapper_V2.Devices.Gamepad;
 using SCJMapper_V2.Devices.Joystick;
+using SCJMapper_V2.Translation;
 
 namespace SCJMapper_V2.Actions
 {
@@ -530,7 +531,7 @@ namespace SCJMapper_V2.Actions
               // must have 2 elements min
               Array.Resize( ref cnl, 0 );
               acm = new ActionMapCls { MapName = elem[iMap] };
-              for ( int eIndex = iAction; eIndex < elem.Length; eIndex += 5 ) { 
+              for ( int eIndex = iAction; eIndex < elem.Length; eIndex += 5 ) {
                 // step 2  - action;actionlabel;defaultBinding;defaultActivationMode;defMultiTap come in as 5groups
                 if ( !string.IsNullOrEmpty( elem[eIndex] ) ) {
                   // default assignments
@@ -890,7 +891,7 @@ namespace SCJMapper_V2.Actions
                 else {
                   // have to recreate the action child nodes
                   ActionTreeInputNode matin = new ActionTreeInputNode( ac.ActionName ) { ImageKey = "Add" };
-                  matin.Update( matn); matin.Command = "";
+                  matin.Update( matn ); matin.Command = "";
                   acc.NodeIndex = matin.Index; // assign visual reference
                   matn.Nodes.Add( matin ); // add to master tree
                   matin.UpdateAction( acc ); UpdateMasterNode( matin );
@@ -1063,15 +1064,18 @@ namespace SCJMapper_V2.Actions
       if ( string.IsNullOrEmpty( input ) ) return; // nothing to find here...
       if ( Act.IsDisabledInput( input ) ) return; // nothing to find here...
       rtf.FontSize( 12 );
-      rtf.Write( "Actions listed for input: " );
+      rtf.Write( Tx.Translate( "mapHeader" ) + " " );
       rtf.RBold = true; rtf.WriteLn( input ); rtf.RBold = false;
 
       rtf.FontSize( 9 ); // 9pt
-      rtf.ClearTabs( ); rtf.SetTab( 852 ); rtf.SetTab( 4260 ); rtf.SetTab( 6532 );
+      rtf.ClearTabs( ); rtf.SetTab( 1200 ); rtf.SetTab( 4660 ); rtf.SetTab( 7500 );
 
       rtf.WriteLn( );
       rtf.RULine = true;
-      rtf.Write( "Location" ); rtf.WriteTab( "Action" ); rtf.WriteTab( "Actionmap" ); rtf.WriteTab( "Activation Mode".PadRight( 40 ) ); rtf.WriteLn( );
+      rtf.Write( Tx.Translate( "mapLocation" ) );
+      rtf.WriteTab( Tx.Translate( "mapAction" ) );
+      rtf.WriteTab( Tx.Translate( "mapActionmap" ) );
+      rtf.WriteTab( Tx.Translate( "mapActivationMode" ).PadRight( 40 ) ); rtf.WriteLn( );
       rtf.RULine = false;
       rtf.WriteLn( );
       string aMode = "";
@@ -1081,11 +1085,14 @@ namespace SCJMapper_V2.Actions
           bool used = false;
           foreach ( ActionCommandCls acc in ac.InputList ) {
             if ( acc.DevInput == input ) {
-              aMode = string.Format( "modified;{0};{1}", acc.ActivationMode.Name, acc.ActivationMode.MultiTap );
+              aMode = string.Format( "{0};{1};{2}", Tx.Translate( "mapModified" ), acc.ActivationMode.Name, acc.ActivationMode.MultiTap );
               if ( acc.ActivationMode == ActivationMode.Default )
-                aMode = string.Format( "default" );
+                aMode = string.Format( "{0}", Tx.Translate( "mapDefault" ) );
               rtf.RHighlightColor = RTF.RTFformatter.ERColor.ERC_Green;
-              rtf.Write( "mapped" ); rtf.WriteTab( ac.ActionName ); rtf.WriteTab( acm.MapName ); rtf.WriteTab( aMode.PadRight( 80 ) ); rtf.WriteLn( );
+              rtf.Write( Tx.Translate( "mapMapped" ) );
+              rtf.WriteTab( SCUiText.Instance.Text( ac.ActionName ));
+              rtf.WriteTab( SCUiText.Instance.Text( acm.MapName) );
+              rtf.WriteTab( aMode.PadRight( 80 ) ); rtf.WriteLn( );
               rtf.RHighlightColor = RTF.RTFformatter.ERColor.ERC_Black;
               rtf.WriteLn( );
               used = true;
@@ -1094,7 +1101,7 @@ namespace SCJMapper_V2.Actions
           }
           if ( ( !used ) && ac.DefBinding == input ) {
             aMode = string.Format( "{0};{1}", ac.DefActivationMode.Name, ac.DefActivationMode.MultiTap );
-            rtf.Write( "profile" ); rtf.WriteTab( ac.ActionName ); rtf.WriteTab( acm.MapName ); rtf.WriteTab( aMode ); rtf.WriteLn( );
+            rtf.Write( Tx.Translate( "mapProfile" ) ); rtf.WriteTab( ac.ActionName ); rtf.WriteTab( acm.MapName ); rtf.WriteTab( aMode ); rtf.WriteLn( );
             rtf.WriteLn( );
           }
         }
@@ -1108,7 +1115,7 @@ namespace SCJMapper_V2.Actions
     /// <param name="text">The string to find</param>
     public string FindText( string actionmap, string text )
     {
-      log.DebugFormat ( "FindText - Entry ({0}, {1})", actionmap, text );
+      log.DebugFormat( "FindText - Entry ({0}, {1})", actionmap, text );
 
       foreach ( ActionTreeNode tn in m_MasterTree.Nodes ) {
         //        if ( string.IsNullOrEmpty( actionmap ) || ( tn.Text == actionmap ) ) {
@@ -1295,9 +1302,9 @@ namespace SCJMapper_V2.Actions
       const int padInput = 25;
 
       repList += string.Format( "\n" );
-      repList += string.Format( " {0}+- {1} _ {2}#-[{4}] {3}\n\n", "Action".PadRight( padAction ), 
-                                                                    "Dev".PadRight( padDevice ), 
-                                                                    "Binding".PadRight( padInput ), 
+      repList += string.Format( " {0}+- {1} _ {2}#-[{4}] {3}\n\n", "Action".PadRight( padAction ),
+                                                                    "Dev".PadRight( padDevice ),
+                                                                    "Binding".PadRight( padInput ),
                                                                     "Activation", "T" ); // col description line
 
       foreach ( ActionMapCls acm in ActionMaps ) {
@@ -1385,9 +1392,9 @@ namespace SCJMapper_V2.Actions
             }
             // action changed - restart collection
             action = ac.ActionName;
-            rep = string.Format( "{0};{1};", SCUiText.Instance.Text( acm.MapName), 
-                                             SCUiText.Instance.Text( ac.ActionName )); // actionmap; action
-                                                                        // note: don't add trailing semicolons as the are applied in the output formatting
+            rep = string.Format( "{0};{1};", SCUiText.Instance.Text( acm.MapName ),
+                                             SCUiText.Instance.Text( ac.ActionName ) ); // actionmap; action
+                                                                                        // note: don't add trailing semicolons as the are applied in the output formatting
             if ( listModifiers ) {
               kbA = "n.a.;;;;"; // defaults tag;input;mod-tag;mod-name;mod-mult
             }

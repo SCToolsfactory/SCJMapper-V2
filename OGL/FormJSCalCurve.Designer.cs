@@ -98,14 +98,15 @@
       this.lblRoll = new System.Windows.Forms.Label();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.panel9 = new System.Windows.Forms.Panel();
-      this.label6 = new System.Windows.Forms.Label();
+      this.lblDamp = new System.Windows.Forms.Label();
       this.lblDamping = new System.Windows.Forms.Label();
       this.slDamping = new System.Windows.Forms.TrackBar();
       this.panel1 = new System.Windows.Forms.Panel();
-      this.label16 = new System.Windows.Forms.Label();
+      this.lblTurntime = new System.Windows.Forms.Label();
       this.lblTurnspeed = new System.Windows.Forms.Label();
       this.slTurnSpeed = new System.Windows.Forms.TrackBar();
       this.panel6 = new System.Windows.Forms.Panel();
+      this.btZeroCoords = new System.Windows.Forms.Button();
       this.rbPtDeadzone = new System.Windows.Forms.RadioButton();
       this.lblGraphSaturation = new System.Windows.Forms.Label();
       this.lblGraphDeadzone = new System.Windows.Forms.Label();
@@ -124,7 +125,7 @@
       this.lblLivePitch = new System.Windows.Forms.Label();
       this.btCopyToAllAxis = new System.Windows.Forms.Button();
       this.lblLiveYaw = new System.Windows.Forms.Label();
-      this.label4 = new System.Windows.Forms.Label();
+      this.lblChart = new System.Windows.Forms.Label();
       this.lblYOutput = new System.Windows.Forms.Label();
       this.lblYInput = new System.Windows.Forms.Label();
       this.rbPtExponent = new System.Windows.Forms.RadioButton();
@@ -172,7 +173,6 @@
       this.panel10 = new System.Windows.Forms.Panel();
       this.rbTuneStrafe = new System.Windows.Forms.RadioButton();
       this.rbTuneYPR = new System.Windows.Forms.RadioButton();
-      this.btZeroCoords = new System.Windows.Forms.Button();
       this.tlp.SuspendLayout();
       this.tlpData.SuspendLayout();
       this.pnlYaw.SuspendLayout();
@@ -957,23 +957,25 @@
       // 
       this.panel9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.panel9.Controls.Add(this.label6);
+      this.panel9.Controls.Add(this.lblDamp);
       this.panel9.Controls.Add(this.lblDamping);
       this.panel9.Controls.Add(this.slDamping);
       this.panel9.Location = new System.Drawing.Point(624, 63);
       this.panel9.Name = "panel9";
       this.panel9.Size = new System.Drawing.Size(401, 54);
       this.panel9.TabIndex = 7;
+      this.panel9.Tag = "§";
       // 
-      // label6
+      // lblDamp
       // 
-      this.label6.AutoSize = true;
-      this.label6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label6.Location = new System.Drawing.Point(273, 8);
-      this.label6.Name = "label6";
-      this.label6.Size = new System.Drawing.Size(54, 13);
-      this.label6.TabIndex = 12;
-      this.label6.Text = "damping";
+      this.lblDamp.AutoSize = true;
+      this.lblDamp.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblDamp.Location = new System.Drawing.Point(273, 8);
+      this.lblDamp.Name = "lblDamp";
+      this.lblDamp.Size = new System.Drawing.Size(54, 13);
+      this.lblDamp.TabIndex = 12;
+      this.lblDamp.Tag = "§";
+      this.lblDamp.Text = "damping";
       // 
       // lblDamping
       // 
@@ -1000,7 +1002,7 @@
       // 
       this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.panel1.Controls.Add(this.label16);
+      this.panel1.Controls.Add(this.lblTurntime);
       this.panel1.Controls.Add(this.lblTurnspeed);
       this.panel1.Controls.Add(this.slTurnSpeed);
       this.panel1.Location = new System.Drawing.Point(624, 3);
@@ -1008,15 +1010,16 @@
       this.panel1.Size = new System.Drawing.Size(401, 54);
       this.panel1.TabIndex = 4;
       // 
-      // label16
+      // lblTurntime
       // 
-      this.label16.AutoSize = true;
-      this.label16.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label16.Location = new System.Drawing.Point(273, 8);
-      this.label16.Name = "label16";
-      this.label16.Size = new System.Drawing.Size(93, 13);
-      this.label16.TabIndex = 12;
-      this.label16.Text = "sec per 360° turn";
+      this.lblTurntime.AutoSize = true;
+      this.lblTurntime.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblTurntime.Location = new System.Drawing.Point(273, 8);
+      this.lblTurntime.Name = "lblTurntime";
+      this.lblTurntime.Size = new System.Drawing.Size(93, 13);
+      this.lblTurntime.TabIndex = 12;
+      this.lblTurntime.Tag = "§";
+      this.lblTurntime.Text = "sec per 360° turn";
       // 
       // lblTurnspeed
       // 
@@ -1064,7 +1067,7 @@
       this.panel6.Controls.Add(this.lblLivePitch);
       this.panel6.Controls.Add(this.btCopyToAllAxis);
       this.panel6.Controls.Add(this.lblLiveYaw);
-      this.panel6.Controls.Add(this.label4);
+      this.panel6.Controls.Add(this.lblChart);
       this.panel6.Controls.Add(this.lblYOutput);
       this.panel6.Controls.Add(this.lblYInput);
       this.panel6.Controls.Add(this.rbPtExponent);
@@ -1089,6 +1092,16 @@
       this.tableLayoutPanel1.SetRowSpan(this.panel6, 4);
       this.panel6.Size = new System.Drawing.Size(579, 288);
       this.panel6.TabIndex = 5;
+      // 
+      // btZeroCoords
+      // 
+      this.btZeroCoords.Location = new System.Drawing.Point(220, 225);
+      this.btZeroCoords.Name = "btZeroCoords";
+      this.btZeroCoords.Size = new System.Drawing.Size(30, 55);
+      this.btZeroCoords.TabIndex = 55;
+      this.btZeroCoords.Text = "|+|";
+      this.btZeroCoords.UseVisualStyleBackColor = true;
+      this.btZeroCoords.Click += new System.EventHandler(this.btZeroCoords_Click);
       // 
       // rbPtDeadzone
       // 
@@ -1252,10 +1265,11 @@
       // 
       // btCopyToAllAxis
       // 
-      this.btCopyToAllAxis.Location = new System.Drawing.Point(192, 159);
+      this.btCopyToAllAxis.Location = new System.Drawing.Point(192, 130);
       this.btCopyToAllAxis.Name = "btCopyToAllAxis";
-      this.btCopyToAllAxis.Size = new System.Drawing.Size(57, 44);
+      this.btCopyToAllAxis.Size = new System.Drawing.Size(57, 73);
       this.btCopyToAllAxis.TabIndex = 38;
+      this.btCopyToAllAxis.Tag = "§";
       this.btCopyToAllAxis.Text = "Copy to all axis";
       this.btCopyToAllAxis.UseVisualStyleBackColor = true;
       this.btCopyToAllAxis.Click += new System.EventHandler(this.btCopyToAllAxis_Click);
@@ -1271,14 +1285,15 @@
       this.lblLiveYaw.TabIndex = 37;
       this.lblLiveYaw.Text = "Y-Axis:";
       // 
-      // label4
+      // lblChart
       // 
-      this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(310, 272);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(193, 13);
-      this.label4.TabIndex = 36;
-      this.label4.Text = "Select an option then click and drag";
+      this.lblChart.Location = new System.Drawing.Point(289, 271);
+      this.lblChart.Name = "lblChart";
+      this.lblChart.Size = new System.Drawing.Size(237, 13);
+      this.lblChart.TabIndex = 36;
+      this.lblChart.Tag = "§";
+      this.lblChart.Text = "Select an option then click and drag";
+      this.lblChart.TextAlign = System.Drawing.ContentAlignment.TopCenter;
       // 
       // lblYOutput
       // 
@@ -1317,7 +1332,7 @@
       this.rbPtSaturation.AutoSize = true;
       this.rbPtSaturation.Checked = true;
       this.rbPtSaturation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.rbPtSaturation.Location = new System.Drawing.Point(101, 72);
+      this.rbPtSaturation.Location = new System.Drawing.Point(125, 72);
       this.rbPtSaturation.Name = "rbPtSaturation";
       this.rbPtSaturation.Size = new System.Drawing.Size(83, 19);
       this.rbPtSaturation.TabIndex = 32;
@@ -1588,6 +1603,7 @@
       this.btDone.Name = "btDone";
       this.btDone.Size = new System.Drawing.Size(125, 101);
       this.btDone.TabIndex = 28;
+      this.btDone.Tag = "§";
       this.btDone.Text = "Done";
       this.btDone.UseVisualStyleBackColor = true;
       this.btDone.Click += new System.EventHandler(this.btDone_Click);
@@ -1857,16 +1873,6 @@
       this.rbTuneYPR.UseVisualStyleBackColor = false;
       this.rbTuneYPR.CheckedChanged += new System.EventHandler(this.rbTuneYPR_CheckedChanged);
       // 
-      // btZeroCoords
-      // 
-      this.btZeroCoords.Location = new System.Drawing.Point(220, 225);
-      this.btZeroCoords.Name = "btZeroCoords";
-      this.btZeroCoords.Size = new System.Drawing.Size(30, 55);
-      this.btZeroCoords.TabIndex = 55;
-      this.btZeroCoords.Text = "|+|";
-      this.btZeroCoords.UseVisualStyleBackColor = true;
-      this.btZeroCoords.Click += new System.EventHandler(this.btZeroCoords_Click);
-      // 
       // FormJSCalCurve
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1879,7 +1885,8 @@
       this.MinimumSize = new System.Drawing.Size(1200, 950);
       this.Name = "FormJSCalCurve";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-      this.Text = "Joystick Tuning";
+      this.Tag = "§";
+      this.Text = "Flight Device Tuning";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormJSCalCurve_FormClosing);
       this.Load += new System.EventHandler(this.FormJSCalCurve_Load);
       this.Move += new System.EventHandler(this.FormJSCalCurve_Move);
@@ -1954,7 +1961,7 @@
     private System.Windows.Forms.Label lblPsat;
     private System.Windows.Forms.Label lblRsat;
     private System.Windows.Forms.Label lblOutSlider;
-    private System.Windows.Forms.Label label16;
+    private System.Windows.Forms.Label lblTurntime;
     private System.Windows.Forms.Label label25;
     private System.Windows.Forms.Label label24;
     private System.Windows.Forms.Label label23;
@@ -2022,10 +2029,10 @@
     private System.Windows.Forms.RadioButton rbShiodome;
     private System.Windows.Forms.RadioButton rbCanyon;
     private System.Windows.Forms.Label lblLiveYaw;
-    private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Label lblChart;
     private System.Windows.Forms.RadioButton rbBigSight;
     private System.Windows.Forms.Panel panel9;
-    private System.Windows.Forms.Label label6;
+    private System.Windows.Forms.Label lblDamp;
     private System.Windows.Forms.Label lblDamping;
     private System.Windows.Forms.TrackBar slDamping;
     private System.Windows.Forms.Button btCopyToAllAxis;

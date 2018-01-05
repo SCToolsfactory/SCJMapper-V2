@@ -23,16 +23,22 @@ namespace SCJMapper_V2
 
     // The msSenseLimit property. (Mouse)
     private static readonly ConfigurationProperty _msSenseLimit =
-      new ConfigurationProperty( "msSenseLimit", typeof( int ), ( int )150, ConfigurationPropertyOptions.None );
+      new ConfigurationProperty( "msSenseLimit", typeof( int ), (int)150, ConfigurationPropertyOptions.None );
+
+    // The msSenseLimit property. (Culture)
+    private static readonly ConfigurationProperty _culture =
+      new ConfigurationProperty( "culture", typeof( string ), (string)"en", ConfigurationPropertyOptions.None );
 
     // ctor
     public AppConfiguration( )
     {
       // initialization
-      _Properties = new ConfigurationPropertyCollection( );
-      _Properties.Add( _jsSenseLimit );
-      _Properties.Add( _gpSenseLimit );
-      _Properties.Add( _msSenseLimit );
+      _Properties = new ConfigurationPropertyCollection {
+        _jsSenseLimit,
+        _gpSenseLimit,
+        _msSenseLimit,
+        _culture
+      };
     }
 
 
@@ -86,13 +92,22 @@ namespace SCJMapper_V2
     [StringValidator( InvalidCharacters = " ~!@#$%^&*()[]{}/;'\"|\\", MinLength = 10, MaxLength = 500 )]
     public string scActionmaps
     {
-      get
-      {
-        return ( string )this["scActionmaps"];
+      get {
+        return (string)this["scActionmaps"];
       }
-      set
-      {
+      set {
         this["scActionmaps"] = value;
+      }
+    }
+
+    [StringValidator( InvalidCharacters = " ~!@#$%^&+*()[]{}/;'\"|\\", MinLength = 2, MaxLength = 5 )]
+    public string culture
+    {
+      get {
+        return (string)this["culture"];
+      }
+      set {
+        this["culture"] = value;
       }
     }
 
@@ -152,11 +167,22 @@ namespace SCJMapper_V2
       /// </summary>
       static public int msSenseLimit
       {
-        get
-        {
+        get {
           AppConfiguration s = GetAppSection( );
           if ( s != null ) return s.msSenseLimit;
           else return 150; // default if things go wrong...
+        }
+      }
+
+      /// <summary>
+      /// The Culture override
+      /// </summary>
+      static public string culture
+      {
+        get {
+          AppConfiguration s = GetAppSection( );
+          if ( s != null ) return s.culture;
+          else return ""; // default if things go wrong...
         }
       }
 

@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SCJMapper_V2.Common;
 using SCJMapper_V2.Devices;
+using SCJMapper_V2.Translation;
 
 namespace SCJMapper_V2.Table
 {
@@ -24,17 +26,47 @@ namespace SCJMapper_V2.Table
       DGV.AutoGenerateColumns = true;
       DGV.DataSource = m_bSrc;
       DGV.MultiSelect = false;
-      DGV.Columns["ID_Action"].Visible = false;
       DGV.AutoResizeColumns( DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader );
 
       // handle Edits (Blended Col is only allowed to be edited by the user)
-      btUpdateFromEdit.Enabled = chkEditBlend.Checked;
+      btUpdateFromEdit.Enabled = chkEditDisabled.Checked;
       DGV.Columns["Usr_Binding"].ReadOnly = true;
       DGV.Columns["Usr_Modifier"].ReadOnly = true;
-      DGV.Columns["ActionName"].Visible = false;
-      DGV.ReadOnly = !chkEditBlend.Checked;
+      DGV.ReadOnly = !chkEditDisabled.Checked;
+
+      lblLoadingData.Visible = false;
     }
 
+    private void TranslateDGV()
+    {
+      DGV.Columns["ID_Action"].Visible = false;
+      DGV.Columns["ActionName"].Visible = false;
+      DGV.Columns["REF_ActionMap"].HeaderText = Tx.Translate( "tREF_ActionMap" );
+      DGV.Columns["ActionText"].HeaderText = Tx.Translate( "tActionText" );
+      DGV.Columns["Device"].HeaderText = Tx.Translate( "tDevice" );
+      DGV.Columns["Def_Binding"].HeaderText = Tx.Translate( "tDef_Binding" );
+      DGV.Columns["Def_Modifier"].HeaderText = Tx.Translate( "tDef_Modifier" );
+      DGV.Columns["AddBind"].HeaderText = Tx.Translate( "tAddBind" );
+      DGV.Columns["Usr_Binding"].HeaderText = Tx.Translate( "tUsr_Binding" );
+      DGV.Columns["Usr_Modifier"].HeaderText = Tx.Translate( "tUsr_Modifier" );
+      DGV.Columns["Disabled"].HeaderText = Tx.Translate( "tDisabled" );
+    }
+
+    private void FormTable_Load( object sender, EventArgs e )
+    {
+      Tx.LocalizeControlTree( this );
+      btClrFilterAction.Text = Tx.Translate( "btClear" );
+      btClrFilterDefBinding.Text = Tx.Translate( "btClear" );
+      btClrFilterUsrBinding.Text = Tx.Translate( "btClear" );
+      TranslateDGV( );
+
+      // Assign Size property - check if on screen, else use defaults
+      if ( Commons.IsOnScreen( new Rectangle( AppSettings.Instance.FormTableLocation, AppSettings.Instance.FormTableSize ) ) ) {
+        this.Size = AppSettings.Instance.FormTableSize;
+        this.Location = AppSettings.Instance.FormTableLocation;
+      }
+
+    }
 
 
     public event EventHandler<EditRowEventArgs> EditActionEvent;
@@ -70,11 +102,19 @@ namespace SCJMapper_V2.Table
     public void SuspendDGV()
     {
       // add things to improve speed while re-loading the DataSet outside - nothing found so far
+      DGV.DataSource = null;
+      lblLoadingData.Visible = true;
+
+      this.Update( );
+      //DGV.SuspendLayout( );
     }
 
     public void ResumeDGV()
     {
       // finish things to improve speed while re-loading the DataSet outside - nothing found so far
+      DGV.DataSource = m_bSrc;
+      this.BringToFront( );
+    //  DGV.ResumeLayout( );
     }
 
 
@@ -83,8 +123,7 @@ namespace SCJMapper_V2.Table
     /// </summary>
     public void Populate()
     {
-      //      DGV.SuspendLayout( );
-
+      TranslateDGV( );
       if ( !string.IsNullOrEmpty( LastColSize ) ) {
         string[] e = LastColSize.Split( new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries );
         for ( int i = 0; i < e.Length; i++ ) {
@@ -94,7 +133,7 @@ namespace SCJMapper_V2.Table
       }
       DGV.AllowUserToResizeColumns = true;
       ComposeFilter( );
-      //    DGV.ResumeLayout( );
+      lblLoadingData.Visible = false;
     }
 
     /// <summary>
@@ -145,15 +184,15 @@ namespace SCJMapper_V2.Table
       }
 
       string deviceFilter = "";
-      if ( ( chkJoystick.Checked == false ) && ( chkGamepad.Checked == false ) && ( chkMouse.Checked == false ) && ( chkKbd.Checked == false ) ) {
+      if ( ( cbxShowJoystick.Checked == false ) && ( cbxShowGamepad.Checked == false ) && ( cbxShowMouse.Checked == false ) && ( cbxShowKeyboard.Checked == false ) ) {
         // none checked means all
       }
       else {
         deviceFilter = "( Device='X'"
-        + ( ( chkJoystick.Checked ) ? string.Format( " OR Device = 'joystick'" ) : "" )
-        + ( ( chkGamepad.Checked ) ? string.Format( " OR Device = 'xboxpad'" ) : "" )
-        + ( ( chkMouse.Checked ) ? string.Format( " OR Device = 'mouse'" ) : "" )
-        + ( ( chkKbd.Checked ) ? string.Format( " OR Device = 'keyboard'" ) : "" )
+        + ( ( cbxShowJoystick.Checked ) ? string.Format( " OR Device = 'joystick'" ) : "" )
+        + ( ( cbxShowGamepad.Checked ) ? string.Format( " OR Device = 'xboxpad'" ) : "" )
+        + ( ( cbxShowMouse.Checked ) ? string.Format( " OR Device = 'mouse'" ) : "" )
+        + ( ( cbxShowKeyboard.Checked ) ? string.Format( " OR Device = 'keyboard'" ) : "" )
         + " )";
       }
 
@@ -282,10 +321,10 @@ namespace SCJMapper_V2.Table
     private void chkEditBlend_CheckedChanged( object sender, EventArgs e )
     {
       // toggle the Edit mode of the Blend Column
-      btUpdateFromEdit.Enabled = chkEditBlend.Checked;
-      btBlendAll.Enabled = chkEditBlend.Checked;
+      btUpdateFromEdit.Enabled = chkEditDisabled.Checked;
+      btDisableUnmapped.Enabled = chkEditDisabled.Checked;
 
-      DGV.ReadOnly = !chkEditBlend.Checked;
+      DGV.ReadOnly = !chkEditDisabled.Checked;
     }
 
     private void btCancelEdit_Click( object sender, EventArgs e )
@@ -297,7 +336,7 @@ namespace SCJMapper_V2.Table
 
     private void btBlendAll_Click( object sender, EventArgs e )
     {
-      if ( !chkEditBlend.Checked ) return; // only if Edit is allowed
+      if ( !chkEditDisabled.Checked ) return; // only if Edit is allowed
 
       foreach ( DataGridViewRow row in DGV.Rows ) {
         if ( string.IsNullOrEmpty( (string)row.Cells[DGV.Columns["Usr_Binding"].Index].Value ) )
@@ -325,9 +364,10 @@ namespace SCJMapper_V2.Table
 
     private void DGV_CellValueChanged( object sender, DataGridViewCellEventArgs e )
     {
-      // set the Usr_Binding only if Blended column items Changes
+      if ( e.RowIndex < 0 ) return; // header
       if ( e.ColumnIndex != DGV.Columns["Disabled"].Index ) return;
 
+      // set the Usr_Binding only if Blended column items Changes
       if ( (bool)DGV.Rows[e.RowIndex].Cells[DGV.Columns["Disabled"].Index].Value == true )
         DGV.Rows[e.RowIndex].Cells[DGV.Columns["Usr_Binding"].Index].Value = DeviceCls.DisabledInput;
       else

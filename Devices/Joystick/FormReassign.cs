@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using SCJMapper_V2.Translation;
 
 namespace SCJMapper_V2.Devices.Joystick
 {
@@ -39,6 +40,8 @@ namespace SCJMapper_V2.Devices.Joystick
 
     private void FormReassign_Load( object sender, EventArgs e )
     {
+      Tx.LocalizeControlTree( this );
+
       int textIdx = 0;
       foreach ( JoystickCls j in m_owner ) {
         m_tb[textIdx++].Text = j.DevName;

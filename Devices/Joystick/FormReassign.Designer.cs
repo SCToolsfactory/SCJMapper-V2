@@ -29,8 +29,8 @@
     {
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReassign));
       this.btCancel = new System.Windows.Forms.Button();
-      this.btDone = new System.Windows.Forms.Button();
-      this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.btAccept = new System.Windows.Forms.Button();
+      this.gbxReassignJS = new System.Windows.Forms.GroupBox();
       this.cbxStick12 = new System.Windows.Forms.ComboBox();
       this.cbxStick11 = new System.Windows.Forms.ComboBox();
       this.cbxStick10 = new System.Windows.Forms.ComboBox();
@@ -67,7 +67,7 @@
       this.txJS4 = new System.Windows.Forms.TextBox();
       this.txJS5 = new System.Windows.Forms.TextBox();
       this.label6 = new System.Windows.Forms.Label();
-      this.groupBox1.SuspendLayout();
+      this.gbxReassignJS.SuspendLayout();
       this.SuspendLayout();
       // 
       // btCancel
@@ -77,65 +77,68 @@
       this.btCancel.Name = "btCancel";
       this.btCancel.Size = new System.Drawing.Size(108, 31);
       this.btCancel.TabIndex = 27;
+      this.btCancel.Tag = "§";
       this.btCancel.Text = "Cancel";
       this.btCancel.UseVisualStyleBackColor = true;
       this.btCancel.Click += new System.EventHandler(this.btCancel_Click);
       // 
-      // btDone
+      // btAccept
       // 
-      this.btDone.Location = new System.Drawing.Point(446, 379);
-      this.btDone.Name = "btDone";
-      this.btDone.Size = new System.Drawing.Size(108, 31);
-      this.btDone.TabIndex = 26;
-      this.btDone.Text = "Accept";
-      this.btDone.UseVisualStyleBackColor = true;
-      this.btDone.Click += new System.EventHandler(this.btDone_Click);
+      this.btAccept.Location = new System.Drawing.Point(446, 379);
+      this.btAccept.Name = "btAccept";
+      this.btAccept.Size = new System.Drawing.Size(108, 31);
+      this.btAccept.TabIndex = 26;
+      this.btAccept.Tag = "§";
+      this.btAccept.Text = "Accept";
+      this.btAccept.UseVisualStyleBackColor = true;
+      this.btAccept.Click += new System.EventHandler(this.btDone_Click);
       // 
-      // groupBox1
+      // gbxReassignJS
       // 
-      this.groupBox1.Controls.Add(this.cbxStick12);
-      this.groupBox1.Controls.Add(this.cbxStick11);
-      this.groupBox1.Controls.Add(this.cbxStick10);
-      this.groupBox1.Controls.Add(this.cbxStick9);
-      this.groupBox1.Controls.Add(this.txJS11);
-      this.groupBox1.Controls.Add(this.label1);
-      this.groupBox1.Controls.Add(this.txJS12);
-      this.groupBox1.Controls.Add(this.label2);
-      this.groupBox1.Controls.Add(this.label11);
-      this.groupBox1.Controls.Add(this.txJS10);
-      this.groupBox1.Controls.Add(this.label12);
-      this.groupBox1.Controls.Add(this.txJS9);
-      this.groupBox1.Controls.Add(this.cbxStick8);
-      this.groupBox1.Controls.Add(this.cbxStick7);
-      this.groupBox1.Controls.Add(this.cbxStick6);
-      this.groupBox1.Controls.Add(this.cbxStick5);
-      this.groupBox1.Controls.Add(this.cbxStick4);
-      this.groupBox1.Controls.Add(this.cbxStick3);
-      this.groupBox1.Controls.Add(this.cbxStick2);
-      this.groupBox1.Controls.Add(this.cbxStick1);
-      this.groupBox1.Controls.Add(this.txJS7);
-      this.groupBox1.Controls.Add(this.label10);
-      this.groupBox1.Controls.Add(this.txJS1);
-      this.groupBox1.Controls.Add(this.txJS8);
-      this.groupBox1.Controls.Add(this.label3);
-      this.groupBox1.Controls.Add(this.label9);
-      this.groupBox1.Controls.Add(this.txJS2);
-      this.groupBox1.Controls.Add(this.label4);
-      this.groupBox1.Controls.Add(this.label8);
-      this.groupBox1.Controls.Add(this.txJS3);
-      this.groupBox1.Controls.Add(this.txJS6);
-      this.groupBox1.Controls.Add(this.label5);
-      this.groupBox1.Controls.Add(this.label7);
-      this.groupBox1.Controls.Add(this.txJS4);
-      this.groupBox1.Controls.Add(this.txJS5);
-      this.groupBox1.Controls.Add(this.label6);
-      this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.groupBox1.Location = new System.Drawing.Point(14, 12);
-      this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(654, 361);
-      this.groupBox1.TabIndex = 28;
-      this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "jsN - Assginment";
+      this.gbxReassignJS.Controls.Add(this.cbxStick12);
+      this.gbxReassignJS.Controls.Add(this.cbxStick11);
+      this.gbxReassignJS.Controls.Add(this.cbxStick10);
+      this.gbxReassignJS.Controls.Add(this.cbxStick9);
+      this.gbxReassignJS.Controls.Add(this.txJS11);
+      this.gbxReassignJS.Controls.Add(this.label1);
+      this.gbxReassignJS.Controls.Add(this.txJS12);
+      this.gbxReassignJS.Controls.Add(this.label2);
+      this.gbxReassignJS.Controls.Add(this.label11);
+      this.gbxReassignJS.Controls.Add(this.txJS10);
+      this.gbxReassignJS.Controls.Add(this.label12);
+      this.gbxReassignJS.Controls.Add(this.txJS9);
+      this.gbxReassignJS.Controls.Add(this.cbxStick8);
+      this.gbxReassignJS.Controls.Add(this.cbxStick7);
+      this.gbxReassignJS.Controls.Add(this.cbxStick6);
+      this.gbxReassignJS.Controls.Add(this.cbxStick5);
+      this.gbxReassignJS.Controls.Add(this.cbxStick4);
+      this.gbxReassignJS.Controls.Add(this.cbxStick3);
+      this.gbxReassignJS.Controls.Add(this.cbxStick2);
+      this.gbxReassignJS.Controls.Add(this.cbxStick1);
+      this.gbxReassignJS.Controls.Add(this.txJS7);
+      this.gbxReassignJS.Controls.Add(this.label10);
+      this.gbxReassignJS.Controls.Add(this.txJS1);
+      this.gbxReassignJS.Controls.Add(this.txJS8);
+      this.gbxReassignJS.Controls.Add(this.label3);
+      this.gbxReassignJS.Controls.Add(this.label9);
+      this.gbxReassignJS.Controls.Add(this.txJS2);
+      this.gbxReassignJS.Controls.Add(this.label4);
+      this.gbxReassignJS.Controls.Add(this.label8);
+      this.gbxReassignJS.Controls.Add(this.txJS3);
+      this.gbxReassignJS.Controls.Add(this.txJS6);
+      this.gbxReassignJS.Controls.Add(this.label5);
+      this.gbxReassignJS.Controls.Add(this.label7);
+      this.gbxReassignJS.Controls.Add(this.txJS4);
+      this.gbxReassignJS.Controls.Add(this.txJS5);
+      this.gbxReassignJS.Controls.Add(this.label6);
+      this.gbxReassignJS.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.gbxReassignJS.Location = new System.Drawing.Point(14, 12);
+      this.gbxReassignJS.Name = "gbxReassignJS";
+      this.gbxReassignJS.Size = new System.Drawing.Size(654, 361);
+      this.gbxReassignJS.TabIndex = 28;
+      this.gbxReassignJS.TabStop = false;
+      this.gbxReassignJS.Tag = "§";
+      this.gbxReassignJS.Text = "jsN - Assginment";
       // 
       // cbxStick12
       // 
@@ -598,18 +601,19 @@
       this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
       this.ClientSize = new System.Drawing.Size(682, 419);
-      this.Controls.Add(this.groupBox1);
+      this.Controls.Add(this.gbxReassignJS);
       this.Controls.Add(this.btCancel);
-      this.Controls.Add(this.btDone);
+      this.Controls.Add(this.btAccept);
       this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "FormReassign";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+      this.Tag = "§";
       this.Text = "Reassign Joystick Numbers";
       this.Load += new System.EventHandler(this.FormReassign_Load);
-      this.groupBox1.ResumeLayout(false);
-      this.groupBox1.PerformLayout();
+      this.gbxReassignJS.ResumeLayout(false);
+      this.gbxReassignJS.PerformLayout();
       this.ResumeLayout(false);
 
     }
@@ -617,8 +621,8 @@
     #endregion
 
     private System.Windows.Forms.Button btCancel;
-    private System.Windows.Forms.Button btDone;
-    private System.Windows.Forms.GroupBox groupBox1;
+    private System.Windows.Forms.Button btAccept;
+    private System.Windows.Forms.GroupBox gbxReassignJS;
     private System.Windows.Forms.TextBox txJS7;
     private System.Windows.Forms.Label label10;
     private System.Windows.Forms.TextBox txJS1;

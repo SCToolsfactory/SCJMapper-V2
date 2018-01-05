@@ -15,6 +15,8 @@ using System.Windows.Forms.DataVisualization.Charting;
 using SCJMapper_V2.Actions;
 using SCJMapper_V2.Devices.Mouse;
 using SCJMapper_V2.SC;
+using SCJMapper_V2.Translation;
+using SCJMapper_V2.Common;
 
 namespace SCJMapper_V2.Devices.Options
 {
@@ -75,6 +77,8 @@ namespace SCJMapper_V2.Devices.Options
       ESubItems_LAST
     }
 
+    public Size LastSize { get; set; }
+    public Point LastLocation { get; set; }
 
     private Tuningoptions m_tuningRef = null; // will get the current optiontree on call
     public Tuningoptions TuningOptions { get { return m_tuningRef; } set { m_tuningRef = value; } }
@@ -138,6 +142,27 @@ namespace SCJMapper_V2.Devices.Options
     private void FormOptions_Load( object sender, EventArgs e )
     {
       log.Debug( "Load - Entry" );
+
+      // Assign Size property - check if on screen, else use defaults
+      if ( Commons.IsOnScreen( new Rectangle( AppSettings.Instance.FormOptionsLocation, AppSettings.Instance.FormOptionsSize ) ) ) {
+        this.Size = AppSettings.Instance.FormOptionsSize;
+        this.Location = AppSettings.Instance.FormOptionsLocation;
+      }
+
+      Tx.LocalizeControlTree( this );
+      // localization with generic IDs
+      cbxUseDeadzone.Text = Tx.Translate( "xDeadzone" );
+      cbxUseSaturation.Text = Tx.Translate( "xSaturation" );
+      cbxLiveInvert.Text = Tx.Translate( "xInvert" );
+      rbUseExpo.Text = Tx.Translate( "xExponent" );
+      rbUsePts.Text = Tx.Translate( "xCurve" );
+      rbUseNone.Text = Tx.Translate( "xNone" );
+      rbLivePt1.Text = Tx.Translate( "xPoint1" );
+      rbLivePt2.Text = Tx.Translate( "xPoint2" );
+      rbLivePt3.Text = Tx.Translate( "xPoint3" );
+      // END OF localization with generic IDs
+
+
       DeviceTabsSetup( );
 
       PrepOptionsTab( );
@@ -147,9 +172,28 @@ namespace SCJMapper_V2.Devices.Options
       log.Debug( "Load - Exit" );
     }
 
+    private void FormOptions_LocationChanged( object sender, EventArgs e )
+    {
+      if ( this.WindowState == FormWindowState.Normal )
+        LastLocation = this.Location;
+
+    }
+
+    private void FormOptions_SizeChanged( object sender, EventArgs e )
+    {
+      if ( this.WindowState == FormWindowState.Normal )
+        LastSize = this.Size;
+    }
+
+
     private void FormOptions_FormClosing( object sender, FormClosingEventArgs e )
     {
       log.Debug( "FormClosing - Entry" );
+      if ( this.WindowState== FormWindowState.Normal ) {
+        AppSettings.Instance.FormOptionsLocation = this.Location;
+        AppSettings.Instance.FormOptionsSize = this.Size;
+      }
+
       // have to carry on current edits - NO ListView SelectionChange Event happens 
       try {
         if ( ( (ListView)tabC.SelectedTab.Controls["LV"] ).SelectedItems.Count > 0 ) {
@@ -244,16 +288,16 @@ namespace SCJMapper_V2.Devices.Options
       lview.MultiSelect = false;
       lview.HideSelection = false;
 
-      string instText = " - instance=" + Tuningoptions.XmlInstanceFromID( (string)lview.Tag );
-      lview.Columns.Add( "Option" + instText, 180, HorizontalAlignment.Left );
-      lview.Columns.Add( "Dev Control", 80, HorizontalAlignment.Left );
-      lview.Columns.Add( "Saturation", 80, HorizontalAlignment.Center );
-      lview.Columns.Add( "Deadzone", 80, HorizontalAlignment.Center );
-      lview.Columns.Add( "Invert", 50, HorizontalAlignment.Center );
-      lview.Columns.Add( "Expo.", 50, HorizontalAlignment.Center );
-      lview.Columns.Add( "Curve P1", 90, HorizontalAlignment.Center );
-      lview.Columns.Add( "Curve P2", 90, HorizontalAlignment.Center );
-      lview.Columns.Add( "Curve P3", 90, HorizontalAlignment.Center );
+      string instText = " - " + Tx.Translate("xInstance") +" =" + Tuningoptions.XmlInstanceFromID( (string)lview.Tag );
+      lview.Columns.Add( Tx.Translate( "xOption" ) + " " + instText, 180, HorizontalAlignment.Left );
+      lview.Columns.Add( Tx.Translate( "xDevControl"), 80, HorizontalAlignment.Left );
+      lview.Columns.Add( Tx.Translate( "xSaturation"), 80, HorizontalAlignment.Center );
+      lview.Columns.Add(Tx.Translate( "xDeadzone"), 80, HorizontalAlignment.Center );
+      lview.Columns.Add( Tx.Translate( "xInvert"), 50, HorizontalAlignment.Center );
+      lview.Columns.Add( Tx.Translate( "xExponent"), 50, HorizontalAlignment.Center );
+      lview.Columns.Add( Tx.Translate( "xPoint1"), 90, HorizontalAlignment.Center );
+      lview.Columns.Add( Tx.Translate( "xPoint2" ), 90, HorizontalAlignment.Center );
+      lview.Columns.Add( Tx.Translate( "xPoint3" ), 90, HorizontalAlignment.Center );
 
       lview.ShowGroups = true;
     }
@@ -293,7 +337,7 @@ namespace SCJMapper_V2.Devices.Options
         if ( kv.Value.DevInstanceGUID == devGUID ) {
           devClass = kv.Value.DevClass;
           if ( !devNamesDone.Contains( kv.Value.DevName ) ) {
-            lvg = new ListViewGroup( "Device Options" ); lview.Groups.Add( lvg );
+            lvg = new ListViewGroup(Tx.Translate( "xDeviceOptions" )); lview.Groups.Add( lvg );
             devNamesDone.Add( kv.Value.DevName );
           }
           lvi = new ListViewItem( kv.Value.CommandCtrl, lvg ) { Name = kv.Value.DoID };
@@ -1244,8 +1288,6 @@ namespace SCJMapper_V2.Devices.Options
     {
       // It ai setup as OK button - nothing here so far...
     }
-
-
 
   }
 }

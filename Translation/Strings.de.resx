@@ -1,0 +1,633 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="btAccept" xml:space="preserve">
+    <value>Akzeptieren</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="btAssign" xml:space="preserve">
+    <value>Zuweisen</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="btBlend" xml:space="preserve">
+    <value>Deaktivieren</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="btCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="btCancelEdit" xml:space="preserve">
+    <value>Änderungen zurücksetzen</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="btClear" xml:space="preserve">
+    <value>Löschen</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="btClearFilter" xml:space="preserve">
+    <value>Filter löschen</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="btCopyToAllAxis" xml:space="preserve">
+    <value>Auf alle kopieren</value>
+    <comment>5-DevTuning</comment>
+  </data>
+  <data name="btDisableUnmapped" xml:space="preserve">
+    <value>Nicht zugewiesene deaktivieren</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="btDone" xml:space="preserve">
+    <value>Fertig</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="btDump" xml:space="preserve">
+    <value>Nach XML</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="btFind" xml:space="preserve">
+    <value>Finde ersten</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="btGrab" xml:space="preserve">
+    <value>Von XML</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="btJsKbd" xml:space="preserve">
+    <value>JS / Tast.</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="btSaveMyMapping" xml:space="preserve">
+    <value>Nach XML und speichern</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="btUpdateFromEdit" xml:space="preserve">
+    <value>Änderungen akzeptieren</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="buttonExit" xml:space="preserve">
+    <value>Schliessen</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="cbxAutoTabXML" xml:space="preserve">
+    <value>XML/Zuweisungen automatisch umschalten</value>
+    <comment>1-Main, 2-Settings</comment>
+  </data>
+  <data name="cbxCSVListing" xml:space="preserve">
+    <value>CSV Liste</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="cbxDetectGamepad" xml:space="preserve">
+    <value>Nutze Gamepad</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="cbxListModifiers" xml:space="preserve">
+    <value>Modifikator auflisten</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="cbxShowGamepad" xml:space="preserve">
+    <value>Gamep</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="cbxShowJoystick" xml:space="preserve">
+    <value>Joystick</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="cbxShowKeyboard" xml:space="preserve">
+    <value>Tastat.</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="cbxShowMappedOnly" xml:space="preserve">
+    <value>Zugew.</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="cbxShowMouse" xml:space="preserve">
+    <value>Maus</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="cbxThrottle" xml:space="preserve">
+    <value>Throttle</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="cbxTreeTips" xml:space="preserve">
+    <value>Tips im Baum anzeigen</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="chkEditDisabled" xml:space="preserve">
+    <value>"Deaktiviert" editieren</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="FormJSCalCurve" xml:space="preserve">
+    <value>Flugsteuerung optimieren</value>
+    <comment>5-DevTuning</comment>
+  </data>
+  <data name="FormOptions" xml:space="preserve">
+    <value>SCJMapper - Optionen</value>
+    <comment>4-Options</comment>
+  </data>
+  <data name="FormReassign" xml:space="preserve">
+    <value>Joystick Nummer zuweisen</value>
+    <comment>3-ReassingJS</comment>
+  </data>
+  <data name="FormSettings" xml:space="preserve">
+    <value>Einstellungen</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="FormTable" xml:space="preserve">
+    <value>Aktionsbaum als Tabelle</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="gbxAdvanced" xml:space="preserve">
+    <value>Zusätzliche Optionen ...</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="gbxBoxCap" xml:space="preserve">
+    <value>Geräte Eigenschaften</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="gbxEditBindings" xml:space="preserve">
+    <value>Editieren</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="gbxFilters" xml:space="preserve">
+    <value>Filter</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="gbxGBox" xml:space="preserve">
+    <value>Gamepad Status</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="gbxIgnoreBt" xml:space="preserve">
+    <value>Tasten ignorieren - Nummern der zu ignorierenden Tasten mit Blank getrennt eingeben (e.g. 24 25)</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="gbxIgnoreMaps" xml:space="preserve">
+    <value>Aktionstabellen ignorieren - markieren versteckt</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="gbxJAssignment" xml:space="preserve">
+    <value>jsN - Zuweisung</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="gbxJBox" xml:space="preserve">
+    <value>Joystick Status</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="gbxReassignJS" xml:space="preserve">
+    <value>jsN - Zuweisung</value>
+    <comment>3-ReassingJS</comment>
+  </data>
+  <data name="gbxSCPath" xml:space="preserve">
+    <value>Pfad zur Star Citizen Installation (e.g. C:\Games\StarCitizen)</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="lblActionFilter" xml:space="preserve">
+    <value>Aktions Filter:</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="lblChart" xml:space="preserve">
+    <value>Einen Punkt auswählen, dann klicken und ziehen</value>
+    <comment>4-Options</comment>
+  </data>
+  <data name="lblDamp" xml:space="preserve">
+    <value>Dämpfung</value>
+    <comment>5-DevTuning</comment>
+  </data>
+  <data name="lblDefBindFilter" xml:space="preserve">
+    <value>Std.Zuweisung</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="lblDevCtrl" xml:space="preserve">
+    <value>Geräte Einst.</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="lblJsnNumber" xml:space="preserve">
+    <value>Das Gerät ist registriert unter:</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="lblLoadingData" xml:space="preserve">
+    <value>Am laden von Daten...</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="lblMapping" xml:space="preserve">
+    <value>Zuweisung</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="lblMappingname" xml:space="preserve">
+    <value>Zuweisungsname:</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="lblNumAxes" xml:space="preserve">
+    <value># Achsen:</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="lblNumButtons" xml:space="preserve">
+    <value># Knöpfe:</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="lblNumDPad" xml:space="preserve">
+    <value># DPad:</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="lblNumPOV" xml:space="preserve">
+    <value># POV:</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="lblNumSticks" xml:space="preserve">
+    <value># TSticks:</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="lblNumTriggers" xml:space="preserve">
+    <value># Auslöser:</value>
+    <comment>1-Main - Must remain short to fit the space</comment>
+  </data>
+  <data name="lblProfileLang" xml:space="preserve">
+    <value>Profil Sprache:</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="lblSelected" xml:space="preserve">
+    <value>Ausgewählt</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="lblSettingNote" xml:space="preserve">
+    <value>Achtung: Akzeptieren der neuen Einstellungen löscht den aktuellen Aktionsbaum; 
+benutzen sie Abbrechen um die Arbeit erst zu speichern.</value>
+    <comment>ä</comment>
+  </data>
+  <data name="lblTurntime" xml:space="preserve">
+    <value>Sek. pro 360° Drehung</value>
+    <comment>5-DevTuning</comment>
+  </data>
+  <data name="lblUsrBindFilter" xml:space="preserve">
+    <value>Ben.Zuweisung</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="linkLblReleases" xml:space="preserve">
+    <value>Für Informationen und Aktualisierungen besuchen sie @ Github ...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meDefaultsLoadAndGrab" xml:space="preserve">
+    <value>Standards holen und danach Datei und Baum laden !</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meDumpActiontreeAsXML" xml:space="preserve">
+    <value>Aktionsbaum nach XML übertragen</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meDumpDefaultProfile" xml:space="preserve">
+    <value>DefaultProfile auflisten</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meDumpLogfile" xml:space="preserve">
+    <value>Logfile auflisten</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meDumpMappingList" xml:space="preserve">
+    <value>Zuweisungen auflisten</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meJsReassignDialog" xml:space="preserve">
+    <value>Js Zuweisungen bearbeiten ...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meLoad" xml:space="preserve">
+    <value>Datei laden !</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meLoadAndGrab" xml:space="preserve">
+    <value>Datei und Baum laden !</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="msBtLoadMap" xml:space="preserve">
+    <value>Laden...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="msBtLoadMap_TT" xml:space="preserve">
+    <value>Laden von Zuweisungen mit Optionen...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meResetDefaults" xml:space="preserve">
+    <value>Auf Standards zurücksetzen</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meResetEmpty" xml:space="preserve">
+    <value>Leer zurücksetzen</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meResetLoadAndGrab" xml:space="preserve">
+    <value>Leeren und danach Datei und Baum laden !</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meSettingsDialog" xml:space="preserve">
+    <value>Programeinstellungen...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meShowDeviceTuningDialog" xml:space="preserve">
+    <value>Geräte Optimierungen...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meShowOptionsDialog" xml:space="preserve">
+    <value>Optionen einstellen...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="meShowToggleTable" xml:space="preserve">
+    <value>Baum als Tabelle anzeigen...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="msBtDump" xml:space="preserve">
+    <value>Auflistungen...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="msBtDump_TT" xml:space="preserve">
+    <value>Informationen abrufen und auflisten</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="msBtLoad" xml:space="preserve">
+    <value>Zurücksetzen...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="msBtLoad_TT" xml:space="preserve">
+    <value>Aktionsbaum zurücksetzen...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="msBtConfig" xml:space="preserve">
+    <value>Einstellungen...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="msBtConfig_TT" xml:space="preserve">
+    <value>Programm Einstellungen bearbeiten</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="msBtShow" xml:space="preserve">
+    <value>Anzeigen...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="msBtShow_TT" xml:space="preserve">
+    <value>Optionen, Optimierungen und Tabellen anzeigen</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="tActionText" xml:space="preserve">
+    <value>Aktion</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="tAddBind" xml:space="preserve">
+    <value>Addbind</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="tDef_Binding" xml:space="preserve">
+    <value>Std.Zuweisung</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="tDef_Modifier" xml:space="preserve">
+    <value>Std.Modifikator</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="tDevice" xml:space="preserve">
+    <value>Gerät</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="tDisabled" xml:space="preserve">
+    <value>Deaktiviert</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="tPageDump" xml:space="preserve">
+    <value>Auflistungen (XML, Logs etc.)</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="tPageOther" xml:space="preserve">
+    <value>Komplette Zuweisungsliste</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="tREF_ActionMap" xml:space="preserve">
+    <value>Aktionstabelle</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="tsLblMappings" xml:space="preserve">
+    <value>Zuweisung:</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="tsLblProfile" xml:space="preserve">
+    <value>Profil:</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="tsLblSupportedProfile" xml:space="preserve">
+    <value>Unterstützung:</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="tUsr_Binding" xml:space="preserve">
+    <value>Ben.Zuweisung</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="tUsr_Modifier" xml:space="preserve">
+    <value>Ben.Modifikator</value>
+    <comment>6-Table</comment>
+  </data>
+  <data name="xCurve" xml:space="preserve">
+    <value>Kurve</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xDeadzone" xml:space="preserve">
+    <value>Totbereich</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xDevControl" xml:space="preserve">
+    <value>Geräte Einst.</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xDeviceOptions" xml:space="preserve">
+    <value>Geräte Optionen</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xExponent" xml:space="preserve">
+    <value>Exponent</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xInstance" xml:space="preserve">
+    <value>Instanz</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xInvert" xml:space="preserve">
+    <value>Invertieren</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xNone" xml:space="preserve">
+    <value>Keine</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xOption" xml:space="preserve">
+    <value>Option</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xPoint1" xml:space="preserve">
+    <value>Punkt 1:</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xPoint2" xml:space="preserve">
+    <value>Punkt 2:</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xPoint3" xml:space="preserve">
+    <value>Punkt 3:</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xSaturation" xml:space="preserve">
+    <value>Sättigung</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="rbLivePtExponent" xml:space="preserve">
+    <value>Exp.Wert</value>
+    <comment>4-Options</comment>
+  </data>
+  <data name="mapAction" xml:space="preserve">
+    <value>Aktion</value>
+    <comment>7-RTF map</comment>
+  </data>
+  <data name="mapActionmap" xml:space="preserve">
+    <value>Aktionstabelle</value>
+    <comment>7-RTF map</comment>
+  </data>
+  <data name="mapActivationMode" xml:space="preserve">
+    <value>Aktivierung durch</value>
+    <comment>7-RTF map</comment>
+  </data>
+  <data name="mapDefault" xml:space="preserve">
+    <value>normal</value>
+    <comment>7-RTF map</comment>
+  </data>
+  <data name="mapHeader" xml:space="preserve">
+    <value>Aktionen für die Eingabe::</value>
+    <comment>7-RTF map</comment>
+  </data>
+  <data name="mapLocation" xml:space="preserve">
+    <value>Ort</value>
+    <comment>7-RTF map</comment>
+  </data>
+  <data name="mapMapped" xml:space="preserve">
+    <value>zugewiesen</value>
+    <comment>7-RTF map</comment>
+  </data>
+  <data name="mapModified" xml:space="preserve">
+    <value>modifiziert</value>
+    <comment>7-RTF map</comment>
+  </data>
+  <data name="mapProfile" xml:space="preserve">
+    <value>profil</value>
+    <comment>7-RTF map</comment>
+  </data>
+</root>

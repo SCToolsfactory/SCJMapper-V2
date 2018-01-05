@@ -358,6 +358,24 @@ namespace SCJMapper_V2
     }
 
 
+    //**** Form Options
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "1000, 765" )]
+    public Size FormOptionsSize
+    {
+      get { return (Size)this["FormOptionsSize"]; }
+      set { this["FormOptionsSize"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "10, 10" )]
+    public Point FormOptionsLocation
+    {
+      get { return (Point)this["FormOptionsLocation"]; }
+      set { this["FormOptionsLocation"] = value; }
+    }
+
 
     #endregion
 

@@ -84,6 +84,16 @@ namespace SCJMapper_V2
 
       CultureInfo current = CultureInfo.CurrentCulture;
       CultureInfo modded = new CultureInfo( current.Name ); // that is the users locale
+      log.InfoFormat( "SCJMapper_V2 - using current culture : {0}", modded.Name );
+      if ( ! string.IsNullOrEmpty( AppConfiguration.AppConfig.culture ) ) {
+        try {
+          modded = new CultureInfo( AppConfiguration.AppConfig.culture ); // that is the users locale
+          log.InfoFormat( "SCJMapper_V2 - override culture from config file: {0}", modded.Name );
+        }
+        catch {
+          log.ErrorFormat( "SCJMapper_V2 - Error in culture name from config file: {0}", AppConfiguration.AppConfig.culture );
+        }
+      }
       CultureInfo us = new CultureInfo( "en-US" );
       modded.NumberFormat = us.NumberFormat;  // change the whole number format to US - should be safe ...
       // change the applications formatting to US (the dec point is essential here)

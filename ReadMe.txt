@@ -1,21 +1,24 @@
 SC Joystick Mapper V 2.35 - Build 69 BETA
 (c) Cassini, StandardToaster - 05-Jan-2018
 
-Contains 12 files + graphics:
+Contains 14 files + graphics:
 
 SCJMapper.exe                The program (V2.35)
 SCJMapper.exe.config         Program config (V2.35)              - MUST be in the same folder as the Exe file
+de\SCJMapper.resources.dll   German language (V2.35)             - MUST be in the same folder as the Exe file
+fr\SCJMapper.resources.dll   French language (V2.35)             - MUST be in the same folder as the Exe file
+Storage\*.scj                Folder for collected assets (V2.35) - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
 OpenTK.GLControl.dll         Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
 ZstdNet.dll                  Managed Zip Assembly (v2.33)        - MUST be in the same folder as the Exe file
-x64/libzstd.dll              Native dll for ZstdNet (v2.33)      - MUST be in the same folder as the Exe file
-x86/libzstd.dll              Native dll for ZstdNet (v2.33)      - MUST be in the same folder as the Exe file
+x64\libzstd.dll              Native dll for ZstdNet (v2.33)      - MUST be in the same folder as the Exe file
+x86\libzstd.dll              Native dll for ZstdNet (v2.33)      - MUST be in the same folder as the Exe file
 log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
 log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
                                                                    then look for  trace.log  in the same folder
-SCJMapper_QGuide V2.34beta.pdf    Quick Guide (v2.34)
+SCJMapper_QGuide V2.35beta.pdf    Quick Guide (v2.35)
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images (V2.32)               - graphics folder MUST be in the same folder as the Exe file
@@ -24,7 +27,7 @@ NOTE V 2.35:
   search order for defaultProfile.xml to build the action tree is:
    1. directory where SCJMapper Exe is located
    2. directory of <SC>\LIVE\USER
-   3. extract from <SC>\LIVE\Data.p4k
+   3. extract from <SC>\LIVE\Data.p4k (using stored asset)
    4. extract from SCJMapper exe file (derived from 3.0 build 695052)
 
    --> in order to get always the most current one use 3. (and therefore remove the ones in 1. and 2.)
@@ -41,6 +44,7 @@ cassini@burri-web.org
 
 Changelog:
 V 2.35 - BETA Build 69
+- add - GUI translation support (english, german, french so far..)
 - add - provide CIG asset texts/translations for actions and maps 
   (use Settings to choose - for now only French and German are in but have no translations
    for English not all have a proper text - may not be used in the game ??)

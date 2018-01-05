@@ -56,7 +56,7 @@
       this.lblGraphSaturation = new System.Windows.Forms.Label();
       this.lblGraphDeadzone = new System.Windows.Forms.Label();
       this.lblLiveNodetext = new System.Windows.Forms.Label();
-      this.label4 = new System.Windows.Forms.Label();
+      this.lblChart = new System.Windows.Forms.Label();
       this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
       this.pnlDevOptionInput = new System.Windows.Forms.Panel();
       this.cbxUseSaturation = new System.Windows.Forms.CheckBox();
@@ -69,7 +69,7 @@
       this.pnlPreview = new System.Windows.Forms.Panel();
       this.btDebugStop = new System.Windows.Forms.Button();
       this.panel4 = new System.Windows.Forms.Panel();
-      this.btExit = new System.Windows.Forms.Button();
+      this.btDone = new System.Windows.Forms.Button();
       this.tableLayoutPanel1.SuspendLayout();
       this.tabC.SuspendLayout();
       this.tabOptions.SuspendLayout();
@@ -87,22 +87,23 @@
       // tableLayoutPanel1
       // 
       this.tableLayoutPanel1.ColumnCount = 2;
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 670F));
       this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 340F));
       this.tableLayoutPanel1.Controls.Add(this.tabC, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.pnlOptionInput, 1, 1);
       this.tableLayoutPanel1.Controls.Add(this.pnlDevOptionInput, 1, 2);
       this.tableLayoutPanel1.Controls.Add(this.pnlPreview, 0, 3);
       this.tableLayoutPanel1.Controls.Add(this.panel4, 1, 3);
-      this.tableLayoutPanel1.Location = new System.Drawing.Point(9, 9);
+      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
       this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
       this.tableLayoutPanel1.Name = "tableLayoutPanel1";
       this.tableLayoutPanel1.RowCount = 4;
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 516F));
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 126F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(1008, 719);
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(984, 726);
       this.tableLayoutPanel1.TabIndex = 0;
       // 
       // tabC
@@ -114,7 +115,7 @@
       this.tabC.Name = "tabC";
       this.tableLayoutPanel1.SetRowSpan(this.tabC, 3);
       this.tabC.SelectedIndex = 0;
-      this.tabC.Size = new System.Drawing.Size(664, 661);
+      this.tabC.Size = new System.Drawing.Size(638, 670);
       this.tabC.TabIndex = 3;
       this.tabC.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabC_Selecting);
       this.tabC.Deselecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabC_Selecting);
@@ -125,7 +126,7 @@
       this.tabOptions.Location = new System.Drawing.Point(4, 22);
       this.tabOptions.Name = "tabOptions";
       this.tabOptions.Padding = new System.Windows.Forms.Padding(3);
-      this.tabOptions.Size = new System.Drawing.Size(656, 635);
+      this.tabOptions.Size = new System.Drawing.Size(630, 644);
       this.tabOptions.TabIndex = 0;
       this.tabOptions.Text = "Flight Options";
       this.tabOptions.UseVisualStyleBackColor = true;
@@ -135,7 +136,7 @@
       this.lvOptionTree.Dock = System.Windows.Forms.DockStyle.Fill;
       this.lvOptionTree.Location = new System.Drawing.Point(3, 3);
       this.lvOptionTree.Name = "lvOptionTree";
-      this.lvOptionTree.Size = new System.Drawing.Size(650, 629);
+      this.lvOptionTree.Size = new System.Drawing.Size(624, 638);
       this.lvOptionTree.TabIndex = 0;
       this.lvOptionTree.UseCompatibleStateImageBehavior = false;
       this.lvOptionTree.View = System.Windows.Forms.View.Details;
@@ -146,7 +147,7 @@
       this.tabDevOption.Location = new System.Drawing.Point(4, 22);
       this.tabDevOption.Name = "tabDevOption";
       this.tabDevOption.Padding = new System.Windows.Forms.Padding(3);
-      this.tabDevOption.Size = new System.Drawing.Size(656, 635);
+      this.tabDevOption.Size = new System.Drawing.Size(630, 644);
       this.tabDevOption.TabIndex = 1;
       this.tabDevOption.Text = "Device Options";
       this.tabDevOption.UseVisualStyleBackColor = true;
@@ -161,12 +162,12 @@
       this.pnlOptionInput.Controls.Add(this.lblGraphSaturation);
       this.pnlOptionInput.Controls.Add(this.lblGraphDeadzone);
       this.pnlOptionInput.Controls.Add(this.lblLiveNodetext);
-      this.pnlOptionInput.Controls.Add(this.label4);
+      this.pnlOptionInput.Controls.Add(this.lblChart);
       this.pnlOptionInput.Controls.Add(this.chart1);
       this.pnlOptionInput.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.pnlOptionInput.Location = new System.Drawing.Point(673, 28);
+      this.pnlOptionInput.Location = new System.Drawing.Point(647, 28);
       this.pnlOptionInput.Name = "pnlOptionInput";
-      this.pnlOptionInput.Size = new System.Drawing.Size(332, 510);
+      this.pnlOptionInput.Size = new System.Drawing.Size(334, 510);
       this.pnlOptionInput.TabIndex = 6;
       // 
       // rbUsePts
@@ -236,9 +237,10 @@
       this.rbLivePtExponent.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.rbLivePtExponent.Location = new System.Drawing.Point(9, 9);
       this.rbLivePtExponent.Name = "rbLivePtExponent";
-      this.rbLivePtExponent.Size = new System.Drawing.Size(85, 19);
+      this.rbLivePtExponent.Size = new System.Drawing.Size(84, 19);
       this.rbLivePtExponent.TabIndex = 33;
       this.rbLivePtExponent.TabStop = true;
+      this.rbLivePtExponent.Tag = "§";
       this.rbLivePtExponent.Text = "Exp. Value:";
       this.rbLivePtExponent.UseVisualStyleBackColor = true;
       this.rbLivePtExponent.CheckedChanged += new System.EventHandler(this.rbPtAny_CheckedChanged);
@@ -281,6 +283,7 @@
       this.cbxLiveInvert.Name = "cbxLiveInvert";
       this.cbxLiveInvert.Size = new System.Drawing.Size(59, 17);
       this.cbxLiveInvert.TabIndex = 54;
+      this.cbxLiveInvert.Tag = "§";
       this.cbxLiveInvert.Text = "Invert";
       this.cbxLiveInvert.UseVisualStyleBackColor = true;
       this.cbxLiveInvert.CheckedChanged += new System.EventHandler(this.cbxInvert_CheckedChanged);
@@ -412,14 +415,15 @@
       this.lblLiveNodetext.TabIndex = 51;
       this.lblLiveNodetext.Text = "...";
       // 
-      // label4
+      // lblChart
       // 
-      this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(84, 295);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(178, 13);
-      this.label4.TabIndex = 36;
-      this.label4.Text = "Select an option then click and drag";
+      this.lblChart.Location = new System.Drawing.Point(50, 295);
+      this.lblChart.Name = "lblChart";
+      this.lblChart.Size = new System.Drawing.Size(233, 15);
+      this.lblChart.TabIndex = 36;
+      this.lblChart.Tag = "§";
+      this.lblChart.Text = "Select an option then click and drag";
+      this.lblChart.TextAlign = System.Drawing.ContentAlignment.TopCenter;
       // 
       // chart1
       // 
@@ -470,9 +474,9 @@
       this.pnlDevOptionInput.Controls.Add(this.cbxUseDeadzone);
       this.pnlDevOptionInput.Controls.Add(this.panel3);
       this.pnlDevOptionInput.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.pnlDevOptionInput.Location = new System.Drawing.Point(673, 544);
+      this.pnlDevOptionInput.Location = new System.Drawing.Point(647, 544);
       this.pnlDevOptionInput.Name = "pnlDevOptionInput";
-      this.pnlDevOptionInput.Size = new System.Drawing.Size(332, 120);
+      this.pnlDevOptionInput.Size = new System.Drawing.Size(334, 129);
       this.pnlDevOptionInput.TabIndex = 7;
       // 
       // cbxUseSaturation
@@ -557,9 +561,9 @@
       // 
       this.pnlPreview.Controls.Add(this.btDebugStop);
       this.pnlPreview.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.pnlPreview.Location = new System.Drawing.Point(3, 670);
+      this.pnlPreview.Location = new System.Drawing.Point(3, 679);
       this.pnlPreview.Name = "pnlPreview";
-      this.pnlPreview.Size = new System.Drawing.Size(664, 46);
+      this.pnlPreview.Size = new System.Drawing.Size(638, 44);
       this.pnlPreview.TabIndex = 8;
       // 
       // btDebugStop
@@ -576,38 +580,43 @@
       // panel4
       // 
       this.panel4.AutoSize = true;
-      this.panel4.Controls.Add(this.btExit);
+      this.panel4.Controls.Add(this.btDone);
       this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panel4.Location = new System.Drawing.Point(673, 670);
+      this.panel4.Location = new System.Drawing.Point(647, 679);
       this.panel4.Name = "panel4";
-      this.panel4.Size = new System.Drawing.Size(332, 46);
+      this.panel4.Size = new System.Drawing.Size(334, 44);
       this.panel4.TabIndex = 9;
       // 
-      // btExit
+      // btDone
       // 
-      this.btExit.DialogResult = System.Windows.Forms.DialogResult.OK;
-      this.btExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.btExit.Location = new System.Drawing.Point(193, 8);
-      this.btExit.Name = "btExit";
-      this.btExit.Size = new System.Drawing.Size(136, 32);
-      this.btExit.TabIndex = 0;
-      this.btExit.Text = "Done";
-      this.btExit.UseVisualStyleBackColor = true;
-      this.btExit.Click += new System.EventHandler(this.btExit_Click);
+      this.btDone.DialogResult = System.Windows.Forms.DialogResult.OK;
+      this.btDone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.btDone.Location = new System.Drawing.Point(193, 8);
+      this.btDone.Name = "btDone";
+      this.btDone.Size = new System.Drawing.Size(136, 32);
+      this.btDone.TabIndex = 0;
+      this.btDone.Tag = "§";
+      this.btDone.Text = "Done";
+      this.btDone.UseVisualStyleBackColor = true;
+      this.btDone.Click += new System.EventHandler(this.btExit_Click);
       // 
       // FormOptions
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-      this.ClientSize = new System.Drawing.Size(1027, 737);
+      this.ClientSize = new System.Drawing.Size(984, 726);
       this.Controls.Add(this.tableLayoutPanel1);
-      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+      this.MinimumSize = new System.Drawing.Size(1000, 765);
       this.Name = "FormOptions";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+      this.Tag = "§";
       this.Text = "SCJMapper - Options";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormOptions_FormClosing);
       this.Load += new System.EventHandler(this.FormOptions_Load);
+      this.LocationChanged += new System.EventHandler(this.FormOptions_LocationChanged);
+      this.SizeChanged += new System.EventHandler(this.FormOptions_SizeChanged);
       this.tableLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel1.PerformLayout();
       this.tabC.ResumeLayout(false);
@@ -660,7 +669,7 @@
     private System.Windows.Forms.Label lblGraphSaturation;
     private System.Windows.Forms.Label lblGraphDeadzone;
     private System.Windows.Forms.Label lblLiveNodetext;
-    private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Label lblChart;
     private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     private System.Windows.Forms.Panel pnlDevOptionInput;
     private System.Windows.Forms.TrackBar tbDeadzone;
@@ -672,6 +681,6 @@
     private System.Windows.Forms.TrackBar tbSaturation;
     private System.Windows.Forms.Panel pnlPreview;
     private System.Windows.Forms.Panel panel4;
-    private System.Windows.Forms.Button btExit;
+    private System.Windows.Forms.Button btDone;
   }
 }

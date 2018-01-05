@@ -20,6 +20,7 @@ using SCJMapper_V2.Devices.Options;
 using SCJMapper_V2.OGL.TextureLoaders;
 using SCJMapper_V2.Devices.Mouse;
 using SCJMapper_V2.Devices;
+using SCJMapper_V2.Translation;
 
 namespace SCJMapper_V2.OGL
 {
@@ -128,6 +129,20 @@ namespace SCJMapper_V2.OGL
 
     private void FormJSCalCurve_Load( object sender, EventArgs e )
     {
+      Tx.LocalizeControlTree( this );
+      // localization with generic IDs
+      rbPtDeadzone.Text = Tx.Translate( "xDeadzone" );
+      rbPtSaturation.Text = Tx.Translate( "xSaturation" );
+      rbPtExponent.Text = Tx.Translate( "xExponent" );
+      rbPt1.Text = Tx.Translate( "xPoint1" );
+      rbPt2.Text = Tx.Translate( "xPoint2" );
+      rbPt3.Text = Tx.Translate( "xPoint3" );
+      cbxPdeadzone.Text = Tx.Translate( "xDeadzone" ); cbxRdeadzone.Text = Tx.Translate( "xDeadzone" ); cbxYdeadzone.Text = Tx.Translate( "xDeadzone" );
+      cbxPexpo.Text = Tx.Translate( "xExponent" ); cbxRexpo.Text = Tx.Translate( "xExponent" ); cbxYexpo.Text = Tx.Translate( "xExponent" );
+      cbxPinvert.Text = Tx.Translate( "xInvert" ); cbxRinvert.Text = Tx.Translate( "xInvert" ); cbxYinvert.Text = Tx.Translate( "xInvert" );
+      cbxPsat.Text = Tx.Translate( "xSaturation" ); cbxRsat.Text = Tx.Translate( "xSaturation" ); cbxYsat.Text = Tx.Translate( "xSaturation" );
+      // END OF localization with generic IDs
+
       rbHornet.Checked = true;
 
       rbTuneYPR.Checked = false;

@@ -27,7 +27,7 @@
     /// </summary>
     private void InitializeComponent( )
     {
-      this.gBox = new System.Windows.Forms.GroupBox();
+      this.gbxJBox = new System.Windows.Forms.GroupBox();
       this.lbl1Buttons = new System.Windows.Forms.Label();
       this.lB = new System.Windows.Forms.Label();
       this.lbl1Hat3 = new System.Windows.Forms.Label();
@@ -54,55 +54,56 @@
       this.lZ = new System.Windows.Forms.Label();
       this.lY = new System.Windows.Forms.Label();
       this.lX = new System.Windows.Forms.Label();
-      this.gBoxCap = new System.Windows.Forms.GroupBox();
+      this.gbxBoxCap = new System.Windows.Forms.GroupBox();
       this.lblnButtons = new System.Windows.Forms.Label();
       this.lblnPOVs = new System.Windows.Forms.Label();
       this.lblnAxis = new System.Windows.Forms.Label();
-      this.label5 = new System.Windows.Forms.Label();
-      this.label3 = new System.Windows.Forms.Label();
-      this.label2 = new System.Windows.Forms.Label();
-      this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.lblNumButtons = new System.Windows.Forms.Label();
+      this.lblNumPOV = new System.Windows.Forms.Label();
+      this.lblNumAxes = new System.Windows.Forms.Label();
+      this.gbxJAssignment = new System.Windows.Forms.GroupBox();
       this.lblJsAssignment = new System.Windows.Forms.Label();
-      this.label1 = new System.Windows.Forms.Label();
-      this.gBox.SuspendLayout();
-      this.gBoxCap.SuspendLayout();
-      this.groupBox1.SuspendLayout();
+      this.lblJsnNumber = new System.Windows.Forms.Label();
+      this.gbxJBox.SuspendLayout();
+      this.gbxBoxCap.SuspendLayout();
+      this.gbxJAssignment.SuspendLayout();
       this.SuspendLayout();
       // 
-      // gBox
+      // gbxJBox
       // 
-      this.gBox.Controls.Add(this.lbl1Buttons);
-      this.gBox.Controls.Add(this.lB);
-      this.gBox.Controls.Add(this.lbl1Hat3);
-      this.gBox.Controls.Add(this.lbl1S1);
-      this.gBox.Controls.Add(this.lbl1S0);
-      this.gBox.Controls.Add(this.lbl1Hat2);
-      this.gBox.Controls.Add(this.lbl1Hat1);
-      this.gBox.Controls.Add(this.lbl1Hat0);
-      this.gBox.Controls.Add(this.lbl1Zr);
-      this.gBox.Controls.Add(this.lbl1Yr);
-      this.gBox.Controls.Add(this.lbl1Xr);
-      this.gBox.Controls.Add(this.lbl1Z);
-      this.gBox.Controls.Add(this.lbl1Y);
-      this.gBox.Controls.Add(this.lbl1X);
-      this.gBox.Controls.Add(this.lH3);
-      this.gBox.Controls.Add(this.lH2);
-      this.gBox.Controls.Add(this.lH1);
-      this.gBox.Controls.Add(this.lH0);
-      this.gBox.Controls.Add(this.lS1);
-      this.gBox.Controls.Add(this.lS0);
-      this.gBox.Controls.Add(this.lZr);
-      this.gBox.Controls.Add(this.lYr);
-      this.gBox.Controls.Add(this.lXr);
-      this.gBox.Controls.Add(this.lZ);
-      this.gBox.Controls.Add(this.lY);
-      this.gBox.Controls.Add(this.lX);
-      this.gBox.Location = new System.Drawing.Point(3, 69);
-      this.gBox.Name = "gBox";
-      this.gBox.Size = new System.Drawing.Size(261, 151);
-      this.gBox.TabIndex = 3;
-      this.gBox.TabStop = false;
-      this.gBox.Text = "Joystick State";
+      this.gbxJBox.Controls.Add(this.lbl1Buttons);
+      this.gbxJBox.Controls.Add(this.lB);
+      this.gbxJBox.Controls.Add(this.lbl1Hat3);
+      this.gbxJBox.Controls.Add(this.lbl1S1);
+      this.gbxJBox.Controls.Add(this.lbl1S0);
+      this.gbxJBox.Controls.Add(this.lbl1Hat2);
+      this.gbxJBox.Controls.Add(this.lbl1Hat1);
+      this.gbxJBox.Controls.Add(this.lbl1Hat0);
+      this.gbxJBox.Controls.Add(this.lbl1Zr);
+      this.gbxJBox.Controls.Add(this.lbl1Yr);
+      this.gbxJBox.Controls.Add(this.lbl1Xr);
+      this.gbxJBox.Controls.Add(this.lbl1Z);
+      this.gbxJBox.Controls.Add(this.lbl1Y);
+      this.gbxJBox.Controls.Add(this.lbl1X);
+      this.gbxJBox.Controls.Add(this.lH3);
+      this.gbxJBox.Controls.Add(this.lH2);
+      this.gbxJBox.Controls.Add(this.lH1);
+      this.gbxJBox.Controls.Add(this.lH0);
+      this.gbxJBox.Controls.Add(this.lS1);
+      this.gbxJBox.Controls.Add(this.lS0);
+      this.gbxJBox.Controls.Add(this.lZr);
+      this.gbxJBox.Controls.Add(this.lYr);
+      this.gbxJBox.Controls.Add(this.lXr);
+      this.gbxJBox.Controls.Add(this.lZ);
+      this.gbxJBox.Controls.Add(this.lY);
+      this.gbxJBox.Controls.Add(this.lX);
+      this.gbxJBox.Location = new System.Drawing.Point(3, 69);
+      this.gbxJBox.Name = "gbxJBox";
+      this.gbxJBox.Size = new System.Drawing.Size(261, 151);
+      this.gbxJBox.TabIndex = 3;
+      this.gbxJBox.TabStop = false;
+      this.gbxJBox.Tag = "§";
+      this.gbxJBox.Text = "Joystick State";
       // 
       // lbl1Buttons
       // 
@@ -360,20 +361,21 @@
       this.lX.TabIndex = 0;
       this.lX.Text = "X Axis:";
       // 
-      // gBoxCap
+      // gbxBoxCap
       // 
-      this.gBoxCap.Controls.Add(this.lblnButtons);
-      this.gBoxCap.Controls.Add(this.lblnPOVs);
-      this.gBoxCap.Controls.Add(this.lblnAxis);
-      this.gBoxCap.Controls.Add(this.label5);
-      this.gBoxCap.Controls.Add(this.label3);
-      this.gBoxCap.Controls.Add(this.label2);
-      this.gBoxCap.Location = new System.Drawing.Point(3, 3);
-      this.gBoxCap.Name = "gBoxCap";
-      this.gBoxCap.Size = new System.Drawing.Size(261, 60);
-      this.gBoxCap.TabIndex = 4;
-      this.gBoxCap.TabStop = false;
-      this.gBoxCap.Text = "Device Capabilities";
+      this.gbxBoxCap.Controls.Add(this.lblnButtons);
+      this.gbxBoxCap.Controls.Add(this.lblnPOVs);
+      this.gbxBoxCap.Controls.Add(this.lblnAxis);
+      this.gbxBoxCap.Controls.Add(this.lblNumButtons);
+      this.gbxBoxCap.Controls.Add(this.lblNumPOV);
+      this.gbxBoxCap.Controls.Add(this.lblNumAxes);
+      this.gbxBoxCap.Location = new System.Drawing.Point(3, 3);
+      this.gbxBoxCap.Name = "gbxBoxCap";
+      this.gbxBoxCap.Size = new System.Drawing.Size(261, 60);
+      this.gbxBoxCap.TabIndex = 4;
+      this.gbxBoxCap.TabStop = false;
+      this.gbxBoxCap.Tag = "§";
+      this.gbxBoxCap.Text = "Device Capabilities";
       // 
       // lblnButtons
       // 
@@ -402,85 +404,90 @@
       this.lblnAxis.TabIndex = 14;
       this.lblnAxis.Text = "0";
       // 
-      // label5
+      // lblNumButtons
       // 
-      this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(9, 40);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(56, 13);
-      this.label5.TabIndex = 13;
-      this.label5.Text = "# Buttons:";
+      this.lblNumButtons.AutoSize = true;
+      this.lblNumButtons.Location = new System.Drawing.Point(9, 40);
+      this.lblNumButtons.Name = "lblNumButtons";
+      this.lblNumButtons.Size = new System.Drawing.Size(56, 13);
+      this.lblNumButtons.TabIndex = 13;
+      this.lblNumButtons.Tag = "§";
+      this.lblNumButtons.Text = "# Buttons:";
       // 
-      // label3
+      // lblNumPOV
       // 
-      this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(124, 24);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(42, 13);
-      this.label3.TabIndex = 13;
-      this.label3.Text = "# POV:";
+      this.lblNumPOV.AutoSize = true;
+      this.lblNumPOV.Location = new System.Drawing.Point(124, 24);
+      this.lblNumPOV.Name = "lblNumPOV";
+      this.lblNumPOV.Size = new System.Drawing.Size(42, 13);
+      this.lblNumPOV.TabIndex = 13;
+      this.lblNumPOV.Tag = "§";
+      this.lblNumPOV.Text = "# POV:";
       // 
-      // label2
+      // lblNumAxes
       // 
-      this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(9, 24);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(39, 13);
-      this.label2.TabIndex = 13;
-      this.label2.Text = "# Axis:";
+      this.lblNumAxes.AutoSize = true;
+      this.lblNumAxes.Location = new System.Drawing.Point(9, 24);
+      this.lblNumAxes.Name = "lblNumAxes";
+      this.lblNumAxes.Size = new System.Drawing.Size(39, 13);
+      this.lblNumAxes.TabIndex = 13;
+      this.lblNumAxes.Tag = "§";
+      this.lblNumAxes.Text = "# Axis:";
       // 
-      // groupBox1
+      // gbxJAssignment
       // 
-      this.groupBox1.Controls.Add(this.lblJsAssignment);
-      this.groupBox1.Controls.Add(this.label1);
-      this.groupBox1.Location = new System.Drawing.Point(3, 226);
-      this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(261, 46);
-      this.groupBox1.TabIndex = 5;
-      this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "jsN - Assignment";
+      this.gbxJAssignment.Controls.Add(this.lblJsAssignment);
+      this.gbxJAssignment.Controls.Add(this.lblJsnNumber);
+      this.gbxJAssignment.Location = new System.Drawing.Point(3, 226);
+      this.gbxJAssignment.Name = "gbxJAssignment";
+      this.gbxJAssignment.Size = new System.Drawing.Size(261, 46);
+      this.gbxJAssignment.TabIndex = 5;
+      this.gbxJAssignment.TabStop = false;
+      this.gbxJAssignment.Tag = "§";
+      this.gbxJAssignment.Text = "jsN - Assignment";
       // 
       // lblJsAssignment
       // 
       this.lblJsAssignment.AutoSize = true;
       this.lblJsAssignment.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblJsAssignment.Location = new System.Drawing.Point(169, 21);
+      this.lblJsAssignment.Location = new System.Drawing.Point(210, 21);
       this.lblJsAssignment.Name = "lblJsAssignment";
       this.lblJsAssignment.Size = new System.Drawing.Size(22, 13);
       this.lblJsAssignment.TabIndex = 1;
       this.lblJsAssignment.Text = "jsx";
       // 
-      // label1
+      // lblJsnNumber
       // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(9, 21);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(119, 13);
-      this.label1.TabIndex = 0;
-      this.label1.Text = "This device is listed as: ";
+      this.lblJsnNumber.AutoSize = true;
+      this.lblJsnNumber.Location = new System.Drawing.Point(9, 21);
+      this.lblJsnNumber.Name = "lblJsnNumber";
+      this.lblJsnNumber.Size = new System.Drawing.Size(119, 13);
+      this.lblJsnNumber.TabIndex = 0;
+      this.lblJsnNumber.Tag = "§";
+      this.lblJsnNumber.Text = "This device is listed as: ";
       // 
       // UC_JoyPanel
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-      this.Controls.Add(this.groupBox1);
-      this.Controls.Add(this.gBoxCap);
-      this.Controls.Add(this.gBox);
+      this.Controls.Add(this.gbxJAssignment);
+      this.Controls.Add(this.gbxBoxCap);
+      this.Controls.Add(this.gbxJBox);
       this.Name = "UC_JoyPanel";
       this.Size = new System.Drawing.Size(271, 278);
-      this.gBox.ResumeLayout(false);
-      this.gBox.PerformLayout();
-      this.gBoxCap.ResumeLayout(false);
-      this.gBoxCap.PerformLayout();
-      this.groupBox1.ResumeLayout(false);
-      this.groupBox1.PerformLayout();
+      this.gbxJBox.ResumeLayout(false);
+      this.gbxJBox.PerformLayout();
+      this.gbxBoxCap.ResumeLayout(false);
+      this.gbxBoxCap.PerformLayout();
+      this.gbxJAssignment.ResumeLayout(false);
+      this.gbxJAssignment.PerformLayout();
       this.ResumeLayout(false);
 
     }
 
     #endregion
 
-    private System.Windows.Forms.GroupBox gBox;
+    private System.Windows.Forms.GroupBox gbxJBox;
     private System.Windows.Forms.Label lbl1Buttons;
     private System.Windows.Forms.Label lB;
     private System.Windows.Forms.Label lbl1Hat3;
@@ -507,15 +514,15 @@
     private System.Windows.Forms.Label lZ;
     private System.Windows.Forms.Label lY;
     private System.Windows.Forms.Label lX;
-    private System.Windows.Forms.GroupBox gBoxCap;
+    private System.Windows.Forms.GroupBox gbxBoxCap;
     private System.Windows.Forms.Label lblnButtons;
     private System.Windows.Forms.Label lblnPOVs;
     private System.Windows.Forms.Label lblnAxis;
-    private System.Windows.Forms.Label label5;
-    private System.Windows.Forms.Label label3;
-    private System.Windows.Forms.Label label2;
-    private System.Windows.Forms.GroupBox groupBox1;
+    private System.Windows.Forms.Label lblNumButtons;
+    private System.Windows.Forms.Label lblNumPOV;
+    private System.Windows.Forms.Label lblNumAxes;
+    private System.Windows.Forms.GroupBox gbxJAssignment;
     private System.Windows.Forms.Label lblJsAssignment;
-    private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.Label lblJsnNumber;
   }
 }

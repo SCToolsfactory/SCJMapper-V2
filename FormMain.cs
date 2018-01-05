@@ -20,6 +20,7 @@ using SCJMapper_V2.Devices.Mouse;
 using SCJMapper_V2.Devices.Gamepad;
 using SCJMapper_V2.Devices.Joystick;
 using SCJMapper_V2.Devices.Options;
+using SCJMapper_V2.Translation;
 
 namespace SCJMapper_V2
 {
@@ -148,22 +149,6 @@ namespace SCJMapper_V2
       else msSelectMapping.BackColor = MyColors.MappingColor;
     }
 
-    /// <summary>
-    /// Checks if a rectangle is visible on any screen
-    /// </summary>
-    /// <param name="formRect"></param>
-    /// <returns>True if visible</returns>
-    private static bool IsOnScreen( Rectangle formRect )
-    {
-      Screen[] screens = Screen.AllScreens;
-      foreach ( Screen screen in screens ) {
-        if ( screen.WorkingArea.Contains( formRect ) ) {
-          return true;
-        }
-      }
-      return false;
-    }
-
 
     #endregion
 
@@ -246,9 +231,17 @@ namespace SCJMapper_V2
     {
       log.Debug( "MainForm_Load - Entry" );
 
+      Tx.LocalizeControlTree( this );
+      msBtLoad.ToolTipText = Tx.Translate( msBtLoad.Name + "_TT" );
+      msBtDump.ToolTipText = Tx.Translate( msBtDump.Name + "_TT" );
+      msBtShow.ToolTipText = Tx.Translate( msBtShow.Name + "_TT" );
+      msBtConfig.ToolTipText = Tx.Translate( msBtConfig.Name + "_TT" );
+      msBtLoadMap.ToolTipText = Tx.Translate( msBtLoadMap.Name + "_TT" );
+
+
       // some applic initialization 
       // Assign Size property - check if on screen, else use defaults
-      if ( IsOnScreen( new Rectangle( AppSettings.Instance.FormLocation, AppSettings.Instance.FormSize ) ) ) {
+      if ( Commons.IsOnScreen( new Rectangle( AppSettings.Instance.FormLocation, AppSettings.Instance.FormSize ) ) ) {
         this.Size = AppSettings.Instance.FormSize;
         this.Location = AppSettings.Instance.FormLocation;
       }
@@ -262,6 +255,8 @@ namespace SCJMapper_V2
 
       // tooltips where needed
       toolTip1.SetToolTip( this.linkLblReleases, c_GithubLink ); // allow to see where the link may head
+
+      tsLblSupport.Text = "profile version = \"1\" optionsVersion = \"2\" rebindVersion = \"2\"";
 
       // XML RTB
       log.Debug( "Loading RTB" );
@@ -571,6 +566,8 @@ namespace SCJMapper_V2
         log.Debug( "  - Add first Gamepad panel" );
         tc1.TabPages[tabs].Text = "Gamepad ";
         UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
+        Tx.LocalizeControlTree( uUC_GpadPanelNew );
+
         uUC_GpadPanelNew.Size = UC_JoyPanel.Size; uUC_GpadPanelNew.Location = UC_JoyPanel.Location;
         UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
         log.Debug( "  - Create Gamepad instance" );
@@ -601,6 +598,7 @@ namespace SCJMapper_V2
           // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
           tc1.TabPages.Add( "" );  // numbering is 1 based for the user
           uUC_JoyPanelNew = new UC_JoyPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
+          Tx.LocalizeControlTree( uUC_JoyPanelNew );
           uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
 
         }
@@ -940,8 +938,6 @@ namespace SCJMapper_V2
       else {
         FTAB.Show( );
         if ( created ) {
-          FTAB.Size = AppSettings.Instance.FormTableSize;
-          FTAB.Location = AppSettings.Instance.FormTableLocation;
           FTAB.LastColSize = AppSettings.Instance.FormTableColumnWidth;
         }
         // reload the data to display
