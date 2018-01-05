@@ -127,7 +127,7 @@ namespace SCJMapper_V2
 
       // DetectGamepad
       if ( AppSettings.Instance.DetectGamepad != cbxDetectGamepad.Checked ) {
-        MessageBox.Show( "Changing the Gamepad option needs a restart of the application !!", "Settings Notification", MessageBoxButtons.OK, MessageBoxIcon.Information );
+        MessageBox.Show( Tx.Translate( "setNote1" ), Tx.Translate("setNote2") , MessageBoxButtons.OK, MessageBoxIcon.Information );
       }
       AppSettings.Instance.DetectGamepad = cbxDetectGamepad.Checked;
 

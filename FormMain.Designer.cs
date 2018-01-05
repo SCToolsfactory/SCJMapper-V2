@@ -103,9 +103,9 @@
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-      this.btSaveMyMapping = new System.Windows.Forms.Button();
       this.txMappingName = new System.Windows.Forms.TextBox();
       this.lblMappingname = new System.Windows.Forms.Label();
+      this.btSaveMyMapping = new System.Windows.Forms.Button();
       this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
       this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
       this.btClearFilter = new System.Windows.Forms.Button();
@@ -209,6 +209,7 @@
       // 
       this.tsiCopy.Name = "tsiCopy";
       this.tsiCopy.Size = new System.Drawing.Size(169, 22);
+      this.tsiCopy.Tag = "§";
       this.tsiCopy.Text = "Copy";
       this.tsiCopy.Click += new System.EventHandler(this.tsiCopy_Click);
       // 
@@ -216,6 +217,7 @@
       // 
       this.tsiPaste.Name = "tsiPaste";
       this.tsiPaste.Size = new System.Drawing.Size(169, 22);
+      this.tsiPaste.Tag = "§";
       this.tsiPaste.Text = "Paste";
       this.tsiPaste.Click += new System.EventHandler(this.tsiPaste_Click);
       // 
@@ -223,6 +225,7 @@
       // 
       this.tsiPReplace.Name = "tsiPReplace";
       this.tsiPReplace.Size = new System.Drawing.Size(169, 22);
+      this.tsiPReplace.Tag = "§";
       this.tsiPReplace.Text = "Paste (Replace all)";
       this.tsiPReplace.Click += new System.EventHandler(this.tsiPReplace_Click);
       // 
@@ -230,6 +233,7 @@
       // 
       this.tsiSelAll.Name = "tsiSelAll";
       this.tsiSelAll.Size = new System.Drawing.Size(169, 22);
+      this.tsiSelAll.Tag = "§";
       this.tsiSelAll.Text = "Select All";
       this.tsiSelAll.Click += new System.EventHandler(this.tsiSelAll_Click);
       // 
@@ -242,6 +246,7 @@
       // 
       this.tsiOpen.Name = "tsiOpen";
       this.tsiOpen.Size = new System.Drawing.Size(169, 22);
+      this.tsiOpen.Tag = "§";
       this.tsiOpen.Text = "Open...";
       this.tsiOpen.Click += new System.EventHandler(this.tsiOpen_Click);
       // 
@@ -249,6 +254,7 @@
       // 
       this.tsiSaveAs.Name = "tsiSaveAs";
       this.tsiSaveAs.Size = new System.Drawing.Size(169, 22);
+      this.tsiSaveAs.Tag = "§";
       this.tsiSaveAs.Text = "Save as...";
       this.tsiSaveAs.Click += new System.EventHandler(this.tsiSaveAs_Click);
       // 
@@ -555,7 +561,7 @@
             this.tdiAddMod2,
             this.tdiAddMod3});
       this.cmAddDel.Name = "cmAddDel";
-      this.cmAddDel.Size = new System.Drawing.Size(221, 457);
+      this.cmAddDel.Size = new System.Drawing.Size(261, 479);
       this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
       // 
       // tdiCollapseAll
@@ -563,6 +569,7 @@
       this.tdiCollapseAll.ForeColor = System.Drawing.Color.MediumBlue;
       this.tdiCollapseAll.Name = "tdiCollapseAll";
       this.tdiCollapseAll.Size = new System.Drawing.Size(220, 22);
+      this.tdiCollapseAll.Tag = "§";
       this.tdiCollapseAll.Text = "Collapse to selected";
       this.tdiCollapseAll.Click += new System.EventHandler(this.tdiCollapseAll_Click);
       // 
@@ -571,6 +578,7 @@
       this.tdiExpandAll.ForeColor = System.Drawing.Color.MediumBlue;
       this.tdiExpandAll.Name = "tdiExpandAll";
       this.tdiExpandAll.Size = new System.Drawing.Size(220, 22);
+      this.tdiExpandAll.Tag = "§";
       this.tdiExpandAll.Text = "Expand all Mappings";
       this.tdiExpandAll.Click += new System.EventHandler(this.tdiExpandAll_Click);
       // 
@@ -583,6 +591,7 @@
       // 
       this.tdiAssignBinding.Name = "tdiAssignBinding";
       this.tdiAssignBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiAssignBinding.Tag = "§";
       this.tdiAssignBinding.Text = "Assign Mapping";
       this.tdiAssignBinding.Click += new System.EventHandler(this.tdiAssignBinding_Click);
       // 
@@ -590,6 +599,7 @@
       // 
       this.tdiBlendBinding.Name = "tdiBlendBinding";
       this.tdiBlendBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiBlendBinding.Tag = "§";
       this.tdiBlendBinding.Text = "Disable Mapping";
       this.tdiBlendBinding.Click += new System.EventHandler(this.tdiBlendBinding_Click);
       // 
@@ -597,6 +607,7 @@
       // 
       this.tdiClearBinding.Name = "tdiClearBinding";
       this.tdiClearBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiClearBinding.Tag = "§";
       this.tdiClearBinding.Text = "Clear Mapping";
       this.tdiClearBinding.Click += new System.EventHandler(this.tdiClearBinding_Click);
       // 
@@ -609,6 +620,7 @@
       // 
       this.tdiAddBinding.Name = "tdiAddBinding";
       this.tdiAddBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiAddBinding.Tag = "§";
       this.tdiAddBinding.Text = "Add Mapping";
       this.tdiAddBinding.Click += new System.EventHandler(this.tsiAddBinding_Click);
       // 
@@ -616,6 +628,7 @@
       // 
       this.tdiDelBinding.Name = "tdiDelBinding";
       this.tdiDelBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiDelBinding.Tag = "§";
       this.tdiDelBinding.Text = "Delete Mapping";
       this.tdiDelBinding.Click += new System.EventHandler(this.tdiDelBinding_Click);
       // 
@@ -629,7 +642,7 @@
       this.tdiTxDefActivationMode.BackColor = System.Drawing.Color.PapayaWhip;
       this.tdiTxDefActivationMode.Name = "tdiTxDefActivationMode";
       this.tdiTxDefActivationMode.ReadOnly = true;
-      this.tdiTxDefActivationMode.Size = new System.Drawing.Size(160, 23);
+      this.tdiTxDefActivationMode.Size = new System.Drawing.Size(200, 23);
       this.tdiTxDefActivationMode.Text = "Default ActMode";
       // 
       // tdiCbxActivation
@@ -643,7 +656,7 @@
             "None"});
       this.tdiCbxActivation.MaxDropDownItems = 10;
       this.tdiCbxActivation.Name = "tdiCbxActivation";
-      this.tdiCbxActivation.Size = new System.Drawing.Size(160, 180);
+      this.tdiCbxActivation.Size = new System.Drawing.Size(200, 180);
       this.tdiCbxActivation.Click += new System.EventHandler(this.tdiCbxActivation_Click);
       // 
       // tdiSGroup4
@@ -889,21 +902,6 @@
       this.tableLayoutPanel3.Size = new System.Drawing.Size(352, 78);
       this.tableLayoutPanel3.TabIndex = 25;
       // 
-      // btSaveMyMapping
-      // 
-      this.btSaveMyMapping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.tableLayoutPanel3.SetColumnSpan(this.btSaveMyMapping, 2);
-      this.btSaveMyMapping.Image = ((System.Drawing.Image)(resources.GetObject("btSaveMyMapping.Image")));
-      this.btSaveMyMapping.Location = new System.Drawing.Point(115, 51);
-      this.btSaveMyMapping.Name = "btSaveMyMapping";
-      this.btSaveMyMapping.Size = new System.Drawing.Size(234, 24);
-      this.btSaveMyMapping.TabIndex = 15;
-      this.btSaveMyMapping.Tag = "§";
-      this.btSaveMyMapping.Text = "Dump and Save my Mapping";
-      this.btSaveMyMapping.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-      this.btSaveMyMapping.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-      this.btSaveMyMapping.Click += new System.EventHandler(this.btSaveMyMapping_Click);
-      // 
       // txMappingName
       // 
       this.txMappingName.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -925,6 +923,21 @@
       this.lblMappingname.TabIndex = 16;
       this.lblMappingname.Tag = "§";
       this.lblMappingname.Text = "Mapping name:";
+      // 
+      // btSaveMyMapping
+      // 
+      this.btSaveMyMapping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.tableLayoutPanel3.SetColumnSpan(this.btSaveMyMapping, 2);
+      this.btSaveMyMapping.Image = ((System.Drawing.Image)(resources.GetObject("btSaveMyMapping.Image")));
+      this.btSaveMyMapping.Location = new System.Drawing.Point(115, 51);
+      this.btSaveMyMapping.Name = "btSaveMyMapping";
+      this.btSaveMyMapping.Size = new System.Drawing.Size(234, 24);
+      this.btSaveMyMapping.TabIndex = 15;
+      this.btSaveMyMapping.Tag = "§";
+      this.btSaveMyMapping.Text = "Dump and Save my Mapping";
+      this.btSaveMyMapping.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.btSaveMyMapping.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+      this.btSaveMyMapping.Click += new System.EventHandler(this.btSaveMyMapping_Click);
       // 
       // tableLayoutPanel4
       // 
@@ -1612,7 +1625,6 @@
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
     private System.Windows.Forms.ToolStripMenuItem tdiCollapseAll;
-    private System.Windows.Forms.ToolStripMenuItem tdiExpandAll;
     private System.Windows.Forms.ToolStripSeparator tdiSGroup1;
     private System.Windows.Forms.Label lblMapping;
     private System.Windows.Forms.Label lblAssigned;
@@ -1653,6 +1665,7 @@
     private System.Windows.Forms.ToolStripMenuItem meJsReassignDialog;
     private System.Windows.Forms.ToolStripStatusLabel tsLblSupport;
     private System.Windows.Forms.ToolStripDropDownButton msBtDump;
+    private System.Windows.Forms.ToolStripMenuItem tdiExpandAll;
   }
 }
 

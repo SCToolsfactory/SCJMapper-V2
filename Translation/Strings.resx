@@ -630,4 +630,88 @@ Cancel now if you want to save your work first.</value>
     <value>profile</value>
     <comment>7-RTF map</comment>
   </data>
+  <data name="tdiAddBinding" xml:space="preserve">
+    <value>Add Mapping</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tdiAssignBinding" xml:space="preserve">
+    <value>Assign Mapping</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tdiBlendBinding" xml:space="preserve">
+    <value>Disable Mapping</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tdiClearBinding" xml:space="preserve">
+    <value>Clear Mapping</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tdiCollapseAll" xml:space="preserve">
+    <value>Collapse to selected</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tdiDelBinding" xml:space="preserve">
+    <value>Delete Mapping</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tdiExpandAll" xml:space="preserve">
+    <value>Expand all Mappings</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tsiCopy" xml:space="preserve">
+    <value>Copy</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tsiOpen" xml:space="preserve">
+    <value>Open...</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tsiPaste" xml:space="preserve">
+    <value>Paste</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tsiPReplace" xml:space="preserve">
+    <value>Paste (Replace all)</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tsiSaveAs" xml:space="preserve">
+    <value>Save as...</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="tsiSelAll" xml:space="preserve">
+    <value>Select All</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="lB" xml:space="preserve">
+    <value>Buttons:</value>
+    <comment>1-Main JPanel</comment>
+  </data>
+  <data name="setNote1" xml:space="preserve">
+    <value>Changing the Gamepad option needs a restart of the application !!</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="setNote2" xml:space="preserve">
+    <value>Settings Notification</value>
+    <comment>2-Settings</comment>
+  </data>
+  <data name="setNote3" xml:space="preserve">
+    <value>the same jsN was assigned to more than one Joystick - either fix it or exit with Cancel</value>
+    <comment>3-ReassingJS</comment>
+  </data>
+  <data name="setNote4" xml:space="preserve">
+    <value>Settings Notification</value>
+    <comment>3-ReassingJS</comment>
+  </data>
+  <data name="tdiTxDefActivationMode" xml:space="preserve">
+    <value>No Activation Mode</value>
+    <comment>1-Main Context</comment>
+  </data>
+  <data name="xGamepad" xml:space="preserve">
+    <value>Gamepad</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xJoystick" xml:space="preserve">
+    <value>Joystick</value>
+    <comment>0-General</comment>
+  </data>
 </root>

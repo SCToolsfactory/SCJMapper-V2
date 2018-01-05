@@ -119,6 +119,7 @@
       this.lB.Name = "lB";
       this.lB.Size = new System.Drawing.Size(46, 13);
       this.lB.TabIndex = 24;
+      this.lB.Tag = "§";
       this.lB.Text = "Buttons:";
       // 
       // lbl1Hat3

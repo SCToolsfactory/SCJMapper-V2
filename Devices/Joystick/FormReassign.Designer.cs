@@ -36,12 +36,12 @@
       this.cbxStick10 = new System.Windows.Forms.ComboBox();
       this.cbxStick9 = new System.Windows.Forms.ComboBox();
       this.txJS11 = new System.Windows.Forms.TextBox();
-      this.label1 = new System.Windows.Forms.Label();
+      this.lblJoy12 = new System.Windows.Forms.Label();
       this.txJS12 = new System.Windows.Forms.TextBox();
-      this.label2 = new System.Windows.Forms.Label();
-      this.label11 = new System.Windows.Forms.Label();
+      this.lblJoy11 = new System.Windows.Forms.Label();
+      this.lblJoy10 = new System.Windows.Forms.Label();
       this.txJS10 = new System.Windows.Forms.TextBox();
-      this.label12 = new System.Windows.Forms.Label();
+      this.lblJoy9 = new System.Windows.Forms.Label();
       this.txJS9 = new System.Windows.Forms.TextBox();
       this.cbxStick8 = new System.Windows.Forms.ComboBox();
       this.cbxStick7 = new System.Windows.Forms.ComboBox();
@@ -52,21 +52,21 @@
       this.cbxStick2 = new System.Windows.Forms.ComboBox();
       this.cbxStick1 = new System.Windows.Forms.ComboBox();
       this.txJS7 = new System.Windows.Forms.TextBox();
-      this.label10 = new System.Windows.Forms.Label();
+      this.lblJoy8 = new System.Windows.Forms.Label();
       this.txJS1 = new System.Windows.Forms.TextBox();
       this.txJS8 = new System.Windows.Forms.TextBox();
-      this.label3 = new System.Windows.Forms.Label();
-      this.label9 = new System.Windows.Forms.Label();
+      this.lblJoy1 = new System.Windows.Forms.Label();
+      this.lblJoy7 = new System.Windows.Forms.Label();
       this.txJS2 = new System.Windows.Forms.TextBox();
-      this.label4 = new System.Windows.Forms.Label();
-      this.label8 = new System.Windows.Forms.Label();
+      this.lblJoy2 = new System.Windows.Forms.Label();
+      this.lblJoy6 = new System.Windows.Forms.Label();
       this.txJS3 = new System.Windows.Forms.TextBox();
       this.txJS6 = new System.Windows.Forms.TextBox();
-      this.label5 = new System.Windows.Forms.Label();
-      this.label7 = new System.Windows.Forms.Label();
+      this.lblJoy3 = new System.Windows.Forms.Label();
+      this.lblJoy5 = new System.Windows.Forms.Label();
       this.txJS4 = new System.Windows.Forms.TextBox();
       this.txJS5 = new System.Windows.Forms.TextBox();
-      this.label6 = new System.Windows.Forms.Label();
+      this.lblJoy4 = new System.Windows.Forms.Label();
       this.gbxReassignJS.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -100,12 +100,12 @@
       this.gbxReassignJS.Controls.Add(this.cbxStick10);
       this.gbxReassignJS.Controls.Add(this.cbxStick9);
       this.gbxReassignJS.Controls.Add(this.txJS11);
-      this.gbxReassignJS.Controls.Add(this.label1);
+      this.gbxReassignJS.Controls.Add(this.lblJoy12);
       this.gbxReassignJS.Controls.Add(this.txJS12);
-      this.gbxReassignJS.Controls.Add(this.label2);
-      this.gbxReassignJS.Controls.Add(this.label11);
+      this.gbxReassignJS.Controls.Add(this.lblJoy11);
+      this.gbxReassignJS.Controls.Add(this.lblJoy10);
       this.gbxReassignJS.Controls.Add(this.txJS10);
-      this.gbxReassignJS.Controls.Add(this.label12);
+      this.gbxReassignJS.Controls.Add(this.lblJoy9);
       this.gbxReassignJS.Controls.Add(this.txJS9);
       this.gbxReassignJS.Controls.Add(this.cbxStick8);
       this.gbxReassignJS.Controls.Add(this.cbxStick7);
@@ -116,21 +116,21 @@
       this.gbxReassignJS.Controls.Add(this.cbxStick2);
       this.gbxReassignJS.Controls.Add(this.cbxStick1);
       this.gbxReassignJS.Controls.Add(this.txJS7);
-      this.gbxReassignJS.Controls.Add(this.label10);
+      this.gbxReassignJS.Controls.Add(this.lblJoy8);
       this.gbxReassignJS.Controls.Add(this.txJS1);
       this.gbxReassignJS.Controls.Add(this.txJS8);
-      this.gbxReassignJS.Controls.Add(this.label3);
-      this.gbxReassignJS.Controls.Add(this.label9);
+      this.gbxReassignJS.Controls.Add(this.lblJoy1);
+      this.gbxReassignJS.Controls.Add(this.lblJoy7);
       this.gbxReassignJS.Controls.Add(this.txJS2);
-      this.gbxReassignJS.Controls.Add(this.label4);
-      this.gbxReassignJS.Controls.Add(this.label8);
+      this.gbxReassignJS.Controls.Add(this.lblJoy2);
+      this.gbxReassignJS.Controls.Add(this.lblJoy6);
       this.gbxReassignJS.Controls.Add(this.txJS3);
       this.gbxReassignJS.Controls.Add(this.txJS6);
-      this.gbxReassignJS.Controls.Add(this.label5);
-      this.gbxReassignJS.Controls.Add(this.label7);
+      this.gbxReassignJS.Controls.Add(this.lblJoy3);
+      this.gbxReassignJS.Controls.Add(this.lblJoy5);
       this.gbxReassignJS.Controls.Add(this.txJS4);
       this.gbxReassignJS.Controls.Add(this.txJS5);
-      this.gbxReassignJS.Controls.Add(this.label6);
+      this.gbxReassignJS.Controls.Add(this.lblJoy4);
       this.gbxReassignJS.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.gbxReassignJS.Location = new System.Drawing.Point(14, 12);
       this.gbxReassignJS.Name = "gbxReassignJS";
@@ -235,14 +235,14 @@
       this.txJS11.Size = new System.Drawing.Size(466, 22);
       this.txJS11.TabIndex = 34;
       // 
-      // label1
+      // lblJoy12
       // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(7, 332);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(63, 13);
-      this.label1.TabIndex = 37;
-      this.label1.Text = "Joystick 12";
+      this.lblJoy12.AutoSize = true;
+      this.lblJoy12.Location = new System.Drawing.Point(7, 332);
+      this.lblJoy12.Name = "lblJoy12";
+      this.lblJoy12.Size = new System.Drawing.Size(63, 13);
+      this.lblJoy12.TabIndex = 37;
+      this.lblJoy12.Text = "Joystick 12";
       // 
       // txJS12
       // 
@@ -251,23 +251,23 @@
       this.txJS12.Size = new System.Drawing.Size(466, 22);
       this.txJS12.TabIndex = 36;
       // 
-      // label2
+      // lblJoy11
       // 
-      this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(7, 304);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(63, 13);
-      this.label2.TabIndex = 35;
-      this.label2.Text = "Joystick 11";
+      this.lblJoy11.AutoSize = true;
+      this.lblJoy11.Location = new System.Drawing.Point(7, 304);
+      this.lblJoy11.Name = "lblJoy11";
+      this.lblJoy11.Size = new System.Drawing.Size(63, 13);
+      this.lblJoy11.TabIndex = 35;
+      this.lblJoy11.Text = "Joystick 11";
       // 
-      // label11
+      // lblJoy10
       // 
-      this.label11.AutoSize = true;
-      this.label11.Location = new System.Drawing.Point(7, 276);
-      this.label11.Name = "label11";
-      this.label11.Size = new System.Drawing.Size(63, 13);
-      this.label11.TabIndex = 33;
-      this.label11.Text = "Joystick 10";
+      this.lblJoy10.AutoSize = true;
+      this.lblJoy10.Location = new System.Drawing.Point(7, 276);
+      this.lblJoy10.Name = "lblJoy10";
+      this.lblJoy10.Size = new System.Drawing.Size(63, 13);
+      this.lblJoy10.TabIndex = 33;
+      this.lblJoy10.Text = "Joystick 10";
       // 
       // txJS10
       // 
@@ -276,14 +276,14 @@
       this.txJS10.Size = new System.Drawing.Size(466, 22);
       this.txJS10.TabIndex = 32;
       // 
-      // label12
+      // lblJoy9
       // 
-      this.label12.AutoSize = true;
-      this.label12.Location = new System.Drawing.Point(7, 248);
-      this.label12.Name = "label12";
-      this.label12.Size = new System.Drawing.Size(57, 13);
-      this.label12.TabIndex = 31;
-      this.label12.Text = "Joystick 9";
+      this.lblJoy9.AutoSize = true;
+      this.lblJoy9.Location = new System.Drawing.Point(7, 248);
+      this.lblJoy9.Name = "lblJoy9";
+      this.lblJoy9.Size = new System.Drawing.Size(57, 13);
+      this.lblJoy9.TabIndex = 31;
+      this.lblJoy9.Text = "Joystick 9";
       // 
       // txJS9
       // 
@@ -475,14 +475,14 @@
       this.txJS7.Size = new System.Drawing.Size(466, 22);
       this.txJS7.TabIndex = 18;
       // 
-      // label10
+      // lblJoy8
       // 
-      this.label10.AutoSize = true;
-      this.label10.Location = new System.Drawing.Point(7, 220);
-      this.label10.Name = "label10";
-      this.label10.Size = new System.Drawing.Size(57, 13);
-      this.label10.TabIndex = 21;
-      this.label10.Text = "Joystick 8";
+      this.lblJoy8.AutoSize = true;
+      this.lblJoy8.Location = new System.Drawing.Point(7, 220);
+      this.lblJoy8.Name = "lblJoy8";
+      this.lblJoy8.Size = new System.Drawing.Size(57, 13);
+      this.lblJoy8.TabIndex = 21;
+      this.lblJoy8.Text = "Joystick 8";
       // 
       // txJS1
       // 
@@ -498,23 +498,23 @@
       this.txJS8.Size = new System.Drawing.Size(466, 22);
       this.txJS8.TabIndex = 20;
       // 
-      // label3
+      // lblJoy1
       // 
-      this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(7, 24);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(57, 13);
-      this.label3.TabIndex = 7;
-      this.label3.Text = "Joystick 1";
+      this.lblJoy1.AutoSize = true;
+      this.lblJoy1.Location = new System.Drawing.Point(7, 24);
+      this.lblJoy1.Name = "lblJoy1";
+      this.lblJoy1.Size = new System.Drawing.Size(57, 13);
+      this.lblJoy1.TabIndex = 7;
+      this.lblJoy1.Text = "Joystick 1";
       // 
-      // label9
+      // lblJoy7
       // 
-      this.label9.AutoSize = true;
-      this.label9.Location = new System.Drawing.Point(7, 192);
-      this.label9.Name = "label9";
-      this.label9.Size = new System.Drawing.Size(57, 13);
-      this.label9.TabIndex = 19;
-      this.label9.Text = "Joystick 7";
+      this.lblJoy7.AutoSize = true;
+      this.lblJoy7.Location = new System.Drawing.Point(7, 192);
+      this.lblJoy7.Name = "lblJoy7";
+      this.lblJoy7.Size = new System.Drawing.Size(57, 13);
+      this.lblJoy7.TabIndex = 19;
+      this.lblJoy7.Text = "Joystick 7";
       // 
       // txJS2
       // 
@@ -523,23 +523,23 @@
       this.txJS2.Size = new System.Drawing.Size(466, 22);
       this.txJS2.TabIndex = 8;
       // 
-      // label4
+      // lblJoy2
       // 
-      this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(7, 52);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(57, 13);
-      this.label4.TabIndex = 9;
-      this.label4.Text = "Joystick 2";
+      this.lblJoy2.AutoSize = true;
+      this.lblJoy2.Location = new System.Drawing.Point(7, 52);
+      this.lblJoy2.Name = "lblJoy2";
+      this.lblJoy2.Size = new System.Drawing.Size(57, 13);
+      this.lblJoy2.TabIndex = 9;
+      this.lblJoy2.Text = "Joystick 2";
       // 
-      // label8
+      // lblJoy6
       // 
-      this.label8.AutoSize = true;
-      this.label8.Location = new System.Drawing.Point(7, 164);
-      this.label8.Name = "label8";
-      this.label8.Size = new System.Drawing.Size(57, 13);
-      this.label8.TabIndex = 17;
-      this.label8.Text = "Joystick 6";
+      this.lblJoy6.AutoSize = true;
+      this.lblJoy6.Location = new System.Drawing.Point(7, 164);
+      this.lblJoy6.Name = "lblJoy6";
+      this.lblJoy6.Size = new System.Drawing.Size(57, 13);
+      this.lblJoy6.TabIndex = 17;
+      this.lblJoy6.Text = "Joystick 6";
       // 
       // txJS3
       // 
@@ -555,23 +555,23 @@
       this.txJS6.Size = new System.Drawing.Size(466, 22);
       this.txJS6.TabIndex = 16;
       // 
-      // label5
+      // lblJoy3
       // 
-      this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(7, 80);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(57, 13);
-      this.label5.TabIndex = 11;
-      this.label5.Text = "Joystick 3";
+      this.lblJoy3.AutoSize = true;
+      this.lblJoy3.Location = new System.Drawing.Point(7, 80);
+      this.lblJoy3.Name = "lblJoy3";
+      this.lblJoy3.Size = new System.Drawing.Size(57, 13);
+      this.lblJoy3.TabIndex = 11;
+      this.lblJoy3.Text = "Joystick 3";
       // 
-      // label7
+      // lblJoy5
       // 
-      this.label7.AutoSize = true;
-      this.label7.Location = new System.Drawing.Point(7, 136);
-      this.label7.Name = "label7";
-      this.label7.Size = new System.Drawing.Size(57, 13);
-      this.label7.TabIndex = 15;
-      this.label7.Text = "Joystick 5";
+      this.lblJoy5.AutoSize = true;
+      this.lblJoy5.Location = new System.Drawing.Point(7, 136);
+      this.lblJoy5.Name = "lblJoy5";
+      this.lblJoy5.Size = new System.Drawing.Size(57, 13);
+      this.lblJoy5.TabIndex = 15;
+      this.lblJoy5.Text = "Joystick 5";
       // 
       // txJS4
       // 
@@ -587,14 +587,14 @@
       this.txJS5.Size = new System.Drawing.Size(466, 22);
       this.txJS5.TabIndex = 14;
       // 
-      // label6
+      // lblJoy4
       // 
-      this.label6.AutoSize = true;
-      this.label6.Location = new System.Drawing.Point(7, 108);
-      this.label6.Name = "label6";
-      this.label6.Size = new System.Drawing.Size(57, 13);
-      this.label6.TabIndex = 13;
-      this.label6.Text = "Joystick 4";
+      this.lblJoy4.AutoSize = true;
+      this.lblJoy4.Location = new System.Drawing.Point(7, 108);
+      this.lblJoy4.Name = "lblJoy4";
+      this.lblJoy4.Size = new System.Drawing.Size(57, 13);
+      this.lblJoy4.TabIndex = 13;
+      this.lblJoy4.Text = "Joystick 4";
       // 
       // FormReassign
       // 
@@ -624,21 +624,21 @@
     private System.Windows.Forms.Button btAccept;
     private System.Windows.Forms.GroupBox gbxReassignJS;
     private System.Windows.Forms.TextBox txJS7;
-    private System.Windows.Forms.Label label10;
+    private System.Windows.Forms.Label lblJoy8;
     private System.Windows.Forms.TextBox txJS1;
     private System.Windows.Forms.TextBox txJS8;
-    private System.Windows.Forms.Label label3;
-    private System.Windows.Forms.Label label9;
+    private System.Windows.Forms.Label lblJoy1;
+    private System.Windows.Forms.Label lblJoy7;
     private System.Windows.Forms.TextBox txJS2;
-    private System.Windows.Forms.Label label4;
-    private System.Windows.Forms.Label label8;
+    private System.Windows.Forms.Label lblJoy2;
+    private System.Windows.Forms.Label lblJoy6;
     private System.Windows.Forms.TextBox txJS3;
     private System.Windows.Forms.TextBox txJS6;
-    private System.Windows.Forms.Label label5;
-    private System.Windows.Forms.Label label7;
+    private System.Windows.Forms.Label lblJoy3;
+    private System.Windows.Forms.Label lblJoy5;
     private System.Windows.Forms.TextBox txJS4;
     private System.Windows.Forms.TextBox txJS5;
-    private System.Windows.Forms.Label label6;
+    private System.Windows.Forms.Label lblJoy4;
     private System.Windows.Forms.ComboBox cbxStick2;
     private System.Windows.Forms.ComboBox cbxStick1;
     private System.Windows.Forms.ComboBox cbxStick8;
@@ -652,12 +652,12 @@
     private System.Windows.Forms.ComboBox cbxStick10;
     private System.Windows.Forms.ComboBox cbxStick9;
     private System.Windows.Forms.TextBox txJS11;
-    private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.Label lblJoy12;
     private System.Windows.Forms.TextBox txJS12;
-    private System.Windows.Forms.Label label2;
-    private System.Windows.Forms.Label label11;
+    private System.Windows.Forms.Label lblJoy11;
+    private System.Windows.Forms.Label lblJoy10;
     private System.Windows.Forms.TextBox txJS10;
-    private System.Windows.Forms.Label label12;
+    private System.Windows.Forms.Label lblJoy9;
     private System.Windows.Forms.TextBox txJS9;
   }
 }

@@ -1,4 +1,4 @@
-SC Joystick Mapper V 2.35 - Build 69 BETA
+SC Joystick Mapper V 2.35 - Build 70 BETA
 (c) Cassini, StandardToaster - 05-Jan-2018
 
 Contains 14 files + graphics:
@@ -43,7 +43,7 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
-V 2.35 - BETA Build 69
+V 2.35 - BETA Build 70
 - add - GUI translation support (english, german, french so far..)
 - add - provide CIG asset texts/translations for actions and maps 
   (use Settings to choose - for now only French and German are in but have no translations

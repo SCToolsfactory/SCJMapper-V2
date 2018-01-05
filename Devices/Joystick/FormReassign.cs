@@ -41,6 +41,18 @@ namespace SCJMapper_V2.Devices.Joystick
     private void FormReassign_Load( object sender, EventArgs e )
     {
       Tx.LocalizeControlTree( this );
+      lblJoy1.Text = Tx.Translate( "xJoystick" ) + " 1";
+      lblJoy2.Text = Tx.Translate( "xJoystick" ) + " 2";
+      lblJoy3.Text = Tx.Translate( "xJoystick" ) + " 3";
+      lblJoy4.Text = Tx.Translate( "xJoystick" ) + " 4";
+      lblJoy5.Text = Tx.Translate( "xJoystick" ) + " 5";
+      lblJoy6.Text = Tx.Translate( "xJoystick" ) + " 6";
+      lblJoy7.Text = Tx.Translate( "xJoystick" ) + " 7";
+      lblJoy8.Text = Tx.Translate( "xJoystick" ) + " 8";
+      lblJoy9.Text = Tx.Translate( "xJoystick" ) + " 9";
+      lblJoy10.Text = Tx.Translate( "xJoystick" ) + " 10";
+      lblJoy11.Text = Tx.Translate( "xJoystick" ) + " 11";
+      lblJoy12.Text = Tx.Translate( "xJoystick" ) + " 12";
 
       int textIdx = 0;
       foreach ( JoystickCls j in m_owner ) {
@@ -102,7 +114,7 @@ namespace SCJMapper_V2.Devices.Joystick
         this.Hide( );
       }
       else {
-        MessageBox.Show( "the same jsN was assigned to more than one Joystick - either fix it or exit with Cancel", "Accept Reassignment", MessageBoxButtons.OK );
+        MessageBox.Show( Tx.Translate( "setNote3" ), Tx.Translate( "setNote4" ), MessageBoxButtons.OK );
       }
     }
 

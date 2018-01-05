@@ -466,6 +466,15 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Buttons:.
+        /// </summary>
+        public static string lB {
+            get {
+                return ResourceManager.GetString("lB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action Filter:.
         /// </summary>
         public static string lblActionFilter {
@@ -971,6 +980,42 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changing the Gamepad option needs a restart of the application !!.
+        /// </summary>
+        public static string setNote1 {
+            get {
+                return ResourceManager.GetString("setNote1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings Notification.
+        /// </summary>
+        public static string setNote2 {
+            get {
+                return ResourceManager.GetString("setNote2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to the same jsN was assigned to more than one Joystick - either fix it or exit with Cancel.
+        /// </summary>
+        public static string setNote3 {
+            get {
+                return ResourceManager.GetString("setNote3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings Notification.
+        /// </summary>
+        public static string setNote4 {
+            get {
+                return ResourceManager.GetString("setNote4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action.
         /// </summary>
         public static string tActionText {
@@ -1016,11 +1061,83 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Mapping.
+        /// </summary>
+        public static string tdiAddBinding {
+            get {
+                return ResourceManager.GetString("tdiAddBinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign Mapping.
+        /// </summary>
+        public static string tdiAssignBinding {
+            get {
+                return ResourceManager.GetString("tdiAssignBinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable Mapping.
+        /// </summary>
+        public static string tdiBlendBinding {
+            get {
+                return ResourceManager.GetString("tdiBlendBinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Mapping.
+        /// </summary>
+        public static string tdiClearBinding {
+            get {
+                return ResourceManager.GetString("tdiClearBinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collapse to selected.
+        /// </summary>
+        public static string tdiCollapseAll {
+            get {
+                return ResourceManager.GetString("tdiCollapseAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Mapping.
+        /// </summary>
+        public static string tdiDelBinding {
+            get {
+                return ResourceManager.GetString("tdiDelBinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expand all Mappings.
+        /// </summary>
+        public static string tdiExpandAll {
+            get {
+                return ResourceManager.GetString("tdiExpandAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disabled.
         /// </summary>
         public static string tDisabled {
             get {
                 return ResourceManager.GetString("tDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Activation Mode.
+        /// </summary>
+        public static string tdiTxDefActivationMode {
+            get {
+                return ResourceManager.GetString("tdiTxDefActivationMode", resourceCulture);
             }
         }
         
@@ -1048,6 +1165,60 @@ namespace SCJMapper_V2.Translation {
         public static string tREF_ActionMap {
             get {
                 return ResourceManager.GetString("tREF_ActionMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        public static string tsiCopy {
+            get {
+                return ResourceManager.GetString("tsiCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open....
+        /// </summary>
+        public static string tsiOpen {
+            get {
+                return ResourceManager.GetString("tsiOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste.
+        /// </summary>
+        public static string tsiPaste {
+            get {
+                return ResourceManager.GetString("tsiPaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste (Replace all).
+        /// </summary>
+        public static string tsiPReplace {
+            get {
+                return ResourceManager.GetString("tsiPReplace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as....
+        /// </summary>
+        public static string tsiSaveAs {
+            get {
+                return ResourceManager.GetString("tsiSaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select All.
+        /// </summary>
+        public static string tsiSelAll {
+            get {
+                return ResourceManager.GetString("tsiSelAll", resourceCulture);
             }
         }
         
@@ -1142,6 +1313,15 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gamepad.
+        /// </summary>
+        public static string xGamepad {
+            get {
+                return ResourceManager.GetString("xGamepad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Instance.
         /// </summary>
         public static string xInstance {
@@ -1156,6 +1336,15 @@ namespace SCJMapper_V2.Translation {
         public static string xInvert {
             get {
                 return ResourceManager.GetString("xInvert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Joystick.
+        /// </summary>
+        public static string xJoystick {
+            get {
+                return ResourceManager.GetString("xJoystick", resourceCulture);
             }
         }
         

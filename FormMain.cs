@@ -232,12 +232,13 @@ namespace SCJMapper_V2
       log.Debug( "MainForm_Load - Entry" );
 
       Tx.LocalizeControlTree( this );
+      Tx.LocalizeControlTree( cmCopyPaste );
+      Tx.LocalizeControlTree( cmAddDel );
       msBtLoad.ToolTipText = Tx.Translate( msBtLoad.Name + "_TT" );
       msBtDump.ToolTipText = Tx.Translate( msBtDump.Name + "_TT" );
       msBtShow.ToolTipText = Tx.Translate( msBtShow.Name + "_TT" );
       msBtConfig.ToolTipText = Tx.Translate( msBtConfig.Name + "_TT" );
       msBtLoadMap.ToolTipText = Tx.Translate( msBtLoadMap.Name + "_TT" );
-
 
       // some applic initialization 
       // Assign Size property - check if on screen, else use defaults
@@ -564,7 +565,7 @@ namespace SCJMapper_V2
       // make the GP the first device if there is one.
       if ( dxGamepad != null ) {
         log.Debug( "  - Add first Gamepad panel" );
-        tc1.TabPages[tabs].Text = "Gamepad ";
+        tc1.TabPages[tabs].Text = Tx.Translate("xGamepad") + " ";
         UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
         Tx.LocalizeControlTree( uUC_GpadPanelNew );
 
@@ -603,7 +604,7 @@ namespace SCJMapper_V2
 
         }
         // common part
-        tc1.TabPages[tabs].Text = string.Format( "Joystick {0}", nJs + 1 ); // numbering is 1 based for the user
+        tc1.TabPages[tabs].Text = string.Format( "{0} {1}",Tx.Translate("xJoystick"), nJs + 1 ); // numbering is 1 based for the user
         log.Debug( "  - Create Joystick instance " + nJs.ToString( ) );
         js = new JoystickCls( myJs.js, this, nJs, uUC_JoyPanelNew, tabs ); // does all device related activities for that particular item
         DeviceInst.JoystickListRef.Add( js ); // add to joystick list
@@ -1185,7 +1186,7 @@ namespace SCJMapper_V2
       m_prevActivationMode = ActivationMode.Default; // switch Closing handling OFF in case we don't show anything
 
       if ( m_AT.CanAssignBinding ) {
-        tdiAssignBinding.Text = "Assign: " + JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked );
+        tdiAssignBinding.Text = Tx.Translate( tdiAssignBinding) + ": " + JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked );
       }
       tdiAssignBinding.Visible = m_AT.CanAssignBinding; any2 = any2 || m_AT.CanAssignBinding; // Assign
       tdiBlendBinding.Visible = m_AT.CanDisableBinding; any2 = any2 || m_AT.CanDisableBinding; // Blend
@@ -1200,7 +1201,7 @@ namespace SCJMapper_V2
       ActivationModes am = m_AT.ActivationModeSelectedItem( );
       // have to fudge around with a descriptive text here
       if ( am[0] == ActivationMode.Default )
-        tdiTxDefActivationMode.Text = string.Format( "Profile: {0}", "no ActivationMode" ); // show the default element
+        tdiTxDefActivationMode.Text = string.Format( "Profile: {0}", Tx.Translate( tdiTxDefActivationMode ) ); // show the default element
       else
         tdiTxDefActivationMode.Text = string.Format( "Profile: {0}", am[0].Name ); // show the default element
 
