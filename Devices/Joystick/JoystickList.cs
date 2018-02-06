@@ -94,6 +94,21 @@ namespace SCJMapper_V2.Devices.Joystick
     }
 
     /// <summary>
+    ///  pushes the Activated state on a stack
+    /// </summary>
+    public void PushActiveState()
+    {
+      foreach ( JoystickCls j in this ) j.PushActiveState();
+    }
+    /// <summary>
+    /// Pop the Activated state from stack
+    /// </summary>
+    public void PopActiveState()
+    {
+      foreach ( JoystickCls j in this ) j.PopActiveState( );
+    }
+
+    /// <summary>
     /// Show the jsN Reassign Dialog
     /// </summary>
     public DialogResult ShowReassign( )
@@ -155,10 +170,23 @@ namespace SCJMapper_V2.Devices.Joystick
     /// </summary>
     /// <param name="n">The JsN</param>
     /// <returns>The instance or null if not found</returns>
-    public JoystickCls Find_jsN( int n )
+    public JoystickCls Find_InstanceForjsN( int n )
     {
       foreach ( JoystickCls j in this ) {
         if ( j.JSAssignment == n ) return j;
+      }
+      return null;
+    }
+
+    /// <summary>
+    /// Returns the JoystickCls Instance for an DevInstance number
+    /// </summary>
+    /// <param name="n">The instance [0..]</param>
+    /// <returns>The JoystickCls instance or null if not found</returns>
+    public JoystickCls Find_jsNForInstance( int n )
+    {
+      foreach ( JoystickCls j in this ) {
+        if ( j.DevInstance == n ) return j;
       }
       return null;
     }

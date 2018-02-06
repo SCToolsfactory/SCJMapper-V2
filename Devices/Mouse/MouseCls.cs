@@ -135,7 +135,7 @@ namespace SCJMapper_V2.Devices.Mouse
     private MouseState m_state = new MouseState( );
     private MouseState m_prevState = new MouseState( );
 
-    private Control m_hwnd;
+    private IntPtr m_hwnd;
     private bool m_activated = false;
 
     private string m_lastItem = "";
@@ -191,7 +191,7 @@ namespace SCJMapper_V2.Devices.Mouse
     /// </summary>
     /// <param name="device">A DXInput device</param>
     /// <param name="hwnd">The WinHandle of the main window</param>
-    public MouseCls( SharpDX.DirectInput.Mouse device, Control hwnd )
+    public MouseCls( SharpDX.DirectInput.Mouse device, IntPtr hwnd )
     {
       log.DebugFormat( "MouseCls cTor - Entry with {0}", device.Information.ProductName );
 
@@ -221,19 +221,52 @@ namespace SCJMapper_V2.Devices.Mouse
       Activated_low = true;
     }
 
-
-
-    public void Deactivate()
-    {
-      this.Activated = false;
-    }
-    public void Activate()
-    {
-      this.Activated = true;
-    }
-
+    /// <summary>
+    /// Returns the number of buttons
+    /// </summary>
     public int NumberOfButtons { get { return m_state.Buttons.Length; } }
 
+    // Property Mapping from DXinput to CryEngine string
+    private Dictionary<string, string> m_axiesDx2Cry = new Dictionary<string, string>( )
+      {
+          {"X","maxis_x"},
+          {"Y","maxis_y"},
+          {"Z","mwheel_"},
+        };
+
+    /// <summary>
+    /// returns the currently available input string
+    ///  (does not retrieve new data but uses what was collected by GetData())
+    ///  NOTE: for Mouse when multiple inputs are available the sequence is 
+    ///    axis > button > hat > slider (wher prio is max itemNum > min itemNum)
+    /// </summary>
+    /// <returns>An input string or an empty string if no input is available</returns>
+    public override string GetCurrentInput()
+    {
+      string currentChange = "";
+
+      // get axis
+      foreach ( KeyValuePair<string, string> entry in m_axiesDx2Cry ) {
+        PropertyInfo axisProperty = typeof( MouseState ).GetProperty( entry.Key );
+        if ( DidAxisChange2( (int)axisProperty.GetValue( m_state, null ), (int)axisProperty.GetValue( m_prevState, null ), true ) ) {
+          currentChange = entry.Value;
+          if ( entry.Key == "Z" ) currentChange += "down";
+        }
+        else if ( DidAxisChange2( (int)axisProperty.GetValue( m_state, null ), (int)axisProperty.GetValue( m_prevState, null ), false ) ) {
+          currentChange = entry.Value;
+          if ( entry.Key == "Z" ) currentChange += "up";
+        }
+      }
+      // get prio button
+      bool[] buttons = m_state.Buttons;
+      bool[] prevButtons = m_prevState.Buttons;
+      for ( int bi = 0; bi < buttons.Length; bi++ ) {
+        if ( buttons[bi] )
+          currentChange = "mouse" + ( bi + 1 ).ToString( );
+      }
+
+      return currentChange;
+    }
 
     /// <summary>
     /// Find the last change the user did on that device
@@ -244,33 +277,27 @@ namespace SCJMapper_V2.Devices.Mouse
     /// <returns>The last action as CryEngine compatible string</returns>
     public override string GetLastChange()
     {
-      // TODO: Expand this out into a joystick class (see commit for details)
-      Dictionary<string, string> axies = new Dictionary<string, string>( )
-        {
-          {"X","maxis_x"},
-          {"Y","maxis_y"},
-          {"Z","mwheel_"},
-        };
-
-      foreach ( KeyValuePair<string, string> entry in axies ) {
+      // get changed axis
+      foreach ( KeyValuePair<string, string> entry in m_axiesDx2Cry ) {
         PropertyInfo axisProperty = typeof( MouseState ).GetProperty( entry.Key );
-
-        if ( DidAxisChange2( (int)axisProperty.GetValue( this.m_state, null ), (int)axisProperty.GetValue( this.m_prevState, null ), true ) ) {
-          this.m_lastItem = entry.Value;
-          if ( entry.Key == "Z" ) this.m_lastItem += "down";
+        if ( DidAxisChange2( (int)axisProperty.GetValue( m_state, null ), (int)axisProperty.GetValue( m_prevState, null ), true ) ) {
+          m_lastItem = entry.Value;
+          if ( entry.Key == "Z" ) m_lastItem += "down";
         }
-        else if ( DidAxisChange2( (int)axisProperty.GetValue( this.m_state, null ), (int)axisProperty.GetValue( this.m_prevState, null ), false ) ) {
-          this.m_lastItem = entry.Value;
-          if ( entry.Key == "Z" ) this.m_lastItem += "up";
+        else if ( DidAxisChange2( (int)axisProperty.GetValue( m_state, null ), (int)axisProperty.GetValue( m_prevState, null ), false ) ) {
+          m_lastItem = entry.Value;
+          if ( entry.Key == "Z" ) m_lastItem += "up";
         }
       }
 
+      // get new button
       bool[] buttons = m_state.Buttons;
       bool[] prevButtons = m_prevState.Buttons;
       for ( int bi = 0; bi < buttons.Length; bi++ ) {
-        if ( buttons[bi] && buttons[bi] != prevButtons[bi] )
+        if ( buttons[bi] && ( buttons[bi] != prevButtons[bi] ) )
           m_lastItem = "mouse" + ( bi + 1 ).ToString( );
       }
+
       return m_lastItem;
     }
 
@@ -376,51 +403,6 @@ namespace SCJMapper_V2.Devices.Mouse
         return;
       }
 
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // mwheel_up, mwheel_down
-
-    public static string MouseCmd( MouseEventArgs e )
-    {
-      string mbs = "";
-      switch ( e.Button ) {
-        case MouseButtons.Left: {
-            mbs = "mouse1";
-            break;
-          }
-        case MouseButtons.Middle: {
-            mbs = "mouse3";
-            break;
-          }
-        case MouseButtons.Right: {
-            mbs = "mouse2";
-            break;
-          }
-        case MouseButtons.XButton1: {
-            mbs = "mouse4";
-            break;
-          }
-        case MouseButtons.XButton2: {
-            mbs = "mouse5";
-            break;
-          }
-      }
-      return mbs;
     }
 
   }

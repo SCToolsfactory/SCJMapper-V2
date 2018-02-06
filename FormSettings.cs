@@ -127,7 +127,7 @@ namespace SCJMapper_V2
 
       // DetectGamepad
       if ( AppSettings.Instance.DetectGamepad != cbxDetectGamepad.Checked ) {
-        MessageBox.Show( Tx.Translate( "setNote1" ), Tx.Translate("setNote2") , MessageBoxButtons.OK, MessageBoxIcon.Information );
+        MessageBox.Show( Tx.Translate( "setNote1" ), Tx.Translate( "setNote2" ), MessageBoxButtons.OK, MessageBoxIcon.Information );
       }
       AppSettings.Instance.DetectGamepad = cbxDetectGamepad.Checked;
 
@@ -154,6 +154,14 @@ namespace SCJMapper_V2
 
     private void btDone_Click( object sender, EventArgs e )
     {
+      if ( cbxUsePath.Checked ) {
+        string issue = SC.SCPath.CheckSCBasePath( fbDlg.SelectedPath );
+        if ( !string.IsNullOrEmpty( issue ) ) {
+          MessageBox.Show( this, issue, Tx.Translate( "setMsgBox" ), MessageBoxButtons.OK );
+          return;
+        }
+      }
+
       SaveSettings( );
       Canceled = false;
       this.Hide( );
@@ -207,8 +215,14 @@ namespace SCJMapper_V2
 
     private void btChooseSCDir_Click( object sender, EventArgs e )
     {
-      if ( fbDlg.ShowDialog( this ) == System.Windows.Forms.DialogResult.OK ) {
+      fbDlg.SelectedPath = txSCPath.Text;
+      if ( fbDlg.ShowDialog( this ) == DialogResult.OK ) {
         txSCPath.Text = fbDlg.SelectedPath;
+
+        string issue = SC.SCPath.CheckSCBasePath( fbDlg.SelectedPath );
+        if ( !string.IsNullOrEmpty( issue ) ) {
+          MessageBox.Show( this, issue, Tx.Translate("setMsgBox"), MessageBoxButtons.OK );
+        }
       }
     }
 
@@ -216,5 +230,17 @@ namespace SCJMapper_V2
     {
 
     }
+
+    private void cbxUsePath_CheckedChanged( object sender, EventArgs e )
+    {
+      if ( cbxUsePath.Checked ) {
+        string issue = SC.SCPath.CheckSCBasePath( fbDlg.SelectedPath );
+        if ( !string.IsNullOrEmpty( issue ) ) {
+          MessageBox.Show( this, issue, Tx.Translate( "setMsgBox" ), MessageBoxButtons.OK );
+        }
+      }
+    }
+
+
   }
 }

@@ -714,4 +714,48 @@ Cancel now if you want to save your work first.</value>
     <value>Joystick</value>
     <comment>0-General</comment>
   </data>
+  <data name="meShowDeviceMonitoringDialog" xml:space="preserve">
+    <value>Show Device Monitoring Dialog...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="btTogMonitor" xml:space="preserve">
+    <value>Monitoring</value>
+    <comment>8-DeviceMonitor</comment>
+  </data>
+  <data name="chkMonitorMouse" xml:space="preserve">
+    <value>Monitor mouse axis</value>
+    <comment>8-DeviceMonitor</comment>
+  </data>
+  <data name="FormDeviceMonitor" xml:space="preserve">
+    <value>Device Monitor</value>
+    <comment>8-DeviceMonitor</comment>
+  </data>
+  <data name="xKeyboard" xml:space="preserve">
+    <value>Keyboard</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xMouse" xml:space="preserve">
+    <value>Mouse</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="scpAutoPathFailed" xml:space="preserve">
+    <value>Cannot find the SC Installation Path !!\nUse Settings to provide the path manually</value>
+    <comment>2-Settings SCPath</comment>
+  </data>
+  <data name="scpClientDirNotFound" xml:space="preserve">
+    <value>Cannot find the SC Client Directory !!\n\nTried to look for:\n{0} \n\nPlease adjust the path in Settings\n</value>
+    <comment>2-Settings SCPath</comment>
+  </data>
+  <data name="scpEmptyString" xml:space="preserve">
+    <value>There is no vaild path given (empty string)</value>
+    <comment>2-Settings SCPath</comment>
+  </data>
+  <data name="scpInvalidPath" xml:space="preserve">
+    <value>There is no vaild path given (invalid directory)</value>
+    <comment>2-Settings SCPath</comment>
+  </data>
+  <data name="setMsgBox" xml:space="preserve">
+    <value>Path to the Star Citizen Installation</value>
+    <comment>2-Settings SCPath</comment>
+  </data>
 </root>

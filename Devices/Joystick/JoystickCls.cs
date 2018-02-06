@@ -103,6 +103,19 @@ namespace SCJMapper_V2.Devices.Joystick
     }
 
     /// <summary>
+    /// Create a DevInput string if the input does look like not having a device ID
+    /// </summary>
+    /// <param name="input">A keyboard input</param>
+    /// <returns>DevInput</returns>
+    static public string DevInput( string input, int jsN )
+    {
+      if ( DevMatch( input ) )
+        return input; // already
+      else
+        return DeviceID.Replace( "1", jsN.ToString( "D" ) ) + input;
+    }
+
+    /// <summary>
     /// Returns true if the input matches this device
     /// </summary>
     /// <param name="devInput">A devInput string</param>
@@ -672,36 +685,9 @@ namespace SCJMapper_V2.Devices.Joystick
       }
     }
 
-    /// <summary>
-    /// Find the last change the user did on that device
-    /// </summary>
-    /// <returns>The last action as CryEngine compatible string</returns>
-    public override string GetLastChange()
-    {
-      int[] slider = m_state.Sliders;
-      int[] pslider = m_prevState.Sliders;
-      if ( DidAxisChange2( slider[0], pslider[0] ) ) m_lastItem = "slider1";
-      if ( DidAxisChange2( slider[1], pslider[1] ) ) m_lastItem = "slider2";
-
-      int[] pov = m_state.PointOfViewControllers;
-      int[] ppov = m_prevState.PointOfViewControllers;
-      if ( pov[0] >= 0 ) if ( pov[0] != ppov[0] ) m_lastItem = "hat1_" + HatDir( pov[0] );
-      if ( pov[1] >= 0 ) if ( pov[1] != ppov[1] ) m_lastItem = "hat2_" + HatDir( pov[1] );
-      if ( pov[2] >= 0 ) if ( pov[2] != ppov[2] ) m_lastItem = "hat3_" + HatDir( pov[2] );
-      if ( pov[3] >= 0 ) if ( pov[3] != ppov[3] ) m_lastItem = "hat4_" + HatDir( pov[3] );
-
-      bool[] buttons = m_state.Buttons;
-      bool[] prevButtons = m_prevState.Buttons;
-      for ( int bi = 0; bi < buttons.Length; bi++ ) {
-        if ( m_ignoreButtons[bi] == false ) {
-          if ( buttons[bi] && buttons[bi] != prevButtons[bi] )
-            m_lastItem = "button" + ( bi + 1 ).ToString( );
-        }
-      }
-
-      // TODO: Expand this out into a joystick class (see commit for details)
-      Dictionary<string, string> axies = new Dictionary<string, string>( )
-        {
+    // Property Mapping from DXinput to CryEngine string
+    private Dictionary<string, string> m_axiesDx2Cry = new Dictionary<string, string>( )
+      {
           {"X","x"},
           {"Y","y"},
           {"Z","z"},
@@ -710,11 +696,99 @@ namespace SCJMapper_V2.Devices.Joystick
           {"RotationZ","rotz"}
         };
 
-      foreach ( KeyValuePair<string, string> entry in axies ) {
-        PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( entry.Key );
+    // Property Mapping from CryEngine string to DxInput
+    private Dictionary<string, string> m_axiesCry2Dx = new Dictionary<string, string>( )
+      {
+          {"x","X"},
+          {"y","Y"},
+          {"z","Z"},
+          {"rotx","RotationX"},
+          {"roty","RotationY"},
+          {"rotz","RotationZ"}
+        };
 
+    /// <summary>
+    /// returns the currently available input string
+    ///  (does not retrieve new data but uses what was collected by GetData())
+    ///  NOTE: for Joystick when multiple inputs are available the sequence is 
+    ///    axis > button > hat > slider (wher prio is max itemNum > min itemNum)
+    /// </summary>
+    /// <returns>An input string or an empty string if no input is available</returns>
+    public override string GetCurrentInput()
+    {
+      string currentInput = string.Empty;
+
+      // get changed slider
+      int[] slider = m_state.Sliders;
+      int[] pslider = m_prevState.Sliders;
+      if ( DidAxisChange2( slider[0], pslider[0] ) ) currentInput = "slider1";
+      if ( DidAxisChange2( slider[1], pslider[1] ) ) currentInput = "slider2";
+
+      // get prio hat
+      int[] pov = m_state.PointOfViewControllers;
+      int[] ppov = m_prevState.PointOfViewControllers;
+      if ( pov[0] >= 0 ) currentInput = "hat1_" + HatDir( pov[0] );
+      if ( pov[1] >= 0 ) currentInput = "hat2_" + HatDir( pov[1] );
+      if ( pov[2] >= 0 ) currentInput = "hat3_" + HatDir( pov[2] );
+      if ( pov[3] >= 0 ) currentInput = "hat4_" + HatDir( pov[3] );
+
+      // get prio button
+      bool[] buttons = m_state.Buttons;
+      bool[] prevButtons = m_prevState.Buttons;
+      for ( int bi = 0; bi < buttons.Length; bi++ ) {
+        if ( m_ignoreButtons[bi] == false ) {
+          if ( buttons[bi] )
+            currentInput = "button" + ( bi + 1 ).ToString( );
+        }
+      }
+
+      // get axis
+      foreach ( KeyValuePair<string, string> entry in m_axiesDx2Cry ) {
+        PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( entry.Key );
         if ( DidAxisChange2( (int)axisProperty.GetValue( this.m_state, null ), (int)axisProperty.GetValue( this.m_prevState, null ) ) )
-          this.m_lastItem = entry.Value;
+          currentInput = entry.Value;
+      }
+
+      return currentInput;
+    }
+
+    /// <summary>
+    /// Find the last change the user did on that device
+    ///  either new or from persistence
+    ///  NOTE: reporting priority is:
+    ///    axis > button > hat > slider (for buttons and hats this returns the newly pressed one when more than one is active)
+    /// </summary>
+    /// <returns>An input string</returns>
+    public override string GetLastChange()
+    {
+      // get changed slider
+      int[] slider = m_state.Sliders;
+      int[] pslider = m_prevState.Sliders;
+      if ( DidAxisChange2( slider[0], pslider[0] ) ) m_lastItem = "slider1";
+      if ( DidAxisChange2( slider[1], pslider[1] ) ) m_lastItem = "slider2";
+
+      // get new hat
+      int[] pov = m_state.PointOfViewControllers;
+      int[] ppov = m_prevState.PointOfViewControllers;
+      if ( pov[0] >= 0 ) if ( pov[0] != ppov[0] ) m_lastItem = "hat1_" + HatDir( pov[0] );
+      if ( pov[1] >= 0 ) if ( pov[1] != ppov[1] ) m_lastItem = "hat2_" + HatDir( pov[1] );
+      if ( pov[2] >= 0 ) if ( pov[2] != ppov[2] ) m_lastItem = "hat3_" + HatDir( pov[2] );
+      if ( pov[3] >= 0 ) if ( pov[3] != ppov[3] ) m_lastItem = "hat4_" + HatDir( pov[3] );
+
+      // get new button
+      bool[] buttons = m_state.Buttons;
+      bool[] prevButtons = m_prevState.Buttons;
+      for ( int bi = 0; bi < buttons.Length; bi++ ) {
+        if ( m_ignoreButtons[bi] == false ) {
+          if ( buttons[bi] && ( buttons[bi] != prevButtons[bi] ) )
+            m_lastItem = "button" + ( bi + 1 ).ToString( );
+        }
+      }
+      // get changed axis
+      foreach ( KeyValuePair<string, string> entry in m_axiesDx2Cry ) {
+        PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( entry.Key );
+        if ( DidAxisChange2( (int)axisProperty.GetValue( this.m_state, null ), (int)axisProperty.GetValue( this.m_prevState, null ) ) )
+          m_lastItem = entry.Value;
       }
 
       return m_lastItem;
@@ -762,40 +836,42 @@ namespace SCJMapper_V2.Devices.Joystick
     /// </summary>
     private void UpdateUI()
     {
-      // This function updated the UI with joystick state information.
-      string strText = null;
+      if ( Application.MessageLoop ) {
+        // This function updated the UI with joystick state information.
+        string strText = null;
 
-      m_jPanel.X = m_state.X.ToString( );
-      m_jPanel.Y = m_state.Y.ToString( );
-      m_jPanel.Z = m_state.Z.ToString( );
+        m_jPanel.X = m_state.X.ToString( );
+        m_jPanel.Y = m_state.Y.ToString( );
+        m_jPanel.Z = m_state.Z.ToString( );
 
-      m_jPanel.Xr = m_state.RotationX.ToString( );
-      m_jPanel.Yr = m_state.RotationY.ToString( );
-      m_jPanel.Zr = m_state.RotationZ.ToString( );
+        m_jPanel.Xr = m_state.RotationX.ToString( );
+        m_jPanel.Yr = m_state.RotationY.ToString( );
+        m_jPanel.Zr = m_state.RotationZ.ToString( );
 
 
-      int[] slider = m_state.Sliders;
+        int[] slider = m_state.Sliders;
 
-      m_jPanel.S1 = slider[0].ToString( );
-      m_jPanel.S2 = slider[1].ToString( );
+        m_jPanel.S1 = slider[0].ToString( );
+        m_jPanel.S2 = slider[1].ToString( );
 
-      int[] pov = m_state.PointOfViewControllers;
+        int[] pov = m_state.PointOfViewControllers;
 
-      m_jPanel.H1 = pov[0].ToString( );
-      m_jPanel.H2 = pov[1].ToString( );
-      m_jPanel.H3 = pov[2].ToString( );
-      m_jPanel.H4 = pov[3].ToString( );
+        m_jPanel.H1 = pov[0].ToString( );
+        m_jPanel.H2 = pov[1].ToString( );
+        m_jPanel.H3 = pov[2].ToString( );
+        m_jPanel.H4 = pov[3].ToString( );
 
-      // Fill up text with which buttons are pressed
-      bool[] buttons = m_state.Buttons;
+        // Fill up text with which buttons are pressed
+        bool[] buttons = m_state.Buttons;
 
-      int button = 0;
-      foreach ( bool b in buttons ) {
-        if ( b )
-          strText += ( button + 1 ).ToString( "00 " ); // buttons are 1 based
-        button++;
+        int button = 0;
+        foreach ( bool b in buttons ) {
+          if ( b )
+            strText += ( button + 1 ).ToString( "00 " ); // buttons are 1 based
+          button++;
+        }
+        m_jPanel.Button = strText;
       }
-      m_jPanel.Button = strText;
     }
 
 
@@ -854,17 +930,6 @@ namespace SCJMapper_V2.Devices.Joystick
     /// </summary>
     public override void GetCmdData( string cmd, out int data )
     {
-      // TODO: Expand this out into a joystick class (see commit for details)
-      Dictionary<string, string> axies = new Dictionary<string, string>( )
-        {
-          {"x","X"},
-          {"y","Y"},
-          {"z","Z"},
-          {"rotx","RotationX"},
-          {"roty","RotationY"},
-          {"rotz","RotationZ"}
-        };
-
       data = 0;
 
       // Make sure there is a valid device.
@@ -905,7 +970,7 @@ namespace SCJMapper_V2.Devices.Joystick
       }
 
       try {
-        PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( axies[cmd] );
+        PropertyInfo axisProperty = typeof( JoystickState ).GetProperty( m_axiesCry2Dx[cmd] );
         data = (int)axisProperty.GetValue( this.m_state, null );
       }
       catch {
@@ -960,8 +1025,6 @@ namespace SCJMapper_V2.Devices.Joystick
 
       UpdateUI( ); // and update the GUI
     }
-
-
 
   }
 }

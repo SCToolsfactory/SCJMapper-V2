@@ -1016,10 +1016,36 @@ namespace SCJMapper_V2.Actions
     }
 
     /// <summary>
-    /// Find all actions that are mapped to this input
+    /// Find all actions that are mapped to this input 
     /// </summary>
     /// <param name="input">The input string to find</param>
-    public List<string> FindAllActions( string input )
+    public List<string> GetAllActions( string input )
+    {
+      List<string> ret = new List<string>( );
+      if ( string.IsNullOrEmpty( input ) ) return ret; // nothing to find here...
+      if ( Act.IsDisabledInput( input ) ) return ret; // nothing to find here...
+
+      foreach ( ActionMapCls acm in ActionMaps ) {
+        // have to search Actions in Maps
+        foreach ( ActionCls ac in acm ) {
+          if ( ac.DefBinding == input ) {
+            ret.Add( ac.ActionName );
+          }
+          foreach ( ActionCommandCls acc in ac.InputList ) {
+            if ( acc.DevInput == input ) {
+              ret.Add( ac.ActionName );
+            }
+          }
+        }
+      }
+      return ret;
+    }
+
+    /// <summary>
+    /// Find and pretty list all actions that are mapped to this input
+    /// </summary>
+    /// <param name="input">The input string to find</param>
+    public List<string> ListAllActions( string input )
     {
       List<string> ret = new List<string>( );
       if ( string.IsNullOrEmpty( input ) ) return ret; // nothing to find here...
@@ -1055,11 +1081,11 @@ namespace SCJMapper_V2.Actions
     }
 
     /// <summary>
-    /// Find all actions that are mapped to this input
+    /// Find and pretty print all actions that are mapped to this input as RTF text
     /// formatted as RTF text
     /// </summary>
     /// <param name="input">The input string to find</param>
-    public void FindAllActionsRTF( string input, RTF.RTFformatter rtf )
+    public void ListAllActionsRTF( string input, RTF.RTFformatter rtf, bool inverse = false )
     {
       if ( string.IsNullOrEmpty( input ) ) return; // nothing to find here...
       if ( Act.IsDisabledInput( input ) ) return; // nothing to find here...
@@ -1088,12 +1114,12 @@ namespace SCJMapper_V2.Actions
               aMode = string.Format( "{0};{1};{2}", Tx.Translate( "mapModified" ), acc.ActivationMode.Name, acc.ActivationMode.MultiTap );
               if ( acc.ActivationMode == ActivationMode.Default )
                 aMode = string.Format( "{0}", Tx.Translate( "mapDefault" ) );
-              rtf.RHighlightColor = RTF.RTFformatter.ERColor.ERC_Green;
+              rtf.RHighlightColor = ( inverse ) ? RTF.RTFformatter.ERColor.ERC_DarkGreen : RTF.RTFformatter.ERColor.ERC_Green;
               rtf.Write( Tx.Translate( "mapMapped" ) );
               rtf.WriteTab( SCUiText.Instance.Text( ac.ActionName ));
               rtf.WriteTab( SCUiText.Instance.Text( acm.MapName) );
               rtf.WriteTab( aMode.PadRight( 80 ) ); rtf.WriteLn( );
-              rtf.RHighlightColor = RTF.RTFformatter.ERColor.ERC_Black;
+              rtf.RHighlightColor = RTF.RTFformatter.ERColor.ERC_Black; // background
               rtf.WriteLn( );
               used = true;
             }
@@ -1338,12 +1364,14 @@ namespace SCJMapper_V2.Actions
       }
       return repList;
     }
-
+    
     /// <summary>
     /// Reports a summary list of the mapped items
     /// </summary>
-    /// <returns></returns>
-    public string ReportActionsCSV( bool listModifiers )
+    /// <param name="listModifiers">Wether or not listing modifiers</param>
+    /// <param name="listNativeNames">Wether or not listing the profilenames (false by default)</param>
+    /// <returns>A string containing the CSV listing</returns>
+    public string ReportActionsCSV( bool listModifiers, bool listProfileNames = false )
     {
       log.Debug( "ReportActionsCSV - Entry" );
 
@@ -1392,9 +1420,14 @@ namespace SCJMapper_V2.Actions
             }
             // action changed - restart collection
             action = ac.ActionName;
-            rep = string.Format( "{0};{1};", SCUiText.Instance.Text( acm.MapName ),
-                                             SCUiText.Instance.Text( ac.ActionName ) ); // actionmap; action
-                                                                                        // note: don't add trailing semicolons as the are applied in the output formatting
+            if ( listProfileNames ) {
+              rep = string.Format( "{0};{1};", acm.MapName, ac.ActionName ); // actionmap; action
+            }
+            else {
+              rep = string.Format( "{0};{1};", SCUiText.Instance.Text( acm.MapName ),
+                                               SCUiText.Instance.Text( ac.ActionName ) ); // actionmap; action
+            }
+            // note: don't add trailing semicolons as the are applied in the output formatting
             if ( listModifiers ) {
               kbA = "n.a.;;;;"; // defaults tag;input;mod-tag;mod-name;mod-mult
             }

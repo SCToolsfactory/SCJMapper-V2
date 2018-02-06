@@ -1,12 +1,12 @@
-SC Joystick Mapper V 2.35 - Build 70 BETA
-(c) Cassini, StandardToaster - 05-Jan-2018
+SC Joystick Mapper V 2.36 - Build 71 BETA
+(c) Cassini, StandardToaster - 05-Feb-2018
 
 Contains 14 files + graphics:
 
-SCJMapper.exe                The program (V2.35)
-SCJMapper.exe.config         Program config (V2.35)              - MUST be in the same folder as the Exe file
-de\SCJMapper.resources.dll   German language (V2.35)             - MUST be in the same folder as the Exe file
-fr\SCJMapper.resources.dll   French language (V2.35)             - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.36)
+SCJMapper.exe.config         Program config (V2.36)              - MUST be in the same folder as the Exe file
+de\SCJMapper.resources.dll   German language (V2.36)             - MUST be in the same folder as the Exe file
+fr\SCJMapper.resources.dll   French language (V2.36)             - MUST be in the same folder as the Exe file
 Storage\*.scj                Folder for collected assets (V2.35) - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
@@ -43,6 +43,10 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.36 - BETA Build 71
+- new feature - window for realtime monitoring of the controls (works also in background)
+- add - silently dumps the CSV list along the backup xml file into MyDocuments
+- improvement - try to add more usability for the config path setting
 V 2.35 - BETA Build 70
 - add - GUI translation support (english, german, french so far..)
 - add - provide CIG asset texts/translations for actions and maps 

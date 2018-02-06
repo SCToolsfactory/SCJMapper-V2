@@ -27,8 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>70</ApplicationRevision>
-    <ApplicationVersion>2.35.0.%2a</ApplicationVersion>
+    <ApplicationRevision>71</ApplicationRevision>
+    <ApplicationVersion>2.36.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -134,8 +134,34 @@
     <Compile Include="Common\CloneableItems.cs" />
     <Compile Include="Common\Commons.cs" />
     <Compile Include="Devices\DeviceCls.cs" />
+    <Compile Include="Devices\Monitor\DeviceMonitoring.cs" />
     <Compile Include="Devices\DeviceInst.cs" />
     <Compile Include="Devices\DeviceList.cs" />
+    <Compile Include="Devices\Monitor\DxDeviceEventArgs.cs" />
+    <Compile Include="Devices\Monitor\FormDeviceMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Devices\Monitor\FormDeviceMonitor.Designer.cs">
+      <DependentUpon>FormDeviceMonitor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Monitor\UC_LED.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Monitor\UC_LED.Designer.cs">
+      <DependentUpon>UC_LED.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Monitor\UC_SwitchRect.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Monitor\UC_SwitchRect.Designer.cs">
+      <DependentUpon>UC_SwitchRect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Monitor\UC_Toggle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Monitor\UC_Toggle.Designer.cs">
+      <DependentUpon>UC_Toggle.cs</DependentUpon>
+    </Compile>
     <Compile Include="Devices\Options\FormOptions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,6 +298,18 @@
       <DependentUpon>Strings.fr.resx</DependentUpon>
     </Compile>
     <Compile Include="Translation\Tx.cs" />
+    <EmbeddedResource Include="Devices\Monitor\FormDeviceMonitor.resx">
+      <DependentUpon>FormDeviceMonitor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Monitor\UC_LED.resx">
+      <DependentUpon>UC_LED.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Monitor\UC_SwitchRect.resx">
+      <DependentUpon>UC_SwitchRect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Monitor\UC_Toggle.resx">
+      <DependentUpon>UC_Toggle.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
       <SubType>Designer</SubType>

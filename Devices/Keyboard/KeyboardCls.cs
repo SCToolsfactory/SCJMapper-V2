@@ -123,7 +123,7 @@ namespace SCJMapper_V2.Devices.Keyboard
     /// </summary>
     /// <param name="pressedKeys">The list of pressed DX keys</param>
     /// <returns>The SC keycode string</returns>
-    public static string DXKeyboardCmd( List<Key> pressedKeys, bool modAndKey )
+    public static string DXKeyboardCmd( List<Key> pressedKeys, bool modAndKey, bool keyOnly )
     {
       string altMod = "";
       string shiftMod = "";
@@ -240,10 +240,15 @@ namespace SCJMapper_V2.Devices.Keyboard
 
       }//for
       if ( modAndKey ) {
-        key = altMod + shiftMod + ctrlMod + key;
+        if ( keyOnly ) {
+          ; // key only
+        }
+        else {
+          key = altMod + shiftMod + ctrlMod + key;
+        }
       }
       else {
-        // mods only OR space to kill mods
+        // mods only if not killed
         if ( !key.Contains( ClearMods ) ) key = altMod + shiftMod + ctrlMod;
       }
 
@@ -268,7 +273,7 @@ namespace SCJMapper_V2.Devices.Keyboard
     private SharpDX.DirectInput.Keyboard m_device;
     private KeyboardState m_state = new KeyboardState( );
 
-    private Control m_hwnd;
+    private IntPtr m_hwnd;
     private bool m_activated = false;
 
 
@@ -323,7 +328,7 @@ namespace SCJMapper_V2.Devices.Keyboard
     /// </summary>
     /// <param name="device">A DXInput device</param>
     /// <param name="hwnd">The WinHandle of the main window</param>
-    public KeyboardCls( SharpDX.DirectInput.Keyboard device, Control hwnd )
+    public KeyboardCls( SharpDX.DirectInput.Keyboard device, IntPtr hwnd )
     {
       log.DebugFormat( "KeyboardCls ctor - Entry with {0}", device.Information.ProductName );
 
@@ -351,34 +356,35 @@ namespace SCJMapper_V2.Devices.Keyboard
       Activated_low = true;
     }
 
-
-
-    public void Deactivate( )
+    /// <summary>
+    /// returns the currently available input string
+    ///  (does not retrieve new data but uses what was collected by GetData())
+    ///  NOTE: for Keyboard this returns only the key, no modifiers
+    /// </summary>
+    /// <returns>An input string or an empty string if no input is available</returns>
+    public override string GetCurrentInput()
     {
-      this.Activated = false;
-    }
-    public void Activate( )
-    {
-      this.Activated = true;
+      return DXKeyboardCmd( m_state.PressedKeys, true, true );
     }
 
     /// <summary>
     /// Find the last change the user did on that device
     /// </summary>
-    /// <returns>The last action as CryEngine compatible string</returns>
+    /// <returns>The last action as with modifiers</returns>
     public override string GetLastChange( )
     {
-      return DXKeyboardCmd( m_state.PressedKeys, true );
+      return DXKeyboardCmd( m_state.PressedKeys, true, false );
     }
 
 
     /// <summary>
     /// Find the last change the user did on that device
     /// </summary>
-    /// <returns>The last action as CryEngine compatible string</returns>
+    /// <param name="modAndKey">True for mod and key, false for modifier only</param>
+    /// <returns>Last action mod and key or only modifier</returns>
     public string GetLastChange( bool modAndKey )
     {
-      return DXKeyboardCmd( m_state.PressedKeys, modAndKey );
+      return DXKeyboardCmd( m_state.PressedKeys, modAndKey, false);
     }
 
 

@@ -714,4 +714,48 @@ Annulez maintenant si vous voulez d'abord enregistrer votre travail.</value>
     <value>Manette</value>
     <comment>0-General</comment>
   </data>
+  <data name="meShowDeviceMonitoringDialog" xml:space="preserve">
+    <value>Surveillance des appareils...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="btTogMonitor" xml:space="preserve">
+    <value>Surveillance</value>
+    <comment>8-DeviceMonitor</comment>
+  </data>
+  <data name="chkMonitorMouse" xml:space="preserve">
+    <value>Rapport l'axis du souris</value>
+    <comment>8-DeviceMonitor</comment>
+  </data>
+  <data name="FormDeviceMonitor" xml:space="preserve">
+    <value>Surveillance des périphériques d'entrée</value>
+    <comment>8-DeviceMonitor</comment>
+  </data>
+  <data name="xKeyboard" xml:space="preserve">
+    <value>Clavier</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xMouse" xml:space="preserve">
+    <value>Souris</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="scpAutoPathFailed" xml:space="preserve">
+    <value>Impossible de trouver le répertoire des clients SC !!\nUtilisez Configuration pour fournir le chemin manuellement</value>
+    <comment>2-Settings SCPath</comment>
+  </data>
+  <data name="scpClientDirNotFound" xml:space="preserve">
+    <value>Impossible de trouver le répertoire des clients SC !!\n\nla valeur par défaut est invalide:\n{0} \n\nS'il vous plaît ajuster le chemin dans Configuration\n</value>
+    <comment>2-Settings SCPath</comment>
+  </data>
+  <data name="scpEmptyString" xml:space="preserve">
+    <value>Il n'y a pas de chemin valide donné (chaîne vide)</value>
+    <comment>2-Settings SCPath</comment>
+  </data>
+  <data name="scpInvalidPath" xml:space="preserve">
+    <value>Il n'y a pas de chemin d'accès valide (répertoire invalide)</value>
+    <comment>2-Settings SCPath</comment>
+  </data>
+  <data name="setMsgBox" xml:space="preserve">
+    <value>Chemin du répertoire vers le Star Citizen installation</value>
+    <comment>2-Settings SCPath</comment>
+  </data>
 </root>

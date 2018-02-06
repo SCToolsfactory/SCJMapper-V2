@@ -75,7 +75,14 @@ namespace SCJMapper_V2.RTF
 
     #region Text Color
 
-    private const string c_Colors = @"{\colortbl ;\red255\green0\blue0;\red0\green176\blue80;\red0\green77\blue187;\red173\green255\blue47;}"; // some colors (Black, Red, Green, Blue)
+    private const string c_Colors =
+      @"{\colortbl ;\red255\green0\blue0;"      // Red
+                + @"\red0\green176\blue80;"     // MidGreen
+                + @"\red0\green77\blue187;"     // Blue
+                + @"\red173\green255\blue47;"   // Green
+                + @"\red0\green100\blue0;"      // DarkGreen
+                + @"\red220\green220\blue220;"  // Gainsborow
+                + "}"; 
     public enum ERColor
     {
       ERC_Black = 0,
@@ -83,6 +90,8 @@ namespace SCJMapper_V2.RTF
       ERC_MidGreen,
       ERC_Blue,
       ERC_Green,
+      ERC_DarkGreen,
+      ERC_Gainsborow,
     }
 
     private string m_fmtColor = @"\cf0";

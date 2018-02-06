@@ -89,6 +89,7 @@ namespace SCJMapper_V2.Devices.Gamepad
     /// <returns>True for a match</returns>
     static public new bool DevMatch( string devInput )
     {
+      if ( string.IsNullOrEmpty( devInput ) ) return false;
       return devInput.StartsWith( DeviceID );
     }
 
@@ -124,6 +125,8 @@ namespace SCJMapper_V2.Devices.Gamepad
     /// <returns>An AC2 style input string</returns>
     static public string FromAC1( string input )
     {
+      if ( string.IsNullOrEmpty( input ) ) return "";
+
       // input is something like a xi_something or compositions like triggerl_btn+thumbrx 
       // try easy: add xi1_ at the beginning; if xi_start subst with xi1_
       string retVal = input.Replace( " ", "" );
@@ -223,14 +226,7 @@ namespace SCJMapper_V2.Devices.Gamepad
       }
     }
 
-
-    public override bool Activated
-    {
-      get { return m_activated; }
-      set {
-        m_activated = value;
-      }
-    }
+    public override bool Activated { get => m_activated; set => m_activated = value; }
 
     private bool Bit( GamepadButtonFlags set, GamepadButtonFlags check )
     {
@@ -384,14 +380,81 @@ namespace SCJMapper_V2.Devices.Gamepad
       state.Gamepad.RightThumbY = (short)( val > 32767 ? 32767 * sign : val * sign );
     }
 
+
+    /// <summary>
+    /// returns the currently available input string
+    ///  (does not retrieve new data but uses what was collected by GetData())
+    /// </summary>
+    /// <returns>An input string or an empty string if no input is available</returns>
+    public override string GetCurrentInput()
+    {
+      string currentInput = string.Empty;
+
+      if ( ModButtonPressed( ) ) {
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) > Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) )
+          && !Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.LeftThumb ) ) currentInput += "xi_thumblx+";
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) > Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) )
+          && !Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.LeftThumb ) ) currentInput += "xi_thumbly+";
+
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) > Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) )
+          && !Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.RightThumb ) ) currentInput += "xi_thumbrx+";
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) > Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) )
+          && !Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.RightThumb ) ) currentInput += "xi_thumbry+";
+
+        if ( Math.Abs( (Int32)m_state.Gamepad.LeftTrigger ) > 0 ) currentInput += "xi_triggerl_btn+";
+        if ( Math.Abs( (Int32)m_state.Gamepad.RightTrigger ) > 0 ) currentInput += "xi_triggerr_btn+";
+
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.A ) ) currentInput += "xi_a+";
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.B ) ) currentInput += "xi_b+";
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.X ) ) currentInput += "xi_x+";
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.Y ) ) currentInput += "xi_y+";
+
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.Start ) ) currentInput += "xi_start+";
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.Back ) ) currentInput += "xi_back+";
+
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.DPadDown ) ) currentInput += "xi_dpad_down+";
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.DPadLeft ) ) currentInput += "xi_dpad_left+";
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.DPadRight ) ) currentInput += "xi_dpad_right+";
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.DPadUp ) ) currentInput += "xi_dpad_up+";
+
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.LeftShoulder ) ) currentInput += "xi_shoulderl+";
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.RightShoulder ) ) currentInput += "xi_shoulderr+";
+
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.LeftThumb ) ) currentInput += "xi_thumbl+";
+        if ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.RightThumb ) ) currentInput += "xi_thumbr+";
+      }
+      else {
+        // no button -> only non button items will reported - single events
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) > Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) ) ) currentInput = "xi_thumblx+";
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) > Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) ) ) currentInput = "xi_thumbly+";
+
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) > Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) ) ) currentInput = "xi_thumbrx+";
+        if ( ( Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) > m_senseLimit )
+          && ( Math.Abs( (Int32)m_state.Gamepad.RightThumbY ) > Math.Abs( (Int32)m_state.Gamepad.RightThumbX ) ) ) currentInput = "xi_thumbry+";
+
+        if ( Math.Abs( (Int32)m_state.Gamepad.LeftTrigger ) > 0 ) currentInput = "xi_triggerl_btn+";
+        if ( Math.Abs( (Int32)m_state.Gamepad.RightTrigger ) > 0 ) currentInput = "xi_triggerr_btn+";
+      }
+
+      return currentInput.TrimEnd( new char[] { '+' } );
+    }
+
+
     /// <summary>
     /// Find the last change the user did on that device
     /// </summary>
     /// <returns>The last action as CryEngine compatible string</returns>
-    public override string GetLastChange()
+    public override string GetLastChange( )
     {
       if ( ModButtonPressed( ) ) {
-        m_lastItem = "";
+        m_lastItem = string.Empty;
         if ( ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) > m_senseLimit )
           && ( Math.Abs( (Int32)m_state.Gamepad.LeftThumbX ) > Math.Abs( (Int32)m_state.Gamepad.LeftThumbY ) )
           && !Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.LeftThumb ) ) m_lastItem += "xi_thumblx+";
@@ -444,7 +507,7 @@ namespace SCJMapper_V2.Devices.Gamepad
         if ( Math.Abs( (Int32)m_state.Gamepad.RightTrigger ) > 0 ) m_lastItem = "xi_triggerr_btn+";
       }
 
-      return m_lastItem.TrimEnd( new char[] { '+' } ); ;
+      return m_lastItem.TrimEnd( new char[] { '+' } );
     }
 
 
@@ -489,38 +552,41 @@ namespace SCJMapper_V2.Devices.Gamepad
     /// </summary>
     private void UpdateUI()
     {
-      // This function updated the UI with joystick state information.
-      string strText = "";
+      if ( Application.MessageLoop ) {
 
-      strText += ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.DPadDown ) > 0 ) ? "d" : " ";
-      strText += ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.DPadLeft ) > 0 ) ? "l" : " ";
-      strText += ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.DPadRight ) > 0 ) ? "r" : " ";
-      strText += ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.DPadUp ) > 0 ) ? "u" : " ";
-      m_gPanel.DPad = strText;
+        // This function updated the UI with joystick state information.
+        string strText = "";
 
-      m_gPanel.TStickXL = m_state.Gamepad.LeftThumbX.ToString( );
-      m_gPanel.TStickYL = m_state.Gamepad.LeftThumbY.ToString( );
-      m_gPanel.TStickBtL = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.LeftThumb ) > 0 ) ? "pressed" : "_";
-      m_gPanel.TStickXR = m_state.Gamepad.RightThumbX.ToString( );
-      m_gPanel.TStickYR = m_state.Gamepad.RightThumbY.ToString( );
-      m_gPanel.TStickBtR = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.RightThumb ) > 0 ) ? "pressed" : "_";
+        strText += ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.DPadDown ) > 0 ) ? "d" : " ";
+        strText += ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.DPadLeft ) > 0 ) ? "l" : " ";
+        strText += ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.DPadRight ) > 0 ) ? "r" : " ";
+        strText += ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.DPadUp ) > 0 ) ? "u" : " ";
+        m_gPanel.DPad = strText;
 
-      m_gPanel.TriggerL = m_state.Gamepad.LeftTrigger.ToString( );
-      m_gPanel.TriggerR = m_state.Gamepad.RightTrigger.ToString( );
+        m_gPanel.TStickXL = m_state.Gamepad.LeftThumbX.ToString( );
+        m_gPanel.TStickYL = m_state.Gamepad.LeftThumbY.ToString( );
+        m_gPanel.TStickBtL = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.LeftThumb ) > 0 ) ? "pressed" : "_";
+        m_gPanel.TStickXR = m_state.Gamepad.RightThumbX.ToString( );
+        m_gPanel.TStickYR = m_state.Gamepad.RightThumbY.ToString( );
+        m_gPanel.TStickBtR = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.RightThumb ) > 0 ) ? "pressed" : "_";
 
-      m_gPanel.ShoulderL = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.LeftShoulder ) > 0 ) ? "pressed" : "_";
-      m_gPanel.ShoulderR = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.RightShoulder ) > 0 ) ? "pressed" : "_";
+        m_gPanel.TriggerL = m_state.Gamepad.LeftTrigger.ToString( );
+        m_gPanel.TriggerR = m_state.Gamepad.RightTrigger.ToString( );
 
-      m_gPanel.Start = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.Start ) > 0 ) ? "pressed" : "_";
-      m_gPanel.Back = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.Back ) > 0 ) ? "pressed" : "_";
+        m_gPanel.ShoulderL = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.LeftShoulder ) > 0 ) ? "pressed" : "_";
+        m_gPanel.ShoulderR = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.RightShoulder ) > 0 ) ? "pressed" : "_";
+
+        m_gPanel.Start = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.Start ) > 0 ) ? "pressed" : "_";
+        m_gPanel.Back = ( ( m_state.Gamepad.Buttons & GamepadButtonFlags.Back ) > 0 ) ? "pressed" : "_";
 
 
-      string buttons = "";
-      buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.A ) ) ? "A" : "_";
-      buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.B ) ) ? "B" : "_";
-      buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.X ) ) ? "X" : "_";
-      buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.Y ) ) ? "Y" : "_";
-      m_gPanel.Button = buttons;
+        string buttons = "";
+        buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.A ) ) ? "A" : "_";
+        buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.B ) ) ? "B" : "_";
+        buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.X ) ) ? "X" : "_";
+        buttons += ( Bit( m_state.Gamepad.Buttons, GamepadButtonFlags.Y ) ) ? "Y" : "_";
+        m_gPanel.Button = buttons;
+      }
     }
 
 
@@ -581,8 +647,6 @@ namespace SCJMapper_V2.Devices.Gamepad
       }
       UpdateUI( ); // and update the GUI
     }
-
-
 
   }
 }

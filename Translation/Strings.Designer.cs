@@ -196,6 +196,15 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Monitoring.
+        /// </summary>
+        public static string btTogMonitor {
+            get {
+                return ResourceManager.GetString("btTogMonitor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Accept Edits.
         /// </summary>
         public static string btUpdateFromEdit {
@@ -318,6 +327,24 @@ namespace SCJMapper_V2.Translation {
         public static string chkEditDisabled {
             get {
                 return ResourceManager.GetString("chkEditDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monitor mouse axis.
+        /// </summary>
+        public static string chkMonitorMouse {
+            get {
+                return ResourceManager.GetString("chkMonitorMouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device Monitor.
+        /// </summary>
+        public static string FormDeviceMonitor {
+            get {
+                return ResourceManager.GetString("FormDeviceMonitor", resourceCulture);
             }
         }
         
@@ -854,6 +881,15 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Device Monitoring Dialog....
+        /// </summary>
+        public static string meShowDeviceMonitoringDialog {
+            get {
+                return ResourceManager.GetString("meShowDeviceMonitoringDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Device Tuning Dialog....
         /// </summary>
         public static string meShowDeviceTuningDialog {
@@ -976,6 +1012,51 @@ namespace SCJMapper_V2.Translation {
         public static string rbLivePtExponent {
             get {
                 return ResourceManager.GetString("rbLivePtExponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find the SC Installation Path !!\nUse Settings to provide the path manually.
+        /// </summary>
+        public static string scpAutoPathFailed {
+            get {
+                return ResourceManager.GetString("scpAutoPathFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find the SC Client Directory !!\n\nTried to look for:\n{0} \n\nPlease adjust the path in Settings\n.
+        /// </summary>
+        public static string scpClientDirNotFound {
+            get {
+                return ResourceManager.GetString("scpClientDirNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no vaild path given (empty string).
+        /// </summary>
+        public static string scpEmptyString {
+            get {
+                return ResourceManager.GetString("scpEmptyString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no vaild path given (invalid directory).
+        /// </summary>
+        public static string scpInvalidPath {
+            get {
+                return ResourceManager.GetString("scpInvalidPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path to the Star Citizen Installation.
+        /// </summary>
+        public static string setMsgBox {
+            get {
+                return ResourceManager.GetString("setMsgBox", resourceCulture);
             }
         }
         
@@ -1345,6 +1426,24 @@ namespace SCJMapper_V2.Translation {
         public static string xJoystick {
             get {
                 return ResourceManager.GetString("xJoystick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyboard.
+        /// </summary>
+        public static string xKeyboard {
+            get {
+                return ResourceManager.GetString("xKeyboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mouse.
+        /// </summary>
+        public static string xMouse {
+            get {
+                return ResourceManager.GetString("xMouse", resourceCulture);
             }
         }
         

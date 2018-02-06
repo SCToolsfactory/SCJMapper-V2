@@ -55,11 +55,55 @@ namespace SCJMapper_V2.Devices
     public virtual List<string> AnalogCommands { get { return new List<string>( ); }  } // just return an empty one if not implemented
 
     public abstract bool Activated { get; set; }
+    public void Deactivate() { this.Activated = false; }
+    public void Activate() { this.Activated = true; }
+
+    private Stack<bool> m_activeState = new Stack<bool>( );
+    /// <summary>
+    ///  pushes the Activated state on a stack
+    /// </summary>
+    public void PushActiveState()
+    {
+      m_activeState.Push( Activated );
+    }
+    /// <summary>
+    /// Pop the Activated state from stack
+    /// </summary>
+    public void PopActiveState()
+    {
+      if ( m_activeState.Count > 0 )
+        Activated = m_activeState.Pop( );
+    }
+
+
     public virtual void FinishDX( ) { }
     public virtual void ApplySettings( ) { }
 
+    /// <summary>
+    /// returns the currently available input string
+    ///  (does not retrieve new data but uses what was collected by GetData())
+    /// </summary>
+    /// <returns>An input string or an empty string if no input is available</returns>
+    public abstract string GetCurrentInput( );
+
+    /// <summary>
+    /// Find the last change the user did on that device
+    ///  either new or from persistence
+    /// </summary>
+    /// <returns>An input string</returns>
     public abstract string GetLastChange( );
+
+    /// <summary>
+    /// Returns the data for the requested input
+    /// Retrieves a new set of data from DX
+    /// </summary>
+    /// <param name="cmd">The input where the value is requested for</param>
+    /// <param name="data">The value for the input</param>
     public abstract void GetCmdData( string cmd, out int data );
+
+    /// <summary>
+    /// Retrieves the input data from DX
+    /// </summary>
     public abstract void GetData( );
 
     static public string toXML( string blendedInput )

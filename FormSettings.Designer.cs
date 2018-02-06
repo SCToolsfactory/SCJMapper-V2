@@ -114,6 +114,7 @@
       this.cbxUsePath.Size = new System.Drawing.Size(15, 14);
       this.cbxUsePath.TabIndex = 5;
       this.cbxUsePath.UseVisualStyleBackColor = true;
+      this.cbxUsePath.CheckedChanged += new System.EventHandler(this.cbxUsePath_CheckedChanged);
       // 
       // txJS1
       // 

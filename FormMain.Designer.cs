@@ -88,6 +88,7 @@
       this.tdiAddMod3 = new System.Windows.Forms.ToolStripMenuItem();
       this.tc1 = new System.Windows.Forms.TabControl();
       this.tabJS1 = new System.Windows.Forms.TabPage();
+      this.UC_JoyPanel = new SCJMapper_V2.Devices.Joystick.UC_JoyPanel();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btClip = new System.Windows.Forms.Button();
       this.txRebind = new System.Windows.Forms.TextBox();
@@ -143,6 +144,7 @@
       this.meShowToggleTable = new System.Windows.Forms.ToolStripMenuItem();
       this.meShowOptionsDialog = new System.Windows.Forms.ToolStripMenuItem();
       this.meShowDeviceTuningDialog = new System.Windows.Forms.ToolStripMenuItem();
+      this.meShowDeviceMonitoringDialog = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
       this.msBtConfig = new System.Windows.Forms.ToolStripDropDownButton();
       this.meSettingsDialog = new System.Windows.Forms.ToolStripMenuItem();
@@ -156,7 +158,6 @@
       this.msSelectMapping = new System.Windows.Forms.ToolStripDropDownButton();
       this.tsLblMappings = new System.Windows.Forms.ToolStripLabel();
       this.IL2 = new System.Windows.Forms.ImageList(this.components);
-      this.UC_JoyPanel = new SCJMapper_V2.Devices.Joystick.UC_JoyPanel();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmMouseEntry.SuspendLayout();
@@ -561,14 +562,14 @@
             this.tdiAddMod2,
             this.tdiAddMod3});
       this.cmAddDel.Name = "cmAddDel";
-      this.cmAddDel.Size = new System.Drawing.Size(261, 479);
+      this.cmAddDel.Size = new System.Drawing.Size(261, 457);
       this.cmAddDel.Opening += new System.ComponentModel.CancelEventHandler(this.cmAddDel_Opening);
       // 
       // tdiCollapseAll
       // 
       this.tdiCollapseAll.ForeColor = System.Drawing.Color.MediumBlue;
       this.tdiCollapseAll.Name = "tdiCollapseAll";
-      this.tdiCollapseAll.Size = new System.Drawing.Size(220, 22);
+      this.tdiCollapseAll.Size = new System.Drawing.Size(260, 22);
       this.tdiCollapseAll.Tag = "§";
       this.tdiCollapseAll.Text = "Collapse to selected";
       this.tdiCollapseAll.Click += new System.EventHandler(this.tdiCollapseAll_Click);
@@ -577,7 +578,7 @@
       // 
       this.tdiExpandAll.ForeColor = System.Drawing.Color.MediumBlue;
       this.tdiExpandAll.Name = "tdiExpandAll";
-      this.tdiExpandAll.Size = new System.Drawing.Size(220, 22);
+      this.tdiExpandAll.Size = new System.Drawing.Size(260, 22);
       this.tdiExpandAll.Tag = "§";
       this.tdiExpandAll.Text = "Expand all Mappings";
       this.tdiExpandAll.Click += new System.EventHandler(this.tdiExpandAll_Click);
@@ -585,12 +586,12 @@
       // tdiSGroup1
       // 
       this.tdiSGroup1.Name = "tdiSGroup1";
-      this.tdiSGroup1.Size = new System.Drawing.Size(217, 6);
+      this.tdiSGroup1.Size = new System.Drawing.Size(257, 6);
       // 
       // tdiAssignBinding
       // 
       this.tdiAssignBinding.Name = "tdiAssignBinding";
-      this.tdiAssignBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiAssignBinding.Size = new System.Drawing.Size(260, 22);
       this.tdiAssignBinding.Tag = "§";
       this.tdiAssignBinding.Text = "Assign Mapping";
       this.tdiAssignBinding.Click += new System.EventHandler(this.tdiAssignBinding_Click);
@@ -598,7 +599,7 @@
       // tdiBlendBinding
       // 
       this.tdiBlendBinding.Name = "tdiBlendBinding";
-      this.tdiBlendBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiBlendBinding.Size = new System.Drawing.Size(260, 22);
       this.tdiBlendBinding.Tag = "§";
       this.tdiBlendBinding.Text = "Disable Mapping";
       this.tdiBlendBinding.Click += new System.EventHandler(this.tdiBlendBinding_Click);
@@ -606,7 +607,7 @@
       // tdiClearBinding
       // 
       this.tdiClearBinding.Name = "tdiClearBinding";
-      this.tdiClearBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiClearBinding.Size = new System.Drawing.Size(260, 22);
       this.tdiClearBinding.Tag = "§";
       this.tdiClearBinding.Text = "Clear Mapping";
       this.tdiClearBinding.Click += new System.EventHandler(this.tdiClearBinding_Click);
@@ -614,12 +615,12 @@
       // tdiSGroup2
       // 
       this.tdiSGroup2.Name = "tdiSGroup2";
-      this.tdiSGroup2.Size = new System.Drawing.Size(217, 6);
+      this.tdiSGroup2.Size = new System.Drawing.Size(257, 6);
       // 
       // tdiAddBinding
       // 
       this.tdiAddBinding.Name = "tdiAddBinding";
-      this.tdiAddBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiAddBinding.Size = new System.Drawing.Size(260, 22);
       this.tdiAddBinding.Tag = "§";
       this.tdiAddBinding.Text = "Add Mapping";
       this.tdiAddBinding.Click += new System.EventHandler(this.tsiAddBinding_Click);
@@ -627,7 +628,7 @@
       // tdiDelBinding
       // 
       this.tdiDelBinding.Name = "tdiDelBinding";
-      this.tdiDelBinding.Size = new System.Drawing.Size(220, 22);
+      this.tdiDelBinding.Size = new System.Drawing.Size(260, 22);
       this.tdiDelBinding.Tag = "§";
       this.tdiDelBinding.Text = "Delete Mapping";
       this.tdiDelBinding.Click += new System.EventHandler(this.tdiDelBinding_Click);
@@ -635,7 +636,7 @@
       // tdiSGroup3
       // 
       this.tdiSGroup3.Name = "tdiSGroup3";
-      this.tdiSGroup3.Size = new System.Drawing.Size(217, 6);
+      this.tdiSGroup3.Size = new System.Drawing.Size(257, 6);
       // 
       // tdiTxDefActivationMode
       // 
@@ -662,12 +663,12 @@
       // tdiSGroup4
       // 
       this.tdiSGroup4.Name = "tdiSGroup4";
-      this.tdiSGroup4.Size = new System.Drawing.Size(217, 6);
+      this.tdiSGroup4.Size = new System.Drawing.Size(257, 6);
       // 
       // tdiAddMod1
       // 
       this.tdiAddMod1.Name = "tdiAddMod1";
-      this.tdiAddMod1.Size = new System.Drawing.Size(220, 22);
+      this.tdiAddMod1.Size = new System.Drawing.Size(260, 22);
       this.tdiAddMod1.Tag = "0";
       this.tdiAddMod1.Text = "Mod:";
       this.tdiAddMod1.Visible = false;
@@ -676,7 +677,7 @@
       // tdiAddMod2
       // 
       this.tdiAddMod2.Name = "tdiAddMod2";
-      this.tdiAddMod2.Size = new System.Drawing.Size(220, 22);
+      this.tdiAddMod2.Size = new System.Drawing.Size(260, 22);
       this.tdiAddMod2.Tag = "1";
       this.tdiAddMod2.Text = "Mod:";
       this.tdiAddMod2.Visible = false;
@@ -685,7 +686,7 @@
       // tdiAddMod3
       // 
       this.tdiAddMod3.Name = "tdiAddMod3";
-      this.tdiAddMod3.Size = new System.Drawing.Size(220, 22);
+      this.tdiAddMod3.Size = new System.Drawing.Size(260, 22);
       this.tdiAddMod3.Tag = "2";
       this.tdiAddMod3.Text = "Mod:";
       this.tdiAddMod3.Visible = false;
@@ -717,6 +718,15 @@
       this.tabJS1.Size = new System.Drawing.Size(290, 339);
       this.tabJS1.TabIndex = 0;
       this.tabJS1.Text = "Joystick 1";
+      // 
+      // UC_JoyPanel
+      // 
+      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.UC_JoyPanel.JsAssignment = 0;
+      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
+      this.UC_JoyPanel.Name = "UC_JoyPanel";
+      this.UC_JoyPanel.Size = new System.Drawing.Size(284, 333);
+      this.UC_JoyPanel.TabIndex = 0;
       // 
       // panel1
       // 
@@ -1157,7 +1167,7 @@
       this.lbxOther.Dock = System.Windows.Forms.DockStyle.Fill;
       this.lbxOther.Location = new System.Drawing.Point(3, 33);
       this.lbxOther.Name = "lbxOther";
-      this.lbxOther.Size = new System.Drawing.Size(332, 618);
+      this.lbxOther.Size = new System.Drawing.Size(332, 572);
       this.lbxOther.TabIndex = 3;
       this.lbxOther.Text = "";
       this.lbxOther.WordWrap = false;
@@ -1250,7 +1260,7 @@
       // 
       this.meResetDefaults.Image = global::SCJMapper_V2.Properties.Resources.RSI;
       this.meResetDefaults.Name = "meResetDefaults";
-      this.meResetDefaults.Size = new System.Drawing.Size(153, 22);
+      this.meResetDefaults.Size = new System.Drawing.Size(169, 38);
       this.meResetDefaults.Tag = "§";
       this.meResetDefaults.Text = "Reset defaults !";
       this.meResetDefaults.Click += new System.EventHandler(this.meResetDefaults_Click);
@@ -1259,7 +1269,7 @@
       // 
       this.meResetEmpty.Image = global::SCJMapper_V2.Properties.Resources.NPad;
       this.meResetEmpty.Name = "meResetEmpty";
-      this.meResetEmpty.Size = new System.Drawing.Size(153, 22);
+      this.meResetEmpty.Size = new System.Drawing.Size(169, 38);
       this.meResetEmpty.Tag = "§";
       this.meResetEmpty.Text = "Reset empty !";
       this.meResetEmpty.Click += new System.EventHandler(this.meResetEmpty_Click);
@@ -1326,7 +1336,8 @@
       this.msBtShow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.meShowToggleTable,
             this.meShowOptionsDialog,
-            this.meShowDeviceTuningDialog});
+            this.meShowDeviceTuningDialog,
+            this.meShowDeviceMonitoringDialog});
       this.msBtShow.Image = global::SCJMapper_V2.Properties.Resources.Monitor;
       this.msBtShow.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.msBtShow.Name = "msBtShow";
@@ -1338,7 +1349,7 @@
       // meShowToggleTable
       // 
       this.meShowToggleTable.Name = "meShowToggleTable";
-      this.meShowToggleTable.Size = new System.Drawing.Size(228, 22);
+      this.meShowToggleTable.Size = new System.Drawing.Size(250, 22);
       this.meShowToggleTable.Tag = "§";
       this.meShowToggleTable.Text = "Show Toggle Table...";
       this.meShowToggleTable.Click += new System.EventHandler(this.meShowToggleTable_Click);
@@ -1346,7 +1357,7 @@
       // meShowOptionsDialog
       // 
       this.meShowOptionsDialog.Name = "meShowOptionsDialog";
-      this.meShowOptionsDialog.Size = new System.Drawing.Size(228, 22);
+      this.meShowOptionsDialog.Size = new System.Drawing.Size(250, 22);
       this.meShowOptionsDialog.Tag = "§";
       this.meShowOptionsDialog.Text = "Show Options Dialog...";
       this.meShowOptionsDialog.Click += new System.EventHandler(this.meShowOptionsDialog_Click);
@@ -1354,10 +1365,18 @@
       // meShowDeviceTuningDialog
       // 
       this.meShowDeviceTuningDialog.Name = "meShowDeviceTuningDialog";
-      this.meShowDeviceTuningDialog.Size = new System.Drawing.Size(228, 22);
+      this.meShowDeviceTuningDialog.Size = new System.Drawing.Size(250, 22);
       this.meShowDeviceTuningDialog.Tag = "§";
       this.meShowDeviceTuningDialog.Text = "Show Device Tuning Dialog...";
       this.meShowDeviceTuningDialog.Click += new System.EventHandler(this.meShowDeviceTuningDialog_Click);
+      // 
+      // meShowDeviceMonitoringDialog
+      // 
+      this.meShowDeviceMonitoringDialog.Name = "meShowDeviceMonitoringDialog";
+      this.meShowDeviceMonitoringDialog.Size = new System.Drawing.Size(250, 22);
+      this.meShowDeviceMonitoringDialog.Tag = "§";
+      this.meShowDeviceMonitoringDialog.Text = "Show Device Monitoring Dialog...";
+      this.meShowDeviceMonitoringDialog.Click += new System.EventHandler(this.meShowDeviceMonitoringDialog_Click);
       // 
       // toolStripSeparator6
       // 
@@ -1483,15 +1502,6 @@
       this.IL2.Images.SetKeyName(0, "User");
       this.IL2.Images.SetKeyName(1, "Locked");
       this.IL2.Images.SetKeyName(2, "RSI");
-      // 
-      // UC_JoyPanel
-      // 
-      this.UC_JoyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.UC_JoyPanel.JsAssignment = 0;
-      this.UC_JoyPanel.Location = new System.Drawing.Point(3, 3);
-      this.UC_JoyPanel.Name = "UC_JoyPanel";
-      this.UC_JoyPanel.Size = new System.Drawing.Size(284, 333);
-      this.UC_JoyPanel.TabIndex = 0;
       // 
       // MainForm
       // 
@@ -1666,6 +1676,7 @@
     private System.Windows.Forms.ToolStripStatusLabel tsLblSupport;
     private System.Windows.Forms.ToolStripDropDownButton msBtDump;
     private System.Windows.Forms.ToolStripMenuItem tdiExpandAll;
+    private System.Windows.Forms.ToolStripMenuItem meShowDeviceMonitoringDialog;
   }
 }
 

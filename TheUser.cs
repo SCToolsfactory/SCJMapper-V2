@@ -61,7 +61,7 @@ namespace SCJMapper_V2
     /// <summary>
     /// The application directory
     /// </summary>
-    static public string AppDir { get => Path.GetDirectoryName( Application.ExecutablePath); } 
+    static public string AppDir { get => Path.GetDirectoryName( Application.ExecutablePath); }
 
 
     /// <summary>
@@ -74,6 +74,18 @@ namespace SCJMapper_V2
       log.Debug( "MappingFileName - Entry" );
 
       return Path.Combine( UserDir, mapName + ".xml" );
+    }
+
+    /// <summary>
+    /// Returns the mapping file name + path into our user dir
+    /// </summary>
+    /// <param name="mapName">The mapping name</param>
+    /// <returns>A fully qualified filename</returns>
+    static public string MappingCsvFileName( string mapName )
+    {
+      log.Debug( "MappingCsvFileName - Entry" );
+
+      return Path.Combine( UserDir, mapName + ".csv" );
     }
 
 

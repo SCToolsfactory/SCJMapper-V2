@@ -20,6 +20,7 @@ using SCJMapper_V2.Devices.Mouse;
 using SCJMapper_V2.Devices.Gamepad;
 using SCJMapper_V2.Devices.Joystick;
 using SCJMapper_V2.Devices.Options;
+using SCJMapper_V2.Devices.Monitor;
 using SCJMapper_V2.Translation;
 
 namespace SCJMapper_V2
@@ -494,7 +495,7 @@ namespace SCJMapper_V2
     // Helper: collect the joysticks here
     struct myDxJoystick
     {
-      public SharpDX.DirectInput.Joystick js;
+      public Joystick js;
       public string prodName;
     }
 
@@ -515,10 +516,10 @@ namespace SCJMapper_V2
 
       try {
         log.Debug( "  - Get Keyboard device" );
-        DeviceInst.KeyboardInst = new KeyboardCls( new SharpDX.DirectInput.Keyboard( directInput ), this );
+        DeviceInst.KeyboardInst = new KeyboardCls( new Keyboard( directInput ), this.Handle );
 
         log.Debug( "  - Get Mouse device" );
-        DeviceInst.MouseInst = new MouseCls( new SharpDX.DirectInput.Mouse( directInput ), this );
+        DeviceInst.MouseInst = new MouseCls( new Mouse( directInput ), this.Handle );
 
       }
       catch ( Exception ex ) {
@@ -549,7 +550,7 @@ namespace SCJMapper_V2
           }
           else {
             myDxJoystick myJs = new myDxJoystick( );
-            myJs.js = new SharpDX.DirectInput.Joystick( directInput, instance.InstanceGuid );
+            myJs.js = new Joystick( directInput, instance.InstanceGuid );
             myJs.prodName = instance.ProductName;
             dxJoysticks.Add( myJs );
             log.DebugFormat( "  - Create the device interface for: {0}", myJs.prodName );
@@ -565,7 +566,7 @@ namespace SCJMapper_V2
       // make the GP the first device if there is one.
       if ( dxGamepad != null ) {
         log.Debug( "  - Add first Gamepad panel" );
-        tc1.TabPages[tabs].Text = Tx.Translate("xGamepad") + " ";
+        tc1.TabPages[tabs].Text = Tx.Translate( "xGamepad" ) + " ";
         UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
         Tx.LocalizeControlTree( uUC_GpadPanelNew );
 
@@ -604,7 +605,7 @@ namespace SCJMapper_V2
 
         }
         // common part
-        tc1.TabPages[tabs].Text = string.Format( "{0} {1}",Tx.Translate("xJoystick"), nJs + 1 ); // numbering is 1 based for the user
+        tc1.TabPages[tabs].Text = string.Format( "{0} {1}", Tx.Translate( "xJoystick" ), nJs + 1 ); // numbering is 1 based for the user
         log.Debug( "  - Create Joystick instance " + nJs.ToString( ) );
         js = new JoystickCls( myJs.js, this, nJs, uUC_JoyPanelNew, tabs ); // does all device related activities for that particular item
         DeviceInst.JoystickListRef.Add( js ); // add to joystick list
@@ -720,7 +721,7 @@ namespace SCJMapper_V2
     // *** Timer Events
 
     // polls the devices to get the latest update
-    private void timer1_Tick( object sender, System.EventArgs e )
+    private void timer1_Tick( object sender, EventArgs e )
     {
       // Handle Kbd modifier timeout for joystick
       m_modifierTimeout -= timer1.Interval;  // decrement timeout
@@ -1006,6 +1007,15 @@ namespace SCJMapper_V2
       timer1.Enabled = true;
     }
 
+    private void meShowDeviceMonitoringDialog_Click( object sender, EventArgs e )
+    {
+      timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
+      var MONITOR = new FormDeviceMonitor { ActionTree = m_AT };
+      MONITOR.ShowDialog( this );
+      MONITOR = null; // get rid and create a new one next time..
+      timer1.Enabled = true;
+    }
+
 
     // *** Settings
 
@@ -1047,7 +1057,7 @@ namespace SCJMapper_V2
         JoystickCls j = null;
         // for all supported jsN devices
         for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-          j = DeviceInst.JoystickListRef.Find_jsN( i + 1 );
+          j = DeviceInst.JoystickListRef.Find_InstanceForjsN( i + 1 );
           if ( j != null ) {
             newTree.ActionMaps.jsN[i] = j.DevName; newTree.ActionMaps.jsNGUID[i] = j.DevInstanceGUID;
           }
@@ -1158,7 +1168,7 @@ namespace SCJMapper_V2
 
     private void tsiOpen_Click( object sender, EventArgs e )
     {
-      if ( OFD.ShowDialog( this ) == System.Windows.Forms.DialogResult.OK ) {
+      if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         rtb.LoadFile( OFD.FileName, RichTextBoxStreamType.PlainText );
         btGrab.BackColor = MyColors.DirtyColor;
       }
@@ -1166,7 +1176,7 @@ namespace SCJMapper_V2
 
     private void tsiSaveAs_Click( object sender, EventArgs e )
     {
-      if ( SFD.ShowDialog( this ) == System.Windows.Forms.DialogResult.OK ) {
+      if ( SFD.ShowDialog( this ) == DialogResult.OK ) {
         rtb.SaveFile( SFD.FileName, RichTextBoxStreamType.PlainText );
       }
     }
@@ -1186,7 +1196,7 @@ namespace SCJMapper_V2
       m_prevActivationMode = ActivationMode.Default; // switch Closing handling OFF in case we don't show anything
 
       if ( m_AT.CanAssignBinding ) {
-        tdiAssignBinding.Text = Tx.Translate( tdiAssignBinding) + ": " + JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked );
+        tdiAssignBinding.Text = Tx.Translate( tdiAssignBinding ) + ": " + JoystickCls.MakeThrottle( lblLastJ.Text, cbxThrottle.Checked );
       }
       tdiAssignBinding.Visible = m_AT.CanAssignBinding; any2 = any2 || m_AT.CanAssignBinding; // Assign
       tdiBlendBinding.Visible = m_AT.CanDisableBinding; any2 = any2 || m_AT.CanDisableBinding; // Blend
@@ -1339,7 +1349,7 @@ namespace SCJMapper_V2
       if ( SCMappings.IsValidMappingName( txMappingName.Text ) ) {
         Dump( );
         if ( SCMappings.MappingFileExists( txMappingName.Text ) ) {
-          cancel = ( MessageBox.Show( "File exists, shall we overwrite ?", "Save XML", MessageBoxButtons.YesNo ) == System.Windows.Forms.DialogResult.No );
+          cancel = ( MessageBox.Show( "File exists, shall we overwrite ?", "Save XML", MessageBoxButtons.YesNo ) == DialogResult.No );
         }
         if ( !cancel ) {
           rtb.SaveFile( SCMappings.MappingFileName( txMappingName.Text ), RichTextBoxStreamType.PlainText );
@@ -1352,6 +1362,14 @@ namespace SCJMapper_V2
           UpdateDDMapping( txMappingName.Text );
           AppSettings.Instance.MyMappingName = txMappingName.Text; AppSettings.Instance.Save( );// last used - persist
           txMappingName.BackColor = MyColors.SuccessColor;
+
+          // autosave CSV
+          string csvList = string.Format( "-- {0} - SC Joystick Mapping ({1}) --\n{2}", DateTime.Now, txMappingName.Text, 
+                                                                                        m_AT.ReportActionsCSV( true, true ) );
+          using (StreamWriter sw = File.CreateText(TheUser.MappingCsvFileName(txMappingName.Text)) ) {
+            sw.Write( csvList );
+          }
+
         }
       }
       else {
@@ -1426,7 +1444,7 @@ namespace SCJMapper_V2
       // find the device for the action if it is an axis (analog command)
       string command = ActionTreeNode.CommandFromActionText( nodeText );
       if ( JoystickCls.IsAxisCommand( command ) ) {
-        dev = DeviceInst.JoystickListRef.Find_jsN( JoystickCls.JSNum( command ) );
+        dev = DeviceInst.JoystickListRef.Find_InstanceForjsN( JoystickCls.JSNum( command ) );
       }
       else if ( GamepadCls.IsAxisCommand( command ) ) {
         dev = DeviceInst.GamepadRef;
@@ -1573,11 +1591,11 @@ namespace SCJMapper_V2
     {
       string devInput = Act.DevInput( lblLastJ.Text, InputMode );
       RTF.RTFformatter RTF = new RTF.RTFformatter( );
-      m_AT.FindAllActionsRTF( devInput, RTF );
+      m_AT.ListAllActionsRTF( devInput, RTF );
       // have to check if throttle is used and if - add those to the list
       string altDevInput = JoystickCls.MakeThrottle( devInput, true );
       if ( altDevInput != devInput ) {
-        m_AT.FindAllActionsRTF( altDevInput, RTF );
+        m_AT.ListAllActionsRTF( altDevInput, RTF );
       }
       lbxOther.Rtf = RTF.RTFtext;
     }
