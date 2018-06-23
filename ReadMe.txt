@@ -1,5 +1,5 @@
 SC Joystick Mapper V 2.37 - Build 72 BETA
-(c) Cassini, StandardToaster - 21-Mar-2018
+(c) Cassini, StandardToaster - 23-Jun-2018
 
 Contains 14 files + graphics:
 
@@ -8,6 +8,7 @@ SCJMapper.exe.config         Program config (V2.37)              - MUST be in th
 de\SCJMapper.resources.dll   German language (V2.37)             - MUST be in the same folder as the Exe file
 fr\SCJMapper.resources.dll   French language (V2.37)             - MUST be in the same folder as the Exe file
 Storage\*.scj                Folder for collected assets (V2.35) - MUST be in the same folder as the Exe file
+PTU_Storage\*.scj            Folder for collected PTU    (V2.37) - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
 OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
@@ -23,12 +24,12 @@ ReadMe.txt                   This file
 
 graphics folder              Skybox Images (V2.32)               - graphics folder MUST be in the same folder as the Exe file
 
-NOTE V 2.35:
+NOTE V 2.35+:
   search order for defaultProfile.xml to build the action tree is:
    1. directory where SCJMapper Exe is located
    2. directory of <SC>\LIVE\USER
    3. extract from <SC>\LIVE\Data.p4k (using stored asset)
-   4. extract from SCJMapper exe file (derived from 3.0 build 695052)
+   4. extract from SCJMapper exe file (derived from 3.2i build 790942)
 
    --> in order to get always the most current one use 3. (and therefore remove the ones in 1. and 2.)
    --> The one used is shown below the actionTree (Profile: ....)
@@ -44,8 +45,10 @@ cassini@burri-web.org
 
 Changelog:
 V 2.37 - BETA Build 72 - quick update for PTU 3.1
-- added - PTU 3.1 folder is now checked first - then the 'old' 3.0 installation
+- improved - adopt PTU treatment of SC 3.x series 
   (<install>\StarCitizenPTU\LIVE) then (<install>\StarCitizen\LIVE)
+- improved - separate storage / backup of PTU files in MyDocuments
+- update - defaultProfile.xml from SC PTU 3.2i as last resort built in one
 - NOTE: other new stuff is not complete so you're on your own here
 V 2.36 - BETA Build 71
 - new feature - window for realtime monitoring of the controls (works also in background)
