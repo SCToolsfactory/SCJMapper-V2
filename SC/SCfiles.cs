@@ -116,7 +116,7 @@ namespace SCJMapper_V2.SC
     }
 
     /// <summary>
-    /// Update from the pack file (treats is like never read..)
+    /// Update from the pack file (treats it like never read..)
     /// </summary>
     private void UpdateDefProfileFile()
     {
@@ -160,7 +160,7 @@ namespace SCJMapper_V2.SC
     }
 
     /// <summary>
-    /// Update all map files from the pak file (treats is like never read..)
+    /// Update all map files from the pak file (treats it like never read..)
     /// </summary>
     private void UpdateMapFiles()
     {
@@ -208,7 +208,7 @@ namespace SCJMapper_V2.SC
     }
 
     /// <summary>
-    /// Update all language files from the pak file (treats is like never read..)
+    /// Update all language files from the pak file (treats it like never read..)
     /// </summary>
     private void UpdateLangFiles()
     {

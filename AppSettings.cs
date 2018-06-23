@@ -284,7 +284,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "False" )]
     public bool UsePTU
     {
-      get { return false; } // ( bool )this["UsePTU"]; } no longer used
+      get { return ( bool )this["UsePTU"]; }
       set { this["UsePTU"] = value; }
     }
 

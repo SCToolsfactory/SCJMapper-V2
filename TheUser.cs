@@ -12,7 +12,11 @@ namespace SCJMapper_V2
   /// </summary>
   class TheUser
   {
+
     private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+
+    // distinguish for some stuff
+    public static bool UsesPTU { get; set; }
 
     private static bool hasWriteAccessToFolder( string folderPath )
     {
@@ -28,7 +32,7 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
-    /// Returns the name of the Personal Program folder in My Documents
+    /// Returns the name of the Personal Program folder in My Documents (depends on PTU use...)
     /// Creates the folder if needed
     /// </summary>
     /// <returns>Path to the Personal Program directory</returns>
@@ -38,12 +42,16 @@ namespace SCJMapper_V2
         log.Debug( "UserDir - Entry" );
         string docPath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.Personal ), Application.ProductName );
         if ( !Directory.Exists( docPath ) ) Directory.CreateDirectory( docPath );
+        if ( UsesPTU ) {
+          docPath = Path.Combine( docPath, "PTU" );
+          if ( !Directory.Exists( docPath ) ) Directory.CreateDirectory( docPath );
+        }
         return docPath;
       }
     }
 
     /// <summary>
-    /// The directory to store the assets
+    /// The directory to store the assets (depends on PTU use...)
     /// </summary>
     static public string FileStoreDir
     {
@@ -53,7 +61,10 @@ namespace SCJMapper_V2
         // fallback
         if ( !hasWriteAccessToFolder( docPath ) )
           docPath = UserDir;
-        return Path.Combine( docPath, "Storage");
+        if ( UsesPTU )
+          return Path.Combine( docPath, "PTU_Storage" );
+        else
+          return Path.Combine( docPath, "Storage" );
       }
     }
 
@@ -86,6 +97,19 @@ namespace SCJMapper_V2
       log.Debug( "MappingCsvFileName - Entry" );
 
       return Path.Combine( UserDir, mapName + ".csv" );
+    }
+
+
+    /// <summary>
+    /// Returns the mapping file name + path into our user dir
+    /// </summary>
+    /// <param name="mapName">The mapping name</param>
+    /// <returns>A fully qualified filename</returns>
+    static public string MappingXmlFileName( string mapName )
+    {
+      log.Debug( "MappingXmlFileName - Entry" );
+
+      return Path.Combine( UserDir, mapName + ".scjm.xml" );
     }
 
 

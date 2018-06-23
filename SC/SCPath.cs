@@ -83,9 +83,15 @@ namespace SCJMapper_V2.SC
         issue = Tx.Translate( "scpInvalidPath" ); // string.Format( "There is no vaild path given (invalid directory)" );
         return issue; // no valid one can be found
       }
+      // 20180321 New PTU 3.1 another change in setup path - Testing for PTU first 
+      if ( Directory.Exists( Path.Combine( basePath, "StarCitizenPTU" ) ) ) {
+        basePath = Path.Combine( basePath, "StarCitizenPTU" );
+      }
+      else {
+        // then try the retail path (was valid so far..)
+        basePath = Path.Combine( basePath, "StarCitizen" );
+      }
 
-      //
-      basePath = Path.Combine( basePath, "StarCitizen" );
       string scpX = "";
       // SC 3.0 try LIVE 
       scpX = Path.Combine( basePath, "LIVE" );
@@ -206,8 +212,17 @@ namespace SCJMapper_V2.SC
         string issue = "";
 
         if ( string.IsNullOrEmpty( scp ) ) return ""; // no valid one can be found
-                                                      //
-        scp = Path.Combine( scp, "StarCitizen" );
+        
+
+        // 20180321 New PTU 3.1 another change in setup path - Testing for PTU first 
+        if (AppSettings.Instance.UsePTU && Directory.Exists( Path.Combine( scp, "StarCitizenPTU" ) ) ) {
+          scp = Path.Combine( scp, "StarCitizenPTU" );
+        }
+        else {
+          // then try the retail path (was valid so far..)
+          scp = Path.Combine( scp, "StarCitizen" );
+        }
+
         string scpX = "";
         // SC 3.0 try LIVE 
         scpX = Path.Combine( scp, "LIVE" );

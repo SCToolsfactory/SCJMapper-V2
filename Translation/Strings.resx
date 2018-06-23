@@ -758,4 +758,8 @@ Cancel now if you want to save your work first.</value>
     <value>Path to the Star Citizen Installation</value>
     <comment>2-Settings SCPath</comment>
   </data>
+  <data name="chkReport" xml:space="preserve">
+    <value>List actions</value>
+    <comment>8-DeviceMonitor</comment>
+  </data>
 </root>

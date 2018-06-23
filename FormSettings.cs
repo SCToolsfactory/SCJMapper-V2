@@ -80,7 +80,6 @@ namespace SCJMapper_V2
 
       // Use PTU
       cbxPTU.Checked = AppSettings.Instance.UsePTU;
-      AppSettings.Instance.UsePTU = false; // no longer used
 
       // AutoTabXML
       cbxAutoTabXML.Checked = AppSettings.Instance.AutoTabXML;
@@ -132,10 +131,10 @@ namespace SCJMapper_V2
       AppSettings.Instance.DetectGamepad = cbxDetectGamepad.Checked;
 
       //// Use PTU
-      //if ( AppSettings.Instance.UsePTU != cbxPTU.Checked ) {
-      //  MessageBox.Show( "Changing to / from PTU folders needs a restart of the application !!", "Settings Notification", MessageBoxButtons.OK, MessageBoxIcon.Information );
-      //}
-      //AppSettings.Instance.UsePTU = cbxPTU.Checked; // no longer used
+      if ( AppSettings.Instance.UsePTU != cbxPTU.Checked ) {
+        MessageBox.Show( "Changing to / from PTU folders needs a restart of the application !!", "Settings Notification", MessageBoxButtons.OK, MessageBoxIcon.Information );
+      }
+      AppSettings.Instance.UsePTU = cbxPTU.Checked;
 
       // AutoTabXML
       AppSettings.Instance.AutoTabXML = cbxAutoTabXML.Checked;

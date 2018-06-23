@@ -1116,8 +1116,8 @@ namespace SCJMapper_V2.Actions
                 aMode = string.Format( "{0}", Tx.Translate( "mapDefault" ) );
               rtf.RHighlightColor = ( inverse ) ? RTF.RTFformatter.ERColor.ERC_DarkGreen : RTF.RTFformatter.ERColor.ERC_Green;
               rtf.Write( Tx.Translate( "mapMapped" ) );
-              rtf.WriteTab( SCUiText.Instance.Text( ac.ActionName ));
-              rtf.WriteTab( SCUiText.Instance.Text( acm.MapName) );
+              rtf.WriteTab( SCUiText.Instance.Text( ac.ActionName ) );
+              rtf.WriteTab( SCUiText.Instance.Text( acm.MapName ) );
               rtf.WriteTab( aMode.PadRight( 80 ) ); rtf.WriteLn( );
               rtf.RHighlightColor = RTF.RTFformatter.ERColor.ERC_Black; // background
               rtf.WriteLn( );
@@ -1364,7 +1364,77 @@ namespace SCJMapper_V2.Actions
       }
       return repList;
     }
-    
+
+    /// <summary>
+    /// Reports a list of the mapped items as XML (not CIG style)
+    /// </summary>
+    /// <returns>XML string</returns>
+    public string ReportActionsXML()
+    {
+      log.Debug( "ReportActionsXML - Entry" );
+      /*
+       Format:
+       <actions>
+        <actionmap name="mapname">
+          <action name="actionname">
+            <rebind input="devID_command" />
+          </action>
+        </actionmap>
+       </actions>
+       e.g.
+       <actions>
+        <actionmap name="spaceship_movement">
+          <action name="v_pitch">
+            <rebind input="js1_y" />
+            <rebind input="mo1_maxis_y" />
+          </action>
+        </actionmap>
+       </actions>
+ 
+      */
+      string repList = "";
+      repList = string.Format( "<actions>\n" );
+      foreach ( ActionMapCls acm in ActionMaps ) {
+        repList += string.Format( "\t<actionmap AMname=\"{0}\">\n", acm.MapName );
+        // restart output
+        string actionName = "", devRep = "";
+        foreach ( ActionCls ac in acm ) {
+          if ( ac.ActionName == actionName ) {
+            // same as before
+            // collect further
+          }
+          else {
+            // new action
+            // report
+            if ( !string.IsNullOrEmpty( devRep ) ) {
+              repList += string.Format( "\t\t<action Aname=\"{0}\">\n", actionName );
+              repList += devRep;
+              repList += string.Format( "\t\t</action>\n" );
+            }
+            // and reset
+            actionName = ac.ActionName; // new one
+            devRep = "";
+          }
+          foreach ( ActionCommandCls acc in ac.InputList ) {
+            if ( !Act.IsDisabledInput( acc.Input ) ) {
+              if ( !string.IsNullOrEmpty( acc.Input ) ) {
+                devRep += string.Format( "\t\t\t<rebind input=\"{0}_{1}\" />\n", acc.DevID, acc.Input );
+              }
+            }
+          }
+        }
+        // have to report the last one
+        if ( !string.IsNullOrEmpty( devRep ) ) {
+          repList += string.Format( "\t\t<action Aname=\"{0}\">\n", actionName );
+          repList += devRep;
+          repList += string.Format( "\t\t</action>\n" );
+        }
+        repList += string.Format( "\t</actionmap>\n" );
+      }
+      repList += string.Format( "</actions>\n" );
+      return repList;
+    }
+
     /// <summary>
     /// Reports a summary list of the mapped items
     /// </summary>

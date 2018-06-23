@@ -525,7 +525,6 @@
       this.cbxPTU.TabIndex = 7;
       this.cbxPTU.Text = "Use PTU folders";
       this.cbxPTU.UseVisualStyleBackColor = false;
-      this.cbxPTU.Visible = false;
       // 
       // cbxDetectGamepad
       // 

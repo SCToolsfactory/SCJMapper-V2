@@ -158,6 +158,7 @@
       this.msSelectMapping = new System.Windows.Forms.ToolStripDropDownButton();
       this.tsLblMappings = new System.Windows.Forms.ToolStripLabel();
       this.IL2 = new System.Windows.Forms.ImageList(this.components);
+      this.lblPTU = new System.Windows.Forms.Label();
       this.cmCopyPaste.SuspendLayout();
       this.panel2.SuspendLayout();
       this.cmMouseEntry.SuspendLayout();
@@ -883,6 +884,7 @@
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel2.Controls.Add(this.buttonExit, 1, 1);
+      this.tableLayoutPanel2.Controls.Add(this.lblPTU, 1, 0);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
       this.tableLayoutPanel2.Location = new System.Drawing.Point(386, 772);
@@ -1503,6 +1505,20 @@
       this.IL2.Images.SetKeyName(1, "Locked");
       this.IL2.Images.SetKeyName(2, "RSI");
       // 
+      // lblPTU
+      // 
+      this.lblPTU.AutoSize = true;
+      this.lblPTU.BackColor = System.Drawing.Color.SandyBrown;
+      this.lblPTU.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.lblPTU.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblPTU.Location = new System.Drawing.Point(155, 0);
+      this.lblPTU.Name = "lblPTU";
+      this.lblPTU.Size = new System.Drawing.Size(146, 48);
+      this.lblPTU.TabIndex = 14;
+      this.lblPTU.Text = "Using PTU";
+      this.lblPTU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      this.lblPTU.Visible = false;
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1533,6 +1549,7 @@
       this.tlpanel.ResumeLayout(false);
       this.tableLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel2.ResumeLayout(false);
+      this.tableLayoutPanel2.PerformLayout();
       this.tableLayoutPanel3.ResumeLayout(false);
       this.tableLayoutPanel3.PerformLayout();
       this.tableLayoutPanel4.ResumeLayout(false);
@@ -1677,6 +1694,7 @@
     private System.Windows.Forms.ToolStripDropDownButton msBtDump;
     private System.Windows.Forms.ToolStripMenuItem tdiExpandAll;
     private System.Windows.Forms.ToolStripMenuItem meShowDeviceMonitoringDialog;
+    private System.Windows.Forms.Label lblPTU;
   }
 }
 

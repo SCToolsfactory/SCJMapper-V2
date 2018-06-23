@@ -758,4 +758,8 @@ Annulez maintenant si vous voulez d'abord enregistrer votre travail.</value>
     <value>Chemin du répertoire vers le Star Citizen installation</value>
     <comment>2-Settings SCPath</comment>
   </data>
+  <data name="chkReport" xml:space="preserve">
+    <value>Lister les actions</value>
+    <comment>8-DeviceMonitor</comment>
+  </data>
 </root>

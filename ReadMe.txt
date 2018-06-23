@@ -1,12 +1,12 @@
-SC Joystick Mapper V 2.36 - Build 71 BETA
-(c) Cassini, StandardToaster - 05-Feb-2018
+SC Joystick Mapper V 2.37 - Build 72 BETA
+(c) Cassini, StandardToaster - 21-Mar-2018
 
 Contains 14 files + graphics:
 
-SCJMapper.exe                The program (V2.36)
-SCJMapper.exe.config         Program config (V2.36)              - MUST be in the same folder as the Exe file
-de\SCJMapper.resources.dll   German language (V2.36)             - MUST be in the same folder as the Exe file
-fr\SCJMapper.resources.dll   French language (V2.36)             - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.37)
+SCJMapper.exe.config         Program config (V2.37)              - MUST be in the same folder as the Exe file
+de\SCJMapper.resources.dll   German language (V2.37)             - MUST be in the same folder as the Exe file
+fr\SCJMapper.resources.dll   French language (V2.37)             - MUST be in the same folder as the Exe file
 Storage\*.scj                Folder for collected assets (V2.35) - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
 SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
@@ -43,6 +43,10 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.37 - BETA Build 72 - quick update for PTU 3.1
+- added - PTU 3.1 folder is now checked first - then the 'old' 3.0 installation
+  (<install>\StarCitizenPTU\LIVE) then (<install>\StarCitizen\LIVE)
+- NOTE: other new stuff is not complete so you're on your own here
 V 2.36 - BETA Build 71
 - new feature - window for realtime monitoring of the controls (works also in background)
 - add - silently dumps the CSV list along the backup xml file into MyDocuments

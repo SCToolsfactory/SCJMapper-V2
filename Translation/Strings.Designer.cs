@@ -340,6 +340,15 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List actions.
+        /// </summary>
+        public static string chkReport {
+            get {
+                return ResourceManager.GetString("chkReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Device Monitor.
         /// </summary>
         public static string FormDeviceMonitor {

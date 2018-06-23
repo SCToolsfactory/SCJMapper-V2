@@ -255,6 +255,11 @@ namespace SCJMapper_V2
 
       log.InfoFormat( "Application Version: {0}", version.ToString( ) );
 
+      // init PTU folder usage at the very start
+      if ( AppSettings.Instance.UsePTU ) log.Debug( "Using PTU Folders" );
+      lblPTU.Visible = AppSettings.Instance.UsePTU;
+      TheUser.UsesPTU = AppSettings.Instance.UsePTU;
+
       // tooltips where needed
       toolTip1.SetToolTip( this.linkLblReleases, c_GithubLink ); // allow to see where the link may head
 
@@ -332,10 +337,6 @@ namespace SCJMapper_V2
       // init current Joystick
       int jsIndex = (int)tc1.SelectedTab.Tag; // gets the index into the JS list
       if ( jsIndex >= 0 ) DeviceInst.JoystickInst = DeviceInst.JoystickListRef[jsIndex];
-
-      // init PTU folder usage sign
-      //lblPTU.Visible = false; // m_AppSettings.UsePTU;  no longer used
-      if ( AppSettings.Instance.UsePTU ) log.Debug( "Using PTU Folders" );
 
       // Auto Tab XML
       cbxAutoTabXML.Checked = AppSettings.Instance.AutoTabXML;
@@ -1363,11 +1364,11 @@ namespace SCJMapper_V2
           AppSettings.Instance.MyMappingName = txMappingName.Text; AppSettings.Instance.Save( );// last used - persist
           txMappingName.BackColor = MyColors.SuccessColor;
 
-          // autosave CSV
-          string csvList = string.Format( "-- {0} - SC Joystick Mapping ({1}) --\n{2}", DateTime.Now, txMappingName.Text, 
-                                                                                        m_AT.ReportActionsCSV( true, true ) );
-          using (StreamWriter sw = File.CreateText(TheUser.MappingCsvFileName(txMappingName.Text)) ) {
-            sw.Write( csvList );
+          // autosave our XML
+          string xmlList = string.Format( "<!-- {0} - SC Joystick Mapping ({1}) --> \n{2}", DateTime.Now, txMappingName.Text, 
+                                                                                        m_AT.ReportActionsXML( ) );
+          using (StreamWriter sw = File.CreateText(TheUser.MappingXmlFileName( txMappingName.Text)) ) {
+            sw.Write( xmlList );
           }
 
         }

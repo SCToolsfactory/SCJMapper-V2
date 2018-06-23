@@ -368,7 +368,7 @@
   <data name="lblSettingNote" xml:space="preserve">
     <value>Achtung: Akzeptieren der neuen Einstellungen löscht den aktuellen Aktionsbaum; 
 benutzen sie Abbrechen um die Arbeit erst zu speichern.</value>
-    <comment>ä</comment>
+    <comment>2-Settings</comment>
   </data>
   <data name="lblTurntime" xml:space="preserve">
     <value>Sek. pro 360° Drehung</value>
@@ -757,5 +757,9 @@ benutzen sie Abbrechen um die Arbeit erst zu speichern.</value>
   <data name="setMsgBox" xml:space="preserve">
     <value>Pfad zur Star Citizen Installation</value>
     <comment>2-Settings SCPath</comment>
+  </data>
+  <data name="chkReport" xml:space="preserve">
+    <value>Aktionen zeigen</value>
+    <comment>8-DeviceMonitor</comment>
   </data>
 </root>
