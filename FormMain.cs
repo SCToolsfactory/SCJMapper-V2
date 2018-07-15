@@ -97,15 +97,19 @@ namespace SCJMapper_V2
           return Act.ActionDevice.AD_Keyboard;
         }
         else {
-          if ( IsGamepadTab( tc1.SelectedTab ) ) {
-            return Act.ActionDevice.AD_Gamepad;
+          if ( tc1.SelectedTab != null ) {
+            if ( IsGamepadTab( tc1.SelectedTab ) ) {
+              return Act.ActionDevice.AD_Gamepad;
+            }
+            else {
+              return Act.ActionDevice.AD_Joystick;
+            }
           }
-          else {
-            return Act.ActionDevice.AD_Joystick;
-          }
+          return Act.ActionDevice.AD_Unknown;
         }
       }
     }
+
 
     /// <summary>
     /// Get the current JsN string for the active device tab
@@ -113,8 +117,8 @@ namespace SCJMapper_V2
     /// <returns>The jsN string - can be jsx, js1..jsN</returns>
     private string JSStr()
     {
-      UC_JoyPanel jp = (UC_JoyPanel)( tc1.SelectedTab.Controls["UC_JoyPanel"] );
-      return jp.JsName;
+      UC_JoyPanel jp = (UC_JoyPanel)( tc1.SelectedTab?.Controls["UC_JoyPanel"] );      
+      return jp?.JsName;
     }
 
     // tab index for the tcXML control
@@ -150,6 +154,85 @@ namespace SCJMapper_V2
       else msSelectMapping.BackColor = MyColors.MappingColor;
     }
 
+
+    /// <summary>
+    /// Returns true if the JS with index (0...) is hidden in AppSettings
+    /// </summary>
+    /// <param name="jsIndex">The JS index (0...)</param>
+    /// <returns>True if hidden</returns>
+    private bool IsTabPageHidden( int jsIndex )
+    {
+      return ( AppSettings.Instance.JSnHide.Contains( jsIndex.ToString( "D2" ) ) );
+    }
+
+    private int[] m_tabMap = new int[12] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+
+    // manage TabPage visibility
+    private void ShowTabPages()
+    {
+      foreach ( var dev in DeviceInst.JoystickListRef ) {
+        dev.Hidden = IsTabPageHidden( dev.DevInstance );
+      }
+      tc1.SuspendLayout( );
+      tc1.TabPages.Clear( );
+
+      m_tabMap = new int[12] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+      int i = 0;
+      foreach ( var dev in DeviceInst.JoystickListRef ) {
+        if ( !dev.Hidden ) {
+          m_tabMap[i++] = dev.DevInstance;
+          tc1.TabPages.Add( dev.TabPage );
+        }
+      }
+      if ( DeviceInst.GamepadRef != null ) {
+        tc1.TabPages.Add( DeviceInst.GamepadRef.TabPage );
+      }
+      // select the first tab if one is available
+      if ( tc1.TabPages.Count > 0 )
+        tc1.SelectedTab = tc1.TabPages[0];
+
+      tc1.ResumeLayout( );
+    }
+
+
+    /// <summary>
+    /// Returns the assigned color of the Joystick from Settings
+    /// </summary>
+    /// <param name="jsIndex">The JS index (0...)</param>
+    /// <returns>An Argb Color</returns>
+    private Color JsColorSetting( int jsIndex )
+    {
+      // JS Tab Colors
+      string[] e = AppSettings.Instance.JSnColor.Split( new char[] { ',' } );
+      if ( jsIndex < e.Length ) {
+        if ( int.TryParse( e[jsIndex], out int colInt ) ) {
+          return Color.FromArgb( colInt );
+        }
+        else {
+          //invalid int... , use default
+          return MyColors.TabColor[jsIndex];
+        }
+      }
+      else {
+        // no color found, use default
+        return MyColors.TabColor[jsIndex];
+      }
+    }
+
+    /// <summary>
+    /// Update the TabPage Colors from Setting
+    /// </summary>
+    private void UpdateTabPageColors()
+    {
+      // load TabPage colors 
+      for ( int i = 0; i < MyColors.TabColor.Length; i++ ) {
+      }
+
+      foreach ( var dev in DeviceInst.JoystickListRef ) {
+        MyColors.TabColor[dev.DevInstance] = JsColorSetting( dev.DevInstance );
+        dev.TabPage.BackColor = MyColors.TabColor[dev.DevInstance];
+      }
+    }
 
     #endregion
 
@@ -232,6 +315,8 @@ namespace SCJMapper_V2
     {
       log.Debug( "MainForm_Load - Entry" );
 
+      SCFiles.Instance.UpdatePack( ); // update game files
+
       Tx.LocalizeControlTree( this );
       Tx.LocalizeControlTree( cmCopyPaste );
       Tx.LocalizeControlTree( cmAddDel );
@@ -286,6 +371,11 @@ namespace SCJMapper_V2
 
       SCFileIndication( );
 
+      // load TabPage colors 
+      for ( int i = 0; i < MyColors.TabColor.Length; i++ ) {
+        MyColors.TabColor[i] = JsColorSetting( i );
+      }
+
       // load other defaults
       log.Debug( "Loading Other" );
       txMappingName.Text = AppSettings.Instance.MyMappingName;
@@ -296,6 +386,7 @@ namespace SCJMapper_V2
           break;
         }
       }
+
       // Init X things
       log.Debug( "Loading DirectX" );
       if ( !InitDirectInput( ) ) {
@@ -326,7 +417,6 @@ namespace SCJMapper_V2
         }
       }
 
-
       // load show checkboxes
       cbxShowJoystick.Checked = AppSettings.Instance.ShowJoystick;
       cbxShowGamepad.Checked = AppSettings.Instance.ShowGamepad;
@@ -335,7 +425,9 @@ namespace SCJMapper_V2
       cbxShowMappedOnly.Checked = AppSettings.Instance.ShowMapped;
 
       // init current Joystick
-      int jsIndex = (int)tc1.SelectedTab.Tag; // gets the index into the JS list
+      int jsIndex = -1;
+      if ( tc1.SelectedTab!=null)
+        jsIndex = (int)tc1.SelectedTab.Tag; // gets the index into the JS list
       if ( jsIndex >= 0 ) DeviceInst.JoystickInst = DeviceInst.JoystickListRef[jsIndex];
 
       // Auto Tab XML
@@ -368,12 +460,17 @@ namespace SCJMapper_V2
 
     private void tc1_Selected( object sender, TabControlEventArgs e )
     {
-      // init current Joystick
-      int jsIndex = (int)tc1.SelectedTab.Tag; // gets the index into the JS list
-      if ( jsIndex >= 0 )
-        DeviceInst.JoystickInst = DeviceInst.JoystickListRef[jsIndex];
-      else
+      if ( tc1.SelectedTab == null ) {
         DeviceInst.JoystickInst = null;
+      }
+      else {
+        // init current Joystick
+        int jsIndex = (int)tc1.SelectedTab.Tag; // gets the index into the JS list
+        if ( jsIndex >= 0 )
+          DeviceInst.JoystickInst = DeviceInst.JoystickListRef[jsIndex];
+        else
+          DeviceInst.JoystickInst = null;
+      }
     }
 
     /// <summary>
@@ -382,18 +479,15 @@ namespace SCJMapper_V2
     private void tc1_DrawItem( object sender, DrawItemEventArgs e )
     {
       try {
-        //This line of code will help you to change the apperance like size,name,style.
         Font f;
-        //For background color
-        Brush backBrush = new SolidBrush( MyColors.TabColor[e.Index] );
-        //For forground color
+        Brush backBrush = new SolidBrush( MyColors.TabColor[m_tabMap[e.Index]] );
         Brush foreBrush = new SolidBrush( Color.Black );
 
 
         //This construct will tell you which tab page has focus to change the style.
         if ( e.Index == this.tc1.SelectedIndex ) {
           f = new Font( e.Font, FontStyle.Bold );
-
+          /*
           Rectangle tabRect = tc1.Bounds;
           Region tabRegion = new Region( tabRect );
           Rectangle TabItemRect = new Rectangle( 0, 0, 0, 0 );
@@ -401,7 +495,8 @@ namespace SCJMapper_V2
             TabItemRect = Rectangle.Union( TabItemRect, tc1.GetTabRect( nTanIndex ) );
           }
           tabRegion.Exclude( TabItemRect );
-          e.Graphics.FillRegion( backBrush, tabRegion );
+          //e.Graphics.FillRegion( backBrush, tabRegion );
+          */
         }
         else {
           f = e.Font;
@@ -410,11 +505,9 @@ namespace SCJMapper_V2
 
         //To set the alignment of the caption.
         string tabName = this.tc1.TabPages[e.Index].Text;
-        StringFormat sf = new StringFormat( );
-        sf.Alignment = StringAlignment.Center;
+        StringFormat sf = new StringFormat { Alignment = StringAlignment.Center };
 
-        //Thsi will help you to fill the interior portion of
-        //selected tabpage.
+        //This will help you to fill the interior portion of selected tabpage.
         e.Graphics.FillRectangle( backBrush, e.Bounds );
         Rectangle r = e.Bounds;
         r = new Rectangle( r.X, r.Y + 3, r.Width, r.Height - 3 );
@@ -424,6 +517,7 @@ namespace SCJMapper_V2
         if ( e.Index == this.tc1.SelectedIndex ) {
           f.Dispose( );
           backBrush.Dispose( );
+          foreBrush.Dispose( );
         }
         else {
           backBrush.Dispose( );
@@ -528,9 +622,11 @@ namespace SCJMapper_V2
         return false;
       }
 
+      // init devices
       List<myDxJoystick> dxJoysticks = new List<myDxJoystick>( );
       SharpDX.XInput.Controller dxGamepad = null;
 
+      // load from DirectX
       try {
         // scan the Input for attached devices
         log.Debug( "  - Scan GameControl devices" );
@@ -550,9 +646,7 @@ namespace SCJMapper_V2
             }
           }
           else {
-            myDxJoystick myJs = new myDxJoystick( );
-            myJs.js = new Joystick( directInput, instance.InstanceGuid );
-            myJs.prodName = instance.ProductName;
+            myDxJoystick myJs = new myDxJoystick { js = new Joystick( directInput, instance.InstanceGuid ), prodName = instance.ProductName };
             dxJoysticks.Add( myJs );
             log.DebugFormat( "  - Create the device interface for: {0}", myJs.prodName );
           }
@@ -563,28 +657,8 @@ namespace SCJMapper_V2
         return false;
       }
 
+      // Create the TabPages
       int tabs = 0;
-      // make the GP the first device if there is one.
-      if ( dxGamepad != null ) {
-        log.Debug( "  - Add first Gamepad panel" );
-        tc1.TabPages[tabs].Text = Tx.Translate( "xGamepad" ) + " ";
-        UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
-        Tx.LocalizeControlTree( uUC_GpadPanelNew );
-
-        uUC_GpadPanelNew.Size = UC_JoyPanel.Size; uUC_GpadPanelNew.Location = UC_JoyPanel.Location;
-        UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
-        log.Debug( "  - Create Gamepad instance" );
-        DeviceInst.GamepadInst = new GamepadCls( dxGamepad, uUC_GpadPanelNew, tabs ); // does all device related activities for that particular item
-        DeviceInst.GamepadRef.SetDeviceName( GamepadCls.DevNameCIG ); // this is fixed ...
-        tc1.TabPages[tabs].ToolTipText = string.Format( "{0}\n{1}", DeviceInst.GamepadRef.DevName, " " );
-        toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
-
-        SetGamepadTab( tc1.TabPages[tabs] );  // indicates the gamepad tab (murks..)
-        MyColors.TabColor[tabs] = MyColors.GamepadColor; // save it for future use of tab coloring (drawing)
-        tc1.TabPages[tabs].BackColor = MyColors.TabColor[tabs];
-
-        tabs++; // next tab
-      }
 
       // do all joysticks
       int nJs = 0; // number the Joystick Tabs
@@ -603,24 +677,53 @@ namespace SCJMapper_V2
           uUC_JoyPanelNew = new UC_JoyPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
           Tx.LocalizeControlTree( uUC_JoyPanelNew );
           uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
-
         }
         // common part
-        tc1.TabPages[tabs].Text = string.Format( "{0} {1}", Tx.Translate( "xJoystick" ), nJs + 1 ); // numbering is 1 based for the user
         log.Debug( "  - Create Joystick instance " + nJs.ToString( ) );
-        js = new JoystickCls( myJs.js, this, nJs, uUC_JoyPanelNew, tabs ); // does all device related activities for that particular item
+        // does all device related activities for that particular item
+        js = new JoystickCls( myJs.js, this, nJs, uUC_JoyPanelNew, tabs ) { TabPage = tc1.TabPages[tabs] };
         DeviceInst.JoystickListRef.Add( js ); // add to joystick list
-        tc1.TabPages[tabs].ToolTipText = string.Format( "{0}\n{1}", js.DevName, js.DevInstanceGUID );
-        toolTip1.SetToolTip( tc1.TabPages[tabs], tc1.TabPages[tabs].ToolTipText );
-        tc1.TabPages[tabs].BackColor = MyColors.TabColor[tabs];
-        tc1.TabPages[tabs].Tag = js.DevInstance;  //  used to find the tab for polling
+        js.TabPage.Text = string.Format( "{0} {1}", Tx.Translate( "xJoystick" ), nJs + 1 ); // numbering is 1 based for the user
+        js.TabPage.ToolTipText = string.Format( "{0}\n{1}", js.DevName, js.DevInstanceGUID );
+        toolTip1.SetToolTip( js.TabPage, js.TabPage.ToolTipText );
+        js.TabPage.Tag = js.DevInstance;  //  used to find the tab for polling
+        js.TabPage.BackColor = MyColors.TabColor[tabs];
+        js.Hidden = IsTabPageHidden( js.DevInstance );
 
         nJs++; // next joystick
         // next Joystick tab
         tabs++;
-        if ( tabs >= JoystickCls.JSnum_MAX ) break; // cannot load more JSticks than predefined Tabs
+        if ( tabs >= JoystickCls.JSnum_MAX ) {
+          log.Debug( "  - Number of Device tabs reached MAX, cannot add more devices" );
+          break; // cannot load more JSticks than predefined Tabs
+        }
       }
 
+      // make the GP the LAST device if there is one.
+      if ( ( tabs < JoystickCls.JSnum_MAX ) && ( dxGamepad != null ) ) {
+        log.Debug( "  - Add Gamepad panel" );
+        tc1.TabPages[tabs].Text = Tx.Translate( "xGamepad" ) + " ";
+        UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( );
+        tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
+        Tx.LocalizeControlTree( uUC_GpadPanelNew );
+
+        uUC_GpadPanelNew.Size = UC_JoyPanel.Size; uUC_GpadPanelNew.Location = UC_JoyPanel.Location;
+        UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
+        log.Debug( "  - Create Gamepad instance" );
+        DeviceInst.GamepadInst = new GamepadCls( dxGamepad, uUC_GpadPanelNew, tabs ); // does all device related activities for that particular item
+        DeviceInst.GamepadRef.SetDeviceName( GamepadCls.DevNameCIG ); // this is fixed ...
+        DeviceInst.GamepadRef.TabPage = tc1.TabPages[tabs];
+
+        DeviceInst.GamepadRef.TabPage.ToolTipText = string.Format( "{0}\n{1}", DeviceInst.GamepadRef.DevName, " " );
+        toolTip1.SetToolTip( DeviceInst.GamepadRef.TabPage, DeviceInst.GamepadRef.TabPage.ToolTipText );
+
+        SetGamepadTab( DeviceInst.GamepadRef.TabPage );  // indicates the gamepad tab (murks..)
+        MyColors.TabColor[tabs] = MyColors.GamepadColor; // save it for future use of tab coloring (drawing)
+        DeviceInst.GamepadRef.TabPage.BackColor = MyColors.TabColor[tabs];
+        DeviceInst.GamepadRef.Hidden = false; // always visible
+
+        tabs++; // next tab
+      }
       log.DebugFormat( "  - Added {0} GameControl devices", tabs );
 
       if ( tabs == 0 ) {
@@ -628,6 +731,9 @@ namespace SCJMapper_V2
         MessageBox.Show( "Unable to create a joystick device. Program will exit.", "No joystick found", MessageBoxButtons.OK, MessageBoxIcon.Information );
         return false;
       }
+
+      // manage visibility of Tabs
+      ShowTabPages( );
 
       // load the profile items from the XML
       log.Debug( "  - End of, InitActionTree now" );
@@ -728,7 +834,7 @@ namespace SCJMapper_V2
       m_modifierTimeout -= timer1.Interval;  // decrement timeout
       if ( m_modifierTimeout < 0 ) m_modifierTimeout = 0; // prevent undeflow after long time not using modifiers
 
-      if ( m_keyIn || tc1.SelectedTab.Tag == null ) return; // don't handle those
+      if ( m_keyIn || tc1.SelectedTab?.Tag == null ) return; // don't handle those
 
       string ctrl = "";
       if ( DeviceInst.JoystickRef == null ) {
@@ -1026,6 +1132,12 @@ namespace SCJMapper_V2
       timer1.Enabled = false;
       if ( AppSettings.Instance.ShowSettings( "" ) != DialogResult.Cancel ) {
         AppSettings.Instance.Reload( ); // must reload in case of any changes in the form
+
+        // Hide JS Tabs as needed
+        ShowTabPages( );
+        // update JS colors
+        UpdateTabPageColors( );
+
         // then reload the profile and mappings
         LoadMappingDD( );
         // indicates (in)valid folders
@@ -1365,9 +1477,9 @@ namespace SCJMapper_V2
           txMappingName.BackColor = MyColors.SuccessColor;
 
           // autosave our XML
-          string xmlList = string.Format( "<!-- {0} - SC Joystick Mapping ({1}) --> \n{2}", DateTime.Now, txMappingName.Text, 
+          string xmlList = string.Format( "<!-- {0} - SC Joystick Mapping ({1}) --> \n{2}", DateTime.Now, txMappingName.Text,
                                                                                         m_AT.ReportActionsXML( ) );
-          using (StreamWriter sw = File.CreateText(TheUser.MappingXmlFileName( txMappingName.Text)) ) {
+          using ( StreamWriter sw = File.CreateText( TheUser.MappingXmlFileName( txMappingName.Text ) ) ) {
             sw.Write( xmlList );
           }
 

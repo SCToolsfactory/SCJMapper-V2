@@ -331,6 +331,15 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide.
+        /// </summary>
+        public static string chkHideXX {
+            get {
+                return ResourceManager.GetString("chkHideXX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Monitor mouse axis.
         /// </summary>
         public static string chkMonitorMouse {
@@ -448,7 +457,7 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ignore Buttons - enter button numbers which should be ignored separated by spaces (e.g. 24 25).
+        ///   Looks up a localized string similar to Configuration - enter button numbers which should be ignored separated by spaces (e.g. 24 25).
         /// </summary>
         public static string gbxIgnoreBt {
             get {

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using SCJMapper_V2.Common;
 using SCJMapper_V2.Actions;
 using SCJMapper_V2.Translation;
 
@@ -14,6 +15,10 @@ namespace SCJMapper_V2
 {
   partial class FormSettings : Form
   {
+
+    List<CheckBox> m_checks = new List<CheckBox>( );
+    List<Label> m_labels = new List<Label>( );
+
     public bool Canceled { get; set; }
 
     public string PasteString { get; set; } // used to copy, paste JS commands
@@ -30,7 +35,18 @@ namespace SCJMapper_V2
 
     private void FormSettings_Load( object sender, EventArgs e )
     {
+      // get them for enumeration
+      m_checks.Clear( );
+      m_checks.Add( chkHidden01 ); m_checks.Add( chkHidden02 ); m_checks.Add( chkHidden03 ); m_checks.Add( chkHidden04 ); m_checks.Add( chkHidden05 ); m_checks.Add( chkHidden06 );
+      m_checks.Add( chkHidden07 ); m_checks.Add( chkHidden08 ); m_checks.Add( chkHidden09 ); m_checks.Add( chkHidden10 ); m_checks.Add( chkHidden11 ); m_checks.Add( chkHidden12 );
+
+      m_labels.Clear( );
+      m_labels.Add( lblColor01 ); m_labels.Add( lblColor02 ); m_labels.Add( lblColor03 ); m_labels.Add( lblColor04 ); m_labels.Add( lblColor05 ); m_labels.Add( lblColor06 );
+      m_labels.Add( lblColor07 ); m_labels.Add( lblColor08 ); m_labels.Add( lblColor09 ); m_labels.Add( lblColor10 ); m_labels.Add( lblColor11 ); m_labels.Add( lblColor12 );
+
+      // init GUI
       Tx.LocalizeControlTree( this );
+      foreach ( var c in m_checks ) c.Text = Tx.Translate( "chkHideXX" );
 
       chkLbActionMaps.Items.Clear( );
       for ( int i = 0; i < ActionMapsCls.ActionMaps.Length; i++ ) {
@@ -64,6 +80,30 @@ namespace SCJMapper_V2
       txJS10.Text = AppSettings.Instance.IgnoreJS10;
       txJS11.Text = AppSettings.Instance.IgnoreJS11;
       txJS12.Text = AppSettings.Instance.IgnoreJS12;
+
+      // Hidden Joysticks (a comma separated list of numbers to hide)
+      for ( int i = 0; i < m_checks.Count; i++ ) {
+        m_checks[i].Checked = AppSettings.Instance.JSnHide.Contains( i.ToString( "D2" ) );
+      }
+
+      // JS Tab Colors
+      string[] e = AppSettings.Instance.JSnColor.Split( new char[] { ',' } );
+      for ( int i = 0; i < m_labels.Count; i++ ) {
+        if ( i < e.Length ) { 
+          if ( int.TryParse( e[i], out int colInt ) ) { 
+            m_labels[i].BackColor = Color.FromArgb( colInt );
+          }
+          else {
+            //invalid int... , use default
+            m_labels[i].BackColor = MyColors.TabColor[i];
+          }
+        }
+        else {
+          // no color found, use default
+          m_labels[i].BackColor = MyColors.TabColor[i];
+        }
+      }
+
 
       // Ignore actionmaps
       for ( int i = 0; i < chkLbActionMaps.Items.Count; i++ ) {
@@ -114,6 +154,22 @@ namespace SCJMapper_V2
       AppSettings.Instance.IgnoreJS10 = txJS10.Text;
       AppSettings.Instance.IgnoreJS11 = txJS11.Text;
       AppSettings.Instance.IgnoreJS12 = txJS12.Text;
+
+      // Hidden Joysticks (a comma separated list of numbers to hide)
+      AppSettings.Instance.JSnHide = "";
+      for ( int i = 0; i < m_checks.Count; i++ ) {
+        AppSettings.Instance.JSnHide += ( m_checks[i].Checked ) ? i.ToString( "D2" ) : "";
+        AppSettings.Instance.JSnHide += ",";
+      }
+
+      // JS Tab Colors
+      AppSettings.Instance.JSnColor = "";
+      for ( int i = 0; i < m_labels.Count; i++ ) {
+        AppSettings.Instance.JSnColor += m_labels[i].BackColor.ToArgb().ToString( );
+        AppSettings.Instance.JSnColor += ",";
+      }
+
+
 
       // Ignore actionmaps
       string ignore = ",";
@@ -220,7 +276,7 @@ namespace SCJMapper_V2
 
         string issue = SC.SCPath.CheckSCBasePath( fbDlg.SelectedPath );
         if ( !string.IsNullOrEmpty( issue ) ) {
-          MessageBox.Show( this, issue, Tx.Translate("setMsgBox"), MessageBoxButtons.OK );
+          MessageBox.Show( this, issue, Tx.Translate( "setMsgBox" ), MessageBoxButtons.OK );
         }
       }
     }
@@ -240,6 +296,12 @@ namespace SCJMapper_V2
       }
     }
 
-
+    private void lblColor01_Click( object sender, EventArgs e )
+    {
+      colDlg.Color = ( sender as Label ).BackColor;
+      if ( colDlg.ShowDialog( this ) == DialogResult.OK ) {
+        ( sender as Label ).BackColor = colDlg.Color;
+      }
+    }
   }
 }

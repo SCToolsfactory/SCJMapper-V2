@@ -274,7 +274,7 @@
     <comment>1-Main</comment>
   </data>
   <data name="gbxIgnoreBt" xml:space="preserve">
-    <value>Ignorer les boutons - entrer les numéros de boutons qui doivent être ignorés séparés par des espaces (e.g. 24 25)</value>
+    <value>Configuration - entrer les numéros de boutons qui doivent être ignorés séparés par des espaces (e.g. 24 25)</value>
     <comment>2-Settings</comment>
   </data>
   <data name="gbxIgnoreMaps" xml:space="preserve">
@@ -761,5 +761,9 @@ Annulez maintenant si vous voulez d'abord enregistrer votre travail.</value>
   <data name="chkReport" xml:space="preserve">
     <value>Lister les actions</value>
     <comment>8-DeviceMonitor</comment>
+  </data>
+  <data name="chkHideXX" xml:space="preserve">
+    <value>Chacher</value>
+    <comment>2-Settings</comment>
   </data>
 </root>

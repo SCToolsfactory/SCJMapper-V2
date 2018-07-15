@@ -13,29 +13,6 @@ namespace SCJMapper_V2.Devices.Joystick
   {
     #region Static Parts
 
-    /// <summary>
-    /// Reassigns the mapping color based on the jsAssignment list given
-    /// i.e. prepare the mapping colors for a given jsN assignment
-    /// </summary>
-    /// <param name="newJsList">List of 0.. tabs where the value is the jsN number </param>
-    static public void ReassignJsColor( List<int> newJsList )
-    {
-      // the default colors are aligned with the tabs - the tabs color is never changed but the jsN may
-      // i.e. if the first Tab is assigned as js2 then the second MapColor must get the color of the first Tab
-      int idx = 0;
-      foreach ( int i in newJsList ) {
-        if ( MyColors.TabColor[idx] == MyColors.GamepadColor ) {
-          ;  // skip the gamepad for joystick coloring
-        } else {
-          // walk through the tabs
-          if ( i > 0 ) {
-            // this is the jsN for the tab indexed (make it 0 based)
-            MyColors.JsMapColor[i - 1] = MyColors.TabColor[idx];
-          }
-        }
-        idx++;
-      }
-    }
 
     static private Color DeviceColor( int dxnumber )
     {

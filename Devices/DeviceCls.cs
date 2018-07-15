@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace SCJMapper_V2.Devices
 {
@@ -50,6 +51,12 @@ namespace SCJMapper_V2.Devices
     /// The DX GUID of the device
     /// </summary>
     public abstract string DevInstanceGUID { get; }
+
+    /// <summary>
+    /// The TabPage associated with the device (GP and JS only)
+    /// </summary>
+    public TabPage TabPage { get; set; } // added to handle hiding..
+    public bool Hidden { get; set; } // added to handle hiding..
 
     public abstract System.Drawing.Color MapColor { get; }
     public virtual List<string> AnalogCommands { get { return new List<string>( ); }  } // just return an empty one if not implemented

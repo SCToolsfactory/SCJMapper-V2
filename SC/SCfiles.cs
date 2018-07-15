@@ -32,7 +32,7 @@ namespace SCJMapper_V2.SC
 
     private SCFiles()
     {
-      UpdatePack( );
+      LoadPack( ); // get the lastest ones
     }
 
 
@@ -409,11 +409,13 @@ namespace SCJMapper_V2.SC
     /// <summary>
     /// Load the asset files from the local store and reloads from p4k if needed only
     /// </summary>
-    private void UpdatePack()
+    public void UpdatePack()
     {
       LoadPack( ); // get the lastest ones
                    // either we have files or not...
       if ( NeedsUpdate( ) == false ) return; // EXIT without update
+
+
 
       UpdatePakFile( );
       UpdateDefProfileFile( );

@@ -335,6 +335,10 @@
 						<optiongroup  name="mgv_move"  UILabel="@ui_COGroundVehicleMove"  invert="1"  UIShowCurve="1"  UIShowInvert="1"  />
 					</optiongroup>
 
+					<optiongroup  name="mining"  UILabel="@ui_COMining"  UIShowCurve="1"  UIShowSensitivity="0"  UIShowInvert="1"  >
+						<optiongroup  name="mining_throttle"  UILabel="@ui_COMiningThrottle"  invert="1"  UIShowCurve="1"  UIShowInvert="1"  />
+					</optiongroup>
+
 				</optiongroup>
 
 			</optiongroup>
@@ -533,6 +537,7 @@
 		<action  name="v_toggle_mining_laser_type"  ActivationMode="press"  keyboard=""  mouse="mouse2"  xboxpad="thumbr"  joystick="button2"  UILabel="@ui_CIToggleMiningLaserType"  UIDescription="@ui_CIToggleMiningLaserTypeDesc"  />
 		<action  name="v_increase_mining_throttle"  ActivationMode="press"  mouse="mwheel_up"  keyboard=""  xboxpad="x"  joystick="button3"  UILabel="@ui_CIIncreaseMiningThrottle"  UIDescription="@ui_CIIncreaseMiningThrottleDesc"  />
 		<action  name="v_decrease_mining_throttle"  ActivationMode="press"  mouse="mwheel_down"  keyboard=""  xboxpad="b"  joystick="button4"  UILabel="@ui_CIDecreaseMiningThrottle"  UIDescription="@ui_CIDecreaseMiningThrottleDesc"  />
+		<action  name="v_mining_throttle"  onPress="1"  always="1"  mouse=""  keyboard=""  xboxpad=""  joystick=" "  optionGroup="mining_throttle"  UILabel="@ui_CIMiningThrottle"  UIDescription="@ui_CIMiningThrottleDesc"  />
 	</actionmap>
 
 	<actionmap  name="spaceship_turret"  version="1"  UILabel="@ui_CGSpaceFlightTurrets"  UICategory="@ui_CCSpaceFlight"  >

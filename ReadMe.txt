@@ -1,12 +1,12 @@
-SC Joystick Mapper V 2.37 - Build 72 BETA
-(c) Cassini, StandardToaster - 23-Jun-2018
+SC Joystick Mapper V 2.38 - Build 73 BETA
+(c) Cassini, StandardToaster - 15-Jul-2018
 
 Contains 14 files + graphics:
 
-SCJMapper.exe                The program (V2.37)
-SCJMapper.exe.config         Program config (V2.37)              - MUST be in the same folder as the Exe file
-de\SCJMapper.resources.dll   German language (V2.37)             - MUST be in the same folder as the Exe file
-fr\SCJMapper.resources.dll   French language (V2.37)             - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.38)
+SCJMapper.exe.config         Program config (V2.38)              - MUST be in the same folder as the Exe file
+de\SCJMapper.resources.dll   German language (V2.38)             - MUST be in the same folder as the Exe file
+fr\SCJMapper.resources.dll   French language (V2.38)             - MUST be in the same folder as the Exe file
 Storage\*.scj                Folder for collected assets (V2.35) - MUST be in the same folder as the Exe file
 PTU_Storage\*.scj            Folder for collected PTU    (V2.37) - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
@@ -44,6 +44,11 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.38 - BETA Build 73
+- add - ability to hide device tabs in Settings
+- add - ability to color device tabs in Settings
+- update - defaultProfile.xml from SC PTU 3.2.1d as last resort built in one
+- NOTE: other new stuff is not complete so you're on your own here
 V 2.37 - BETA Build 72 - quick update for PTU 3.1
 - improved - adopt PTU treatment of SC 3.x series 
   (<install>\StarCitizenPTU\LIVE) then (<install>\StarCitizen\LIVE)

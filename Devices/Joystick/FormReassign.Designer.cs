@@ -73,7 +73,7 @@
       // btCancel
       // 
       this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-      this.btCancel.Location = new System.Drawing.Point(562, 379);
+      this.btCancel.Location = new System.Drawing.Point(565, 379);
       this.btCancel.Name = "btCancel";
       this.btCancel.Size = new System.Drawing.Size(108, 31);
       this.btCancel.TabIndex = 27;
@@ -84,7 +84,7 @@
       // 
       // btAccept
       // 
-      this.btAccept.Location = new System.Drawing.Point(446, 379);
+      this.btAccept.Location = new System.Drawing.Point(449, 379);
       this.btAccept.Name = "btAccept";
       this.btAccept.Size = new System.Drawing.Size(108, 31);
       this.btAccept.TabIndex = 26;
@@ -134,7 +134,7 @@
       this.gbxReassignJS.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.gbxReassignJS.Location = new System.Drawing.Point(14, 12);
       this.gbxReassignJS.Name = "gbxReassignJS";
-      this.gbxReassignJS.Size = new System.Drawing.Size(654, 361);
+      this.gbxReassignJS.Size = new System.Drawing.Size(659, 361);
       this.gbxReassignJS.TabIndex = 28;
       this.gbxReassignJS.TabStop = false;
       this.gbxReassignJS.Tag = "§";

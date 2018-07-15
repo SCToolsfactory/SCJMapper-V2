@@ -49,11 +49,5 @@ namespace SCJMapper_V2.Common
     static public Color ProfileColor = Color.DarkKhaki;
     static public Color MappingColor = Color.DarkSeaGreen;
 
-    static public void Reset( )
-    {
-      JsMapColor = ( Color[] )InitColor.Clone( );
-      GamepadColor = GamepadColorDefault;
-    }
-
   }
 }

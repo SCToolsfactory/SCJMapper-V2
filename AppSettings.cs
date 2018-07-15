@@ -149,7 +149,7 @@ namespace SCJMapper_V2
     }
 
 
-    // Seetings Window
+    // Settings Window
 
     [UserScopedSetting( )]
     [DefaultSettingValue( "" )]
@@ -243,9 +243,27 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS12
     {
-      get { return ( string )this["IgnoreJS12"]; }
+      get { return (string)this["IgnoreJS12"]; }
       set { this["IgnoreJS12"] = value; }
     }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "" )]
+    public string JSnHide
+    {
+      get { return (string)this["JSnHide"]; }
+      set { this["JSnHide"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "" )]
+    public string JSnColor
+    {
+      get { return (string)this["JSnColor"]; }
+      set { this["JSnColor"] = value; }
+    }
+
+
 
     [UserScopedSetting( )]
     [DefaultSettingValue( "" )]
