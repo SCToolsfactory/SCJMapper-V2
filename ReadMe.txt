@@ -1,5 +1,5 @@
 SC Joystick Mapper V 2.38 - Build 73 BETA
-(c) Cassini, StandardToaster - 15-Jul-2018
+(c) Cassini, StandardToaster - 19-Jul-2018
 
 Contains 14 files + graphics:
 
@@ -45,8 +45,8 @@ cassini@burri-web.org
 
 Changelog:
 V 2.38 - BETA Build 73
-- add - ability to hide device tabs in Settings
-- add - ability to color device tabs in Settings
+- add - ability to hide joystick device tabs in Settings
+- add - ability to color joystick device tabs in Settings
 - update - defaultProfile.xml from SC PTU 3.2.1d as last resort built in one
 - NOTE: other new stuff is not complete so you're on your own here
 V 2.37 - BETA Build 72 - quick update for PTU 3.1

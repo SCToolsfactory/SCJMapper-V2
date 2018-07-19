@@ -165,27 +165,32 @@ namespace SCJMapper_V2
       return ( AppSettings.Instance.JSnHide.Contains( jsIndex.ToString( "D2" ) ) );
     }
 
+    // contains the index into the color map of this particular device
+    // JS are 0..n, GP is GPtab index, not used is -1
     private int[] m_tabMap = new int[12] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 
     // manage TabPage visibility
     private void ShowTabPages()
     {
+      // only JS devices can be hidden
       foreach ( var dev in DeviceInst.JoystickListRef ) {
         dev.Hidden = IsTabPageHidden( dev.DevInstance );
       }
       tc1.SuspendLayout( );
+      // reload all pages from the dev instance
       tc1.TabPages.Clear( );
-
+      // rebuild tab map for visible JS devices
       m_tabMap = new int[12] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
       int i = 0;
       foreach ( var dev in DeviceInst.JoystickListRef ) {
         if ( !dev.Hidden ) {
-          m_tabMap[i++] = dev.DevInstance;
           tc1.TabPages.Add( dev.TabPage );
+          m_tabMap[i++] = dev.DevInstance;
         }
       }
       if ( DeviceInst.GamepadRef != null ) {
         tc1.TabPages.Add( DeviceInst.GamepadRef.TabPage );
+        m_tabMap[i++] = DeviceInst.GamepadRef.MyTabPageIndex;
       }
       // select the first tab if one is available
       if ( tc1.TabPages.Count > 0 )
@@ -202,7 +207,7 @@ namespace SCJMapper_V2
     /// <returns>An Argb Color</returns>
     private Color JsColorSetting( int jsIndex )
     {
-      // JS Tab Colors
+      // read JS Tab Colors
       string[] e = AppSettings.Instance.JSnColor.Split( new char[] { ',' } );
       if ( jsIndex < e.Length ) {
         if ( int.TryParse( e[jsIndex], out int colInt ) ) {
@@ -220,14 +225,11 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
-    /// Update the TabPage Colors from Setting
+    /// Update the TabPage Colors from Settings (only Joystick colors)
     /// </summary>
     private void UpdateTabPageColors()
     {
-      // load TabPage colors 
-      for ( int i = 0; i < MyColors.TabColor.Length; i++ ) {
-      }
-
+      // re-load TabPage colors for each JS device
       foreach ( var dev in DeviceInst.JoystickListRef ) {
         MyColors.TabColor[dev.DevInstance] = JsColorSetting( dev.DevInstance );
         dev.TabPage.BackColor = MyColors.TabColor[dev.DevInstance];
@@ -479,12 +481,20 @@ namespace SCJMapper_V2
     private void tc1_DrawItem( object sender, DrawItemEventArgs e )
     {
       try {
+        // get the BG color from the current TabColor Map.
+        // as some devices can be hidden, use m_tabMap to find the 'real' index rather than using the tab index (this tabMap is updated on changes in Settings)
+        // GP should be always the last JS +1 
+        // -1 indicates - not used
+
+        if ( m_tabMap[e.Index] < 0 )
+          return; // not used tab - should not happen..
+
         Font f;
         Brush backBrush = new SolidBrush( MyColors.TabColor[m_tabMap[e.Index]] );
-        Brush foreBrush = new SolidBrush( Color.Black );
+        Brush foreBrush = new SolidBrush( Color.Black ); 
 
 
-        //This construct will tell you which tab page has focus to change the style.
+        //The draw call sends all tabs to draw, the selected one needs to be with Bold font
         if ( e.Index == this.tc1.SelectedIndex ) {
           f = new Font( e.Font, FontStyle.Bold );
           /*
@@ -500,7 +510,6 @@ namespace SCJMapper_V2
         }
         else {
           f = e.Font;
-          foreBrush = new SolidBrush( e.ForeColor );
         }
 
         //To set the alignment of the caption.
@@ -515,14 +524,10 @@ namespace SCJMapper_V2
 
         sf.Dispose( );
         if ( e.Index == this.tc1.SelectedIndex ) {
-          f.Dispose( );
-          backBrush.Dispose( );
-          foreBrush.Dispose( );
+          f.Dispose( ); // we created this one
         }
-        else {
-          backBrush.Dispose( );
-          foreBrush.Dispose( );
-        }
+        backBrush.Dispose( );
+        foreBrush.Dispose( );
       }
       catch ( Exception Ex ) {
         log.Error( "Ex DrawItem", Ex );
@@ -664,7 +669,8 @@ namespace SCJMapper_V2
       int nJs = 0; // number the Joystick Tabs
       foreach ( myDxJoystick myJs in dxJoysticks ) {
         // we have the first tab made as reference so TabPage[0] already exists
-        JoystickCls js = null; UC_JoyPanel uUC_JoyPanelNew = null;
+        JoystickCls js = null;
+        UC_JoyPanel uUC_JoyPanelNew = null;
         if ( tabs == 0 ) {
           // first panel - The Tab content exists already 
           log.Debug( "  - Add first Joystick panel" );
@@ -673,7 +679,7 @@ namespace SCJMapper_V2
         else {
           log.Debug( "  - Add next Joystick panel" );
           // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
-          tc1.TabPages.Add( "" );  // numbering is 1 based for the user
+          tc1.TabPages.Add( "" ); 
           uUC_JoyPanelNew = new UC_JoyPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
           Tx.LocalizeControlTree( uUC_JoyPanelNew );
           uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
@@ -702,13 +708,18 @@ namespace SCJMapper_V2
       // make the GP the LAST device if there is one.
       if ( ( tabs < JoystickCls.JSnum_MAX ) && ( dxGamepad != null ) ) {
         log.Debug( "  - Add Gamepad panel" );
+        if ( tabs > 0 ) {
+          tc1.TabPages.Add( "" );
+          log.Debug( "  - Add Gamepad as next panel" );
+        }
         tc1.TabPages[tabs].Text = Tx.Translate( "xGamepad" ) + " ";
-        UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( );
-        tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
+        UC_GpadPanel uUC_GpadPanelNew = new UC_GpadPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_GpadPanelNew );
         Tx.LocalizeControlTree( uUC_GpadPanelNew );
 
         uUC_GpadPanelNew.Size = UC_JoyPanel.Size; uUC_GpadPanelNew.Location = UC_JoyPanel.Location;
-        UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
+        if ( tabs == 0 ) {
+          UC_JoyPanel.Enabled = false; UC_JoyPanel.Visible = false; // don't use this one 
+        }
         log.Debug( "  - Create Gamepad instance" );
         DeviceInst.GamepadInst = new GamepadCls( dxGamepad, uUC_GpadPanelNew, tabs ); // does all device related activities for that particular item
         DeviceInst.GamepadRef.SetDeviceName( GamepadCls.DevNameCIG ); // this is fixed ...
