@@ -133,6 +133,16 @@ namespace SCJMapper_V2.p4kFile
     }
 
     /// <summary>
+    /// As the file is 4k page oriented - this backups to the previous page
+    /// </summary>
+    public void BackwardPage()
+    {
+      long current = TheReader.BaseStream.Position;
+        long seek = -PageSize;
+        TheReader.BaseStream.Seek( seek, SeekOrigin.Current );
+    }
+
+    /// <summary>
     /// Places the stream at the last Page of the file
     /// </summary>
     /// <returns>Position of the stream</returns>

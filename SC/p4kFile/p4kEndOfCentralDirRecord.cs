@@ -26,12 +26,25 @@ namespace SCJMapper_V2.p4kFile
 
       if ( reader.IsOpen( ) ) {
         try {
-          long cPos = p4kSignatures.FindSignatureInPage( reader, p4kSignatures.EndOfCentralDirRecord );
-          if ( cPos >= 0 ) {
-            m_recordOffset = cPos;
-            reader.Seek( cPos );
-            m_item = p4kRecReader.ByteToType<MyRecord>( reader.TheReader );
-            m_itemValid = true;
+          long thisPos = 0;
+          // 20180804BM- fix when the last page is barely used and the sig is one or more pages before 
+          //  - backup one or more pages to find end of dir (max 10 times)
+          int tries = 10;
+          while ( !m_itemValid && ( tries > 0 ) ) {
+            thisPos = reader.Position;
+            long cPos = p4kSignatures.FindSignatureInPage( reader, p4kSignatures.EndOfCentralDirRecord );
+            if ( cPos >= 0 ) {
+              m_recordOffset = cPos;
+              reader.Seek( cPos );
+              m_item = p4kRecReader.ByteToType<MyRecord>( reader.TheReader );
+              m_itemValid = true;
+            }
+            else {
+              // backup one page again
+              reader.Seek( thisPos );
+              reader.BackwardPage( );
+              tries--;
+            }
           }
         }
         catch {

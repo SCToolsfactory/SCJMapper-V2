@@ -1,5 +1,5 @@
-SC Joystick Mapper V 2.38 - Build 73 BETA
-(c) Cassini, StandardToaster - 19-Jul-2018
+SC Joystick Mapper V 2.39 - Build 74 BETA
+(c) Cassini, StandardToaster - 04-Aug-2018
 
 Contains 14 files + graphics:
 
@@ -44,6 +44,9 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.39 - BETA Build 74
+- fix - processing gamefile (PTU 3.2.1i) causes exception
+- NOTE: other new stuff is not complete so you're on your own here
 V 2.38 - BETA Build 73
 - add - ability to hide joystick device tabs in Settings
 - add - ability to color joystick device tabs in Settings
