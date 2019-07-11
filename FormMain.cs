@@ -317,6 +317,12 @@ namespace SCJMapper_V2
     {
       log.Debug( "MainForm_Load - Entry" );
 
+      // 20190711 - this needs to be done before updating the Pack...
+      // init PTU folder usage at the very start
+      if ( AppSettings.Instance.UsePTU ) log.Debug( "Using PTU Folders" );
+      lblPTU.Visible = AppSettings.Instance.UsePTU;
+      TheUser.UsesPTU = AppSettings.Instance.UsePTU;
+
       SCFiles.Instance.UpdatePack( ); // update game files
 
       Tx.LocalizeControlTree( this );
@@ -341,11 +347,6 @@ namespace SCJMapper_V2
       lblTitle.Text += " - V " + version + " beta"; // BETA
 
       log.InfoFormat( "Application Version: {0}", version.ToString( ) );
-
-      // init PTU folder usage at the very start
-      if ( AppSettings.Instance.UsePTU ) log.Debug( "Using PTU Folders" );
-      lblPTU.Visible = AppSettings.Instance.UsePTU;
-      TheUser.UsesPTU = AppSettings.Instance.UsePTU;
 
       // tooltips where needed
       toolTip1.SetToolTip( this.linkLblReleases, c_GithubLink ); // allow to see where the link may head

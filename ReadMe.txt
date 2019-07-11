@@ -1,12 +1,12 @@
-SC Joystick Mapper V 2.41 - Build 76 BETA
+SC Joystick Mapper V 2.42 - Build 77 BETA
 (c) Cassini, StandardToaster - 11-Jul-2019
 
 Contains 14 files + graphics:
 
-SCJMapper.exe                The program (V2.41)
-SCJMapper.exe.config         Program config (V2.41)              - MUST be in the same folder as the Exe file
-de\SCJMapper.resources.dll   German language (V2.41)             - MUST be in the same folder as the Exe file
-fr\SCJMapper.resources.dll   French language (V2.41)             - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.42)
+SCJMapper.exe.config         Program config (V2.42)              - MUST be in the same folder as the Exe file
+de\SCJMapper.resources.dll   German language (V2.42)             - MUST be in the same folder as the Exe file
+fr\SCJMapper.resources.dll   French language (V2.42)             - MUST be in the same folder as the Exe file
 Storage\*.scj                Folder for collected assets (V2.35) - MUST be in the same folder as the Exe file
 PTU_Storage\*.scj            Folder for collected PTU    (V2.37) - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
@@ -46,6 +46,9 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.42 - BETA Build 77
+- fix for not using the proper PTU cache when pulling data from gamepack (#87)
+  NOTE: please delete .scj files in <installDir>\Storage\*.scj    (as they have been overwritten with PTU content)
 V 2.41 - BETA Build 76
 - update for SC Alpha PTU 3.6.0 and launcher 1.2.0 - new PTU path (#86)
 - update Log File from game includes also used Pathes - revisit those if the progam does not find them
