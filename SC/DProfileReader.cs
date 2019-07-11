@@ -232,6 +232,7 @@ namespace SCJMapper_V2.SC
       KInput( ref kAC, action, (string)action.Attribute( KeyboardCls.DeviceClass ) );
       MInput( ref mAC, action, (string)action.Attribute( MouseCls.DeviceClass ) );
       XInput( ref xAC, action, (string)action.Attribute( GamepadCls.DeviceClass ) );
+      XInput( ref xAC, action, (string)action.Attribute( GamepadCls.DeviceClass_3_5 ) );// Handle either or Alpha 3.5+
 
       // then nested ones - they may or may not exist from the initial scan
       foreach ( XElement l1action in action.Elements( ) ) {

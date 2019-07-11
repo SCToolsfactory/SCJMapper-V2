@@ -1,12 +1,12 @@
-SC Joystick Mapper V 2.39 - Build 74 BETA
-(c) Cassini, StandardToaster - 04-Aug-2018
+SC Joystick Mapper V 2.41 - Build 76 BETA
+(c) Cassini, StandardToaster - 11-Jul-2019
 
 Contains 14 files + graphics:
 
-SCJMapper.exe                The program (V2.38)
-SCJMapper.exe.config         Program config (V2.38)              - MUST be in the same folder as the Exe file
-de\SCJMapper.resources.dll   German language (V2.38)             - MUST be in the same folder as the Exe file
-fr\SCJMapper.resources.dll   French language (V2.38)             - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.41)
+SCJMapper.exe.config         Program config (V2.41)              - MUST be in the same folder as the Exe file
+de\SCJMapper.resources.dll   German language (V2.41)             - MUST be in the same folder as the Exe file
+fr\SCJMapper.resources.dll   French language (V2.41)             - MUST be in the same folder as the Exe file
 Storage\*.scj                Folder for collected assets (V2.35) - MUST be in the same folder as the Exe file
 PTU_Storage\*.scj            Folder for collected PTU    (V2.37) - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
@@ -24,11 +24,11 @@ ReadMe.txt                   This file
 
 graphics folder              Skybox Images (V2.32)               - graphics folder MUST be in the same folder as the Exe file
 
-NOTE V 2.35+:
+NOTE V 2.41+:
   search order for defaultProfile.xml to build the action tree is:
    1. directory where SCJMapper Exe is located
-   2. directory of <SC>\LIVE\USER
-   3. extract from <SC>\LIVE\Data.p4k (using stored asset)
+   2. directory of <SC>\LIVE\USER  or <SC>\PTU\USER
+   3. extract from <SC>\LIVE\Data.p4k <SC>\PTU\Data.p4k (preferred - using stored asset)
    4. extract from SCJMapper exe file (derived from 3.2i build 790942)
 
    --> in order to get always the most current one use 3. (and therefore remove the ones in 1. and 2.)
@@ -40,10 +40,19 @@ Put all files into one folder and hit SCJMapper.exe to run it
 For Updates and information visit:
 https://github.com/SCToolsfactory/SCJMapper-V2
 
+Or CIG Spectrum https://robertsspaceindustries.com/spectrum/community/SC/forum/51473/thread/scjmapper-news-and-updates
+
 Scanned for viruses before packing... 
 cassini@burri-web.org
 
 Changelog:
+V 2.41 - BETA Build 76
+- update for SC Alpha PTU 3.6.0 and launcher 1.2.0 - new PTU path (#86)
+- update Log File from game includes also used Pathes - revisit those if the progam does not find them
+- NOTE: Gampad may not yet work and other new stuff is not complete so you're on your own here
+V 2.40 - BETA Build 75
+- update for SC Alpha PTU 3.5.0 defaultProfile now using gamepad instead of xboxpad (#83)
+- NOTE: other new stuff is not complete so you're on your own here
 V 2.39 - BETA Build 74
 - fix - processing gamefile (PTU 3.2.1i) causes exception
 - NOTE: other new stuff is not complete so you're on your own here

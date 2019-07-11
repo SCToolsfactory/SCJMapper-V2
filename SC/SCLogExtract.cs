@@ -22,19 +22,30 @@ namespace SCJMapper_V2.SC
       if ( l.StartsWith( "host cpu" ) ) return string.Format( "\t{0}\n", inLine );
 
 
-      if ( l.StartsWith( "windows:" ) ) return string.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "current display mode" ) ) return string.Format( "\t{0}\n", inLine );
-
+      if ( l.Contains( "gamename" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "buildtime" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "windows:" ) ) return string.Format( "\t{0}\n", inLine );
       if ( l.Contains( "physical memory" ) ) return string.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "--- dedicated video memory" ) ) return string.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "- final rating" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "vendor " ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "dedicated video memory" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "feature level" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "final rating" ) ) return string.Format( "\t{0}\n", inLine );
+
+      if ( l.Contains( "benchmark" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "performance" ) ) return string.Format( "\t{0}\n", inLine );
+
 
       if ( l.Contains( "64 bit" ) ) return string.Format( "\t{0}\n", inLine );
       if ( l.Contains( "keyboard" ) ) return string.Format( "\t{0}\n", inLine );
       if ( l.Contains( "display mode" ) ) return string.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "- connected" ) ) return string.Format( "\t{0}\n", inLine );
-      if ( l.StartsWith( "reset controls" ) ) return string.Format( "\t{0}\n", inLine );
+      if ( l.Contains( "- connected" ) ) return string.Format( "\t{0}\n", inLine );
+
+      if ( l.Contains( "faceware" ) ) return string.Format( "\t{0}\n", inLine );
+
+      if ( l.Contains( "reset controls" ) ) return string.Format( "\t{0}\n", inLine );
       if ( l.Contains( "enjoy" ) ) return string.Format( "\t{0}\n", inLine );
+
+
 
       return retVal;
     }

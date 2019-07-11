@@ -42,6 +42,10 @@ namespace SCJMapper_V2.Devices
     /// The DX ProductName property
     /// </summary>
     public abstract string DevName { get; }
+    /// <summary>
+    /// The DX ProductGUID property
+    /// </summary>
+    public abstract string DevGUID { get; }
 
     /// <summary>
     /// The DX instance number of the object (from enum) - 0 based 

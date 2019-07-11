@@ -308,7 +308,7 @@ namespace SCJMapper_V2.Devices.Options
       string type = m_devClass;
       if ( MouseCls.IsDeviceClass( type ) ) type = KeyboardCls.DeviceClass;
 
-      tmp += string.Format( "\t<options type=\"{0}\" instance=\"{1}\">\n", type, m_devInstanceNo.ToString( ) );
+      tmp += $"\t<options type=\"{type}\" instance=\"{m_devInstanceNo.ToString( )}\" Product=\"{m_deviceRef.DevName + " " + m_deviceRef.DevGUID}\">\n";// 3.5 do we need Product here ??
       tmp += string.Format( "\t\t<{0} ", m_option );
 
       if ( InvertUsed ) {

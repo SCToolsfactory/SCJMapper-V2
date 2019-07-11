@@ -294,6 +294,11 @@ namespace SCJMapper_V2.Devices.Keyboard
     /// </summary>
     public override string DevName { get { return m_device.Properties.ProductName; } }
     /// <summary>
+    /// The ProductGUID property
+    /// </summary>
+    public override string DevGUID { get { return "{" + m_device.Information.ProductGuid.ToString( ).ToUpperInvariant( ) + "}"; } }
+
+    /// <summary>
     /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
     /// </summary>
     public override string DevInstanceGUID { get { return m_device.Information.InstanceGuid.ToString( ); } }

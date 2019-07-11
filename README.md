@@ -4,6 +4,9 @@ SCJMapper-V2<br>
 SC Joystick Mapper  (.Net 4.5.2; using sharpDX/OpenTK wrapper)<br>
 this should work with Win7, Win8.x Win 10 out of the box<br>
 <br>
+On RSI Spectrum see https://robertsspaceindustries.com/spectrum/community/SC/forum/51473/thread/scjmapper-news-and-updates
+<br>
+<br>
 Built using Windows Forms - Issues with display scaling may be encountered - set display scaling to 100%.
 <br>
 using sharpDX 2.6.3 .net wrapper  (http://sharpdx.org/)<br>

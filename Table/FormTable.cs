@@ -190,7 +190,7 @@ namespace SCJMapper_V2.Table
       else {
         deviceFilter = "( Device='X'"
         + ( ( cbxShowJoystick.Checked ) ? string.Format( " OR Device = 'joystick'" ) : "" )
-        + ( ( cbxShowGamepad.Checked ) ? string.Format( " OR Device = 'xboxpad'" ) : "" )
+        + ( ( cbxShowGamepad.Checked ) ? string.Format( " OR Device = 'xboxpad' OR Device = 'gamepad'" ) : "" ) // Alpha 3.5+
         + ( ( cbxShowMouse.Checked ) ? string.Format( " OR Device = 'mouse'" ) : "" )
         + ( ( cbxShowKeyboard.Checked ) ? string.Format( " OR Device = 'keyboard'" ) : "" )
         + " )";

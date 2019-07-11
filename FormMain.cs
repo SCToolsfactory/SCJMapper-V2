@@ -1022,7 +1022,7 @@ namespace SCJMapper_V2
     private void meDumpLogfile_Click( object sender, EventArgs e )
     {
       AutoTabXML_Assignment( EATabXML.Tab_XML );
-      rtb.Text = string.Format( "-- {0} - SC Joystick AC Log Controller Detection --\n{1}", DateTime.Now, SCLogExtract.ExtractLog( ) );
+      rtb.Text = string.Format( "-- {0} - SC Joystick AC Path and Logfile --\n\n{1}\n{2}", DateTime.Now, SCPath.Summary(), SCLogExtract.ExtractLog( ) );
     }
 
     private void meDumpDefaultProfile_Click( object sender, EventArgs e )

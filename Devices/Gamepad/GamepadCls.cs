@@ -23,10 +23,12 @@ namespace SCJMapper_V2.Devices.Gamepad
 
     #region Static Items
 
-    public new const string DeviceClass = "xboxpad";  // the device name used throughout this app
+    public new const string DeviceClass = "xboxpad";  // the device name used throughout this app (3.5 still in user mapping ??)
+    public const string DeviceClass_3_5 = "gamepad";  // defaultProfile from Alpha 3.5 onwards
     public new const string DeviceID = "xi1_";
     static public int RegisteredDevices = 0;
     public const string DevNameCIG = "Controller (Gamepad)"; // seems CIG names the Gamepad always like this - and not as the device replies
+    public const string DevGUIDCIG = "{}"; // @@@ t.b.d.
 
     public const string JsUnknown = "xi_";
     public new const string DisabledInput = DeviceID + DeviceCls.DisabledInput;
@@ -53,7 +55,7 @@ namespace SCJMapper_V2.Devices.Gamepad
     /// <returns></returns>
     static public new bool IsDeviceClass( string deviceClass )
     {
-      return ( deviceClass == DeviceClass );
+      return ( deviceClass == DeviceClass ) || ( deviceClass == DeviceClass_3_5 ); // handle Alpha 3.5+
     }
 
     /// <summary>
@@ -146,6 +148,7 @@ namespace SCJMapper_V2.Devices.Gamepad
 
     private Controller m_device;
     private string m_devName = DevNameCIG;
+    private string m_devGUID = DevGUIDCIG;
     private Capabilities m_gpCaps = new Capabilities( );
 
     private State m_state = new State( );
@@ -181,6 +184,9 @@ namespace SCJMapper_V2.Devices.Gamepad
     /// </summary>
     public override string DevName { get { return m_devName; } }
     /// <summary>
+    /// The ProductGUID property
+    /// </summary>
+    public override string DevGUID { get { return m_devGUID; } }
 
     public void SetDeviceName( string devName )
     {

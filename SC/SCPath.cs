@@ -19,6 +19,7 @@ namespace SCJMapper_V2.SC
 
     /// <summary>
     /// Try to locate the launcher from Alpha 3.0.0 public - e.g. E:\G\StarCitizen\RSI Launcher
+    /// Alpha 3.6.0 PTU launcher 1.2.0 has the same entry (but PTU location changed)
     /// </summary>
     static private string SCLauncherDir6
     {
@@ -67,15 +68,16 @@ namespace SCJMapper_V2.SC
 
     /// <summary>
     /// Checks if the base path is correct - i.e. the subfolders can be found
+    /// Changed for Patcher 1.2.0 again
     /// </summary>
     /// <param name="basePath"></param>
-    /// <returns></returns>
+    /// <returns>An empty string if OK - else the issue found</returns>
     static public string CheckSCBasePath( string basePath )
     {
       string issue = "";
 
       if ( string.IsNullOrEmpty( basePath ) ) {
-        issue = Tx.Translate("scpEmptyString" );  // string.Format( "There is no vaild path given (empty string)" );
+        issue = Tx.Translate( "scpEmptyString" );  // string.Format( "There is no vaild path given (empty string)" );
         return issue; // no valid one can be found
       }
 
@@ -84,25 +86,33 @@ namespace SCJMapper_V2.SC
         return issue; // no valid one can be found
       }
       // 20180321 New PTU 3.1 another change in setup path - Testing for PTU first 
-      if ( Directory.Exists( Path.Combine( basePath, "StarCitizenPTU" ) ) ) {
-        basePath = Path.Combine( basePath, "StarCitizenPTU" );
-      }
-      else {
-        // then try the retail path (was valid so far..)
-        basePath = Path.Combine( basePath, "StarCitizen" );
-      }
+      // 20190711 Lanuncher 1.2 - PTU has moved - change detection to find this one first.
+      basePath = Path.Combine( basePath, "StarCitizen" );
 
       string scpX = "";
-      // SC 3.0 try LIVE 
-      scpX = Path.Combine( basePath, "LIVE" );
-
-      if ( !Directory.Exists( scpX ) ) {
-        issue = string.Format( Tx.Translate( "scpClientDirNotFound" ).Replace("\\n","\n") , scpX );
+      scpX = Path.Combine( basePath, "PTU" );
+      if ( Directory.Exists( scpX ) ) {
+        return ""; // OK at least PTU folder exists - seems legit
+      }
+      else {
+        // may be there is only LIVE ?
+        scpX = Path.Combine( basePath, "LIVE" );
+        if ( Directory.Exists( scpX ) ) {
+          return ""; // OK LIVE folder exists - seems legit
+        }
+        // for now it failed
+        issue = string.Format( Tx.Translate( "scpClientDirNotFound" ).Replace( "\\n", "\n" ), scpX );
         //"Cannot find the SC Client Directory !!\n\nTried to look for:\n{0} \n\nPlease adjust the path in Settings\n"
-        return issue;
       }
 
-      return issue;
+      // last resort is old style PTU only
+      // This would be pre 1.2 laucher and PTU only
+      basePath += "PTU";  // makes it "StarCitizenPTU"
+      if ( Directory.Exists( basePath ) ) {
+        return ""; // OK at least old PTU folder exists - seems legit
+      }
+
+      return issue; // OK exit 
     }
 
     /// <summary>
@@ -167,11 +177,11 @@ namespace SCJMapper_V2.SC
           // nothing found
           log.Warn( "SCBasePath - cannot find any valid SC path" );
           // Issue a warning here to let the user know
-          string issue = Tx.Translate( "scpAutoPathFailed" ).Replace( "\\n", "\n" ); 
+          string issue = Tx.Translate( "scpAutoPathFailed" ).Replace( "\\n", "\n" );
           //string.Format( "Cannot find the SC Installation Path !!\nUse Settings to provide the path manually" );
 
           if ( !m_hasInformed )
-            System.Windows.Forms.MessageBox.Show( issue, Tx.Translate( "setMsgBox"),
+            System.Windows.Forms.MessageBox.Show( issue, Tx.Translate( "setMsgBox" ),
                      System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
           m_hasInformed = true;
         }
@@ -212,28 +222,29 @@ namespace SCJMapper_V2.SC
         string issue = "";
 
         if ( string.IsNullOrEmpty( scp ) ) return ""; // no valid one can be found
-        
+
 
         // 20180321 New PTU 3.1 another change in setup path - Testing for PTU first 
-        if (AppSettings.Instance.UsePTU && Directory.Exists( Path.Combine( scp, "StarCitizenPTU" ) ) ) {
-          scp = Path.Combine( scp, "StarCitizenPTU" );
+        // 20190711 Lanuncher 1.2 - PTU has moved - change detection to find this one first.
+        if ( AppSettings.Instance.UsePTU ) {
+          if ( Directory.Exists( Path.Combine( scp, @"StarCitizen\PTU" )) ) {
+            scp = Path.Combine( scp, @"StarCitizen\PTU" );
+          }
+          else if ( Directory.Exists( Path.Combine( scp, @"StarCitizenPTU\LIVE" ) ) ) {
+            // this would be old style
+            scp = Path.Combine( scp, @"StarCitizenPTU\LIVE" );
+          }
         }
         else {
-          // then try the retail path (was valid so far..)
-          scp = Path.Combine( scp, "StarCitizen" );
+          // no PTU ..
+          scp = Path.Combine( scp, @"StarCitizen\LIVE" );
         }
+        if ( Directory.Exists( scp ) ) return scp; // EXIT Success
 
-        string scpX = "";
-        // SC 3.0 try LIVE 
-        scpX = Path.Combine( scp, "LIVE" );
-        if ( Directory.Exists( scpX ) ) return scpX;
-
+        log.WarnFormat( "SCClientPath - StarCitizen\\LIVE or PTU subfolder does not exist: {0}", scp );
         // Issue a warning here to let the user know
-        issue = string.Format( Tx.Translate( "scpClientDirNotFound" ).Replace( "\\n", "\n" ), scpX );
+        issue = string.Format( Tx.Translate( "scpClientDirNotFound" ).Replace( "\\n", "\n" ), scp );
         //"Cannot find the SC Client Directory !!\n\nTried to look for:\n{0} \n\nPlease adjust the path in Settings\n"
-
-        log.WarnFormat( "SCClientPath - StarCitizen\\Live subfolder does not exist: {0}", scp );
-
         // Issue a warning here to let the user know
         if ( !m_hasInformed ) System.Windows.Forms.MessageBox.Show( issue, Tx.Translate( "setMsgBox" ), System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation );
         m_hasInformed = true;
@@ -424,6 +435,25 @@ namespace SCJMapper_V2.SC
         return @"defaultProfile";
       }
     }
+
+    /// <summary>
+    /// Returns a summary of the detected pathes
+    /// </summary>
+    /// <returns>A formatted string</returns>
+    static public string Summary()
+    {
+      string ret = $"SC Path:\n";
+
+      ret += $"  InstallPath:\t{SCInstallPath}\n";
+      ret += $"  BasePath:\t\t{SCBasePath}\n";
+      ret += $"  Client:\t\t{SCClientPath}\n";
+      ret += $"  ClientData:\t\t{SCClientDataPath}\n";
+      ret += $"  ClientUSER:\t\t{SCClientUSERPath}\n";
+      ret += $"  ClientMapping:\t{SCClientMappingPath}\n";
+
+      return ret;
+    }
+
 
 
   }

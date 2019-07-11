@@ -139,7 +139,7 @@ namespace SCJMapper_V2.Devices.Options
     private string[] FormatXml( string xml )
     {
       try {
-        XDocument doc = XDocument.Parse( xml );
+        var doc = XDocument.Parse( xml );
         return doc.ToString( ).Split( new string[] { string.Format( "\n" ) }, StringSplitOptions.RemoveEmptyEntries );
       }
       catch ( Exception ) {
@@ -193,7 +193,7 @@ namespace SCJMapper_V2.Devices.Options
           </options>  
 
        * 
-           <options type="joystick" instance="1">
+           <options type="joystick" instance="2" Product="Saitek Pro Flight X-55 Rhino Stick {22150738-0000-0000-0000-504944564944}">
               <flight>
                 <nonlinearity_curve>
                   <point in="0.1"  out="0.001"/>
@@ -213,6 +213,7 @@ namespace SCJMapper_V2.Devices.Options
       string instance = (string)options.Attribute( "instance" ); // mandadory
       string type = (string)options.Attribute( "type" ); // mandadory
       if ( !int.TryParse( instance, out int nInstance ) ) nInstance = 0; // get the one from the map if given (else it's a map error...)
+      string productS = (string)options.Attribute( "Product" ); // optional 3.5 ??
 
       string devClass = DeviceCls.DeviceClass; // the generic one
       if ( !string.IsNullOrEmpty(type)) devClass = type; // get the one from the map if given (else it's a map error...)

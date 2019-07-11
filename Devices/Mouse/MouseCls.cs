@@ -158,6 +158,10 @@ namespace SCJMapper_V2.Devices.Mouse
     /// </summary>
     public override string DevName { get { return "Mouse"; } } // no props in directX
     /// <summary>
+    /// The ProductGUID property
+    /// </summary>
+    public override string DevGUID { get { return "{}"; } } // @@@ tbd
+    /// <summary>
     /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
     /// </summary>
     public override string DevInstanceGUID { get { return m_device.Information.InstanceGuid.ToString( ); } }
