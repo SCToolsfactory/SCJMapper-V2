@@ -36,6 +36,7 @@ namespace SCJMapper_V2.Devices.Options
     private List<string> m_PtsIn = new List<string>( );
     private List<string> m_PtsOut = new List<string>( );
 
+    private bool m_invertForced = false; // default (forced writing)
     private bool m_invertEnabled = false; // default
 
     private DeviceCls m_deviceRef = null; // Ref
@@ -80,6 +81,7 @@ namespace SCJMapper_V2.Devices.Options
       ret &= ( this.m_PtsIn == clone.m_PtsIn );
       ret &= ( this.m_PtsOut == clone.m_PtsOut );
       ret &= ( this.m_invertEnabled == clone.m_invertEnabled );
+      ret &= ( this.m_invertForced == clone.m_invertForced );
       ret &= ( this.m_deviceRef == clone.m_deviceRef );
 
       // check m_deviceoptionRef
@@ -172,6 +174,15 @@ namespace SCJMapper_V2.Devices.Options
     {
       get { return m_invertEnabled; }
       set { m_invertEnabled = value; }
+    }
+
+    /// <summary>
+    /// Force writing of Inverted
+    /// </summary>
+    public bool InvertForced
+    {
+      get { return m_invertForced; }
+      set { m_invertForced = value;}
     }
 
     public bool ExponentUsed
@@ -299,7 +310,7 @@ namespace SCJMapper_V2.Devices.Options
     /// <returns>The XML string or an empty string</returns>
     public string Options_toXML()
     {
-      if ( ( /*SensitivityUsed ||*/ ExponentUsed || InvertUsed || NonLinCurveUsed ) == false ) return ""; // not used
+      if ( ( /*SensitivityUsed ||*/ ExponentUsed || InvertForced || NonLinCurveUsed ) == false ) return ""; // not used
       if ( DevInstanceNo < 1 ) return ""; // no device to assign it to..
 
       string tmp = "";
@@ -312,7 +323,9 @@ namespace SCJMapper_V2.Devices.Options
       tmp += string.Format( "\t\t<{0} ", m_option );
 
       if ( InvertUsed ) {
-        tmp += string.Format( "invert=\"1\" " );
+        tmp += string.Format( "invert=\"1\" " ); // if used write it in all the times
+      } else if ( InvertForced ) {
+        tmp += string.Format( "invert=\"0\" " ); // disable only if requested
       }
       /*
       if ( SensitivityUsed ) {
@@ -374,6 +387,10 @@ namespace SCJMapper_V2.Devices.Options
       if ( !string.IsNullOrEmpty(invert) ) {
         InvertUsed = false;
         if ( invert == "1" ) InvertUsed = true;
+        if ( invert == "0" ) {
+          InvertUsed = false;
+          InvertForced = true;
+        }
       }
 
       string exponent = (string)option.Attribute( "exponent" );

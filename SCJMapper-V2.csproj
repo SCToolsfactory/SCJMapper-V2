@@ -27,8 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>77</ApplicationRevision>
-    <ApplicationVersion>2.42.0.%2a</ApplicationVersion>
+    <ApplicationRevision>78</ApplicationRevision>
+    <ApplicationVersion>2.43.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -124,6 +124,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\ActionCommandCls.cs" />
     <Compile Include="Actions\Act.cs" />
     <Compile Include="Actions\ActionTreeEventArgs.cs" />
@@ -298,6 +304,9 @@
       <DependentUpon>Strings.fr.resx</DependentUpon>
     </Compile>
     <Compile Include="Translation\Tx.cs" />
+    <EmbeddedResource Include="AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Devices\Monitor\FormDeviceMonitor.resx">
       <DependentUpon>FormDeviceMonitor.cs</DependentUpon>
     </EmbeddedResource>

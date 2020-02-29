@@ -766,4 +766,12 @@ Cancel now if you want to save your work first.</value>
     <value>Hide</value>
     <comment>2-Settings</comment>
   </data>
+  <data name="xForced" xml:space="preserve">
+    <value>Forced write</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xYes" xml:space="preserve">
+    <value>Yes</value>
+    <comment>0-General</comment>
+  </data>
 </root>

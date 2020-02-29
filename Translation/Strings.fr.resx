@@ -766,4 +766,12 @@ Annulez maintenant si vous voulez d'abord enregistrer votre travail.</value>
     <value>Chacher</value>
     <comment>2-Settings</comment>
   </data>
+  <data name="xForced" xml:space="preserve">
+    <value>Écriture forcée</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xYes" xml:space="preserve">
+    <value>Oui</value>
+    <comment>0-General</comment>
+  </data>
 </root>

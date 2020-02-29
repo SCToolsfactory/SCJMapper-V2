@@ -22,6 +22,7 @@ using SCJMapper_V2.Devices.Joystick;
 using SCJMapper_V2.Devices.Options;
 using SCJMapper_V2.Devices.Monitor;
 using SCJMapper_V2.Translation;
+using System.Threading;
 
 namespace SCJMapper_V2
 {
@@ -239,18 +240,28 @@ namespace SCJMapper_V2
     #endregion
 
     #region Main Form Handling
+    public void splash()
+    {
+      Application.Run(  new AboutBox( ) );
+    }
+
+    private Thread SplashT = null;
 
     public MainForm()
     {
 
       try {
         // Load the icon from our resources
-        System.Resources.ResourceManager resources = new System.Resources.ResourceManager( this.GetType( ) );
+        var resources = new System.Resources.ResourceManager( this.GetType( ) );
         this.Icon = ( (Icon)( resources.GetObject( "$this.Icon" ) ) );
       }
       catch {
         ; // well...
       }
+
+      // Splash screen
+      SplashT = new Thread( new ThreadStart( splash ) );
+      SplashT.Start( );
 
       InitializeComponent( );
 
@@ -414,7 +425,7 @@ namespace SCJMapper_V2
       // load Mouse menu strip
       if ( DeviceInst.MouseRef != null ) {
         for ( int i = 0; i < DeviceInst.MouseRef.NumberOfButtons; i++ ) {
-          ToolStripMenuItem ts = new ToolStripMenuItem( "Button " + ( i + 1 ).ToString( ), null, new EventHandler( tmeItem_Click ) );
+          var ts = new ToolStripMenuItem( "Button " + ( i + 1 ).ToString( ), null, new EventHandler( tmeItem_Click ) );
           ts.Tag = ( i + 1 ).ToString( );
           cmMouseEntry.Items.Add( ts );
         }
@@ -446,6 +457,8 @@ namespace SCJMapper_V2
       AutoTabXML_Assignment( EATabXML.Tab_XML );
 
       m_appLoading = false; // no longer
+
+      SplashT.Abort( );
     }
 
 

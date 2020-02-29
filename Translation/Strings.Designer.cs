@@ -1412,6 +1412,15 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forced write.
+        /// </summary>
+        public static string xForced {
+            get {
+                return ResourceManager.GetString("xForced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gamepad.
         /// </summary>
         public static string xGamepad {
@@ -1516,6 +1525,15 @@ namespace SCJMapper_V2.Translation {
         public static string xSaturation {
             get {
                 return ResourceManager.GetString("xSaturation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string xYes {
+            get {
+                return ResourceManager.GetString("xYes", resourceCulture);
             }
         }
     }

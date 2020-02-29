@@ -225,6 +225,7 @@ namespace SCJMapper_V2.OGL
             saturationUsed = dp.DeviceoptionRef.SaturationUsed;
             saturationS = dp.DeviceoptionRef.Saturation;
           }
+          invertForced = dp.InvertForced;
           invertUsed = dp.InvertUsed;
           exponentUsed = dp.ExponentUsed;
           exponentS = dp.Exponent;
@@ -255,6 +256,7 @@ namespace SCJMapper_V2.OGL
           dp.DeviceoptionRef.SaturationUsed = saturationUsed;
           dp.DeviceoptionRef.Saturation = saturationS;
         }
+        dp.InvertForced = invertForced;
         dp.InvertUsed = invertUsed;
         dp.ExponentUsed = exponentUsed;
         dp.Exponent = exponentS;
@@ -316,6 +318,8 @@ namespace SCJMapper_V2.OGL
       }
 
       // set values
+      public bool m_invertForced = false;
+      public bool invertForced { get { return m_invertForced; } set { m_invertForced = value; } }
       public bool m_invertUsed = false;
       public bool invertUsed { get { return m_invertUsed; } set { m_invertUsed = value; m_sign = m_invertUsed ? -1.0 : 1.0; } }
 
@@ -448,6 +452,7 @@ namespace SCJMapper_V2.OGL
 
       lblYCmd.Text = lv.control;
       lblYnt.Text = lv.nodetext;
+      cbxYinvertForced.Checked = lv.invertForced;
       cbxYinvert.Checked = lv.invertUsed;
       lblYdeadzone.Text = lv.deadzoneS;
       cbxYdeadzone.Checked = lv.deadzoneUsed;
@@ -514,6 +519,7 @@ namespace SCJMapper_V2.OGL
 
       lblPCmd.Text = lv.control;
       lblPnt.Text = lv.nodetext;
+      cbxPinvertForced.Checked = lv.invertForced;
       cbxPinvert.Checked = lv.invertUsed;
       lblPdeadzone.Text = lv.deadzoneS;
       cbxPdeadzone.Checked = lv.deadzoneUsed;
@@ -580,6 +586,7 @@ namespace SCJMapper_V2.OGL
 
       lblRCmd.Text = lv.control;
       lblRnt.Text = lv.nodetext;
+      cbxRinvertForced.Checked = lv.invertForced;
       cbxRinvert.Checked = lv.invertUsed;
       lblRdeadzone.Text = lv.deadzoneS;
       cbxRdeadzone.Checked = lv.deadzoneUsed;
@@ -647,6 +654,7 @@ namespace SCJMapper_V2.OGL
 
       lblYCmd.Text = lv.control;
       lblYnt.Text = lv.nodetext;
+      cbxYinvertForced.Checked = lv.invertForced;
       cbxYinvert.Checked = lv.invertUsed;
       lblYdeadzone.Text = lv.deadzoneS;
       cbxYdeadzone.Checked = lv.deadzoneUsed;
@@ -711,6 +719,7 @@ namespace SCJMapper_V2.OGL
 
       lblPCmd.Text = lv.control;
       lblPnt.Text = lv.nodetext;
+      cbxPinvertForced.Checked = lv.invertForced;
       cbxPinvert.Checked = lv.invertUsed;
       lblPdeadzone.Text = lv.deadzoneS;
       cbxPdeadzone.Checked = lv.deadzoneUsed;
@@ -775,6 +784,7 @@ namespace SCJMapper_V2.OGL
 
       lblRCmd.Text = lv.control;
       lblRnt.Text = lv.nodetext;
+      cbxRinvertForced.Checked = lv.invertForced;
       cbxRinvert.Checked = lv.invertUsed;
       lblRdeadzone.Text = lv.deadzoneS;
       cbxRdeadzone.Checked = lv.deadzoneUsed;
@@ -1508,7 +1518,7 @@ namespace SCJMapper_V2.OGL
     int mX = 0; int mY = 0;
 
     /// <summary>
-    /// Update the graph from changes of acitve label values
+    /// Update the graph from changes of active label values
     /// </summary>
     private void UpdateChartItems()
     {

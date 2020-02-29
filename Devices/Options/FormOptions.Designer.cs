@@ -39,6 +39,8 @@
       this.rbUseExpo = new System.Windows.Forms.RadioButton();
       this.rbUseNone = new System.Windows.Forms.RadioButton();
       this.panel2 = new System.Windows.Forms.Panel();
+      this.lblInverted = new System.Windows.Forms.Label();
+      this.cbxLiveInvertForced = new System.Windows.Forms.CheckBox();
       this.rbLivePtExponent = new System.Windows.Forms.RadioButton();
       this.lblLiveOutExponent = new System.Windows.Forms.Label();
       this.lblLiveIn1 = new System.Windows.Forms.Label();
@@ -134,6 +136,7 @@
       // lvOptionTree
       // 
       this.lvOptionTree.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.lvOptionTree.HideSelection = false;
       this.lvOptionTree.Location = new System.Drawing.Point(3, 3);
       this.lvOptionTree.Name = "lvOptionTree";
       this.lvOptionTree.Size = new System.Drawing.Size(624, 638);
@@ -211,6 +214,8 @@
       // panel2
       // 
       this.panel2.BackColor = System.Drawing.Color.Gainsboro;
+      this.panel2.Controls.Add(this.lblInverted);
+      this.panel2.Controls.Add(this.cbxLiveInvertForced);
       this.panel2.Controls.Add(this.rbLivePtExponent);
       this.panel2.Controls.Add(this.lblLiveOutExponent);
       this.panel2.Controls.Add(this.lblLiveIn1);
@@ -227,8 +232,32 @@
       this.panel2.Controls.Add(this.label33);
       this.panel2.Location = new System.Drawing.Point(103, 345);
       this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(220, 144);
+      this.panel2.Size = new System.Drawing.Size(220, 162);
       this.panel2.TabIndex = 55;
+      // 
+      // lblInverted
+      // 
+      this.lblInverted.AutoSize = true;
+      this.lblInverted.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblInverted.Location = new System.Drawing.Point(6, 123);
+      this.lblInverted.Name = "lblInverted";
+      this.lblInverted.Size = new System.Drawing.Size(45, 15);
+      this.lblInverted.TabIndex = 56;
+      this.lblInverted.Tag = "§";
+      this.lblInverted.Text = "Invert:";
+      // 
+      // cbxLiveInvertForced
+      // 
+      this.cbxLiveInvertForced.AutoSize = true;
+      this.cbxLiveInvertForced.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.cbxLiveInvertForced.Location = new System.Drawing.Point(87, 141);
+      this.cbxLiveInvertForced.Name = "cbxLiveInvertForced";
+      this.cbxLiveInvertForced.Size = new System.Drawing.Size(65, 17);
+      this.cbxLiveInvertForced.TabIndex = 55;
+      this.cbxLiveInvertForced.Tag = "§";
+      this.cbxLiveInvertForced.Text = "Forced";
+      this.cbxLiveInvertForced.UseVisualStyleBackColor = true;
+      this.cbxLiveInvertForced.CheckedChanged += new System.EventHandler(this.cbxLiveInvertForced_CheckedChanged);
       // 
       // rbLivePtExponent
       // 
@@ -279,12 +308,12 @@
       // 
       this.cbxLiveInvert.AutoSize = true;
       this.cbxLiveInvert.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.cbxLiveInvert.Location = new System.Drawing.Point(9, 120);
+      this.cbxLiveInvert.Location = new System.Drawing.Point(9, 141);
       this.cbxLiveInvert.Name = "cbxLiveInvert";
-      this.cbxLiveInvert.Size = new System.Drawing.Size(59, 17);
+      this.cbxLiveInvert.Size = new System.Drawing.Size(50, 17);
       this.cbxLiveInvert.TabIndex = 54;
       this.cbxLiveInvert.Tag = "§";
-      this.cbxLiveInvert.Text = "Invert";
+      this.cbxLiveInvert.Text = "YES";
       this.cbxLiveInvert.UseVisualStyleBackColor = true;
       this.cbxLiveInvert.CheckedChanged += new System.EventHandler(this.cbxInvert_CheckedChanged);
       // 
@@ -682,5 +711,7 @@
     private System.Windows.Forms.Panel pnlPreview;
     private System.Windows.Forms.Panel panel4;
     private System.Windows.Forms.Button btDone;
+    private System.Windows.Forms.Label lblInverted;
+    private System.Windows.Forms.CheckBox cbxLiveInvertForced;
   }
 }

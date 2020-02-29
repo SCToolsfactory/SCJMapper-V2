@@ -766,4 +766,12 @@ benutzen sie Abbrechen um die Arbeit erst zu speichern.</value>
     <value>Ausblenden</value>
     <comment>2-Settings</comment>
   </data>
+  <data name="xForced" xml:space="preserve">
+    <value>Immer ausgeben</value>
+    <comment>0-General</comment>
+  </data>
+  <data name="xYes" xml:space="preserve">
+    <value>Ja</value>
+    <comment>0-General</comment>
+  </data>
 </root>

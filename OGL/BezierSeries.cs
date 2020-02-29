@@ -98,6 +98,9 @@ namespace SCJMapper_V2.OGL
 
     private void CalcCurve( float[] cout )
     {
+      // fix issue #26 don't calc if we have no _bezierPoints
+      if ( _bezierPoints.Count == 0 ) return; // the input as initialized
+
       Vector2[] ptList = new Vector2[_bezierPoints.Count];
       //convert bezier points to flat list
       int pIdx = 0;

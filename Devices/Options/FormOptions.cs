@@ -153,7 +153,9 @@ namespace SCJMapper_V2.Devices.Options
       // localization with generic IDs
       cbxUseDeadzone.Text = Tx.Translate( "xDeadzone" );
       cbxUseSaturation.Text = Tx.Translate( "xSaturation" );
-      cbxLiveInvert.Text = Tx.Translate( "xInvert" );
+      lblInverted.Text = Tx.Translate( "xInvert" );
+      cbxLiveInvert.Text = Tx.Translate( "xYes" );
+      cbxLiveInvertForced.Text = Tx.Translate( "xForced" );
       rbUseExpo.Text = Tx.Translate( "xExponent" );
       rbUsePts.Text = Tx.Translate( "xCurve" );
       rbUseNone.Text = Tx.Translate( "xNone" );
@@ -432,6 +434,7 @@ namespace SCJMapper_V2.Devices.Options
           }
 
           // the tuning data
+          invertForced = dp.InvertForced;
           invertUsed = dp.InvertUsed;
           exponentUsed = dp.ExponentUsed;
           exponentS = dp.Exponent;
@@ -470,7 +473,8 @@ namespace SCJMapper_V2.Devices.Options
           saturationUsed = dp.SaturationUsed;
           saturationS = dp.Saturation;
 
-          // tuning data us not used here
+          // tuning data is not used here
+          invertForced = false;
           invertUsed = false;
           exponentUsed = false;
           nonLinCurveUsed = false;
@@ -487,6 +491,7 @@ namespace SCJMapper_V2.Devices.Options
           dp.GameDevice = gameDeviceRef;
         }
         */
+        dp.InvertForced = invertForced;
         dp.InvertUsed = invertUsed;
 
         // update device options
@@ -535,7 +540,7 @@ namespace SCJMapper_V2.Devices.Options
         used = false;
         nodetext = ""; control = ""; command = "";
         m_range = 1000.0; m_sign = 1.0;
-        invertUsed = false;
+        invertForced = false; invertUsed = false;
         deadzoneUsed = false; deadzone = 0.0;
         saturationSupported = false; saturationUsed = false; saturation = 1000.0;
         exponentUsed = false; exponent = 1.0;
@@ -564,6 +569,8 @@ namespace SCJMapper_V2.Devices.Options
 
 
       // set values
+      public bool m_invertForced = false;
+      public bool invertForced { get { return m_invertForced; } set { m_invertForced = value; } }
       public bool m_invertUsed = false;
       public bool invertUsed { get { return m_invertUsed; } set { m_invertUsed = value; m_sign = m_invertUsed ? -1.0 : 1.0; } }
       public string invertS
@@ -747,6 +754,8 @@ namespace SCJMapper_V2.Devices.Options
 
       cbxLiveInvert.Enabled = true;
       cbxLiveInvert.Checked = lv.invertUsed;
+      cbxLiveInvertForced.Enabled = true;
+      cbxLiveInvertForced.Checked = lv.invertForced;
 
       rbUseNone.Checked = true; // init - we will see later if it changes (guarded - so no sideeffects from Checked Events)
       if ( lv.exponentUsed ) lblLiveOutExponent.Text = lv.exponentS;
@@ -1141,6 +1150,14 @@ namespace SCJMapper_V2.Devices.Options
       m_live.invertUsed = false;
       if ( cbxLiveInvert.Checked == true ) {
         m_live.invertUsed = true;
+      }
+    }
+
+    private void cbxLiveInvertForced_CheckedChanged( object sender, EventArgs e )
+    {
+      m_live.invertForced = false;
+      if ( cbxLiveInvertForced.Checked == true ) {
+        m_live.invertForced = true;
       }
     }
 
