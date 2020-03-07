@@ -59,7 +59,8 @@ namespace SCJMapper_V2.Actions
 
     // own additions for JS mapping - should not harm..
     private string[] m_js;
-    private string[] m_GUIDs;
+    private string[] m_product_GUIDs;
+    private string[] m_instance_GUIDs;
 
     /// <summary>
     /// get/set jsN assignment (use 0-based index i.e. js1 -> [0])
@@ -70,11 +71,18 @@ namespace SCJMapper_V2.Actions
     }
 
     /// <summary>
-    /// get/set jsN GUID assignment (use 0-based index i.e. js1GUID -> [0])
+    /// get/set jsN product GUID assignment (use 0-based index i.e. js1GUID -> [0])
     /// </summary>
-    public string[] jsNGUID
+    public string[] jsN_prodGUID
     {
-      get { return m_GUIDs; }
+      get { return m_product_GUIDs; }
+    }
+    /// <summary>
+    /// get/set jsN instance GUID assignment (use 0-based index i.e. js1GUID -> [0])
+    /// </summary>
+    public string[] jsN_instGUID
+    {
+      get { return m_instance_GUIDs; }
     }
 
     /// <summary>
@@ -83,7 +91,8 @@ namespace SCJMapper_V2.Actions
     public void Clear_jsEntry( int index )
     {
       m_js[index] = "";
-      m_GUIDs[index] = "";
+      m_instance_GUIDs[index] = "";
+      m_product_GUIDs[index] = "";
     }
 
     // provide access to Tuning items of the Options obj to the owner
@@ -129,7 +138,8 @@ namespace SCJMapper_V2.Actions
     {
       this.version = other.version;
       this.m_js = other.m_js;
-      this.m_GUIDs = other.m_GUIDs;
+      this.m_instance_GUIDs = other.m_instance_GUIDs;
+      this.m_product_GUIDs = other.m_product_GUIDs;
       // other ref objects are not populated here    
     }
 
@@ -142,9 +152,10 @@ namespace SCJMapper_V2.Actions
 
       // create the Joystick assignments
       Array.Resize( ref m_js, JoystickCls.JSnum_MAX + 1 );
-      Array.Resize( ref m_GUIDs, JoystickCls.JSnum_MAX + 1 );
+      Array.Resize( ref m_instance_GUIDs, JoystickCls.JSnum_MAX + 1 );
+      Array.Resize( ref m_product_GUIDs, JoystickCls.JSnum_MAX + 1 );
       for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-        m_js[i] = ""; m_GUIDs[i] = "";
+        m_js[i] = ""; m_instance_GUIDs[i] = ""; m_product_GUIDs[i] = "";
       }
       // create the default mapped optiontree
      // CreateNewOptions( );
@@ -273,7 +284,7 @@ namespace SCJMapper_V2.Actions
       // now the devices (our addition)
       for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
         if ( !string.IsNullOrEmpty( jsN[i] ) ) r += string.Format( "\tjs{0}=\"{1}\" ", i + 1, jsN[i] );
-        if ( !string.IsNullOrEmpty( jsNGUID[i] ) ) r += string.Format( "js{0}G=\"{1}\" \n", i + 1, jsNGUID[i] );
+        if ( !string.IsNullOrEmpty( jsN_instGUID[i] ) ) r += string.Format( "js{0}G=\"{1}\" \n", i + 1, jsN_instGUID[i] );
       }
 
       // close the tag
@@ -331,12 +342,12 @@ namespace SCJMapper_V2.Actions
     {
       log.Debug( "ActionMapsCls.fromXML - Entry" );
 
-      XmlReaderSettings settings = new XmlReaderSettings {
+      var settings = new XmlReaderSettings {
         ConformanceLevel = ConformanceLevel.Fragment,
         IgnoreWhitespace = true,
         IgnoreComments = true
       };
-      using ( XmlReader reader = XmlReader.Create( new StringReader( xml ), settings ) ) {
+      using ( var reader = XmlReader.Create( new StringReader( xml ), settings ) ) {
 
         reader.MoveToContent( );
         if ( reader.EOF ) return false;
@@ -344,6 +355,7 @@ namespace SCJMapper_V2.Actions
         if ( XNode.ReadFrom( reader ) is XElement el ) {
 
           // read the header element
+          bool jsMapFound = false;
           if ( el.Name.LocalName == "ActionMaps" ) {
             if ( el.HasAttributes ) {
               version = (string)el.Attribute( "version" );
@@ -351,8 +363,9 @@ namespace SCJMapper_V2.Actions
 
               // get the joystick mapping if there is one
               for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-                jsN[i] = (string)el.Attribute( string.Format( "js{0}", i + 1 ) );
-                jsNGUID[i] = (string)el.Attribute( string.Format( "js{0}G", i + 1 ) );
+                jsN[i] = (string)el.Attribute( $"js{i + 1}" );
+                jsN_instGUID[i] = (string)el.Attribute( $"js{i + 1}G" );
+                if ( !string.IsNullOrEmpty( jsN_instGUID[i] ) ) jsMapFound = true; // any found will do
               }
             }
             else {
@@ -362,7 +375,8 @@ namespace SCJMapper_V2.Actions
 
           // now handle the js assignment from the map
           // Reset with the found mapping
-          DeviceInst.JoystickListRef.ResetJsNAssignment( jsNGUID );
+          if (jsMapFound) DeviceInst.JoystickListRef.ResetJsNAssignment( jsN_instGUID );
+
           // Only now create the default optiontree for this map, containing included joysticks and the gamepad
           CreateNewOptions( );
 

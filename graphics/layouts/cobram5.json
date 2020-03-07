@@ -1,0 +1,44 @@
+{
+  "MapName" : "Defender Cobra M5",
+  "MapImage" : "cobram5.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J",
+    "DeviceName": "Defender Cobra M5",
+    "DeviceProdGuid": ["{560311C0-0000-0000-0000-504944564944}",
+                       "{560511C0-0000-0000-0000-504944564944}"],
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X":64, "Y":1273, "Width":1392, "Height":54, "Cmt":  "Primary trigger"},
+      { "Input": "button2", "Type": "Digital", "X":2264, "Y":922, "Width":1392, "Height":54, "Cmt":  "Secondary trigger"},
+      { "Input": "button3", "Type": "Digital", "X":124, "Y":1124, "Width":1332, "Height":54, "Cmt":  "NAV left red button"},
+      { "Input": "button4", "Type": "Digital", "X":2324, "Y":734, "Width":1332, "Height":54, "Cmt":  "NAV right red button"},
+      { "Input": "button5", "Type": "Digital", "X":184, "Y":722, "Width":1272, "Height":54, "Cmt":  "NAV witch hat left"},
+      { "Input": "button6", "Type": "Digital", "X":184, "Y":554, "Width":1272, "Height":54, "Cmt":  "NAV witch hat up"},
+      { "Input": "button7", "Type": "Digital", "X":184, "Y":610, "Width":1272, "Height":54, "Cmt":  "NAV witch hat right"},
+      { "Input": "button8", "Type": "Digital", "X":184, "Y":666, "Width":1272, "Height":54, "Cmt":  "NAV witch hat down"},
+      { "Input": "button9", "Type": "Digital", "X":124, "Y":1414, "Width":1332, "Height":54, "Cmt":  "NAV pinky trigger"},
+      { "Input": "button10", "Type": "Digital", "X":124, "Y":1064, "Width":1332, "Height":54, "Cmt":  "BVR left red button"},
+      { "Input": "button11", "Type": "Digital", "X":2324, "Y":674, "Width":1332, "Height":54, "Cmt":  "BVR right red button"},
+      { "Input": "button12", "Type": "Digital", "X":184, "Y":492, "Width":1272, "Height":54, "Cmt":  "BVR witch hat left"},
+      { "Input": "button13", "Type": "Digital", "X":184, "Y":324, "Width":1272, "Height":54, "Cmt":  "BVR witch hat up"},
+      { "Input": "button14", "Type": "Digital", "X":184, "Y":380, "Width":1272, "Height":54, "Cmt":  "BVR witch hat right"},
+      { "Input": "button15", "Type": "Digital", "X":184, "Y":436, "Width":1272, "Height":54, "Cmt":  "BVR witch hat down"},
+      { "Input": "button16", "Type": "Digital", "X":124, "Y":1354, "Width":1332, "Height":54, "Cmt":  "BVR pinky trigger"},
+      { "Input": "button17", "Type": "Digital", "X":124, "Y":1184, "Width":1332, "Height":54, "Cmt":  "VIS left red button"},
+      { "Input": "button18", "Type": "Digital", "X":2324, "Y":794, "Width":1332, "Height":54, "Cmt":  "VIS right red button"},
+      { "Input": "button19", "Type": "Digital", "X":184, "Y":952, "Width":1272, "Height":54, "Cmt":  "VIS witch hat left"},
+      { "Input": "button20", "Type": "Digital", "X":184, "Y":784, "Width":1272, "Height":54, "Cmt":  "VIS witch hat up"},
+      { "Input": "button21", "Type": "Digital", "X":184, "Y":840, "Width":1272, "Height":54, "Cmt":  "VIS witch hat right"},
+      { "Input": "button22", "Type": "Digital", "X":184, "Y":896, "Width":1272, "Height":54, "Cmt":  "VIS witch hat down"},
+      { "Input": "button23", "Type": "Digital", "X":124, "Y":1474, "Width":1332, "Height":54, "Cmt":  "VIS pinky trigger"},
+      { "Input": "hat1_up", "Type": "Digital", "X":1864, "Y":324, "Width":1932, "Height":54, "Cmt":  "PoV up"},
+      { "Input": "hat1_right", "Type": "Digital", "X":1864, "Y":380, "Width":1932, "Height":54, "Cmt":  "PoV right"},
+      { "Input": "hat1_down", "Type": "Digital", "X":1864, "Y":436, "Width":1932, "Height":54, "Cmt":  "PoV down"},
+      { "Input": "hat1_left", "Type": "Digital", "X":1864, "Y":492, "Width":1932, "Height":54, "Cmt":  "PoV left"},
+      { "Input": "x", "Type": "Analogue", "X":2324, "Y":1080, "Width":1332, "Height":54, "Cmt":  ""},
+      { "Input": "y", "Type": "Analogue", "X":2324, "Y":1024, "Width":1332, "Height":54, "Cmt":  ""},
+      { "Input": "rotz", "Type": "Analogue", "X":2324, "Y":1136, "Width":1332, "Height":54, "Cmt": ""}
+    ]
+  }
+  ]
+}

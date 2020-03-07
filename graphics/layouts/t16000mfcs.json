@@ -1,0 +1,67 @@
+{
+  "MapName" : "T16000MFCS",
+  "MapImage" : "t16000mfcs.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J",
+    "DeviceName": "T16000M Stick",
+    "DeviceProdGuid": "{B10A044F-0000-0000-0000-504944564944}",
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X":1804, "Y":844, "Width":642, "Height":54, "Cmt": "Primary trigger" },
+      { "Input": "button2", "Type": "Digital", "X":2764, "Y":604, "Width":992, "Height":54, "Cmt": "Bottom button" },
+      { "Input": "button3", "Type": "Digital", "X":1754, "Y":484, "Width":692, "Height":54, "Cmt": "Left-hand button" },
+      { "Input": "button4", "Type": "Digital", "X":2764, "Y":504, "Width":992, "Height":54, "Cmt": "Right-hand button" },
+      { "Input": "button5", "Type": "Digital", "X":1254, "Y":1244, "Width":292, "Height":108, "Cmt": "Left bank top-left button" },
+      { "Input": "button6", "Type": "Digital", "X":1554, "Y":1244, "Width":292, "Height":108, "Cmt": "Left bank top-middle button" },
+      { "Input": "button7", "Type": "Digital", "X":1854, "Y":1244, "Width":292, "Height":108, "Cmt": "Left bank top-right button" },
+      { "Input": "button8", "Type": "Digital", "X":1854, "Y":1360, "Width":292, "Height":108, "Cmt": "Left bank bottom-right button" },
+      { "Input": "button9", "Type": "Digital", "X":1554, "Y":1360, "Width":292, "Height":108, "Cmt": "Left bank bottom-middle button" },
+      { "Input": "button10", "Type": "Digital", "X":1254, "Y":1360, "Width":292, "Height":108, "Cmt": "Left bank bottom-left button" },
+      { "Input": "button11", "Type": "Digital", "X":3484, "Y":992, "Width":292, "Height":108, "Cmt": "Right bank top-right button" },
+      { "Input": "button12", "Type": "Digital", "X":3184, "Y":992, "Width":292, "Height":108, "Cmt": "Right bank top-middle button" },
+      { "Input": "button13", "Type": "Digital", "X":2884, "Y":992, "Width":292, "Height":108, "Cmt": "Right bank top-left button" },
+      { "Input": "button14", "Type": "Digital", "X":2884, "Y":1108, "Width":292, "Height":108, "Cmt": "Right bank bottom-left button" },
+      { "Input": "button15", "Type": "Digital", "X":3184, "Y":1108, "Width":292, "Height":108, "Cmt": "Right bank bottom-middle button" },
+      { "Input": "button16", "Type": "Digital", "X":3484, "Y":1108, "Width":292, "Height":108, "Cmt": "Right bank bottom-right button" },
+      { "Input": "hat1_up", "Type": "Digital", "X":2524, "Y":214, "Width":1192, "Height":54, "Cmt": "PoV hat up" },
+      { "Input": "hat1_right", "Type": "Digital", "X":2524, "Y":270, "Width":1192, "Height":54, "Cmt": "PoV hat right" },
+      { "Input": "hat1_down", "Type": "Digital", "X":2524, "Y":326, "Width":1192, "Height":54, "Cmt": "PoV hat down" },
+      { "Input": "hat1_left", "Type": "Digital", "X":2524, "Y":382, "Width":1192, "Height":54, "Cmt": "PoV hat left" },
+      { "Input": "rotz", "Type": "Analogue", "X":2824, "Y":856, "Width":932, "Height":54, "Cmt": "Stick twist" },
+      { "Input":  "slider1", "Type": "Analogue", "X":2944, "Y":1593, "Width":832, "Height":54, "Cmt": "Stick throttle slider" },
+      { "Input": "x", "Type": "Analogue", "X":2824, "Y":800, "Width":932, "Height":54, "Cmt": "Stick pitch" },
+      { "Input": "y", "Type": "Analogue", "X":2824, "Y":744, "Width":932, "Height": 54, "Cmt": "Stick roll" }
+    ]
+  },
+  { 
+    "InputType": "J",
+    "DeviceName": "T16000M Throttle",
+    "DeviceProdGuid": "{B687044F-0000-0000-0000-504944564944}",
+    "Controls": [
+        { "Input": "button1", "Type":  "Digital", "X":294, "Y":1244, "Width":792, "Height":54, "Cmt": "Thumb button" },
+        { "Input": "button2", "Type":  "Digital", "X":1774, "Y":1774, "Width":892, "Height":54, "Cmt": "Pinky button" },
+        { "Input": "button3", "Type":  "Digital", "X":1714, "Y":1664, "Width":892, "Height":54, "Cmt": "Ring finger button" },
+        { "Input": "button4", "Type":  "Digital", "X":1484, "Y":1514, "Width":692, "Height":54, "Cmt": "Middle finger rocker up" },
+        { "Input": "button5", "Type":  "Digital", "X":1484, "Y":1570, "Width":692, "Height":54, "Cmt": "Middle finger rocker down" },
+        { "Input": "button6", "Type":  "Digital", "X":244, "Y":1866, "Width":732, "Height":54, "Cmt": "Index finger mouse push" },
+        { "Input": "button7", "Type":  "Digital", "X":1024, "Y":654, "Width":692, "Height":54, "Cmt": "Middle hat up" },
+        { "Input": "button8", "Type":  "Digital", "X":1024, "Y":710, "Width":692, "Height":54, "Cmt": "Middle hat right" },
+        { "Input": "button9", "Type":  "Digital", "X":1024, "Y":766, "Width":692, "Height":54, "Cmt": "Middle hat down" },
+        { "Input": "button10", "Type":  "Digital", "X":1024, "Y":820, "Width":692, "Height":54, "Cmt": "Middle hat left" },
+        { "Input": "button11", "Type":  "Digital", "X":1034, "Y":929, "Width":692, "Height":54, "Cmt": "Middle hat up" },
+        { "Input": "button12", "Type":  "Digital", "X":1034, "Y":985, "Width":692, "Height":54, "Cmt": "Castle hat right" },
+        { "Input": "button13", "Type":  "Digital", "X":1034, "Y":1041, "Width":692, "Height":54, "Cmt": "Castle hat down" },
+        { "Input": "button14", "Type":  "Digital", "X":1034, "Y":1097, "Width":692, "Height":54, "Cmt": "Castle hat left" },
+        { "Input": "hat1_up", "Type":  "Digital", "X":1014, "Y":364, "Width":692, "Height":54, "Cmt": "PoV hat up" },
+        { "Input": "hat1_right", "Type":  "Digital", "X":1014, "Y":420, "Width":692, "Height":54, "Cmt": "PoV hat right" },
+        { "Input": "hat1_down", "Type":  "Digital", "X":1014, "Y":476, "Width":692, "Height":54, "Cmt": "PoV hat down" },
+        { "Input": "hat1_left", "Type":  "Digital", "X":1014, "Y":532, "Width":692, "Height":54, "Cmt": "PoV hat left" },
+        { "Input": "x", "Type":  "Digital", "X":244, "Y":1810, "Width":732, "Height":54, "Cmt": "Index finger mouse X" },
+        { "Input": "y", "Type":  "Digital", "X":244, "Y":1754, "Width":732, "Height":54, "Cmt": "Index finger mouse Y" },
+        { "Input":  "z", "Type":  "Digital", "X":84, "Y":555, "Width":572, "Height":54, "Cmt": "Throttle" },
+        { "Input":  "slider1", "Type":  "Digital", "X":1874, "Y":1914, "Width":832, "Height":54, "Cmt": "Pinky dial" },
+        { "Input":  "rotz", "Type":  "Digital", "X":1954, "Y":2054, "Width":832, "Height":54, "Cmt": "Paddle" }
+    ]
+  }
+  ]
+}

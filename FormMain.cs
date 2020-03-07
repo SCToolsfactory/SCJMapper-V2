@@ -23,6 +23,7 @@ using SCJMapper_V2.Devices.Options;
 using SCJMapper_V2.Devices.Monitor;
 using SCJMapper_V2.Translation;
 using System.Threading;
+using SCJMapper_V2.Layout;
 
 namespace SCJMapper_V2
 {
@@ -310,7 +311,10 @@ namespace SCJMapper_V2
       SCMappings.UpdateMappingNames( );
       msSelectMapping.DropDownItems.Clear( );
       foreach ( string s in SCMappings.MappingNames ) {
-        if ( !SCMappings.IsUserMapping( s ) ) {
+        if ( SCMappings.IsExportedMapping( s ) ) {
+          msSelectMapping.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ), IL2.Images["Exported"] );
+        }
+        else if ( !SCMappings.IsUserMapping( s ) ) {
           msSelectMapping.DropDownItems.Add( Path.GetFileNameWithoutExtension( s ), IL2.Images["RSI"] );
         }
         else {
@@ -598,7 +602,8 @@ namespace SCJMapper_V2
             // there is a joystick device left..
             DeviceInst.JoystickListRef[joyStickIndex].JSAssignment = joyStickIndex + 1; // assign number 1..
             m_AT.ActionMaps.jsN[deviceTabIndex] = DeviceInst.JoystickListRef[joyStickIndex].DevName;
-            m_AT.ActionMaps.jsNGUID[deviceTabIndex] = DeviceInst.JoystickListRef[joyStickIndex].DevInstanceGUID;
+            m_AT.ActionMaps.jsN_instGUID[deviceTabIndex] = DeviceInst.JoystickListRef[joyStickIndex].DevInstanceGUID;
+            m_AT.ActionMaps.jsN_prodGUID[deviceTabIndex] = DeviceInst.JoystickListRef[joyStickIndex].DevGUID;
             joyStickIndex++;
           }
         }
@@ -1036,7 +1041,10 @@ namespace SCJMapper_V2
     private void meDumpLogfile_Click( object sender, EventArgs e )
     {
       AutoTabXML_Assignment( EATabXML.Tab_XML );
-      rtb.Text = string.Format( "-- {0} - SC Joystick AC Path and Logfile --\n\n{1}\n{2}", DateTime.Now, SCPath.Summary(), SCLogExtract.ExtractLog( ) );
+      rtb.Text = $"-- {DateTime.Now} - SC Joystick AC Path and Logfile --\n";
+      var devList = new DeviceList( );
+      rtb.Text += $"\n{devList.DumpDevices( )}\n{SCPath.Summary( )}\n{SCLogExtract.ExtractLog( )}";
+      devList = null;
     }
 
     private void meDumpDefaultProfile_Click( object sender, EventArgs e )
@@ -1148,6 +1156,15 @@ namespace SCJMapper_V2
       timer1.Enabled = true;
     }
 
+    private void meShowLayoutDialog_Click( object sender, EventArgs e )
+    {
+      timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
+      var LAYOUT = new FormLayout { ActionList = m_AT.ReportActionsSItemText() };
+      LAYOUT.ShowDialog( this );
+      LAYOUT = null; // get rid and create a new one next time..
+      timer1.Enabled = true;
+    }
+
 
     // *** Settings
 
@@ -1197,10 +1214,12 @@ namespace SCJMapper_V2
         for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
           j = DeviceInst.JoystickListRef.Find_InstanceForjsN( i + 1 );
           if ( j != null ) {
-            newTree.ActionMaps.jsN[i] = j.DevName; newTree.ActionMaps.jsNGUID[i] = j.DevInstanceGUID;
+            newTree.ActionMaps.jsN[i] = j.DevName;
+            newTree.ActionMaps.jsN_instGUID[i] = j.DevInstanceGUID;
+            newTree.ActionMaps.jsN_prodGUID[i] = j.DevGUID;
           }
           else {
-            newTree.ActionMaps.jsN[i] = ""; newTree.ActionMaps.jsNGUID[i] = "";
+            newTree.ActionMaps.jsN[i] = ""; newTree.ActionMaps.jsN_instGUID[i] = ""; newTree.ActionMaps.jsN_prodGUID[i] = "";
           }
         }
 

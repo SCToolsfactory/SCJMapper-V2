@@ -125,5 +125,16 @@ namespace SCJMapper_V2
       if ( File.Exists( mf ) ) File.Copy( mf, mf + ".backup", true );
     }
 
+    /// <summary>
+    /// Graphics folder name in the Application directory
+    /// </summary>
+    static public string GraphicsDir => "graphics";
+
+    /// <summary>
+    /// Graphics\Layouts folder name in the Application directory
+    /// </summary>
+    static public string LayoutsDir => Path.Combine(GraphicsDir, "layouts");
+
+
   }
 }

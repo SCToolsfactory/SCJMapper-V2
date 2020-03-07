@@ -160,7 +160,7 @@ namespace SCJMapper_V2.Devices.Mouse
     /// <summary>
     /// The ProductGUID property
     /// </summary>
-    public override string DevGUID { get { return "{}"; } } // @@@ tbd
+    public override string DevGUID { get { return $"{{{m_device.Information.ProductGuid.ToString( )}}}"; } } // @@@ tbd 
     /// <summary>
     /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
     /// </summary>

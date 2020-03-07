@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>System.Runtime.Serialization.Json</name>
+  </assembly>
+  <members>
+    <member name="T:System.Runtime.Serialization.DateTimeFormat">
+      <summary>Задает параметры формата даты-времени.</summary>
+    </member>
+    <member name="M:System.Runtime.Serialization.DateTimeFormat.#ctor(System.String)">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:System.Runtime.Serialization.DateTimeFormat" />, используя строку формата.</summary>
+      <param name="formatString">Строка формата.</param>
+    </member>
+    <member name="M:System.Runtime.Serialization.DateTimeFormat.#ctor(System.String,System.IFormatProvider)">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:System.Runtime.Serialization.DateTimeFormat" />, используя строку формата и поставщик формата.</summary>
+      <param name="formatString">Строка формата.</param>
+      <param name="formatProvider">Поставщик формата.</param>
+    </member>
+    <member name="P:System.Runtime.Serialization.DateTimeFormat.DateTimeStyles">
+      <summary>Получает или задает параметры форматирования, задающие пользовательские настройки синтаксического анализа строки для ряда методов синтаксического анализа даты и времени.</summary>
+      <returns>Параметры форматирования, задающие пользовательские настройки синтаксического анализа строки для ряда методов синтаксического анализа даты и времени.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.DateTimeFormat.FormatProvider">
+      <summary>Получает объект, управляющий форматированием.</summary>
+    </member>
+    <member name="P:System.Runtime.Serialization.DateTimeFormat.FormatString">
+      <summary>Получает строки формата для управления форматированием, получаемым, когда дата или время представлены в виде строки.</summary>
+      <returns>Строки формата для управления форматированием, получаемым, когда дата или время представлены в виде строки.</returns>
+    </member>
+    <member name="T:System.Runtime.Serialization.EmitTypeInformation">
+      <summary>Определяет частоту выдачи сведений о типе.</summary>
+    </member>
+    <member name="F:System.Runtime.Serialization.EmitTypeInformation.Always">
+      <summary>Всегда для создания информации о типе.</summary>
+    </member>
+    <member name="F:System.Runtime.Serialization.EmitTypeInformation.AsNeeded">
+      <summary>По необходимости сообщать сведения о типе.</summary>
+    </member>
+    <member name="F:System.Runtime.Serialization.EmitTypeInformation.Never">
+      <summary>Никогда не сообщать сведения о типе.</summary>
+    </member>
+    <member name="T:System.Runtime.Serialization.Json.DataContractJsonSerializer">
+      <summary>Сериализует объекты в нотацию объектов JavaScript (JSON) и десериализует данные JSON в объекты.Этот класс не наследуется.</summary>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializer.#ctor(System.Type)">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" /> для сериализации или десериализации объекта указанного типа.</summary>
+      <param name="type">Тип сериализуемых или десериализуемых экземпляров.</param>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializer.#ctor(System.Type,System.Collections.Generic.IEnumerable{System.Type})">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" /> для сериализации или десериализации объекта указанного типа с коллекцией известных типов, которые могут присутствовать в графе объекта. </summary>
+      <param name="type">Тип сериализуемых или десериализуемых экземпляров.</param>
+      <param name="knownTypes">Интерфейс <see cref="T:System.Collections.Generic.IEnumerable`1" />, принадлежащий к типу <see cref="T:System.Type" />, в котором содержатся типы, которые могут присутствовать в графе объекта.</param>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializer.#ctor(System.Type,System.Runtime.Serialization.Json.DataContractJsonSerializerSettings)">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" /> для сериализации или десериализации объекта указанного типа и параметров сериализатора.</summary>
+      <param name="type">Тип сериализуемых или десериализуемых экземпляров.</param>
+      <param name="settings">Параметры сериализатора для сериализатора JSON.</param>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializer.DateTimeFormat">
+      <summary>Получает формат элементов типа "дата и время" в графе объектов.</summary>
+      <returns>Формат элементов типа "дата и время" в графе объектов.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializer.EmitTypeInformation">
+      <summary>Получает или задает параметры сериализатора контракта данных JSON для выдачи сведений о типе.</summary>
+      <returns>Параметры сериализатора контракта данных JSON для выдачи сведений о типе.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializer.KnownTypes">
+      <summary>Возвращает коллекцию типов, которые могут присутствовать в графе объекта, сериализованном с использованием этого экземпляра класса <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" />.</summary>
+      <returns>Коллекция <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" />, которая содержит ожидаемые типы, переданные в качестве известных типов конструктору <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" />.</returns>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializer.ReadObject(System.IO.Stream)">
+      <summary>Выполняет чтение потока документа в формате JSON (нотации объектов JavaScript) и возвращает десериализованный объект.</summary>
+      <returns>Десериализованный объект.</returns>
+      <param name="stream">Поток <see cref="T:System.IO.Stream" />, подлежащий чтению.</param>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializer.SerializeReadOnlyTypes">
+      <summary>Получает или задает значение, указывающее, следует ли сериализовать типы, доступные только для чтения.</summary>
+      <returns>Значение true для сериализации доступных только для чтения типов; в противном случае — значение false.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializer.UseSimpleDictionaryFormat">
+      <summary>Получает или задает значение, указывающее, следует ли использовать простой формат словаря.</summary>
+      <returns>Значение true для использования простого формата словаря; в противном случае — значение false.</returns>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializer.WriteObject(System.IO.Stream,System.Object)">
+      <summary>Сериализует указанный объект в данные нотации объектов JavaScript (JSON) и записывает полученные данные JSON в поток.</summary>
+      <param name="stream">Поток <see cref="T:System.IO.Stream" />, в который осуществляется запись.</param>
+      <param name="graph">Объект, содержащий данные для записи в поток.</param>
+      <exception cref="T:System.Runtime.Serialization.InvalidDataContractException">Сериализуемый тип не соответствует правилам контракта данных.Например, к этому типу не применен атрибут <see cref="T:System.Runtime.Serialization.DataContractAttribute" />.</exception>
+      <exception cref="T:System.Runtime.Serialization.SerializationException">Возникла проблема с записываемым экземпляром.</exception>
+      <exception cref="T:System.ServiceModel.QuotaExceededException">Превышено максимально допустимое количество объектов для сериализации.Проверьте свойство <see cref="P:System.Runtime.Serialization.DataContractSerializer.MaxItemsInObjectGraph" />.</exception>
+    </member>
+    <member name="T:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings">
+      <summary>Задает параметры <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" />.</summary>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.#ctor">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings" />.</summary>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.DateTimeFormat">
+      <summary>Получает или задает DateTimeFormat, определяющий формат отображения даты и времени, соответствующий языку и региональным параметрам.</summary>
+      <returns>DateTimeFormat, определяющий формат отображения даты и времени, соответствующий языку и региональным параметрам.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.EmitTypeInformation">
+      <summary>Получает или задает параметры сериализатора контракта данных JSON для выдачи сведений о типе.</summary>
+      <returns>Параметры сериализатора контракта данных JSON для выдачи сведений о типе.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.KnownTypes">
+      <summary>Получает или задает коллекцию типов, которые могут присутствовать в графе объекта, сериализованном с помощью этого DataContractJsonSerializerSettings.</summary>
+      <returns>Коллекция типов, которые могут присутствовать в графе объекта, сериализованном с помощью этого экземпляра класса DataContractJsonSerializerSettings.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.MaxItemsInObjectGraph">
+      <summary>Получает или задает максимальное количество элементов в графе объекта для сериализации или десериализации.</summary>
+      <returns>Максимальное количество элементов в графе объекта для сериализации или десериализации.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.RootName">
+      <summary>Получает или задает корневое имя выбранного объекта.</summary>
+      <returns>Имя корневого объекта выбранного объекта.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.SerializeReadOnlyTypes">
+      <summary>Получает или задает значение, указывающее, следует ли сериализовать типы, доступные только для чтения.</summary>
+      <returns>Значение True для сериализации доступных только для чтения типов; в противном случае — значение false.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.UseSimpleDictionaryFormat">
+      <summary>Получает или задает значение, указывающее, следует ли использовать простой формат словаря.</summary>
+      <returns>Значение True для использования простого формата словаря; в противном случае — значение false.</returns>
+    </member>
+  </members>
+</doc>

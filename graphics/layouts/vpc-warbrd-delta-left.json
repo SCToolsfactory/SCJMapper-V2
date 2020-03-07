@@ -1,0 +1,40 @@
+{
+  "MapName" : "VPC WarBRD Delta (left)",
+  "MapImage" : "vpc-warbrd-delta-left.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J",
+    "DeviceName": "VPC WarBRD Delta left",
+    "DeviceProdGuid": ["{204203EB-0000-0000-0000-504944564944}"],
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X":2470, "Y":1100, "Width":1180, "Height":54, "Cmt":"Trigger first stage"},
+      { "Input": "button2", "Type": "Digital", "X":2470, "Y":1160, "Width":1180, "Height":54, "Cmt":"Trigger second stage"},
+      { "Input": "button3", "Type": "Digital", "X":2470, "Y":1300, "Width":1180, "Height":54, "Cmt":"Trigger button"},
+      { "Input": "button4", "Type": "Digital", "X":270, "Y":1000, "Width":1180, "Height":54, "Cmt":"Wheel up"},
+      { "Input": "button5", "Type": "Digital", "X":270, "Y":1060, "Width":1180, "Height":54, "Cmt":"Wheel down"},
+      { "Input": "button6", "Type": "Digital", "X":270, "Y":1120, "Width":1180, "Height":54, "Cmt":"Wheel push"},
+      { "Input": "button7", "Type": "Digital", "X":270, "Y":820, "Width":1180, "Height":54, "Cmt":"Mini-joystick push"},
+      { "Input": "button8", "Type": "Digital", "X":2470, "Y":700, "Width":1180, "Height":54, "Cmt":"4-way hat right up"},
+      { "Input": "button9", "Type": "Digital", "X":2470, "Y":760, "Width":1180, "Height":54, "Cmt":"4-way hat right righ"},
+      { "Input": "button10", "Type": "Digital", "X":2470, "Y":820, "Width":1180, "Height":54, "Cmt":"4-way hat right down"},
+      { "Input": "button11", "Type": "Digital", "X":2470, "Y":880, "Width":1180, "Height":54, "Cmt":"4-way hat right left"},
+      { "Input": "button12", "Type": "Digital", "X":2470, "Y":940, "Width":1180, "Height":54, "Cmt":"4-way hat right push?"},
+      { "Input": "button13", "Type": "Digital", "X":270, "Y":300, "Width":1180, "Height":54, "Cmt":"4-way hat left up"},
+      { "Input": "button14", "Type": "Digital", "X":270, "Y":360, "Width":1180, "Height":54, "Cmt":"4-way hat left righ"},
+      { "Input": "button15", "Type": "Digital", "X":270, "Y":420, "Width":1180, "Height":54, "Cmt":"4-way hat left down"},
+      { "Input": "button16", "Type": "Digital", "X":270, "Y":480, "Width":1180, "Height":54, "Cmt":"4-way hat left left"},
+      { "Input": "button17", "Type": "Digital", "X":270, "Y":540, "Width":1180, "Height":54, "Cmt":"4-way hat left push?"},
+      { "Input": "button18", "Type": "Digital", "X":2470, "Y":300, "Width":1180, "Height":54, "Cmt":"8-way hat LED up"},
+      { "Input": "button19", "Type": "Digital", "X":2470, "Y":360, "Width":1180, "Height":54, "Cmt":"8-way hat LED righ"},
+      { "Input": "button20", "Type": "Digital", "X":2470, "Y":420, "Width":1180, "Height":54, "Cmt":"8-way hat LED down"},
+      { "Input": "button21", "Type": "Digital", "X":2470, "Y":480, "Width":1180, "Height":54, "Cmt":"8-way hat LED left"},
+      { "Input": "button22", "Type": "Digital", "X":2470, "Y":540, "Width":1180, "Height":54, "Cmt":"8-way hat LED push?"},
+      { "Input": "x", "Type": "Analogue", "X":270, "Y":1400, "Width":1180, "Height":54, "Cmt":"Joystick axis" },
+      { "Input": "y", "Type": "Analogue", "X":270, "Y":1460, "Width":1180, "Height":54, "Cmt":""},
+      { "Input": "z", "Type": "Analogue", "X":270, "Y":1520, "Width":1180, "Height":54, "Cmt":""},
+      { "Input": "rotx", "Type": "Analogue", "X":270, "Y":700, "Width":1180, "Height":54, "Cmt":"Mini-joysticks axis"},
+      { "Input": "roty", "Type": "Analogue", "X":270, "Y":760, "Width":1180, "Height":54, "Cmt":""}
+    ]
+  }
+  ]
+}

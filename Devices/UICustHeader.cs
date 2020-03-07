@@ -151,6 +151,14 @@ namespace SCJMapper_V2.Devices
         </devices>
         <categories>
          <category label="@ui_CCSpaceFlight"/>
+         <category label="@ui_CGLightControllerDesc"/>
+         <category label="@ui_CCFPS"/>
+         <category label="@ui_CCEVA"/>
+         <category label="@ui_CCVehicle"/>
+         <category label="@ui_CGEASpectator"/>
+         <category label="@ui_CGUIGeneral"/>
+         <category label="@ui_CGInteraction"/>
+         <category label="@ui_CCCamera"/>
         </categories>
        </CustomisationUIHeader>
       */
@@ -171,6 +179,13 @@ namespace SCJMapper_V2.Devices
       // CIG adds them to export - so can we ...
       r += string.Format( "\t\t<categories>\n" );
       r += string.Format( "\t\t<category label=\"@ui_CCSpaceFlight\"/>\n" );
+      r += string.Format( "\t\t<category label=\"@ui_CCFPS\"/>\n" );
+      r += string.Format( "\t\t<category label=\"@ui_CCEVA\"/>\n" );
+      r += string.Format( "\t\t<category label=\"@ui_CCVehicle\"/>\n" );
+      r += string.Format( "\t\t<category label=\"@ui_CGEASpectator\"/>\n" );
+      r += string.Format( "\t\t<category label=\"@ui_CGUIGeneral\"/>\n" );
+      r += string.Format( "\t\t<category label=\"@ui_CGInteraction\"/>\n" );
+      r += string.Format( "\t\t<category label=\"@ui_CCCamera\"/>\n" );
       r += string.Format( "\t\t</categories>\n" );
 
       r += string.Format( "\t</CustomisationUIHeader>\n" );

@@ -1,12 +1,12 @@
-SC Joystick Mapper V 2.43 - Build 78 BETA
-(c) Cassini, StandardToaster - 29-Feb-2020
+SC Joystick Mapper V 2.44 - Build 79 BETA
+(c) Cassini, StandardToaster - 07-Mar-2020
 
 Contains 14 files + graphics:
 
-SCJMapper.exe                The program (V2.43)
-SCJMapper.exe.config         Program config (V2.43)              - MUST be in the same folder as the Exe file
-de\SCJMapper.resources.dll   German language (V2.43)             - MUST be in the same folder as the Exe file
-fr\SCJMapper.resources.dll   French language (V2.43)             - MUST be in the same folder as the Exe file
+SCJMapper.exe                The program (V2.44)
+SCJMapper.exe.config         Program config (V2.44)              - MUST be in the same folder as the Exe file
+de\SCJMapper.resources.dll   German language (V2.44)             - MUST be in the same folder as the Exe file
+fr\SCJMapper.resources.dll   French language (V2.44)             - MUST be in the same folder as the Exe file
 Storage\*.scj                Folder for collected assets (V2.35) - MUST be in the same folder as the Exe file
 PTU_Storage\*.scj            Folder for collected PTU    (V2.37) - MUST be in the same folder as the Exe file
 SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
@@ -23,6 +23,7 @@ SCJMapper_QGuide V2.35beta.pdf    Quick Guide (v2.35)
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images (V2.32)               - graphics folder MUST be in the same folder as the Exe file
+graphics\layouts folder      Layout Images & defs (V2.44)        - layouts folder MUST be in the graphics folder above
 
 NOTE V 2.41+:
   search order for defaultProfile.xml to build the action tree is:
@@ -46,9 +47,15 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.44 - BETA Build 79
+- added Input device layout dialog and some layouts for the most common device controllers
+   NOTE: THIS IS VERY EARLY and may break or not show - use the GitHub Issue feature to report 
+		 also make sure to copy the graphics\layouts folder from the distribution else no layouts are available         
+- update Can read Exported XMLs from the Game (mostly ... max 3 points for curves are supported) (#91)
+- update - defaultProfile.xml from SC LIVE PTU 3.8.2 as last resort built in one
 V 2.43 - BETA Build 78
 - added About / Splash Screen while loading Game resources
-- update checkbox "Forced write" for Invert items in Options (writes the invert tag in any case to disable CIG invert defaults) #90
+- update checkbox "Forced write" for Invert items in Options (writes the invert tag in any case to disable CIG invert defaults) (#90)
 V 2.42 - BETA Build 77
 - fix for not using the proper PTU cache when pulling data from gamepack (#87)
   NOTE: please delete .scj files in <installDir>\Storage\*.scj    (as they have been overwritten with PTU content)

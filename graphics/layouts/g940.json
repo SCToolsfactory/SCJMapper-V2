@@ -1,0 +1,41 @@
+{
+  "MapName" : "Logitec G940 Stick + Throttle",
+  "MapImage" : "g940.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J",
+    "DeviceName": "Logitec G940 Stick",
+    "DeviceProdGuid": ["{C2A8046D-0000-0000-0000-504944564944}"],
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X":2034, "Y":604, "Width":652, "Height":54, "Cmt":  "Primary trigger half-press"},
+      { "Input": "button2", "Type": "Digital", "X":2044, "Y":424, "Width":642, "Height":108, "Cmt":  "Fire button"},
+      { "Input": "button3", "Type": "Digital", "X":2124, "Y":234, "Width":642, "Height":108, "Cmt":  "S1 button"},
+      { "Input": "button4", "Type": "Digital", "X":3064, "Y":496, "Width":752, "Height":54, "Cmt":  "S2 button"},
+      { "Input": "button5", "Type": "Digital", "X":3064, "Y":584, "Width":752, "Height":54, "Cmt":  "S3 button"},
+      { "Input": "button6", "Type": "Digital", "X":2044, "Y":764, "Width":642, "Height":108, "Cmt":  "S4 button"},
+      { "Input": "button7", "Type": "Digital", "X":2044, "Y":1018, "Width":642, "Height":108, "Cmt":  "S5 button"},
+      { "Input": "button8", "Type": "Digital", "X":2954, "Y":386, "Width":832, "Height":54, "Cmt":  "Ministick button"},
+      { "Input":  "slider2", "Type": "Analogue", "X":2954, "Y":330, "Width":832, "Height":54, "Cmt":  "Ministick X"},
+      { "Input":  "slider1", "Type": "Analogue", "X":2954, "Y":274, "Width":832, "Height":54, "Cmt":  "Ministick Y"},
+      { "Input": "button9", "Type": "Digital", "X":2034, "Y":660, "Width":652, "Height":54, "Cmt":  "Primary trigger full-press"},
+      { "Input": "hat1_up", "Type": "Digital", "X":3124, "Y":694, "Width":692, "Height":54, "Cmt":  "POV hat up"},
+      { "Input": "hat1_right", "Type": "Digital", "X":3124, "Y":750, "Width":692, "Height":54, "Cmt":  "POV hat right"},
+      { "Input": "hat1_down", "Type": "Digital", "X":3124, "Y":806, "Width":692, "Height":54, "Cmt":  "POV hat down"},
+      { "Input": "hat1_left", "Type": "Digital", "X":3124, "Y":862, "Width":692, "Height":54, "Cmt":  "POV hat left"},
+      { "Input": "x", "Type": "Analogue", "X":3144, "Y":1060, "Width":672, "Height":54, "Cmt":  "Stick X axis"},
+      { "Input": "y", "Type": "Analogue", "X":3144, "Y":1004, "Width":672, "Height":54, "Cmt":  "Stick Y axis"},
+      { "Input": "rotx", "Type": "Analogue", "X":3084, "Y":1824, "Width":592, "Height":54, "Cmt":  "Trim 2"},
+      { "Input": "roty", "Type": "Analogue", "X":3224, "Y":1744, "Width":592, "Height":54, "Cmt":  "Trim 3"},
+      { "Input": "rotz", "Type": "Analogue", "X":2934, "Y":1904, "Width":592, "Height":54, "Cmt":  "Trim 1"}
+    ]
+  },
+  { 
+    "InputType": "J",
+    "DeviceName": "Logitec G940 Throttle",
+    "DeviceProdGuid": ["{C2A9046D-0000-0000-0000-504944564944}"],
+    "Controls": [
+
+    ]
+  }
+  ]
+}

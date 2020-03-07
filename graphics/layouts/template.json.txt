@@ -1,0 +1,30 @@
+{
+  "MapName" : "A Name that is shown in the dropdown",
+  "MapImage" : "DeviceImage.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J",
+    "DeviceName": "DeviceName Name as shown in the SCJM GUI",
+    "DeviceProdGuid": ["{Product GUID from DX Input}", "{An alternate product GUID from DX Input}"],
+    "Controls": [
+      { "Input":  "button1", "Type":  "Digital", "X": 1629, "Y": 628, "Width": 732, "Height": 52, "Cmt":  "Primary trigger" },
+      { "Input":  "button2", "Type":  "Digital", "X": 1723, "Y": 450, "Width": 731, "Height": 52, "Cmt":  "Top trigger (A)" },
+      ..
+      ..
+      { "Input":  "z", "Type":  "Analogue", "X": 97, "Y": 763, "Width": 572, "Height": 54, "Cmt":  "Throttle Left" }
+   ]
+  },
+  { 
+    "InputType": "J",
+    "DeviceName": "Next DeviceName Name as shown in the SCJM GUI",
+    "DeviceProdGuid": ["{Product GUID from DX Input}"],
+    "Controls": [
+      { "Input":  "button1", "Type":  "Digital", "X": 1629, "Y": 628, "Width": 732, "Height": 52, "Cmt":  "Primary trigger" },
+      { "Input":  "button2", "Type":  "Digital", "X": 1723, "Y": 450, "Width": 731, "Height": 52, "Cmt":  "Top trigger (A)" },
+      ..
+      ..
+      { "Input":  "z", "Type":  "Analogue", "X": 97, "Y": 763, "Width": 572, "Height": 54, "Cmt":  "Throttle Left" }
+    ]
+  }
+  ]
+}

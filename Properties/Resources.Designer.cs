@@ -93,19 +93,18 @@ namespace SCJMapper_V2.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;profile  version=&quot;1&quot;  optionsVersion=&quot;2&quot;  rebindVersion=&quot;2&quot;  &gt;
         ///	&lt;platforms  &gt;
-        ///		&lt;PC  keyboard=&quot;1&quot;  mouse=&quot;1&quot;  xboxpad=&quot;1&quot;  ps3pad=&quot;0&quot;  joystick=&quot;1&quot;  /&gt;
-        ///		&lt;Xbox  keyboard=&quot;1&quot;  xboxpad=&quot;1&quot;  ps3pad=&quot;0&quot;  /&gt;
-        ///		&lt;PS3  keyboard=&quot;1&quot;  xboxpad=&quot;0&quot;  ps3pad=&quot;1&quot;  /&gt;
+        ///		&lt;PC  keyboard=&quot;1&quot;  mouse=&quot;1&quot;  gamepad=&quot;1&quot;  joystick=&quot;1&quot;  /&gt;
+        ///		&lt;XboxOne  keyboard=&quot;1&quot;  mouse=&quot;0&quot;  gamepad=&quot;1&quot;  joystick=&quot;0&quot;  /&gt;
+        ///		&lt;PS4  keyboard=&quot;1&quot;  mouse=&quot;0&quot;  gamepad=&quot;1&quot;  joystick=&quot;0&quot;  /&gt;
         ///	&lt;/platforms&gt;
         ///
         ///	&lt;actiongroup  action=&quot;v_attack1&quot;  &gt;
         ///		&lt;action  name=&quot;v_attack1_group1&quot;  /&gt;
         ///		&lt;action  name=&quot;v_attack1_group2&quot;  /&gt;
-        ///		&lt;action  name=&quot;v_attack1_group3&quot;  /&gt;
         ///	&lt;/actiongroup&gt;
         ///
         ///	&lt;ActivationModes  &gt;
-        ///		&lt;ActivationMode  name=&quot;tap&quot;  onPress= [rest of string was truncated]&quot;;.
+        ///		&lt;ActivationMode  name=&quot;tap&quot;  onPress=&quot;0&quot;  onHold=&quot;0&quot;  onRe [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string defaultProfile {
             get {
@@ -199,6 +198,16 @@ namespace SCJMapper_V2.Properties {
         internal static System.Drawing.Bitmap NPad {
             get {
                 object obj = ResourceManager.GetObject("NPad", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap page_notdefined {
+            get {
+                object obj = ResourceManager.GetObject("page_notdefined", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

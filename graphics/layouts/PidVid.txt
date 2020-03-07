@@ -1,0 +1,89 @@
+Joystick Product GUID ????
+{PIDVID-0000-0000-0000-504944564944}
+
+SaitekFLY5                          {13020738-}
+SaitekFLY5                          {083606A3-}
+SaitekP2600RumbleForce              {5F0D06A3-}
+SaitekP2500RumbleForce              {FF0C06A3-}
+SaitekST290Pro                      {046006A3-}
+SaitekCyborgEvoWireless             {353E06A3-}
+SaitekProFlightCombatRudderPedals   {076406A3-}
+SaitekProFlightRudderPedals         {076306A3-}
+SaitekProFlightPedals               {076506A3-}
+SaitekAV8R03                        {0C2806A3-}
+SaitekAV8R03                        {046106A3-}
+SaitekX45                           {053C06A3-}
+SaitekX52Pro                        {076206A3-}
+SaitekX52                           {075C06A3-}
+SaitekX52                           {025506A3-}
+SaitekX55Joystick                   {22150738-}
+SaitekX55Throttle                   {A2150738-}
+SaitekX56Joystick                   {22210738-}
+SaitekX56Throttle                   {A2210738-}
+SaitekX65F                          {0B6A06A3-}
+SidePanelControlDeck                {22180738-}
+
+LogitechG940Pedals                  {C2AA046D-}
+LogitechG940Joystick                {C2A8046D-}
+LogitechG940Throttle                {C2A9046D-}
+LogitechExtreme3DPro                {C215046D-}
+Logitech710WirelessGamepad          {C219046D-}
+LogitechWingManStrikeForce3D        {C285046D-}
+
+LogitechGTWheel                     {C29A046D-}
+
+ThrustMasterWarthogJoystick         {0402044F-}
+ThrustMasterWarthogThrottle         {0404044F-}
+ThrustMasterWarthogCombined         {FFFF044F-}
+TMwTARGET                           {FFFF044F-}
+ThrustMasterTFlightHOTASX           {B108044f-}
+ThrustMasterHOTAS4                  {B67C044F-}
+ThrustMasterHOTAS4                  {B67B044F-}
+TFlightHotasOne                     {B68D044F-}
+T16000M                             {B10A044F-}
+T16000MTHROTTLE                     {B687044F-}
+T-Rudder                            {B679044F-}
+TFlightStickX                       {B106044F-}
+
+CHProThrottle1              {00F1068E-}
+CHProThrottle2              {C0F1068E-}
+CHFighterStick              {00F3068E-}
+CHFighterStick              {C0F3068E-}
+CHFighterStick              {C010068E-}
+CHProPedals                 {C0F2068E-}
+CHCombatStick               {C0F4068E-}
+CHCombatStick               {00F4068E-}
+CHThrottleQuadrant          {00FA068E-}
+CHProFlightThrottleQuadrant {0C2D06A3-}
+CHProPedals                 {00F2068E-}
+
+VPC-WarBRD-DELTA-Left       {204203EB-}
+VPC-WarBRD-DELTA-Right      {204403EB-}
+
+CobraM5                     {560311C0-}
+CobraM5                     {560511C0-}
+Gladiator                   {0121231D-} 
+Sabretooth                  {FE001689-}
+Cougar                      {B351044F-}
+Cougar                      {B352044F-}
+BlackWidow                  {031707B5-}
+GioteckPS3WiredController   {C12125F0-}
+EDTracker                   {80372341-}
+MFGCrosswind                {0A3816D0-}
+MFGCrosswind                {02038564-}
+TrustPredator               {00030E8F-}
+Playstation3Controller      {0268054C-}
+SlawFlightControlRudder     {001104D8-}
+OculusTouch                 {02112833-}
+DualShock4                  {0BA0054C-}
+DualShock4                  {05c4054C-}
+DualShock4                  {09cc054C-}
+XBox                        {02FF045E-}
+XBox                        {02DD045E-}
+XBoxElite                   {02E3045E-}
+
+XterminatorDualControl      {3001047D-}
+SideWinderForceFeedback2    {001B045E-}
+
+vJoy                        {BEAD1234-}
+ArduinoLeonardo             {80362341-}

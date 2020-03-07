@@ -1,0 +1,34 @@
+{
+  "MapName" : "x55-joystick",
+  "MapImage" : "x55-joystick.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J",
+    "DeviceName": "Saitek Pro Flight X-55 Rhino Stick",
+    "DeviceProdGuid": ["{22150738-0000-0000-0000-504944564944}"],
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X": 397, "Y": 604, "Width": 642, "Height": 108, "Cmt": "Primary trigger" },
+      { "Input": "button2", "Type": "Digital", "X": 498, "Y": 224, "Width": 792, "Height": 54, "Cmt": "Top trigger" },
+      { "Input": "button3", "Type": "Digital", "X": 1417, "Y": 555, "Width": 692, "Height": 54, "Cmt": "Side trigger" },
+      { "Input": "button4", "Type": "Digital", "X": 397, "Y": 744, "Width": 642, "Height": 108, "Cmt": "Secondary trigger" },
+      { "Input": "button5", "Type": "Digital", "X": 1377, "Y": 974, "Width": 792, "Height": 54, "Cmt": "Pinky button" },
+      { "Input": "button6", "Type": "Digital", "X": 397, "Y": 884, "Width": 642, "Height": 108, "Cmt": "Pinky trigger" },
+      { "Input": "button7", "Type": "Digital", "X": 1408, "Y": 224, "Width": 772, "Height": 54, "Cmt": "Witch hat up" },
+      { "Input": "button8", "Type": "Digital", "X": 1408, "Y": 280, "Width": 772, "Height": 54, "Cmt": "Witch hat right" },
+      { "Input": "button9", "Type": "Digital", "X": 1408, "Y": 336, "Width": 772, "Height": 54, "Cmt": "Witch hat down" },
+      { "Input": "button10", "Type": "Digital", "X": 1408, "Y": 393, "Width": 772, "Height": 54, "Cmt": "Witch hat left" },
+      { "Input": "button11", "Type": "Digital", "X": 1428, "Y": 724, "Width": 742, "Height": 54, "Cmt": "Castle hat up" },
+      { "Input": "button12", "Type": "Digital", "X": 1428, "Y": 781, "Width": 742, "Height": 54, "Cmt": "Castle hat right" },
+      { "Input": "button13", "Type": "Digital", "X": 1428, "Y": 837, "Width": 742, "Height": 54, "Cmt": "Castle hat down" },
+      { "Input": "button14", "Type": "Digital", "X": 1428, "Y": 893, "Width": 742, "Height": 54, "Cmt": "Castle hat left" },
+      { "Input": "hat1_up", "Type": "Digital", "X": 97, "Y": 304, "Width": 1072, "Height": 54, "Cmt": "PoV hat up" },
+      { "Input": "hat1_right", "Type": "Digital", "X": 97, "Y": 360, "Width": 1072, "Height": 54, "Cmt": "PoV hat right" },
+      { "Input": "hat1_down", "Type": "Digital", "X": 97, "Y": 415, "Width": 1072, "Height": 54, "Cmt": "PoV hat down" },
+      { "Input": "hat1_left", "Type": "Digital", "X": 97, "Y": 472, "Width": 1072, "Height": 54, "Cmt": "PoV hat left" },
+      { "Input": "y", "Type": "Analogue", "X": 1547, "Y": 1055, "Width": 632, "Height": 54, "Cmt": "Stick Y" },
+      { "Input": "x", "Type": "Analogue", "X": 1547, "Y": 1112, "Width": 632, "Height": 54, "Cmt": "Stick X" },
+      { "Input": "rotz", "Type": "Analogue", "X": 1547, "Y": 1167, "Width": 632, "Height": 54, "Cmt": "Stick RotZ" }
+    ]
+  }
+  ]
+}

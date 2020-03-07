@@ -1,0 +1,33 @@
+{
+  "MapName" : "Logitech Extreme 3DPro",
+  "MapImage" : "extreme3dpro.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J",
+    "DeviceName": "Logitech Extreme 3DPro",
+    "DeviceProdGuid": ["{C215046D-0000-0000-0000-504944564944}"],
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X":474, "Y":904, "Width":1092, "Height":54, "Cmt": "Primary trigger" },
+      { "Input": "button2", "Type": "Digital", "X":474, "Y":1004, "Width":1092, "Height":54, "Cmt": "Side trigger" },
+      { "Input": "button3", "Type": "Digital", "X":424, "Y":784, "Width":1092, "Height":54, "Cmt": "Bottom-left button" },
+      { "Input": "button4", "Type": "Digital", "X":2124, "Y":784, "Width":1092, "Height":54, "Cmt": "Bottom-right button" },
+      { "Input": "button5", "Type": "Digital", "X":424, "Y":654, "Width":1092, "Height":54, "Cmt": "Top-left button" },
+      { "Input": "button6", "Type": "Digital", "X":2124, "Y":654, "Width":1092, "Height":54, "Cmt": "Top-right button" },
+      { "Input": "button7", "Type": "Digital", "X":244, "Y":1434, "Width":542, "Height":108, "Cmt": "Left bank top-left button" },
+      { "Input": "button8", "Type": "Digital", "X":794, "Y":1434, "Width":542, "Height":108, "Cmt": "Left bank top-right button" },
+      { "Input": "button9", "Type": "Digital", "X":244, "Y":1550, "Width":542, "Height":108, "Cmt": "Left bank middle-left button" },
+      { "Input": "button10", "Type": "Digital", "X":794, "Y":1550, "Width":542, "Height":108, "Cmt": "Left bank middle-right button" },
+      { "Input": "button11", "Type": "Digital", "X":244, "Y":1666, "Width":542, "Height":108, "Cmt": "Left bank bottom-left button" },
+      { "Input": "button12", "Type": "Digital", "X":794, "Y":1666, "Width":542, "Height":108, "Cmt": "Left bank bottom-right button" },
+      { "Input": "hat1_up", "Type": "Digital", "X":864, "Y":374, "Width":1932, "Height":54, "Cmt": "PoV hat up" },
+      { "Input": "hat1_right", "Type": "Digital", "X":864, "Y":430, "Width":1932, "Height":54, "Cmt": "PoV hat right" },
+      { "Input": "hat1_down", "Type": "Digital", "X":864, "Y":486, "Width":1932, "Height":54, "Cmt": "PoV hat down" },
+      { "Input": "hat1_left", "Type": "Digital", "X":864, "Y":542, "Width":1932, "Height":54, "Cmt": "PoV hat left" },
+      { "Input": "rotz", "Type": "Analogue", "X":2357, "Y":980, "Width":1132, "Height":54, "Cmt": "Stick twist" },
+      { "Input":  "slider1", "Type": "Analogue", "X":2864, "Y":1574, "Width":832, "Height":54, "Cmt": "Stick throttle slider" },
+      { "Input": "x", "Type": "Analogue", "X":2357, "Y":924, "Width":1132, "Height":54, "Cmt": "Stick pitch" },
+      { "Input": "y", "Type": "Analogue", "X":2357, "Y":868, "Width":1132, "Height":54, "Cmt": "Stick roll" }
+    ]
+  }
+  ]
+}

@@ -44,10 +44,21 @@ namespace SCJMapper_V2.OGL
     uint TMU0_Handle;
     TextureTarget TMU0_Target;
 
-    private string[] SBFiles = { "graphics/SB_SC_BrokenMoon.dds","graphics/SB_SC_DyingStar.dds","graphics/SB_SC_Demien.dds","graphics/SB_SC_Area18.dds",
-                                "graphics/SB_OutThere1.dds", "graphics/SB_OutThere3.dds", "graphics/SB_Canyon.dds",
-                                "graphics/SB_Shiodome.dds", "graphics/SB_Highway.dds", "graphics/SB_BigSight.dds", "graphics/SB_LA_Helipad.dds", "graphics/SB_Sunset.dds",
-                                "graphics/Skybox.dds"  };
+    private string[] SBFiles = {
+      Path.Combine(TheUser.GraphicsDir, "SB_SC_BrokenMoon.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_SC_DyingStar.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_SC_Demien.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_SC_Area18.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_OutThere1.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_OutThere3.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_Canyon.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_Shiodome.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_Highway.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_BigSight.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_LA_Helipad.dds"),
+      Path.Combine(TheUser.GraphicsDir, "SB_Sunset.dds"),
+      Path.Combine(TheUser.GraphicsDir, "Skybox.dds"  )
+    };
     // index into SBFiles
     const int SB_BrokenMoon = 0;
     const int SB_DyingStar = SB_BrokenMoon + 1;
@@ -994,7 +1005,7 @@ namespace SCJMapper_V2.OGL
 
     private void UpdateMouseTargetRect()
     {
-      DeviceInst.MouseRef.SetTargetRectForCmdData( new Rectangle( glControl1.PointToScreen( new Point(0,0) ), glControl1.Size ) );
+      DeviceInst.MouseRef.SetTargetRectForCmdData( new Rectangle( glControl1.PointToScreen( new Point( 0, 0 ) ), glControl1.Size ) );
     }
 
 

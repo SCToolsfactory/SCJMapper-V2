@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>System.Runtime.Serialization.Json</name>
+  </assembly>
+  <members>
+    <member name="T:System.Runtime.Serialization.DateTimeFormat">
+      <summary>Spécifie les options du format de date/heure.</summary>
+    </member>
+    <member name="M:System.Runtime.Serialization.DateTimeFormat.#ctor(System.String)">
+      <summary>Initialise une nouvelle instance de la classe <see cref="T:System.Runtime.Serialization.DateTimeFormat" /> à l'aide de la chaîne de format spécifiée.</summary>
+      <param name="formatString">Chaîne de format.</param>
+    </member>
+    <member name="M:System.Runtime.Serialization.DateTimeFormat.#ctor(System.String,System.IFormatProvider)">
+      <summary>Initialise une nouvelle instance de la classe <see cref="T:System.Runtime.Serialization.DateTimeFormat" /> avec la chaîne de format et le fournisseur de format spécifiés.</summary>
+      <param name="formatString">Chaîne de format.</param>
+      <param name="formatProvider">Fournisseur de format.</param>
+    </member>
+    <member name="P:System.Runtime.Serialization.DateTimeFormat.DateTimeStyles">
+      <summary>Obtient ou définit les options de mise en forme qui personnalisent l'analyse de chaîne pour certaines méthodes d'analyse de la date et de l'heure.</summary>
+      <returns>Options de mise en forme qui personnalisent l'analyse de chaîne pour plusieurs méthodes d'analyse de date et d'heure.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.DateTimeFormat.FormatProvider">
+      <summary>Obtient un objet qui contrôle la mise en forme.</summary>
+    </member>
+    <member name="P:System.Runtime.Serialization.DateTimeFormat.FormatString">
+      <summary>Obtient les chaînes de format permettant de contrôler la mise en forme produite lorsqu'une date ou une heure est représentée sous forme de chaîne.</summary>
+      <returns>Chaînes de format permettant de contrôler la mise en forme produite lorsqu'une date ou une heure est représentée sous forme de chaîne.</returns>
+    </member>
+    <member name="T:System.Runtime.Serialization.EmitTypeInformation">
+      <summary>Spécifie la fréquence d'émission des informations de type.</summary>
+    </member>
+    <member name="F:System.Runtime.Serialization.EmitTypeInformation.Always">
+      <summary>Est toujours en mesure d'émettre des informations de type.</summary>
+    </member>
+    <member name="F:System.Runtime.Serialization.EmitTypeInformation.AsNeeded">
+      <summary>Selon les besoins, émission des informations de type.</summary>
+    </member>
+    <member name="F:System.Runtime.Serialization.EmitTypeInformation.Never">
+      <summary>Ne jamais émettre des informations de type.</summary>
+    </member>
+    <member name="T:System.Runtime.Serialization.Json.DataContractJsonSerializer">
+      <summary>Sérialise des objets au format JSON (JavaScript Object Notation) et désérialise les données JSON vers des objets.Cette classe ne peut pas être héritée.</summary>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializer.#ctor(System.Type)">
+      <summary>Initialise une nouvelle instance de la classe <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" /> pour sérialiser ou désérialiser un objet du type spécifié.</summary>
+      <param name="type">Type des instances sérialisées ou désérialisées.</param>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializer.#ctor(System.Type,System.Collections.Generic.IEnumerable{System.Type})">
+      <summary>Initialise une nouvelle instance de la classe <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" /> pour sérialiser ou désérialiser un objet du type spécifié, avec une collection de types connus pouvant être présents dans le graphique d'objets. </summary>
+      <param name="type">Type des instances sérialisées ou désérialisées.</param>
+      <param name="knownTypes">
+        <see cref="T:System.Collections.Generic.IEnumerable`1" /> de <see cref="T:System.Type" /> qui contient les types pouvant être présents dans le graphique d'objets.</param>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializer.#ctor(System.Type,System.Runtime.Serialization.Json.DataContractJsonSerializerSettings)">
+      <summary>Initialise une nouvelle instance de la classe <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" /> pour sérialiser ou désérialiser un objet avec le type et les paramètres de sérialiseur spécifiés.</summary>
+      <param name="type">Type des instances sérialisées ou désérialisées.</param>
+      <param name="settings">Paramètres de sérialiseur pour le sérialiseur JSON.</param>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializer.DateTimeFormat">
+      <summary>Obtient le format des éléments de type date et heure dans le graphique d'objet.</summary>
+      <returns>Format des éléments de type date et heure dans le graphique d'objet.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializer.EmitTypeInformation">
+      <summary>Obtient ou définit les paramètres du sérialiseur JSON de contrat de données pour l'émission des informations de type.</summary>
+      <returns>Paramètres du sérialiseur JSON de contrat de données pour l'émission des informations de type.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializer.KnownTypes">
+      <summary>Obtient une collection des types pouvant être présents dans le graphique d'objets sérialisé à l'aide de cette instance de <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" />.</summary>
+      <returns>
+        <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" /> qui contient les types attendus passés en tant que types connus au constructeur <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" />.</returns>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializer.ReadObject(System.IO.Stream)">
+      <summary>Lit un flux de document au format JSON (JavaScript Object Notation) et retourne l'objet désérialisé.</summary>
+      <returns>Objet désérialisé.</returns>
+      <param name="stream">
+        <see cref="T:System.IO.Stream" /> à lire.</param>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializer.SerializeReadOnlyTypes">
+      <summary>Obtient ou définit une valeur qui spécifie s'il faut sérialiser des types de lecture seule.</summary>
+      <returns>true pour sérialiser des types en lecture seule ; sinon false.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializer.UseSimpleDictionaryFormat">
+      <summary>Obtient ou définit une valeur qui spécifie s'il faut utiliser un format de dictionnaire simple.</summary>
+      <returns>true pour utiliser un format de dictionnaire simple ; sinon, false.</returns>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializer.WriteObject(System.IO.Stream,System.Object)">
+      <summary>Sérialise un objet spécifié vers des données JSON (JavaScript Objet Notation) et écrit le JSON obtenu dans un flux.</summary>
+      <param name="stream">
+        <see cref="T:System.IO.Stream" /> dans lequel il est écrit.</param>
+      <param name="graph">L'objet qui contient les données à écrire dans le flux.</param>
+      <exception cref="T:System.Runtime.Serialization.InvalidDataContractException">Le type en cours de sérialisation n'est pas conforme aux règles de contrat de données.Par exemple, l'attribut <see cref="T:System.Runtime.Serialization.DataContractAttribute" /> n'a pas été appliqué au type.</exception>
+      <exception cref="T:System.Runtime.Serialization.SerializationException">Il y a un problème avec l'instance en cours d'écriture.</exception>
+      <exception cref="T:System.ServiceModel.QuotaExceededException">Le nombre maximal d'objets à sérialiser a été dépassé.Vérifiez la propriété <see cref="P:System.Runtime.Serialization.DataContractSerializer.MaxItemsInObjectGraph" />.</exception>
+    </member>
+    <member name="T:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings">
+      <summary>Spécifie les paramètres <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializer" />.</summary>
+    </member>
+    <member name="M:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.#ctor">
+      <summary>Initialise une nouvelle instance de la classe <see cref="T:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings" />.</summary>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.DateTimeFormat">
+      <summary>Obtient ou définit un DateTimeFormat qui définit le format d'affichage des dates et de l'heure approprié pour la culture.</summary>
+      <returns>DateTimeFormat qui définit le format d'affichage des dates et de l'heure approprié pour la culture.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.EmitTypeInformation">
+      <summary>Obtient ou définit les paramètres du sérialiseur JSON de contrat de données pour l'émission des informations de type.</summary>
+      <returns>Paramètres du sérialiseur JSON de contrat de données pour l'émission des informations de type.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.KnownTypes">
+      <summary>Obtient ou définit une collection des types pouvant être présents dans le graphique d'objets sérialisé à l'aide de l'instance DataContractJsonSerializerSettings.</summary>
+      <returns>Collection des types pouvant être présents dans le graphique d'objets sérialisé à l'aide de cette instance DataContractJsonSerializerSettings.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.MaxItemsInObjectGraph">
+      <summary>Obtient ou définit le nombre maximal d'éléments à sérialiser ou désérialiser dans un graphique d'objets.</summary>
+      <returns>Nombre maximal d'éléments à sérialiser ou désérialiser dans un graphique d'objets.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.RootName">
+      <summary>Obtient ou définit le nom racine de l'objet sélectionné.</summary>
+      <returns>Nom racine de l'objet sélectionné.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.SerializeReadOnlyTypes">
+      <summary>Obtient ou définit une valeur qui spécifie s'il faut sérialiser des types de lecture seule.</summary>
+      <returns>True pour sérialiser des types en lecture seule ; sinon false.</returns>
+    </member>
+    <member name="P:System.Runtime.Serialization.Json.DataContractJsonSerializerSettings.UseSimpleDictionaryFormat">
+      <summary>Obtient ou définit une valeur qui spécifie s'il faut utiliser un format de dictionnaire simple.</summary>
+      <returns>True pour utiliser un format de dictionnaire simple ; sinon, false.</returns>
+    </member>
+  </members>
+</doc>

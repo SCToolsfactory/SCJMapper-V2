@@ -1,0 +1,49 @@
+{
+  "MapName" : "x45-joystick+throttle",
+  "MapImage" : "x45.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J",
+    "DeviceName": "Saitek X45 Stick and Throttle",
+    "DeviceProdGuid": ["{053C06A3-0000-0000-0000-504944564944}"],
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X":4260, "Y":1040, "Width":600, "Height":54, "Cmt": "Stick Trigger button" },
+      { "Input": "button2", "Type": "Digital", "X":2900, "Y":810, "Width":600, "Height":54, "Cmt": "Stick Fire button A" },
+      { "Input": "button3", "Type": "Digital", "X":4100, "Y":640, "Width":600, "Height":54, "Cmt": "Stick Fire button B" },
+      { "Input": "button4", "Type": "Digital", "X":3710, "Y":410, "Width":600, "Height":54, "Cmt": "Stick Launch button" },
+      { "Input": "button5", "Type": "Digital", "X":1880, "Y":1410, "Width":600, "Height":54, "Cmt": "Throttle Fire button D" },
+      { "Input": "button6", "Type": "Digital", "X":1630, "Y":2400, "Width":600, "Height":54, "Cmt": "Throttle Mouse Fire button" },
+      { "Input": "button7", "Type": "Digital", "X":4200, "Y":1370, "Width":600, "Height":54, "Cmt": "Stick Pinkie button" },
+      { "Input": "button8", "Type": "Digital", "X":4260, "Y":800, "Width":600, "Height":54, "Cmt": "Stick Fire button C" },
+      { "Input": "button9", "Type": "Digital", "X":1630, "Y":1556, "Width":600, "Height":54, "Cmt": "Stick first switch up" },
+      { "Input": "button10", "Type": "Digital", "X":1630, "Y":1608, "Width":600, "Height":54, "Cmt": "Stick first switch down" },
+      { "Input": "button11", "Type": "Digital", "X":1785, "Y":1716, "Width":600, "Height":54, "Cmt": "Stick second switch up" },
+      { "Input": "button12", "Type": "Digital", "X":1785, "Y":1768, "Width":600, "Height":54, "Cmt": "Stick second switch down" },
+      { "Input": "button13", "Type": "Digital", "X":2110, "Y":1872, "Width":600, "Height":54, "Cmt": "Stick third switch up" },
+      { "Input": "button14", "Type": "Digital", "X":2110, "Y":1924, "Width":600, "Height":54, "Cmt": "Stick third switch down" },
+      { "Input": "button15", "Type": "Digital", "X":2940, "Y":370, "Width":600, "Height":54, "Cmt": "Stick PoV2 Up" },
+      { "Input": "button16", "Type": "Digital", "X":2940, "Y":450, "Width":600, "Height":54, "Cmt": "Stick PoV2 Right" },
+      { "Input": "button17", "Type": "Digital", "X":2940, "Y":540, "Width":600, "Height":54, "Cmt": "Stick PoV2 Down" },
+      { "Input": "button18", "Type": "Digital", "X":2940, "Y":630, "Width":600, "Height":54, "Cmt": "Stick PoV2 Left" },
+      { "Input": "button19", "Type": "Digital", "X":1630, "Y":530, "Width":600, "Height":54, "Cmt": "Throttle rear hat up" },
+      { "Input": "button20", "Type": "Digital", "X":1630, "Y":610, "Width":600, "Height":54, "Cmt": "Throttle rear hat right" },
+      { "Input": "button21", "Type": "Digital", "X":1630, "Y":700, "Width":600, "Height":54, "Cmt": "Throttle rear hat down" },
+      { "Input": "button22", "Type": "Digital", "X":1630, "Y":790, "Width":600, "Height":54, "Cmt": "Throttle rear hat left" },
+      { "Input": "button23", "Type": "Digital", "X":2180, "Y":1930, "Width":600, "Height":54, "Cmt": "Throttle Mouse Hat Up" },
+      { "Input": "button24", "Type": "Digital", "X":2180, "Y":2010, "Width":600, "Height":54, "Cmt": "Throttle Mouse Hat Right" },
+      { "Input": "button25", "Type": "Digital", "X":2180, "Y":2100, "Width":600, "Height":54, "Cmt": "Throttle Mouse Hat Down" },
+      { "Input": "button26", "Type": "Digital", "X":2180, "Y":2190, "Width":600, "Height":54, "Cmt": "Throttle Mouse Hat Left" },
+      { "Input": "hat1_up", "Type": "Digital", "X":2810, "Y":1050, "Width":600, "Height":54, "Cmt": "Stick PoV1 hat up" },
+      { "Input": "hat1_right", "Type": "Digital", "X":2810, "Y":1130, "Width":600, "Height":54, "Cmt": "Stick PoV1 hat right" },
+      { "Input": "hat1_down", "Type": "Digital", "X":2810, "Y":1220, "Width":600, "Height":54, "Cmt": "Stick PoV1 hat down" },
+      { "Input": "hat1_left", "Type": "Digital", "X":2810, "Y":1315, "Width":600, "Height":54, "Cmt": "Stick PoV1 hat left" },
+      { "Input": "rotx", "Type": "Analogue", "X":1890, "Y":1620, "Width":600, "Height":54, "Cmt": "Throttle bottom rotary" },
+      { "Input": "roty", "Type": "Analogue", "X":1940, "Y":1120, "Width":600, "Height":54, "Cmt": "Throttle top rotary" },
+      { "Input": "rotz", "Type": "Analogue", "X":730, "Y":880, "Width":600, "Height":54, "Cmt": "Throttle yaw rocker" },
+      { "Input": "x", "Type": "Analogue", "X":4210, "Y":2310, "Width":600, "Height":54, "Cmt": "Stick roll" },
+      { "Input": "y", "Type": "Analogue", "X":4210, "Y":2400, "Width":600, "Height":54, "Cmt": "Stick pitch" },
+      { "Input":  "slider1", "Type": "Analogue", "X":140, "Y":1600, "Width":600, "Height":54, "Cmt": "Throttle main slider" }
+    ]
+  }
+  ]
+}

@@ -14,6 +14,7 @@ using SCJMapper_V2.Devices.Mouse;
 using SCJMapper_V2.Devices.Gamepad;
 using SCJMapper_V2.Devices.Joystick;
 using SCJMapper_V2.Translation;
+using SCJMapper_V2.Layout;
 
 namespace SCJMapper_V2.Actions
 {
@@ -1307,6 +1308,60 @@ namespace SCJMapper_V2.Actions
         return null;
       }
 
+    }
+
+    /// <summary>
+    /// Reports a list of the mapped items
+    /// </summary>
+    /// <returns></returns>
+    public ActionItemList ReportActionsSItemText()
+    {
+      log.Debug( "ReportActions (ActionItem) - Entry" );
+
+      var repList = new ActionItemList( );
+
+      foreach ( ActionMapCls acm in ActionMaps ) {
+        foreach ( ActionCls ac in acm ) {
+          foreach ( ActionCommandCls acc in ac.InputList ) {
+            if ( !string.IsNullOrEmpty( acc.Input ) && !( acc.Input == DeviceCls.DisabledInput ) ) {
+              var sItem = new ActionItem( );
+              sItem.ActionMap = acm.MapName;
+              sItem.DispText = SCUiText.Instance.Text( ac.ActionName );
+              sItem.ControlInput = acc.Input;
+              switch ( Act.ADeviceFromDevID( acc.DevID ) ) {
+                case Act.ActionDevice.AD_Keyboard:
+                  sItem.InputType = "K";
+                  sItem.DeviceName = KeyboardCls.DeviceClass;
+                  sItem.DeviceProdGuid = "";
+                  break;
+                case Act.ActionDevice.AD_Mouse:
+                  sItem.InputType = "M";
+                  sItem.DeviceName = MouseCls.DeviceClass;
+                  sItem.DeviceProdGuid = "";
+                  break;
+                case Act.ActionDevice.AD_Joystick:
+                  int jsNum = JoystickCls.JSNum( acc.DevInput ) - 1;
+                  if ( jsNum >= 0 ) {
+                    sItem.DeviceName = ActionMaps.jsN[jsNum];
+                    sItem.DeviceProdGuid = ActionMaps.jsN_prodGUID[jsNum];
+                    sItem.InputType = "J";
+                  }
+                  break;
+                case Act.ActionDevice.AD_Gamepad:
+                  sItem.InputType = "G";
+                  sItem.DeviceName = GamepadCls.DevNameCIG;
+                  sItem.DeviceProdGuid = GamepadCls.DevGUIDCIG ;
+                  break;
+                default: break;
+              }//switch
+              // add if valid
+              if ( !string.IsNullOrEmpty( sItem.InputType ) )
+                repList.Add( sItem );
+            }
+          }
+        }
+      }
+      return repList;
     }
 
     /// <summary>

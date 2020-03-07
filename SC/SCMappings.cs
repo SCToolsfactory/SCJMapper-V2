@@ -16,6 +16,7 @@ namespace SCJMapper_V2.SC
 
     public const string c_MapStartsWith = "layout_";  // we only allow those mapping names
     private const string c_UserMapStartsWith = c_MapStartsWith + "my_";  // we only allow those mapping names
+    private const string c_ExportedMapEndsWith = "_exported";  // we only allow those mapping names
 
     static private List<string> m_scMappings = new List<string>( );
     static private SCGameMaps m_scGameMaps = new SCGameMaps( ); // only one instance allowed... else we read it multiple times from the pak file
@@ -56,6 +57,17 @@ namespace SCJMapper_V2.SC
     }
 
     /// <summary>
+    /// Returns true if a mapping name is considered an exported mapping
+    /// </summary>
+    /// <param name="mapName">The mapping name</param>
+    /// <returns>True if it is an exported mapping name</returns>
+    static public bool IsExportedMapping( string mapName )
+    {
+      return Path.GetFileNameWithoutExtension( mapName ).StartsWith( c_MapStartsWith )
+          && Path.GetFileNameWithoutExtension( mapName ).EndsWith( c_ExportedMapEndsWith );
+    }
+
+    /// <summary>
     /// Check if we may use that name - we allow only names like "layout_my_XYZ" 
     /// </summary>
     /// <param name="mapName">A map name</param>
@@ -73,7 +85,7 @@ namespace SCJMapper_V2.SC
     {
       if ( Directory.Exists( SCPath.SCClientMappingPath ) ) {
         m_scMappings.Clear( );
-        m_scMappings = (List<string>)Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
+        m_scMappings = Directory.EnumerateFiles( SCPath.SCClientMappingPath ).ToList( );
         foreach ( KeyValuePair<string, string> kv in m_scGameMaps ) {
           m_scMappings.Insert( 0, kv.Key ); // insert before others
         }
@@ -107,16 +119,25 @@ namespace SCJMapper_V2.SC
     static public string Mapping( string mappingName )
     {
       string retVal = "";
-      if ( IsUserMapping( mappingName ) ) {
+      // first check for exported as they may start with user mapping pattern as well
+      if ( IsExportedMapping( mappingName ) ) { 
         string mFile = Path.Combine( SCPath.SCClientMappingPath, ( mappingName + ".xml" ) );
         if ( File.Exists( mFile ) ) {
-          using ( StreamReader sr = new StreamReader( mFile ) ) {
+          using ( var sr = new StreamReader( mFile ) ) {
+            retVal = sr.ReadToEnd( );
+          }
+        }
+      }
+      else if ( IsUserMapping( mappingName ) ) {
+        string mFile = Path.Combine( SCPath.SCClientMappingPath, ( mappingName + ".xml" ) );
+        if ( File.Exists( mFile ) ) {
+          using ( var sr = new StreamReader( mFile ) ) {
             retVal = sr.ReadToEnd( );
           }
         }
       }
       else {
-        // game mapping
+        // CIG provided game mapping
         if ( m_scGameMaps.ContainsKey( mappingName ) ) {
           retVal = m_scGameMaps[mappingName];
         }

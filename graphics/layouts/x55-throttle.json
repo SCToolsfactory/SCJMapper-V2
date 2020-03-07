@@ -1,0 +1,51 @@
+{
+  "MapName" : "x55-throttle",
+  "MapImage" : "x55-throttle.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J",
+    "DeviceName": "Saitek Pro Flight X-55 Rhino Throttle",
+    "DeviceProdGuid": ["{A2150738-0000-0000-0000-504944564944}"],
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X":422, "Y":300, "Width":852, "Height":54, "Cmt": "E button" },
+      { "Input": "button2", "Type": "Digital", "X":585, "Y":1659, "Width":672, "Height":54, "Cmt": "F push" },
+      { "Input": "button3", "Type": "Digital", "X":244, "Y":1810, "Width":672, "Height":54, "Cmt": "G push" },
+      { "Input": "button4", "Type": "Digital", "X":1284, "Y":1694, "Width":892, "Height":54, "Cmt": "H button" },
+      { "Input": "button5", "Type": "Digital", "X":1453, "Y":1784, "Width":892, "Height":54, "Cmt": "I button" },
+      { "Input": "button6", "Type": "Digital", "X":453, "Y":1299, "Width":572, "Height":54, "Cmt": "Switch 1" },
+      { "Input": "button7", "Type":  "Digital", "X":453, "Y":1355, "Width":572, "Height":54, "Cmt": "Switch 2" },
+      { "Input": "button8", "Type":  "Digital", "X":472, "Y":1450, "Width":572, "Height":54, "Cmt": "Switch 3" },
+      { "Input": "button9", "Type":  "Digital", "X":472, "Y":1506, "Width":572, "Height":54, "Cmt": "Switch 4" },
+      { "Input": "button10", "Type":  "Digital", "X":1143, "Y":1450, "Width":572, "Height":54, "Cmt": "Switch 5" },
+      { "Input": "button11", "Type": "Digital", "X":1143, "Y":1506, "Width":572, "Height":54, "Cmt": "Switch 6" },
+      { "Input": "button12", "Type": "Digital", "X":1483, "Y":1120, "Width":572, "Height":54, "Cmt": "TGL 1 up" },
+      { "Input": "button13", "Type": "Digital", "X":1483, "Y":1176, "Width":572, "Height":54, "Cmt": "TGL 1 down" },
+      { "Input": "button14", "Type": "Digital", "X":1542, "Y":979, "Width":572, "Height":54, "Cmt": "TGL 2 up" },
+      { "Input": "button15", "Type": "Digital", "X":1542, "Y":1035, "Width":572, "Height":54, "Cmt": "TGL 2 down" },
+      { "Input": "button16", "Type": "Digital", "X":1602, "Y":849, "Width":572, "Height":54, "Cmt": "TGL 3 up" },
+      { "Input": "button17", "Type": "Digital", "X":1602, "Y":905, "Width":572, "Height":54, "Cmt": "TGL 3 down" },
+      { "Input": "button18", "Type": "Digital", "X":1623, "Y":710, "Width":572, "Height":54, "Cmt": "TGL 4 up" },
+      { "Input": "button19", "Type": "Digital", "X":1623, "Y":765, "Width":572, "Height":54, "Cmt": "TGL 4 down" },
+      { "Input": "button20", "Type": "Digital", "X":1532, "Y":260, "Width":772, "Height":54, "Cmt": "H3 up" },
+      { "Input": "button21", "Type": "Digital", "X":1532, "Y":315, "Width":772, "Height":54, "Cmt": "H3 right" },
+      { "Input": "button22", "Type": "Digital", "X":1532, "Y":371, "Width":772, "Height":54, "Cmt": "H3 down" },
+      { "Input": "button23", "Type": "Digital", "X":1532, "Y":428, "Width":772, "Height":54, "Cmt": "H3 left" },
+      { "Input": "button24", "Type": "Digital", "X":74, "Y":1924, "Width":772, "Height":54, "Cmt": "H4 up" },
+      { "Input": "button25", "Type": "Digital", "X":73, "Y":1979, "Width":772, "Height":54, "Cmt": "H4 right" },
+      { "Input": "button26", "Type": "Digital", "X":73, "Y":2035, "Width":772, "Height":54, "Cmt": "H4 down" },
+      { "Input": "button27", "Type": "Digital", "X":73, "Y":2092, "Width":772, "Height":54, "Cmt": "H4 left" },
+      { "Input": "button28", "Type": "Digital", "X":1834, "Y":2033, "Width":692, "Height":54, "Cmt": "Pinky rocker up" },
+      { "Input": "button29", "Type": "Digital", "X":1834, "Y":2089, "Width":692, "Height":54, "Cmt": "Pinky rocker down" },
+      { "Input": "button30", "Type": "Digital", "X":1843, "Y":1884, "Width":692, "Height":54, "Cmt": "Pinky spin up" },
+      { "Input": "button31", "Type": "Digital", "X":1843, "Y":1940, "Width":692, "Height":54, "Cmt": "Pinky spin down" },
+      { "Input": "x", "Type": "Analogue", "X":542, "Y":376, "Width":572, "Height":54, "Cmt": "Throttle" },
+      { "Input": "y", "Type": "Analogue", "X":583, "Y":1604, "Width":672, "Height":54, "Cmt": "F spin" },
+      { "Input": "rotx", "Type": "Analogue", "X":244, "Y":1753, "Width":672, "Height":54, "Cmt": "G spin" },
+      { "Input": "roty", "Type": "Analogue", "X":1233, "Y":1350, "Width":692, "Height":54, "Cmt": "RTY2 axis" },
+      { "Input": "rotz", "Type": "Analogue", "X":1393, "Y":1269, "Width":692, "Height":54, "Cmt": "RTY1 axis" },
+      { "Input":  "slider2", "Type": "Analogue", "X":1572, "Y":566, "Width":732, "Height":54, "Cmt": "Mouse left/right" },
+      { "Input":  "slider1", "Type": "Analogue", "X":1572, "Y":510, "Width":732, "Height":54, "Cmt": "Mouse up/down" }
+    ]
+  }
+  ]
+}

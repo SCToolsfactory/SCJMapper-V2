@@ -27,8 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>78</ApplicationRevision>
-    <ApplicationVersion>2.43.0.%2a</ApplicationVersion>
+    <ApplicationRevision>79</ApplicationRevision>
+    <ApplicationVersion>2.44.0.79</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -110,6 +110,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -175,6 +176,27 @@
       <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="Devices\Options\Tuningoptions.cs" />
+    <Compile Include="Layout\ActionGroups.cs" />
+    <Compile Include="Layout\ActionItem.cs" />
+    <Compile Include="Layout\ActionItemList.cs" />
+    <Compile Include="Layout\MapProps.cs" />
+    <Compile Include="Layout\ControllerJson.cs" />
+    <Compile Include="Layout\DeviceFile.cs" />
+    <Compile Include="Layout\DeviceLayout.cs" />
+    <Compile Include="Layout\DisplayList.cs" />
+    <Compile Include="Layout\DrawPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Layout\FormLayout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Layout\FormLayout.Designer.cs">
+      <DependentUpon>FormLayout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Layout\IShape.cs" />
+    <Compile Include="Layout\Layouts.cs" />
+    <Compile Include="Layout\ShapeItem.cs" />
+    <Compile Include="Layout\ShapeItemList.cs" />
     <Compile Include="RTF\RTFformatter.cs" />
     <Compile Include="SC\Modifiers.cs" />
     <Compile Include="SC\p4kFile\p4kDirectory.cs" />
@@ -326,6 +348,9 @@
     <EmbeddedResource Include="Devices\Options\FormOptions.resx">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Layout\FormLayout.resx">
+      <DependentUpon>FormLayout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Translation\Strings.de.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.de.Designer.cs</LastGenOutput>
@@ -439,6 +464,7 @@
     <None Include="graphics\LArrow.png" />
     <None Include="graphics\RSI.png" />
     <None Include="graphics\NPad.png" />
+    <None Include="graphics\page_notdefined.png" />
     <Content Include="ReadMe.txt" />
     <None Include="graphics\YPR.png" />
     <None Include="graphics\300i.jpg" />

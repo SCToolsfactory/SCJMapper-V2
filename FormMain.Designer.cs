@@ -146,6 +146,7 @@
       this.meShowOptionsDialog = new System.Windows.Forms.ToolStripMenuItem();
       this.meShowDeviceTuningDialog = new System.Windows.Forms.ToolStripMenuItem();
       this.meShowDeviceMonitoringDialog = new System.Windows.Forms.ToolStripMenuItem();
+      this.meShowLayoutDialog = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
       this.msBtConfig = new System.Windows.Forms.ToolStripDropDownButton();
       this.meSettingsDialog = new System.Windows.Forms.ToolStripMenuItem();
@@ -395,13 +396,13 @@
             this.tmeWDown,
             this.toolStripSeparator4});
       this.cmMouseEntry.Name = "cmMouseEntry";
-      this.cmMouseEntry.Size = new System.Drawing.Size(172, 132);
+      this.cmMouseEntry.Size = new System.Drawing.Size(173, 132);
       this.cmMouseEntry.Opening += new System.ComponentModel.CancelEventHandler(this.cmMouseEntry_Opening);
       // 
       // tmeK_Tab
       // 
       this.tmeK_Tab.Name = "tmeK_Tab";
-      this.tmeK_Tab.Size = new System.Drawing.Size(171, 22);
+      this.tmeK_Tab.Size = new System.Drawing.Size(172, 22);
       this.tmeK_Tab.Tag = "K_Tab";
       this.tmeK_Tab.Text = "Kbd - TAB";
       this.tmeK_Tab.Click += new System.EventHandler(this.tmeItem_Click);
@@ -409,12 +410,12 @@
       // toolStripSeparator7
       // 
       this.toolStripSeparator7.Name = "toolStripSeparator7";
-      this.toolStripSeparator7.Size = new System.Drawing.Size(168, 6);
+      this.toolStripSeparator7.Size = new System.Drawing.Size(169, 6);
       // 
       // tmeXAxis
       // 
       this.tmeXAxis.Name = "tmeXAxis";
-      this.tmeXAxis.Size = new System.Drawing.Size(171, 22);
+      this.tmeXAxis.Size = new System.Drawing.Size(172, 22);
       this.tmeXAxis.Tag = "X";
       this.tmeXAxis.Text = "X-Axis (horizontal)";
       this.tmeXAxis.Click += new System.EventHandler(this.tmeItem_Click);
@@ -422,7 +423,7 @@
       // tmeYAxis
       // 
       this.tmeYAxis.Name = "tmeYAxis";
-      this.tmeYAxis.Size = new System.Drawing.Size(171, 22);
+      this.tmeYAxis.Size = new System.Drawing.Size(172, 22);
       this.tmeYAxis.Tag = "Y";
       this.tmeYAxis.Text = "Y-Axis (vertical)";
       this.tmeYAxis.Click += new System.EventHandler(this.tmeItem_Click);
@@ -430,12 +431,12 @@
       // toolStripSeparator3
       // 
       this.toolStripSeparator3.Name = "toolStripSeparator3";
-      this.toolStripSeparator3.Size = new System.Drawing.Size(168, 6);
+      this.toolStripSeparator3.Size = new System.Drawing.Size(169, 6);
       // 
       // tmeWUp
       // 
       this.tmeWUp.Name = "tmeWUp";
-      this.tmeWUp.Size = new System.Drawing.Size(171, 22);
+      this.tmeWUp.Size = new System.Drawing.Size(172, 22);
       this.tmeWUp.Tag = "U";
       this.tmeWUp.Text = "Wheel Up";
       this.tmeWUp.Click += new System.EventHandler(this.tmeItem_Click);
@@ -443,7 +444,7 @@
       // tmeWDown
       // 
       this.tmeWDown.Name = "tmeWDown";
-      this.tmeWDown.Size = new System.Drawing.Size(171, 22);
+      this.tmeWDown.Size = new System.Drawing.Size(172, 22);
       this.tmeWDown.Tag = "D";
       this.tmeWDown.Text = "Wheel Down";
       this.tmeWDown.Click += new System.EventHandler(this.tmeItem_Click);
@@ -451,14 +452,14 @@
       // toolStripSeparator4
       // 
       this.toolStripSeparator4.Name = "toolStripSeparator4";
-      this.toolStripSeparator4.Size = new System.Drawing.Size(168, 6);
+      this.toolStripSeparator4.Size = new System.Drawing.Size(169, 6);
       // 
       // cbxThrottle
       // 
       this.cbxThrottle.AutoSize = true;
       this.cbxThrottle.Location = new System.Drawing.Point(107, 108);
       this.cbxThrottle.Name = "cbxThrottle";
-      this.cbxThrottle.Size = new System.Drawing.Size(66, 17);
+      this.cbxThrottle.Size = new System.Drawing.Size(67, 17);
       this.cbxThrottle.TabIndex = 13;
       this.cbxThrottle.Tag = "§";
       this.cbxThrottle.Text = "Throttle";
@@ -1353,7 +1354,8 @@
             this.meShowToggleTable,
             this.meShowOptionsDialog,
             this.meShowDeviceTuningDialog,
-            this.meShowDeviceMonitoringDialog});
+            this.meShowDeviceMonitoringDialog,
+            this.meShowLayoutDialog});
       this.msBtShow.Image = global::SCJMapper_V2.Properties.Resources.Monitor;
       this.msBtShow.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.msBtShow.Name = "msBtShow";
@@ -1393,6 +1395,13 @@
       this.meShowDeviceMonitoringDialog.Tag = "§";
       this.meShowDeviceMonitoringDialog.Text = "Show Device Monitoring Dialog...";
       this.meShowDeviceMonitoringDialog.Click += new System.EventHandler(this.meShowDeviceMonitoringDialog_Click);
+      // 
+      // meShowLayoutDialog
+      // 
+      this.meShowLayoutDialog.Name = "meShowLayoutDialog";
+      this.meShowLayoutDialog.Size = new System.Drawing.Size(250, 22);
+      this.meShowLayoutDialog.Text = "Show Layout Dialog...";
+      this.meShowLayoutDialog.Click += new System.EventHandler(this.meShowLayoutDialog_Click);
       // 
       // toolStripSeparator6
       // 
@@ -1518,6 +1527,7 @@
       this.IL2.Images.SetKeyName(0, "User");
       this.IL2.Images.SetKeyName(1, "Locked");
       this.IL2.Images.SetKeyName(2, "RSI");
+      this.IL2.Images.SetKeyName(3, "Exported");
       // 
       // MainForm
       // 
@@ -1695,6 +1705,7 @@
     private System.Windows.Forms.ToolStripMenuItem tdiExpandAll;
     private System.Windows.Forms.ToolStripMenuItem meShowDeviceMonitoringDialog;
     private System.Windows.Forms.Label lblPTU;
+    private System.Windows.Forms.ToolStripMenuItem meShowLayoutDialog;
   }
 }
 

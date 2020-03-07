@@ -1,0 +1,36 @@
+{
+  "MapName" : "Cyborg F.L.Y. 5",
+  "MapImage" : "fly5.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J",
+    "DeviceName": "SaitekFLY5",
+    "DeviceProdGuid": ["{13020738-0000-0000-0000-504944564944}",
+                       "{083606A3-0000-0000-0000-504944564944}"],
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X":684, "Y":794, "Width":1092, "Height":54, "Cmt": "Primary trigger" },
+      { "Input": "button2", "Type": "Digital", "X":734, "Y":874, "Width":1092, "Height":54, "Cmt": "Bottom-left button" },
+      { "Input": "button3", "Type": "Digital", "X":2414, "Y":744, "Width":1092, "Height":54, "Cmt": "Bottom-right button" },
+      { "Input": "button4", "Type": "Digital", "X":624, "Y":704, "Width":1092, "Height":54, "Cmt": "Top-left button" },
+      { "Input": "button5", "Type": "Digital", "X":2414, "Y":594, "Width":1092, "Height":54, "Cmt": "Top-right button" },
+      { "Input": "button6", "Type": "Digital", "X":584, "Y":1847, "Width":1092, "Height":54, "Cmt": "Bottom bank first button" },
+      { "Input": "button7", "Type": "Digital", "X":734, "Y":1927, "Width":1092, "Height":54, "Cmt": "Bottom bank second button" },
+      { "Input": "button8", "Type": "Digital", "X":884, "Y":2007, "Width":1092, "Height":54, "Cmt": "Bottom bank third button" },
+      { "Input": "button9", "Type": "Digital", "X":1034, "Y":2090, "Width":1092, "Height":54, "Cmt": "Bottom bank fourth button" },
+      { "Input": "button10", "Type": "Digital", "X":304, "Y":1604, "Width":1092, "Height":54, "Cmt": "Rear left button" },
+      { "Input": "button11", "Type": "Digital", "X":664, "Y":1204, "Width":1092, "Height":54, "Cmt": "Rear right button" },
+      { "Input": "button12", "Type": "Digital", "X":2474, "Y":864, "Width":1132, "Height":54, "Cmt": "Scroll wheel up" },
+      { "Input": "button13", "Type": "Digital", "X":2474, "Y":920, "Width":1132, "Height":54, "Cmt": "Scroll wheel down" },
+      { "Input": "button14", "Type": "Digital", "X":2594, "Y":1504, "Width":1092, "Height":54, "Cmt": "Base button" },
+      { "Input": "hat1_up", "Type": "Digital", "X":990, "Y":304, "Width":1932, "Height":54, "Cmt": "PoV hat up" },
+      { "Input": "hat1_right", "Type": "Digital", "X":990, "Y":360, "Width":1932, "Height":54, "Cmt": "PoV hat right" },
+      { "Input": "hat1_down", "Type": "Digital", "X":990, "Y":416, "Width":1932, "Height":54, "Cmt": "PoV hat down" },
+      { "Input": "hat1_left", "Type": "Digital", "X":990, "Y":472, "Width":1932, "Height":54, "Cmt": "PoV hat left" },
+      { "Input": "rotz", "Type": "Analogue", "X":2484, "Y":1136, "Width":1132, "Height":54, "Cmt": "Stick twist" },
+      { "Input": "x", "Type": "Analogue", "X":2484, "Y":1080, "Width":1132, "Height":54, "Cmt": "Stick roll" },
+      { "Input": "y", "Type": "Analogue", "X":2484, "Y":1024, "Width":1132, "Height":54, "Cmt": "Stick pitch" },
+      { "Input":  "z", "Type": "Analogue", "X":264, "Y":1404, "Width":1032, "Height":54, "Cmt": "Throttle" }
+    ]
+  }
+  ]
+}

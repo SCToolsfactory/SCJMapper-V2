@@ -25,6 +25,13 @@ using log4net.dll<br>
 <br>
 Built with VisualStudio 2017 Community free version<br>
 <br>
+
+# Credits
+
+Device Layout Images and Maps:<br>
+<br>
+https://github.com/richardbuckle/EDRefCard
+<br>
 DDS Skydome Images:<br>
 <br>
 Canyon, Highway, Shiodome, BigSight, LA Heliport:<br>

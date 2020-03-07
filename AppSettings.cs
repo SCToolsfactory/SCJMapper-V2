@@ -5,6 +5,7 @@ using System.Text;
 using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
+using static SCJMapper_V2.Layout.MapProps;
 
 namespace SCJMapper_V2
 {
@@ -12,12 +13,12 @@ namespace SCJMapper_V2
   {
     FormSettings FS = null; // Settings form
 
-    
+
     // Singleton
     private static readonly Lazy<AppSettings> m_lazy = new Lazy<AppSettings>( () => new AppSettings( ) );
     public static AppSettings Instance { get => m_lazy.Value; }
 
-    private AppSettings( )
+    private AppSettings()
     {
       if ( this.FirstRun ) {
         // migrate the settings to the new version if the app runs the first time
@@ -66,10 +67,10 @@ namespace SCJMapper_V2
 
     // manages Upgrade
     [UserScopedSetting( )]
-    [DefaultSettingValue( "True" )] 
+    [DefaultSettingValue( "True" )]
     public bool FirstRun
     {
-      get { return ( bool )this["FirstRun"]; }
+      get { return (bool)this["FirstRun"]; }
       set { this["FirstRun"] = value; }
     }
 
@@ -79,7 +80,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "1000, 900" )]
     public Size FormSize
     {
-      get { return ( Size )this["FormSize"]; }
+      get { return (Size)this["FormSize"]; }
       set { this["FormSize"] = value; }
     }
 
@@ -87,7 +88,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "10, 10" )]
     public Point FormLocation
     {
-      get { return ( Point )this["FormLocation"]; }
+      get { return (Point)this["FormLocation"]; }
       set { this["FormLocation"] = value; }
     }
 
@@ -96,7 +97,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "layout_joystick_spacesim" )] // from Game Bundle
     public string DefMappingName
     {
-      get { return ( string )this["DefMappingName"]; }
+      get { return (string)this["DefMappingName"]; }
       set { this["DefMappingName"] = value; }
     }
 
@@ -104,7 +105,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "layout_my_joystick" )] // just a default
     public string MyMappingName
     {
-      get { return ( string )this["MyMappingName"]; }
+      get { return (string)this["MyMappingName"]; }
       set { this["MyMappingName"] = value; }
     }
 
@@ -112,7 +113,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "True" )]
     public bool ShowJoystick
     {
-      get { return ( bool )this["ShowJoystick"]; }
+      get { return (bool)this["ShowJoystick"]; }
       set { this["ShowJoystick"] = value; }
     }
 
@@ -120,7 +121,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "True" )]
     public bool ShowGamepad
     {
-      get { return ( bool )this["ShowGamepad"]; }
+      get { return (bool)this["ShowGamepad"]; }
       set { this["ShowGamepad"] = value; }
     }
 
@@ -128,7 +129,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "True" )]
     public bool ShowKeyboard
     {
-      get { return ( bool )this["ShowKeyboard"]; }
+      get { return (bool)this["ShowKeyboard"]; }
       set { this["ShowKeyboard"] = value; }
     }
 
@@ -136,7 +137,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "True" )]
     public bool ShowMouse  // 20151220BM: add mouse device (from AC 2.0 defaultProfile usage)
     {
-      get { return ( bool )this["ShowMouse"]; }
+      get { return (bool)this["ShowMouse"]; }
       set { this["ShowMouse"] = value; }
     }
 
@@ -144,7 +145,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "False" )]
     public bool ShowMapped
     {
-      get { return ( bool )this["ShowMapped"]; }
+      get { return (bool)this["ShowMapped"]; }
       set { this["ShowMapped"] = value; }
     }
 
@@ -155,7 +156,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS1
     {
-      get { return ( string )this["IgnoreJS1"]; }
+      get { return (string)this["IgnoreJS1"]; }
       set { this["IgnoreJS1"] = value; }
     }
 
@@ -163,7 +164,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS2
     {
-      get { return ( string )this["IgnoreJS2"]; }
+      get { return (string)this["IgnoreJS2"]; }
       set { this["IgnoreJS2"] = value; }
     }
 
@@ -171,7 +172,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS3
     {
-      get { return ( string )this["IgnoreJS3"]; }
+      get { return (string)this["IgnoreJS3"]; }
       set { this["IgnoreJS3"] = value; }
     }
 
@@ -179,7 +180,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS4
     {
-      get { return ( string )this["IgnoreJS4"]; }
+      get { return (string)this["IgnoreJS4"]; }
       set { this["IgnoreJS4"] = value; }
     }
 
@@ -187,7 +188,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS5
     {
-      get { return ( string )this["IgnoreJS5"]; }
+      get { return (string)this["IgnoreJS5"]; }
       set { this["IgnoreJS5"] = value; }
     }
 
@@ -195,7 +196,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS6
     {
-      get { return ( string )this["IgnoreJS6"]; }
+      get { return (string)this["IgnoreJS6"]; }
       set { this["IgnoreJS6"] = value; }
     }
 
@@ -203,7 +204,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS7
     {
-      get { return ( string )this["IgnoreJS7"]; }
+      get { return (string)this["IgnoreJS7"]; }
       set { this["IgnoreJS7"] = value; }
     }
 
@@ -211,7 +212,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS8
     {
-      get { return ( string )this["IgnoreJS8"]; }
+      get { return (string)this["IgnoreJS8"]; }
       set { this["IgnoreJS8"] = value; }
     }
 
@@ -219,7 +220,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS9
     {
-      get { return ( string )this["IgnoreJS9"]; }
+      get { return (string)this["IgnoreJS9"]; }
       set { this["IgnoreJS9"] = value; }
     }
 
@@ -227,7 +228,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS10
     {
-      get { return ( string )this["IgnoreJS10"]; }
+      get { return (string)this["IgnoreJS10"]; }
       set { this["IgnoreJS10"] = value; }
     }
 
@@ -235,7 +236,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string IgnoreJS11
     {
-      get { return ( string )this["IgnoreJS11"]; }
+      get { return (string)this["IgnoreJS11"]; }
       set { this["IgnoreJS11"] = value; }
     }
 
@@ -269,7 +270,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string UserSCPath
     {
-      get { return ( string )this["UserSCPath"]; }
+      get { return (string)this["UserSCPath"]; }
       set { this["UserSCPath"] = value; }
     }
 
@@ -277,7 +278,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "False" )]
     public bool UserSCPathUsed
     {
-      get { return ( bool )this["UserSCPathUsed"]; }
+      get { return (bool)this["UserSCPathUsed"]; }
       set { this["UserSCPathUsed"] = value; }
     }
 
@@ -285,7 +286,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( ",default,multiplayer,singleplayer,player,flycam,vehicle_driver," )] // empty  Note: comma separated list, must have a comma at the begining and the end (to find 'player' on its own...)
     public string IgnoreActionmaps
     {
-      get { return ( string )this["IgnoreActionmaps"]; }
+      get { return (string)this["IgnoreActionmaps"]; }
       set { this["IgnoreActionmaps"] = value; }
     }
 
@@ -294,7 +295,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "False" )]
     public bool DetectGamepad
     {
-      get { return ( bool )this["DetectGamepad"]; }
+      get { return (bool)this["DetectGamepad"]; }
       set { this["DetectGamepad"] = value; }
     }
 
@@ -302,7 +303,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "False" )]
     public bool UsePTU
     {
-      get { return ( bool )this["UsePTU"]; }
+      get { return (bool)this["UsePTU"]; }
       set { this["UsePTU"] = value; }
     }
 
@@ -310,7 +311,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "False" )]
     public bool UseCSVListing
     {
-      get { return ( bool )this["UseCSVListing"]; }
+      get { return (bool)this["UseCSVListing"]; }
       set { this["UseCSVListing"] = value; }
     }
 
@@ -318,7 +319,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "False" )]
     public bool ListModifiers
     {
-      get { return ( bool )this["ListModifiers"]; }
+      get { return (bool)this["ListModifiers"]; }
       set { this["ListModifiers"] = value; }
     }
 
@@ -355,7 +356,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "1000, 900" )]
     public Size FormTableSize
     {
-      get { return ( Size )this["FormTableSize"]; }
+      get { return (Size)this["FormTableSize"]; }
       set { this["FormTableSize"] = value; }
     }
 
@@ -363,7 +364,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "760, 320" )]
     public Point FormTableLocation
     {
-      get { return ( Point )this["FormTableLocation"]; }
+      get { return (Point)this["FormTableLocation"]; }
       set { this["FormTableLocation"] = value; }
     }
 
@@ -371,7 +372,7 @@ namespace SCJMapper_V2
     [DefaultSettingValue( "" )]
     public string FormTableColumnWidth
     {
-      get { return ( string )this["FormTableColumnWidth"]; }
+      get { return (string)this["FormTableColumnWidth"]; }
       set { this["FormTableColumnWidth"] = value; }
     }
 
@@ -392,6 +393,137 @@ namespace SCJMapper_V2
     {
       get { return (Point)this["FormOptionsLocation"]; }
       set { this["FormOptionsLocation"] = value; }
+    }
+
+
+    //**** Form Layout
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "1000, 765" )]
+    public Size FormLayoutSize
+    {
+      get { return (Size)this["FormLayoutSize"]; }
+      set { this["FormLayoutSize"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "10, 10" )]
+    public Point FormLayoutLocation
+    {
+      get { return (Point)this["FormLayoutLocation"]; }
+      set { this["FormLayoutLocation"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "16" )]
+    public int LayoutFontSize
+    {
+      get { return (int)this["LayoutFontSize"]; }
+      set { this["LayoutFontSize"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,0,0,139|255,255,255,255" )]
+    public string GroupColor_00
+    {
+      get { return (string)this["GroupColor_00"]; }
+      set { this["GroupColor_00"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,255,140,00|255,255,255,255" )]
+    public string GroupColor_01
+    {
+      get { return (string)this["GroupColor_01"]; }
+      set { this["GroupColor_01"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,138,43,226|255,255,255,255" )]
+    public string GroupColor_02
+    {
+      get { return (string)this["GroupColor_02"]; }
+      set { this["GroupColor_02"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,220,20,60|255,255,255,255" )]
+    public string GroupColor_03
+    {
+      get { return (string)this["GroupColor_03"]; }
+      set { this["GroupColor_03"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,184,134,11|255,255,255,255" )]
+    public string GroupColor_04
+    {
+      get { return (string)this["GroupColor_04"]; }
+      set { this["GroupColor_04"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,46,139,87|255,255,255,255" )]
+    public string GroupColor_05
+    {
+      get { return (string)this["GroupColor_05"]; }
+      set { this["GroupColor_05"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,128,128,0|255,255,255,255" )]
+    public string GroupColor_06
+    {
+      get { return (string)this["GroupColor_06"]; }
+      set { this["GroupColor_06"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,47,79,79|255,255,255,255" )]
+    public string GroupColor_07
+    {
+      get { return (string)this["GroupColor_07"]; }
+      set { this["GroupColor_07"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,255,0,0|255,255,255,255" )]
+    public string GroupColor_08
+    {
+      get { return (string)this["GroupColor_08"]; }
+      set { this["GroupColor_08"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,255,215,0|255,255,255,255" )]
+    public string GroupColor_09
+    {
+      get { return (string)this["GroupColor_09"]; }
+      set { this["GroupColor_09"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "0|255,255,255,255" )]
+    public string GroupColor_10
+    {
+      get { return (string)this["GroupColor_10"]; }
+      set { this["GroupColor_10"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,128,0,128|255,255,255,255" )]
+    public string GroupColor_11
+    {
+      get { return (string)this["GroupColor_11"]; }
+      set { this["GroupColor_11"] = value; }
+    }
+
+    [UserScopedSetting( )]
+    [DefaultSettingValue( "255,255,20,147|255,255,255,255" )]
+    public string GroupColor_12
+    {
+      get { return (string)this["GroupColor_12"]; }
+      set { this["GroupColor_12"] = value; }
     }
 
 
