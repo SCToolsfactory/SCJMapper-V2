@@ -774,4 +774,15 @@ benutzen sie Abbrechen um die Arbeit erst zu speichern.</value>
     <value>Ja</value>
     <comment>0-General</comment>
   </data>
+  <data name="meShowLayoutDialog" xml:space="preserve">
+    <value>Geräte Layout...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="lblLayoutNote" xml:space="preserve">
+    <value>Wählen Sie einen Eintrag in der Liste aus und klicken Sie oben Farben zuweisen.
+
+Hinweis:
+Weißer Hintergrund wird beim Zeichnen von Elementen auf das Bild als transparent behandelt.</value>
+    <comment>9-Layout</comment>
+  </data>
 </root>

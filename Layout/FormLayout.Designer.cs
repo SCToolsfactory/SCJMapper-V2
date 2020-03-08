@@ -32,34 +32,42 @@
       this.chkLbActionGroups = new System.Windows.Forms.ListView();
       this.chkLbActionMaps = new System.Windows.Forms.ListView();
       this.pnlInput = new System.Windows.Forms.Panel();
+      this.btClose = new System.Windows.Forms.Button();
+      this.pnlDebug = new System.Windows.Forms.Panel();
+      this.cbxJs3 = new System.Windows.Forms.ComboBox();
+      this.cbxJs2 = new System.Windows.Forms.ComboBox();
+      this.cbxJs1 = new System.Windows.Forms.ComboBox();
+      this.label4 = new System.Windows.Forms.Label();
+      this.label3 = new System.Windows.Forms.Label();
+      this.label1 = new System.Windows.Forms.Label();
+      this.btCreateDbgList = new System.Windows.Forms.Button();
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
-      this.btColors = new System.Windows.Forms.Button();
-      this.btSave = new System.Windows.Forms.Button();
       this.btLayout = new System.Windows.Forms.Button();
       this.cbxLayouts = new System.Windows.Forms.ComboBox();
       this.drawPanel = new System.Windows.Forms.Panel();
       this.gbxColors = new System.Windows.Forms.GroupBox();
       this.lblFontSize = new System.Windows.Forms.Label();
       this.tbFontSize = new System.Windows.Forms.TrackBar();
-      this.label2 = new System.Windows.Forms.Label();
-      this.btAcceptColors = new System.Windows.Forms.Button();
+      this.lblLayoutNote = new System.Windows.Forms.Label();
+      this.btAccept = new System.Windows.Forms.Button();
       this.lblTextColor = new System.Windows.Forms.Label();
       this.lblTest = new System.Windows.Forms.Label();
       this.lblBackColor = new System.Windows.Forms.Label();
       this.chkLbActionGroupsColor = new System.Windows.Forms.ListView();
-      this.btCancelColors = new System.Windows.Forms.Button();
+      this.btCancel = new System.Windows.Forms.Button();
+      this.panel1 = new System.Windows.Forms.Panel();
+      this.btSave = new System.Windows.Forms.Button();
+      this.btColors = new System.Windows.Forms.Button();
       this.SFD = new System.Windows.Forms.SaveFileDialog();
       this.colDlg = new System.Windows.Forms.ColorDialog();
-      this.txGuid1 = new System.Windows.Forms.TextBox();
-      this.txGuid2 = new System.Windows.Forms.TextBox();
-      this.txGuid3 = new System.Windows.Forms.TextBox();
-      this.btCreateDbgList = new System.Windows.Forms.Button();
       this.tlPanel.SuspendLayout();
       this.pnlInput.SuspendLayout();
+      this.pnlDebug.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.drawPanel.SuspendLayout();
       this.gbxColors.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.tbFontSize)).BeginInit();
+      this.panel1.SuspendLayout();
       this.SuspendLayout();
       // 
       // tlPanel
@@ -71,14 +79,16 @@
       this.tlPanel.Controls.Add(this.chkLbActionMaps, 0, 2);
       this.tlPanel.Controls.Add(this.pnlInput, 0, 0);
       this.tlPanel.Controls.Add(this.drawPanel, 1, 1);
+      this.tlPanel.Controls.Add(this.panel1, 0, 3);
       this.tlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tlPanel.Location = new System.Drawing.Point(0, 0);
       this.tlPanel.Name = "tlPanel";
-      this.tlPanel.RowCount = 3;
+      this.tlPanel.RowCount = 4;
       this.tlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
       this.tlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
       this.tlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 75F));
-      this.tlPanel.Size = new System.Drawing.Size(1298, 640);
+      this.tlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+      this.tlPanel.Size = new System.Drawing.Size(1271, 681);
       this.tlPanel.TabIndex = 0;
       // 
       // chkLbActionGroups
@@ -95,7 +105,7 @@
       this.chkLbActionGroups.MultiSelect = false;
       this.chkLbActionGroups.Name = "chkLbActionGroups";
       this.chkLbActionGroups.ShowGroups = false;
-      this.chkLbActionGroups.Size = new System.Drawing.Size(174, 134);
+      this.chkLbActionGroups.Size = new System.Drawing.Size(174, 124);
       this.chkLbActionGroups.TabIndex = 5;
       this.chkLbActionGroups.UseCompatibleStateImageBehavior = false;
       this.chkLbActionGroups.View = System.Windows.Forms.View.Details;
@@ -111,12 +121,12 @@
       this.chkLbActionMaps.HideSelection = false;
       this.chkLbActionMaps.HoverSelection = true;
       this.chkLbActionMaps.LabelWrap = false;
-      this.chkLbActionMaps.Location = new System.Drawing.Point(3, 223);
+      this.chkLbActionMaps.Location = new System.Drawing.Point(3, 213);
       this.chkLbActionMaps.MultiSelect = false;
       this.chkLbActionMaps.Name = "chkLbActionMaps";
       this.chkLbActionMaps.ShowGroups = false;
       this.chkLbActionMaps.ShowItemToolTips = true;
-      this.chkLbActionMaps.Size = new System.Drawing.Size(174, 414);
+      this.chkLbActionMaps.Size = new System.Drawing.Size(174, 384);
       this.chkLbActionMaps.TabIndex = 6;
       this.chkLbActionMaps.UseCompatibleStateImageBehavior = false;
       this.chkLbActionMaps.View = System.Windows.Forms.View.Details;
@@ -124,20 +134,107 @@
       // pnlInput
       // 
       this.tlPanel.SetColumnSpan(this.pnlInput, 2);
-      this.pnlInput.Controls.Add(this.btCreateDbgList);
-      this.pnlInput.Controls.Add(this.txGuid3);
-      this.pnlInput.Controls.Add(this.txGuid2);
-      this.pnlInput.Controls.Add(this.txGuid1);
+      this.pnlInput.Controls.Add(this.btClose);
+      this.pnlInput.Controls.Add(this.pnlDebug);
       this.pnlInput.Controls.Add(this.pictureBox1);
-      this.pnlInput.Controls.Add(this.btColors);
-      this.pnlInput.Controls.Add(this.btSave);
       this.pnlInput.Controls.Add(this.btLayout);
       this.pnlInput.Controls.Add(this.cbxLayouts);
       this.pnlInput.Dock = System.Windows.Forms.DockStyle.Fill;
       this.pnlInput.Location = new System.Drawing.Point(3, 3);
       this.pnlInput.Name = "pnlInput";
-      this.pnlInput.Size = new System.Drawing.Size(1292, 74);
+      this.pnlInput.Size = new System.Drawing.Size(1265, 74);
       this.pnlInput.TabIndex = 1;
+      // 
+      // btClose
+      // 
+      this.btClose.Image = ((System.Drawing.Image)(resources.GetObject("btClose.Image")));
+      this.btClose.Location = new System.Drawing.Point(651, 16);
+      this.btClose.Name = "btClose";
+      this.btClose.Size = new System.Drawing.Size(80, 53);
+      this.btClose.TabIndex = 8;
+      this.btClose.UseVisualStyleBackColor = true;
+      this.btClose.Click += new System.EventHandler(this.btClose_Click);
+      // 
+      // pnlDebug
+      // 
+      this.pnlDebug.BackColor = System.Drawing.Color.Honeydew;
+      this.pnlDebug.Controls.Add(this.cbxJs3);
+      this.pnlDebug.Controls.Add(this.cbxJs2);
+      this.pnlDebug.Controls.Add(this.cbxJs1);
+      this.pnlDebug.Controls.Add(this.label4);
+      this.pnlDebug.Controls.Add(this.label3);
+      this.pnlDebug.Controls.Add(this.label1);
+      this.pnlDebug.Controls.Add(this.btCreateDbgList);
+      this.pnlDebug.Dock = System.Windows.Forms.DockStyle.Right;
+      this.pnlDebug.Location = new System.Drawing.Point(748, 0);
+      this.pnlDebug.Name = "pnlDebug";
+      this.pnlDebug.Size = new System.Drawing.Size(517, 74);
+      this.pnlDebug.TabIndex = 7;
+      this.pnlDebug.Visible = false;
+      // 
+      // cbxJs3
+      // 
+      this.cbxJs3.FormattingEnabled = true;
+      this.cbxJs3.Location = new System.Drawing.Point(42, 49);
+      this.cbxJs3.Name = "cbxJs3";
+      this.cbxJs3.Size = new System.Drawing.Size(376, 21);
+      this.cbxJs3.Sorted = true;
+      this.cbxJs3.TabIndex = 16;
+      // 
+      // cbxJs2
+      // 
+      this.cbxJs2.FormattingEnabled = true;
+      this.cbxJs2.Location = new System.Drawing.Point(42, 26);
+      this.cbxJs2.Name = "cbxJs2";
+      this.cbxJs2.Size = new System.Drawing.Size(376, 21);
+      this.cbxJs2.Sorted = true;
+      this.cbxJs2.TabIndex = 15;
+      // 
+      // cbxJs1
+      // 
+      this.cbxJs1.FormattingEnabled = true;
+      this.cbxJs1.Location = new System.Drawing.Point(42, 3);
+      this.cbxJs1.Name = "cbxJs1";
+      this.cbxJs1.Size = new System.Drawing.Size(376, 21);
+      this.cbxJs1.Sorted = true;
+      this.cbxJs1.TabIndex = 14;
+      // 
+      // label4
+      // 
+      this.label4.AutoSize = true;
+      this.label4.Location = new System.Drawing.Point(14, 52);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(22, 13);
+      this.label4.TabIndex = 13;
+      this.label4.Text = "Js3";
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Location = new System.Drawing.Point(14, 29);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(22, 13);
+      this.label3.TabIndex = 12;
+      this.label3.Text = "Js2";
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(14, 6);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(22, 13);
+      this.label1.TabIndex = 11;
+      this.label1.Text = "Js1";
+      // 
+      // btCreateDbgList
+      // 
+      this.btCreateDbgList.Location = new System.Drawing.Point(424, 9);
+      this.btCreateDbgList.Name = "btCreateDbgList";
+      this.btCreateDbgList.Size = new System.Drawing.Size(74, 56);
+      this.btCreateDbgList.TabIndex = 10;
+      this.btCreateDbgList.Text = "Create Debug List";
+      this.btCreateDbgList.UseVisualStyleBackColor = true;
+      this.btCreateDbgList.Click += new System.EventHandler(this.btCreateDbgList_Click);
       // 
       // pictureBox1
       // 
@@ -151,30 +248,10 @@
       this.pictureBox1.TabStop = false;
       this.pictureBox1.DoubleClick += new System.EventHandler(this.pictureBox1_DoubleClick);
       // 
-      // btColors
-      // 
-      this.btColors.Image = global::SCJMapper_V2.Properties.Resources.Settings;
-      this.btColors.Location = new System.Drawing.Point(651, 15);
-      this.btColors.Name = "btColors";
-      this.btColors.Size = new System.Drawing.Size(80, 54);
-      this.btColors.TabIndex = 5;
-      this.btColors.UseVisualStyleBackColor = true;
-      this.btColors.Click += new System.EventHandler(this.btColors_Click);
-      // 
-      // btSave
-      // 
-      this.btSave.Image = ((System.Drawing.Image)(resources.GetObject("btSave.Image")));
-      this.btSave.Location = new System.Drawing.Point(534, 15);
-      this.btSave.Name = "btSave";
-      this.btSave.Size = new System.Drawing.Size(80, 54);
-      this.btSave.TabIndex = 4;
-      this.btSave.UseVisualStyleBackColor = true;
-      this.btSave.Click += new System.EventHandler(this.btSave_Click);
-      // 
       // btLayout
       // 
       this.btLayout.Image = ((System.Drawing.Image)(resources.GetObject("btLayout.Image")));
-      this.btLayout.Location = new System.Drawing.Point(383, 16);
+      this.btLayout.Location = new System.Drawing.Point(431, 16);
       this.btLayout.Name = "btLayout";
       this.btLayout.Size = new System.Drawing.Size(80, 53);
       this.btLayout.TabIndex = 3;
@@ -187,7 +264,8 @@
       this.cbxLayouts.FormattingEnabled = true;
       this.cbxLayouts.Location = new System.Drawing.Point(91, 30);
       this.cbxLayouts.Name = "cbxLayouts";
-      this.cbxLayouts.Size = new System.Drawing.Size(269, 25);
+      this.cbxLayouts.Size = new System.Drawing.Size(334, 25);
+      this.cbxLayouts.Sorted = true;
       this.cbxLayouts.TabIndex = 1;
       this.cbxLayouts.SelectedIndexChanged += new System.EventHandler(this.cbxLayouts_SelectedIndexChanged);
       // 
@@ -199,8 +277,8 @@
       this.drawPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.drawPanel.Location = new System.Drawing.Point(183, 83);
       this.drawPanel.Name = "drawPanel";
-      this.tlPanel.SetRowSpan(this.drawPanel, 2);
-      this.drawPanel.Size = new System.Drawing.Size(1112, 554);
+      this.tlPanel.SetRowSpan(this.drawPanel, 3);
+      this.drawPanel.Size = new System.Drawing.Size(1085, 595);
       this.drawPanel.TabIndex = 2;
       // 
       // gbxColors
@@ -208,17 +286,17 @@
       this.gbxColors.BackColor = System.Drawing.Color.Gray;
       this.gbxColors.Controls.Add(this.lblFontSize);
       this.gbxColors.Controls.Add(this.tbFontSize);
-      this.gbxColors.Controls.Add(this.label2);
-      this.gbxColors.Controls.Add(this.btAcceptColors);
+      this.gbxColors.Controls.Add(this.lblLayoutNote);
+      this.gbxColors.Controls.Add(this.btAccept);
       this.gbxColors.Controls.Add(this.lblTextColor);
       this.gbxColors.Controls.Add(this.lblTest);
       this.gbxColors.Controls.Add(this.lblBackColor);
       this.gbxColors.Controls.Add(this.chkLbActionGroupsColor);
-      this.gbxColors.Controls.Add(this.btCancelColors);
+      this.gbxColors.Controls.Add(this.btCancel);
       this.gbxColors.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.gbxColors.Location = new System.Drawing.Point(17, 16);
       this.gbxColors.Name = "gbxColors";
-      this.gbxColors.Size = new System.Drawing.Size(534, 418);
+      this.gbxColors.Size = new System.Drawing.Size(534, 455);
       this.gbxColors.TabIndex = 0;
       this.gbxColors.TabStop = false;
       this.gbxColors.Text = "Layout Settings";
@@ -228,6 +306,7 @@
       // 
       this.lblFontSize.AutoSize = true;
       this.lblFontSize.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblFontSize.ForeColor = System.Drawing.Color.LightCyan;
       this.lblFontSize.Location = new System.Drawing.Point(428, 35);
       this.lblFontSize.Name = "lblFontSize";
       this.lblFontSize.Size = new System.Drawing.Size(37, 30);
@@ -249,25 +328,27 @@
       this.tbFontSize.Value = 16;
       this.tbFontSize.Scroll += new System.EventHandler(this.tbFontSize_Scroll);
       // 
-      // label2
+      // lblLayoutNote
       // 
-      this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(248, 243);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(247, 78);
-      this.label2.TabIndex = 12;
-      this.label2.Text = "Select an entry in the list and then click above \r\nto assing colors.\r\n\r\nNote: \r\nW" +
+      this.lblLayoutNote.ForeColor = System.Drawing.Color.LightCyan;
+      this.lblLayoutNote.Location = new System.Drawing.Point(248, 246);
+      this.lblLayoutNote.Name = "lblLayoutNote";
+      this.lblLayoutNote.Size = new System.Drawing.Size(247, 141);
+      this.lblLayoutNote.TabIndex = 12;
+      this.lblLayoutNote.Tag = "§";
+      this.lblLayoutNote.Text = "Select an entry in the list and then click above \r\nto assign colors.\r\n\r\nNote: \r\nW" +
     "hite background is treated as Transparent\r\nwhile drawing items to the image.";
       // 
-      // btAcceptColors
+      // btAccept
       // 
-      this.btAcceptColors.Location = new System.Drawing.Point(234, 370);
-      this.btAcceptColors.Name = "btAcceptColors";
-      this.btAcceptColors.Size = new System.Drawing.Size(129, 26);
-      this.btAcceptColors.TabIndex = 11;
-      this.btAcceptColors.Text = "Accept";
-      this.btAcceptColors.UseVisualStyleBackColor = true;
-      this.btAcceptColors.Click += new System.EventHandler(this.btAcceptColors_Click);
+      this.btAccept.Location = new System.Drawing.Point(229, 407);
+      this.btAccept.Name = "btAccept";
+      this.btAccept.Size = new System.Drawing.Size(129, 26);
+      this.btAccept.TabIndex = 11;
+      this.btAccept.Tag = "§";
+      this.btAccept.Text = "Accept";
+      this.btAccept.UseVisualStyleBackColor = true;
+      this.btAccept.Click += new System.EventHandler(this.btAcceptColors_Click);
       // 
       // lblTextColor
       // 
@@ -323,15 +404,46 @@
       this.chkLbActionGroupsColor.View = System.Windows.Forms.View.Details;
       this.chkLbActionGroupsColor.ItemActivate += new System.EventHandler(this.chkLbActionGroupsColor_ItemActivate);
       // 
-      // btCancelColors
+      // btCancel
       // 
-      this.btCancelColors.Location = new System.Drawing.Point(382, 370);
-      this.btCancelColors.Name = "btCancelColors";
-      this.btCancelColors.Size = new System.Drawing.Size(129, 26);
-      this.btCancelColors.TabIndex = 6;
-      this.btCancelColors.Text = "Cancel";
-      this.btCancelColors.UseVisualStyleBackColor = true;
-      this.btCancelColors.Click += new System.EventHandler(this.btCloseColors_Click);
+      this.btCancel.Location = new System.Drawing.Point(377, 407);
+      this.btCancel.Name = "btCancel";
+      this.btCancel.Size = new System.Drawing.Size(129, 26);
+      this.btCancel.TabIndex = 6;
+      this.btCancel.Tag = "§";
+      this.btCancel.Text = "Cancel";
+      this.btCancel.UseVisualStyleBackColor = true;
+      this.btCancel.Click += new System.EventHandler(this.btCloseColors_Click);
+      // 
+      // panel1
+      // 
+      this.panel1.Controls.Add(this.btSave);
+      this.panel1.Controls.Add(this.btColors);
+      this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.panel1.Location = new System.Drawing.Point(3, 603);
+      this.panel1.Name = "panel1";
+      this.panel1.Size = new System.Drawing.Size(174, 75);
+      this.panel1.TabIndex = 7;
+      // 
+      // btSave
+      // 
+      this.btSave.Image = ((System.Drawing.Image)(resources.GetObject("btSave.Image")));
+      this.btSave.Location = new System.Drawing.Point(3, 11);
+      this.btSave.Name = "btSave";
+      this.btSave.Size = new System.Drawing.Size(62, 54);
+      this.btSave.TabIndex = 4;
+      this.btSave.UseVisualStyleBackColor = true;
+      this.btSave.Click += new System.EventHandler(this.btSave_Click);
+      // 
+      // btColors
+      // 
+      this.btColors.Image = global::SCJMapper_V2.Properties.Resources.Settings;
+      this.btColors.Location = new System.Drawing.Point(109, 11);
+      this.btColors.Name = "btColors";
+      this.btColors.Size = new System.Drawing.Size(62, 54);
+      this.btColors.TabIndex = 5;
+      this.btColors.UseVisualStyleBackColor = true;
+      this.btColors.Click += new System.EventHandler(this.btColors_Click);
       // 
       // SFD
       // 
@@ -344,50 +456,16 @@
       this.colDlg.AnyColor = true;
       this.colDlg.FullOpen = true;
       // 
-      // txGuid1
-      // 
-      this.txGuid1.Location = new System.Drawing.Point(842, 2);
-      this.txGuid1.Name = "txGuid1";
-      this.txGuid1.Size = new System.Drawing.Size(338, 22);
-      this.txGuid1.TabIndex = 7;
-      this.txGuid1.Visible = false;
-      // 
-      // txGuid2
-      // 
-      this.txGuid2.Location = new System.Drawing.Point(842, 25);
-      this.txGuid2.Name = "txGuid2";
-      this.txGuid2.Size = new System.Drawing.Size(338, 22);
-      this.txGuid2.TabIndex = 8;
-      this.txGuid2.Visible = false;
-      // 
-      // txGuid3
-      // 
-      this.txGuid3.Location = new System.Drawing.Point(842, 48);
-      this.txGuid3.Name = "txGuid3";
-      this.txGuid3.Size = new System.Drawing.Size(338, 22);
-      this.txGuid3.TabIndex = 9;
-      this.txGuid3.Visible = false;
-      // 
-      // btCreateDbgList
-      // 
-      this.btCreateDbgList.Location = new System.Drawing.Point(1190, 24);
-      this.btCreateDbgList.Name = "btCreateDbgList";
-      this.btCreateDbgList.Size = new System.Drawing.Size(74, 24);
-      this.btCreateDbgList.TabIndex = 10;
-      this.btCreateDbgList.Text = "Create List";
-      this.btCreateDbgList.UseVisualStyleBackColor = true;
-      this.btCreateDbgList.Visible = false;
-      this.btCreateDbgList.Click += new System.EventHandler(this.btCreateDbgList_Click);
-      // 
       // FormLayout
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1298, 640);
+      this.ClientSize = new System.Drawing.Size(1271, 681);
       this.Controls.Add(this.tlPanel);
       this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MinimizeBox = false;
+      this.MinimumSize = new System.Drawing.Size(770, 720);
       this.Name = "FormLayout";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
       this.Text = "Device Layout";
@@ -395,12 +473,14 @@
       this.Load += new System.EventHandler(this.FormLayout_Load);
       this.tlPanel.ResumeLayout(false);
       this.pnlInput.ResumeLayout(false);
-      this.pnlInput.PerformLayout();
+      this.pnlDebug.ResumeLayout(false);
+      this.pnlDebug.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
       this.drawPanel.ResumeLayout(false);
       this.gbxColors.ResumeLayout(false);
       this.gbxColors.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.tbFontSize)).EndInit();
+      this.panel1.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -418,20 +498,26 @@
     private System.Windows.Forms.SaveFileDialog SFD;
     private System.Windows.Forms.Button btColors;
     private System.Windows.Forms.GroupBox gbxColors;
-    private System.Windows.Forms.Button btCancelColors;
+    private System.Windows.Forms.Button btCancel;
     private System.Windows.Forms.Label lblTest;
     private System.Windows.Forms.ListView chkLbActionGroupsColor;
     private System.Windows.Forms.Label lblBackColor;
     private System.Windows.Forms.Label lblTextColor;
     private System.Windows.Forms.ColorDialog colDlg;
-    private System.Windows.Forms.Button btAcceptColors;
-    private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.Button btAccept;
+    private System.Windows.Forms.Label lblLayoutNote;
     private System.Windows.Forms.TrackBar tbFontSize;
     private System.Windows.Forms.Label lblFontSize;
     private System.Windows.Forms.PictureBox pictureBox1;
-    private System.Windows.Forms.TextBox txGuid3;
-    private System.Windows.Forms.TextBox txGuid2;
-    private System.Windows.Forms.TextBox txGuid1;
     private System.Windows.Forms.Button btCreateDbgList;
+    private System.Windows.Forms.Panel pnlDebug;
+    private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.Button btClose;
+    private System.Windows.Forms.Panel panel1;
+    private System.Windows.Forms.ComboBox cbxJs1;
+    private System.Windows.Forms.ComboBox cbxJs3;
+    private System.Windows.Forms.ComboBox cbxJs2;
   }
 }

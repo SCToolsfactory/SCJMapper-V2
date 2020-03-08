@@ -774,4 +774,15 @@ Annulez maintenant si vous voulez d'abord enregistrer votre travail.</value>
     <value>Oui</value>
     <comment>0-General</comment>
   </data>
+  <data name="meShowLayoutDialog" xml:space="preserve">
+    <value>Disposition de l'appareil...</value>
+    <comment>1-Main</comment>
+  </data>
+  <data name="lblLayoutNote" xml:space="preserve">
+    <value>Sélectionnez une entrée dans la liste puis cliquez dessus pour attribuer des couleurs.
+
+Remarque:
+Le fond blanc est traité comme transparent tout en dessinant des éléments sur l'image.</value>
+    <comment>9-Layout</comment>
+  </data>
 </root>

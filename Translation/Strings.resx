@@ -774,4 +774,15 @@ Cancel now if you want to save your work first.</value>
     <value>Yes</value>
     <comment>0-General</comment>
   </data>
+  <data name="lblLayoutNote" xml:space="preserve">
+    <value>Select an entry in the list and then click above to assign colors.
+
+Note:
+White background is treated as Transparent while drawing items to the image.</value>
+    <comment>9-Layout</comment>
+  </data>
+  <data name="meShowLayoutDialog" xml:space="preserve">
+    <value>Show Layout Dialog...</value>
+    <comment>1-Main</comment>
+  </data>
 </root>

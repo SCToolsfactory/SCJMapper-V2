@@ -1,10 +1,10 @@
 {
-  "MapName" : "Saitek ProFlight Combat Rudder Pedals",
+  "MapName" : "Saitek ProFlight Rudder Pedals",
   "MapImage" : "proflightpedals.jpg",
   "InputDevices" :[
   { 
     "InputType": "J",
-    "DeviceName": "Saitek ProFlight Combat Rudder Pedals",
+    "DeviceName": "Saitek ProFlight Rudder Pedals",
     "DeviceProdGuid": ["{076306A3-0000-0000-0000-504944564944}",
                        "{076506A3-0000-0000-0000-504944564944}"],
     "Controls": [

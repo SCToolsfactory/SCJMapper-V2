@@ -4,7 +4,7 @@
   "InputDevices" :[
   { 
     "InputType": "J2",
-    "DeviceName": "T16000M-left",
+    "DeviceName": "T.16000M Joystick - left",
     "DeviceProdGuid": ["{B10A044F-0000-0000-0000-504944564944}"],
     "Controls": [
       { "Input": "button1", "Type": "Digital", "X":1299, "Y":792, "Width":660, "Height":108, "Cmt": "Primary trigger" },
@@ -35,7 +35,7 @@
   },
   { 
     "InputType": "J1",
-    "DeviceName": "T16000M-right",
+    "DeviceName": "T.16000M Joystick -right",
     "DeviceProdGuid": ["{B10A044F-0000-0000-0000-504944564944}"],
     "Controls": [
       { "Input": "button1", "Type": "Digital", "X":1997, "Y":792, "Width":660, "Height":108, "Cmt": "Primary trigger" },

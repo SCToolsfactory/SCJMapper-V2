@@ -310,7 +310,7 @@ namespace SCJMapper_V2.Devices.Options
     /// <returns>The XML string or an empty string</returns>
     public string Options_toXML()
     {
-      if ( ( /*SensitivityUsed ||*/ ExponentUsed || InvertForced || NonLinCurveUsed ) == false ) return ""; // not used
+      if ( ( /*SensitivityUsed ||*/ ExponentUsed || InvertForced || InvertUsed || NonLinCurveUsed ) == false ) return ""; // not used
       if ( DevInstanceNo < 1 ) return ""; // no device to assign it to..
 
       string tmp = "";

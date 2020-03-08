@@ -574,6 +574,18 @@ namespace SCJMapper_V2.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select an entry in the list and then click above to assign colors.
+        ///
+        ///Note:
+        ///White background is treated as Transparent while drawing items to the image..
+        /// </summary>
+        public static string lblLayoutNote {
+            get {
+                return ResourceManager.GetString("lblLayoutNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading data....
         /// </summary>
         public static string lblLoadingData {
@@ -913,6 +925,15 @@ namespace SCJMapper_V2.Translation {
         public static string meShowDeviceTuningDialog {
             get {
                 return ResourceManager.GetString("meShowDeviceTuningDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Layout Dialog....
+        /// </summary>
+        public static string meShowLayoutDialog {
+            get {
+                return ResourceManager.GetString("meShowLayoutDialog", resourceCulture);
             }
         }
         

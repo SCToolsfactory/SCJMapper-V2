@@ -28,6 +28,7 @@ namespace SCJMapper_V2.Layout
     private readonly Color COL_ERR = Color.Gold;
 
     private Layouts m_layouts = null;
+    private List<Device.DeviceDescriptor> m_devices = null; // for debug allocated only
 
     internal ActionItemList ActionList { get; set; } = null;
 
@@ -40,13 +41,8 @@ namespace SCJMapper_V2.Layout
     {
       InitializeComponent( );
 
-      if ( IsDebug( ) ) {
-        // Show Debug items at startup
-        txGuid1.Visible = true;
-        txGuid2.Visible = true;
-        txGuid3.Visible = true;
-        btCreateDbgList.Visible = true;
-      }
+      // Show Debug items at startup
+      if ( IsDebug( ) ) pnlDebug.Visible = true;
     }
 
     /// <summary>
@@ -141,6 +137,23 @@ namespace SCJMapper_V2.Layout
       m_sPanel.Dock = DockStyle.Fill;
       m_sPanel.BackgroundImageLayout = ImageLayout.Zoom;
 
+      if ( IsDebug( ) ) {
+        // get an empty on top
+        cbxJs1.Items.Add( new Device.DeviceDescriptor( ) );
+        cbxJs2.Items.Add( new Device.DeviceDescriptor( ) );
+        cbxJs3.Items.Add( new Device.DeviceDescriptor( ) );
+        // get all devices know in the layout folder
+        m_devices = m_layouts.Devices( );
+        foreach ( var dev in m_devices ) {
+          cbxJs1.Items.Add( dev );
+          cbxJs2.Items.Add( dev );
+          cbxJs3.Items.Add( dev );
+        }
+        cbxJs1.SelectedIndex = 0;
+        cbxJs2.SelectedIndex = 0;
+        cbxJs3.SelectedIndex = 0;
+      }
+
       RefreshPanel( );
     }
 
@@ -196,11 +209,12 @@ namespace SCJMapper_V2.Layout
     /// </summary>
     private void Populate()
     {
+      bool errorShown = false;
+
       // for all actions found from action tree
       m_displayList.Clear( );
       ( cbxLayouts.SelectedItem as DeviceLayout ).DeviceController.CreateShapes( );
       foreach ( var si in ActionList ) {
-        //        if ( si.DeviceName == cbxDevices.SelectedItem.ToString( ) ) {
         // matches the selected device      
         if ( MatchCriteria( si ) ) {
           bool firstInstance = ActionList.IsFirstInstance( si.DevicePidVid, si.InputTypeNumber );
@@ -213,9 +227,17 @@ namespace SCJMapper_V2.Layout
               shape.BackColor = MapProps.MapBackColor( si.ActionMap );
               m_displayList.Add( shape );
             }
+            else {
+              // Display elements exhausted...
+              if ( ! errorShown ) {
+                string msg = $"No more display elements left for device:  {si.DeviceName}";
+                msg += $"\n\nTry to use a smaller font to show all actions!";
+                MessageBox.Show( msg, "Layout - Cannot show all actions", MessageBoxButtons.OK, MessageBoxIcon.Warning );
+                errorShown = true; // only once
+              }
+            }
           }
         }
-        //      }
       }
     }
 
@@ -369,6 +391,11 @@ namespace SCJMapper_V2.Layout
       m_checkAllToggle = !m_checkAllToggle; // toggle
     }
 
+    private void btClose_Click( object sender, EventArgs e )
+    {
+      this.Close( );
+    }
+
     #endregion
 
     #region DEBUG LIST
@@ -378,16 +405,15 @@ namespace SCJMapper_V2.Layout
     {
       DBG_LIST = new DbgActionItemList( );
       List<string> guids = new List<string>( );
-      if ( !string.IsNullOrEmpty( txGuid1.Text ) ) guids.Add( txGuid1.Text );
-      if ( !string.IsNullOrEmpty( txGuid2.Text ) ) guids.Add( txGuid2.Text );
-      if ( !string.IsNullOrEmpty( txGuid3.Text ) ) guids.Add( txGuid3.Text );
+      if ( !string.IsNullOrEmpty( ( cbxJs1.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs1.SelectedItem as Device.DeviceDescriptor ).DevGuid );
+      if ( !string.IsNullOrEmpty( ( cbxJs2.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs2.SelectedItem as Device.DeviceDescriptor ).DevGuid );
+      if ( !string.IsNullOrEmpty( ( cbxJs3.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs3.SelectedItem as Device.DeviceDescriptor ).DevGuid );
 
       DBG_LIST.CreateDebugList( guids.ToArray( ) );
       ActionList = DBG_LIST.DbgList;
     }
 
+
     #endregion
-
-
   }
 }

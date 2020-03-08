@@ -66,18 +66,34 @@ namespace SCJMapper_V2.Layout
 
       for ( int i = 0; i < InputDevices.Count; i++ ) {
         if ( InputDevices[i].DevicePIDVID.Contains( pidVid ) ) { // can have multiple PID VIDs for a device (alternates)
+          // input can be:  {modifier+}Input
+          string[] e = input.Split( new char[] { '+' } );
+          string effInput = e[e.Length - 1]; // last item is the real input
           // returns if we are asked for the first instance and it is the first one (default)
           if ( firstInstance && ( InputDevices[i].InputTypeNumber == 1 ) ) {
-            return InputDevices[i].FindItem( input );
+            return InputDevices[i].FindItem( effInput );
           }
-          else if (!firstInstance && InputDevices[i].InputTypeNumber > 1 ) {
-            return InputDevices[i].FindItem( input ); // not first and J2.. - return any other (more than 2 not supported)
+          else if ( !firstInstance && InputDevices[i].InputTypeNumber > 1 ) {
+            return InputDevices[i].FindItem( effInput ); // not first and J2.. - return any other (more than 2 not supported)
           }
         }
       }
       return null;
     }
 
+    /// <summary>
+    /// Get all devices with Name (only first GUID is returned)
+    /// </summary>
+    /// <returns></returns>
+    public List<Device.DeviceDescriptor> Devices()
+    {
+      var ret = new List<Device.DeviceDescriptor>( );
+      for ( int i = 0; i < InputDevices.Count; i++ ) {
+        if ( !ret.Exists( x => x.DevGuid == InputDevices[i].DevDescriptor.DevGuid ) )
+          ret.Add( InputDevices[i].DevDescriptor );
+      }
+      return ret;
+    }
   }
 
   /// <summary>
@@ -96,6 +112,28 @@ namespace SCJMapper_V2.Layout
     public List<Control> Controls { get; set; } = new List<Control>( );// The list of Controls supported (see below)
 
     // non Json
+
+    /// <summary>
+    /// Describes a known device
+    /// Used for the Layout Debug Mode
+    /// </summary>
+    public class DeviceDescriptor
+    {
+      public string DevGuid { get; set; } = "";
+      public string DevName { get; set; } = "";
+      public override string ToString()
+      {
+        return DevName;
+      }
+    }
+
+    public DeviceDescriptor DevDescriptor
+    {
+      get {
+        return new DeviceDescriptor( ) { DevGuid = DeviceProdGuid[0], DevName = DeviceName };
+      }
+    }
+
 
     public string InputTypeLetter { get => InputType.Substring( 0, 1 ); }
     public int InputTypeNumber
@@ -132,9 +170,6 @@ namespace SCJMapper_V2.Layout
     /// <returns>The found Control or Null</returns>
     public Control FindItem( string input )
     {
-      // input can be:  {modifier+}Input
-      string[] e = input.Split( new char[] { '+' } );
-      string effInput = e[e.Length - 1]; // last item is the real input
       for ( int i = 0; i < Controls.Count; i++ ) {
         if ( input == Controls[i].Input ) {
           return Controls[i];
@@ -153,6 +188,7 @@ namespace SCJMapper_V2.Layout
         Controls[i].CreateShapes( );
       }
     }
+
   }
 
   /// <summary>
@@ -209,7 +245,7 @@ namespace SCJMapper_V2.Layout
         for ( int c = 0; c < nCols; c++ ) {
           var sh = new ShapeItem {
             X = X + c * baseWidth,
-            Y = Y + l * baseHeight,
+            Y = Y + l * baseHeight + 2, // offset Y by 2 pix to have it more centered
             Width = baseWidth,
             Height = baseHeight
           };

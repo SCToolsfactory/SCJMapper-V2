@@ -1400,6 +1400,7 @@
       // 
       this.meShowLayoutDialog.Name = "meShowLayoutDialog";
       this.meShowLayoutDialog.Size = new System.Drawing.Size(250, 22);
+      this.meShowLayoutDialog.Tag = "§";
       this.meShowLayoutDialog.Text = "Show Layout Dialog...";
       this.meShowLayoutDialog.Click += new System.EventHandler(this.meShowLayoutDialog_Click);
       // 

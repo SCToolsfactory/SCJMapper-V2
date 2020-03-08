@@ -1,5 +1,5 @@
 SC Joystick Mapper V 2.45 - Build 80 BETA
-(c) Cassini, StandardToaster - 07-Mar-2020
+(c) Cassini, StandardToaster - 09-Mar-2020
 
 Contains 14 files + graphics:
 
@@ -50,6 +50,7 @@ Changelog:
 V 2.45 - BETA Build 80
 - add Some more Layout files for devices
 - update Layout to work with dual Joysticks of the same type and Gamepads
+- fix for Invert mod writing to XML (#90)
 - fix for some Layout files and general fixes in the layout part
 V 2.44 - BETA Build 79
 - added Input device layout dialog and some layouts for the most common device controllers

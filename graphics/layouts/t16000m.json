@@ -4,7 +4,7 @@
   "InputDevices" :[
   { 
     "InputType": "J",
-    "DeviceName": "T16000M",
+    "DeviceName": "T.16000M Joystick ",
     "DeviceProdGuid": ["{B10A044F-0000-0000-0000-504944564944}"],
     "Controls": [
       { "Input": "button1", "Type": "Digital", "X":2124, "Y":624, "Width":1092, "Height":54, "Cmt": "Primary trigger" },

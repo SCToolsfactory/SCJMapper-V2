@@ -1,32 +1,33 @@
 {
-  "MapName" : "Elecom JC-U3613M (X-Input)",
-  "MapImage" : "gp-jcu3613m.jpg",
+  "MapName" : "XPad Elecom JC-U3613M (X-Input)",
+  "MapImage" : "gpad-jc-u3613m.jpg",
   "InputDevices" :[
   { 
     "InputType": "G1",
     "DeviceName": "Elecom JC-U3613M",
     "DeviceProdGuid": ["{028E045E-0000-0000-0000-504944564944}"],
     "Controls": [
-      { "Input":"x", "Type":  "Digital", "X":2625, "Y":1178, "Width":1192, "Height":54, "Cmt":  "X"},
-      { "Input":"a", "Type":  "Digital", "X":2625, "Y":1083, "Width":1192, "Height":54, "Cmt":  "A"},
-      { "Input":"b", "Type":  "Digital", "X":2625, "Y":988, "Width":1192, "Height":54, "Cmt":  "B"},
-      { "Input":"y", "Type":  "Digital", "X":2625, "Y":894, "Width":1192, "Height":54, "Cmt":  "Y"},
-      { "Input":"shoulderl", "Type":  "Digital", "X":74, "Y":510, "Width":1392, "Height":108, "Cmt":  "Left bumper - shoulderl"},
-      { "Input":"shoulderr", "Type":  "Digital", "X":2368, "Y":510, "Width":1442, "Height":108, "Cmt":  "Right bumper - shoulderr"},
-      { "Input":"triggerl_btn", "Type":  "Digital", "X":74, "Y":406, "Width":1392, "Height":54, "Cmt":  "Left trigger - triggerl_btn"},
-      { "Input":"triggerr_btn", "Type":  "Digital", "X":2368, "Y":406, "Width":1442, "Height":54, "Cmt":  "Right trigger - triggerr_btn"},
-      { "Input":"back", "Type":  "Digital", "X":74, "Y":706, "Width":1192, "Height":54, "Cmt":  "Back"},
-      { "Input":"start", "Type":  "Digital", "X":2625, "Y":706, "Width":1192, "Height":54, "Cmt":  "Start"},
-      { "Input":"thumbl", "Type":  "Digital", "X":134, "Y":1542, "Width":1032, "Height":108, "Cmt":  "Left stick button  thumbl"},
-      { "Input":"thumbr", "Type":  "Digital", "X":2765, "Y":1542, "Width":1052, "Height":108, "Cmt":  "Right stick button - thumbr"},
-      { "Input":"dpad_up", "Type":  "Digital", "X":134, "Y":864, "Width":1032, "Height":108, "Cmt": "dpad_up"},
-      { "Input":"dpad_right", "Type":  "Digital", "X":134, "Y":974, "Width":1032, "Height":108, "Cmt": "dpad_right"},
-      { "Input":"dpad_down", "Type": "Digital", "X":134, "Y":1084, "Width":1032, "Height":108, "Cmt": "dpad_down"},
-      { "Input":"dpad_left", "Type": "Digital", "X":134, "Y":1194, "Width":1032, "Height":108, "Cmt": "dpad_left"},
-      { "Input":"thumblx", "Type": "Analogue", "X":2765, "Y":1322, "Width":1052, "Height":108, "Cmt": "thumbry"},
-      { "Input":"thumbly", "Type": "Analogue", "X":2765, "Y":1432, "Width":1052, "Height":108, "Cmt": "thumbrx"},
-      { "Input":"thumbrx", "Type": "Analogue", "X":134, "Y":1322, "Width":1032, "Height":108, "Cmt": "thumbly"},
-      { "Input":"thumbry", "Type": "Analogue", "X":134, "Y":1432, "Width":1032, "Height":108, "Cmt": "thumblx"}    ]
+      { "Input":"x", "Type":  "Digital", "X":2586, "Y":1254, "Width":770, "Height":108, "Cmt":  "X"},
+      { "Input":"a", "Type":  "Digital", "X":2586, "Y":1132, "Width":770, "Height":108, "Cmt":  "A"},
+      { "Input":"b", "Type":  "Digital", "X":2586, "Y":1010, "Width":770, "Height":108, "Cmt":  "B"},
+      { "Input":"y", "Type":  "Digital", "X":2586, "Y":888, "Width":770, "Height":108, "Cmt":  "Y"},
+      { "Input":"shoulderl", "Type":  "Digital", "X":784, "Y":632, "Width":770, "Height":108, "Cmt":  "Left bumper - shoulderl"},
+      { "Input":"shoulderr", "Type":  "Digital", "X":2342, "Y":630, "Width":770, "Height":108, "Cmt":  "Right bumper - shoulderr"},
+      { "Input":"triggerl_btn", "Type":  "Digital", "X":1049, "Y":492, "Width":770, "Height":108, "Cmt":  "Left trigger - triggerl_btn"},
+      { "Input":"triggerr_btn", "Type":  "Digital", "X":2045, "Y":492, "Width":770, "Height":108, "Cmt":  "Right trigger - triggerr_btn"},
+      { "Input":"back", "Type":  "Digital", "X":343, "Y":806, "Width":1000, "Height":54, "Cmt":  "Back"},
+      { "Input":"start", "Type":  "Digital", "X":2431, "Y":806, "Width":1000, "Height":54, "Cmt":  "Start"},
+      { "Input":"thumbl", "Type":  "Digital", "X":232, "Y":1035, "Width":1000, "Height":54, "Cmt":  "Left stick button  thumbl"},
+      { "Input":"thumbr", "Type":  "Digital", "X":2675, "Y":1567, "Width":1000, "Height":54, "Cmt":  "Right stick button - thumbr"},
+      { "Input":"dpad_up", "Type":  "Digital", "X":274, "Y":1212, "Width":1000, "Height":54, "Cmt": "dpad_up"},
+      { "Input":"dpad_right", "Type":  "Digital", "X":274, "Y":1262, "Width":1000, "Height":54, "Cmt": "dpad_right"},
+      { "Input":"dpad_down", "Type": "Digital", "X":274, "Y":1315, "Width":1000, "Height":54, "Cmt": "dpad_down"},
+      { "Input":"dpad_left", "Type": "Digital", "X":274, "Y":1366, "Width":1000, "Height":54, "Cmt": "dpad_left"},
+      { "Input":"thumbry", "Type": "Analogue", "X":2675, "Y":1465, "Width":1000, "Height":54, "Cmt": "thumbry"},
+      { "Input":"thumbrx", "Type": "Analogue", "X":2675, "Y":1515, "Width":1000, "Height":54, "Cmt": "thumbrx"},
+      { "Input":"thumbly", "Type": "Analogue", "X":232, "Y":932, "Width":1000, "Height":54, "Cmt": "thumbly"},
+      { "Input":"thumblx", "Type": "Analogue", "X":232, "Y":984, "Width":1000, "Height":54, "Cmt": "thumblx"}
+    ]
   }
   ]
 }
