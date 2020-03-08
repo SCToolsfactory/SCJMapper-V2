@@ -1,6 +1,6 @@
 {
-  "MapName" : "T16000M",
-  "MapImage" : "T16000M.jpg",
+  "MapName" : "T.16000M Joystick (right)",
+  "MapImage" : "t16000m.jpg",
   "InputDevices" :[
   { 
     "InputType": "J",

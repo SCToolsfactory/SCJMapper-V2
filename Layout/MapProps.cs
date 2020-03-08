@@ -14,6 +14,52 @@ namespace SCJMapper_V2.Layout
   /// </summary>
   class MapProps
   {
+    public static string ModShoulderLeft = "←";//═
+    public static string ModShoulderRight = "→";
+
+    public static string ModAltLeft = "←Å";
+    public static string ModAltRight = "→Å";
+    public static string ModCtrlLeft = "←Ꞓ";
+    public static string ModCtrlRight = "→Ꞓ";
+    public static string ModShiftLeft = "←Ȿ";
+    public static string ModShiftRight = "→Ȿ";
+
+    /// <summary>
+    /// Returns a Layout Modifier string (char) for a given modifier
+    /// </summary>
+    /// <param name="modifier">The modifier string</param>
+    /// <returns></returns>
+    public static string ModS( string modifier )
+    {
+      if ( modifier == "shoulderl" ) {
+        return ModShoulderLeft;
+      }
+      else if ( modifier == "shoulderr" ) {
+        return ModShoulderRight;
+      }
+      else if ( modifier == "lalt" ) {
+        return ModAltLeft;
+      }
+      else if ( modifier == "ralt" ) {
+        return ModAltRight;
+      }
+      else if ( modifier == "lshift" ) {
+        return ModShiftLeft;
+      }
+      else if ( modifier == "rshift" ) {
+        return ModShiftRight;
+      }
+      else if ( modifier == "lctrl" ) {
+        return ModCtrlLeft;
+      }
+      else if ( modifier == "rctrl" ) {
+        return ModCtrlRight;
+      }
+      else {
+        return "⸮";
+      }
+    }
+
     /// <summary>
     /// Save Color Settings for the Layout
     /// </summary>

@@ -28,7 +28,7 @@ namespace SCJMapper_V2.Devices.Gamepad
     public new const string DeviceID = "xi1_";
     static public int RegisteredDevices = 0;
     public const string DevNameCIG = "Controller (Gamepad)"; // seems CIG names the Gamepad always like this - and not as the device replies
-    public const string DevGUIDCIG = "{}"; // @@@ t.b.d.
+    public const string DevGUIDCIG = "{028E045E-0000-0000-0000-504944564944}"; // - Fixed for Gamepads  - just one of the many possible - 
 
     public const string JsUnknown = "xi_";
     public new const string DisabledInput = DeviceID + DeviceCls.DisabledInput;

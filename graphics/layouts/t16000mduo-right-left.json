@@ -1,0 +1,68 @@
+{
+  "MapName" : "T.16000M DUO Joystick (right-left)",
+  "MapImage" : "t16000mduo-left-right.jpg",
+  "InputDevices" :[
+  { 
+    "InputType": "J2",
+    "DeviceName": "T16000M-left",
+    "DeviceProdGuid": ["{B10A044F-0000-0000-0000-504944564944}"],
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X":1299, "Y":792, "Width":660, "Height":108, "Cmt": "Primary trigger" },
+      { "Input": "button2", "Type": "Digital", "X":137, "Y":726, "Width":770, "Height":54, "Cmt": "Bottom button" },
+      { "Input": "button3", "Type": "Digital", "X":140, "Y":509, "Width":770, "Height":54, "Cmt": "Left-hand button" },
+      { "Input": "button4", "Type": "Digital", "X":1267, "Y":589, "Width":770, "Height":54, "Cmt": "Right-hand button" },
+      { "Input": "button5", "Type": "Digital", "X":1272, "Y":1056, "Width":770, "Height":54, "Cmt": "Left bank top-left button" },
+      { "Input": "button6", "Type": "Digital", "X":1272, "Y":1107, "Width":770, "Height":54, "Cmt": "Left bank top-middle button" },
+      { "Input": "button7", "Type":  "Digital", "X":1272, "Y":1157, "Width":770, "Height":54, "Cmt": "Left bank top-right button" },
+      { "Input": "button8", "Type":  "Digital", "X":1595, "Y":1450, "Width":770, "Height":54, "Cmt": "Left bank bottom-right button" },
+      { "Input": "button9", "Type":  "Digital", "X":1595, "Y":1399, "Width":770, "Height":54, "Cmt": "Left bank bottom-middle button" },
+      { "Input": "button10", "Type":  "Digital", "X":1595, "Y":1347, "Width":770, "Height":54, "Cmt": "Left bank bottom-left button" },
+      { "Input": "button11", "Type": "Digital", "X":16, "Y":1112, "Width":770, "Height":54, "Cmt": "Right bank top-right button" },
+      { "Input": "button12", "Type": "Digital", "X":16, "Y":1164, "Width":770, "Height":54, "Cmt": "Right bank top-middle button" },
+      { "Input": "button13", "Type": "Digital", "X":16, "Y":1214, "Width":770, "Height":54, "Cmt": "Right bank top-left button" },
+      { "Input": "button14", "Type": "Digital", "X":16, "Y":1730, "Width":770, "Height":54, "Cmt": "Right bank bottom-left button" },
+      { "Input": "button15", "Type": "Digital", "X":16, "Y":1679, "Width":770, "Height":54, "Cmt": "Right bank bottom-middle button" },
+      { "Input": "button16", "Type": "Digital", "X":16, "Y":1629, "Width":770, "Height":54, "Cmt": "Right bank bottom-right button" },
+      { "Input": "hat1_up", "Type": "Digital", "X":728, "Y":229, "Width":770, "Height":54, "Cmt": "PoV hat up" },
+      { "Input": "hat1_right", "Type": "Digital", "X":728, "Y":280, "Width":770, "Height":54, "Cmt": "PoV hat right" },
+      { "Input": "hat1_down", "Type": "Digital", "X":728, "Y":333, "Width":770, "Height":54, "Cmt": "PoV hat down" },
+      { "Input": "hat1_left", "Type": "Digital", "X":728, "Y":385, "Width":770, "Height":54, "Cmt": "PoV hat left" },
+      { "Input": "rotz", "Type": "Analogue", "X":134, "Y":982, "Width":770, "Height":54, "Cmt": "Stick twist" },
+      { "Input":  "slider1", "Type": "Analogue", "X":711, "Y":1824, "Width":770, "Height":54, "Cmt": "Stick throttle slider" },
+      { "Input": "x", "Type": "Analogue", "X":134, "Y":930, "Width":770, "Height":54, "Cmt": "Stick pitch" },
+      { "Input": "y", "Type": "Analogue", "X":134, "Y":880, "Width":770, "Height":54, "Cmt": "Stick roll" }
+    ]
+  },
+  { 
+    "InputType": "J1",
+    "DeviceName": "T16000M-right",
+    "DeviceProdGuid": ["{B10A044F-0000-0000-0000-504944564944}"],
+    "Controls": [
+      { "Input": "button1", "Type": "Digital", "X":1997, "Y":792, "Width":660, "Height":108, "Cmt": "Primary trigger" },
+      { "Input": "button2", "Type": "Digital", "X":2915, "Y":726, "Width":770, "Height":54, "Cmt": "Bottom button" },
+      { "Input": "button3", "Type": "Digital", "X":1814, "Y":509, "Width":770, "Height":54, "Cmt": "Left-hand button" },
+      { "Input": "button4", "Type": "Digital", "X":2910, "Y":509, "Width":770, "Height":54, "Cmt": "Right-hand button" },
+      { "Input": "button5", "Type": "Digital", "X":1933, "Y":953, "Width":770, "Height":54, "Cmt": "Left bank top-left button" },
+      { "Input": "button6", "Type": "Digital", "X":1933, "Y":1003, "Width":770, "Height":54, "Cmt": "Left bank top-middle button" },
+      { "Input": "button7", "Type":  "Digital", "X":1933, "Y":1054, "Width":770, "Height":54, "Cmt": "Left bank top-right button" },
+      { "Input": "button8", "Type":  "Digital", "X":1618, "Y":1677, "Width":770, "Height":54, "Cmt": "Left bank bottom-right button" },
+      { "Input": "button9", "Type":  "Digital", "X":1618, "Y":1626, "Width":770, "Height":54, "Cmt": "Left bank bottom-middle button" },
+      { "Input": "button10", "Type":  "Digital", "X":1618, "Y":1574, "Width":770, "Height":54, "Cmt": "Left bank bottom-left button" },
+      { "Input": "button11", "Type": "Digital", "X":3164, "Y":1122, "Width":770, "Height":54, "Cmt": "Right bank top-right button" },
+      { "Input": "button12", "Type": "Digital", "X":3164, "Y":1172, "Width":770, "Height":54, "Cmt": "Right bank top-middle button" },
+      { "Input": "button13", "Type": "Digital", "X":3164, "Y":1223, "Width":770, "Height":54, "Cmt": "Right bank top-left button" },
+      { "Input": "button14", "Type": "Digital", "X":3166, "Y":1721, "Width":770, "Height":54, "Cmt": "Right bank bottom-left button" },
+      { "Input": "button15", "Type": "Digital", "X":3166, "Y":1669, "Width":770, "Height":54, "Cmt": "Right bank bottom-middle button" },
+      { "Input": "button16", "Type": "Digital", "X":3166, "Y":1619, "Width":770, "Height":54, "Cmt": "Right bank bottom-right button" },
+      { "Input": "hat1_up", "Type": "Digital", "X":2395, "Y":230, "Width":770, "Height":54, "Cmt": "PoV hat up" },
+      { "Input": "hat1_right", "Type": "Digital", "X":2395, "Y":280, "Width":770, "Height":54, "Cmt": "PoV hat right" },
+      { "Input": "hat1_down", "Type": "Digital", "X":2395, "Y":333, "Width":770, "Height":54, "Cmt": "PoV hat down" },
+      { "Input": "hat1_left", "Type": "Digital", "X":2395, "Y":385, "Width":770, "Height":54, "Cmt": "PoV hat left" },
+      { "Input": "rotz", "Type": "Analogue", "X":2982, "Y":995, "Width":770, "Height":54, "Cmt": "Stick twist" },
+      { "Input":  "slider1", "Type": "Analogue", "X":2382, "Y":1824, "Width":770, "Height":54, "Cmt": "Stick throttle slider" },
+      { "Input": "x", "Type": "Analogue", "X":2982, "Y":943, "Width":770, "Height":54, "Cmt": "Stick pitch" },
+      { "Input": "y", "Type": "Analogue", "X":2982, "Y":893, "Width":770, "Height":54, "Cmt": "Stick roll" }
+    ]
+  }
+  ]
+}

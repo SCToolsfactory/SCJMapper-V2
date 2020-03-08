@@ -1,10 +1,10 @@
 {
-  "MapName" : "Logitec G940 Stick + Throttle",
+  "MapName" : "Logitech G940 Stick + Throttle",
   "MapImage" : "g940.jpg",
   "InputDevices" :[
   { 
     "InputType": "J",
-    "DeviceName": "Logitec G940 Stick",
+    "DeviceName": "Logitech G940 Stick",
     "DeviceProdGuid": ["{C2A8046D-0000-0000-0000-504944564944}"],
     "Controls": [
       { "Input": "button1", "Type": "Digital", "X":2034, "Y":604, "Width":652, "Height":54, "Cmt":  "Primary trigger half-press"},
@@ -31,7 +31,7 @@
   },
   { 
     "InputType": "J",
-    "DeviceName": "Logitec G940 Throttle",
+    "DeviceName": "Logitech G940 Throttle",
     "DeviceProdGuid": ["{C2A9046D-0000-0000-0000-504944564944}"],
     "Controls": [
 

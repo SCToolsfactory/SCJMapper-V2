@@ -1,10 +1,10 @@
 {
-  "MapName" : "Logitec G940 Pedals",
+  "MapName" : "Logitech G940 Pedals",
   "MapImage" : "g940pedals.jpg",
   "InputDevices" :[
   { 
     "InputType": "J",
-    "DeviceName": "Logitec G940 Pedals",
+    "DeviceName": "Logitech G940 Pedals",
     "DeviceProdGuid": ["{C2AA046D-0000-0000-0000-504944564944}"],
     "Controls": [
       { "Input": "x", "Type": "Digital", "X":2264, "Y":588, "Width":1332, "Height":162, "Cmt":  "Right pedal (unconfirmed)"},

@@ -32,12 +32,15 @@
       this.chkLbActionGroups = new System.Windows.Forms.ListView();
       this.chkLbActionMaps = new System.Windows.Forms.ListView();
       this.pnlInput = new System.Windows.Forms.Panel();
+      this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.btColors = new System.Windows.Forms.Button();
       this.btSave = new System.Windows.Forms.Button();
       this.btLayout = new System.Windows.Forms.Button();
       this.cbxLayouts = new System.Windows.Forms.ComboBox();
       this.drawPanel = new System.Windows.Forms.Panel();
       this.gbxColors = new System.Windows.Forms.GroupBox();
+      this.lblFontSize = new System.Windows.Forms.Label();
+      this.tbFontSize = new System.Windows.Forms.TrackBar();
       this.label2 = new System.Windows.Forms.Label();
       this.btAcceptColors = new System.Windows.Forms.Button();
       this.lblTextColor = new System.Windows.Forms.Label();
@@ -47,15 +50,16 @@
       this.btCancelColors = new System.Windows.Forms.Button();
       this.SFD = new System.Windows.Forms.SaveFileDialog();
       this.colDlg = new System.Windows.Forms.ColorDialog();
-      this.tbFontSize = new System.Windows.Forms.TrackBar();
-      this.lblFontSize = new System.Windows.Forms.Label();
-      this.pictureBox1 = new System.Windows.Forms.PictureBox();
+      this.txGuid1 = new System.Windows.Forms.TextBox();
+      this.txGuid2 = new System.Windows.Forms.TextBox();
+      this.txGuid3 = new System.Windows.Forms.TextBox();
+      this.btCreateDbgList = new System.Windows.Forms.Button();
       this.tlPanel.SuspendLayout();
       this.pnlInput.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.drawPanel.SuspendLayout();
       this.gbxColors.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.tbFontSize)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.SuspendLayout();
       // 
       // tlPanel
@@ -120,6 +124,10 @@
       // pnlInput
       // 
       this.tlPanel.SetColumnSpan(this.pnlInput, 2);
+      this.pnlInput.Controls.Add(this.btCreateDbgList);
+      this.pnlInput.Controls.Add(this.txGuid3);
+      this.pnlInput.Controls.Add(this.txGuid2);
+      this.pnlInput.Controls.Add(this.txGuid1);
       this.pnlInput.Controls.Add(this.pictureBox1);
       this.pnlInput.Controls.Add(this.btColors);
       this.pnlInput.Controls.Add(this.btSave);
@@ -130,6 +138,18 @@
       this.pnlInput.Name = "pnlInput";
       this.pnlInput.Size = new System.Drawing.Size(1292, 74);
       this.pnlInput.TabIndex = 1;
+      // 
+      // pictureBox1
+      // 
+      this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+      this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+      this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+      this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+      this.pictureBox1.Name = "pictureBox1";
+      this.pictureBox1.Size = new System.Drawing.Size(82, 71);
+      this.pictureBox1.TabIndex = 6;
+      this.pictureBox1.TabStop = false;
+      this.pictureBox1.DoubleClick += new System.EventHandler(this.pictureBox1_DoubleClick);
       // 
       // btColors
       // 
@@ -203,6 +223,31 @@
       this.gbxColors.TabStop = false;
       this.gbxColors.Text = "Layout Settings";
       this.gbxColors.Visible = false;
+      // 
+      // lblFontSize
+      // 
+      this.lblFontSize.AutoSize = true;
+      this.lblFontSize.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblFontSize.Location = new System.Drawing.Point(428, 35);
+      this.lblFontSize.Name = "lblFontSize";
+      this.lblFontSize.Size = new System.Drawing.Size(37, 30);
+      this.lblFontSize.TabIndex = 14;
+      this.lblFontSize.Text = "16";
+      // 
+      // tbFontSize
+      // 
+      this.tbFontSize.LargeChange = 2;
+      this.tbFontSize.Location = new System.Drawing.Point(248, 30);
+      this.tbFontSize.Maximum = 22;
+      this.tbFontSize.Minimum = 12;
+      this.tbFontSize.Name = "tbFontSize";
+      this.tbFontSize.Size = new System.Drawing.Size(160, 45);
+      this.tbFontSize.SmallChange = 2;
+      this.tbFontSize.TabIndex = 13;
+      this.tbFontSize.TickFrequency = 2;
+      this.tbFontSize.TickStyle = System.Windows.Forms.TickStyle.Both;
+      this.tbFontSize.Value = 16;
+      this.tbFontSize.Scroll += new System.EventHandler(this.tbFontSize_Scroll);
       // 
       // label2
       // 
@@ -299,40 +344,40 @@
       this.colDlg.AnyColor = true;
       this.colDlg.FullOpen = true;
       // 
-      // tbFontSize
+      // txGuid1
       // 
-      this.tbFontSize.LargeChange = 2;
-      this.tbFontSize.Location = new System.Drawing.Point(248, 30);
-      this.tbFontSize.Maximum = 22;
-      this.tbFontSize.Minimum = 12;
-      this.tbFontSize.Name = "tbFontSize";
-      this.tbFontSize.Size = new System.Drawing.Size(160, 45);
-      this.tbFontSize.SmallChange = 2;
-      this.tbFontSize.TabIndex = 13;
-      this.tbFontSize.TickFrequency = 2;
-      this.tbFontSize.TickStyle = System.Windows.Forms.TickStyle.Both;
-      this.tbFontSize.Value = 16;
-      this.tbFontSize.Scroll += new System.EventHandler(this.tbFontSize_Scroll);
+      this.txGuid1.Location = new System.Drawing.Point(842, 2);
+      this.txGuid1.Name = "txGuid1";
+      this.txGuid1.Size = new System.Drawing.Size(338, 22);
+      this.txGuid1.TabIndex = 7;
+      this.txGuid1.Visible = false;
       // 
-      // lblFontSize
+      // txGuid2
       // 
-      this.lblFontSize.AutoSize = true;
-      this.lblFontSize.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblFontSize.Location = new System.Drawing.Point(428, 35);
-      this.lblFontSize.Name = "lblFontSize";
-      this.lblFontSize.Size = new System.Drawing.Size(37, 30);
-      this.lblFontSize.TabIndex = 14;
-      this.lblFontSize.Text = "16";
+      this.txGuid2.Location = new System.Drawing.Point(842, 25);
+      this.txGuid2.Name = "txGuid2";
+      this.txGuid2.Size = new System.Drawing.Size(338, 22);
+      this.txGuid2.TabIndex = 8;
+      this.txGuid2.Visible = false;
       // 
-      // pictureBox1
+      // txGuid3
       // 
-      this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-      this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-      this.pictureBox1.Location = new System.Drawing.Point(3, 3);
-      this.pictureBox1.Name = "pictureBox1";
-      this.pictureBox1.Size = new System.Drawing.Size(82, 71);
-      this.pictureBox1.TabIndex = 6;
-      this.pictureBox1.TabStop = false;
+      this.txGuid3.Location = new System.Drawing.Point(842, 48);
+      this.txGuid3.Name = "txGuid3";
+      this.txGuid3.Size = new System.Drawing.Size(338, 22);
+      this.txGuid3.TabIndex = 9;
+      this.txGuid3.Visible = false;
+      // 
+      // btCreateDbgList
+      // 
+      this.btCreateDbgList.Location = new System.Drawing.Point(1190, 24);
+      this.btCreateDbgList.Name = "btCreateDbgList";
+      this.btCreateDbgList.Size = new System.Drawing.Size(74, 24);
+      this.btCreateDbgList.TabIndex = 10;
+      this.btCreateDbgList.Text = "Create List";
+      this.btCreateDbgList.UseVisualStyleBackColor = true;
+      this.btCreateDbgList.Visible = false;
+      this.btCreateDbgList.Click += new System.EventHandler(this.btCreateDbgList_Click);
       // 
       // FormLayout
       // 
@@ -350,11 +395,12 @@
       this.Load += new System.EventHandler(this.FormLayout_Load);
       this.tlPanel.ResumeLayout(false);
       this.pnlInput.ResumeLayout(false);
+      this.pnlInput.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
       this.drawPanel.ResumeLayout(false);
       this.gbxColors.ResumeLayout(false);
       this.gbxColors.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.tbFontSize)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -383,5 +429,9 @@
     private System.Windows.Forms.TrackBar tbFontSize;
     private System.Windows.Forms.Label lblFontSize;
     private System.Windows.Forms.PictureBox pictureBox1;
+    private System.Windows.Forms.TextBox txGuid3;
+    private System.Windows.Forms.TextBox txGuid2;
+    private System.Windows.Forms.TextBox txGuid1;
+    private System.Windows.Forms.Button btCreateDbgList;
   }
 }

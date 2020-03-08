@@ -27,8 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>79</ApplicationRevision>
-    <ApplicationVersion>2.44.0.79</ApplicationVersion>
+    <ApplicationRevision>80</ApplicationRevision>
+    <ApplicationVersion>2.45.0.80</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -179,6 +179,7 @@
     <Compile Include="Layout\ActionGroups.cs" />
     <Compile Include="Layout\ActionItem.cs" />
     <Compile Include="Layout\ActionItemList.cs" />
+    <Compile Include="Layout\DbgActionItemList.cs" />
     <Compile Include="Layout\MapProps.cs" />
     <Compile Include="Layout\ControllerJson.cs" />
     <Compile Include="Layout\DeviceFile.cs" />

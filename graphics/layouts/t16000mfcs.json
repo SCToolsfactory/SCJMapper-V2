@@ -1,11 +1,11 @@
 {
-  "MapName" : "T16000MFCS",
+  "MapName" : "T.16000M FCS",
   "MapImage" : "t16000mfcs.jpg",
   "InputDevices" :[
   { 
     "InputType": "J",
     "DeviceName": "T16000M Stick",
-    "DeviceProdGuid": "{B10A044F-0000-0000-0000-504944564944}",
+    "DeviceProdGuid": ["{B10A044F-0000-0000-0000-504944564944}"],
     "Controls": [
       { "Input": "button1", "Type": "Digital", "X":1804, "Y":844, "Width":642, "Height":54, "Cmt": "Primary trigger" },
       { "Input": "button2", "Type": "Digital", "X":2764, "Y":604, "Width":992, "Height":54, "Cmt": "Bottom button" },
@@ -36,7 +36,7 @@
   { 
     "InputType": "J",
     "DeviceName": "T16000M Throttle",
-    "DeviceProdGuid": "{B687044F-0000-0000-0000-504944564944}",
+    "DeviceProdGuid": ["{B687044F-0000-0000-0000-504944564944}"],
     "Controls": [
         { "Input": "button1", "Type":  "Digital", "X":294, "Y":1244, "Width":792, "Height":54, "Cmt": "Thumb button" },
         { "Input": "button2", "Type":  "Digital", "X":1774, "Y":1774, "Width":892, "Height":54, "Cmt": "Pinky button" },

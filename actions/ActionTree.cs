@@ -1330,27 +1330,27 @@ namespace SCJMapper_V2.Actions
               sItem.ControlInput = acc.Input;
               switch ( Act.ADeviceFromDevID( acc.DevID ) ) {
                 case Act.ActionDevice.AD_Keyboard:
-                  sItem.InputType = "K";
+                  sItem.InputType = "K1";
                   sItem.DeviceName = KeyboardCls.DeviceClass;
-                  sItem.DeviceProdGuid = "";
+                  sItem.DeviceProdGuid = ""; // not needed - generic
                   break;
                 case Act.ActionDevice.AD_Mouse:
-                  sItem.InputType = "M";
+                  sItem.InputType = "M1";
                   sItem.DeviceName = MouseCls.DeviceClass;
-                  sItem.DeviceProdGuid = "";
+                  sItem.DeviceProdGuid = ""; // not needed - generic
                   break;
                 case Act.ActionDevice.AD_Joystick:
                   int jsNum = JoystickCls.JSNum( acc.DevInput ) - 1;
                   if ( jsNum >= 0 ) {
                     sItem.DeviceName = ActionMaps.jsN[jsNum];
                     sItem.DeviceProdGuid = ActionMaps.jsN_prodGUID[jsNum];
-                    sItem.InputType = "J";
+                    sItem.InputType = $"J{JoystickCls.JSNum( acc.DevInput )}"; 
                   }
                   break;
                 case Act.ActionDevice.AD_Gamepad:
-                  sItem.InputType = "G";
+                  sItem.InputType = "G1";
                   sItem.DeviceName = GamepadCls.DevNameCIG;
-                  sItem.DeviceProdGuid = GamepadCls.DevGUIDCIG ;
+                  sItem.DeviceProdGuid = GamepadCls.DevGUIDCIG;
                   break;
                 default: break;
               }//switch

@@ -31,9 +31,22 @@ namespace SCJMapper_V2.Layout
 
     internal ActionItemList ActionList { get; set; } = null;
 
+    private bool IsDebug()
+    {
+      return File.Exists( "DEBUG_LAYOUT.txt" );
+    }
+
     public FormLayout()
     {
       InitializeComponent( );
+
+      if ( IsDebug( ) ) {
+        // Show Debug items at startup
+        txGuid1.Visible = true;
+        txGuid2.Visible = true;
+        txGuid3.Visible = true;
+        btCreateDbgList.Visible = true;
+      }
     }
 
     /// <summary>
@@ -190,11 +203,12 @@ namespace SCJMapper_V2.Layout
         //        if ( si.DeviceName == cbxDevices.SelectedItem.ToString( ) ) {
         // matches the selected device      
         if ( MatchCriteria( si ) ) {
-          var ctrl = ( cbxLayouts.SelectedItem as DeviceLayout ).DeviceController.FindItem( si.DeviceProdGuid, si.ControlInput );
+          bool firstInstance = ActionList.IsFirstInstance( si.DevicePidVid, si.InputTypeNumber );
+          var ctrl = ( cbxLayouts.SelectedItem as DeviceLayout ).DeviceController.FindItem( si.DevicePidVid, si.ControlInput, firstInstance );
           if ( ctrl != null ) {
             if ( ctrl.ShapeItems.Count > 0 ) {
               var shape = ctrl.ShapeItems.Dequeue( );
-              shape.DispText = si.DispText;
+              shape.DispText = si.ModdedDispText;
               shape.TextColor = MapProps.MapForeColor( si.ActionMap );
               shape.BackColor = MapProps.MapBackColor( si.ActionMap );
               m_displayList.Add( shape );
@@ -291,7 +305,7 @@ namespace SCJMapper_V2.Layout
       }
 
       foreach ( ListViewItem item in chkLbActionMaps.Items ) {
-        item.ForeColor = MapProps.GroupColor( MapNameToGroup( item.ToolTipText) ).ForeColor;
+        item.ForeColor = MapProps.GroupColor( MapNameToGroup( item.ToolTipText ) ).ForeColor;
         item.BackColor = MapProps.GroupColor( MapNameToGroup( item.ToolTipText ) ).BackColor;
       }
 
@@ -345,7 +359,35 @@ namespace SCJMapper_V2.Layout
       lblTest.Font = new Font( lblTest.Font.FontFamily, tbFontSize.Value ); ;
     }
 
+    private bool m_checkAllToggle = true;
+    private void pictureBox1_DoubleClick( object sender, EventArgs e )
+    {
+      // select all groups
+      for ( int i = 0; i < chkLbActionGroups.Items.Count; i++ ) {
+        chkLbActionGroups.Items[i].Checked = m_checkAllToggle;
+      }
+      m_checkAllToggle = !m_checkAllToggle; // toggle
+    }
+
     #endregion
+
+    #region DEBUG LIST
+
+    private DbgActionItemList DBG_LIST = null;
+    private void btCreateDbgList_Click( object sender, EventArgs e )
+    {
+      DBG_LIST = new DbgActionItemList( );
+      List<string> guids = new List<string>( );
+      if ( !string.IsNullOrEmpty( txGuid1.Text ) ) guids.Add( txGuid1.Text );
+      if ( !string.IsNullOrEmpty( txGuid2.Text ) ) guids.Add( txGuid2.Text );
+      if ( !string.IsNullOrEmpty( txGuid3.Text ) ) guids.Add( txGuid3.Text );
+
+      DBG_LIST.CreateDebugList( guids.ToArray( ) );
+      ActionList = DBG_LIST.DbgList;
+    }
+
+    #endregion
+
 
   }
 }

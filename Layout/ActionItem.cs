@@ -23,9 +23,56 @@ namespace SCJMapper_V2.Layout
     // Input Device Refs
     public string DeviceName { get; set; } = "";      // Device Name
     public string DeviceProdGuid { get; set; } = "";  // Device Product GUID
-    public string InputType { get; set; } = "";       // K, M, J, G (keyb, mouse, joystick, gamepad)
+    public string InputType { get; set; } = "";       // K1, M1, Jn, G1 (keyb, mouse, joystick jsN number 1.., gamepad)
     // Command Input Ref - match required to find the display location
     public string ControlInput { get; set; } = "";    // buttonN, hatN_up,_right,_down,_left, [rot]xyz, sliderN (CryInput notification)
+
+    /// <summary>
+    /// Returnd the PID VID part of the device GUID in lowercase
+    ///  or an empty string...
+    /// </summary>
+    public string DevicePidVid
+    {
+      get {
+        if ( DeviceProdGuid.Length > 9 ) {
+          return DeviceProdGuid.Substring( 1, 8 ).ToLowerInvariant( );
+        }
+        return DeviceProdGuid;
+      }
+    }
+
+    public string InputTypeLetter { get => InputType.Substring( 0, 1 ); }
+    public short InputTypeNumber { get => short.Parse( InputType.Substring( 1 ) ); } // cannot fail else we have a program error...
+
+    /// <summary>
+    /// Returns the Modifier for this item
+    /// i.e. 
+    /// </summary>
+    public string Modifier
+    {
+      get {
+        // input can be:  {modifier+}Input
+        if ( !ControlInput.Contains( "+" ) ) return ""; // no modifier
+
+        string[] e = ControlInput.Split( new char[] { '+' } );
+        string mod = "";
+        for ( int i = 0; i < e.Length - 1; i++ ) {
+          mod += MapProps.ModS( e[i] );
+        }
+        return "("+mod+")";
+      }
+    }
+
+    /// <summary>
+    /// Returns the DispText with Modding added
+    /// </summary>
+    public string ModdedDispText
+    {
+      get {
+        return Modifier+DispText;
+      }
+    }
+
 
   }
 }
