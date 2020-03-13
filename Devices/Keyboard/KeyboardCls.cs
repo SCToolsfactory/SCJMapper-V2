@@ -24,6 +24,8 @@ namespace SCJMapper_V2.Devices.Keyboard
     public new const string DeviceClass = "keyboard";  // the device name used throughout this app
     public new const string DeviceID = "kb1_";
     static public int RegisteredDevices = 0;  // devices add here once they are created (though will not decrement as they are not deleted)
+    public const string DevNameCIG = "Keyboard"; // just a name...
+    public const string DevGUIDCIG = "{00000000-0000-0000-0000-000000000000}"; // - Fixed for Keyboards, we dont differentiate
 
     public const string ClearMods = "escape";
 
@@ -123,7 +125,7 @@ namespace SCJMapper_V2.Devices.Keyboard
     /// </summary>
     /// <param name="pressedKeys">The list of pressed DX keys</param>
     /// <returns>The SC keycode string</returns>
-    public static string DXKeyboardCmd( List<Key> pressedKeys, bool modAndKey, bool keyOnly )
+    public static string FromDXKeyboardCmd( List<Key> pressedKeys, bool modAndKey, bool keyOnly )
     {
       string altMod = "";
       string shiftMod = "";
@@ -257,6 +259,120 @@ namespace SCJMapper_V2.Devices.Keyboard
 
 
     /// <summary>
+    /// Converts from SC command to DX command
+    /// </summary>
+    /// <param name="scKey">A single SC game keyname</param>
+    /// <returns>The DX Code of this key</returns>
+    static public Key FromSCKeyboardCmd( string scKey )
+    {
+      switch ( scKey ) {
+        // handle modifiers first
+        case "lalt":  return Key.LeftAlt;
+        case "ralt": return Key.RightAlt;
+        case "lshift": return Key.LeftShift;
+        case "rshift": return Key.RightShift;
+        case "lctrl":return Key.LeftControl;
+        case "rctrl": return Key.RightControl;
+
+        // function keys first 
+        case "f1": return Key.F1;
+        case "f2": return Key.F2;
+        case "f3": return Key.F3;
+        case "f4": return Key.F4;
+        case "f5": return Key.F5;
+        case "f6": return Key.F6;
+        case "f7": return Key.F7;
+        case "f8": return Key.F8;
+        case "f9": return Key.F9;
+        case "f10": return Key.F10;
+        case "f11": return Key.F11;
+        case "f12": return Key.F12;
+        case "f13": return Key.F13;
+        case "f14": return Key.F14;
+        case "f15": return Key.F15;
+
+        // all keys where the DX name does not match the SC name
+        // Numpad
+        case "numlock": return Key.NumberLock;
+        case "np_divide": return Key.Divide;
+        case "np_multiply": return Key.Multiply;
+        case "np_subtract": return Key.Subtract;
+        case "np_add": return Key.Add;
+        case "np_period": return Key.Decimal;
+        case "np_enter": return Key.NumberPadEnter;
+        case "np_0": return Key.NumberPad0;
+        case "np_1": return Key.NumberPad1;
+        case "np_2": return Key.NumberPad2;
+        case "np_3": return Key.NumberPad3;
+        case "np_4": return Key.NumberPad4;
+        case "np_5": return Key.NumberPad5;
+        case "np_6": return Key.NumberPad6;
+        case "np_7": return Key.NumberPad7;
+        case "np_8": return Key.NumberPad8;
+        case "np_9": return Key.NumberPad9;
+        // Digits
+        case "0": return Key.D0;
+        case "1": return Key.D1;
+        case "2": return Key.D2;
+        case "3": return Key.D3;
+        case "4": return Key.D4;
+        case "5": return Key.D5;
+        case "6": return Key.D6;
+        case "7": return Key.D7;
+        case "8": return Key.D8;
+        case "9": return Key.D9;
+        // navigation
+        case "insert": return Key.Insert;
+        case "home": return Key.Home;
+        case "delete": return Key.Delete;
+        case "end": return Key.End;
+        case "pgup": return Key.PageUp;
+        case "pgdown": return Key.PageDown;
+        case "print": return Key.PrintScreen;
+        case "scrolllock": return Key.ScrollLock;
+        case "pause": return Key.Pause;
+        // Arrows
+        case "up": return Key.Up;
+        case "down": return Key.Down;
+        case "left": return Key.Left;
+        case "right": return Key.Right;
+        // non letters
+        case "escape": return Key.Escape;
+        case "minus": return Key.Minus;
+        case "equals": return Key.Equals;
+        case "grave": return Key.Grave;
+        case "underline": return Key.Underline;
+        case "backspace": return Key.Back;
+        case "tab": return Key.Tab;
+        case "lbracket": return Key.LeftBracket;
+        case "rbracket": return Key.RightBracket;
+        case "enter": return Key.Return;
+        case "capslock": return Key.Capital;
+        case "colon": return Key.Colon;
+        case "backslash": return Key.Backslash;
+        case "comma": return Key.Comma;
+        case "period": return Key.Period;
+        case "slash": return Key.Slash;
+        case "space": return Key.Space;
+        case "semicolon": return Key.Semicolon;
+        case "apostrophe": return Key.Apostrophe;
+
+        // all where the lowercase DX name matches the SC name
+        default:
+          if ( string.IsNullOrEmpty( scKey ) ) return Key.Unknown;
+
+          string letter = scKey.ToUpperInvariant( );
+          if (Enum.TryParse( letter, out Key dxKey ) ) {
+            return dxKey;
+          }
+          else {
+            return Key.Unknown;
+          }
+      }
+
+    }
+
+    /// <summary>
     /// Format the various parts to a valid ctrl entry
     /// </summary>
     /// <param name="input">The input by the user</param>
@@ -296,7 +412,8 @@ namespace SCJMapper_V2.Devices.Keyboard
     /// <summary>
     /// The ProductGUID property
     /// </summary>
-    public override string DevGUID { get { return "{" + m_device.Information.ProductGuid.ToString( ).ToUpperInvariant( ) + "}"; } }
+    //public override string DevGUID { get { return "{" + m_device.Information.ProductGuid.ToString( ).ToUpperInvariant( ) + "}"; } }
+    public override string DevGUID { get { return DevGUIDCIG; } } // generic as we don't differentiate Kbds
 
     /// <summary>
     /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
@@ -369,7 +486,7 @@ namespace SCJMapper_V2.Devices.Keyboard
     /// <returns>An input string or an empty string if no input is available</returns>
     public override string GetCurrentInput()
     {
-      return DXKeyboardCmd( m_state.PressedKeys, true, true );
+      return FromDXKeyboardCmd( m_state.PressedKeys, true, true );
     }
 
     /// <summary>
@@ -378,7 +495,7 @@ namespace SCJMapper_V2.Devices.Keyboard
     /// <returns>The last action as with modifiers</returns>
     public override string GetLastChange( )
     {
-      return DXKeyboardCmd( m_state.PressedKeys, true, false );
+      return FromDXKeyboardCmd( m_state.PressedKeys, true, false );
     }
 
 
@@ -389,7 +506,7 @@ namespace SCJMapper_V2.Devices.Keyboard
     /// <returns>Last action mod and key or only modifier</returns>
     public string GetLastChange( bool modAndKey )
     {
-      return DXKeyboardCmd( m_state.PressedKeys, modAndKey, false);
+      return FromDXKeyboardCmd( m_state.PressedKeys, modAndKey, false);
     }
 
 

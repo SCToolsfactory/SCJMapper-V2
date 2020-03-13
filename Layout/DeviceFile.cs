@@ -17,6 +17,7 @@ namespace SCJMapper_V2.Layout
       "InputDevices" :[
       { 
         "InputType": "J1",
+        "FontFamily": "Tahoma",
         "DeviceName": "T16000M",
         "DeviceProdGuid": ["{B10A044F-0000-0000-0000-504944564944}"],
          "Controls": [
@@ -56,7 +57,7 @@ namespace SCJMapper_V2.Layout
     /// Find a Control entry with the given product guid and input command
     /// </summary>
     /// <param name="pidVid">the Device Prduct PID VID string in lowecase</param>
-    /// <param name="input">the Item (device property)</param>
+    /// <param name="input">the Main input command without modifiers</param>
     /// <param name="firstInstance">If true it looks for the InputTypeNumber 1 (InputType="x1") else for the next</param>
     /// <returns>The found Control or Null</returns>
     public Control FindItem( string pidVid, string input, bool firstInstance )
@@ -66,15 +67,13 @@ namespace SCJMapper_V2.Layout
 
       for ( int i = 0; i < InputDevices.Count; i++ ) {
         if ( InputDevices[i].DevicePIDVID.Contains( pidVid ) ) { // can have multiple PID VIDs for a device (alternates)
-          // input can be:  {modifier+}Input
-          string[] e = input.Split( new char[] { '+' } );
-          string effInput = e[e.Length - 1]; // last item is the real input
           // returns if we are asked for the first instance and it is the first one (default)
-          if ( firstInstance && ( InputDevices[i].InputTypeNumber == 1 ) ) {
-            return InputDevices[i].FindItem( effInput );
+          // Use numbers only when there are more than one device with the same GUID in a file !!! (or 0)
+          if ( firstInstance && ( InputDevices[i].InputTypeNumber <= 1 ) ) {
+            return InputDevices[i].FindItem( input );
           }
-          else if ( !firstInstance && InputDevices[i].InputTypeNumber > 1 ) {
-            return InputDevices[i].FindItem( effInput ); // not first and J2.. - return any other (more than 2 not supported)
+          else if ( !firstInstance && ( InputDevices[i].InputTypeNumber > 1 || InputDevices[i].InputTypeNumber == 0 ) ) {
+            return InputDevices[i].FindItem( input ); // not first and dev2+ or dev0.. - return any other (more than 2 not supported)
           }
         }
       }
@@ -103,7 +102,9 @@ namespace SCJMapper_V2.Layout
   class Device
   {
     [DataMember( IsRequired = true )]
-    public string InputType { get; set; } // Joystick, Throttle, Pedal, Gamepad, Keyboard, Other
+    public string InputType { get; set; } // J[n], G[n], K[n], M[n], X
+    [DataMember( IsRequired = false )]
+    public string FontFamily { get; set; } // any valid FontFamily
     [DataMember( IsRequired = true )]
     public string DeviceName { get; set; } // The device name
     [DataMember( IsRequired = true )]
@@ -112,6 +113,21 @@ namespace SCJMapper_V2.Layout
     public List<Control> Controls { get; set; } = new List<Control>( );// The list of Controls supported (see below)
 
     // non Json
+
+
+    private Font m_deviceFont = null;
+    /// <summary>
+    /// Get the base font for this device
+    /// </summary>
+    public Font DeviceFont
+    {
+      get {
+        if ( !string.IsNullOrEmpty( FontFamily ) ) {
+          return m_deviceFont;
+        }
+        return MapProps.MapFont; // no specified - get the default one
+      }
+    }
 
     /// <summary>
     /// Describes a known device
@@ -144,7 +160,7 @@ namespace SCJMapper_V2.Layout
             return num;
           }
         }
-        return 1; //default
+        return 0; //default
       }
     }
 
@@ -163,16 +179,29 @@ namespace SCJMapper_V2.Layout
       }
     }
 
+
+    // this one tracks the returned KbdItems - must be reset when Shapes are newly created
+    private int m_kbdItemTracker = 0;
     /// <summary>
     /// Find a Control entry with the given input command
+    /// For Keyboards there is not an entry for every possible key - so return just the next one
     /// </summary>
     /// <param name="input">the Item (device property)</param>
     /// <returns>The found Control or Null</returns>
     public Control FindItem( string input )
     {
+      // we may find it already here
       for ( int i = 0; i < Controls.Count; i++ ) {
         if ( input == Controls[i].Input ) {
           return Controls[i];
+        }
+      }
+      // if not - and Keyboard - assign a new one and tag it
+      if ( this.InputTypeLetter == "X" ) {
+        if ( Controls.Count > m_kbdItemTracker ) {
+          int item = m_kbdItemTracker++;
+          Controls[item].Input = input; // mark to reuse
+          return Controls[item];
         }
       }
       return null;
@@ -184,8 +213,13 @@ namespace SCJMapper_V2.Layout
     /// </summary>
     public void CreateShapes()
     {
+      m_kbdItemTracker = 0; // reset 
+      if ( m_deviceFont != null ) m_deviceFont.Dispose( );
+      if ( !string.IsNullOrEmpty( FontFamily ) ) {
+        m_deviceFont = new Font( FontFamily, MapProps.FontSize ); // create actual Font here
+      }
       for ( int i = 0; i < Controls.Count; i++ ) {
-        Controls[i].CreateShapes( );
+        Controls[i].CreateShapes( DeviceFont, this.InputTypeLetter == "X" ); // symbols only for X type maps (keyboard with Symbols)
       }
     }
 
@@ -228,28 +262,52 @@ namespace SCJMapper_V2.Layout
     /// <summary>
     /// Create all possible ShapeItems for this Control
     /// </summary>
-    public void CreateShapes()
+    public void CreateShapes( Font deviceFontRef, bool useSymbol )
     {
       // this is a bit messy...
       // have to allocate a number of Rectangles to draw into but the layout rects are very different in size..
       this.ShapeItems = new Queue<ShapeItem>( ); // get rid of previous ones
       // create a reference font 
       int baseHeight = MapProps.MapFont.Height;
-      int baseWidth = MapProps.MapFont.Height * 12; // Lets see if this is good or needs adjustment
+      int baseWidth = MapProps.MapFont.Height * 12; // Lets see if this is a good Width or needs adjustment
 
       // live values from base
       int nCols = Width / baseWidth;
+      if ( nCols == 0 ) {
+        nCols = 1; // at least one column..
+      }
+      baseWidth = (int)Math.Floor( (double)Width / nCols ); // fill rectangle
       int nLines = Height / baseHeight;
+      if ( nLines == 0 ) {
+        nLines = 1; // at least one line..
+      }
+      baseHeight = (int)Math.Floor( (double)Height / nLines ); // fill rectangle
 
+      bool symbol = useSymbol;
       for ( int l = 0; l < nLines; l++ ) {
         for ( int c = 0; c < nCols; c++ ) {
-          var sh = new ShapeItem {
-            X = X + c * baseWidth,
-            Y = Y + l * baseHeight + 2, // offset Y by 2 pix to have it more centered
-            Width = baseWidth,
-            Height = baseHeight
-          };
-          ShapeItems.Enqueue( sh );
+          if ( this.Type == "Key" ) {
+            var sh = new ShapeKey {
+              X = X + c * baseWidth,
+              Y = Y + l * baseHeight,
+              Width = baseWidth,
+              Height = baseHeight,
+              IsSymbolShape = symbol,
+              TextFontRef = deviceFontRef
+            };
+            symbol = false; // only once
+            ShapeItems.Enqueue( sh );
+          }
+          else {
+            var sh = new ShapeItem {
+              X = X + c * baseWidth,
+              Y = Y + l * baseHeight,
+              Width = baseWidth,
+              Height = baseHeight,
+              TextFontRef = deviceFontRef
+            };
+            ShapeItems.Enqueue( sh );
+          }
         }
       }
     }

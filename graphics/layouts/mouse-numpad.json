@@ -1,0 +1,64 @@
+{
+  "MapName" : "8: Numpad, Navigation Layout & Mouse",
+  "MapImage" : "mouse-numpad.jpg",
+  "InputDevices" :[
+  { 
+    "FontFamily": "Gill Sans Nova Cond",
+    "InputType": "K1",
+    "DeviceName": "Keyboard",
+    "DeviceProdGuid": ["{00000000-0000-0000-0000-000000000000}"],
+    "Controls": [
+      { "Input":"print", "Type": "Digital", "X":107, "Y":340, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"scrolllock", "Type": "Digital", "X":351, "Y":339, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"pause", "Type": "Digital", "X":595, "Y":340, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"insert", "Type": "Digital", "X":107, "Y":685, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"home", "Type": "Digital", "X":351, "Y":685, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"pgup", "Type": "Digital", "X":595, "Y":685, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"delete", "Type": "Digital", "X":107, "Y":928, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"end", "Type": "Digital", "X":351, "Y":928, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"pgdown", "Type": "Digital", "X":595, "Y":928, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"up", "Type": "Digital", "X":351, "Y":1416, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"left", "Type": "Digital", "X":107, "Y":1660, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"down", "Type": "Digital", "X":351, "Y":1660, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"right", "Type": "Digital", "X":595, "Y":1660, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"numlock", "Type":  "Digital", "X":939, "Y":685, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_divide", "Type":  "Digital", "X":1183, "Y":685, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_multiply", "Type":  "Digital", "X":1427, "Y":685, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_subtract", "Type":  "Digital", "X":1670, "Y":685, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_7", "Type":  "Digital", "X":939, "Y":928, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_8", "Type":  "Digital", "X":1183, "Y":928, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_9", "Type":  "Digital", "X":1427, "Y":928, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_add", "Type":  "Digital", "X":1670, "Y":956, "Width":235, "Height":450, "Cmt":""},
+      { "Input":"np_4", "Type": "Digital", "X":939, "Y":1172, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_5", "Type": "Digital", "X":1183, "Y":1172, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_6", "Type": "Digital", "X":1427, "Y":1172, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_1", "Type": "Digital", "X":939, "Y":1416, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_2", "Type": "Digital", "X":1183, "Y":1416, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_3", "Type": "Digital", "X":1427, "Y":1416, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_enter", "Type": "Digital", "X":1670, "Y":1444, "Width":235, "Height":450, "Cmt":""},
+      { "Input":"np_0", "Type": "Digital", "X":939, "Y":1672, "Width":235, "Height":205, "Cmt":""},
+      { "Input":"np_period", "Type": "Digital", "X":1427, "Y":1660, "Width":235, "Height":205, "Cmt":""}
+    ]
+  },
+  {
+    "InputType": "M1",
+    "DeviceName": "Mouse",
+    "DeviceProdGuid": ["{10001000-0000-0000-0000-000000000000}"],
+    "Controls": [
+      { "Input":"mouse1", "Type":  "Digital", "X":2142, "Y":654, "Width":755, "Height":205, "Cmt":""},
+      { "Input":"mouse2", "Type":  "Digital", "X":3003, "Y":656, "Width":755, "Height":205, "Cmt":""},
+      { "Input":"mouse3", "Type":  "Digital", "X":2460, "Y":378, "Width":985, "Height":205, "Cmt":""},
+      { "Input":"mouse4", "Type":  "Digital", "X":2142, "Y":1115, "Width":535, "Height":205, "Cmt":""},
+      { "Input":"mouse5", "Type":  "Digital", "X":2142, "Y":884, "Width":535, "Height":205, "Cmt":""},
+      { "Input":"mouse6", "Type":  "Digital", "X":2459, "Y":1717, "Width":985, "Height":50, "Cmt":""},
+      { "Input":"mouse7", "Type":  "Digital", "X":2459, "Y":1769, "Width":985, "Height":50, "Cmt":""},
+      { "Input":"mouse8", "Type":  "Digital", "X":2459, "Y":1819, "Width":985, "Height":50, "Cmt":""},
+      { "Input":"mwheel_up", "Type": "Digital", "X":2460, "Y":276, "Width":985, "Height":50, "Cmt":""},
+      { "Input":"mwheel_down", "Type": "Digital", "X":2460, "Y":326, "Width":985, "Height":50, "Cmt":""},
+      { "Input":"maxis_x", "Type": "Analogue", "X":2459, "Y":178, "Width":985, "Height":50, "Cmt":""},
+      { "Input":"maxis_y", "Type": "Analogue", "X":2459, "Y":129, "Width":985, "Height":50, "Cmt":""}
+    ]
+  }
+  ]
+}
+

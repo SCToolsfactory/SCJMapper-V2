@@ -16,13 +16,15 @@ namespace SCJMapper_V2.Layout
   {
     public static string ModShoulderLeft = "←";//═
     public static string ModShoulderRight = "→";
+    public static string ModDpadDown = "↓";
+    public static string ModTrigLeft = "◄";
 
-    public static string ModAltLeft = "←Å";
-    public static string ModAltRight = "→Å";
-    public static string ModCtrlLeft = "←Ꞓ";
-    public static string ModCtrlRight = "→Ꞓ";
-    public static string ModShiftLeft = "←Ȿ";
-    public static string ModShiftRight = "→Ȿ";
+    public static string ModAltLeft = "<A";
+    public static string ModAltRight = "<A";
+    public static string ModCtrlLeft = "<C";
+    public static string ModCtrlRight = ">C";
+    public static string ModShiftLeft = "<S";
+    public static string ModShiftRight = ">S";
 
     /// <summary>
     /// Returns a Layout Modifier string (char) for a given modifier
@@ -55,6 +57,13 @@ namespace SCJMapper_V2.Layout
       else if ( modifier == "rctrl" ) {
         return ModCtrlRight;
       }
+      else if ( modifier == "dpad_down" ) {
+        return ModDpadDown;
+      }
+      else if ( modifier == "triggerl_btn" ) {
+        return ModTrigLeft;
+      }
+
       else {
         return "⸮";
       }
@@ -75,8 +84,22 @@ namespace SCJMapper_V2.Layout
       }
     }
 
+    // Text 
+    private const string c_fontFamily = "Tahoma";
     private static int m_fontSize = 16; // maintained as int to support the TrackBar Value property)
-    private static Font m_font = new Font( "Tahoma", m_fontSize ); // real fontsize will be scaled to float but not used outside
+    private static Font m_font = new Font( c_fontFamily, m_fontSize ); // real fontsize will be scaled to float but not used outside
+
+    // Keyboard Layout Text 
+    private const string c_kbdFontFamily = "Gill Sans Nova Cond";
+    private static Font m_kbdFont = new Font( c_kbdFontFamily, m_fontSize ); // real fontsize will be scaled to float but not used outside
+
+    // Keyboard Symbols
+    private const string c_kbdSymbolFontFamily = "Tahoma";
+    private const int c_kbdSymbolFontDecrement = 5; // kbd Symbol is so many points smaller than main font
+    private static Font m_kbdSymbolFont = new Font( c_kbdSymbolFontFamily, m_fontSize - c_kbdSymbolFontDecrement );
+    private static Brush m_kbdSymbolBrush = Brushes.DimGray;
+    private static Pen m_kbdSymbolPen = Pens.Gray;
+
 
     // all known actionmaps with it's classification
     private static Dictionary<EGroup, ColorPair> m_amColors;
@@ -170,7 +193,7 @@ namespace SCJMapper_V2.Layout
 
     /// <summary>
     /// FontSize property
-    /// creates a new MapFont property to use
+    /// creates a new MapFont and KbdSymbolFont property to use
     /// </summary>
     public static int FontSize
     {
@@ -178,8 +201,10 @@ namespace SCJMapper_V2.Layout
       set {
         m_fontSize = value;
         m_font = new Font( m_font.FontFamily, m_fontSize );
-      }
-    }
+        m_kbdSymbolFont = new Font( m_kbdSymbolFont.FontFamily, m_fontSize - c_kbdSymbolFontDecrement );
+
+  }
+}
 
     // Handle Layout Colors
 
@@ -245,6 +270,15 @@ namespace SCJMapper_V2.Layout
     {
       return m_amColors[eGroup].BackColor;
     }
+
+    // Keyboard Text
+    public static Font KbdFont { get => m_kbdFont; }
+
+    // Keyboard Symbols 
+    public static Font KbdSymbolFont { get => m_kbdSymbolFont; }
+    public static Brush KbdSymbolBrush { get => m_kbdSymbolBrush; }
+    public static Pen KbdSymbolPen { get => m_kbdSymbolPen; }
+
 
   }
 }

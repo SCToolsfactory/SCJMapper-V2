@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SCJMapper_V2.Devices.Gamepad;
+using SCJMapper_V2.Devices.Keyboard;
 
 namespace SCJMapper_V2.Layout
 {
@@ -92,128 +93,184 @@ namespace SCJMapper_V2.Layout
       return ail;
     }
 
-    private List<ActionItem> AI_Gamepad( string aMap )
+    private List<ActionItem> AI_Gamepad( string aMap, string guid )
     {
       var ail = new List<ActionItem>( );
       var ai = new ActionItem {
         ActionMap = aMap, ControlInput = "x", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button X", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button X", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "a", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button A", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button A", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "b", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button B", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button B", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "y", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button Y", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button Y", InputType = $"G1"
       }; ail.Add( ai );
 
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "shoulderl", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button Shoulder Left", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button Shoulder Left", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "shoulderr", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button Shoulder Right", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button Shoulder Right", InputType = $"G1"
       }; ail.Add( ai );
 
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "triggerl_btn", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button Trigger Left", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button Trigger Left", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "triggerr_btn", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button Trigger Right", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button Trigger Right", InputType = $"G1"
       }; ail.Add( ai );
 
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "back", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button Back", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button Back", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "start", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button Start", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button Start", InputType = $"G1"
       }; ail.Add( ai );
 
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "thumbl", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button Thumb Left", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button Thumb Left", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "thumbr", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Button Thumb Right", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Button Thumb Right", InputType = $"G1"
       }; ail.Add( ai );
 
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "dpad_up", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - POV Up", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - POV Up", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "dpad_right", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - POV Right", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - POV Right", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "dpad_down", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - POV Down", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - POV Down", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "dpad_left", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - POV Left", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - POV Left", InputType = $"G1"
       }; ail.Add( ai );
 
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "thumblx", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - X - Axis Thumb Left", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - X - Axis Thumb Left", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "thumbly", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Y - Axis Thumb Left", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Y - Axis Thumb Left", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "thumbrx", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - X - Axis Thumb Right", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - X - Axis Thumb Right", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "thumbry", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - Y - Axis Thumb Right", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - Y - Axis Thumb Right", InputType = $"G1"
       }; ail.Add( ai );
 
       return ail;
     }
 
-    private List<ActionItem> AI_GamepadMods( string aMap )
+    private List<ActionItem> AI_GamepadMods( string aMap, string guid )
     {
       var ail = new List<ActionItem>( );
       var ai = new ActionItem {
         ActionMap = aMap, ControlInput = "shoulderl+x", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - ShLeft + Button X", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - ShLeft + Button X", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "shoulderl+a", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - ShLeft + Button A", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - ShLeft + Button A", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "shoulderl+b", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - ShLeft + Button B", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - ShLeft + Button B", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "shoulderl+y", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - ShLeft + Button Y", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - ShLeft + Button Y", InputType = $"G1"
       }; ail.Add( ai );
 
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "shoulderl+triggerl_btn", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - ShLeft + Trigger Left", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - ShLeft + Trigger Left", InputType = $"G1"
       }; ail.Add( ai );
       ai = new ActionItem {
         ActionMap = aMap, ControlInput = "shoulderl+triggerr_btn", DeviceName = "Debug Controller",
-        DeviceProdGuid = GamepadCls.DevGUIDCIG, DispText = $"GP - ShLeft + Trigger Right", InputType = $"G1"
+        DeviceProdGuid = guid, DispText = $"GP - ShLeft + Trigger Right", InputType = $"G1"
       }; ail.Add( ai );
 
+      return ail;
+    }
+
+    private List<ActionItem> AI_Keyboard( string aMap, string guid )
+    {
+      var ail = new List<ActionItem>( );
+      var ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "a", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key A", InputType = $"K1"
+      }; ail.Add( ai );
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "q", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key Q", InputType = $"K1"
+      }; ail.Add( ai );
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "x", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key A", InputType = $"K1"
+      }; ail.Add( ai );
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "y", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key Y", InputType = $"K1"
+      }; ail.Add( ai );
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "z", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key Z", InputType = $"K1"
+      }; ail.Add( ai );
+
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "1", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key 1", InputType = $"K1"
+      }; ail.Add( ai );
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "0", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key 0", InputType = $"K1"
+      }; ail.Add( ai );
+
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "f1", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key F1", InputType = $"K1"
+      }; ail.Add( ai );
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "np_0", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key Numpad 0", InputType = $"K1"
+      }; ail.Add( ai );
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "np_multiply", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key Numpad *", InputType = $"K1"
+      }; ail.Add( ai );
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "backspace", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key Backspace", InputType = $"K1"
+      }; ail.Add( ai );
+      ai = new ActionItem {
+        ActionMap = aMap, ControlInput = "escape", DeviceName = "Debug Controller",
+        DeviceProdGuid = guid, DispText = $"KB - Key Escape", InputType = $"K1"
+      }; ail.Add( ai );
       return ail;
     }
 
@@ -241,13 +298,17 @@ namespace SCJMapper_V2.Layout
 
       // Create Gamepad
       // Gamepads are in "spaceship_targeting"
-      m_actionItems.AddRange( AI_Gamepad( "spaceship_targeting" ) );
+   //   m_actionItems.AddRange( AI_Gamepad( "spaceship_targeting", GamepadCls.DevGUIDCIG ) );
 
       // Create Gamepad modified
       // Gamepads Mods are in "spaceship_target_hailing"
-      m_actionItems.AddRange( AI_GamepadMods( "spaceship_target_hailing" ) );
+   //   m_actionItems.AddRange( AI_GamepadMods( "spaceship_target_hailing", GamepadCls.DevGUIDCIG ) );
 
       // Create Keyboard
+      // Keyboard are in "vehicle_general"
+      m_actionItems.AddRange( AI_Keyboard( "vehicle_general", KeyboardCls.DevGUIDCIG ) );
+
+      // Create Keyboard modified
     }
 
 

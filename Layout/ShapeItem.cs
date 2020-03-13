@@ -55,11 +55,13 @@ namespace SCJMapper_V2.Layout
 
     public bool IsValid { get => !string.IsNullOrEmpty( DispText ); }
 
-    private Brush m_textBrush = Brushes.Black;
-    private Color m_textColor = Color.DarkBlue;
+    protected Brush m_textBrush = Brushes.Black;
+    protected Color m_textColor = Color.DarkBlue;
 
-    private Brush m_backBrush = Brushes.White;
-    private Color m_backColor = Color.White;
+    protected Brush m_backBrush = Brushes.White;
+    protected Color m_backColor = Color.White;
+
+    protected Font m_textFontRef = null;
 
     /// <summary>
     /// Set the Textcolor
@@ -88,6 +90,13 @@ namespace SCJMapper_V2.Layout
     }
 
     /// <summary>
+    /// TextFont Property of this shape
+    /// you get a ref not a new font here
+    /// </summary>
+    public Font TextFontRef { get => m_textFontRef; set => m_textFontRef = value; }
+
+
+    /// <summary>
     /// Returns the drawn text size for this item
     /// </summary>
     /// <param name="g"></param>
@@ -102,13 +111,13 @@ namespace SCJMapper_V2.Layout
     /// <summary>
     /// Draws the shape 
     /// </summary>
-    public void DrawShape( Graphics g )
+    public virtual void DrawShape( Graphics g )
     {
       if ( IsValid ) {
         if ( m_backColor!= Color.White ) {
           g.FillRectangle( m_backBrush, Rectangle );
         }
-        g.DrawString( DispText, MapProps.MapFont, m_textBrush, Rectangle ); // write into the rectangle
+        g.DrawString( DispText, TextFontRef, m_textBrush, Rectangle ); // write into the rectangle
       }
     }
 

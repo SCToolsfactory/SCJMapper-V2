@@ -26,6 +26,8 @@ namespace SCJMapper_V2.Devices.Mouse
     public new const string DeviceClass = "mouse";   // the device name used throughout this app
     public new const string DeviceID = "mo1_";
     static public int RegisteredDevices = 0;  // devices add here once they are created (though will not decrement as they are not deleted)
+    public const string DevNameCIG = "Mouse"; // just a name...
+    public const string DevGUIDCIG = "{10001000-0000-0000-0000-000000000000}"; // - Fixed for Mouse, we dont differentiate
 
     public new const string DisabledInput = DeviceID + DeviceCls.DisabledInput;
     static public new bool IsDisabledInput( string input )

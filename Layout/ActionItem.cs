@@ -46,7 +46,7 @@ namespace SCJMapper_V2.Layout
 
     /// <summary>
     /// Returns the Modifier for this item
-    /// i.e. 
+    /// i.e. only modifiers
     /// </summary>
     public string Modifier
     {
@@ -59,7 +59,22 @@ namespace SCJMapper_V2.Layout
         for ( int i = 0; i < e.Length - 1; i++ ) {
           mod += MapProps.ModS( e[i] );
         }
-        return "("+mod+")";
+        return "(" + mod + ")";
+      }
+    }
+
+    /// <summary>
+    /// Returns the Main Control for this item
+    /// i.e. no modifiers
+    /// </summary>
+    public string MainControl
+    {
+      get {
+        // input can be:  {modifier+}Input
+        if ( !ControlInput.Contains( "+" ) ) return ControlInput; // no modifier
+
+        string[] e = ControlInput.Split( new char[] { '+' } );
+        return e[e.Length - 1]; // last item
       }
     }
 

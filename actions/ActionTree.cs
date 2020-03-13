@@ -1332,12 +1332,12 @@ namespace SCJMapper_V2.Actions
                 case Act.ActionDevice.AD_Keyboard:
                   sItem.InputType = "K1";
                   sItem.DeviceName = KeyboardCls.DeviceClass;
-                  sItem.DeviceProdGuid = ""; // not needed - generic
+                  sItem.DeviceProdGuid = KeyboardCls.DevGUIDCIG;
                   break;
                 case Act.ActionDevice.AD_Mouse:
                   sItem.InputType = "M1";
                   sItem.DeviceName = MouseCls.DeviceClass;
-                  sItem.DeviceProdGuid = ""; // not needed - generic
+                  sItem.DeviceProdGuid = MouseCls.DevGUIDCIG;
                   break;
                 case Act.ActionDevice.AD_Joystick:
                   int jsNum = JoystickCls.JSNum( acc.DevInput ) - 1;

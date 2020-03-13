@@ -214,23 +214,27 @@ namespace SCJMapper_V2.Layout
       // for all actions found from action tree
       m_displayList.Clear( );
       ( cbxLayouts.SelectedItem as DeviceLayout ).DeviceController.CreateShapes( );
-      foreach ( var si in ActionList ) {
+      foreach ( var actItem in ActionList ) {
         // matches the selected device      
-        if ( MatchCriteria( si ) ) {
-          bool firstInstance = ActionList.IsFirstInstance( si.DevicePidVid, si.InputTypeNumber );
-          var ctrl = ( cbxLayouts.SelectedItem as DeviceLayout ).DeviceController.FindItem( si.DevicePidVid, si.ControlInput, firstInstance );
+        if ( MatchCriteria( actItem ) ) {
+          bool firstInstance = ActionList.IsFirstInstance( actItem.DevicePidVid, actItem.InputTypeNumber );
+          var ctrl = ( cbxLayouts.SelectedItem as DeviceLayout ).DeviceController.FindItem( actItem.DevicePidVid, actItem.MainControl, firstInstance );
           if ( ctrl != null ) {
             if ( ctrl.ShapeItems.Count > 0 ) {
               var shape = ctrl.ShapeItems.Dequeue( );
-              shape.DispText = si.ModdedDispText;
-              shape.TextColor = MapProps.MapForeColor( si.ActionMap );
-              shape.BackColor = MapProps.MapBackColor( si.ActionMap );
+              shape.DispText = actItem.ModdedDispText;
+              shape.TextColor = MapProps.MapForeColor( actItem.ActionMap );
+              shape.BackColor = MapProps.MapBackColor( actItem.ActionMap );
+              if ( shape is ShapeKey  ) {
+                // kbd map
+                ( shape as ShapeKey ).SCGameKey = actItem.MainControl;
+              }
               m_displayList.Add( shape );
             }
             else {
               // Display elements exhausted...
               if ( ! errorShown ) {
-                string msg = $"No more display elements left for device:  {si.DeviceName}";
+                string msg = $"No more display elements left for device:  {actItem.DeviceName}";
                 msg += $"\n\nTry to use a smaller font to show all actions!";
                 MessageBox.Show( msg, "Layout - Cannot show all actions", MessageBoxButtons.OK, MessageBoxIcon.Warning );
                 errorShown = true; // only once
