@@ -1,34 +1,33 @@
 {
-  "MapName" : "7: GPad Logitech F710",
-  "MapImage" : "gpad-logi-f710.jpg",
-  "InputDevices" :[
-  { 
+  "MapName": "7: GPad Logitech F710",
+  "MapImage": "gpad-logi-f710.jpg",
+  "InputDevices": [
+  {
     "InputType": "G",
     "DeviceName": "Logitech F710",
     "DeviceProdGuid": ["{028E045E-0000-0000-0000-504944564944}"],
-    "Controls": [
-      { "Input":"x", "Type":  "Digital", "X":2754, "Y":1493, "Width":987, "Height":150, "Cmt":  "X"},
-      { "Input":"a", "Type":  "Digital", "X":2755, "Y":1323, "Width":987, "Height":150, "Cmt":  "A"},
-      { "Input":"b", "Type":  "Digital", "X":2755, "Y":1153, "Width":987, "Height":150, "Cmt":  "B"},
-      { "Input":"y", "Type":  "Digital", "X":2755, "Y":984, "Width":987, "Height":150, "Cmt":  "Y"},
-      { "Input":"shoulderl", "Type":  "Digital", "X":594, "Y":475, "Width":987, "Height":204, "Cmt":  "Left bumper - shoulderl"},
-      { "Input":"shoulderr", "Type":  "Digital", "X":2370, "Y":473, "Width":987, "Height":203, "Cmt":  "Right bumper - shoulderr"},
-      { "Input":"triggerl_btn", "Type":  "Digital", "X":858, "Y":237, "Width":987, "Height":202, "Cmt":  "Left trigger - triggerl_btn"},
-      { "Input":"triggerr_btn", "Type":  "Digital", "X":2074, "Y":235, "Width":987, "Height":203, "Cmt":  "Right trigger - triggerr_btn"},
-      { "Input":"back", "Type":  "Digital", "X":370, "Y":821, "Width":987, "Height":95, "Cmt":  "Back"},
-      { "Input":"start", "Type":  "Digital", "X":2612, "Y":806, "Width":987, "Height":95, "Cmt":  "Start"},
-      { "Input":"thumbl", "Type":  "Digital", "X":264, "Y":1290, "Width":986, "Height":159, "Cmt":  "Left stick button  thumbl"},
-      { "Input":"thumbr", "Type":  "Digital", "X":2258, "Y":1956, "Width":1486, "Height":99, "Cmt":  "Right stick button - thumbr"},
-      { "Input":"dpad_up", "Type":  "Digital", "X":331, "Y":1700, "Width":1478, "Height":101, "Cmt": "dpad_up"},
-      { "Input":"dpad_right", "Type":  "Digital", "X":331, "Y":1806, "Width":1478, "Height":103, "Cmt": "dpad_right"},
-      { "Input":"dpad_down", "Type": "Digital", "X":331, "Y":1914, "Width":1478, "Height":99, "Cmt": "dpad_down"},
-      { "Input":"dpad_left", "Type": "Digital", "X":331, "Y":2016, "Width":1478, "Height":103, "Cmt": "dpad_left"},
-      { "Input":"thumbry", "Type": "Analogue", "X":2258, "Y":1744, "Width":1486, "Height":103, "Cmt": "thumbry"},
-      { "Input":"thumbrx", "Type": "Analogue", "X":2258, "Y":1852, "Width":1486, "Height":100, "Cmt": "thumbrx"},
-      { "Input":"thumbly", "Type": "Analogue", "X":264, "Y":974, "Width":986, "Height":155, "Cmt": "thumbly"},
-      { "Input":"thumblx", "Type": "Analogue", "X":264, "Y":1132, "Width":986, "Height":152, "Cmt": "thumblx"}
+    "Controls": [ 
+      { "Input": "x", "Type": "Digital", "X": 2754, "Y": 1492, "Width": 986, "Height": 149, "Cmt": "" },
+      { "Input": "a", "Type": "Digital", "X": 2754, "Y": 1322, "Width": 986, "Height": 149, "Cmt": "" },
+      { "Input": "b", "Type": "Digital", "X": 2754, "Y": 1152, "Width": 986, "Height": 149, "Cmt": "" },
+      { "Input": "y", "Type": "Digital", "X": 2754, "Y": 982, "Width": 986, "Height": 149, "Cmt": "" },
+      { "Input": "shoulderl", "Type": "Digital", "X": 592, "Y": 474, "Width": 987, "Height": 203, "Cmt": "" },
+      { "Input": "shoulderr", "Type": "Digital", "X": 2370, "Y": 473, "Width": 987, "Height": 202, "Cmt": "" },
+      { "Input": "triggerl_btn", "Type": "Digital", "X": 857, "Y": 234, "Width": 987, "Height": 203, "Cmt": "" },
+      { "Input": "triggerr_btn", "Type": "Digital", "X": 2073, "Y": 234, "Width": 986, "Height": 203, "Cmt": "" },
+      { "Input": "back", "Type": "Digital", "X": 370, "Y": 819, "Width": 987, "Height": 95, "Cmt": "" },
+      { "Input": "start", "Type": "Digital", "X": 2611, "Y": 806, "Width": 987, "Height": 95, "Cmt": "" },
+      { "Input": "thumbl", "Type": "Digital", "X": 600, "Y": 1923, "Width": 986, "Height": 159, "Cmt": "" },
+      { "Input": "thumbr", "Type": "Digital", "X": 2257, "Y": 1956, "Width": 1486, "Height": 99, "Cmt": "" },
+      { "Input": "dpad_up", "Type": "Digital", "X": 258, "Y": 1029, "Width": 989, "Height": 100, "Cmt": "" },
+      { "Input": "dpad_right", "Type": "Digital", "X": 258, "Y": 1135, "Width": 989, "Height": 101, "Cmt": "" },
+      { "Input": "dpad_down", "Type": "Digital", "X": 258, "Y": 1242, "Width": 989, "Height": 98, "Cmt": "" },
+      { "Input": "dpad_left", "Type": "Digital", "X": 258, "Y": 1346, "Width": 989, "Height": 100, "Cmt": "" },
+      { "Input": "thumblx", "Type": "Analogue", "X": 600, "Y": 1766, "Width": 986, "Height": 153, "Cmt": "" },
+      { "Input": "thumbly", "Type": "Analogue", "X": 600, "Y": 1607, "Width": 986, "Height": 154, "Cmt": "" },
+      { "Input": "thumbrx", "Type": "Analogue", "X": 2257, "Y": 1851, "Width": 1486, "Height": 100, "Cmt": "" },
+      { "Input": "thumbry", "Type": "Analogue", "X": 2257, "Y": 1743, "Width": 1486, "Height": 103, "Cmt": "" }
     ]
   }
   ]
 }
-

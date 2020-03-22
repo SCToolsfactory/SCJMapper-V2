@@ -28,7 +28,7 @@ namespace SCJMapper_V2.Layout
         fn = Path.Combine( TheUser.LayoutsDir, fn ); // if it is not found use the default path
       }
       if ( File.Exists( fn ) ) {
-        using ( var ts = File.OpenRead( jFilename ) ) {
+        using ( var ts = File.OpenRead( fn ) ) {
           c = FromJson( ts );
         }
       }

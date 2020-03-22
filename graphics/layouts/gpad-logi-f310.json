@@ -1,0 +1,33 @@
+{
+  "MapName": "7: GPad Logitech F310",
+  "MapImage": "gpad-logi-f310.jpg",
+  "InputDevices": [
+  {
+    "InputType": "G",
+    "DeviceName": "Logitech F310",
+    "DeviceProdGuid": ["{028E045E-0000-0000-0000-504944564944}"],
+    "Controls": [ 
+      { "Input": "x", "Type": "Digital", "X": 2754, "Y": 1492, "Width": 986, "Height": 149, "Cmt": "" },
+      { "Input": "a", "Type": "Digital", "X": 2754, "Y": 1322, "Width": 986, "Height": 149, "Cmt": "" },
+      { "Input": "b", "Type": "Digital", "X": 2754, "Y": 1152, "Width": 986, "Height": 149, "Cmt": "" },
+      { "Input": "y", "Type": "Digital", "X": 2754, "Y": 982, "Width": 986, "Height": 149, "Cmt": "" },
+      { "Input": "shoulderl", "Type": "Digital", "X": 592, "Y": 474, "Width": 987, "Height": 203, "Cmt": "" },
+      { "Input": "shoulderr", "Type": "Digital", "X": 2370, "Y": 473, "Width": 987, "Height": 202, "Cmt": "" },
+      { "Input": "triggerl_btn", "Type": "Digital", "X": 891, "Y": 234, "Width": 987, "Height": 203, "Cmt": "" },
+      { "Input": "triggerr_btn", "Type": "Digital", "X": 2107, "Y": 234, "Width": 986, "Height": 203, "Cmt": "" },
+      { "Input": "back", "Type": "Digital", "X": 370, "Y": 819, "Width": 987, "Height": 95, "Cmt": "" },
+      { "Input": "start", "Type": "Digital", "X": 2611, "Y": 806, "Width": 987, "Height": 95, "Cmt": "" },
+      { "Input": "thumbl", "Type": "Digital", "X": 600, "Y": 1923, "Width": 986, "Height": 159, "Cmt": "" },
+      { "Input": "thumbr", "Type": "Digital", "X": 2257, "Y": 1956, "Width": 1486, "Height": 99, "Cmt": "" },
+      { "Input": "dpad_up", "Type": "Digital", "X": 258, "Y": 1029, "Width": 989, "Height": 100, "Cmt": "" },
+      { "Input": "dpad_right", "Type": "Digital", "X": 258, "Y": 1135, "Width": 989, "Height": 101, "Cmt": "" },
+      { "Input": "dpad_down", "Type": "Digital", "X": 258, "Y": 1242, "Width": 989, "Height": 98, "Cmt": "" },
+      { "Input": "dpad_left", "Type": "Digital", "X": 258, "Y": 1346, "Width": 989, "Height": 100, "Cmt": "" },
+      { "Input": "thumblx", "Type": "Analogue", "X": 600, "Y": 1766, "Width": 986, "Height": 153, "Cmt": "" },
+      { "Input": "thumbly", "Type": "Analogue", "X": 600, "Y": 1607, "Width": 986, "Height": 154, "Cmt": "" },
+      { "Input": "thumbrx", "Type": "Analogue", "X": 2257, "Y": 1851, "Width": 1486, "Height": 100, "Cmt": "" },
+      { "Input": "thumbry", "Type": "Analogue", "X": 2257, "Y": 1743, "Width": 1486, "Height": 103, "Cmt": "" }
+    ]
+  }
+  ]
+}

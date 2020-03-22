@@ -1,34 +1,33 @@
 {
-  "MapName" : "7: GPad Elecom JC-U3613M (X-Input)",
+  "MapName" : "7: GPad Elecom JC-U3613M",
   "MapImage" : "gpad-jc-u3613m.jpg",
-  "InputDevices" :[
-  { 
-    "InputType": "G",
-    "DeviceName": "Elecom JC-U3613M",
-    "DeviceProdGuid": ["{028E045E-0000-0000-0000-504944564944}"],
-    "Controls": [
-      { "Input":"x", "Type":  "Digital", "X":2726, "Y":1401, "Width":987, "Height":150, "Cmt":  "X"},
-      { "Input":"a", "Type":  "Digital", "X":2726, "Y":1232, "Width":987, "Height":150, "Cmt":  "A"},
-      { "Input":"b", "Type":  "Digital", "X":2726, "Y":1062, "Width":987, "Height":150, "Cmt":  "B"},
-      { "Input":"y", "Type":  "Digital", "X":2726, "Y":892, "Width":987, "Height":150, "Cmt":  "Y"},
-      { "Input":"shoulderl", "Type":  "Digital", "X":564, "Y":383, "Width":987, "Height":204, "Cmt":  "Left bumper - shoulderl"},
-      { "Input":"shoulderr", "Type":  "Digital", "X":2343, "Y":383, "Width":987, "Height":203, "Cmt":  "Right bumper - shoulderr"},
-      { "Input":"triggerl_btn", "Type":  "Digital", "X":829, "Y":145, "Width":987, "Height":202, "Cmt":  "Left trigger - triggerl_btn"},
-      { "Input":"triggerr_btn", "Type":  "Digital", "X":2046, "Y":144, "Width":987, "Height":203, "Cmt":  "Right trigger - triggerr_btn"},
-      { "Input":"back", "Type":  "Digital", "X":343, "Y":729, "Width":987, "Height":95, "Cmt":  "Back"},
-      { "Input":"start", "Type":  "Digital", "X":2584, "Y":716, "Width":987, "Height":95, "Cmt":  "Start"},
-      { "Input":"thumbl", "Type":  "Digital", "X":233, "Y":1224, "Width":986, "Height":159, "Cmt":  "Left stick button  thumbl"},
-      { "Input":"thumbr", "Type":  "Digital", "X":2227, "Y":1891, "Width":1486, "Height":99, "Cmt":  "Right stick button - thumbr"},
-      { "Input":"dpad_up", "Type":  "Digital", "X":300, "Y":1635, "Width":1478, "Height":101, "Cmt": "dpad_up"},
-      { "Input":"dpad_right", "Type":  "Digital", "X":300, "Y":1741, "Width":1478, "Height":103, "Cmt": "dpad_right"},
-      { "Input":"dpad_down", "Type": "Digital", "X":300, "Y":1847, "Width":1478, "Height":99, "Cmt": "dpad_down"},
-      { "Input":"dpad_left", "Type": "Digital", "X":300, "Y":1951, "Width":1478, "Height":103, "Cmt": "dpad_left"},
-      { "Input":"thumbry", "Type": "Analogue", "X":2227, "Y":1679, "Width":1486, "Height":103, "Cmt": "thumbry"},
-      { "Input":"thumbrx", "Type": "Analogue", "X":2227, "Y":1786, "Width":1486, "Height":100, "Cmt": "thumbrx"},
-      { "Input":"thumbly", "Type": "Analogue", "X":233, "Y":907, "Width":986, "Height":155, "Cmt": "thumbly"},
-      { "Input":"thumblx", "Type": "Analogue", "X":233, "Y":1067, "Width":986, "Height":152, "Cmt": "thumblx"}
+  "InputDevices" : [
+  {
+    "InputType" : "G",
+    "DeviceName" : "Elecom JC-U3613M",
+    "DeviceProdGuid" : ["{028E045E-0000-0000-0000-504944564944}"],
+    "Controls" : [ 
+      { "Input" : "x", "Type" : "Digital", "X" : 2725, "Y" : 1402, "Width" : 987, "Height" : 148, "Cmt" : "" },
+      { "Input" : "a", "Type" : "Digital", "X" : 2725, "Y" : 1232, "Width" : 987, "Height" : 148, "Cmt" : "" },
+      { "Input" : "b", "Type" : "Digital", "X" : 2725, "Y" : 1062, "Width" : 987, "Height" : 148, "Cmt" : "" },
+      { "Input" : "y", "Type" : "Digital", "X" : 2725, "Y" : 892, "Width" : 987, "Height" : 149, "Cmt" : "" },
+      { "Input" : "shoulderl", "Type" : "Digital", "X" : 564, "Y" : 383, "Width" : 987, "Height" : 203, "Cmt" : "" },
+      { "Input" : "shoulderr", "Type" : "Digital", "X" : 2342, "Y" : 382, "Width" : 987, "Height" : 203, "Cmt" : "" },
+      { "Input" : "triggerl_btn", "Type" : "Digital", "X" : 829, "Y" : 144, "Width" : 986, "Height" : 203, "Cmt" : "" },
+      { "Input" : "triggerr_btn", "Type" : "Digital", "X" : 2044, "Y" : 144, "Width" : 987, "Height" : 203, "Cmt" : "" },
+      { "Input" : "back", "Type" : "Digital", "X" : 342, "Y" : 729, "Width" : 986, "Height" : 94, "Cmt" : "" },
+      { "Input" : "start", "Type" : "Digital", "X" : 2583, "Y" : 716, "Width" : 987, "Height" : 94, "Cmt" : "" },
+      { "Input" : "thumbl", "Type" : "Digital", "X" : 232, "Y" : 1223, "Width" : 986, "Height" : 159, "Cmt" : "" },
+      { "Input" : "thumbr", "Type" : "Digital", "X" : 2226, "Y" : 1890, "Width" : 1486, "Height" : 100, "Cmt" : "" },
+      { "Input" : "dpad_up", "Type" : "Digital", "X" : 299, "Y" : 1634, "Width" : 1478, "Height" : 100, "Cmt" : "" },
+      { "Input" : "dpad_right", "Type" : "Digital", "X" : 299, "Y" : 1739, "Width" : 1478, "Height" : 103, "Cmt" : "" },
+      { "Input" : "dpad_down", "Type" : "Digital", "X" : 299, "Y" : 1847, "Width" : 1478, "Height" : 98, "Cmt" : "" },
+      { "Input" : "dpad_left", "Type" : "Digital", "X" : 299, "Y" : 1950, "Width" : 1478, "Height" : 102, "Cmt" : "" },
+      { "Input" : "thumblx", "Type" : "Analogue", "X" : 232, "Y" : 1066, "Width" : 986, "Height" : 153, "Cmt" : "" },
+      { "Input" : "thumbly", "Type" : "Analogue", "X" : 232, "Y" : 907, "Width" : 986, "Height" : 154, "Cmt" : "" },
+      { "Input" : "thumbrx", "Type" : "Analogue", "X" : 2226, "Y" : 1785, "Width" : 1486, "Height" : 100, "Cmt" : "" },
+      { "Input" : "thumbry", "Type" : "Analogue", "X" : 2226, "Y" : 1678, "Width" : 1486, "Height" : 103, "Cmt" : "" }
     ]
   }
   ]
 }
-

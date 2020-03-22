@@ -54,7 +54,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Cassini_Logo_Icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>SCJMapper_V2.Program</StartupObject>
@@ -83,7 +84,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationManifest>AApp\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -125,10 +126,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutBox1.cs">
+    <Compile Include="AApp\AboutBox1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AboutBox1.Designer.cs">
+    <Compile Include="AApp\AboutBox1.Designer.cs">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\ActionCommandCls.cs" />
@@ -136,8 +137,8 @@
     <Compile Include="Actions\ActionTreeEventArgs.cs" />
     <Compile Include="Actions\ActionTreeInputNode.cs" />
     <Compile Include="Actions\ActionTreeNode.cs" />
-    <Compile Include="appConfiguration.cs" />
-    <Compile Include="AppSettings.cs" />
+    <Compile Include="AApp\appConfiguration.cs" />
+    <Compile Include="AApp\AppSettings.cs" />
     <Compile Include="Common\CloneableItems.cs" />
     <Compile Include="Common\Commons.cs" />
     <Compile Include="Common\WinApi.cs" />
@@ -264,10 +265,10 @@
       <DependentUpon>FormJSCalCurve.cs</DependentUpon>
     </Compile>
     <Compile Include="Devices\Options\Deviceoptions.cs" />
-    <Compile Include="FormMain.cs">
+    <Compile Include="AApp\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormMain.Designer.cs">
+    <Compile Include="AApp\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Devices\Joystick\FormReassign.cs">
@@ -276,10 +277,10 @@
     <Compile Include="Devices\Joystick\FormReassign.Designer.cs">
       <DependentUpon>FormReassign.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSettings.cs">
+    <Compile Include="AApp\FormSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSettings.Designer.cs">
+    <Compile Include="AApp\FormSettings.Designer.cs">
       <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Devices\Joystick\JoystickList.cs" />
@@ -307,14 +308,14 @@
     </Compile>
     <Compile Include="Devices\Options\OptionTree.cs" />
     <Compile Include="OGL\LoaderDDS.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="AApp\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OGL\RK4Integrator.cs" />
     <Compile Include="SC\SCLogExtract.cs" />
     <Compile Include="SC\SCDefaultProfile.cs" />
     <Compile Include="SC\SCMappings.cs" />
     <Compile Include="SC\SCPath.cs" />
-    <Compile Include="TheUser.cs" />
+    <Compile Include="AApp\TheUser.cs" />
     <Compile Include="Devices\UICustHeader.cs" />
     <Compile Include="OGL\TriDiagonalMatrix.cs" />
     <Compile Include="Devices\Joystick\xyPoints.cs" />
@@ -330,7 +331,7 @@
       <DependentUpon>Strings.fr.resx</DependentUpon>
     </Compile>
     <Compile Include="Translation\Tx.cs" />
-    <EmbeddedResource Include="AboutBox1.resx">
+    <EmbeddedResource Include="AApp\AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Monitor\FormDeviceMonitor.resx">
@@ -345,7 +346,7 @@
     <EmbeddedResource Include="Devices\Monitor\UC_Toggle.resx">
       <DependentUpon>UC_Toggle.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormMain.resx">
+    <EmbeddedResource Include="AApp\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -378,7 +379,7 @@
     <EmbeddedResource Include="Devices\Joystick\FormReassign.resx">
       <DependentUpon>FormReassign.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSettings.resx">
+    <EmbeddedResource Include="AApp\FormSettings.resx">
       <DependentUpon>FormSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Joystick\UC_JoyPanel.resx">
@@ -397,10 +398,12 @@
     <EmbeddedResource Include="Devices\Gamepad\UC_GpadPanel.resx">
       <DependentUpon>UC_GpadPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.config" />
-    <EmbeddedResource Include="app.manifest">
+    <None Include="AApp\app.config" />
+    <EmbeddedResource Include="AApp\app.manifest">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="Docx\SCJMapper_QGuide V2.35beta.pdf" />
+    <None Include="Docx\SCJMapper_QGuide V2.x.pub" />
     <None Include="graphics\SB_LA_Helipad.dds">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -457,8 +460,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AC_Examples.txt" />
-    <Content Include="Cassini_Logo_Icon.ico" />
-    <Content Include="defaultProfile.xml" />
+    <Content Include="SC\defaultProfile.xml" />
     <None Include="graphics\Folder.png" />
     <None Include="graphics\Home.png" />
     <None Include="graphics\Info.png" />

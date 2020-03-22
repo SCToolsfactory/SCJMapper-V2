@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCJMapper-V2", "SCJMapper-V2.csproj", "{B5F8B339-E02E-4F6D-BF62-D776F165910F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{6C767E48-A71E-4822-8B3F-2ED741F06582}"
+	ProjectSection(SolutionItems) = preProject
+		AC_Examples.txt = AC_Examples.txt
+		LICENSE = LICENSE
+		README.md = README.md
+		ReadMe.txt = ReadMe.txt
+		Docx\SCJMapper_QGuide V2.35beta.pdf = Docx\SCJMapper_QGuide V2.35beta.pdf
+		Docx\SCJMapper_QGuide V2.x.pub = Docx\SCJMapper_QGuide V2.x.pub
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +34,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EFD3641A-B820-4214-9B5C-CAD3331C2247}
 	EndGlobalSection
 EndGlobal
