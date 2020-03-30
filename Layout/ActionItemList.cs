@@ -78,19 +78,53 @@ namespace SCJMapper_V2.Layout
     /// <summary>
     /// Get the Devices contained in the List
     /// </summary>
-    public List<string> Devices
+    public Dictionary<int, string> Devices
     {
       get {
-        var list = new List<string>( );
+        var list = new Dictionary<int, string>( );
         foreach ( var si in this ) {
-          if ( !list.Contains( si.DeviceName ) ) {
-            list.Add( si.DeviceName );
+          if ( !list.ContainsKey( si.InputTypeNumber ) ) {
+            list.Add( si.InputTypeNumber, si.DeviceName );
           }
         }
         return list;
       }
     }
 
+    /// <summary>
+    /// Get the Joystick Devices contained in the List
+    /// </summary>
+    public Dictionary<int, string> JsDevices
+    {
+      get {
+        var list = new Dictionary<int, string>( );
+        foreach ( var si in this ) {
+          if (si.InputTypeLetter == "J" ) {
+            if ( !list.ContainsKey( si.InputTypeNumber ) ) {
+              list.Add( si.InputTypeNumber, si.DeviceName );
+            }
+          }
+        }
+        return list;
+      }
+    }
+
+    /// <summary>
+    /// Override the current JS guids with the given one
+    /// </summary>
+    /// <param name="guids">A list of GUIDs</param>
+    public void OverrideJsDevices (List<string> guids )
+    {
+      for (int aiidx=0; aiidx<this.Count; aiidx++ ) {
+        // Joystick only
+        var ai = this[aiidx];
+        if ( ai.InputTypeLetter == "J" ) {
+          if ( guids.Count>= ai.InputTypeNumber ) {
+            this[aiidx].DeviceProdGuid = guids[ai.InputTypeNumber - 1]; // the guid list is 0 based, jsN is 1 based..
+          }
+        }
+      }
+    }
 
   }
 }

@@ -20,6 +20,9 @@ namespace SCJMapper_V2.Layout
 {
   public partial class FormLayout : Form
   {
+    // logger
+    private static readonly log4net.ILog log = log4net.LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod( ).DeclaringType );
+
     // Graphics
     private DrawPanel m_dPanel = new DrawPanel( ); // draw panel
     private DrawPanel m_sPanel = new DrawPanel( ); // show panel
@@ -37,13 +40,75 @@ namespace SCJMapper_V2.Layout
       return File.Exists( "DEBUG_LAYOUT.txt" );
     }
 
-    public FormLayout()
+    private bool m_checkAllToggle = true;
+    private void CheckAllGroups()
     {
-      InitializeComponent( );
-
-      // Show Debug items at startup
-      if ( IsDebug( ) ) pnlDebug.Visible = true;
+      // select all groups
+      for ( int i = 0; i < chkLbActionGroups.Items.Count; i++ ) {
+        chkLbActionGroups.Items[i].Checked = m_checkAllToggle;
+      }
+      m_checkAllToggle = !m_checkAllToggle; // toggle
     }
+
+    #region JsCombo stuff
+
+    private void LoadJsCombos()
+    {
+
+      cbxJs1.Items.Clear( ); cbxJs2.Items.Clear( ); cbxJs3.Items.Clear( ); cbxJs4.Items.Clear( );
+      cbxJs1.Items.Add( new Device.DeviceDescriptor( ) { DevName = " Js1 Not Used", DevGuid = "{99999991-0000-0000-000000000000}" } );
+      cbxJs2.Items.Add( new Device.DeviceDescriptor( ) { DevName = " Js2 Not Used", DevGuid = "{99999992-0000-0000-000000000000}" } );
+      cbxJs3.Items.Add( new Device.DeviceDescriptor( ) { DevName = " Js3 Not Used", DevGuid = "{99999993-0000-0000-000000000000}" } );
+      cbxJs4.Items.Add( new Device.DeviceDescriptor( ) { DevName = " Js4 Not Used", DevGuid = "{99999994-0000-0000-000000000000}" } );
+      if ( m_devices == null ) return;
+
+      // get all devices know in the layout folder
+      foreach ( var dev in m_devices ) {
+        cbxJs1.Items.Add( dev ); cbxJs2.Items.Add( dev ); cbxJs3.Items.Add( dev ); cbxJs4.Items.Add( dev );
+      }
+      cbxJs1.SelectedIndex = 0; cbxJs2.SelectedIndex = 0; cbxJs3.SelectedIndex = 0; cbxJs4.SelectedIndex = 0;
+    }
+
+    private int JsIndexOf(ComboBox.ObjectCollection objs, string sought )
+    {
+      for (int i=0; i<objs.Count; i++ ) {
+        var dev = objs[i] as Device.DeviceDescriptor;
+        if ( dev.DevName == sought ) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    private void SetJsCombos(Dictionary<int,string> usedDeviceDict)
+    {
+      cbxJs1.SelectedIndex = 0; cbxJs2.SelectedIndex = 0; cbxJs3.SelectedIndex = 0; cbxJs4.SelectedIndex = 0;
+      int i = 0;
+      foreach ( var kv in usedDeviceDict ) {
+        switch ( kv.Key ) {
+          case 1:
+            i = JsIndexOf( cbxJs1.Items, kv.Value );
+            if ( i >= 0 ) cbxJs1.SelectedIndex = i;
+            break;
+          case 2:
+            i = JsIndexOf( cbxJs2.Items, kv.Value );
+            if ( i >= 0 ) cbxJs2.SelectedIndex = i;
+            break;
+
+          case 3:
+            i = JsIndexOf( cbxJs3.Items, kv.Value );
+            if ( i >= 0 ) cbxJs3.SelectedIndex = i;
+            break;
+          case 4:
+            i = JsIndexOf( cbxJs4.Items, kv.Value );
+            if ( i >= 0 ) cbxJs4.SelectedIndex = i;
+            break;
+          default: break;
+        }
+      }
+    }
+
+    #endregion
 
     /// <summary>
     /// Local to support the handling
@@ -61,8 +126,23 @@ namespace SCJMapper_V2.Layout
     // the item index is shared with the checkbox list in the GUI
     private List<ActionMapItem> m_chkLbActionMaps = new List<ActionMapItem>( );
 
+    #region Main Form Handling
+
+    public FormLayout()
+    {
+      InitializeComponent( );
+
+      // Show Debug items at startup
+      if ( IsDebug( ) ) {
+        log.DebugFormat( "Layout - Debug Mode ON" );
+        pnlDebug.Visible = true;
+      }
+    }
+
     private void FormLayout_Load( object sender, EventArgs e )
     {
+      log.DebugFormat( "Layout - Form Loading" );
+
       Tx.LocalizeControlTree( this );
 
       AppSettings.Instance.Reload( );
@@ -75,23 +155,26 @@ namespace SCJMapper_V2.Layout
 
       // Action Groups
       // Main dialog
+      log.DebugFormat( "Layout - Form Loading - Loading Action Groups" );
       chkLbActionGroups.Items.Clear( );
       chkLbActionGroups.Columns.Add( "Actiongroups", chkLbActionMaps.Width );
-      foreach ( var s in ActionGroups.ActionGroupNames( ) ) {
+      foreach ( var s in ActionGroupNames( ) ) {
         var item = chkLbActionGroups.Items.Add( s );
         item.ForeColor = MapProps.GroupColor( GroupNameToGroup( s ) ).ForeColor;
         item.BackColor = MapProps.GroupColor( GroupNameToGroup( s ) ).BackColor;
       }
       // color settings
+      log.DebugFormat( "Layout - Form Loading - Loading Color Settings" );
       chkLbActionGroupsColor.Items.Clear( );
       chkLbActionGroupsColor.Columns.Add( "Actiongroups", chkLbActionMaps.Width );
-      foreach ( var s in ActionGroups.ActionGroupNames( ) ) {
+      foreach ( var s in ActionGroupNames( ) ) {
         var item = chkLbActionGroupsColor.Items.Add( s );
         item.ForeColor = MapProps.GroupColor( GroupNameToGroup( s ) ).ForeColor;
         item.BackColor = MapProps.GroupColor( GroupNameToGroup( s ) ).BackColor;
       }
 
       // Action Maps
+      log.DebugFormat( "Layout - Form Loading - Loading Action Maps" );
       chkLbActionMaps.Items.Clear( ); m_chkLbActionMaps.Clear( );
       chkLbActionMaps.Columns.Add( "Actionmaps", chkLbActionMaps.Width );
       foreach ( EGroup g in Enum.GetValues( typeof( EGroup ) ) ) {
@@ -112,22 +195,38 @@ namespace SCJMapper_V2.Layout
       }
 
       // Layouts
+      log.DebugFormat( "Layout - Form Loading - Loading Layouts" );
       m_layouts = new Layouts( );
       foreach ( var l in m_layouts ) {
+        log.DebugFormat( "  + {0}", l.Filename );
         cbxLayouts.Items.Add( l );
       }
-      if ( cbxLayouts.Items.Count > 0 ) cbxLayouts.SelectedIndex = 0;
+      if ( cbxLayouts.Items.Count > 0 ) {
+        cbxLayouts.SelectedIndex = 0;
+        m_devices = m_layouts.Devices( );
+        log.DebugFormat( "Layout - Form Loading - Mappable devices found in templates" );
+        foreach ( var dev in m_devices ) {
+          log.DebugFormat( "  + {0} - {1}", dev.DevName, dev.DevGuid );
+        }
+      }
+      else {
+        log.WarnFormat( "Layout - Form Loading - no layout files found " );
+        MessageBox.Show( this, "Could not find any layout templates !??" );
+      }
 
       // Draw Panel
       // drawPanel.Controls.Add( m_dPanel );
       // m_dPanel.Top = 0; m_dPanel.Left = 0;
+      log.DebugFormat( "Layout - Form Loading - Add Draw Panel" );
       this.Controls.Add( m_dPanel );
       m_dPanel.Top = 0; m_dPanel.Left = this.Width + 2000; // out of view
       m_dPanel.Visible = false;
       m_dPanel.AutoSize = true;
       m_dPanel.BackgroundImageLayout = ImageLayout.None;
       m_dPanel.BackColor = Color.SpringGreen;
-      m_dPanel.BackgroundImageResized = ( cbxLayouts.SelectedItem as DeviceLayout ).Image;
+      if ( cbxLayouts.SelectedItem is DeviceLayout ) {
+        m_dPanel.BackgroundImageResized = ( cbxLayouts.SelectedItem as DeviceLayout ).Image;
+      }
 
       m_dPanel.Paint += M_dPanel_Paint;
 
@@ -137,28 +236,17 @@ namespace SCJMapper_V2.Layout
       m_sPanel.Dock = DockStyle.Fill;
       m_sPanel.BackgroundImageLayout = ImageLayout.Zoom;
 
-      if ( IsDebug( ) ) {
-        // get an empty on top
-        cbxJs1.Items.Add( new Device.DeviceDescriptor( ) );
-        cbxJs2.Items.Add( new Device.DeviceDescriptor( ) );
-        cbxJs3.Items.Add( new Device.DeviceDescriptor( ) );
-        // get all devices know in the layout folder
-        m_devices = m_layouts.Devices( );
-        foreach ( var dev in m_devices ) {
-          cbxJs1.Items.Add( dev );
-          cbxJs2.Items.Add( dev );
-          cbxJs3.Items.Add( dev );
-        }
-        cbxJs1.SelectedIndex = 0;
-        cbxJs2.SelectedIndex = 0;
-        cbxJs3.SelectedIndex = 0;
-      }
+      LoadJsCombos( );
+      SetJsCombos( ActionList.JsDevices );
+      CheckAllGroups( );  // Default is all ON now 
 
+      log.DebugFormat( "Layout - Form Loading - End - Resfresh Panel and show" );
       RefreshPanel( );
     }
 
     private void FormLayout_FormClosing( object sender, FormClosingEventArgs e )
     {
+      log.DebugFormat( "Layout - Form Closing" );
       // don't record minimized, maximized forms
       if ( this.WindowState == FormWindowState.Normal ) {
         AppSettings.Instance.FormLayoutSize = this.Size;
@@ -167,7 +255,7 @@ namespace SCJMapper_V2.Layout
       AppSettings.Instance.Save( );
     }
 
-
+    #endregion
 
     #region dPanel Events
 
@@ -209,10 +297,18 @@ namespace SCJMapper_V2.Layout
     /// </summary>
     private void Populate()
     {
+      log.DebugFormat( "Layout - Populate()" );
+
       bool errorShown = false;
 
       // for all actions found from action tree
       m_displayList.Clear( );
+      if ( !( cbxLayouts.SelectedItem is DeviceLayout ) ) {
+        log.WarnFormat( "Layout - Populate() - invalid selected layout.." );
+        return;
+      }
+      log.DebugFormat( "Layout - Populate - Map: {0}", ( cbxLayouts.SelectedItem as DeviceLayout ).DeviceController.MapName );
+
       ( cbxLayouts.SelectedItem as DeviceLayout ).DeviceController.CreateShapes( );
       foreach ( var actItem in ActionList ) {
         // matches the selected device      
@@ -225,7 +321,7 @@ namespace SCJMapper_V2.Layout
               shape.DispText = actItem.ModdedDispText;
               shape.TextColor = MapProps.MapForeColor( actItem.ActionMap );
               shape.BackColor = MapProps.MapBackColor( actItem.ActionMap );
-              if ( shape is ShapeKey  ) {
+              if ( shape is ShapeKey ) {
                 // kbd map
                 ( shape as ShapeKey ).SCGameKey = actItem.MainControl;
               }
@@ -233,7 +329,9 @@ namespace SCJMapper_V2.Layout
             }
             else {
               // Display elements exhausted...
-              if ( ! errorShown ) {
+              if ( !errorShown ) {
+                log.DebugFormat( "Layout - Populate - number of shapes exhausted for device: {0}", actItem.DeviceName );
+
                 string msg = $"No more display elements left for device:  {actItem.DeviceName}";
                 msg += $"\n\nTry to use a smaller font to show all actions!";
                 MessageBox.Show( msg, "Layout - Cannot show all actions", MessageBoxButtons.OK, MessageBoxIcon.Warning );
@@ -243,6 +341,7 @@ namespace SCJMapper_V2.Layout
           }
         }
       }
+      log.DebugFormat( "Layout - Populate() - Done" );
     }
 
     // Event Handlers
@@ -257,6 +356,7 @@ namespace SCJMapper_V2.Layout
     {
       m_displayList.Clear( );
       m_dPanel.BackgroundImageResized = ( cbxLayouts.SelectedItem as DeviceLayout ).Image;
+      log.DebugFormat( "Layout - Selected Layout: {0}", ( cbxLayouts.SelectedItem as DeviceLayout ).Filename );
       RefreshPanel( );
     }
 
@@ -286,6 +386,7 @@ namespace SCJMapper_V2.Layout
           b.Save( SFD.FileName, ImageFormat.Png );
         }
         else {
+          log.DebugFormat( "Layout - SaveFile - unknown file format: {0}", ext.ToLowerInvariant( ) );
           MessageBox.Show( "Unkown fileformat - use jpg or png please", "Save Image Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
         }
 
@@ -385,14 +486,9 @@ namespace SCJMapper_V2.Layout
       lblTest.Font = new Font( lblTest.Font.FontFamily, tbFontSize.Value ); ;
     }
 
-    private bool m_checkAllToggle = true;
     private void pictureBox1_DoubleClick( object sender, EventArgs e )
     {
-      // select all groups
-      for ( int i = 0; i < chkLbActionGroups.Items.Count; i++ ) {
-        chkLbActionGroups.Items[i].Checked = m_checkAllToggle;
-      }
-      m_checkAllToggle = !m_checkAllToggle; // toggle
+      CheckAllGroups( );
     }
 
     private void btClose_Click( object sender, EventArgs e )
@@ -405,19 +501,31 @@ namespace SCJMapper_V2.Layout
     #region DEBUG LIST
 
     private DbgActionItemList DBG_LIST = null;
-    private void btCreateDbgList_Click( object sender, EventArgs e )
+
+    private void btActivateDevices_Click( object sender, EventArgs e )
     {
-      DBG_LIST = new DbgActionItemList( );
-      List<string> guids = new List<string>( );
+      var guids = new List<string>( );
       if ( !string.IsNullOrEmpty( ( cbxJs1.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs1.SelectedItem as Device.DeviceDescriptor ).DevGuid );
       if ( !string.IsNullOrEmpty( ( cbxJs2.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs2.SelectedItem as Device.DeviceDescriptor ).DevGuid );
       if ( !string.IsNullOrEmpty( ( cbxJs3.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs3.SelectedItem as Device.DeviceDescriptor ).DevGuid );
-
-      DBG_LIST.CreateDebugList( guids.ToArray( ) );
-      ActionList = DBG_LIST.DbgList;
+      if ( !string.IsNullOrEmpty( ( cbxJs4.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs4.SelectedItem as Device.DeviceDescriptor ).DevGuid );
+      ActionList.OverrideJsDevices( guids ); // inject in current Action Items
     }
 
+    private void btCreateDbgList_Click( object sender, EventArgs e )
+    {
+      DBG_LIST = new DbgActionItemList( );
+      var guids = new List<string>( );
+      if ( !string.IsNullOrEmpty( ( cbxJs1.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs1.SelectedItem as Device.DeviceDescriptor ).DevGuid );
+      if ( !string.IsNullOrEmpty( ( cbxJs2.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs2.SelectedItem as Device.DeviceDescriptor ).DevGuid );
+      if ( !string.IsNullOrEmpty( ( cbxJs3.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs3.SelectedItem as Device.DeviceDescriptor ).DevGuid );
+      if ( !string.IsNullOrEmpty( ( cbxJs4.SelectedItem as Device.DeviceDescriptor ).DevGuid ) ) guids.Add( ( cbxJs4.SelectedItem as Device.DeviceDescriptor ).DevGuid );
+
+      DBG_LIST.CreateDebugList( guids.ToArray( ) );
+      ActionList = DBG_LIST.DbgList; // create an artificial ActionItems List
+    }
 
     #endregion
+
   }
 }

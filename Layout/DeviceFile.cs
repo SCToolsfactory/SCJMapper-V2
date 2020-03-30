@@ -172,8 +172,10 @@ namespace SCJMapper_V2.Layout
       get {
         var ret = new List<string>( );
         foreach ( string s in DeviceProdGuid ) {
-          string pv = s.Substring( 1, 8 ).ToLowerInvariant( ); // this is "{12345678-0000-0000 etc}
-          ret.Add( pv );
+          if ( s.Length >= 9 ) {
+            string pv = s.Substring( 1, 8 ).ToLowerInvariant( ); // this is "{12345678-0000-0000 etc}
+            ret.Add( pv );
+          }
         }
         return ret;
       }

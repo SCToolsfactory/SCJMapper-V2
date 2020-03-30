@@ -7,15 +7,15 @@
     "DeviceName": "CH Pro Flight Throttle Quadrant",
     "DeviceProdGuid": ["{0C2D06A3-0000-0000-0000-504944564944}"],
     "Controls": [
-      { "Input": "button1", "Type": "Digital", "X":354, "Y":1484, "Width":932, "Height":54, "Cmt":  "Switch 1 up"},
-      { "Input": "button2", "Type": "Digital", "X":354, "Y":1540, "Width":932, "Height":54, "Cmt":  "Switch 1 down"},
-      { "Input": "button3", "Type": "Digital", "X":1474, "Y":1754, "Width":932, "Height":54, "Cmt":  "Switch 2 up"},
-      { "Input": "button4", "Type": "Digital", "X":1474, "Y":1810, "Width":932, "Height":54, "Cmt":  "Switch 2 down"},
-      { "Input": "button5", "Type": "Digital", "X":2614, "Y":1484, "Width":932, "Height":54, "Cmt":  "Switch 3 up"},
-      { "Input": "button6", "Type": "Digital", "X":2614, "Y":1540, "Width":932, "Height":54, "Cmt":  "Switch 3 down"},
-      { "Input": "x", "Type": "Analogue", "X":554, "Y":564, "Width":932, "Height":54, "Cmt":  "Throttle 1"},
-      { "Input": "y", "Type": "Analogue", "X":1474, "Y":324, "Width":932, "Height":54, "Cmt":  "Throttle 2"},
-      { "Input": "z", "Type": "Analogue", "X":2414, "Y":564, "Width":932, "Height":54, "Cmt":  "Throttle 3"}
+      { "Input" : "button1", "Type" : "Digital", "X" : 354, "Y" : 1484, "Width" : 931, "Height" : 53, "Cmt" : "Switch 1 up"},
+      { "Input" : "button2", "Type" : "Digital", "X" : 354, "Y" : 1540, "Width" : 931, "Height" : 53, "Cmt" : "Switch 1 down"},
+      { "Input" : "button3", "Type" : "Digital", "X" : 1474, "Y" : 1754, "Width" : 931, "Height" : 53, "Cmt" : "Switch 2 up"},
+      { "Input" : "button4", "Type" : "Digital", "X" : 1474, "Y" : 1810, "Width" : 931, "Height" : 53, "Cmt" : "Switch 2 down"},
+      { "Input" : "button5", "Type" : "Digital", "X" : 2614, "Y" : 1484, "Width" : 931, "Height" : 53, "Cmt" : "Switch 3 up"},
+      { "Input" : "button6", "Type" : "Digital", "X" : 2614, "Y" : 1540, "Width" : 931, "Height" : 53, "Cmt" : "Switch 3 down"},
+      { "Input" : "x", "Type" : "Analogue", "X" : 554, "Y" : 564, "Width" : 931, "Height" : 53, "Cmt" : "X-Axis Throttle 1" },
+      { "Input" : "y", "Type" : "Analogue", "X" : 1474, "Y" : 324, "Width" : 931, "Height" : 53, "Cmt" : "Y-Axis Throttle 2" },
+      { "Input" : "z", "Type" : "Analogue", "X" : 2414, "Y" : 564, "Width" : 931, "Height" : 53, "Cmt" : "Z-Axis Throttle 3" }
     ]
   }
   ]

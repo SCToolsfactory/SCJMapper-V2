@@ -7,9 +7,9 @@
     "DeviceName": "ThrustMaster T-Flight Pedals",
     "DeviceProdGuid": ["{B679044F-0000-0000-0000-504944564944}"],
     "Controls": [
-      { "Input": "x", "Type": "Digital", "X":164, "Y":588, "Width":1332, "Height":162, "Cmt":"Left pedal"},
-      { "Input": "y", "Type": "Digital", "X":2264, "Y":588, "Width":1332, "Height":162, "Cmt":"Right pedal"},
-      { "Input": "z", "Type": "Analogue", "X":1208, "Y":331, "Width":1332, "Height":162, "Cmt":"Rudder"}
+      { "Input" : "x", "Type" : "Analogue", "X" : 164, "Y" : 588, "Width" : 1331, "Height" : 161, "Cmt" : "Left pedal" },
+      { "Input" : "y", "Type" : "Analogue", "X" : 2264, "Y" : 588, "Width" : 1331, "Height" : 161, "Cmt" : "Right pedal" },
+      { "Input" : "z", "Type" : "Analogue", "X" : 1208, "Y" : 331, "Width" : 1331, "Height" : 161, "Cmt" : "Rudder" }
     ]
   }
   ]

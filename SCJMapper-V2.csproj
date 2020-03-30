@@ -54,8 +54,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Cassini_Logo_Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>SCJMapper_V2.Program</StartupObject>
@@ -414,7 +413,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="LICENSE" />
-    <None Include="README.md" />
     <None Include="Table\DS_ActionMaps.xsc">
       <DependentUpon>DS_ActionMaps.xsd</DependentUpon>
     </None>
@@ -460,6 +458,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AC_Examples.txt" />
+    <Content Include="Cassini_Logo_Icon.ico" />
     <Content Include="SC\defaultProfile.xml" />
     <None Include="graphics\Folder.png" />
     <None Include="graphics\Home.png" />
@@ -472,7 +471,6 @@
     <None Include="graphics\RSI.png" />
     <None Include="graphics\NPad.png" />
     <None Include="graphics\page_notdefined.png" />
-    <Content Include="ReadMe.txt" />
     <None Include="graphics\YPR.png" />
     <None Include="graphics\300i.jpg" />
     <None Include="graphics\aurora.jpg" />

@@ -1158,11 +1158,17 @@ namespace SCJMapper_V2
 
     private void meShowLayoutDialog_Click( object sender, EventArgs e )
     {
-      timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
-      var LAYOUT = new FormLayout { ActionList = m_AT.ReportActionsSItemText() };
-      LAYOUT.ShowDialog( this );
-      LAYOUT = null; // get rid and create a new one next time..
-      timer1.Enabled = true;
+      // sanity check for the layout folder
+      if (! Directory.Exists( TheUser.LayoutsDir ) ) {
+        MessageBox.Show( this, $"Layout folder is missing - should be: {TheUser.LayoutsDir}" );
+      }
+      else {
+        timer1.Enabled = false; // must be off while a modal window is shown, else DX gets crazy
+        var LAYOUT = new FormLayout { ActionList = m_AT.ReportActionsSItemText( ) };
+        LAYOUT.ShowDialog( this );
+        LAYOUT = null; // get rid and create a new one next time..
+        timer1.Enabled = true;
+      }
     }
 
 

@@ -34,6 +34,9 @@
       this.pnlInput = new System.Windows.Forms.Panel();
       this.btClose = new System.Windows.Forms.Button();
       this.pnlDebug = new System.Windows.Forms.Panel();
+      this.label2 = new System.Windows.Forms.Label();
+      this.cbxJs4 = new System.Windows.Forms.ComboBox();
+      this.btActivateDevices = new System.Windows.Forms.Button();
       this.cbxJs3 = new System.Windows.Forms.ComboBox();
       this.cbxJs2 = new System.Windows.Forms.ComboBox();
       this.cbxJs1 = new System.Windows.Forms.ComboBox();
@@ -84,11 +87,11 @@
       this.tlPanel.Location = new System.Drawing.Point(0, 0);
       this.tlPanel.Name = "tlPanel";
       this.tlPanel.RowCount = 4;
-      this.tlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+      this.tlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 106F));
       this.tlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
       this.tlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 75F));
       this.tlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-      this.tlPanel.Size = new System.Drawing.Size(1271, 681);
+      this.tlPanel.Size = new System.Drawing.Size(1209, 681);
       this.tlPanel.TabIndex = 0;
       // 
       // chkLbActionGroups
@@ -101,11 +104,11 @@
       this.chkLbActionGroups.HideSelection = false;
       this.chkLbActionGroups.HoverSelection = true;
       this.chkLbActionGroups.LabelWrap = false;
-      this.chkLbActionGroups.Location = new System.Drawing.Point(3, 83);
+      this.chkLbActionGroups.Location = new System.Drawing.Point(3, 109);
       this.chkLbActionGroups.MultiSelect = false;
       this.chkLbActionGroups.Name = "chkLbActionGroups";
       this.chkLbActionGroups.ShowGroups = false;
-      this.chkLbActionGroups.Size = new System.Drawing.Size(174, 124);
+      this.chkLbActionGroups.Size = new System.Drawing.Size(174, 117);
       this.chkLbActionGroups.TabIndex = 5;
       this.chkLbActionGroups.UseCompatibleStateImageBehavior = false;
       this.chkLbActionGroups.View = System.Windows.Forms.View.Details;
@@ -121,18 +124,19 @@
       this.chkLbActionMaps.HideSelection = false;
       this.chkLbActionMaps.HoverSelection = true;
       this.chkLbActionMaps.LabelWrap = false;
-      this.chkLbActionMaps.Location = new System.Drawing.Point(3, 213);
+      this.chkLbActionMaps.Location = new System.Drawing.Point(3, 232);
       this.chkLbActionMaps.MultiSelect = false;
       this.chkLbActionMaps.Name = "chkLbActionMaps";
       this.chkLbActionMaps.ShowGroups = false;
       this.chkLbActionMaps.ShowItemToolTips = true;
-      this.chkLbActionMaps.Size = new System.Drawing.Size(174, 384);
+      this.chkLbActionMaps.Size = new System.Drawing.Size(174, 365);
       this.chkLbActionMaps.TabIndex = 6;
       this.chkLbActionMaps.UseCompatibleStateImageBehavior = false;
       this.chkLbActionMaps.View = System.Windows.Forms.View.Details;
       // 
       // pnlInput
       // 
+      this.pnlInput.BackColor = System.Drawing.Color.DarkGray;
       this.tlPanel.SetColumnSpan(this.pnlInput, 2);
       this.pnlInput.Controls.Add(this.btClose);
       this.pnlInput.Controls.Add(this.pnlDebug);
@@ -142,7 +146,7 @@
       this.pnlInput.Dock = System.Windows.Forms.DockStyle.Fill;
       this.pnlInput.Location = new System.Drawing.Point(3, 3);
       this.pnlInput.Name = "pnlInput";
-      this.pnlInput.Size = new System.Drawing.Size(1265, 74);
+      this.pnlInput.Size = new System.Drawing.Size(1203, 100);
       this.pnlInput.TabIndex = 1;
       // 
       // btClose
@@ -157,7 +161,10 @@
       // 
       // pnlDebug
       // 
-      this.pnlDebug.BackColor = System.Drawing.Color.Honeydew;
+      this.pnlDebug.BackColor = System.Drawing.Color.DarkGray;
+      this.pnlDebug.Controls.Add(this.label2);
+      this.pnlDebug.Controls.Add(this.cbxJs4);
+      this.pnlDebug.Controls.Add(this.btActivateDevices);
       this.pnlDebug.Controls.Add(this.cbxJs3);
       this.pnlDebug.Controls.Add(this.cbxJs2);
       this.pnlDebug.Controls.Add(this.cbxJs1);
@@ -166,43 +173,70 @@
       this.pnlDebug.Controls.Add(this.label1);
       this.pnlDebug.Controls.Add(this.btCreateDbgList);
       this.pnlDebug.Dock = System.Windows.Forms.DockStyle.Right;
-      this.pnlDebug.Location = new System.Drawing.Point(748, 0);
+      this.pnlDebug.Location = new System.Drawing.Point(742, 0);
       this.pnlDebug.Name = "pnlDebug";
-      this.pnlDebug.Size = new System.Drawing.Size(517, 74);
+      this.pnlDebug.Size = new System.Drawing.Size(461, 100);
       this.pnlDebug.TabIndex = 7;
-      this.pnlDebug.Visible = false;
+      // 
+      // label2
+      // 
+      this.label2.AutoSize = true;
+      this.label2.Location = new System.Drawing.Point(3, 76);
+      this.label2.Name = "label2";
+      this.label2.Size = new System.Drawing.Size(22, 13);
+      this.label2.TabIndex = 19;
+      this.label2.Text = "Js4";
+      // 
+      // cbxJs4
+      // 
+      this.cbxJs4.FormattingEnabled = true;
+      this.cbxJs4.Location = new System.Drawing.Point(31, 73);
+      this.cbxJs4.Name = "cbxJs4";
+      this.cbxJs4.Size = new System.Drawing.Size(243, 21);
+      this.cbxJs4.Sorted = true;
+      this.cbxJs4.TabIndex = 18;
+      // 
+      // btActivateDevices
+      // 
+      this.btActivateDevices.Location = new System.Drawing.Point(280, 3);
+      this.btActivateDevices.Name = "btActivateDevices";
+      this.btActivateDevices.Size = new System.Drawing.Size(74, 90);
+      this.btActivateDevices.TabIndex = 17;
+      this.btActivateDevices.Text = "Activate Changed Devices";
+      this.btActivateDevices.UseVisualStyleBackColor = true;
+      this.btActivateDevices.Click += new System.EventHandler(this.btActivateDevices_Click);
       // 
       // cbxJs3
       // 
       this.cbxJs3.FormattingEnabled = true;
-      this.cbxJs3.Location = new System.Drawing.Point(42, 49);
+      this.cbxJs3.Location = new System.Drawing.Point(31, 50);
       this.cbxJs3.Name = "cbxJs3";
-      this.cbxJs3.Size = new System.Drawing.Size(376, 21);
+      this.cbxJs3.Size = new System.Drawing.Size(243, 21);
       this.cbxJs3.Sorted = true;
       this.cbxJs3.TabIndex = 16;
       // 
       // cbxJs2
       // 
       this.cbxJs2.FormattingEnabled = true;
-      this.cbxJs2.Location = new System.Drawing.Point(42, 26);
+      this.cbxJs2.Location = new System.Drawing.Point(31, 27);
       this.cbxJs2.Name = "cbxJs2";
-      this.cbxJs2.Size = new System.Drawing.Size(376, 21);
+      this.cbxJs2.Size = new System.Drawing.Size(243, 21);
       this.cbxJs2.Sorted = true;
       this.cbxJs2.TabIndex = 15;
       // 
       // cbxJs1
       // 
       this.cbxJs1.FormattingEnabled = true;
-      this.cbxJs1.Location = new System.Drawing.Point(42, 3);
+      this.cbxJs1.Location = new System.Drawing.Point(31, 4);
       this.cbxJs1.Name = "cbxJs1";
-      this.cbxJs1.Size = new System.Drawing.Size(376, 21);
+      this.cbxJs1.Size = new System.Drawing.Size(243, 21);
       this.cbxJs1.Sorted = true;
       this.cbxJs1.TabIndex = 14;
       // 
       // label4
       // 
       this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(14, 52);
+      this.label4.Location = new System.Drawing.Point(3, 53);
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(22, 13);
       this.label4.TabIndex = 13;
@@ -211,7 +245,7 @@
       // label3
       // 
       this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(14, 29);
+      this.label3.Location = new System.Drawing.Point(3, 30);
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(22, 13);
       this.label3.TabIndex = 12;
@@ -220,7 +254,7 @@
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(14, 6);
+      this.label1.Location = new System.Drawing.Point(3, 7);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(22, 13);
       this.label1.TabIndex = 11;
@@ -228,11 +262,11 @@
       // 
       // btCreateDbgList
       // 
-      this.btCreateDbgList.Location = new System.Drawing.Point(424, 9);
+      this.btCreateDbgList.Location = new System.Drawing.Point(378, 4);
       this.btCreateDbgList.Name = "btCreateDbgList";
-      this.btCreateDbgList.Size = new System.Drawing.Size(74, 56);
+      this.btCreateDbgList.Size = new System.Drawing.Size(74, 89);
       this.btCreateDbgList.TabIndex = 10;
-      this.btCreateDbgList.Text = "Create Debug List";
+      this.btCreateDbgList.Text = "Create Test Items List";
       this.btCreateDbgList.UseVisualStyleBackColor = true;
       this.btCreateDbgList.Click += new System.EventHandler(this.btCreateDbgList_Click);
       // 
@@ -240,10 +274,11 @@
       // 
       this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
       this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+      this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
       this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
       this.pictureBox1.Location = new System.Drawing.Point(3, 3);
       this.pictureBox1.Name = "pictureBox1";
-      this.pictureBox1.Size = new System.Drawing.Size(82, 71);
+      this.pictureBox1.Size = new System.Drawing.Size(82, 90);
       this.pictureBox1.TabIndex = 6;
       this.pictureBox1.TabStop = false;
       this.pictureBox1.DoubleClick += new System.EventHandler(this.pictureBox1_DoubleClick);
@@ -275,10 +310,10 @@
       this.drawPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
       this.drawPanel.Controls.Add(this.gbxColors);
       this.drawPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.drawPanel.Location = new System.Drawing.Point(183, 83);
+      this.drawPanel.Location = new System.Drawing.Point(183, 109);
       this.drawPanel.Name = "drawPanel";
       this.tlPanel.SetRowSpan(this.drawPanel, 3);
-      this.drawPanel.Size = new System.Drawing.Size(1085, 595);
+      this.drawPanel.Size = new System.Drawing.Size(1023, 569);
       this.drawPanel.TabIndex = 2;
       // 
       // gbxColors
@@ -460,12 +495,12 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1271, 681);
+      this.ClientSize = new System.Drawing.Size(1209, 681);
       this.Controls.Add(this.tlPanel);
       this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MinimizeBox = false;
-      this.MinimumSize = new System.Drawing.Size(770, 720);
+      this.MinimumSize = new System.Drawing.Size(1225, 720);
       this.Name = "FormLayout";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
       this.Text = "Device Layout";
@@ -519,5 +554,8 @@
     private System.Windows.Forms.ComboBox cbxJs1;
     private System.Windows.Forms.ComboBox cbxJs3;
     private System.Windows.Forms.ComboBox cbxJs2;
+    private System.Windows.Forms.Button btActivateDevices;
+    private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.ComboBox cbxJs4;
   }
 }

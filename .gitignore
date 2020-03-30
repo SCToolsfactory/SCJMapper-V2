@@ -89,9 +89,15 @@ local.properties
 [Dd]ebug/
 [Rr]elease/
 x64/
+x86/
+Win32/
 build/
 [Bb]in/
 [Oo]bj/
+
+# External libraries (not NuGet)
+ExtLibraries/
+
 
 # MSTest test Results
 [Tt]est[Rr]esult*/

@@ -4,21 +4,24 @@ SC Joystick Mapper V 2.46 - Build 81 BETA
 Contains 14 files + graphics:
 
 SCJMapper.exe                The program (V2.46)
-SCJMapper.exe.config         Program config (V2.46)              - MUST be in the same folder as the Exe file
-de\SCJMapper.resources.dll   German language (V2.45)             - MUST be in the same folder as the Exe file
-fr\SCJMapper.resources.dll   French language (V2.45)             - MUST be in the same folder as the Exe file
-Storage\*.scj                Folder for collected assets (V2.35) - MUST be in the same folder as the Exe file
-PTU_Storage\*.scj            Folder for collected PTU    (V2.37) - MUST be in the same folder as the Exe file
-SharpDX.DirectInput.dll      Managed DirectInput Assembly        - MUST be in the same folder as the Exe file
-SharpDX.dll                  Managed DirectX Assembly            - MUST be in the same folder as the Exe file
-OpenTK.dll                   Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
-OpenTK.GLControl.dll         Managed OpenGL Assembly             - MUST be in the same folder as the Exe file
-ZstdNet.dll                  Managed Zip Assembly (v2.33)        - MUST be in the same folder as the Exe file
-x64\libzstd.dll              Native dll for ZstdNet (v2.33)      - MUST be in the same folder as the Exe file
-x86\libzstd.dll              Native dll for ZstdNet (v2.33)      - MUST be in the same folder as the Exe file
-log4net.dll                  Managed Logging Assembly            - MUST be in the same folder as the Exe file
-log4net.config.OFF           Config file for logging             - To use it - rename as  log4net.config and run the program
-                                                                   then look for  trace.log  in the same folder
+
+- The following files and folders MUST be in the same folder as the Exe file
+SCJMapper.exe.config         Program config (V2.46)              
+de\SCJMapper.resources.dll   German language (V2.45)
+fr\SCJMapper.resources.dll   French language (V2.45)
+Storage\*.scj                Folder for collected assets (V2.35)
+PTU_Storage\*.scj            Folder for collected PTU    (V2.37)
+SharpDX.DirectInput.dll      Managed DirectInput Assembly
+SharpDX.dll                  Managed DirectX Assembly
+OpenTK.dll                   Managed OpenGL Assembly
+OpenTK.GLControl.dll         Managed OpenGL Assembly
+ZstdNet.dll                  Managed Zip Assembly (v2.33)
+x64\libzstd.dll              Native dll for ZstdNet (v2.33)
+x86\libzstd.dll              Native dll for ZstdNet (v2.33)
+log4net.dll                  Managed Logging Assembly
+log4net.config.OFF           Config file for logging
+                               then look for  trace.log  in the same folder
+
 SCJMapper_QGuide V2.35beta.pdf    Quick Guide (v2.35)
 ReadMe.txt                   This file
 
