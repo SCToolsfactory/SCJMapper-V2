@@ -140,6 +140,7 @@
       this.meDumpLogfile = new System.Windows.Forms.ToolStripMenuItem();
       this.meDumpDefaultProfile = new System.Windows.Forms.ToolStripMenuItem();
       this.meDumpActiontreeAsXML = new System.Windows.Forms.ToolStripMenuItem();
+      this.meDumpSCJoyServerCommands = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
       this.msBtShow = new System.Windows.Forms.ToolStripDropDownButton();
       this.meShowToggleTable = new System.Windows.Forms.ToolStripMenuItem();
@@ -543,6 +544,7 @@
       this.treeView1.Size = new System.Drawing.Size(374, 640);
       this.treeView1.TabIndex = 16;
       this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
+      this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
       // 
       // cmAddDel
       // 
@@ -1277,7 +1279,7 @@
       // 
       this.meResetDefaults.Image = global::SCJMapper_V2.Properties.Resources.RSI;
       this.meResetDefaults.Name = "meResetDefaults";
-      this.meResetDefaults.Size = new System.Drawing.Size(169, 38);
+      this.meResetDefaults.Size = new System.Drawing.Size(196, 38);
       this.meResetDefaults.Tag = "§";
       this.meResetDefaults.Text = "Reset defaults !";
       this.meResetDefaults.Click += new System.EventHandler(this.meResetDefaults_Click);
@@ -1286,7 +1288,7 @@
       // 
       this.meResetEmpty.Image = global::SCJMapper_V2.Properties.Resources.NPad;
       this.meResetEmpty.Name = "meResetEmpty";
-      this.meResetEmpty.Size = new System.Drawing.Size(169, 38);
+      this.meResetEmpty.Size = new System.Drawing.Size(196, 38);
       this.meResetEmpty.Tag = "§";
       this.meResetEmpty.Text = "Reset empty !";
       this.meResetEmpty.Click += new System.EventHandler(this.meResetEmpty_Click);
@@ -1302,7 +1304,8 @@
             this.meDumpMappingList,
             this.meDumpLogfile,
             this.meDumpDefaultProfile,
-            this.meDumpActiontreeAsXML});
+            this.meDumpActiontreeAsXML,
+            this.meDumpSCJoyServerCommands});
       this.msBtDump.Image = global::SCJMapper_V2.Properties.Resources.Info;
       this.msBtDump.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.msBtDump.Name = "msBtDump";
@@ -1314,7 +1317,7 @@
       // meDumpMappingList
       // 
       this.meDumpMappingList.Name = "meDumpMappingList";
-      this.meDumpMappingList.Size = new System.Drawing.Size(206, 22);
+      this.meDumpMappingList.Size = new System.Drawing.Size(238, 22);
       this.meDumpMappingList.Tag = "§";
       this.meDumpMappingList.Text = "Dump Mapping List";
       this.meDumpMappingList.Click += new System.EventHandler(this.meDumpMappingList_Click);
@@ -1322,7 +1325,7 @@
       // meDumpLogfile
       // 
       this.meDumpLogfile.Name = "meDumpLogfile";
-      this.meDumpLogfile.Size = new System.Drawing.Size(206, 22);
+      this.meDumpLogfile.Size = new System.Drawing.Size(238, 22);
       this.meDumpLogfile.Tag = "§";
       this.meDumpLogfile.Text = "Dump Logfile";
       this.meDumpLogfile.Click += new System.EventHandler(this.meDumpLogfile_Click);
@@ -1330,7 +1333,7 @@
       // meDumpDefaultProfile
       // 
       this.meDumpDefaultProfile.Name = "meDumpDefaultProfile";
-      this.meDumpDefaultProfile.Size = new System.Drawing.Size(206, 22);
+      this.meDumpDefaultProfile.Size = new System.Drawing.Size(238, 22);
       this.meDumpDefaultProfile.Tag = "§";
       this.meDumpDefaultProfile.Text = "Dump DefaultProfile";
       this.meDumpDefaultProfile.Click += new System.EventHandler(this.meDumpDefaultProfile_Click);
@@ -1338,10 +1341,17 @@
       // meDumpActiontreeAsXML
       // 
       this.meDumpActiontreeAsXML.Name = "meDumpActiontreeAsXML";
-      this.meDumpActiontreeAsXML.Size = new System.Drawing.Size(206, 22);
+      this.meDumpActiontreeAsXML.Size = new System.Drawing.Size(238, 22);
       this.meDumpActiontreeAsXML.Tag = "§";
       this.meDumpActiontreeAsXML.Text = "Dump Actiontree as XML";
       this.meDumpActiontreeAsXML.Click += new System.EventHandler(this.meDumpActiontreeAsXML_Click);
+      // 
+      // meDumpSCJoyServerCommands
+      // 
+      this.meDumpSCJoyServerCommands.Name = "meDumpSCJoyServerCommands";
+      this.meDumpSCJoyServerCommands.Size = new System.Drawing.Size(238, 22);
+      this.meDumpSCJoyServerCommands.Text = "Dump SCJoyServer Commands";
+      this.meDumpSCJoyServerCommands.Click += new System.EventHandler(this.meDumpSCJoyServerCommands_Click);
       // 
       // toolStripSeparator5
       // 
@@ -1707,6 +1717,7 @@
     private System.Windows.Forms.ToolStripMenuItem meShowDeviceMonitoringDialog;
     private System.Windows.Forms.Label lblPTU;
     private System.Windows.Forms.ToolStripMenuItem meShowLayoutDialog;
+    private System.Windows.Forms.ToolStripMenuItem meDumpSCJoyServerCommands;
   }
 }
 

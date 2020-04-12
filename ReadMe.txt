@@ -50,6 +50,11 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.47 - BETA Build 82
+- add Mode to create SCJoyServer Command items from action tree
+- add Saving ActionTree to a json file in <User>\Documents\SCJM\file.scjn.json for other tools (easier than XML)
+- updated Rework for Device Monitor
+- fix Ignore buttons from Settings not properly handled
 V 2.46 - BETA Build 81
 - add Some more Layout files for devices
 - update Layout to work with keyboard and mouse

@@ -27,8 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>81</ApplicationRevision>
-    <ApplicationVersion>2.46.0.81</ApplicationVersion>
+    <ApplicationRevision>82</ApplicationRevision>
+    <ApplicationVersion>2.47.0.82</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -138,6 +138,10 @@
     <Compile Include="Actions\ActionTreeNode.cs" />
     <Compile Include="AApp\appConfiguration.cs" />
     <Compile Include="AApp\AppSettings.cs" />
+    <Compile Include="Actions\Json\JAction.cs" />
+    <Compile Include="Actions\Json\JActionmap.cs" />
+    <Compile Include="Actions\Json\JCommand.cs" />
+    <Compile Include="Actions\Json\JExport.cs" />
     <Compile Include="Common\CloneableItems.cs" />
     <Compile Include="Common\Commons.cs" />
     <Compile Include="Common\WinApi.cs" />
@@ -152,24 +156,6 @@
     </Compile>
     <Compile Include="Devices\Monitor\FormDeviceMonitor.Designer.cs">
       <DependentUpon>FormDeviceMonitor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Monitor\UC_LED.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Monitor\UC_LED.Designer.cs">
-      <DependentUpon>UC_LED.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Monitor\UC_SwitchRect.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Monitor\UC_SwitchRect.Designer.cs">
-      <DependentUpon>UC_SwitchRect.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Monitor\UC_Toggle.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Monitor\UC_Toggle.Designer.cs">
-      <DependentUpon>UC_Toggle.cs</DependentUpon>
     </Compile>
     <Compile Include="Devices\Options\FormOptions.cs">
       <SubType>Form</SubType>
@@ -202,6 +188,9 @@
     <Compile Include="Layout\ShapeItemList.cs" />
     <Compile Include="Layout\ShapeKey.cs" />
     <Compile Include="RTF\RTFformatter.cs" />
+    <Compile Include="SCJServer\JoystickCodes.cs" />
+    <Compile Include="SCJServer\KbdCodes.cs" />
+    <Compile Include="SCJServer\SCJScmd.cs" />
     <Compile Include="SC\Modifiers.cs" />
     <Compile Include="SC\p4kFile\p4kDirectory.cs" />
     <Compile Include="SC\p4kFile\p4kDirectoryEntry.cs" />
@@ -335,15 +324,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Monitor\FormDeviceMonitor.resx">
       <DependentUpon>FormDeviceMonitor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Monitor\UC_LED.resx">
-      <DependentUpon>UC_LED.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Monitor\UC_SwitchRect.resx">
-      <DependentUpon>UC_SwitchRect.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Monitor\UC_Toggle.resx">
-      <DependentUpon>UC_Toggle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AApp\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>

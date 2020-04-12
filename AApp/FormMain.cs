@@ -39,6 +39,8 @@ namespace SCJMapper_V2
     private string m_persistentMods = "";
     private const int c_modifierTime = 3500; // msec time before a modifier times out and will be removed
     private int m_modifierTimeout = 0;
+    private bool m_dumpSCJScommands = false; // allow dumping SCJoyServer Commands into the XML Pane while true
+
 
     ///<remarks>
     /// Holds the ActionTree that manages the TreeView and the action lists
@@ -119,7 +121,7 @@ namespace SCJMapper_V2
     /// <returns>The jsN string - can be jsx, js1..jsN</returns>
     private string JSStr()
     {
-      UC_JoyPanel jp = (UC_JoyPanel)( tc1.SelectedTab?.Controls["UC_JoyPanel"] );      
+      UC_JoyPanel jp = (UC_JoyPanel)( tc1.SelectedTab?.Controls["UC_JoyPanel"] );
       return jp?.JsName;
     }
 
@@ -243,7 +245,7 @@ namespace SCJMapper_V2
     #region Main Form Handling
     public void splash()
     {
-      Application.Run(  new AboutBox( ) );
+      Application.Run( new AboutBox( ) );
     }
 
     private Thread SplashT = null;
@@ -442,9 +444,12 @@ namespace SCJMapper_V2
       cbxShowMouse.Checked = AppSettings.Instance.ShowMouse;
       cbxShowMappedOnly.Checked = AppSettings.Instance.ShowMapped;
 
+      // now update the contents according to new settings
+      foreach ( JoystickCls j in DeviceInst.JoystickListRef ) j.ApplySettings( );
+
       // init current Joystick
       int jsIndex = -1;
-      if ( tc1.SelectedTab!=null)
+      if ( tc1.SelectedTab != null )
         jsIndex = (int)tc1.SelectedTab.Tag; // gets the index into the JS list
       if ( jsIndex >= 0 ) DeviceInst.JoystickInst = DeviceInst.JoystickListRef[jsIndex];
 
@@ -509,7 +514,7 @@ namespace SCJMapper_V2
 
         Font f;
         Brush backBrush = new SolidBrush( MyColors.TabColor[m_tabMap[e.Index]] );
-        Brush foreBrush = new SolidBrush( Color.Black ); 
+        Brush foreBrush = new SolidBrush( Color.Black );
 
 
         //The draw call sends all tabs to draw, the selected one needs to be with Bold font
@@ -698,7 +703,7 @@ namespace SCJMapper_V2
         else {
           log.Debug( "  - Add next Joystick panel" );
           // setup the further tab contents along the reference one in TabPage[0] (the control named UC_JoyPanel)
-          tc1.TabPages.Add( "" ); 
+          tc1.TabPages.Add( "" );
           uUC_JoyPanelNew = new UC_JoyPanel( ); tc1.TabPages[tabs].Controls.Add( uUC_JoyPanelNew );
           Tx.LocalizeControlTree( uUC_JoyPanelNew );
           uUC_JoyPanelNew.Size = UC_JoyPanel.Size; uUC_JoyPanelNew.Location = UC_JoyPanel.Location;
@@ -782,6 +787,7 @@ namespace SCJMapper_V2
     private void Grab()
     {
       log.Debug( "Grab - Entry" );
+      m_dumpSCJScommands = false; // disable this one
 
       m_AT.ActionMaps.fromXML( rtb.Text );
 
@@ -836,6 +842,7 @@ namespace SCJMapper_V2
     private void Dump()
     {
       log.Debug( "Dump - Entry" );
+      m_dumpSCJScommands = false; // disable this one
 
       AutoTabXML_Assignment( EATabXML.Tab_XML );
 
@@ -912,6 +919,20 @@ namespace SCJMapper_V2
     {
       if ( e.Button == MouseButtons.Right ) {
         treeView1.SelectedNode = e.Node; // trigger ActionTree events..
+      }
+    }
+
+    private void treeView1_NodeMouseDoubleClick( object sender, TreeNodeMouseClickEventArgs e )
+    {
+      if ( !m_dumpSCJScommands ) return; // disabled
+
+      if ( e.Button == MouseButtons.Left ) {
+        if ( e.Node.Level > 0 ) {
+          string cmd = SCJServer.SCJScmd.GetCommand( e.Node );
+          if ( !string.IsNullOrEmpty( cmd ) ) {
+            rtb.Text += $"{cmd}\n";
+          }
+        }
       }
     }
 
@@ -1010,6 +1031,8 @@ namespace SCJMapper_V2
 
     private void meResetDefaults_Click( object sender, EventArgs e )
     {
+      m_dumpSCJScommands = false; // disable this one
+
       // start over and if chosen, load defaults from SC game
       InitActionTree( true );
       rtb.Text = "";
@@ -1019,6 +1042,8 @@ namespace SCJMapper_V2
 
     private void meResetEmpty_Click( object sender, EventArgs e )
     {
+      m_dumpSCJScommands = false; // disable this one
+
       // start over 
       cbxShowMappedOnly.Checked = false; // else it might get empty..
       InitActionTree( false );
@@ -1159,7 +1184,7 @@ namespace SCJMapper_V2
     private void meShowLayoutDialog_Click( object sender, EventArgs e )
     {
       // sanity check for the layout folder
-      if (! Directory.Exists( TheUser.LayoutsDir ) ) {
+      if ( !Directory.Exists( TheUser.LayoutsDir ) ) {
         MessageBox.Show( this, $"Layout folder is missing - should be: {TheUser.LayoutsDir}" );
       }
       else {
@@ -1171,6 +1196,14 @@ namespace SCJMapper_V2
       }
     }
 
+    private void meDumpSCJoyServerCommands_Click( object sender, EventArgs e )
+    {
+      // clear the XML pane and allow double clicks to create commands from the action
+      rtb.Clear( );
+      m_dumpSCJScommands = true; // enable this one
+      rtb.Text = "Doubleclick items in the Action Tree to create commands\n\n";
+
+    }
 
     // *** Settings
 
@@ -1250,6 +1283,8 @@ namespace SCJMapper_V2
 
     private void meDefaultsLoadAndGrab_Click( object sender, EventArgs e )
     {
+      m_dumpSCJScommands = false; // disable this one
+
       // start over 
       InitActionTree( true );
       rtb.Text = SCMappings.Mapping( AppSettings.Instance.DefMappingName );
@@ -1264,6 +1299,8 @@ namespace SCJMapper_V2
 
     private void meResetLoadAndGrab_Click( object sender, EventArgs e )
     {
+      m_dumpSCJScommands = false; // disable this one
+
       // start over 
       InitActionTree( false );
       rtb.Text = SCMappings.Mapping( AppSettings.Instance.DefMappingName );
@@ -1277,6 +1314,8 @@ namespace SCJMapper_V2
 
     private void meLoadAndGrab_Click( object sender, EventArgs e )
     {
+      m_dumpSCJScommands = false; // disable this one
+
       rtb.Text = SCMappings.Mapping( AppSettings.Instance.DefMappingName );
       Grab( );
       if ( SCMappings.IsUserMapping( AppSettings.Instance.DefMappingName ) ) {
@@ -1289,6 +1328,8 @@ namespace SCJMapper_V2
 
     private void meLoad_Click( object sender, EventArgs e )
     {
+      m_dumpSCJScommands = false; // disable this one
+
       rtb.Text = SCMappings.Mapping( AppSettings.Instance.DefMappingName );
       if ( SCMappings.IsUserMapping( AppSettings.Instance.DefMappingName ) ) {
         txMappingName.Text = AppSettings.Instance.DefMappingName;
@@ -1526,13 +1567,15 @@ namespace SCJMapper_V2
           AppSettings.Instance.MyMappingName = txMappingName.Text; AppSettings.Instance.Save( );// last used - persist
           txMappingName.BackColor = MyColors.SuccessColor;
 
-          // autosave our XML
-          string xmlList = string.Format( "<!-- {0} - SC Joystick Mapping ({1}) --> \n{2}", DateTime.Now, txMappingName.Text,
-                                                                                        m_AT.ReportActionsXML( ) );
+          // autosave our XML for other activities
+          string xmlList = $"<!-- {DateTime.Now} - SC Joystick Mapping ({txMappingName.Text}) --> \n{m_AT.ReportActionsXML( )}";
           using ( StreamWriter sw = File.CreateText( TheUser.MappingXmlFileName( txMappingName.Text ) ) ) {
             sw.Write( xmlList );
           }
-
+          // autosave our Json for other activities
+          var jexport = m_AT.ReportActionsJson( );
+          jexport.Comment = $"{DateTime.Now} - SC Joystick Mapping ({txMappingName.Text})";
+          jexport.WriteToFile( TheUser.MappingJsonFileName( txMappingName.Text ) );
         }
       }
       else {
@@ -1901,7 +1944,9 @@ namespace SCJMapper_V2
       m_AT.FindAndSelectActionKey( e.Actionmap, e.Actionkey, e.Nodeindex );
     }
 
+
     #endregion
+
 
   }
 }

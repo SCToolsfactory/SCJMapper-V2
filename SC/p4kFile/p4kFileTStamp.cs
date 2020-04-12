@@ -30,7 +30,9 @@ namespace SCJMapper_V2.p4kFile
         var ret = new DateTime( year, month, day, hour, min, sec );
         return ret;
       }
+#pragma warning disable CS0168 // Variable is declared but never used
       catch ( Exception e ) {
+#pragma warning restore CS0168 // Variable is declared but never used
         return new DateTime( 1970, 1, 1 );
       }
     }

@@ -112,6 +112,18 @@ namespace SCJMapper_V2
       return Path.Combine( UserDir, mapName + ".scjm.xml" );
     }
 
+    /// <summary>
+    /// Returns the mapping file name + path into our user dir
+    /// </summary>
+    /// <param name="mapName">The mapping name</param>
+    /// <returns>A fully qualified filename</returns>
+    static public string MappingJsonFileName( string mapName )
+    {
+      log.Debug( "MappingJsonFileName - Entry" );
+
+      return Path.Combine( UserDir, mapName + ".scjm.json" );
+    }
+
 
     /// <summary>
     /// Create a backupfile from the given file

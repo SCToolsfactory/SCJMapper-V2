@@ -58,7 +58,9 @@ namespace SCJMapper_V2.p4kFile
             }
           }
         }
+#pragma warning disable CS0168 // Variable is declared but never used
         catch (Exception e) {
+#pragma warning restore CS0168 // Variable is declared but never used
           m_itemValid = false;
           m_recordOffset = -1;
         }

@@ -68,11 +68,15 @@ namespace SCJMapper_V2.Devices.Joystick
 
     public static void DecompJsCommand( string jsCmd, out string jsTag, out string sAction )
     {
+      // can be jsN_hat1_down .... 
       jsTag = ""; sAction = "";
       string[] e = jsCmd.Split( new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries );
       if ( e.Length > 1 ) {
         jsTag = e[0].Trim( ) + "_";
         sAction = e[1].Trim( );
+        if ( e.Length > 2 ) {
+          sAction += "_" + e[2].Trim( );
+        }
       }
     }
 
@@ -383,7 +387,7 @@ namespace SCJMapper_V2.Devices.Joystick
     /// <summary>
     /// The ProductGUID property
     /// </summary>
-    public override string DevGUID { get { return "{" + m_device.Information.ProductGuid.ToString().ToUpperInvariant() + "}"; } }
+    public override string DevGUID { get { return "{" + m_device.Information.ProductGuid.ToString( ).ToUpperInvariant( ) + "}"; } }
     /// <summary>
     /// The JS Instance GUID for multiple device support (VJoy gets 2 of the same name)
     /// </summary>
@@ -561,7 +565,7 @@ namespace SCJMapper_V2.Devices.Joystick
       ResetButtons( m_ignoreButtons );
       // read ignore buttons
       string igs = "";
-      switch ( m_joystickNumber ) {
+      switch ( m_joystickNumber + 1 ) { // bug alert, m_joystickNumber is 0 based...
         case 1: igs = AppSettings.Instance.IgnoreJS1; break;
         case 2: igs = AppSettings.Instance.IgnoreJS2; break;
         case 3: igs = AppSettings.Instance.IgnoreJS3; break;

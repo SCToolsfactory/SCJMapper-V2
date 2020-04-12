@@ -77,7 +77,7 @@ namespace SCJMapper_V2.Devices.Monitor
       DeviceInst.MouseRef?.PushActiveState( );
       DeviceInst.JoystickListRef.PushActiveState( );
 
-      DxMonitorThread dxMonitorThread = new DxMonitorThread( this );
+      var dxMonitorThread = new DxMonitorThread( this );
       m_monitoringThread = new Thread( dxMonitorThread.Run );
       m_monitoringThread.Start( );
 
@@ -100,6 +100,7 @@ namespace SCJMapper_V2.Devices.Monitor
     {
       public string Input = "";
       public bool IsAxis = false; // true if an Axis is reported
+      public bool Pressed = false; // true if activated (buttons, keys)
     }
 
     /// <summary>
@@ -135,12 +136,15 @@ namespace SCJMapper_V2.Devices.Monitor
       string m_prevKbdMod = string.Empty;
       string m_prevKbd = string.Empty;
       bool m_kbdEmpty = false;
+
       string m_prevMouse = string.Empty;
       string m_prevMouseMod = string.Empty;
       bool m_mouseEmpty = false;
+
       string m_prevGamepad = string.Empty;
       string m_prevGamepadMod = string.Empty;
       bool m_gamepadEmpty = false;
+
       string[] m_prevJoystick = new string[12] { "", "", "", "", "", "", "", "", "", "", "", "" };
       string[] m_prevJoystickMod = new string[12] { "", "", "", "", "", "", "", "", "", "", "", "" };
       bool[] m_joystickEmpty = new bool[12] { false, false, false, false, false, false, false, false, false, false, false, false };
@@ -163,7 +167,9 @@ namespace SCJMapper_V2.Devices.Monitor
 
         KeyboardIn.Input = string.Empty;
         input = DeviceInst.KeyboardRef?.GetCurrentInput( ); // key only
+        KeyboardIn.Pressed = false; // to start with
         if ( !string.IsNullOrEmpty( input ) ) {
+          KeyboardIn.Pressed = true;
           // still pressed or newly pressed
           if ( m_prevKbd == input ) {
             // still pressed
@@ -186,7 +192,9 @@ namespace SCJMapper_V2.Devices.Monitor
 
         MouseIn.Input = string.Empty;
         input = DeviceInst.MouseRef?.GetCurrentInput( );
+        MouseIn.Pressed = false;
         if ( !string.IsNullOrEmpty( input ) ) {
+          MouseIn.Pressed = true;
           // still pressed or newly pressed
           if ( m_prevMouse == input ) {
             // still pressed
@@ -210,7 +218,9 @@ namespace SCJMapper_V2.Devices.Monitor
 
         GamepadIn.Input = string.Empty;
         input = DeviceInst.GamepadRef?.GetCurrentInput( );
+        GamepadIn.Pressed = false;
         if ( !string.IsNullOrEmpty( input ) ) {
+          GamepadIn.Pressed = true;
           // still pressed or newly pressed
           if ( m_prevGamepad == input ) {
             // still pressed
@@ -236,7 +246,9 @@ namespace SCJMapper_V2.Devices.Monitor
         foreach ( var js in DeviceInst.JoystickListRef ) {
           JoystickIn[js.DevInstance].Input = string.Empty; // indicates no change
           input = js.GetCurrentInput( );   // we get either a code or an empty string if released
+          JoystickIn[js.DevInstance].Pressed = false;
           if ( !string.IsNullOrEmpty( input ) ) {
+            JoystickIn[js.DevInstance].Pressed = true;
             // still pressed or newly pressed
             if ( m_prevJoystick[js.DevInstance] == input ) {
               // still pressed

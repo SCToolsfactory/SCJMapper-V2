@@ -48,28 +48,48 @@
       this.IL = new System.Windows.Forms.ImageList(this.components);
       this.lbxOther = new System.Windows.Forms.RichTextBox();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-      this.flpToggle = new System.Windows.Forms.FlowLayoutPanel();
-      this.uC_Toggle1 = new SCJMapper_V2.Devices.Monitor.UC_Toggle();
-      this.uC_Toggle2 = new SCJMapper_V2.Devices.Monitor.UC_Toggle();
-      this.uC_Toggle3 = new SCJMapper_V2.Devices.Monitor.UC_Toggle();
-      this.uC_Toggle4 = new SCJMapper_V2.Devices.Monitor.UC_Toggle();
-      this.uC_Toggle5 = new SCJMapper_V2.Devices.Monitor.UC_Toggle();
-      this.uC_Toggle6 = new SCJMapper_V2.Devices.Monitor.UC_Toggle();
-      this.uC_Toggle7 = new SCJMapper_V2.Devices.Monitor.UC_Toggle();
-      this.uC_Toggle8 = new SCJMapper_V2.Devices.Monitor.UC_Toggle();
-      this.uC_Toggle9 = new SCJMapper_V2.Devices.Monitor.UC_Toggle();
-      this.uC_Toggle10 = new SCJMapper_V2.Devices.Monitor.UC_Toggle();
       this.panel1 = new System.Windows.Forms.Panel();
       this.chkReport = new System.Windows.Forms.CheckBox();
       this.chkMonitorMouse = new System.Windows.Forms.CheckBox();
+      this.lblJ_07 = new System.Windows.Forms.Label();
+      this.txJoystick07 = new System.Windows.Forms.TextBox();
+      this.txJoystick06 = new System.Windows.Forms.TextBox();
+      this.txJoystick05 = new System.Windows.Forms.TextBox();
+      this.txJoystick04 = new System.Windows.Forms.TextBox();
+      this.lblJ_06 = new System.Windows.Forms.Label();
+      this.lblJ_05 = new System.Windows.Forms.Label();
+      this.lblJ_04 = new System.Windows.Forms.Label();
+      this.lblJ_08 = new System.Windows.Forms.Label();
+      this.txJoystick08 = new System.Windows.Forms.TextBox();
+      this.lblJ_09 = new System.Windows.Forms.Label();
+      this.txJoystick09 = new System.Windows.Forms.TextBox();
+      this.lblJ_10 = new System.Windows.Forms.Label();
+      this.txJoystick10 = new System.Windows.Forms.TextBox();
+      this.lblJ_11 = new System.Windows.Forms.Label();
+      this.txJoystick11 = new System.Windows.Forms.TextBox();
       this.groupBox1.SuspendLayout();
       this.tableLayoutPanel1.SuspendLayout();
-      this.flpToggle.SuspendLayout();
       this.panel1.SuspendLayout();
       this.SuspendLayout();
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.lblJ_11);
+      this.groupBox1.Controls.Add(this.txJoystick11);
+      this.groupBox1.Controls.Add(this.lblJ_10);
+      this.groupBox1.Controls.Add(this.txJoystick10);
+      this.groupBox1.Controls.Add(this.lblJ_09);
+      this.groupBox1.Controls.Add(this.txJoystick09);
+      this.groupBox1.Controls.Add(this.lblJ_08);
+      this.groupBox1.Controls.Add(this.txJoystick08);
+      this.groupBox1.Controls.Add(this.lblJ_07);
+      this.groupBox1.Controls.Add(this.txJoystick07);
+      this.groupBox1.Controls.Add(this.txJoystick06);
+      this.groupBox1.Controls.Add(this.txJoystick05);
+      this.groupBox1.Controls.Add(this.txJoystick04);
+      this.groupBox1.Controls.Add(this.lblJ_06);
+      this.groupBox1.Controls.Add(this.lblJ_05);
+      this.groupBox1.Controls.Add(this.lblJ_04);
       this.groupBox1.Controls.Add(this.lblJ_03);
       this.groupBox1.Controls.Add(this.txJoystick03);
       this.groupBox1.Controls.Add(this.txJoystick02);
@@ -90,7 +110,7 @@
       this.groupBox1.Margin = new System.Windows.Forms.Padding(5, 3, 3, 3);
       this.groupBox1.Name = "groupBox1";
       this.tableLayoutPanel1.SetRowSpan(this.groupBox1, 2);
-      this.groupBox1.Size = new System.Drawing.Size(519, 144);
+      this.groupBox1.Size = new System.Drawing.Size(519, 244);
       this.groupBox1.TabIndex = 6;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "...";
@@ -99,7 +119,7 @@
       // 
       this.lblJ_03.AutoSize = true;
       this.lblJ_03.ForeColor = System.Drawing.Color.Gainsboro;
-      this.lblJ_03.Location = new System.Drawing.Point(278, 108);
+      this.lblJ_03.Location = new System.Drawing.Point(14, 161);
       this.lblJ_03.Name = "lblJ_03";
       this.lblJ_03.Size = new System.Drawing.Size(56, 13);
       this.lblJ_03.TabIndex = 8;
@@ -110,7 +130,7 @@
       this.txJoystick03.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
       this.txJoystick03.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.txJoystick03.ForeColor = System.Drawing.Color.Gainsboro;
-      this.txJoystick03.Location = new System.Drawing.Point(363, 105);
+      this.txJoystick03.Location = new System.Drawing.Point(99, 158);
       this.txJoystick03.Name = "txJoystick03";
       this.txJoystick03.ReadOnly = true;
       this.txJoystick03.Size = new System.Drawing.Size(145, 22);
@@ -121,7 +141,7 @@
       this.txJoystick02.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
       this.txJoystick02.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.txJoystick02.ForeColor = System.Drawing.Color.Gainsboro;
-      this.txJoystick02.Location = new System.Drawing.Point(363, 77);
+      this.txJoystick02.Location = new System.Drawing.Point(99, 134);
       this.txJoystick02.Name = "txJoystick02";
       this.txJoystick02.ReadOnly = true;
       this.txJoystick02.Size = new System.Drawing.Size(145, 22);
@@ -132,7 +152,7 @@
       this.txJoystick01.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
       this.txJoystick01.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.txJoystick01.ForeColor = System.Drawing.Color.Gainsboro;
-      this.txJoystick01.Location = new System.Drawing.Point(363, 49);
+      this.txJoystick01.Location = new System.Drawing.Point(99, 110);
       this.txJoystick01.Name = "txJoystick01";
       this.txJoystick01.ReadOnly = true;
       this.txJoystick01.Size = new System.Drawing.Size(145, 22);
@@ -143,7 +163,7 @@
       this.txJoystick00.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
       this.txJoystick00.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.txJoystick00.ForeColor = System.Drawing.Color.Gainsboro;
-      this.txJoystick00.Location = new System.Drawing.Point(363, 21);
+      this.txJoystick00.Location = new System.Drawing.Point(99, 86);
       this.txJoystick00.Name = "txJoystick00";
       this.txJoystick00.ReadOnly = true;
       this.txJoystick00.Size = new System.Drawing.Size(145, 22);
@@ -154,7 +174,7 @@
       this.txGamepad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
       this.txGamepad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.txGamepad.ForeColor = System.Drawing.Color.Gainsboro;
-      this.txGamepad.Location = new System.Drawing.Point(99, 77);
+      this.txGamepad.Location = new System.Drawing.Point(99, 49);
       this.txGamepad.Name = "txGamepad";
       this.txGamepad.ReadOnly = true;
       this.txGamepad.Size = new System.Drawing.Size(145, 22);
@@ -165,7 +185,7 @@
       this.txMouse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
       this.txMouse.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.txMouse.ForeColor = System.Drawing.Color.Gainsboro;
-      this.txMouse.Location = new System.Drawing.Point(99, 49);
+      this.txMouse.Location = new System.Drawing.Point(363, 21);
       this.txMouse.Name = "txMouse";
       this.txMouse.ReadOnly = true;
       this.txMouse.Size = new System.Drawing.Size(145, 22);
@@ -186,7 +206,7 @@
       // 
       this.lblJ_02.AutoSize = true;
       this.lblJ_02.ForeColor = System.Drawing.Color.Gainsboro;
-      this.lblJ_02.Location = new System.Drawing.Point(278, 80);
+      this.lblJ_02.Location = new System.Drawing.Point(14, 137);
       this.lblJ_02.Name = "lblJ_02";
       this.lblJ_02.Size = new System.Drawing.Size(56, 13);
       this.lblJ_02.TabIndex = 0;
@@ -196,7 +216,7 @@
       // 
       this.lblJ_01.AutoSize = true;
       this.lblJ_01.ForeColor = System.Drawing.Color.Gainsboro;
-      this.lblJ_01.Location = new System.Drawing.Point(278, 52);
+      this.lblJ_01.Location = new System.Drawing.Point(14, 113);
       this.lblJ_01.Name = "lblJ_01";
       this.lblJ_01.Size = new System.Drawing.Size(56, 13);
       this.lblJ_01.TabIndex = 0;
@@ -206,7 +226,7 @@
       // 
       this.lblJ_00.AutoSize = true;
       this.lblJ_00.ForeColor = System.Drawing.Color.Gainsboro;
-      this.lblJ_00.Location = new System.Drawing.Point(278, 24);
+      this.lblJ_00.Location = new System.Drawing.Point(14, 89);
       this.lblJ_00.Name = "lblJ_00";
       this.lblJ_00.Size = new System.Drawing.Size(56, 13);
       this.lblJ_00.TabIndex = 0;
@@ -216,7 +236,7 @@
       // 
       this.lblGamepad.AutoSize = true;
       this.lblGamepad.ForeColor = System.Drawing.Color.Gainsboro;
-      this.lblGamepad.Location = new System.Drawing.Point(6, 80);
+      this.lblGamepad.Location = new System.Drawing.Point(6, 52);
       this.lblGamepad.Name = "lblGamepad";
       this.lblGamepad.Size = new System.Drawing.Size(56, 13);
       this.lblGamepad.TabIndex = 0;
@@ -226,7 +246,7 @@
       // 
       this.lblMouse.AutoSize = true;
       this.lblMouse.ForeColor = System.Drawing.Color.Gainsboro;
-      this.lblMouse.Location = new System.Drawing.Point(6, 52);
+      this.lblMouse.Location = new System.Drawing.Point(270, 24);
       this.lblMouse.Name = "lblMouse";
       this.lblMouse.Size = new System.Drawing.Size(42, 13);
       this.lblMouse.TabIndex = 0;
@@ -275,7 +295,7 @@
       this.lbxOther.ForeColor = System.Drawing.Color.Gainsboro;
       this.lbxOther.Location = new System.Drawing.Point(3, 253);
       this.lbxOther.Name = "lbxOther";
-      this.lbxOther.Size = new System.Drawing.Size(698, 125);
+      this.lbxOther.Size = new System.Drawing.Size(698, 369);
       this.lbxOther.TabIndex = 7;
       this.lbxOther.Text = "";
       // 
@@ -284,161 +304,20 @@
       this.tableLayoutPanel1.ColumnCount = 2;
       this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 170F));
       this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Controls.Add(this.lbxOther, 0, 3);
+      this.tableLayoutPanel1.Controls.Add(this.lbxOther, 0, 2);
       this.tableLayoutPanel1.Controls.Add(this.groupBox1, 1, 0);
-      this.tableLayoutPanel1.Controls.Add(this.flpToggle, 0, 2);
       this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
       this.tableLayoutPanel1.Controls.Add(this.btTogMonitor, 0, 0);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
       this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-      this.tableLayoutPanel1.RowCount = 4;
+      this.tableLayoutPanel1.RowCount = 3;
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180F));
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(704, 381);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(704, 625);
       this.tableLayoutPanel1.TabIndex = 8;
-      // 
-      // flpToggle
-      // 
-      this.tableLayoutPanel1.SetColumnSpan(this.flpToggle, 2);
-      this.flpToggle.Controls.Add(this.uC_Toggle1);
-      this.flpToggle.Controls.Add(this.uC_Toggle2);
-      this.flpToggle.Controls.Add(this.uC_Toggle3);
-      this.flpToggle.Controls.Add(this.uC_Toggle4);
-      this.flpToggle.Controls.Add(this.uC_Toggle5);
-      this.flpToggle.Controls.Add(this.uC_Toggle6);
-      this.flpToggle.Controls.Add(this.uC_Toggle7);
-      this.flpToggle.Controls.Add(this.uC_Toggle8);
-      this.flpToggle.Controls.Add(this.uC_Toggle9);
-      this.flpToggle.Controls.Add(this.uC_Toggle10);
-      this.flpToggle.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.flpToggle.Location = new System.Drawing.Point(3, 153);
-      this.flpToggle.Name = "flpToggle";
-      this.flpToggle.Size = new System.Drawing.Size(698, 94);
-      this.flpToggle.TabIndex = 10;
-      // 
-      // uC_Toggle1
-      // 
-      this.uC_Toggle1.BackColor = System.Drawing.Color.Transparent;
-      this.uC_Toggle1.Dock = System.Windows.Forms.DockStyle.Top;
-      this.uC_Toggle1.Label = "";
-      this.uC_Toggle1.Location = new System.Drawing.Point(0, 0);
-      this.uC_Toggle1.Margin = new System.Windows.Forms.Padding(0);
-      this.uC_Toggle1.Name = "uC_Toggle1";
-      this.uC_Toggle1.Size = new System.Drawing.Size(64, 95);
-      this.uC_Toggle1.Switch = false;
-      this.uC_Toggle1.TabIndex = 0;
-      // 
-      // uC_Toggle2
-      // 
-      this.uC_Toggle2.BackColor = System.Drawing.Color.Transparent;
-      this.uC_Toggle2.Dock = System.Windows.Forms.DockStyle.Top;
-      this.uC_Toggle2.Label = "";
-      this.uC_Toggle2.Location = new System.Drawing.Point(64, 0);
-      this.uC_Toggle2.Margin = new System.Windows.Forms.Padding(0);
-      this.uC_Toggle2.Name = "uC_Toggle2";
-      this.uC_Toggle2.Size = new System.Drawing.Size(64, 95);
-      this.uC_Toggle2.Switch = false;
-      this.uC_Toggle2.TabIndex = 1;
-      // 
-      // uC_Toggle3
-      // 
-      this.uC_Toggle3.BackColor = System.Drawing.Color.Transparent;
-      this.uC_Toggle3.Dock = System.Windows.Forms.DockStyle.Top;
-      this.uC_Toggle3.Label = "";
-      this.uC_Toggle3.Location = new System.Drawing.Point(128, 0);
-      this.uC_Toggle3.Margin = new System.Windows.Forms.Padding(0);
-      this.uC_Toggle3.Name = "uC_Toggle3";
-      this.uC_Toggle3.Size = new System.Drawing.Size(64, 95);
-      this.uC_Toggle3.Switch = false;
-      this.uC_Toggle3.TabIndex = 2;
-      // 
-      // uC_Toggle4
-      // 
-      this.uC_Toggle4.BackColor = System.Drawing.Color.Transparent;
-      this.uC_Toggle4.Dock = System.Windows.Forms.DockStyle.Top;
-      this.uC_Toggle4.Label = "";
-      this.uC_Toggle4.Location = new System.Drawing.Point(192, 0);
-      this.uC_Toggle4.Margin = new System.Windows.Forms.Padding(0);
-      this.uC_Toggle4.Name = "uC_Toggle4";
-      this.uC_Toggle4.Size = new System.Drawing.Size(64, 95);
-      this.uC_Toggle4.Switch = false;
-      this.uC_Toggle4.TabIndex = 3;
-      // 
-      // uC_Toggle5
-      // 
-      this.uC_Toggle5.BackColor = System.Drawing.Color.Transparent;
-      this.uC_Toggle5.Dock = System.Windows.Forms.DockStyle.Top;
-      this.uC_Toggle5.Label = "";
-      this.uC_Toggle5.Location = new System.Drawing.Point(256, 0);
-      this.uC_Toggle5.Margin = new System.Windows.Forms.Padding(0);
-      this.uC_Toggle5.Name = "uC_Toggle5";
-      this.uC_Toggle5.Size = new System.Drawing.Size(64, 95);
-      this.uC_Toggle5.Switch = false;
-      this.uC_Toggle5.TabIndex = 4;
-      // 
-      // uC_Toggle6
-      // 
-      this.uC_Toggle6.BackColor = System.Drawing.Color.Transparent;
-      this.uC_Toggle6.Dock = System.Windows.Forms.DockStyle.Top;
-      this.uC_Toggle6.Label = "";
-      this.uC_Toggle6.Location = new System.Drawing.Point(320, 0);
-      this.uC_Toggle6.Margin = new System.Windows.Forms.Padding(0);
-      this.uC_Toggle6.Name = "uC_Toggle6";
-      this.uC_Toggle6.Size = new System.Drawing.Size(64, 95);
-      this.uC_Toggle6.Switch = false;
-      this.uC_Toggle6.TabIndex = 5;
-      // 
-      // uC_Toggle7
-      // 
-      this.uC_Toggle7.BackColor = System.Drawing.Color.Transparent;
-      this.uC_Toggle7.Dock = System.Windows.Forms.DockStyle.Top;
-      this.uC_Toggle7.Label = "";
-      this.uC_Toggle7.Location = new System.Drawing.Point(384, 0);
-      this.uC_Toggle7.Margin = new System.Windows.Forms.Padding(0);
-      this.uC_Toggle7.Name = "uC_Toggle7";
-      this.uC_Toggle7.Size = new System.Drawing.Size(64, 95);
-      this.uC_Toggle7.Switch = false;
-      this.uC_Toggle7.TabIndex = 6;
-      // 
-      // uC_Toggle8
-      // 
-      this.uC_Toggle8.BackColor = System.Drawing.Color.Transparent;
-      this.uC_Toggle8.Dock = System.Windows.Forms.DockStyle.Top;
-      this.uC_Toggle8.Label = "";
-      this.uC_Toggle8.Location = new System.Drawing.Point(448, 0);
-      this.uC_Toggle8.Margin = new System.Windows.Forms.Padding(0);
-      this.uC_Toggle8.Name = "uC_Toggle8";
-      this.uC_Toggle8.Size = new System.Drawing.Size(64, 95);
-      this.uC_Toggle8.Switch = false;
-      this.uC_Toggle8.TabIndex = 7;
-      // 
-      // uC_Toggle9
-      // 
-      this.uC_Toggle9.BackColor = System.Drawing.Color.Transparent;
-      this.uC_Toggle9.Dock = System.Windows.Forms.DockStyle.Top;
-      this.uC_Toggle9.Label = "";
-      this.uC_Toggle9.Location = new System.Drawing.Point(512, 0);
-      this.uC_Toggle9.Margin = new System.Windows.Forms.Padding(0);
-      this.uC_Toggle9.Name = "uC_Toggle9";
-      this.uC_Toggle9.Size = new System.Drawing.Size(64, 95);
-      this.uC_Toggle9.Switch = false;
-      this.uC_Toggle9.TabIndex = 8;
-      // 
-      // uC_Toggle10
-      // 
-      this.uC_Toggle10.BackColor = System.Drawing.Color.Transparent;
-      this.uC_Toggle10.Dock = System.Windows.Forms.DockStyle.Top;
-      this.uC_Toggle10.Label = "";
-      this.uC_Toggle10.Location = new System.Drawing.Point(576, 0);
-      this.uC_Toggle10.Margin = new System.Windows.Forms.Padding(0);
-      this.uC_Toggle10.Name = "uC_Toggle10";
-      this.uC_Toggle10.Size = new System.Drawing.Size(64, 95);
-      this.uC_Toggle10.Switch = false;
-      this.uC_Toggle10.TabIndex = 9;
       // 
       // panel1
       // 
@@ -447,7 +326,7 @@
       this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panel1.Location = new System.Drawing.Point(3, 73);
       this.panel1.Name = "panel1";
-      this.panel1.Size = new System.Drawing.Size(164, 74);
+      this.panel1.Size = new System.Drawing.Size(164, 174);
       this.panel1.TabIndex = 11;
       // 
       // chkReport
@@ -474,12 +353,180 @@
       this.chkMonitorMouse.Text = "Monitor mouse axis";
       this.chkMonitorMouse.UseVisualStyleBackColor = true;
       // 
+      // lblJ_07
+      // 
+      this.lblJ_07.AutoSize = true;
+      this.lblJ_07.ForeColor = System.Drawing.Color.Gainsboro;
+      this.lblJ_07.Location = new System.Drawing.Point(278, 114);
+      this.lblJ_07.Name = "lblJ_07";
+      this.lblJ_07.Size = new System.Drawing.Size(56, 13);
+      this.lblJ_07.TabIndex = 16;
+      this.lblJ_07.Text = "Joystick-7";
+      // 
+      // txJoystick07
+      // 
+      this.txJoystick07.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+      this.txJoystick07.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.txJoystick07.ForeColor = System.Drawing.Color.Gainsboro;
+      this.txJoystick07.Location = new System.Drawing.Point(363, 111);
+      this.txJoystick07.Name = "txJoystick07";
+      this.txJoystick07.ReadOnly = true;
+      this.txJoystick07.Size = new System.Drawing.Size(145, 22);
+      this.txJoystick07.TabIndex = 15;
+      // 
+      // txJoystick06
+      // 
+      this.txJoystick06.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+      this.txJoystick06.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.txJoystick06.ForeColor = System.Drawing.Color.Gainsboro;
+      this.txJoystick06.Location = new System.Drawing.Point(363, 87);
+      this.txJoystick06.Name = "txJoystick06";
+      this.txJoystick06.ReadOnly = true;
+      this.txJoystick06.Size = new System.Drawing.Size(145, 22);
+      this.txJoystick06.TabIndex = 14;
+      // 
+      // txJoystick05
+      // 
+      this.txJoystick05.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+      this.txJoystick05.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.txJoystick05.ForeColor = System.Drawing.Color.Gainsboro;
+      this.txJoystick05.Location = new System.Drawing.Point(99, 206);
+      this.txJoystick05.Name = "txJoystick05";
+      this.txJoystick05.ReadOnly = true;
+      this.txJoystick05.Size = new System.Drawing.Size(145, 22);
+      this.txJoystick05.TabIndex = 13;
+      // 
+      // txJoystick04
+      // 
+      this.txJoystick04.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+      this.txJoystick04.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.txJoystick04.ForeColor = System.Drawing.Color.Gainsboro;
+      this.txJoystick04.Location = new System.Drawing.Point(99, 182);
+      this.txJoystick04.Name = "txJoystick04";
+      this.txJoystick04.ReadOnly = true;
+      this.txJoystick04.Size = new System.Drawing.Size(145, 22);
+      this.txJoystick04.TabIndex = 12;
+      // 
+      // lblJ_06
+      // 
+      this.lblJ_06.AutoSize = true;
+      this.lblJ_06.ForeColor = System.Drawing.Color.Gainsboro;
+      this.lblJ_06.Location = new System.Drawing.Point(278, 90);
+      this.lblJ_06.Name = "lblJ_06";
+      this.lblJ_06.Size = new System.Drawing.Size(56, 13);
+      this.lblJ_06.TabIndex = 9;
+      this.lblJ_06.Text = "Joystick-6";
+      // 
+      // lblJ_05
+      // 
+      this.lblJ_05.AutoSize = true;
+      this.lblJ_05.ForeColor = System.Drawing.Color.Gainsboro;
+      this.lblJ_05.Location = new System.Drawing.Point(14, 209);
+      this.lblJ_05.Name = "lblJ_05";
+      this.lblJ_05.Size = new System.Drawing.Size(56, 13);
+      this.lblJ_05.TabIndex = 10;
+      this.lblJ_05.Text = "Joystick-5";
+      // 
+      // lblJ_04
+      // 
+      this.lblJ_04.AutoSize = true;
+      this.lblJ_04.ForeColor = System.Drawing.Color.Gainsboro;
+      this.lblJ_04.Location = new System.Drawing.Point(14, 185);
+      this.lblJ_04.Name = "lblJ_04";
+      this.lblJ_04.Size = new System.Drawing.Size(56, 13);
+      this.lblJ_04.TabIndex = 11;
+      this.lblJ_04.Text = "Joystick-4";
+      // 
+      // lblJ_08
+      // 
+      this.lblJ_08.AutoSize = true;
+      this.lblJ_08.ForeColor = System.Drawing.Color.Gainsboro;
+      this.lblJ_08.Location = new System.Drawing.Point(278, 138);
+      this.lblJ_08.Name = "lblJ_08";
+      this.lblJ_08.Size = new System.Drawing.Size(56, 13);
+      this.lblJ_08.TabIndex = 18;
+      this.lblJ_08.Text = "Joystick-8";
+      // 
+      // txJoystick08
+      // 
+      this.txJoystick08.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+      this.txJoystick08.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.txJoystick08.ForeColor = System.Drawing.Color.Gainsboro;
+      this.txJoystick08.Location = new System.Drawing.Point(363, 135);
+      this.txJoystick08.Name = "txJoystick08";
+      this.txJoystick08.ReadOnly = true;
+      this.txJoystick08.Size = new System.Drawing.Size(145, 22);
+      this.txJoystick08.TabIndex = 17;
+      // 
+      // lblJ_09
+      // 
+      this.lblJ_09.AutoSize = true;
+      this.lblJ_09.ForeColor = System.Drawing.Color.Gainsboro;
+      this.lblJ_09.Location = new System.Drawing.Point(278, 162);
+      this.lblJ_09.Name = "lblJ_09";
+      this.lblJ_09.Size = new System.Drawing.Size(56, 13);
+      this.lblJ_09.TabIndex = 20;
+      this.lblJ_09.Text = "Joystick-9";
+      // 
+      // txJoystick09
+      // 
+      this.txJoystick09.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+      this.txJoystick09.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.txJoystick09.ForeColor = System.Drawing.Color.Gainsboro;
+      this.txJoystick09.Location = new System.Drawing.Point(363, 159);
+      this.txJoystick09.Name = "txJoystick09";
+      this.txJoystick09.ReadOnly = true;
+      this.txJoystick09.Size = new System.Drawing.Size(145, 22);
+      this.txJoystick09.TabIndex = 19;
+      // 
+      // lblJ_10
+      // 
+      this.lblJ_10.AutoSize = true;
+      this.lblJ_10.ForeColor = System.Drawing.Color.Gainsboro;
+      this.lblJ_10.Location = new System.Drawing.Point(278, 186);
+      this.lblJ_10.Name = "lblJ_10";
+      this.lblJ_10.Size = new System.Drawing.Size(62, 13);
+      this.lblJ_10.TabIndex = 22;
+      this.lblJ_10.Text = "Joystick-10";
+      // 
+      // txJoystick10
+      // 
+      this.txJoystick10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+      this.txJoystick10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.txJoystick10.ForeColor = System.Drawing.Color.Gainsboro;
+      this.txJoystick10.Location = new System.Drawing.Point(363, 183);
+      this.txJoystick10.Name = "txJoystick10";
+      this.txJoystick10.ReadOnly = true;
+      this.txJoystick10.Size = new System.Drawing.Size(145, 22);
+      this.txJoystick10.TabIndex = 21;
+      // 
+      // lblJ_11
+      // 
+      this.lblJ_11.AutoSize = true;
+      this.lblJ_11.ForeColor = System.Drawing.Color.Gainsboro;
+      this.lblJ_11.Location = new System.Drawing.Point(278, 210);
+      this.lblJ_11.Name = "lblJ_11";
+      this.lblJ_11.Size = new System.Drawing.Size(62, 13);
+      this.lblJ_11.TabIndex = 24;
+      this.lblJ_11.Text = "Joystick-11";
+      // 
+      // txJoystick11
+      // 
+      this.txJoystick11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+      this.txJoystick11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.txJoystick11.ForeColor = System.Drawing.Color.Gainsboro;
+      this.txJoystick11.Location = new System.Drawing.Point(363, 207);
+      this.txJoystick11.Name = "txJoystick11";
+      this.txJoystick11.ReadOnly = true;
+      this.txJoystick11.Size = new System.Drawing.Size(145, 22);
+      this.txJoystick11.TabIndex = 23;
+      // 
       // FormDeviceMonitor
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-      this.ClientSize = new System.Drawing.Size(704, 381);
+      this.ClientSize = new System.Drawing.Size(704, 625);
       this.Controls.Add(this.tableLayoutPanel1);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
       this.MinimumSize = new System.Drawing.Size(720, 420);
@@ -491,7 +538,6 @@
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
       this.tableLayoutPanel1.ResumeLayout(false);
-      this.flpToggle.ResumeLayout(false);
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
       this.ResumeLayout(false);
@@ -520,18 +566,23 @@
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private System.Windows.Forms.ImageList IL;
     private System.Windows.Forms.CheckBox chkMonitorMouse;
-    private System.Windows.Forms.FlowLayoutPanel flpToggle;
-    private UC_Toggle uC_Toggle1;
-    private UC_Toggle uC_Toggle2;
-    private UC_Toggle uC_Toggle3;
-    private UC_Toggle uC_Toggle4;
-    private UC_Toggle uC_Toggle5;
-    private UC_Toggle uC_Toggle6;
-    private UC_Toggle uC_Toggle7;
-    private UC_Toggle uC_Toggle8;
-    private UC_Toggle uC_Toggle9;
-    private UC_Toggle uC_Toggle10;
     private System.Windows.Forms.Panel panel1;
     private System.Windows.Forms.CheckBox chkReport;
+    private System.Windows.Forms.Label lblJ_07;
+    private System.Windows.Forms.TextBox txJoystick07;
+    private System.Windows.Forms.TextBox txJoystick06;
+    private System.Windows.Forms.TextBox txJoystick05;
+    private System.Windows.Forms.TextBox txJoystick04;
+    private System.Windows.Forms.Label lblJ_06;
+    private System.Windows.Forms.Label lblJ_05;
+    private System.Windows.Forms.Label lblJ_04;
+    private System.Windows.Forms.Label lblJ_11;
+    private System.Windows.Forms.TextBox txJoystick11;
+    private System.Windows.Forms.Label lblJ_10;
+    private System.Windows.Forms.TextBox txJoystick10;
+    private System.Windows.Forms.Label lblJ_09;
+    private System.Windows.Forms.TextBox txJoystick09;
+    private System.Windows.Forms.Label lblJ_08;
+    private System.Windows.Forms.TextBox txJoystick08;
   }
 }

@@ -24,28 +24,7 @@ namespace SCJMapper_V2.Devices.Monitor
     private DeviceMonitoring m_dx = null;
     private ActionTree m_atRef = null;
     private DeviceMonitoring.DxDeviceStates m_prevStates = new DeviceMonitoring.DxDeviceStates( );
-
-    private class TogWrap
-    {
-      public UC_Toggle Toggle = null;
-      public string Cmd = "";
-      public string Label = "";
-
-      public TogWrap( UC_Toggle tog, string cmd, string lbl )
-      {
-        Toggle = tog;
-        Cmd = cmd;
-        Label = lbl;
-        Toggle.Label = Label;
-      }
-    }
-
-    private Dictionary<string, TogWrap> m_toggles = new Dictionary<string, TogWrap>( );
-
-    private enum Togs
-    {
-      Freelook
-    }
+    private List<TextBox> m_jTx = new List<TextBox>( );
 
     public ActionTree ActionTree { set => m_atRef = value; }
 
@@ -53,6 +32,7 @@ namespace SCJMapper_V2.Devices.Monitor
     {
       InitializeComponent( );
     }
+
 
 
     private void FormDeviceMonitor_Load( object sender, EventArgs e )
@@ -65,20 +45,23 @@ namespace SCJMapper_V2.Devices.Monitor
       lblJ_01.Text = Tx.Translate( "xJoystick" ) + "-1";
       lblJ_02.Text = Tx.Translate( "xJoystick" ) + "-2";
       lblJ_03.Text = Tx.Translate( "xJoystick" ) + "-3";
+      lblJ_04.Text = Tx.Translate( "xJoystick" ) + "-4";
+      lblJ_05.Text = Tx.Translate( "xJoystick" ) + "-5";
+      lblJ_06.Text = Tx.Translate( "xJoystick" ) + "-6";
+      lblJ_07.Text = Tx.Translate( "xJoystick" ) + "-7";
+      lblJ_08.Text = Tx.Translate( "xJoystick" ) + "-8";
+      lblJ_09.Text = Tx.Translate( "xJoystick" ) + "-9";
+      lblJ_10.Text = Tx.Translate( "xJoystick" ) + "-10";
+      lblJ_11.Text = Tx.Translate( "xJoystick" ) + "-11";
 
-      // get Toggles
-      var t = new TogWrap( uC_Toggle1, "v_view_freelook_mode", "Freelook" ); m_toggles.Add( t.Cmd, t );
-      t = new TogWrap( uC_Toggle2, "v_ifcs_toggle_esp", "ESP" ); m_toggles.Add( t.Cmd, t );
-      t = new TogWrap( uC_Toggle3, "v_toggle_landing_system", "Landing System" ); m_toggles.Add( t.Cmd, t );
-      t = new TogWrap( uC_Toggle4, "v_toggle_weapon_gimbal_lock", "Gimbal Lock Tgt" ); m_toggles.Add( t.Cmd, t );
-      t = new TogWrap( uC_Toggle5, "v_target_toggle_pinned_focused", "Pin focused" ); m_toggles.Add( t.Cmd, t );
-      t = new TogWrap( uC_Toggle6, "v_power_toggle_group_1", "Pwr Shields" ); m_toggles.Add( t.Cmd, t );
-      t = new TogWrap( uC_Toggle7, "v_power_toggle_group_2", "Pwr Weapons" ); m_toggles.Add( t.Cmd, t );
-      t = new TogWrap( uC_Toggle8, "v_power_toggle_group_3", "Pwr Drive" ); m_toggles.Add( t.Cmd, t );
-      t = new TogWrap( uC_Toggle9, "v_power_toggle", "Power" ); m_toggles.Add( t.Cmd, t );
-      t = new TogWrap( uC_Toggle10, "v_toggle_running_lights", "Lights" ); m_toggles.Add( t.Cmd, t );
+      // get enumerated access for the joy text boxes
+      m_jTx.Add( txJoystick00 ); m_jTx.Add( txJoystick01 ); m_jTx.Add( txJoystick02 ); m_jTx.Add( txJoystick03 ); m_jTx.Add( txJoystick04 ); m_jTx.Add( txJoystick05 );
+      m_jTx.Add( txJoystick06 ); m_jTx.Add( txJoystick07 ); m_jTx.Add( txJoystick08 ); m_jTx.Add( txJoystick09 ); m_jTx.Add( txJoystick10 ); m_jTx.Add( txJoystick11 );
 
+      // start with List
+      chkReport.Checked = true;
 
+      // Dx stuff
       m_dx = new DeviceMonitoring( );
       m_dx.DxDeviceEvent += M_dx_DxDeviceEvent;
       // start with monitoring OFF
@@ -86,11 +69,14 @@ namespace SCJMapper_V2.Devices.Monitor
       UpdateMonitor( );
     }
 
+    private Queue<DeviceMonitoring.DxDeviceStates> m_dxQueue = new Queue<DeviceMonitoring.DxDeviceStates>( );
+
     // can be called from non UI thread
     private void M_dx_DxDeviceEvent( object sender, DxDeviceEventArgs e )
     {
+      m_dxQueue.Enqueue( e.DeviceStates );
       this.Invoke( (MethodInvoker)delegate {
-        UpdateDeviceLabels( e.DeviceStates );
+        UpdateDeviceLabels( );
       } );
     }
 
@@ -119,49 +105,61 @@ namespace SCJMapper_V2.Devices.Monitor
         m_dx.ReportEvents = false;
       }
     }
-    private void UpdateDeviceLabels( DeviceMonitoring.DxDeviceStates states )
+
+    /// <summary>
+    /// Update the GUI elements in the Form Thread
+    /// </summary>
+    private void UpdateDeviceLabels()
     {
-      if ( !string.IsNullOrEmpty( states.KeyboardIn.Input ) ) {
-        txKeyboard.Text = states.KeyboardIn.Input;
-        UpdateAssignmentList( states.KeyboardIn.Input );
-      }
-      if ( !string.IsNullOrEmpty( states.MouseIn.Input ) ) {
-        if ( chkMonitorMouse.Checked ) {
-          txMouse.Text = states.MouseIn.Input;
-          UpdateAssignmentList( states.MouseIn.Input );
+      // process all received events
+      while ( m_dxQueue.Count > 0 ) {
+        var states = m_dxQueue.Dequeue( );
+
+        // Keyboard
+        if ( !string.IsNullOrEmpty( states.KeyboardIn.Input ) ) {
+          txKeyboard.Text = states.KeyboardIn.Input;
+          UpdateAssignmentList( states.KeyboardIn.Input );
         }
         else {
-
-          if ( states.MouseIn.IsAxis == false ) {
-            // only non axis..
+        //  txKeyboard.Text = "";
+        }
+        // Mouse
+        if ( !string.IsNullOrEmpty( states.MouseIn.Input ) ) {
+          if ( chkMonitorMouse.Checked ) {
             txMouse.Text = states.MouseIn.Input;
             UpdateAssignmentList( states.MouseIn.Input );
           }
+          else {
+
+            if ( states.MouseIn.IsAxis == false ) {
+              // only non axis..
+              txMouse.Text = states.MouseIn.Input;
+              UpdateAssignmentList( states.MouseIn.Input );
+            }
+          }
         }
-      }
-      if ( !string.IsNullOrEmpty( states.GamepadIn.Input ) ) {
-        txGamepad.Text = states.GamepadIn.Input;
-        UpdateAssignmentList( states.GamepadIn.Input );
-      }
-      int jsDev = 0;
-      if ( !string.IsNullOrEmpty( states.JoystickIn[jsDev].Input ) ) {
-        txJoystick00.Text = states.JoystickIn[jsDev].Input;
-        UpdateAssignmentList( states.JoystickIn[jsDev].Input );
-      }
-      jsDev = 1;
-      if ( !string.IsNullOrEmpty( states.JoystickIn[jsDev].Input ) ) {
-        txJoystick01.Text = states.JoystickIn[jsDev].Input;
-        UpdateAssignmentList( states.JoystickIn[jsDev].Input );
-      }
-      jsDev = 2;
-      if ( !string.IsNullOrEmpty( states.JoystickIn[jsDev].Input ) ) {
-        txJoystick02.Text = states.JoystickIn[jsDev].Input;
-        UpdateAssignmentList( states.JoystickIn[jsDev].Input );
-      }
-      jsDev = 3;
-      if ( !string.IsNullOrEmpty( states.JoystickIn[jsDev].Input ) ) {
-        txJoystick03.Text = states.JoystickIn[jsDev].Input;
-        UpdateAssignmentList( states.JoystickIn[jsDev].Input );
+        else {
+         // txMouse.Text = "";
+        }
+        // Gamepad
+        if ( !string.IsNullOrEmpty( states.GamepadIn.Input ) ) {
+          txGamepad.Text = states.GamepadIn.Input;
+          UpdateAssignmentList( states.GamepadIn.Input );
+        }
+        else {
+         // txGamepad.Text = "";
+        }
+
+        // all Joysticks
+        for ( int jsDev = 0; jsDev < m_jTx.Count; jsDev++ ) {
+          if ( !string.IsNullOrEmpty( states.JoystickIn[jsDev].Input ) ) {
+            m_jTx[jsDev].Text = states.JoystickIn[jsDev].Input;
+            UpdateAssignmentList( states.JoystickIn[jsDev].Input );
+          }
+          else {
+           // m_jTx[jsDev].Text = "";
+          }
+        }
       }
     }
 
@@ -170,15 +168,10 @@ namespace SCJMapper_V2.Devices.Monitor
       if ( string.IsNullOrEmpty( devInput ) ) return;
 
       var actions = m_atRef.GetAllActions( devInput );
-      // cheap
-      foreach ( var t in m_toggles ) {
-        if ( actions.Contains( t.Key ) ) {
-          t.Value.Toggle.ToggleState( );
-        }
-      }
+
       if ( chkReport.Checked ) {
         // show list
-        RTF.RTFformatter RTF = new RTF.RTFformatter { RColor = SCJMapper_V2.RTF.RTFformatter.ERColor.ERC_Gainsborow };
+        var RTF = new RTF.RTFformatter { RColor = SCJMapper_V2.RTF.RTFformatter.ERColor.ERC_Gainsborow };
         m_atRef.ListAllActionsRTF( devInput, RTF, true );
         // have to check if throttle is used and if - add those to the list
         string altDevInput = JoystickCls.MakeThrottle( devInput, true );

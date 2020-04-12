@@ -44,8 +44,7 @@ namespace SCJMapper_V2.Actions
     // call when a selection is updated (finds the items in the master tree for the currently selected Ctrl)
     private void NodeSelected()
     {
-      string action = ""; string ctrl = "";
-      SelectedActionCtrl( out action, out ctrl );
+      SelectedActionCtrl( out string action, out string ctrl );
       NodeSelected( action, ctrl );
     }
 
@@ -263,7 +262,7 @@ namespace SCJMapper_V2.Actions
       ActionTreeNode matn = FindMasterAction( (ActionTreeNode)Ctrl.SelectedNode );
       ActionCls ac = FindActionObject( matn.Parent.Name, matn.Name );   // the related action
       // make new items
-      ActionTreeInputNode matin = new ActionTreeInputNode( "UNDEF" ) {
+      var matin = new ActionTreeInputNode( "UNDEF" ) {
         ImageKey = "Add"
       };
       matin.Update( matn );
@@ -423,7 +422,7 @@ namespace SCJMapper_V2.Actions
 
       // traverse the master tree and build the GUI tree from it
       foreach ( ActionTreeNode tn in m_MasterTree.Nodes ) {
-        ActionTreeNode tnMap = new ActionTreeNode( tn ); Ctrl.Nodes.Add( tnMap ); // copy level 0 nodes
+        var tnMap = new ActionTreeNode( tn ); Ctrl.Nodes.Add( tnMap ); // copy level 0 nodes
         if ( topNode == null ) topNode = tnMap;
 
         // have to search nodes of nodes
@@ -433,9 +432,9 @@ namespace SCJMapper_V2.Actions
             ;  // don't create it i.e hide it - though you cannot hide TreeViewNodes at all...
           }
           else {
-            ActionTreeNode tnAction = new ActionTreeNode( stn ); tnMap.Nodes.Add( tnAction ); // copy level 1 nodes
+            var tnAction = new ActionTreeNode( stn ); tnMap.Nodes.Add( tnAction ); // copy level 1 nodes
             foreach ( ActionTreeInputNode istn in stn.Nodes ) {
-              ActionTreeInputNode tnActionInput = new ActionTreeInputNode( istn ); tnAction.Nodes.Add( tnActionInput ); // copy level 2 nodes
+              var tnActionInput = new ActionTreeInputNode( istn ); tnAction.Nodes.Add( tnActionInput ); // copy level 2 nodes
             }
             allHidden = false;
           }
@@ -507,7 +506,7 @@ namespace SCJMapper_V2.Actions
       m_MasterTree.Nodes.Clear( );
 
       // read the action items into the TreeView
-      DProfileReader dpReader = new DProfileReader( ); // we may read a profile
+      var dpReader = new DProfileReader( ); // we may read a profile
       TextReader txReader = null;
 
       dpReader.fromXML( SCDefaultProfile.DefaultProfile( ) );
@@ -650,7 +649,7 @@ namespace SCJMapper_V2.Actions
     /// <returns>A ActivationModes list - first element is the default, second the selected Mode</returns>
     public ActivationModes ActivationModeSelectedItem()
     {
-      ActivationModes am = new ActivationModes( ActivationMode.Default, ActivationMode.Default );// policy: get the default first, then the attached one - dummy answer
+      var am = new ActivationModes( ActivationMode.Default, ActivationMode.Default );// policy: get the default first, then the attached one - dummy answer
 
       if ( Ctrl.SelectedNode == null ) return am; // ERROR exit
       if ( ( Ctrl.SelectedNode.Level == 0 ) || ( Ctrl.SelectedNode.Level > 2 ) ) return am;
@@ -659,7 +658,7 @@ namespace SCJMapper_V2.Actions
       // has a parent - must be level 1 or 2 
       if ( Ctrl.SelectedNode.Level == 1 ) {
         // this is the main node with Action Cmd
-        ActionTreeNode atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 1
+        var atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 1
         ActionCls ac = FindActionObject( atn.Parent.Name, atn.Name ); if ( ac == null ) return am; // ERROR exit
                                                                                                    //        ActionCommandCls acc = ac.FindActionInputObject( ActionTreeNode.CommandFromNodeText( atn.Text ) ); if ( acc == null ) return am; // ERROR exit
         ActionCommandCls acc = ac.FindActionInputObject( atn.Command ); if ( acc == null ) return am; // ERROR exit
@@ -668,8 +667,8 @@ namespace SCJMapper_V2.Actions
       }
       else if ( Ctrl.SelectedNode.Level == 2 ) {
         // this is a child of an action with further commands
-        ActionTreeNode patn = ( Ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode
-        ActionTreeNode atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 1
+        var patn = ( Ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode
+        var atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 1
         // the related action
         ActionCls ac = FindActionObject( patn.Parent.Name, patn.Name ); if ( ac == null ) return am; // ERROR exit
         ActionCommandCls acc = ac.FindActionInputObject( atn.Index ); if ( acc == null ) return am; // ERROR exit
@@ -693,7 +692,7 @@ namespace SCJMapper_V2.Actions
       // has a parent - must be level 1 or 2 
       if ( Ctrl.SelectedNode.Level == 1 ) {
         // this is the main node with Action Cmd
-        ActionTreeNode atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 1
+        var atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 1
         ActionCls ac = FindActionObject( atn.Parent.Name, atn.Name ); if ( ac == null ) return; // ERROR exit
         ActionCommandCls acc = ac.FindActionInputObject( atn.Command ); if ( acc == null ) return; // ERROR exit
         // new am is either a named one or the Default from Profile (which is the default from the Action due to multiTaps..)
@@ -710,8 +709,8 @@ namespace SCJMapper_V2.Actions
       }
       else if ( Ctrl.SelectedNode.Level == 2 ) {
         // this is a child of an action with further commands
-        ActionTreeNode patn = ( Ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode from a level 2
-        ActionTreeNode atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 2
+        var patn = ( Ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode from a level 2
+        var atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 2
         // the related action
         ActionCls ac = FindActionObject( patn.Parent.Name, patn.Name ); if ( ac == null ) return; // ERROR exit
         // find it in the sublist 
@@ -745,7 +744,7 @@ namespace SCJMapper_V2.Actions
       // has a parent - must be level 1 or 2 
       if ( Ctrl.SelectedNode.Level == 1 ) {
         // this is the main node with Action Cmd
-        ActionTreeNode atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 1
+        var atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 1
         ActionCls ac = FindActionObject( atn.Parent.Name, atn.Name );   // the related action in an actionmap
         if ( ac == null ) return false; // ERROR exit
         if ( checkKind && ( ac.ActionDevice != inKind ) ) return false; // ERROR exit
@@ -759,8 +758,8 @@ namespace SCJMapper_V2.Actions
       }
       else if ( Ctrl.SelectedNode.Level == 2 ) {
         // this is a child of an action with further commands
-        ActionTreeNode patn = ( Ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode from a level 2
-        ActionTreeInputNode atn = ( Ctrl.SelectedNode as ActionTreeInputNode );  // the treenode from a level 2
+        var patn = ( Ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode from a level 2
+        var atn = ( Ctrl.SelectedNode as ActionTreeInputNode );  // the treenode from a level 2
         if ( string.IsNullOrEmpty( input ) )
           atn.Action = "UNDEF"; // apply UNDEF
         else
@@ -874,10 +873,10 @@ namespace SCJMapper_V2.Actions
       foreach ( ActionMapCls acm in ActionMaps ) {
         if ( IgnoreMaps.Contains( "," + acm.MapName + "," ) ) break; // next
         try {
-          ActionTreeNode mtn = (ActionTreeNode)m_MasterTree.Nodes[acm.MapName]; // get the map node
+          var mtn = (ActionTreeNode)m_MasterTree.Nodes[acm.MapName]; // get the map node
           // find the item to reload into the treeview
           foreach ( ActionCls ac in acm ) {
-            ActionTreeNode matn = (ActionTreeNode)mtn.Nodes[ac.Key];  // get the action node
+            var matn = (ActionTreeNode)mtn.Nodes[ac.Key];  // get the action node
             bool first = true;
             // refresh commands
             foreach ( ActionCommandCls acc in ac.InputList ) {
@@ -891,7 +890,7 @@ namespace SCJMapper_V2.Actions
                 }
                 else {
                   // have to recreate the action child nodes
-                  ActionTreeInputNode matin = new ActionTreeInputNode( ac.ActionName ) { ImageKey = "Add" };
+                  var matin = new ActionTreeInputNode( ac.ActionName ) { ImageKey = "Add" };
                   matin.Update( matn ); matin.Command = "";
                   acc.NodeIndex = matin.Index; // assign visual reference
                   matn.Nodes.Add( matin ); // add to master tree
@@ -1022,7 +1021,7 @@ namespace SCJMapper_V2.Actions
     /// <param name="input">The input string to find</param>
     public List<string> GetAllActions( string input )
     {
-      List<string> ret = new List<string>( );
+      var ret = new List<string>( );
       if ( string.IsNullOrEmpty( input ) ) return ret; // nothing to find here...
       if ( Act.IsDisabledInput( input ) ) return ret; // nothing to find here...
 
@@ -1048,7 +1047,7 @@ namespace SCJMapper_V2.Actions
     /// <param name="input">The input string to find</param>
     public List<string> ListAllActions( string input )
     {
-      List<string> ret = new List<string>( );
+      var ret = new List<string>( );
       if ( string.IsNullOrEmpty( input ) ) return ret; // nothing to find here...
       if ( Act.IsDisabledInput( input ) ) return ret; // nothing to find here...
 
@@ -1128,7 +1127,12 @@ namespace SCJMapper_V2.Actions
           }
           if ( ( !used ) && ac.DefBinding == input ) {
             aMode = string.Format( "{0};{1}", ac.DefActivationMode.Name, ac.DefActivationMode.MultiTap );
-            rtf.Write( Tx.Translate( "mapProfile" ) ); rtf.WriteTab( ac.ActionName ); rtf.WriteTab( acm.MapName ); rtf.WriteTab( aMode ); rtf.WriteLn( );
+            rtf.Write( Tx.Translate( "mapProfile" ) );
+            rtf.WriteTab( SCUiText.Instance.Text( ac.ActionName ) );
+            rtf.WriteTab( SCUiText.Instance.Text( acm.MapName ) );
+            rtf.WriteTab( aMode );
+            rtf.WriteLn( );
+
             rtf.WriteLn( );
           }
         }
@@ -1241,7 +1245,7 @@ namespace SCJMapper_V2.Actions
         // has a parent - must be level 1 or 2 
         if ( Ctrl.SelectedNode.Level == 1 ) {
           // this is the main node with Action Cmd
-          ActionTreeNode atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 1
+          var atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 1
           ActionCls ac = FindActionObject( atn.Parent.Name, atn.Name );   // the related action in an actionmap
           if ( ac == null ) return ""; // ERROR exit
           ActionCommandCls acc = ac.FindActionInputObject( atn.Command ); if ( acc == null ) return ""; // ERROR exit
@@ -1252,8 +1256,8 @@ namespace SCJMapper_V2.Actions
         }
         else if ( Ctrl.SelectedNode.Level == 2 ) {
           // this is a child of an action with further commands
-          ActionTreeNode patn = ( Ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode from a level 2
-          ActionTreeNode atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 2
+          var patn = ( Ctrl.SelectedNode.Parent as ActionTreeNode );  // the parent treenode from a level 2
+          var atn = ( Ctrl.SelectedNode as ActionTreeNode );  // the treenode from a level 2
           ActionCls ac = FindActionObject( patn.Parent.Name, patn.Name );   // the related action in an actionmap
           if ( ac == null ) return ""; // ERROR exit
           ActionCommandCls acc = ac.FindActionInputObject( atn.Index );
@@ -1273,7 +1277,7 @@ namespace SCJMapper_V2.Actions
     /// <returns>returns a null if no changes have been found</returns>
     public ActionTree UpdateFromDataSet( DS_ActionMaps dsa )
     {
-      ActionTree nTree = new ActionTree( ); // just a copy
+      var nTree = new ActionTree( ); // just a copy
       // full copy from 'this'
       nTree.m_MasterTree = this.m_MasterTree;
       nTree.m_tvCtrlRef = this.m_tvCtrlRef;
@@ -1344,7 +1348,7 @@ namespace SCJMapper_V2.Actions
                   if ( jsNum >= 0 ) {
                     sItem.DeviceName = ActionMaps.jsN[jsNum];
                     sItem.DeviceProdGuid = ActionMaps.jsN_prodGUID[jsNum];
-                    sItem.InputType = $"J{JoystickCls.JSNum( acc.DevInput )}"; 
+                    sItem.InputType = $"J{JoystickCls.JSNum( acc.DevInput )}";
                   }
                   break;
                 case Act.ActionDevice.AD_Gamepad:
@@ -1421,6 +1425,38 @@ namespace SCJMapper_V2.Actions
     }
 
     /// <summary>
+    /// Reports a list of all mapped items as Json Obj
+    /// Format: see Json.JExport
+    /// </summary>
+    /// <returns>Json Export obj</returns>
+    public Json.JExport ReportActionsJson()
+    {
+      log.Debug( "ReportActionsJson - Entry" );
+
+      var jexport = new Json.JExport( );
+      foreach ( ActionMapCls acm in ActionMaps ) {
+        var jamap = new Json.JActionmap( ) { Actionmap = acm.MapName, ActionmapTX = SCUiText.Instance.Text( acm.MapName ) };
+        foreach ( ActionCls ac in acm ) {
+          var jac = new Json.JAction( ) { Action = ac.ActionName, ActionTX = SCUiText.Instance.Text( ac.ActionName ) };
+          foreach ( ActionCommandCls acc in ac.InputList ) {
+            if ( !Act.IsDisabledInput( acc.Input ) ) {
+              if ( !string.IsNullOrEmpty( acc.Input ) ) {
+                var jc = new Json.JCommand( ) { Input = $"{acc.DevID}_{acc.Input}" };
+                jac.Rebind.Add( jc );
+              }
+            }
+          }
+          if ( jac.Rebind.Count > 0 )
+            jamap.Actions.Add( jac );
+        }
+        if ( jamap.Actions.Count > 0 )
+          jexport.Maps.Add( jamap );
+      }
+      return jexport;
+    }
+
+
+    /// <summary>
     /// Reports a list of the mapped items as XML (not CIG style)
     /// </summary>
     /// <returns>XML string</returns>
@@ -1430,27 +1466,27 @@ namespace SCJMapper_V2.Actions
       /*
        Format:
        <actions>
-        <actionmap name="mapname">
-          <action name="actionname">
+        <actionmap AMname="mapname" AMnameTX="translated_mapname" >
+          <action Aname="actionname" AnameTX="translated_actionname">
             <rebind input="devID_command" />
           </action>
         </actionmap>
        </actions>
        e.g.
        <actions>
-        <actionmap name="spaceship_movement">
-          <action name="v_pitch">
+        <actionmap AMname="spaceship_movement" AMnameTX="Flight - Movement" >
+          <action Aname="v_pitch" AnameTX="Pitch">
             <rebind input="js1_y" />
             <rebind input="mo1_maxis_y" />
           </action>
         </actionmap>
        </actions>
- 
+
       */
       string repList = "";
-      repList = string.Format( "<actions>\n" );
+      repList = $"<actions>\n";
       foreach ( ActionMapCls acm in ActionMaps ) {
-        repList += string.Format( "\t<actionmap AMname=\"{0}\">\n", acm.MapName );
+        repList += $"\t<actionmap AMname=\"{acm.MapName}\" AMnameTX=\"{SCUiText.Instance.Text( acm.MapName )}\">\n";
         // restart output
         string actionName = "", devRep = "";
         foreach ( ActionCls ac in acm ) {
@@ -1462,9 +1498,9 @@ namespace SCJMapper_V2.Actions
             // new action
             // report
             if ( !string.IsNullOrEmpty( devRep ) ) {
-              repList += string.Format( "\t\t<action Aname=\"{0}\">\n", actionName );
+              repList += $"\t\t<action Aname=\"{actionName}\" AnameTX=\"{SCUiText.Instance.Text( actionName )}\">\n";
               repList += devRep;
-              repList += string.Format( "\t\t</action>\n" );
+              repList += $"\t\t</action>\n";
             }
             // and reset
             actionName = ac.ActionName; // new one
@@ -1473,20 +1509,20 @@ namespace SCJMapper_V2.Actions
           foreach ( ActionCommandCls acc in ac.InputList ) {
             if ( !Act.IsDisabledInput( acc.Input ) ) {
               if ( !string.IsNullOrEmpty( acc.Input ) ) {
-                devRep += string.Format( "\t\t\t<rebind input=\"{0}_{1}\" />\n", acc.DevID, acc.Input );
+                devRep += $"\t\t\t<rebind input=\"{acc.DevID}_{acc.Input}\" />\n";
               }
             }
           }
         }
         // have to report the last one
         if ( !string.IsNullOrEmpty( devRep ) ) {
-          repList += string.Format( "\t\t<action Aname=\"{0}\">\n", actionName );
+          repList += $"\t\t<action Aname=\"{actionName}\" AnameTX=\"{SCUiText.Instance.Text( actionName )}\">\n";
           repList += devRep;
-          repList += string.Format( "\t\t</action>\n" );
+          repList += $"\t\t</action>\n";
         }
-        repList += string.Format( "\t</actionmap>\n" );
+        repList += $"\t</actionmap>\n";
       }
-      repList += string.Format( "</actions>\n" );
+      repList += $"</actions>\n";
       return repList;
     }
 
@@ -1503,11 +1539,11 @@ namespace SCJMapper_V2.Actions
       string repList = "";
       // JS assignments
       for ( int i = 0; i < JoystickCls.JSnum_MAX; i++ ) {
-        if ( !string.IsNullOrEmpty( ActionMaps.jsN[i] ) ) repList += string.Format( "** js{0} = {1}\n", i + 1, ActionMaps.jsN[i] );
+        if ( !string.IsNullOrEmpty( ActionMaps.jsN[i] ) ) repList += $"** js{i + 1} = {ActionMaps.jsN[i]}\n";
       }
       // now the mapped actions
 
-      repList += string.Format( "\n" );
+      repList += $"\n";
 
       repList += "actionmap;action"; // col description line
       if ( listModifiers ) {
@@ -1540,17 +1576,16 @@ namespace SCJMapper_V2.Actions
             // dump if not empty
             if ( !string.IsNullOrEmpty( action ) ) {
               // compose one action
-              rep += string.Format( "{0};{1};{2};{3};{4};{5};{6}\n", kbA, moA, xbA, jsA[0], jsA[1], jsA[2], jsA[3] ); // should be one line now
+              rep += $"{kbA};{moA};{xbA};{jsA[0]};{jsA[1]};{jsA[2]};{jsA[3]}\n"; // should be one line now
               repList += string.Format( "{0}", rep );  // add to list
             }
             // action changed - restart collection
             action = ac.ActionName;
             if ( listProfileNames ) {
-              rep = string.Format( "{0};{1};", acm.MapName, ac.ActionName ); // actionmap; action
+              rep = $"{acm.MapName};{ac.ActionName};"; // actionmap; action
             }
             else {
-              rep = string.Format( "{0};{1};", SCUiText.Instance.Text( acm.MapName ),
-                                               SCUiText.Instance.Text( ac.ActionName ) ); // actionmap; action
+              rep = $"{SCUiText.Instance.Text( acm.MapName )};{SCUiText.Instance.Text( ac.ActionName )};"; // actionmap; action
             }
             // note: don't add trailing semicolons as the are applied in the output formatting
             if ( listModifiers ) {
@@ -1569,29 +1604,30 @@ namespace SCJMapper_V2.Actions
               if ( !string.IsNullOrEmpty( acc.Input ) ) {
                 // set modified  - note: don't add trailing semicolons as the are applied in the output formatting
                 string aTag = "modified"; //default or modified
-                string aMode = string.Format( "modified;{0};{1}", acc.ActivationMode.Name, acc.ActivationMode.MultiTap );
+                string aMode = $"modified;{acc.ActivationMode.Name};{acc.ActivationMode.MultiTap}";
                 // change if they are default mappings
                 if ( acc.DevInput == ac.DefBinding ) aTag = "default";
-                if ( acc.ActivationMode == ActivationMode.Default ) aMode = string.Format( "default;{0};{1}", ac.DefActivationMode.Name, ac.DefActivationMode.MultiTap );
+                if ( acc.ActivationMode == ActivationMode.Default )
+                  aMode = $"default;{ac.DefActivationMode.Name};{ac.DefActivationMode.MultiTap}";
                 if ( listModifiers ) {
                   switch ( Act.ADeviceFromDevID( acc.DevID ) ) {
-                    case Act.ActionDevice.AD_Keyboard: kbA = string.Format( "{0};{1};{2}", aTag, acc.Input, aMode ); break;
-                    case Act.ActionDevice.AD_Mouse: moA = string.Format( "{0};{1};{2}", aTag, acc.Input, aMode ); break;
+                    case Act.ActionDevice.AD_Keyboard: kbA = $"{aTag};{acc.Input};{aMode}"; break;
+                    case Act.ActionDevice.AD_Mouse: moA = $"{aTag};{acc.Input};{aMode}"; break;
                     case Act.ActionDevice.AD_Joystick:
                       int jsNum = JoystickCls.JSNum( acc.DevInput ) - 1;
-                      if ( jsNum >= 0 ) jsA[jsNum] = string.Format( "{0};{1};{2}", aTag, acc.Input, aMode ); break;
-                    case Act.ActionDevice.AD_Gamepad: xbA = string.Format( "{0};{1};{2}", aTag, acc.Input, aMode ); break;
+                      if ( jsNum >= 0 ) jsA[jsNum] = $"{aTag};{acc.Input};{aMode}"; break;
+                    case Act.ActionDevice.AD_Gamepad: xbA = $"{aTag};{acc.Input};{aMode}"; break;
                     default: break;
                   }//switch
                 }
                 else {
                   switch ( Act.ADeviceFromDevID( acc.DevID ) ) {
-                    case Act.ActionDevice.AD_Keyboard: kbA = string.Format( "{0};{1}", aTag, acc.Input ); break;
-                    case Act.ActionDevice.AD_Mouse: moA = string.Format( "{0};{1}", aTag, acc.Input ); break;
+                    case Act.ActionDevice.AD_Keyboard: kbA = $"{aTag};{acc.Input}"; break;
+                    case Act.ActionDevice.AD_Mouse: moA = $"{aTag};{acc.Input}"; break;
                     case Act.ActionDevice.AD_Joystick:
                       int jsNum = JoystickCls.JSNum( acc.DevInput ) - 1;
-                      if ( jsNum >= 0 ) jsA[jsNum] = string.Format( "{0};{1}", aTag, acc.Input ); break;
-                    case Act.ActionDevice.AD_Gamepad: xbA = string.Format( "{0};{1}", aTag, acc.Input ); break;
+                      if ( jsNum >= 0 ) jsA[jsNum] = $"{aTag};{acc.Input}"; break;
+                    case Act.ActionDevice.AD_Gamepad: xbA = $"{aTag};{acc.Input}"; break;
                     default: break;
                   }//switch
                 }
@@ -1602,8 +1638,8 @@ namespace SCJMapper_V2.Actions
       }
       // add the last one
       // compose one action
-      rep += string.Format( "{0};{1};{2};{3};{4};{5};{6}\n", kbA, moA, xbA, jsA[0], jsA[1], jsA[2], jsA[3] ); // should be one line now
-      repList += string.Format( "{0}", rep );  // add to list
+      rep += $"{kbA};{moA};{xbA};{jsA[0]};{jsA[1]};{jsA[2]};{jsA[3]}\n"; // should be one line now
+      repList += $"{rep}";  // add to list
 
       return repList;
     }
