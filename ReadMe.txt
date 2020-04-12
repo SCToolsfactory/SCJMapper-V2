@@ -1,12 +1,12 @@
-SC Joystick Mapper V 2.46 - Build 81 BETA
-(c) Cassini, StandardToaster - 16-Mar-2020
+SC Joystick Mapper V 2.47 - Build 82 BETA
+(c) Cassini, StandardToaster - 12-Apr-2020
 
 Contains 14 files + graphics:
 
 SCJMapper.exe                The program (V2.46)
 
 - The following files and folders MUST be in the same folder as the Exe file
-SCJMapper.exe.config         Program config (V2.46)              
+SCJMapper.exe.config         Program config (V2.47)
 de\SCJMapper.resources.dll   German language (V2.45)
 fr\SCJMapper.resources.dll   French language (V2.45)
 Storage\*.scj                Folder for collected assets (V2.35)

@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{6C767E48-A71
 		LICENSE = LICENSE
 		README.md = README.md
 		ReadMe.txt = ReadMe.txt
-		Docx\SCJMapper_QGuide V2.35beta.pdf = Docx\SCJMapper_QGuide V2.35beta.pdf
+		Docx\SCJMapper_QGuide V2.47beta.pdf = Docx\SCJMapper_QGuide V2.47beta.pdf
 		Docx\SCJMapper_QGuide V2.x.pub = Docx\SCJMapper_QGuide V2.x.pub
 	EndProjectSection
 EndProject
