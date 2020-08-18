@@ -1,12 +1,12 @@
-SC Joystick Mapper V 2.47 - Build 82 BETA
-(c) Cassini, StandardToaster - 12-Apr-2020
+SC Joystick Mapper V 2.48 - Build 83 BETA
+(c) Cassini, StandardToaster - 18-Aug-2020
 
 Contains 14 files + graphics:
 
-SCJMapper.exe                The program (V2.46)
+SCJMapper.exe                The program (V2.48)
 
 - The following files and folders MUST be in the same folder as the Exe file
-SCJMapper.exe.config         Program config (V2.47)
+SCJMapper.exe.config         Program config (V2.48)
 de\SCJMapper.resources.dll   German language (V2.45)
 fr\SCJMapper.resources.dll   French language (V2.45)
 Storage\*.scj                Folder for collected assets (V2.35)
@@ -20,9 +20,9 @@ x64\libzstd.dll              Native dll for ZstdNet (v2.33)
 x86\libzstd.dll              Native dll for ZstdNet (v2.33)
 log4net.dll                  Managed Logging Assembly
 log4net.config.OFF           Config file for logging
-                               then look for  trace.log  in the same folder
+                               rename without .OFF, restart and then look for  trace.log  in the same folder
 
-SCJMapper_QGuide V2.35beta.pdf    Quick Guide (v2.35)
+SCJMapper_QGuide V2.47beta.pdf    Quick Guide (v2.47)
 ReadMe.txt                   This file
 
 graphics folder              Skybox Images (V2.32)               - graphics folder MUST be in the same folder as the Exe file
@@ -50,6 +50,8 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.48 - BETA Build 83
+- updated Actionmap Groups for Layout Dialog taken from LayoutGroups.json from <User>Documents\SCJMapper\[PTU] folder
 V 2.47 - BETA Build 82
 - add Mode to create SCJoyServer Command items from action tree
 - add Saving ActionTree to a json file in <User>\Documents\SCJM\file.scjn.json for other tools (easier than XML)

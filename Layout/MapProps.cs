@@ -122,7 +122,7 @@ namespace SCJMapper_V2.Layout
         { EGroup.Player,          ConvertFromString(AppSettings.Instance.GroupColor_05) },
         { EGroup.EVA,             ConvertFromString(AppSettings.Instance.GroupColor_06) },
         { EGroup.Vehicle,         ConvertFromString(AppSettings.Instance.GroupColor_07) },
-        { EGroup.VehicleWeapons,  ConvertFromString(AppSettings.Instance.GroupColor_08) },
+       // { EGroup.VehicleWeapons,  ConvertFromString(AppSettings.Instance.GroupColor_08) }, // removed in 3.10.0
         { EGroup.Lights,          ConvertFromString(AppSettings.Instance.GroupColor_09) },
         { EGroup.Interaction,     ConvertFromString(AppSettings.Instance.GroupColor_10) },
         { EGroup.Spectator,       ConvertFromString(AppSettings.Instance.GroupColor_11) },
@@ -145,7 +145,7 @@ namespace SCJMapper_V2.Layout
       AppSettings.Instance.GroupColor_05 = ConvertToString( m_amColors[EGroup.Player] );
       AppSettings.Instance.GroupColor_06 = ConvertToString( m_amColors[EGroup.EVA] );
       AppSettings.Instance.GroupColor_07 = ConvertToString( m_amColors[EGroup.Vehicle] );
-      AppSettings.Instance.GroupColor_08 = ConvertToString( m_amColors[EGroup.VehicleWeapons] );
+      // AppSettings.Instance.GroupColor_08 = ConvertToString( m_amColors[EGroup.VehicleWeapons] );// removed in 3.10.0
       AppSettings.Instance.GroupColor_09 = ConvertToString( m_amColors[EGroup.Lights] );
       AppSettings.Instance.GroupColor_10 = ConvertToString( m_amColors[EGroup.Interaction] );
       AppSettings.Instance.GroupColor_11 = ConvertToString( m_amColors[EGroup.Spectator] );

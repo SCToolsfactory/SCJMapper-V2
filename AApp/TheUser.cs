@@ -88,6 +88,18 @@ namespace SCJMapper_V2
     }
 
     /// <summary>
+    /// Returns the Layout Groups Json file name + path into our user dir
+    /// </summary>
+    /// <returns>A fully qualified filename</returns>
+    static public string LayoutJsonFileName( )
+    {
+      log.Debug( "LayoutJsonFileName - Entry" );
+
+      return Path.Combine( UserDir, "LayoutGroups.json" );
+    }
+
+
+    /// <summary>
     /// Returns the mapping file name + path into our user dir
     /// </summary>
     /// <param name="mapName">The mapping name</param>

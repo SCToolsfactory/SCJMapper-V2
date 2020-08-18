@@ -1,0 +1,62 @@
+{
+  "_comment": "Layout Groups File as of Alpha 3.10.0 (leave group names alone, change only the contained groups)",
+  "SpaceFlight": [
+    "spaceship_general",
+    "spaceship_view",
+    "spaceship_movement",
+    "spaceship_docking",
+    "spaceship_power",
+    "IFCS_controls"
+  ],
+  "SpaceDefensive": [
+    "spaceship_defensive"
+  ],
+  "SpaceTargeting": [
+    "spaceship_targeting",
+    "spaceship_target_hailing",
+    "spaceship_scanning",
+    "spaceship_ping",
+    "spaceship_radar",
+    "spaceship_targeting_advanced"
+  ],
+  "SpaceWeapons": [
+    "turret_main",
+    "spaceship_weapons",
+    "spaceship_missiles",
+    "spaceship_auto_weapons"
+  ],
+  "SpaceMining": [
+    "spaceship_mining"
+  ],
+  "Player": [
+    "default",
+    "prone",
+    "player",
+    "player_choice",
+    "player_emotes",
+    "player_input_optical_tracking"
+  ],
+  "EVA": [
+    "zero_gravity_eva"
+  ],
+  "Vehicle": [
+    "vehicle_general",
+    "vehicle_driver"
+  ],
+  "Lights": [
+    "lights_controller"
+  ],
+  "Interaction": [
+    "spaceship_hud",
+    "ui_textfield",
+    "ui_notification"
+  ],
+  "Spectator": [
+    "spectator",
+    "flycam",
+    "view_director_mode"
+  ],
+  "Others": [
+    "server_renderer"
+  ]
+}
