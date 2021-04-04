@@ -389,7 +389,6 @@
     <EmbeddedResource Include="Devices\Gamepad\UC_GpadPanel.resx">
       <DependentUpon>UC_GpadPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="AApp\app.config" />
     <EmbeddedResource Include="AApp\app.manifest">
       <SubType>Designer</SubType>
     </EmbeddedResource>
