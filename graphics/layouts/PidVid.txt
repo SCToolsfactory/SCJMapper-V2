@@ -87,3 +87,7 @@ SideWinderForceFeedback2    {001B045E-}
 
 vJoy                        {BEAD1234-}
 ArduinoLeonardo             {80362341-}
+
+
+Logi Saitek Flight Yoke    0BAC06A3  Saitek Pro Flight Yoke (USB)
+Logi Saitek Throttle Quad  0C2D06A3  Saitek Pro Flight Throttle Quadrant (USB)

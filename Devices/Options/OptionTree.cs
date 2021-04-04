@@ -50,7 +50,7 @@ namespace SCJMapper_V2.Devices.Options
     /// Clone this object
     /// </summary>
     /// <returns>A deep Clone of this object</returns>
-    public object Clone()
+    public object Clone( )
     {
       var ot = (OptionTree)this.MemberwiseClone( );
       // more objects to deep copy
@@ -97,18 +97,17 @@ namespace SCJMapper_V2.Devices.Options
 
       // get options for the device class
       var devOpts = m_profileOptions.Where( x => x.DeviceClass == device.DevClass );
-      foreach (ProfileOptionRec rec in devOpts ) {
+      foreach ( ProfileOptionRec rec in devOpts ) {
         m_tuning.Add( rec.OptName, new DeviceTuningParameter( rec.OptName, device ) );
       }
     }
 
 
-    public int Count
-    {
+    public int Count {
       get { return ( m_stringOptions.Count + 1 ); }
     }
 
-    public void ResetDynamicItems()
+    public void ResetDynamicItems( )
     {
       foreach ( KeyValuePair<string, DeviceTuningParameter> kv in m_tuning ) {
         DeviceTuningParameter item = kv.Value;
@@ -151,7 +150,7 @@ namespace SCJMapper_V2.Devices.Options
     /// Dump the Options as partial XML nicely formatted
     /// </summary>
     /// <returns>the action as XML fragment</returns>
-    public string toXML()
+    public string toXML( )
     {
       string r = "";
 
@@ -216,7 +215,7 @@ namespace SCJMapper_V2.Devices.Options
       string productS = (string)options.Attribute( "Product" ); // optional 3.5 ??
 
       string devClass = DeviceCls.DeviceClass; // the generic one
-      if ( !string.IsNullOrEmpty(type)) devClass = type; // get the one from the map if given (else it's a map error...)
+      if ( !string.IsNullOrEmpty( type ) ) devClass = type; // get the one from the map if given (else it's a map error...)
 
       // mouse arrives as type keyboard - fix it to deviceClass mouse here
       if ( KeyboardCls.IsDeviceClass( devClass ) )
@@ -236,14 +235,16 @@ namespace SCJMapper_V2.Devices.Options
 
     public class ProfileOptionRec : IEquatable<ProfileOptionRec>
     {
-      public string DeviceClass { get; set; }
-      public string OptGroup { get; set; }
-      public string OptName { get; set; }
-      public bool ShowCurve { get; set; }
-      public bool ShowInvert { get; set; }
-      public ProfileOptionRec()
+      public string DeviceClass { get; set; } = "";
+      public string OptGroup { get; set; } = "";
+      public string OptName { get; set; } = "";
+      public bool ShowCurve { get; set; } = false;
+      public bool ShowInvert { get; set; } = false;
+      public bool DefaultInvert { get; set; } = false; //20201231 - capture default inverted options
+      public float DefaultExponent { get; set; } = float.NaN; //20201231 - capture default exponent options
+      public ProfileOptionRec( )
       {
-        DeviceClass = DeviceCls.DeviceClass; OptGroup = ""; OptName = ""; ShowCurve = false; ShowInvert = false;
+        DeviceClass = DeviceCls.DeviceClass;
       }
       // same class and name means records match
       public bool Equals( ProfileOptionRec other )
@@ -262,7 +263,7 @@ namespace SCJMapper_V2.Devices.Options
     /// Clears the stored optiontree items from the profile
     ///   must be cleared before re-reading them from profile
     /// </summary>
-    public static void InitOptionReader()
+    public static void InitOptionReader( )
     {
       m_profileOptions = new List<ProfileOptionRec>( );
     }
@@ -277,6 +278,10 @@ namespace SCJMapper_V2.Devices.Options
     private static bool ReadOptiongroup( XElement optiongroupIn, string devClass, string optGroup )
     {
       bool retVal = true;
+      bool grpShowCurve = false;
+      bool grpShowInvert = false;
+      bool grpDefaultInvert = false;
+      float grpDefaultExponent = float.NaN;
 
       // collect content and process further groups
       string name = (string)optiongroupIn.Attribute( "name" );
@@ -284,6 +289,33 @@ namespace SCJMapper_V2.Devices.Options
       if ( string.IsNullOrEmpty( uiLabel ) )
         uiLabel = name; // subst if not found in Action node
       SCUiText.Instance.Add( name, uiLabel ); // Register item for translation
+
+      // 20201231- read initial (group and item props and merge from top)
+      string attr = (string)optiongroupIn.Attribute( "UIShowCurve" );
+      if ( !string.IsNullOrEmpty( attr ) ) {
+        if ( int.TryParse( attr, out int showCurve ) ) {
+          if  ( showCurve != 0)  grpShowCurve = ( showCurve == 1 ); // change only if not neutral (==0)
+        }
+      }
+      attr = (string)optiongroupIn.Attribute( "UIShowInvert" );
+      if ( !string.IsNullOrEmpty( attr ) ) {
+        if ( int.TryParse( attr, out int showInvert ) ) {
+          if ( showInvert != 0 ) grpShowInvert = ( showInvert == 1 );; // change only if not neutral (==0)
+        }
+      }
+      //20201231 - get default invert / exponent value from profile
+      attr = (string)optiongroupIn.Attribute( "invert" );
+      if ( !string.IsNullOrEmpty( attr ) ) {
+        if ( int.TryParse( attr, out int defaultInvert ) ) {
+          grpDefaultInvert = ( defaultInvert == 1 );
+        }
+      }
+      attr = (string)optiongroupIn.Attribute( "exponent" );
+      if ( !string.IsNullOrEmpty( attr ) ) {
+        if ( float.TryParse( attr, out float defaultExponent ) ) {
+          grpDefaultExponent = defaultExponent;
+        }
+      }
 
       // further groups
       IEnumerable<XElement> optiongroups = from x in optiongroupIn.Elements( )
@@ -293,23 +325,16 @@ namespace SCJMapper_V2.Devices.Options
         retVal &= ReadOptiongroup( optiongroup, devClass, name ); // current is the group if we dive one down
       }
       // murks.. determine if it is a terminal node, then get items
-      if ( optiongroups.Count() == 0 ) {
-        ProfileOptionRec optRec = new ProfileOptionRec { DeviceClass = devClass, OptGroup=optGroup, OptName = name }; // create a new one
-        // override props if they arrive in the node
-        string attr = (string)optiongroupIn.Attribute( "UIShowCurve" );
-        if ( !string.IsNullOrEmpty( attr ) ) {
-          if ( int.TryParse( attr, out int showCurve ) ) {
-            optRec.ShowCurve = ( showCurve == 1 );
-          }
+      if ( optiongroups.Count( ) == 0 ) {
+        // add if needed
+        if ( grpShowCurve || grpShowInvert ) {
+          ProfileOptionRec optRec = new ProfileOptionRec { DeviceClass = devClass, OptGroup=optGroup, OptName = name }; // create a new one
+          optRec.ShowCurve = grpShowCurve;
+          optRec.ShowInvert = grpShowInvert;
+          optRec.DefaultInvert = grpDefaultInvert;
+          optRec.DefaultExponent = grpDefaultExponent;
+          m_profileOptions.Add( optRec );
         }
-        attr = (string)optiongroupIn.Attribute( "UIShowInvert" );
-        if ( !string.IsNullOrEmpty( attr ) ) {
-          if ( int.TryParse( attr, out int showInvert ) ) {
-            optRec.ShowInvert = ( showInvert == 1 );
-          }
-        }
-        if ( optRec.ShowCurve || optRec.ShowInvert)
-          m_profileOptions.Add( optRec ); // add only if something is to tweak..
       }
       return retVal;
     }

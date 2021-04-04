@@ -1,7 +1,7 @@
 # SCJMapper-V2
 
-SC Joystick Mapper  (.Net 4.5.2; using sharpDX/OpenTK wrapper)  
-this should work with Win7, Win8.x Win 10 out of the box
+SC Joystick Mapper  (.Net 4.7.2; using sharpDX/OpenTK wrapper)  
+this should work with Win 10 out of the box
 
 On RSI Spectrum see https://robertsspaceindustries.com/spectrum/community/SC/forum/51473/thread/scjmapper-news-and-updates
 
@@ -17,9 +17,9 @@ using OpenTK.1.1.1589.5942 .net wrapper  (http://www.opentk.com/)
 * NET40\OpenTK.dll
 * NET40\OpenTK.GLControl.dll
 
-using ZstdNet 1.3.1 (https://www.nuget.org/packages/ZstdNet/)
+using ZstdNet 1.4.5 (https://www.nuget.org/packages/ZstdNet/)
 
-using log4net.dll
+using log4net.dll 2.0.12
 
 Built with VisualStudio 2017 Community free version
 

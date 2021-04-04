@@ -1,0 +1,39 @@
+{
+  "MapName" : "1: Logiech Flight Yoke System",
+  "MapImage" : "logi-flight-yoke.jpg",
+  "InputDevices" : [
+  {
+    "InputType" : "J",
+    "DeviceName" : "Saitek Pro Flight Yoke",
+    "DeviceProdGuid" : ["{0BAC06A3-0000-0000-000000000000}"],
+    "Controls" : [ 
+      { "Input" : "button1", "Type" : "Digital", "X" : 53, "Y" : 721, "Width" : 756, "Height" : 94, "Cmt" : "B1" },
+      { "Input" : "button2", "Type" : "Digital", "X" : 1378, "Y" : 769, "Width" : 756, "Height" : 94, "Cmt" : "B2" },
+      { "Input" : "button3", "Type" : "Digital", "X" : 108, "Y" : 1572, "Width" : 757, "Height" : 42, "Cmt" : "T1" },
+      { "Input" : "button4", "Type" : "Digital", "X" : 108, "Y" : 1619, "Width" : 757, "Height" : 47, "Cmt" : "T2" },
+      { "Input" : "button5", "Type" : "Digital", "X" : 1106, "Y" : 627, "Width" : 757, "Height" : 42, "Cmt" : "T3" },
+      { "Input" : "button6", "Type" : "Digital", "X" : 1106, "Y" : 674, "Width" : 757, "Height" : 47, "Cmt" : "T4" },
+      { "Input" : "button7", "Type" : "Digital", "X" : 1672, "Y" : 906, "Width" : 757, "Height" : 43, "Cmt" : "T5" },
+      { "Input" : "button8", "Type" : "Digital", "X" : 1672, "Y" : 954, "Width" : 757, "Height" : 47, "Cmt" : "T6" },
+      { "Input" : "button15", "Type" : "Digital", "X" : 2627, "Y" : 1861, "Width" : 756, "Height" : 42, "Cmt" : "Quad T1" },
+      { "Input" : "button16", "Type" : "Digital", "X" : 2627, "Y" : 1908, "Width" : 756, "Height" : 47, "Cmt" : "Quad T2" },
+      { "Input" : "button17", "Type" : "Digital", "X" : 2832, "Y" : 1717, "Width" : 756, "Height" : 42, "Cmt" : "Quad T3" },
+      { "Input" : "button18", "Type" : "Digital", "X" : 2832, "Y" : 1764, "Width" : 756, "Height" : 47, "Cmt" : "Quad T4" },
+      { "Input" : "button19", "Type" : "Digital", "X" : 3023, "Y" : 1572, "Width" : 756, "Height" : 42, "Cmt" : "Quad T5" },
+      { "Input" : "button20", "Type" : "Digital", "X" : 3023, "Y" : 1619, "Width" : 756, "Height" : 47, "Cmt" : "Quad T6" },
+      { "Input" : "button21", "Type" : "Digital", "X" : 3204, "Y" : 1008, "Width" : 537, "Height" : 95, "Cmt" : "Quad Throttle Button" },
+      { "Input" : "button22", "Type" : "Digital", "X" : 3204, "Y" : 1150, "Width" : 537, "Height" : 95, "Cmt" : "Quad Prop Button" },
+      { "Input" : "button23", "Type" : "Digital", "X" : 3204, "Y" : 1292, "Width" : 537, "Height" : 95, "Cmt" : "Quad Mixer Button" },
+      { "Input" : "hat1_up", "Type" : "Digital", "X" : 677, "Y" : 358, "Width" : 986, "Height" : 47, "Cmt" : "POV1 up" },
+      { "Input" : "hat1_right", "Type" : "Digital", "X" : 677, "Y" : 410, "Width" : 986, "Height" : 48, "Cmt" : "POV1 right" },
+      { "Input" : "hat1_down", "Type" : "Digital", "X" : 677, "Y" : 463, "Width" : 986, "Height" : 46, "Cmt" : "POV1 down" },
+      { "Input" : "hat1_left", "Type" : "Digital", "X" : 677, "Y" : 514, "Width" : 986, "Height" : 48, "Cmt" : "POV1 left" },
+      { "Input" : "rotx", "Type" : "Analogue", "X" : 2623, "Y" : 598, "Width" : 757, "Height" : 94, "Cmt" : "RotX-Axis Prop" },
+      { "Input" : "roty", "Type" : "Analogue", "X" : 2939, "Y" : 747, "Width" : 756, "Height" : 95, "Cmt" : "RotY-Axis Mixer" },
+      { "Input" : "x", "Type" : "Analogue", "X" : 1155, "Y" : 1863, "Width" : 986, "Height" : 48, "Cmt" : "X-Axis Aillerons" },
+      { "Input" : "y", "Type" : "Analogue", "X" : 1155, "Y" : 1816, "Width" : 986, "Height" : 43, "Cmt" : "Y-Axis Elevator" },
+      { "Input" : "z", "Type" : "Analogue", "X" : 2250, "Y" : 457, "Width" : 756, "Height" : 94, "Cmt" : "Z-Axis Throttle" }
+    ]
+  }
+  ]
+}

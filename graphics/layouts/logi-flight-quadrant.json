@@ -1,0 +1,25 @@
+{
+  "MapName" : "5: Logitech Flight Throttle Quadrant",
+  "MapImage" : "logi-flight-quadrant.jpg",
+  "InputDevices" : [
+  {
+    "InputType" : "J",
+    "DeviceName" : "Saitek Pro Flight Quadrant",
+    "DeviceProdGuid" : ["{0C2D06A3-0000-0000-000000000000}"],
+    "Controls" : [ 
+      { "Input" : "button1", "Type" : "Digital", "X" : 1489, "Y" : 1777, "Width" : 756, "Height" : 43, "Cmt" : "T1" },
+      { "Input" : "button2", "Type" : "Digital", "X" : 1489, "Y" : 1825, "Width" : 756, "Height" : 47, "Cmt" : "T2" },
+      { "Input" : "button3", "Type" : "Digital", "X" : 1694, "Y" : 1633, "Width" : 756, "Height" : 43, "Cmt" : "T3" },
+      { "Input" : "button4", "Type" : "Digital", "X" : 1694, "Y" : 1681, "Width" : 756, "Height" : 47, "Cmt" : "T4" },
+      { "Input" : "button5", "Type" : "Digital", "X" : 1885, "Y" : 1488, "Width" : 756, "Height" : 43, "Cmt" : "T5" },
+      { "Input" : "button6", "Type" : "Digital", "X" : 1885, "Y" : 1536, "Width" : 756, "Height" : 47, "Cmt" : "T6" },
+      { "Input" : "button7", "Type" : "Digital", "X" : 2067, "Y" : 925, "Width" : 536, "Height" : 94, "Cmt" : "Throttle Button" },
+      { "Input" : "button8", "Type" : "Digital", "X" : 2067, "Y" : 1067, "Width" : 536, "Height" : 94, "Cmt" : "Prop Button" },
+      { "Input" : "button9", "Type" : "Digital", "X" : 2067, "Y" : 1209, "Width" : 536, "Height" : 94, "Cmt" : "Mixer Button" },
+      { "Input" : "x", "Type" : "Analogue", "X" : 1112, "Y" : 373, "Width" : 757, "Height" : 95, "Cmt" : "X-Axis Throttle" },
+      { "Input" : "y", "Type" : "Analogue", "X" : 1486, "Y" : 514, "Width" : 756, "Height" : 95, "Cmt" : "Y-Axis Prop" },
+      { "Input" : "z", "Type" : "Analogue", "X" : 1801, "Y" : 664, "Width" : 756, "Height" : 94, "Cmt" : "Z-Axis Mixer" }
+    ]
+  }
+  ]
+}

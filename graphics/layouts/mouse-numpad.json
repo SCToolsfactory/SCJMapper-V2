@@ -45,18 +45,18 @@
     "DeviceName": "Mouse",
     "DeviceProdGuid": ["{10001000-0000-0000-0000-000000000000}"],
     "Controls": [
-      { "Input":"mouse1", "Type":  "Digital", "X":2142, "Y":654, "Width":755, "Height":205, "Cmt":""},
-      { "Input":"mouse2", "Type":  "Digital", "X":3003, "Y":656, "Width":755, "Height":205, "Cmt":""},
-      { "Input":"mouse3", "Type":  "Digital", "X":2460, "Y":378, "Width":985, "Height":205, "Cmt":""},
-      { "Input":"mouse4", "Type":  "Digital", "X":2142, "Y":1115, "Width":535, "Height":205, "Cmt":""},
-      { "Input":"mouse5", "Type":  "Digital", "X":2142, "Y":884, "Width":535, "Height":205, "Cmt":""},
-      { "Input":"mouse6", "Type":  "Digital", "X":2459, "Y":1717, "Width":985, "Height":50, "Cmt":""},
-      { "Input":"mouse7", "Type":  "Digital", "X":2459, "Y":1769, "Width":985, "Height":50, "Cmt":""},
-      { "Input":"mouse8", "Type":  "Digital", "X":2459, "Y":1819, "Width":985, "Height":50, "Cmt":""},
-      { "Input":"mwheel_up", "Type": "Digital", "X":2460, "Y":276, "Width":985, "Height":50, "Cmt":""},
-      { "Input":"mwheel_down", "Type": "Digital", "X":2460, "Y":326, "Width":985, "Height":50, "Cmt":""},
-      { "Input":"maxis_x", "Type": "Analogue", "X":2459, "Y":178, "Width":985, "Height":50, "Cmt":""},
-      { "Input":"maxis_y", "Type": "Analogue", "X":2459, "Y":129, "Width":985, "Height":50, "Cmt":""}
+      { "Input" : "mouse1", "Type" : "Digital", "X" : 2142, "Y" : 968, "Width" : 757, "Height" : 257, "Cmt" : "" },
+      { "Input" : "mouse2", "Type" : "Digital", "X" : 3004, "Y" : 970, "Width" : 757, "Height" : 256, "Cmt" : "" },
+      { "Input" : "mouse3", "Type" : "Digital", "X" : 2200, "Y" : 705, "Width" : 1557, "Height" : 207, "Cmt" : "" },
+      { "Input" : "mouse4", "Type" : "Digital", "X" : 2142, "Y" : 1482, "Width" : 537, "Height" : 203, "Cmt" : "" },
+      { "Input" : "mouse5", "Type" : "Digital", "X" : 2142, "Y" : 1252, "Width" : 537, "Height" : 203, "Cmt" : "" },
+      { "Input" : "mouse6", "Type" : "Digital", "X" : 2202, "Y" : 1717, "Width" : 1555, "Height" : 47, "Cmt" : "" },
+      { "Input" : "mouse7", "Type" : "Digital", "X" : 2202, "Y" : 1768, "Width" : 1555, "Height" : 47, "Cmt" : "" },
+      { "Input" : "mouse8", "Type" : "Digital", "X" : 2202, "Y" : 1819, "Width" : 1555, "Height" : 48, "Cmt" : "" },
+      { "Input" : "mwheel_up", "Type" : "Digital", "X" : 2200, "Y" : 503, "Width" : 1557, "Height" : 94, "Cmt" : "" },
+      { "Input" : "mwheel_down", "Type" : "Digital", "X" : 2200, "Y" : 602, "Width" : 1557, "Height" : 98, "Cmt" : "" },
+      { "Input" : "maxis_x", "Type" : "Analogue", "X" : 2200, "Y" : 284, "Width" : 1558, "Height" : 157, "Cmt" : "" },
+      { "Input" : "maxis_y", "Type" : "Analogue", "X" : 2200, "Y" : 136, "Width" : 1558, "Height" : 142, "Cmt" : "" }
     ]
   }
   ]

@@ -21,8 +21,7 @@ namespace SCJMapper_V2.SC
     /// Try to locate the launcher from Alpha 3.0.0 public - e.g. E:\G\StarCitizen\RSI Launcher
     /// Alpha 3.6.0 PTU launcher 1.2.0 has the same entry (but PTU location changed)
     /// </summary>
-    static private string SCLauncherDir6
-    {
+    static private string SCLauncherDir6 {
       get {
         log.Debug( "SCLauncherDir6 - Entry" );
         string scLauncher = (string)Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\81bfc699-f883-50c7-b674-2483b6baae23", "InstallLocation", null );
@@ -44,8 +43,7 @@ namespace SCJMapper_V2.SC
     /// <summary>
     /// Try to locate the launcher from Alpha 3.0.0 PTU - e.g. E:\G\StarCitizen\RSI PTU Launcher
     /// </summary>
-    static private string SCLauncherDir5
-    {
+    static private string SCLauncherDir5 {
       get {
         log.Debug( "SCLauncherDir5 - Entry" );
         string scLauncher = (string)Registry.GetValue( @"HKEY_LOCAL_MACHINE\SOFTWARE\94a6df8a-d3f9-558d-bb04-097c192530b9", "InstallLocation", null );
@@ -118,8 +116,7 @@ namespace SCJMapper_V2.SC
     /// <summary>
     /// Returns the base SC install path from something like "E:\G\StarCitizen"
     /// </summary>
-    static private string SCBasePath
-    {
+    static private string SCBasePath {
       get {
         log.Debug( "SCBasePath - Entry" );
         AppSettings.Instance.Reload( ); // local instance - reload as it might be changed outside
@@ -195,8 +192,7 @@ namespace SCJMapper_V2.SC
     /// <summary>
     /// Returns the SC installation path or ""
     /// </summary>
-    static public string SCInstallPath
-    {
+    static public string SCInstallPath {
       get {
         log.Debug( "SCInstallPath - Entry" );
         return SCBasePath;
@@ -209,8 +205,7 @@ namespace SCJMapper_V2.SC
     /// Returns the SC Client path  
     /// SC 3.0.0: search path like  E:\G\StarCitizen\StarCitizen\LIVE 
     /// </summary>
-    static public string SCClientPath
-    {
+    static public string SCClientPath {
       get {
         log.Debug( "SCClientPath - Entry" );
         string scp = SCBasePath;
@@ -227,7 +222,7 @@ namespace SCJMapper_V2.SC
         // 20180321 New PTU 3.1 another change in setup path - Testing for PTU first 
         // 20190711 Lanuncher 1.2 - PTU has moved - change detection to find this one first.
         if ( AppSettings.Instance.UsePTU ) {
-          if ( Directory.Exists( Path.Combine( scp, @"StarCitizen\PTU" )) ) {
+          if ( Directory.Exists( Path.Combine( scp, @"StarCitizen\PTU" ) ) ) {
             scp = Path.Combine( scp, @"StarCitizen\PTU" );
           }
           else if ( Directory.Exists( Path.Combine( scp, @"StarCitizenPTU\LIVE" ) ) ) {
@@ -258,8 +253,7 @@ namespace SCJMapper_V2.SC
     /// Returns the SC ClientData path
     /// AC 3.0: E:\G\StarCitizen\StarCitizen\LIVE\Data
     /// </summary>
-    static public string SCClientDataPath
-    {
+    static public string SCClientDataPath {
       get {
         log.Debug( "SCClientDataPath - Entry" );
         string scp = SCClientPath;
@@ -282,23 +276,27 @@ namespace SCJMapper_V2.SC
     /// <summary>
     /// Returns the SC ClientData path
     /// AC 3.0: E:\G\StarCitizen\StarCitizen\LIVE\USER
+    /// AC 3.13: E:\G\StarCitizen\StarCitizen\LIVE\USER\Client\0
     /// </summary>
-    static public string SCClientUSERPath
-    {
+    static public string SCClientUSERPath {
       get {
         log.Debug( "SCClientUSERPath - Entry" );
         string scp = SCClientPath;
         if ( string.IsNullOrEmpty( scp ) ) return "";
         //
-        scp = Path.Combine( scp, "USER" );
+        string scpu = Path.Combine( scp, "USER", "Client", "0" ); // 20210404 new path
+        if ( !Directory.Exists( scpu ) ) {
+          scpu = Path.Combine( scp, "USER" ); // 20210404 old path
+        }
+
 #if DEBUG
         //***************************************
         // scp += "X"; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
         //***************************************
 #endif
-        if ( Directory.Exists( scp ) ) return scp;
+        if ( Directory.Exists( scpu ) ) return scpu;
 
-        log.WarnFormat( "SCClientUSERPath - StarCitizen\\LIVE\\USER subfolder does not exist: {0}", scp );
+        log.WarnFormat( @"SCClientUSERPath - StarCitizen\\LIVE\\USER[\Client\0] subfolder does not exist: {0}", scpu );
         return "";
       }
     }
@@ -307,9 +305,9 @@ namespace SCJMapper_V2.SC
     /// <summary>
     /// Returns the SC ClientData path
     /// AC 1.1.6: E:\G\StarCitizen\StarCitizen\Public
+    /// AC 3x: E:\G\StarCitizen\StarCitizen\LIVE or PTU
     /// </summary>
-    static public string SCClientLogsPath
-    {
+    static public string SCClientLogsPath {
       get {
         log.Debug( "SCClientLogsPath - Entry" );
         string scp = SCClientPath;
@@ -321,7 +319,7 @@ namespace SCJMapper_V2.SC
 #endif
         if ( Directory.Exists( scp ) ) return scp;
 
-        log.WarnFormat( "SCClientLogsPath - StarCitizen\\LIVE subfolder does not exist: {0}", scp );
+        log.WarnFormat( "SCClientLogsPath - StarCitizen\\LIVE or PTU subfolder does not exist: {0}", scp );
         return "";
       }
     }
@@ -331,15 +329,13 @@ namespace SCJMapper_V2.SC
     /// Returns the SC ClientData path
     /// AC 1.1.6: E:\G\StarCitizen\StarCitizen\Public\USER\Controls\Mappings
     /// </summary>
-    static public string SCClientMappingPath
-    {
+    static public string SCClientMappingPath {
       get {
         log.Debug( "SCClientMappingPath - Entry" );
         string scp = SCClientUSERPath; // AC1.03 new here
         if ( string.IsNullOrEmpty( scp ) ) return "";
         //
-        scp = Path.Combine( scp, "Controls" );
-        scp = Path.Combine( scp, "Mappings" );
+        scp = Path.Combine( scp, "Controls", "Mappings");
 #if DEBUG
         //***************************************
         // scp += "X"; // TEST not found (COMMENT OUT FOR PRODUCTIVE BUILD)
@@ -347,7 +343,7 @@ namespace SCJMapper_V2.SC
 #endif
         if ( Directory.Exists( scp ) ) return scp;
 
-        log.WarnFormat( "SCClientMappingPath - StarCitizen\\LIVE\\USER\\Controls\\Mappings subfolder does not exist: {0}", scp );
+        log.WarnFormat( @"SCClientMappingPath - StarCitizen\LIVE\USER\[Client\0\]Controls\Mappings subfolder does not exist: {0}", scp );
         return "";
       }
     }
@@ -357,8 +353,7 @@ namespace SCJMapper_V2.SC
     /// Returns the SC Data.p4k file path
     /// SC Alpha 3.0: E:\G\StarCitizen\StarCitizen\LIVE\Data.p4k (contains the binary XML now)
     /// </summary>
-    static public string SCData_p4k
-    {
+    static public string SCData_p4k {
       get {
         log.Debug( "SCDataXML_p4k - Entry" );
         string scp = SCClientPath;
@@ -372,7 +367,7 @@ namespace SCJMapper_V2.SC
 #endif
         if ( File.Exists( scp ) ) return scp;
 
-        log.WarnFormat( "SCData_p4k - StarCitizen\\Public\\Data\\Data.p4k file does not exist: {0}", scp );
+        log.WarnFormat( @"SCData_p4k - StarCitizen\LIVE or PTU\Data\Data.p4k file does not exist: {0}", scp );
         return "";
       }
     }
@@ -382,8 +377,7 @@ namespace SCJMapper_V2.SC
     /// Returns the SC log file path to the latest logfile
     /// AC 1.1.6: E:\G\StarCitizen\StarCitizen\Public\Game.log  NOTE: 1.1.6 does not longer contain the needed entries .-((
     /// </summary>
-    static public string SCLastLog
-    {
+    static public string SCLastLog {
       get {
         log.Debug( "SCLastLog - Entry" );
         string scp = SCClientLogsPath;
@@ -416,8 +410,7 @@ namespace SCJMapper_V2.SC
     /// Returns the relative path of DefaultProfile.xml
     /// SC Alpha 2.2: still true .. but contains the binary XML now
     /// </summary>
-    static public string DefaultProfilePath_rel
-    {
+    static public string DefaultProfilePath_rel {
       get {
         log.Debug( "DefaultProfilePath_rel - Entry" );
         return @"Libs\Config";
@@ -428,8 +421,7 @@ namespace SCJMapper_V2.SC
     /// Returns the name part of the DefaultProfile w/o extension...
     /// SC Alpha 2.2: still true .. but contains the binary XML now
     /// </summary>
-    static public string DefaultProfileName
-    {
+    static public string DefaultProfileName {
       get {
         log.Debug( "DefaultProfileName - Entry" );
         return @"defaultProfile";
@@ -440,7 +432,7 @@ namespace SCJMapper_V2.SC
     /// Returns a summary of the detected pathes
     /// </summary>
     /// <returns>A formatted string</returns>
-    static public string Summary()
+    static public string Summary( )
     {
       string ret = $"SC Path:\n";
 

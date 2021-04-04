@@ -68,28 +68,39 @@ namespace SCJMapper_V2.Layout
         // Define which maps belongs to which group
         var x = new List<string>( ) { "spaceship_general", "spaceship_view", "spaceship_movement", "spaceship_docking", "spaceship_power", "IFCS_controls" };
         m_actionDict.Add( EGroup.SpaceFlight, x );
+
         x = new List<string>( ) { "spaceship_targeting", "spaceship_target_hailing", "spaceship_scanning", "spaceship_ping", "spaceship_radar", "spaceship_targeting_advanced" };
         m_actionDict.Add( EGroup.SpaceTargeting, x );
-        x = new List<string>( ) { "spaceship_mining" };
+
+        x = new List<string>( ) { "spaceship_mining", "tractor_beam" };
         m_actionDict.Add( EGroup.SpaceMining, x );
+
         x = new List<string>( ) { "turret_main", "spaceship_weapons", "spaceship_missiles", "spaceship_auto_weapons" };
         m_actionDict.Add( EGroup.SpaceWeapons, x );
+
         x = new List<string>( ) { "spaceship_defensive" };
         m_actionDict.Add( EGroup.SpaceDefensive, x );
+
         x = new List<string>( ) { "lights_controller" };
         m_actionDict.Add( EGroup.Lights, x );
-        x = new List<string>( ) { "default", "prone", "player", "player_choice", "player_emotes", "player_input_optical_tracking" };
+
+        x = new List<string>( ) { "default", "player", "prone", "hacking", "player_choice", "player_emotes", "player_input_optical_tracking" };
         m_actionDict.Add( EGroup.Player, x );
+
         x = new List<string>( ) { "zero_gravity_eva" };
         m_actionDict.Add( EGroup.EVA, x );
+
         x = new List<string>( ) { "vehicle_general", "vehicle_driver" };
         m_actionDict.Add( EGroup.Vehicle, x );
         //x = new List<string>( ) { "vehicle_gunner" }; // removed in 3.10.0
         //m_actionDict.Add( EGroup.VehicleWeapons, x ); // removed in 3.10.0
-        x = new List<string>( ) { "spaceship_hud", "ui_textfield", "ui_notification" };
+        // 3.13 add "player_choice_interaction_mode"
+        x = new List<string>( ) { "spaceship_hud", "ui_textfield", "ui_notification", "player_choice_interaction_mode" };
         m_actionDict.Add( EGroup.Interaction, x );
+
         x = new List<string>( ) { "spectator", "flycam", "view_director_mode" };
         m_actionDict.Add( EGroup.Spectator, x );
+
         x = new List<string>( ) { "server_renderer" };
         m_actionDict.Add( EGroup.Others, x );
       }

@@ -140,7 +140,7 @@ namespace SCJMapper_V2.Devices.Joystick
       if ( IsJsN( command ) )
         return ( cLower.EndsWith( "_x" ) || cLower.EndsWith( "_rotx" ) || cLower.EndsWith( "_throttlex" )
             || cLower.EndsWith( "_y" ) || cLower.EndsWith( "_roty" ) || cLower.EndsWith( "_throttley" )
-            || cLower.EndsWith( "_Z" ) || cLower.EndsWith( "_rotz" ) || cLower.EndsWith( "_throttlez" )
+            || cLower.EndsWith( "_z" ) || cLower.EndsWith( "_rotz" ) || cLower.EndsWith( "_throttlez" )
             || cLower.EndsWith( "_slider1" ) || cLower.EndsWith( "_slider2" ) );
       else
         return false;
@@ -425,6 +425,7 @@ namespace SCJMapper_V2.Devices.Joystick
 
         try {
           // Enumerate all the objects on the device.
+          m_sliderCount = 0; //20201231 init to 0 else it counts beyond the available ones
           foreach ( DeviceObjectInstance d in m_device.GetObjects( ) ) {
             // Set the UI to reflect what objects the joystick supports.
             if ( ObjectGuid.XAxis == d.ObjectType ) cmds.Add( "x" );

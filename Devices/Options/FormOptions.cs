@@ -369,7 +369,7 @@ namespace SCJMapper_V2.Devices.Options
         option = pOpt.OptName; tuning = m_tuningRef.TuningItem( (string)lview.Tag, option ); m_live.Load( tuning );
         if ( m_live.used ) {
           lvi = new ListViewItem( SCUiText.Instance.Text( option ), lvg ) { Name = option };
-          lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi );
+          lvi.Name = option; lview.Items.Add( lvi ); ListViewItemSetup( lvi ); // TODO get defaults from pOpt captured (showCurve, Invert, defaults...)
           UpdateLvOptionFromLiveValues( m_live );
         }
       }

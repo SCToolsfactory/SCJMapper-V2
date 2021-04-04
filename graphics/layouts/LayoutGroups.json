@@ -26,12 +26,14 @@
     "spaceship_auto_weapons"
   ],
   "SpaceMining": [
-    "spaceship_mining"
+    "spaceship_mining",
+    "tractor_beam"
   ],
   "Player": [
     "default",
-    "prone",
     "player",
+    "prone",
+    "hacking",
     "player_choice",
     "player_emotes",
     "player_input_optical_tracking"
@@ -49,7 +51,8 @@
   "Interaction": [
     "spaceship_hud",
     "ui_textfield",
-    "ui_notification"
+    "ui_notification",
+    "player_choice_interaction_mode"
   ],
   "Spectator": [
     "spectator",

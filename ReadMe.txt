@@ -1,23 +1,26 @@
-SC Joystick Mapper V 2.48 - Build 83 BETA
-(c) Cassini, StandardToaster - 18-Aug-2020
+SC Joystick Mapper V 2.50 - Build 85 BETA
+(c) Cassini, StandardToaster - 04-Apr-2021
 
-Contains 14 files + graphics:
+Contains files + graphics:
 
-SCJMapper.exe                The program (V2.48)
+SCJMapper.exe                The program (V2.50)
 
 - The following files and folders MUST be in the same folder as the Exe file
-SCJMapper.exe.config         Program config (V2.48)
-de\SCJMapper.resources.dll   German language (V2.45)
-fr\SCJMapper.resources.dll   French language (V2.45)
+SCJMapper.exe.config         Program config (V2.50)
+de\SCJMapper.resources.dll   German language (V2.50)
+fr\SCJMapper.resources.dll   French language (V2.50)
 Storage\*.scj                Folder for collected assets (V2.35)
 PTU_Storage\*.scj            Folder for collected PTU    (V2.37)
 SharpDX.DirectInput.dll      Managed DirectInput Assembly
 SharpDX.dll                  Managed DirectX Assembly
 OpenTK.dll                   Managed OpenGL Assembly
 OpenTK.GLControl.dll         Managed OpenGL Assembly
-ZstdNet.dll                  Managed Zip Assembly (v2.33)
-x64\libzstd.dll              Native dll for ZstdNet (v2.33)
-x86\libzstd.dll              Native dll for ZstdNet (v2.33)
+ZstdNet.dll                  Managed Zip Assembly
+x64\libzstd.dll              Native dll for ZstdNet
+x86\libzstd.dll              Native dll for ZstdNet
+System.Memory.dll            .Net pulled library
+System.Buffers.dll           .Net pulled library
+System.Runtime.CompilerServices.Unsafe.dll .Net pulled library
 log4net.dll                  Managed Logging Assembly
 log4net.config.OFF           Config file for logging
                                rename without .OFF, restart and then look for  trace.log  in the same folder
@@ -25,8 +28,8 @@ log4net.config.OFF           Config file for logging
 SCJMapper_QGuide V2.47beta.pdf    Quick Guide (v2.47)
 ReadMe.txt                   This file
 
-graphics folder              Skybox Images (V2.32)               - graphics folder MUST be in the same folder as the Exe file
-graphics\layouts folder      Layout Images & defs (V2.46)        - layouts folder MUST be in the graphics folder above
+graphics folder              Skybox Images                - graphics folder MUST be in the same folder as the Exe file
+graphics\layouts folder      Layout Images & defs         - layouts folder MUST be in the graphics folder above
 
 NOTE V 2.41+:
   search order for defaultProfile.xml to build the action tree is:
@@ -50,6 +53,15 @@ Scanned for viruses before packing...
 cassini@burri-web.org
 
 Changelog:
+V 2.50 - BETA Build 85
+- updated for the new Mapping path in USER\Client\0 (falls back to currrent if not found)
+- updated actionmap groups for layout as of PTU 3.13
+V 2.49 - BETA Build 84
+- updated log4net 2.0.12, zStdLib 1.4.5 (security updates)
+- update to .Net 4.7.2
+- fix - Options not properly handled
+- fix - Joystick Z axis not properly handled
+- fix - some device layouts
 V 2.48 - BETA Build 83
 - updated Actionmap Groups for Layout Dialog taken from LayoutGroups.json from <User>Documents\SCJMapper\[PTU] folder
 V 2.47 - BETA Build 82

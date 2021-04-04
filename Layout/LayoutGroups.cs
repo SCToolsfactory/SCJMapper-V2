@@ -21,7 +21,7 @@ namespace SCJMapper_V2.Layout
       "EVA"               :[ "zero_gravity_eva" ],
       "Vehicle"           :[ "vehicle_general", "vehicle_driver" ],
       "Lights"            :[ "lights_controller" ],
-      "Interaction"       :[ "spaceship_hud", "ui_textfield", "ui_notification" ],
+      "Interaction"       :[ "spaceship_hud", "ui_textfield", "ui_notification", "player_choice_interaction_mode" ],
       "Spectator"         :[ "spectator", "flycam", "view_director_mode" ],
       "Others"            :[ "server_renderer" ]
     }
